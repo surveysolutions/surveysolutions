@@ -24,10 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         && _.GetListSizeForListQuestion(questionId) == 2
                 );
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         private Because of = () =>
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     }));
 
         private It should_raise_InterviewException = () =>
-            exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldBeOfExactType<InterviewException>();
 
         private It should_throw_exception_with_message_containting__answers__ = () =>
             exception.Message.ToLower().ShouldContain("answers");

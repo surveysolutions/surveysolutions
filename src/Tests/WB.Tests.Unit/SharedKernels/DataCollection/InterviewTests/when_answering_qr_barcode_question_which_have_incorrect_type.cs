@@ -22,10 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         _.GetQuestionType(questionId) == QuestionType.Numeric
                 );
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfType<InterviewException>();
+           exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
              new [] { "type", QuestionType.QRBarcode.ToString().ToLower(), "expected" }.ShouldEachConformTo(

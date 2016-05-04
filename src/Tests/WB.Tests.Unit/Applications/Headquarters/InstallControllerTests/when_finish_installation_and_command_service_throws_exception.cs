@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Web.Mvc;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
-using Ncqrs.Commanding;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.Tests.Unit.Applications.Headquarters.InstallControllerTests;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
@@ -18,10 +15,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
     {
         private Establish context = () =>
         {
-            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
+            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
                 .Throws(new Exception());
             
-            controller = CreateController(commandService: commandServiceMock.Object, logger: loggerMock.Object);
+            controller = CreateController(commandService: commandServiceMock.Object, logger: loggerMock.Object, authentication: authenticationServiceMock.Object);
         };
 
         Because of = () =>
@@ -29,8 +26,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
 
         It should_logger_call_fatal_method = () =>
             loggerMock.Verify(_ => _.Fatal(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()));
+
+        It should_user_never_be_signed_in_by_authentication_service = () =>
+            authenticationServiceMock.Verify(_ => _.SignIn(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
         
         private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        private static Mock<IFormsAuthentication> authenticationServiceMock = new Mock<IFormsAuthentication>();
         private static Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static InstallController controller;
 

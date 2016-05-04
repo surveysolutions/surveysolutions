@@ -5,25 +5,35 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-
- <#foreach (var namespaceToInclude in Model.Namespaces){#>
-    using <#=namespaceToInclude#>;
- <#}#>
+<#
+	foreach (var namespaceToInclude in Model.Namespaces)
+	{
+#>
+using <#=namespaceToInclude#>;
+<#
+	}
+#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-   internal partial class <#=Model.GeneratedClassName#>
+   internal partial class <#=Model.ClassName#>
    {   
-      private bool <#=Model.GeneratedMethodName#>()
+      private bool <#=Model.MethodName#>()
       {
-      <# if(Model.GenerateSelf) {#>
+<# 
+	if(Model.GenerateSelf) 
+	{
+#>
           var self = <#=Model.VariableName#>;
-      <# } #>
-          return <#=Model.ExpressionString#>;
+<# 
+	}
+#>
+          return <#=Model.Expression#>;
       }      
    }
 }

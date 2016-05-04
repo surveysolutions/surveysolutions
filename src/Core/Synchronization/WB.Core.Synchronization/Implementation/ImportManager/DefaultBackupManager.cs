@@ -16,10 +16,10 @@ namespace WB.Core.Synchronization.Implementation.ImportManager
         private readonly IStreamableEventStore eventStore;
         private readonly ISyncEventHandler eventProcessor;
 
-        public DefaultBackupManager()
+        public DefaultBackupManager(IEventStore eventStore)
         {
-            this.eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
-            this.eventProcessor = new SyncEventHandler();
+            this.eventStore = eventStore as IStreamableEventStore;
+            this.eventProcessor = new SyncEventHandler(eventStore);
         }
 
         public ZipFileData Backup()

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.UI.Headquarters.API.Attributes;
@@ -47,8 +49,16 @@ namespace WB.UI.Headquarters.API.Resources
                 comments = interviewSummary.LastStatusChangeComment;
             }
 
+            var rejectedDateTime = interviewSummary != null && interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                ? interviewSummary.UpdateDate
+                : (DateTime?) null;
+
+            var interviewerAssignedDateTime = interviewSummary != null && interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                ? interviewSummary.UpdateDate
+                : (DateTime?)null;
+
             InterviewData document = interviewData;
-            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments);
+            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments, rejectedDateTime, interviewerAssignedDateTime);
 
             var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,
                 new JsonNetFormatter(new JsonSerializerSettings

@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Capi.Implementation.Services;
-using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Tests.Integration.Versions
 {
@@ -19,42 +9,23 @@ namespace WB.Tests.Integration.Versions
     {
         Establish context = () =>
         {
-            designerExpressionsEngineVersionService = new ExpressionsEngineVersionService();
-            testerExpressionsEngineVersionService = new CapiExpressionsEngineVersionService();
-            hqSupportedVersionProvider = new SupportedVersionProvider(() => false, new Version());
+            designerEngineVersionService = new DesignerEngineVersionService();
+            hqSupportedVersionProvider = new SupportedVersionProvider();
         };
 
         Because of = () =>
         {
-            testerVersion = testerExpressionsEngineVersionService.GetExpressionsEngineSupportedVersion();
-            designerVersion = designerExpressionsEngineVersionService.GetLatestSupportedVersion();
+            designerLatestSupportedVersion = designerEngineVersionService.GetLatestSupportedVersion();
             hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion();
         };
 
-        It should_designer_Major_version_be_equal_to_tester_Major_version = () =>
-            designerVersion.Major.ShouldEqual(testerVersion.Major);
+        It should_return_same_versions_for_headquarters_version_and_designer_latest_supported_version = () =>
+            hqVersion.ShouldEqual(designerLatestSupportedVersion);
 
-        It should_designer_Minor_version_be_equal_to_tester_Minor_version = () =>
-            designerVersion.Minor.ShouldEqual(testerVersion.Minor);
-
-        It should_designer_Build_version_be_equal_to_tester_Build_version = () =>
-            designerVersion.Build.ShouldEqual(testerVersion.Build);
-
-        It should_designer_Major_version_be_equal_to_hq_Major_version = () =>
-           designerVersion.Major.ShouldEqual(hqVersion.Major);
-
-        It should_designer_Minor_version_be_equal_to_hq_Minor_version = () =>
-            designerVersion.Minor.ShouldEqual(hqVersion.Minor);
-
-        It should_designer_Build_version_be_equal_to_hq_Build_version = () =>
-            designerVersion.Build.ShouldEqual(hqVersion.Build);
-
-        private static Version testerVersion;
-        private static Version designerVersion;
+        private static Version designerLatestSupportedVersion;
         private static Version hqVersion;
 
-        private static ICapiExpressionsEngineVersionService testerExpressionsEngineVersionService;
-        private static IExpressionsEngineVersionService designerExpressionsEngineVersionService;
-        private static ISupportedVersionProvider hqSupportedVersionProvider;
+        private static DesignerEngineVersionService designerEngineVersionService;
+        private static SupportedVersionProvider hqSupportedVersionProvider;
     }
 }

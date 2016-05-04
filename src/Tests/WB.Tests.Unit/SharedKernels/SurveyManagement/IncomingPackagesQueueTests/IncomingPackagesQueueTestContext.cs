@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -12,14 +12,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     [Subject(typeof(IncomingSyncPackagesQueue))]
     internal class IncomingPackagesQueueTestContext
     {
-        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IJsonUtils jsonUtils = null,
+        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(ISerializer serializer = null,
             IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null)
         {
             return new IncomingSyncPackagesQueue(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
                 new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
-                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), Mock.Of<ILogger>(), jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), Mock.Of<ILogger>(), serializer: serializer ?? Mock.Of<ISerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
-
         }
 
         protected static Mock<IFileSystemAccessor> CreateDefaultFileSystemAccessorMock()

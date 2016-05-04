@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         private static object GetAnswer()
         {
-            return viewState.Levels["#"].QuestionsSearchCahche[questionId].Answer;
+            return viewState.Levels["#"].QuestionsSearchCache[questionId].Answer;
         }
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;

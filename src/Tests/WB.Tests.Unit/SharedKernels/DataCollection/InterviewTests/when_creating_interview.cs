@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
@@ -21,26 +22,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            interviewId = Guid.Parse("11000000000000000000000000000000");
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
-
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
+            interview.CreateInterview(questionnaireId, questionnaireVersion, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewCreated>();
@@ -64,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static long questionnaireVersion;
         private static Guid userId;
         private static Guid responsibleSupervisorId;
-        private static Guid interviewId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
+        private static Interview interview;
     }
 }

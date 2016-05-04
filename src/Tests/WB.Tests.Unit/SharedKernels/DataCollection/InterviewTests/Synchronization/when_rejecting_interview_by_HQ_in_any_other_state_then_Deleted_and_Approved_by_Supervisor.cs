@@ -21,11 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(Mock.Of<IQuestionnaire>());
-
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
+            questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
             statuses =
                 Enum.GetNames(typeof (InterviewStatus))
@@ -40,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         {
             foreach (var interviewStatus in statuses)
             {
-                var interview = CreateInterview();
+                var interview = CreateInterview(questionnaireRepository: questionnaireRepository);
                 interview.Apply(new InterviewStatusChanged(interviewStatus, null));
                 try
                 {
@@ -65,5 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         private static int exceptionCount = 0;
         private static InterviewStatus[] statusToExclude = new InterviewStatus[]
         { InterviewStatus.Deleted, InterviewStatus.ApprovedBySupervisor };
+
+        private static IPlainQuestionnaireRepository questionnaireRepository;
     }
 }

@@ -522,15 +522,8 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             }
 
             AccountPasswordInfo passwordInfo = account.CreatePasswordInfo();
-            bool validated = this.PasswordStrategy.Compare(passwordInfo, password);
-            if (validated)
-            {
-                account.LastLoginAt = DateTime.Now;
-                this.AccountRepository.Update(account, MembershipEventType.UserValidated);
-                return true;
-            }
 
-            return false;
+            return this.PasswordStrategy.Compare(passwordInfo, password);
         }
 
         internal static string GenerateToken(RandomNumberGenerator generator)

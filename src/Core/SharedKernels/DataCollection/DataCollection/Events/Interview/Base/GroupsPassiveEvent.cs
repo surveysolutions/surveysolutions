@@ -4,9 +4,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
     public abstract class GroupsPassiveEvent : InterviewPassiveEvent
     {
-        public Dtos.Identity[] Groups { get; private set; }
+        public Identity[] Groups { get; private set; }
 
-        protected GroupsPassiveEvent(Dtos.Identity[] groups)
+        protected GroupsPassiveEvent(Identity[] groups)
         {
             this.Groups = groups.ToArray();
         }

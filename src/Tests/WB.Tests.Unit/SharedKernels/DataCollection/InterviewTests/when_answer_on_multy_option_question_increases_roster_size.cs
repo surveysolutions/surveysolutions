@@ -44,20 +44,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
-                    questionnaire.Version,
-                    new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
+                 Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.RejectedBySupervisor,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    answers: new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }, string.Empty) },
+                    rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
                             new InterviewItemId(rosterGroupId, new decimal[] {}),
@@ -67,7 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                             }
                         }
                     },
-                    true));
+                    wasCompleted: true
+                    ));
 
             eventContext = new EventContext();
         };

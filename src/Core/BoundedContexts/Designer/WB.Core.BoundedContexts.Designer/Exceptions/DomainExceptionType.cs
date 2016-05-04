@@ -5,7 +5,7 @@
         /// <summary>
         /// This should be used when there are no business logic depending on exception type.
         /// </summary>
-        Undefined,
+        Undefined = 0,
 
         TriggerLinksToNotExistingGroup, 
 
@@ -75,7 +75,7 @@
 
         OwnerCannotBeInShareList,
 
-        LinkedQuestionDoesNotExist,
+        LinkedEntityDoesNotExist,
 
         QuestionCanNotBeFeatured,
 
@@ -134,12 +134,31 @@
 
         FilteredComboboxQuestionOptionsMaxLength,
 
-        CategoricalSingleOptionHasMoreThan200Options,
+        CategoricalQuestionHasMoreThan200Options,
 
         CategoricalCascadingOptionsCantContainsEmptyParentValueField,
 
         CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
 
-        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
+
+        CategoricalCascadingQuestionOptionsMaxLength,
+
+        MacroIsAbsent,
+
+        MacroAlreadyExist,
+
+        MacroContentIsEmpty,
+
+        LookupTableAlreadyExist,
+
+        LookupTableIsAbsent,
+
+        EmptyLookupTable,
+
+        VariableNameEndsWithUnderscore,
+
+        VariableNameHasConsecutiveUnderscores,
+        GroupYouAreLinkedToIsNotRoster
     }
 }

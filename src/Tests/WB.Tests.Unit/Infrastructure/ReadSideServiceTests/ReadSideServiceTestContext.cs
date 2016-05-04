@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         protected static ReadSideService CreateReadSideService(IStreamableEventStore streamableEventStore = null,
             IEventDispatcher eventDispatcher = null,
-            IReadSideCleaner readSideCleaner = null,
+            IPostgresReadSideBootstraper postgresReadSideBootstraper = null,
             ITransactionManagerProviderManager transactionManagerProviderManager = null)
         {
             ReadSideService.InstanceCount = 0;
@@ -28,13 +29,15 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             return new ReadSideService(
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
-                readSideCleaner ?? Mock.Of<IReadSideCleaner>(),
-                transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+                postgresReadSideBootstraper ?? Mock.Of<IPostgresReadSideBootstraper>(),
+                transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
+                Create.ReadSideSettings(),
+                Mock.Of<IReadSideKeyValueStorage<ReadSideVersion>>());
         }
 
         protected static void WaitRebuildReadsideFinish(ReadSideService readSideService)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
 
             while (readSideService.AreViewsBeingRebuiltNow())
             {

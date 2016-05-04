@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.ShouldBeNull();
 
 
-        private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;
     }

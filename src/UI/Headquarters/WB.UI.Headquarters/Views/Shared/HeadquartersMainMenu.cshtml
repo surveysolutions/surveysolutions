@@ -1,5 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -35,10 +35,27 @@
             @MainMenu.Interviews
         </a>
     </li>
-    <li class="@(page == MenuItem.Teams ? "active" : "")">
-        <a href="@Url.Action("Index", "Supervisor", new { area = string.Empty })">
-            <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles
+    <li class="@(page == MenuItem.Teams || page == MenuItem.Interviewers ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles <b class="caret"></b>
         </a>
+        <ul class="dropdown-menu">
+            <li class="@(page == MenuItem.Teams ? "active" : "")">
+                <a href="@Url.Action("Index", "Supervisor", new {area = string.Empty})">
+                    @MainMenu.Supervisors
+                </a>
+            </li>
+            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
+                <a href="@Url.Action("Index", "Interviewers", new {area = string.Empty})">
+                    @MainMenu.Interviewers
+                </a>
+            </li>
+            <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">
+                <a href="@Url.Action("UserBatchUploads", "BatchUserUpload", new {area = string.Empty})">
+                    @MainMenu.UserBatchUpload
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
         <a href="@Url.Action("Index", "HQ", new {area = ""})">
@@ -46,12 +63,15 @@
             </i> @MainMenu.Questionnaires
         </a>
     </li>
+@if (!(User.Identity.IsObserver()))
+{
     <li class="@(page == MenuItem.DataExport ? "active" : "")">
-        <a href="@Url.Action("DataExport", "HQ", new {area = ""})">
+        <a href="@Url.Action("Index", "DataExport", new {area = ""})">
             <i class="glyphicon glyphicon-download">
             </i> @MainMenu.DataExport
         </a>
     </li>
+}
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
@@ -68,7 +88,7 @@
         </ul>
     </li>
     <li>
-        <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/HQ_draft_manual.pdf" title="@MainMenu.Help" target="_blank">
+        <a href="http://docs.mysurvey.solutions/headquarters.pdf" title="@MainMenu.Help" target="_blank">
             <i class="glyphicon glyphicon-question-sign"></i>
         </a>
     </li>

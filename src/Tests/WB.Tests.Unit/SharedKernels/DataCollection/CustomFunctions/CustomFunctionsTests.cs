@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
     [TestFixture]
-    public class UnitTest1
+    internal class UnitTest1
     {
         // For all methods using params[], the indication is that 16383 is the limit:
         // http://stackoverflow.com/questions/12658883/what-is-the-maximum-number-of-parameters-that-a-c-sharp-method-can-be-defined-as
@@ -546,6 +546,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
+        [SetCulture("en-US")]
         public void Test_IsNumber()
         {
             Assert.AreEqual(true, "3.1415".IsNumber());

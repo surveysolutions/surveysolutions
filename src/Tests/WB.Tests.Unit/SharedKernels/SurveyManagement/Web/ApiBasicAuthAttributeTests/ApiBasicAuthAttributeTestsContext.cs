@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Web.Http.Controllers;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             Setup.InstanceToMockedServiceLocator(userViewFactory ?? Mock.Of<IUserViewFactory>());
             Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
-            return new ApiBasicAuthAttribute(isUserValid);
+            return new ApiBasicAuthAttribute(isUserValid, new [] {UserRoles.Operator});
         }
 
         protected static HttpActionContext CreateActionContext()

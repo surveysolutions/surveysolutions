@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             result.Length.ShouldEqual(0);
 
         private It should_archive_be_unziped_once = () =>
-            archiveUtils.Verify(x => x.Unzip(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Once);
+            archiveUtils.Verify(x => x.Unzip(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;

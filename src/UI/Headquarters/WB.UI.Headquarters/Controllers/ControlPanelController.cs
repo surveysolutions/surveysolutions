@@ -5,18 +5,21 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Infrastructure.Native.Storage.EventStore;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -27,66 +30,23 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
-        private static string lastReexportMessage = "no reexport performed";
-        private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        
 
-        public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
-            IDataExportRepositoryWriter dataExportRepositoryWriter, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
+        public ControlPanelController(
+            IServiceLocator serviceLocator,
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
+            ICommandService commandService,
+            IGlobalInfoProvider globalInfo,
+            ILogger logger,
+            IUserViewFactory userViewFactory,
+            IPasswordHasher passwordHasher,
+            ISettingsProvider settingsProvider,
+            ITransactionManagerProvider transactionManagerProvider,
+            IEventStoreApiService eventStoreApiService)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
-            this.dataExportRepositoryWriter = dataExportRepositoryWriter;
-            this.interviewSummaries = interviewSummaries;
-        }
-
-        public ActionResult ReexportInterviews()
-        {
-            return this.View();
-        }
-
-        public ActionResult StartReexportApprovedInterviews(int? skip)
-        {
-            new Task(() => this.ReexportApprovedInterviewsImpl(skip ?? 0)).Start();
-
-            return this.RedirectToAction("ReexportInterviews");
-        }
-
-        private void ReexportApprovedInterviewsImpl(int skip)
-        {
-            int pageSize = 20;
-
-            int count = this.GetApprovedInterviewIds().Count();
-            int processed = skip;
-
-            lastReexportMessage = string.Format("found {0} interviews", count);
-            while (processed < count)
-            {
-                List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
-
-                foreach (var interviewId in interviewIds)
-                {
-                    this.dataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
-                    processed++;
-
-                    lastReexportMessage = string.Format("last processed interview index: {0}", processed);
-                }
-            }
-        }
-
-        private IQueryable<Guid> GetApprovedInterviewIds()
-        {
-            return this.interviewSummaries.Query(_ =>
-                _.Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters || x.Status == InterviewStatus.ApprovedBySupervisor)
-                .Select(x => x.InterviewId).ToList()).AsQueryable();
-        }
-
-        public string GetReexportStatus()
-        {
-            return lastReexportMessage;
         }
 
         public ActionResult CreateHeadquarters()
@@ -123,23 +83,31 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                UserView userToCheck =
+                    this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                if (userToCheck == null)
                 {
-                    this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
-                        userName: model.UserName,
-                        password: passwordHasher.Hash(model.Password), email: model.Email,
-                        isLockedBySupervisor: false,
-                        isLockedByHQ: false, roles: new[] {role}, supervsor: null,
+                    try
+                    {
+                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
+                            userName: model.UserName,
+                            password: passwordHasher.Hash(model.Password), email: model.Email,
+                            isLockedBySupervisor: false,
+                            isLockedByHQ: false, roles: new[] { role }, supervsor: null,
                         personName: model.PersonName,
                         phoneNumber: model.PhoneNumber));
-                    return true;
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
+                        this.Error(userErrorMessage);
+                        this.Logger.Error(userErrorMessage, ex);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName,
-                        role);
-                    this.Error(userErrorMessage);
-                    this.Logger.Fatal(userErrorMessage, ex);
+                    this.Error("User name already exists. Please enter a different user name.");
                 }
             }
             return false;
@@ -154,7 +122,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResetUserPassword(UserModel model)
         {
-            UserView userToCheck = 
+            UserView userToCheck =
                 this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
             if (userToCheck != null && !userToCheck.IsArchived)
             {
@@ -164,7 +132,7 @@ namespace WB.UI.Headquarters.Controllers
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        personName:userToCheck.PersonName, phoneNumber:userToCheck.PhoneNumber));
+                        personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
                 }
@@ -172,7 +140,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     var userErrorMessage = "Error when updating password for user";
                     this.Error(userErrorMessage);
-                    this.Logger.Fatal(userErrorMessage, ex);
+                    this.Logger.Error(userErrorMessage, ex);
                 }
             }
             else

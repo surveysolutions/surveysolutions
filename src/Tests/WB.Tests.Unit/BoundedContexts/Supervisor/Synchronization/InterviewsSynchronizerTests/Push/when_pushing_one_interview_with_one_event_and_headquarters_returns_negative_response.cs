@@ -13,8 +13,8 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>(), TypeSerializationSettings.ObjectsOnly) == "metadata json"
                 && utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>(), TypeSerializationSettings.ObjectsOnly) == "events json"
                 && utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly) == "sync item json"
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
-                jsonUtils: jsonUtils,
+                serializer: jsonUtils,
                 httpMessageHandler: ()=> httpMessageHandler,
                 headquartersPushContext: headquartersPushContextMock.Object);
         };

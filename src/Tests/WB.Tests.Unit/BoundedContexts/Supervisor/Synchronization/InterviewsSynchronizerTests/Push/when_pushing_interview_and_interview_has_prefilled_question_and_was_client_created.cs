@@ -15,8 +15,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == interviewSummary);
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
-                jsonUtils: jsonUtils,
+                serializer: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler,
                 commandService: commandServiceMock.Object);
         };

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         private static Guid eventSourceId;
         private static InvalidOperationException exception;
 
-        internal class TestableFunctionalEventHandlerWithoutWriters : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>
+        public class TestableFunctionalEventHandlerWithoutWriters : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>
         {
             public TestableFunctionalEventHandlerWithoutWriters()
                 : base(null) { }

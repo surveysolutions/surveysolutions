@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Designer</RootNamespace>
     <AssemblyName>WB.UI.Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -22,9 +22,10 @@
     <IISExpressUseClassicPipelineMode />
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>b7adcc67</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,9 +61,24 @@
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah.Contrib.WebApi, Version=1.0.10.25, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Elmah.Contrib.WebApi.1.0.10.25\lib\net45\Elmah.Contrib.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah.Mvc, Version=2.0.0.29988, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.ClientAPI.Embedded">
+      <HintPath>..\..\..\..\packages\EventStore.Client.Embedded.3.4.0\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,27 +93,48 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.Data.OData.5.6.1\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Helpers">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebHelpers.3.2.0-rc\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="MultipartDataMediaFormatter, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MultipartDataMediaFormatter.1.1.0.0\lib\net45\MultipartDataMediaFormatter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Mvc.Mailer">
       <HintPath>..\..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
-    <Reference Include="NConfig, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
+    <Reference Include="NConfig, Version=1.1.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NConfig.1.1.20\lib\Net40\NConfig.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -129,25 +166,31 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Services" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -205,15 +248,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
@@ -231,15 +269,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AttachmentsController.cs" />
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
+    <Compile Include="Api\ImportControllerBase.cs" />
+    <Compile Include="Api\V2\ImportV2Controller.cs" />
+    <Compile Include="Api\QuestionnairesController.cs" />
+    <Compile Include="Api\QuestionnairesObsoleteController.cs" />
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
+    <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
+    <Compile Include="Code\Implementation\ShareChangeType.cs" />
+    <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
+    <Compile Include="DesignerSettingsProvider.cs" />
+    <Compile Include="Code\ICommandPostprocessor.cs" />
+    <Compile Include="Code\Implementation\CommandPostprocessor.cs" />
+    <Compile Include="Code\Implementation\MailNotifier.cs" />
+    <Compile Include="Code\IRecipientNotifier.cs" />
+    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
+    <Compile Include="Implementation\Services\AuthenticationService.cs" />
+    <Compile Include="Implementation\Services\RecaptchaService.cs" />
+    <Compile Include="Models\IEmailNotification.cs" />
+    <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
+    <Compile Include="Models\SharingNotificationModel.cs" />
+    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -254,8 +314,8 @@
     <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
-    <Compile Include="Code\ICommandPreprocessor.cs" />
-    <Compile Include="Code\Implementation\CommandPreprocessor.cs" />
+    <Compile Include="Code\ICommandInflater.cs" />
+    <Compile Include="Code\Implementation\CommandInflater.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
@@ -299,7 +359,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Code\MembershipModule.cs" />
-    <Compile Include="DynamicCompilerSettings.cs" />
+    <Compile Include="DynamicCompilerSettingsGroup.cs" />
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
@@ -312,8 +372,7 @@
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
-    <Compile Include="Models\VerificationError.cs" />
-    <Compile Include="Models\VerificationErrors.cs" />
+    <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
@@ -338,10 +397,20 @@
     <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\AccountResources.Designer.cs">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\QuestionnaireController.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NotificationResources.Designer.cs">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\QuestionnaireHistoryResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -349,6 +418,9 @@
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\IRecaptchaService.cs" />
+    <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
@@ -356,9 +428,9 @@
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
-    <Compile Include="WebServices\RemoteFileInfo.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
+    <Compile Include="WebServices\RemoteFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
@@ -370,11 +442,21 @@
     <Content Include="Content\identity\favicon-designer-192x192.png" />
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
+    <Content Include="PublicService.svc" />
     <Content Include="Content\identity\favicon-designer.png" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <EmbeddedResource Include="Resources\AccountResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -393,8 +475,15 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\attachments.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
+    <Content Include="UpdatedDesigner\app\views\help-link.html" />
+    <Content Include="UpdatedDesigner\app\views\attachment-preview.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
@@ -410,6 +499,15 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\i\designer-left-icons.png" />
+    <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
+    <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\karma.conf.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\tests.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\protractor.conf.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
@@ -577,30 +675,11 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\.jshintrc" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\build\compiler.jar" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\dist\angular-ui-tree.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\dist\angular-ui-tree.min.css" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\dist\angular-ui-tree.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\Gruntfile.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\guide\00_usage.ngdoc" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\guide\01_development_setup.ngdoc" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\guide\index.ngdoc" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\karma.conf.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\README.md" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\controllers\handleCtrl.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\controllers\nodeCtrl.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\controllers\nodesCtrl.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\controllers\treeCtrl.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\directives\uiTree.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\directives\uiTreeHandle.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\directives\uiTreeNode.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\directives\uiTreeNodes.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\main.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\services\helper.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\bower.json" />
@@ -762,7 +841,6 @@
     <Content Include="UpdatedDesigner\vendor\console-shim\test\index.html" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.gitignore" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CHANGES" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CONTRIBUTORS.md" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\es5-sham.js" />
@@ -784,11 +862,9 @@
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\jasmine.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\jasmine_favicon.png" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\json2.js" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\helpers-jasmine.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-array.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-date.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-function.js" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-global.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-number.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-object.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-string.js" />
@@ -801,6 +877,8 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -904,6 +982,276 @@
     <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\lodash\lodash.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\lodash.min.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\af.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ar-ma.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ar-sa.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ar-tn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ar.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\az.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\be.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\bg.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\bn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\bo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\br.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\bs.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\cs.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\cv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\cy.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\da.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\de-at.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\de.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\el.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\en-au.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\en-ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\en-gb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\eo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\es.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\et.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\eu.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fa.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fr-ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\fy.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\gl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\he.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\hi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\hr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\hu.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\hy-am.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\id.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\is.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\it.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ja.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\jv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ka.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\km.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ko.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\lb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\lt.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\lv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\me.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\mk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ml.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\mr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ms-my.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ms.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\my.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\nb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ne.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\nl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\nn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\pl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\pt-br.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\pt.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ro.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ru.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\si.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sq.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sr-cyrl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\sv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\ta.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\th.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\tl-ph.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\tr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\tzl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\tzm-latn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\tzm.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\uk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\uz.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\vi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\zh-cn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\locale\zh-tw.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\locales.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\locales.min.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\moment-with-locales.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\moment-with-locales.min.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\moment.min.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\min\tests.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\moment.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\check-overflow.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\date-from-array.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-anything.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-array.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-object.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-string-and-array.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-string-and-format.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\from-string.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\local.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\parsing-flags.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\utc.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\create\valid.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\abs.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\add-subtract.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\as.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\bubble.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\constructor.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\create.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\duration.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\get.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\humanize.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\iso-string.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\duration\prototype.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\format\format.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\calendar.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\constructor.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\en.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\formats.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\invalid.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\lists.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\locale.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\locales.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\ordinal.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\pre-post-format.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\prototype.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\relative.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\locale\set.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\add-subtract.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\calendar.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\clone.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\compare.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\constructor.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\diff.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\format.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\from.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\get-set.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\locale.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\min-max.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\moment.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\prototype.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\start-end-of.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\to-type.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\to.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\moment\valid.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\parse\regex.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\parse\token.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\aliases.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\constants.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\day-of-month.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\day-of-week.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\day-of-year.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\hour.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\millisecond.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\minute.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\month.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\offset.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\quarter.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\second.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\timestamp.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\timezone.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\units.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\week-year.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\week.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\units\year.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\abs-ceil.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\abs-floor.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\compare-arrays.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\defaults.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\deprecate.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\extend.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\has-own-prop.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\hooks.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\is-array.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\is-date.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\map.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\to-int.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\lib\utils\zero-fill.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\af.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ar-ma.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ar-sa.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ar-tn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ar.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\az.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\be.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\bg.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\bn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\bo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\br.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\bs.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\cs.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\cv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\cy.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\da.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\de-at.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\de.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\el.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\en-au.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\en-ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\en-gb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\eo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\es.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\et.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\eu.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fa.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fo.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fr-ca.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\fy.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\gl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\he.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\hi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\hr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\hu.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\hy-am.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\id.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\is.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\it.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ja.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\jv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ka.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\km.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ko.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\lb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\lt.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\lv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\me.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\mk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ml.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\mr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ms-my.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ms.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\my.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\nb.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ne.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\nl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\nn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\pl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\pt-br.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\pt.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ro.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ru.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\si.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sq.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sr-cyrl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\sv.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\ta.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\th.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\tl-ph.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\tr.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\tzl.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\tzm-latn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\tzm.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\uk.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\uz.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\vi.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\zh-cn.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\locale\zh-tw.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\src\moment.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\templates\amd-named.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\templates\amd.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\templates\globals.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\templates\locale-header.js" />
+    <Content Include="UpdatedDesigner\vendor\moment\templates\test-header.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\bower.json" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\CHANGES.md" />
@@ -913,6 +1261,16 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\protractor.conf.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.flash.swf" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\package.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
@@ -999,7 +1357,7 @@
     <Content Include="UpdatedDesigner\app\scripts\services\utilityService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\verificationService.js" />
     <Content Include="UpdatedDesigner\app\views\confirm.html" />
-    <Content Include="UpdatedDesigner\app\views\static-text.html" />
+    <Content Include="UpdatedDesigner\app\views\static-text.v1.html" />
     <Content Include="UpdatedDesigner\app\views\group.html" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
@@ -1086,7 +1444,6 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="PublicService.svc" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.js" />
@@ -1125,10 +1482,11 @@
     <Content Include="UpdatedDesigner\content\markup.css.css">
       <DependentUpon>markup.css.less</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\app\views\main.html" />
+    <Content Include="UpdatedDesigner\app\views\main.v1.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
+    <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1145,7 +1503,6 @@
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -1174,6 +1531,41 @@
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
+    <Content Include="Views\SystemMailer\TargetPersonShareNotification.cshtml" />
+    <Content Include="Views\ControlPanel\Settings.cshtml" />
+    <Content Include="Views\SystemMailer\TargetPersonStopShareNotification.cshtml" />
+    <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
+    <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
+    <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.versions" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
+    <Content Include="Views\ControlPanel\Versions.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\moment\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\moment\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\moment\CHANGELOG.md" />
+    <Content Include="UpdatedDesigner\vendor\moment\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\moment\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.editorconfig" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.gitignore" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.jshintrc" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.npmignore" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\.travis.yml" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.nuspec" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\CHANGELOG.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\CONTRIBUTING.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-moment\README.md" />
+    <Content Include="Views\Admin\RestoreQuestionnaire.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1249,13 +1641,12 @@
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
     <Content Include="UpdatedDesigner\package.json" />
-    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1267,29 +1658,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
-      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
-      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
-      <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -1299,13 +1674,17 @@
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
@@ -1318,6 +1697,10 @@
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
@@ -1328,6 +1711,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1358,14 +1744,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

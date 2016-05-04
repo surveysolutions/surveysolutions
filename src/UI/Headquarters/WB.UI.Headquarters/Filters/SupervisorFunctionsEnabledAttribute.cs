@@ -1,8 +1,9 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Http.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.UI.Headquarters.Code;
 using System.Web.Http.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -12,9 +13,13 @@ namespace WB.UI.Headquarters.Filters
         {
             if (!LegacyOptions.SupervisorFunctionsEnabled)
             {
-                var controller = filterContext.ControllerContext.Controller as InterviewerSyncController;
+                var interviewerApiNamespace = typeof (InterviewerControllerBase).Namespace;
+                var requestedControllerNamespace = filterContext.ControllerContext.Controller?.GetType().Namespace;
+                var isInterviewerController = requestedControllerNamespace != null &&
+                                              (interviewerApiNamespace != null &&
+                                               requestedControllerNamespace.IndexOf(interviewerApiNamespace, StringComparison.OrdinalIgnoreCase) > -1);
 
-                if (controller != null)
+                if (isInterviewerController)
                 {
                     throw new HttpException(404, "synchronization controller is missing with current web site configuration");
                 }

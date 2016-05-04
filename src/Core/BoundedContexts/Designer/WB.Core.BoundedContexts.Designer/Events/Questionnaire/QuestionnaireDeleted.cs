@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire
+﻿using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace Main.Core.Events.Questionnaire
 {
     using System;
 
@@ -7,8 +10,7 @@
     /// <summary>
     /// TODO: Delete summary.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:QuestionnaireDeleted")]
-    public class QuestionnaireDeleted
+    public class QuestionnaireDeleted : IEvent
     {
     }
 }

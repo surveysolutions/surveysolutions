@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
@@ -21,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             commandServiceMock = new Mock<ICommandService>();
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object,
                 questionnaireBrowseItemStorage:
-                    Mock.Of<IReadSideRepositoryReader<QuestionnaireBrowseItem>>(
+                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireBrowseItem() {Disabled = true}));
         };
 
@@ -29,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId);
 
         It should_never_execute_DisableQuestionnaire_Command = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>()), Times.Never);
 
         private static DeleteQuestionnaireService deleteQuestionnaireService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

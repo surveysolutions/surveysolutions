@@ -36,21 +36,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void Apply(AccountUpdated @event) { }
         public void Apply(AccountPasswordResetTokenChanged @event) { }
         public void Apply(UserLoggedIn @event) { }
-        [Obsolete]
-        public void Apply(AccountValidated @event) { }
+        
         #endregion
         public void Apply(AccountRoleAdded @event) { }
         public void Apply(AccountRoleRemoved @event) { }
 
         public AccountAR()
         {
-        }
-
-        public AccountAR(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt,
-            bool isConfirmed, string confirmationToken)
-            : base(accountId)
-        {
-            this.RegisterAccount(applicationName, userName, email, accountId, password, passwordSalt, isConfirmed, confirmationToken);
         }
 
         public void RegisterAccount(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
@@ -169,11 +161,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     this.ApplyEvent(new AccountUnlocked());
                 }
             }
-        }
-
-        public void Validate()
-        {
-            this.ApplyEvent(new UserLoggedIn { LastLoginAt = DateTime.UtcNow });
         }
     }
 }

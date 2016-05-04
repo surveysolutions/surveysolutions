@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private Establish context = () =>
         {
             var userViewFactoryMock =
-                Mock.Of<IUserViewFactory>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == CreateUserView(userId, userName)); ;
+                Mock.Of<IUserViewFactory>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == CreateUserView(userId, userName));
             
             controller = CreateUsersController(userViewViewFactory: userViewFactoryMock);
         };

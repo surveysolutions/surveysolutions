@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -30,6 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             statusEventsToPublish.Add(Create.InterviewApprovedEvent(interviewId: interviewId, comment: "comment Approved"));
             statusEventsToPublish.Add(Create.InterviewRejectedByHQEvent(interviewId: interviewId, comment: "comment RejectedByHQ"));
             statusEventsToPublish.Add(Create.InterviewApprovedByHQEvent(interviewId: interviewId, comment: "comment ApprovedByHQ"));
+
+            statusEventsToPublish.Add(Create.UnapprovedByHeadquartersEvent(interviewId: interviewId, comment: "comment Unapproved"));
+            statusEventsToPublish.Add(Create.InterviewApprovedByHQEvent(interviewId: interviewId, comment: "comment ApprovedByHQ 2nd"));
+
             statusEventsToPublish.Add(Create.InterviewRestartedEvent(interviewId: interviewId, comment: "comment Restarted"));
             statusEventsToPublish.Add(Create.SupervisorAssignedEvent(interviewId: interviewId));
             statusEventsToPublish.Add(Create.InterviewRestoredEvent(interviewId: interviewId));
@@ -53,6 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                     InterviewExportedAction.ApprovedBySupervisor, 
                     InterviewExportedAction.RejectedByHeadquarter, 
                     InterviewExportedAction.ApprovedByHeadquarter,
+                    InterviewExportedAction.UnapprovedByHeadquarter,
+                    InterviewExportedAction.ApprovedByHeadquarter,
                     InterviewExportedAction.Restarted,
                     InterviewExportedAction.SupervisorAssigned,
                     InterviewExportedAction.Restored,
@@ -69,7 +71,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                    InterviewExportedAction.ApprovedBySupervisor, 
                    InterviewExportedAction.RejectedByHeadquarter,
                    InterviewExportedAction.Restarted, 
-                   InterviewExportedAction.ApprovedByHeadquarter
+                   InterviewExportedAction.ApprovedByHeadquarter,
+                   InterviewExportedAction.UnapprovedByHeadquarter
+
                }.Contains(s.Status)).Select(i => i.Comment).ToArray()
                .ShouldEqual(new[]
                 {
@@ -77,7 +81,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                     "comment Rejected",
                     "comment Approved", 
                     "comment RejectedByHQ", 
-                    "comment ApprovedByHQ", 
+                    "comment ApprovedByHQ",
+                    "comment Unapproved",
+                    "comment ApprovedByHQ 2nd",
                     "comment Restarted"
                 });
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using It = Machine.Specifications.It;
@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
 
             plainFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
-            plainFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+            plainFileRepository.StoreInterviewBinaryDataAsync(interviewId, fileName1, data1);
         };
 
         Because of = () => plainFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);

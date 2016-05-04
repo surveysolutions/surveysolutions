@@ -46,7 +46,7 @@
       match="/configuration/appSettings/add[@key='EventStore.Password']/@value" />
    </parameter>
    
-   <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://solutions.worldbank.org/api/import" tags="">
+   <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://solutions.worldbank.org/api/v2/import" tags="">
     <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='DesignerAddress']/@value" />

@@ -14,16 +14,17 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <NuGetPackageImportStamp>ce25abdd</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,12 +56,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.NLog40, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.NLog40.3.3.0\lib\net40\Common.Logging.NLog40.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -74,13 +82,13 @@
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Humanizer">
-      <HintPath>..\..\..\..\packages\Humanizer.1.34.0\lib\portable-win+net40+sl50+wp8+wpa81\Humanizer.dll</HintPath>
+    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -94,20 +102,32 @@
     <Reference Include="Microsoft.Owin">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NConfig">
-      <HintPath>..\..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
+    <Reference Include="NConfig, Version=1.1.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NConfig.1.1.20\lib\Net40\NConfig.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -139,23 +159,35 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz, Version=2.3.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SDammann.WebApi.Versioning, Version=2.7.0.0, Culture=neutral, PublicKeyToken=8e49016fcaf923da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SDammann.WebApi.Versioning.2.7.0.0\lib\net45\SDammann.WebApi.Versioning.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
@@ -228,6 +260,12 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\icons\binary.png" />
+    <Content Include="Content\icons\ddi.ico" />
+    <Content Include="Content\icons\spss.png" />
+    <Content Include="Content\icons\stata.gif" />
+    <Content Include="Content\icons\tabs.png" />
+    <Content Include="Content\identity\favicon-hq-114x114.png" />
     <Content Include="Content\identity\favicon-hq-120x120.png" />
     <Content Include="Content\identity\favicon-hq-144x144.png" />
     <Content Include="Content\identity\favicon-hq-152x152.png" />
@@ -257,8 +295,16 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\dateRangePicker\daterangepicker.css" />
+    <Content Include="Scripts\dateRangePicker\daterangepicker.js" />
     <Content Include="Scripts\ko.datepicker.js" />
+    <Content Include="Scripts\pages\batch-user-creation.js" />
+    <Content Include="Scripts\pages\exportdata.js" />
+    <Content Include="Scripts\pages\import-interviews.js" />
+    <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
+    <Content Include="Scripts\pages\export-settings.js" />
+    <Content Include="Scripts\pages\userpreloading.js" />
     <Content Include="Scripts\popover-extra-placements.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -270,7 +316,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="parameters.xml" />
+    <None Include="parameters.xml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\jqPlot\changes.txt" />
     <Content Include="Scripts\jqPlot\copyright.txt" />
@@ -404,7 +452,6 @@
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
-    <Content Include="Views\Supervisor\Interviewers.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -423,7 +470,7 @@
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
-    <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\HQ\VerifyPanel.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -437,8 +484,19 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
-    <Content Include="Views\HQ\DataExport.cshtml" />
+    <Content Include="Views\DataExport\Index.cshtml" />
     <Content Include="Views\Supervisor\Archived.cshtml" />
+    <Content Include="Views\BatchUserUpload\NewUserBatchUpload.cshtml" />
+    <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
+    <Content Include="Views\BatchUserUpload\UserPreloadigVerificationDetails.cshtml" />
+    <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
+    <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
+    <Content Include="Views\Shared\_EditorLayout.cshtml" />
+    <Content Include="Views\ApiUser\Create.cshtml" />
+    <Content Include="Views\ApiUser\Edit.cshtml" />
+    <Content Include="Views\ApiUser\Index.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\Settings\ExportEncryptionSettings.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -460,8 +518,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
+    <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="API\ExportSettingsApiController.cs" />
+    <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\Resources\AssembliesResourceController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -483,6 +544,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
@@ -504,13 +571,23 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BatchUserUploadController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
+    <Compile Include="Controllers\DataExportController.cs" />
+    <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Models\ChangeSettingsModel.cs" />
+    <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
+    <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\TypeExtensions.cs" />
+    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
+    <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
@@ -520,14 +597,31 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\InterviewImportService.cs" />
     <Compile Include="Injections\HeadquartersRegistry.cs" />
+    <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\UserPreloadingVerificationMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IInterviewImportService.cs" />
+    <Compile Include="Services\InterviewImportColumn.cs" />
+    <Compile Include="Services\InterviewImportError.cs" />
+    <Compile Include="Services\InterviewImportFileDescription.cs" />
+    <Compile Include="Services\InterviewImportPrefilledQuestion.cs" />
+    <Compile Include="Services\InterviewImportState.cs" />
+    <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -545,32 +639,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
-      <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
-      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
-      <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -584,6 +661,10 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{e96a3629-18f6-4b7c-9920-fc9a1b3892c1}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
@@ -592,10 +673,6 @@
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -603,6 +680,10 @@
     <ProjectReference Include="..\..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
@@ -635,10 +716,19 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
     </Content>
+    <Content Include="App_GlobalResources\Settings.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -648,12 +738,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <_CustomFiles Include="Externals\**\*" />
@@ -698,7 +782,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

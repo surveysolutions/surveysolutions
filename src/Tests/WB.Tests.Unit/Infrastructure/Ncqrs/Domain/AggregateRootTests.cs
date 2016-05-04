@@ -7,13 +7,16 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class AggregateRootTests
+    internal class AggregateRootTests
     {
         [SetUp]
         public void SetUp()
@@ -21,12 +24,12 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class HandledEvent
+        public class HandledEvent : IEvent
         {
         }
 
-        public class UnhandledEvent
-        {}
+        public class UnhandledEvent : IEvent
+        { }
 
         public class MyAggregateRoot : AggregateRoot
         {
@@ -208,7 +211,7 @@ namespace Ncqrs.Tests.Domain
             var theAggregate = new MyAggregateRoot();
             const int wrongSequence = 3;
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, new HandledEvent()));
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, 0, new HandledEvent()));
 
             Action act = ()=> theAggregate.InitializeFromHistory(stream);
             act.ShouldThrow<InvalidOperationException>().And.Message.Should().Contain("sequence");
@@ -220,11 +223,11 @@ namespace Ncqrs.Tests.Domain
             var theAggregate = new MyAggregateRoot();
 
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent()),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent()),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent()),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent()),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent()));
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow,0, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow,0, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow,0, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow,0, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow,0, new HandledEvent()));
 
             theAggregate.InitializeFromHistory(stream);
         }
@@ -270,11 +273,11 @@ namespace Ncqrs.Tests.Domain
 
             Guid commandId = Guid.NewGuid();
 
-            var event1 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent());
-            var event2 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent());
-            var event3 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent());
-            var event4 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent());
-            var event5 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent());
+            var event1 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, 0, new HandledEvent());
+            var event2 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, 0, new HandledEvent());
+            var event3 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, 0, new HandledEvent());
+            var event4 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, 0, new HandledEvent());
+            var event5 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, 0, new HandledEvent());
 
             IEnumerable<CommittedEvent> history = new[] { event1, event2, event3, event4, event5 };
 

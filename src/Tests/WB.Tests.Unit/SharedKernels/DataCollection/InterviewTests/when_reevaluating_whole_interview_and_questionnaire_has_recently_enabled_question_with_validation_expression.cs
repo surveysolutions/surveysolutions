@@ -4,9 +4,9 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
@@ -31,8 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         //&& _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyInvalidQuestionId }
                                                         && _.GetCustomEnablementConditionForQuestion(conditionallyInvalidQuestionId) == enablementCondition
                                                         && _.HasQuestion(conditionallyInvalidQuestionId) == true
-                                                        && _.GetQuestionType(conditionallyInvalidQuestionId) == QuestionType.Text
-                                                        && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
+                                                        && _.GetQuestionType(conditionallyInvalidQuestionId) == QuestionType.Text);
 
             //var expressionProcessor = new Mock<IExpressionProcessor>();
 
@@ -46,10 +45,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            //SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
+            //Setup.InstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new TextQuestionAnswered(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer"));
             interview.Apply(new QuestionsDisabled(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));
             interview.Apply(new AnswersDeclaredInvalid(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));

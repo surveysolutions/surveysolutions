@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using FluentAssertions.Events;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -9,7 +12,10 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -17,7 +23,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     internal class when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository
     {
         private class Initialize : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class Initialized {}
+        private class Initialized : IEvent { }
 
         private class Aggregate : AggregateRoot
         {
@@ -39,21 +45,32 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
 
             var eventBus = Mock.Of<IEventBus>();
-            Mock.Get(eventBus)
-                .Setup(bus => bus.PublishUncommitedEventsFromAggregateRoot(Moq.It.IsAny<IAggregateRoot>(), null, false))
-                .Callback<IAggregateRoot, string, bool>((aggregate, origin, inBatch) =>
+            var eventBusMock = Mock.Get(eventBus);
+
+            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()))
+                        .Returns((IAggregateRoot aggregate, string origin) =>
+                        {
+                            constructedAggregateId = aggregate.EventSourceId;
+                            return Create.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
+                        });
+
+            eventBusMock
+                .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<CommittedEventStream>()))
+                .Callback<CommittedEventStream>(events =>
                 {
-                    publishedEvents = aggregate.GetUncommittedChanges();
-                    constructedAggregateId = aggregate.EventSourceId;
+                    publishedEvents = events;
                 });
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
-            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
+            IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
+                => _.GetInstance(typeof(Aggregate)) == new Aggregate());
+
+            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
         };
 
         Because of = () =>
-            commandService.Execute(new Initialize(), null, false);
+            commandService.Execute(new Initialize(), null);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
             publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();
@@ -68,7 +85,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
-        private static IEnumerable<UncommittedEvent> publishedEvents;
+        private static CommittedEventStream publishedEvents;
         private static Guid constructedAggregateId;
         private static Mock<IAggregateSnapshotter> snapshooterMock;
     }

@@ -9,12 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Tests.Integration</RootNamespace>
     <AssemblyName>WB.Tests.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>e18b2647</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,20 +43,21 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Esent.Collections, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.CrossCore.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EventStore.Client.3.4.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI.Embedded">
-      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.0.1\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI.Embedded, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.4.0\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
@@ -64,28 +65,87 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.1\lib\net45\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.1\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications.Should">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.2\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Moq, Version=4.2.1402.2112, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.0.0\lib\net45\MvvmCross.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Platform.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.0.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.4.0.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -96,11 +156,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
@@ -117,36 +186,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="CommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
+    <Compile Include="CommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
+    <Compile Include="CommandServiceTests\when_executing_command_and_aggregate_root_raised_no_events.cs" />
     <Compile Include="CommandServiceTests\when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
+    <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
-    <Compile Include="EsentTests\TestStoredEntity.cs" />
-    <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
-    <Compile Include="EsentTests\when_item_removed.cs" />
-    <Compile Include="EsentTests\when_random_item_is_stored.cs" />
-    <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
+    <Compile Include="EventHandler\when_using_AnswerNotifier.cs" />
     <Compile Include="EventStoreTests\when_reading_all_events.cs" />
     <Compile Include="EventStoreTests\when_storing_event_stream.cs" />
     <Compile Include="EventStoreTests\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
-    <Compile Include="InterviewStatistics\Create.cs" />
-    <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_acreating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_numeric_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
@@ -156,23 +222,37 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_numeric_question_that_can_turn_off_cascading_chain.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_remove_answer_from_parent_cascading_question.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\CodeGenerationTestsContext.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters_and_filter_throw_exception.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_error_in_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_question_condition_containing_self.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_questionnaire_level_with_multiple_conditions.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_1st_level_of_roster_with_multiple_conditions.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_revalidating_interview_with_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_answer_is_empty_set.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_numeric_roster_size_question_which_propagate_roster_with_mandatory_question.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_2nd_level_of_nested_roster_with_multiple_conditions.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and____.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_mandatory_questions_inside_triggered_by_the_same_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__new_answer_is_empty_set.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_revalidating_interview_with_multiple_options_question_which_is_mandatory_and_answer_is_empty_set.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_disables_roster_size_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_roster_size_question_of_nested_roster_increase_row_count_but_row_is_disabled.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_inside_propagatable_group_which_triggers_group_enablement_with_mandatory_question_inside_disabled_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_top_level_question_which_enables_nested_roster.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C.cs" />
@@ -180,6 +260,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_inside_roster_with_lookup_table_in_validation.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
@@ -190,17 +271,47 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_disabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_question_which_enable_group_with_mandatory_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_regex.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
+    <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
+    <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option.cs" />
+    <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option.cs" />
+    <Compile Include="InterviewTests\Rosters\when_decreasing_roster_row_count_and_linked_question_has_reference_on_it.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_nested_roster.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_different_roster_branches.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_roster.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
+    <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
+    <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
+    <Compile Include="QuestionnaireDocumentExtensions.cs" />
+    <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
+    <Compile Include="ResourcesTranslationTests\when_checking_availability_of_resources_in_Russian_comparing_to_English.cs" />
+    <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_string_format_elements_as_original.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_a_lot_of_events_applying.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_in_random_order.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -208,19 +319,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="TestEnvironment.cs" />
+    <Compile Include="TesterResourcesTests\TesterResourcesTestsContext.cs" />
+    <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />
+    <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
+    <Compile Include="TesterSettingsTests\TesterSettingsTestsContext.cs" />
+    <Compile Include="TesterSettingsTests\when_settings_contain_designer_accesss_point.cs" />
+    <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
     <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\packages\EventStore.Client.Embedded.3.4.0\native\x64\win\js1.dll" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.CAPI.csproj">
+    <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
-      <Name>WB.Core.BoundedContexts.CAPI</Name>
+      <Name>WB.Core.BoundedContexts.Interviewer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
@@ -234,21 +353,13 @@
       <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
+      <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
-      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
-      <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
@@ -262,13 +373,17 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
+      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
+      <Name>WB.Core.SharedKernels.Enumerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -278,28 +393,29 @@
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
+      <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
+      <Name>WB.UI.Designer</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="QuestionnaireTests\" />
-    <Folder Include="SurveyManagement\" />
-    <Folder Include="Synchronization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.4.0\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.4.0\build\EventStore.Client.Embedded.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.4.0\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.4.0\build\EventStore.Client.Embedded.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -4,8 +4,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
@@ -19,6 +19,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [ValidateInput(false)]
     public class AccountController : TeamController
     {
         private readonly IFormsAuthentication authentication;

@@ -23,16 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 parsingResult =
                     questionDataParser.TryParse(answer, questionVarName, 
                         question,
-                        CreateQuestionnaireDocumentWithOneChapter(question),
                         out parcedValue);
 
         private It should_result_value_be_equal_to_answer = () =>
-            parcedValue.Value.ShouldEqual(answer);
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            parcedValue.Key.ShouldEqual(questionId);
-    
-    
+            parcedValue.ShouldEqual(answer);
     }
-
 }

@@ -41,11 +41,6 @@
         FailedLogin, 
 
         /// <summary>
-        /// The user validated.
-        /// </summary>
-        UserValidated, 
-
-        /// <summary>
         /// The update online state.
         /// </summary>
         UpdateOnlineState, 

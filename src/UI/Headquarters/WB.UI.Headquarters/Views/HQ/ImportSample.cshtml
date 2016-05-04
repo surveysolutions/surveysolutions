@@ -1,5 +1,6 @@
 ﻿@using System.Activities.Expressions
 @using System.ServiceModel.Channels
+@using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
@@ -10,13 +11,14 @@
     ViewBag.Title = "Index";
 }
 <div class="row-fluid">
+    <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.BatchUpload_Title, Model.Version, Model.QuestionnaireTitle)</h3>
+    <br />
     @if (Model.MetaData == null)
     {
-        <h3>File wasn't parsed</h3>
+        <h3>File wasn't parsed. Only tab-delimited file can be uploaded.</h3>
     }
     else
     {
-        <h3>@Model.MetaData.Title</h3>
         <div style="height: 500px; overflow-y: scroll;">
             <table class="table table-striped table-bordered table-condensed table-break-words">
                 <thead>

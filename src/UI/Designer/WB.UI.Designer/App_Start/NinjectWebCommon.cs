@@ -4,7 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
-using Microsoft.Practices.ServiceLocation;
+using System.Web.Hosting;
+using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
@@ -13,29 +14,36 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Storage.Esent;
-using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Files;
+using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -75,21 +83,34 @@ namespace WB.UI.Designer.App_Start
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
+            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
-                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
+            var cacheSettings = new ReadSideCacheSettings(
+                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
+            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
 
-            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(DesignerBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
+            };
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -97,48 +118,46 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
+                new PostgresKeyValueModule(cacheSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
-                new FileInfrastructureModule()
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
+
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
+                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
+                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
+
+            kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            kernel.Bind<ReadSideSettings>().ToConstant(readSideSettings);
             kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
             kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
 
-            PrepareNcqrsInfrastucture(kernel);
+            kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
+            kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
+            kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
+
+            CreateAndRegisterEventBus(kernel);
             
             return kernel;
         }
 
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            CreateAndRegisterEventBus(kernel);
-        }
-
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
             kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
+            kernel.Bind<ILiteEventBus>().ToMethod(_ => GetEventBus(kernel));
             kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
         }
 
@@ -149,11 +168,13 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var ignoredDenormalizersConfigSection =
-               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
-            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
+            var eventBusConfigSection =
+               (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
 
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                 eventBusConfigSection.GetSettings(),
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))

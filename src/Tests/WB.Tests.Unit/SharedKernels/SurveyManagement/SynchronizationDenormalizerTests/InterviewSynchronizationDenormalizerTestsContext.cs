@@ -3,7 +3,7 @@
 using Machine.Specifications;
 using Moq;
 
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -25,19 +25,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures = null,
             IReadSideKeyValueStorage<InterviewData> interviews = null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             IMetaInfoBuilder metaBuilder = null,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> interviewPackageStorageWriter = null,
+            IReadSideRepositoryWriter<InterviewSyncPackageMeta> interviewPackageStorageWriter = null,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory = null)
         {
             var result = new InterviewSynchronizationDenormalizer(
                 questionnriePropagationStructures ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 interviews ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
-                metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 interviewPackageStorageWriter ??
-                Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>(),
+                Mock.Of<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>(),
                 synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>());
 

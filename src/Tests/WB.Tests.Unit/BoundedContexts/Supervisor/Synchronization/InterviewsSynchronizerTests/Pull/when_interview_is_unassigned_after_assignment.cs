@@ -5,7 +5,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -22,7 +22,7 @@ using it = Moq.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Pull
 {
     [Subject(typeof (InterviewsSynchronizer))]
-    public class when_interview_is_unassigned_after_assignment
+    internal class when_interview_is_unassigned_after_assignment
     {
         Establish context = () =>
         {
@@ -33,10 +33,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryStorage =
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
 
-            var interviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "",
-                     userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
-                     new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                     new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
+            var interviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(status: InterviewStatus.Deleted,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: 2,
+                    wasCompleted: true,
+                    interviewId: interviewId);
 
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(
@@ -75,10 +78,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         Because of = () => synchronizer.PullInterviewsForSupervisors(new[] { supervisorId });
 
         It should_should_not_create_it = () =>
-            commandServiceMock.Verify(x => x.Execute(it.IsAny<SynchronizeInterviewFromHeadquarters>(), Constants.HeadquartersSynchronizationOrigin, Moq.It.IsAny<bool>()), Times.Never);
+            commandServiceMock.Verify(x => x.Execute(it.IsAny<SynchronizeInterviewFromHeadquarters>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
 
         It should_unassign_interview = () =>
-            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin, Moq.It.IsAny<bool>()), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
         
         private static InterviewsSynchronizer synchronizer;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");

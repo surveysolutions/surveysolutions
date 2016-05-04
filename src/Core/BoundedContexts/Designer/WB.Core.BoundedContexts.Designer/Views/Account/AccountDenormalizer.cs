@@ -22,8 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                        IEventHandler<AccountRoleAdded>, 
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
-                                       IEventHandler<AccountPasswordResetTokenChanged>, 
-                                       IEventHandler<AccountValidated>
+                                       IEventHandler<AccountPasswordResetTokenChanged>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 
@@ -171,10 +170,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         private static string GetNormalizedUserName(string userName)
         {
             return userName.ToLower();
-        }
-
-        public void Handle(IPublishedEvent<AccountValidated> evnt) // Here added just to have this event registered in NCQRS
-        {
         }
     }
 }

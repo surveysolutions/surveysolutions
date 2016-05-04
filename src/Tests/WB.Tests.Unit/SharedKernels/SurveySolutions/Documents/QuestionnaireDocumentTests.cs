@@ -12,7 +12,7 @@ using WB.Tests.Unit;
 namespace Main.Core.Tests.Documents
 {
     [TestFixture]
-    public class QuestionnaireDocumentTests
+    internal class QuestionnaireDocumentTests
     {
         [SetUp]
         public void SetUp()

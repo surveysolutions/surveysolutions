@@ -1,6 +1,5 @@
 ﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Designer.Exceptions
 {
@@ -67,7 +66,7 @@ namespace WB.UI.Designer.Exceptions
             }
 
             // log the error 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<CustomHandleErrorAttribute>();
             logger.Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;

@@ -12,17 +12,23 @@ using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
+using WB.Infrastructure.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -203,10 +209,20 @@ namespace WB.UI.Headquarters.Injections
 
             this.RegisterViewFactories();
 
-            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
+            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
-            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null);
+
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
+
+            this.Bind<IExportSettings>().To<ExportSettings>();
+
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
         }
     }
 }

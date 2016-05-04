@@ -2,17 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit
@@ -33,6 +46,9 @@ namespace WB.Tests.Unit
                 .Setup(locator => locator.GetInstance<T>())
                 .Returns(Mock.Of<T>());
         }
+
+        public static IReadSideKeyValueStorage<TEntity> ReadSideKeyValueStorageWithSameEntityForAnyGet<TEntity>(TEntity entity) where TEntity : class, IReadSideRepositoryEntity
+            => Mock.Of<IReadSideKeyValueStorage<TEntity>>(_ => _.GetById(It.IsAny<string>()) == entity);
 
         public static IQueryableReadSideRepositoryReader<TEntity> QueryableReadSideRepositoryReaderByQueryResultType<TEntity, TResult>(IEnumerable<TEntity> entities)
             where TEntity : class, IReadSideRepositoryEntity
@@ -59,14 +75,30 @@ namespace WB.Tests.Unit
             Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
         }
 
-        public static void QuestionnaireWithRepositoryToMockedServiceLocator(
-            Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
         }
+
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Create.PlainQuestionnaire(questionnaireDocument));
+
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+
+        private static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
+            => Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
+                && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
 
         public static IEventHandler FailingFunctionalEventHandler()
         {
@@ -94,12 +126,121 @@ namespace WB.Tests.Unit
         {
             var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<object>>();
+            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<IEvent>>();
             eventHandlerAsOldSchool
-                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<object>>()))
+                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<IEvent>>()))
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;
+        }
+
+        public static IStatefulInterviewRepository StatefulInterviewRepositoryWithInterviewsWithAllGroupsEnabledAndExisting()
+        {
+            return Setup.StatefulInterviewRepository(
+                Mock.Of<IStatefulInterview>(_
+                    => _.HasGroup(It.IsAny<Identity>()) == true
+                    && _.IsEnabled(It.IsAny<Identity>()) == true));
+        }
+
+        public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
+        {
+            return Mock.Of<IStatefulInterviewRepository>(_
+                => _.Get(It.IsAny<string>()) == interview);
+        }
+
+        public static Interview InterviewForQuestionnaire(IQuestionnaire questionnaire)
+        {
+            Guid questionnaireId = Guid.NewGuid();
+            long questionnaireVersion = 777;
+
+            IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
+                questionnaireId: questionnaireId,
+                questionnaireVersion: questionnaireVersion,
+                questionnaire: questionnaire);
+
+            Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+
+            interview.Apply(Create.Event.InterviewCreated(
+                questionnaireId: questionnaireId,
+                questionnaireVersion: questionnaireVersion));
+
+            return interview;
+        }
+
+        public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
+        }
+
+        public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
+        {
+            var version = new Version(questionnaireContentVersion, 0, 0);
+
+            return Mock.Of<IDesignerEngineVersionService>(_ 
+                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
+                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+        }
+
+        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            var questionnaireIdentity = Create.QuestionnaireIdentity();
+
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+
+            return Create.StatefulInterview(
+                questionnaireId: questionnaireIdentity.QuestionnaireId,
+                questionnaireVersion: questionnaireIdentity.Version,
+                questionnaireRepository: questionnaireRepository);
+        }
+
+        public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
+        {
+            var staticText = Create.StaticText(entityId, text, attachmentName);
+            var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
+            if (!entityId.HasValue)
+            {
+                questionnaireEntityFactoryMock
+                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                   .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
+            }
+            else if (string.IsNullOrWhiteSpace(attachmentName))
+            {
+                questionnaireEntityFactoryMock
+                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>()))
+                    .Returns(staticText);
+            }
+            else
+            {
+                questionnaireEntityFactoryMock
+                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName))
+                   .Returns(staticText);
+            }
+
+            return questionnaireEntityFactoryMock;
+        }
+
+        public static ISupportedVersionProvider SupportedVersionProvider(Version supportedVerstion)
+        {
+            var versionProvider = new Mock<ISupportedVersionProvider>();
+            versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
+
+            return versionProvider.Object;
+        }
+
+        public static IStringCompressor StringCompressor_Decompress<TEntity>(TEntity entity) where TEntity: class
+        {
+            var zipUtilsMock = new Mock<IStringCompressor>();
+
+            zipUtilsMock.Setup(_ => _.DecompressString<TEntity>(Moq.It.IsAny<string>()))
+                .Returns(entity);
+
+            return zipUtilsMock.Object;
+        }
+
+        public static IPrincipal InterviewerPrincipal(string name, string pass)
+        {
+            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == new InterviewerIdentity() { Name = "name", Password = "pass" });
         }
     }
 }

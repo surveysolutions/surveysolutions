@@ -1,22 +1,46 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils.Services;
+using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CSharp.RuntimeBinder;
+using Microsoft.Practices.ServiceLocation;
+using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Storage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -28,6 +52,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Services;
+using Binder = System.Reflection.Binder;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -37,24 +63,26 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
-        private readonly IUserListViewFactory supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
-        private readonly InterviewHistorySettings interviewHistorySettings;
+        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IInterviewImportService interviewImportService;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
-            IUserListViewFactory supervisorsFactory,
             Func<ISampleImportService> sampleImportServiceFactory,
             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            InterviewHistorySettings interviewHistorySettings)
+            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
+            InterviewDataExportSettings interviewDataExportSettings,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IInterviewImportService interviewImportService)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -62,16 +90,17 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
-            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
-            this.interviewHistorySettings = interviewHistorySettings;
+            this.interviewDataExportSettings = interviewDataExportSettings;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.interviewImportService = interviewImportService;
+            this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
-            this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
             return this.View();
         }
 
@@ -85,8 +114,6 @@ namespace WB.UI.Headquarters.Controllers
                         this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(this.Filters());
         }
 
@@ -94,45 +121,18 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            var featuredQuestionItems = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions;
+            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
             var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                FeaturedQuestions = new List<FeaturedQuestionItem>(featuredQuestionItems)
+                QuestionnaireTitle = questionnaireInfo?.Title,
+                FeaturedQuestions = featuredQuestionItems
             };
 
             return this.View(viewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public ActionResult SampleBatchUpload(BatchUploadModel model)
-        {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("BatchUpload", model);
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
-            }
-
-            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
-
-            //clean up for security reasons
-            if (preloadedMetadata == null)
-            {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
-            }
-
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
 
         [HttpPost]
@@ -144,7 +144,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("BatchUpload", model);
+                return this.RedirectToAction("BatchUpload",
+                    new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
             }
 
             if (User.Identity.IsObserver())
@@ -162,7 +163,42 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
             }
 
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult SampleBatchUpload(BatchUploadModel model)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("BatchUpload",
+                    new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
+            }
+
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("BatchUpload", model);
+            }
+
+            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
+
+            //clean up for security reasons
+            if (preloadedMetadata == null)
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+            }
+
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
@@ -173,11 +209,20 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            if (this.interviewImportService.Status.InterviewImportProcessId == id)
+            {
+                var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
+                    questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
+                    true, id, PreloadedContentType.Sample);
+
+                return this.View(inProgressModel);
+            }
+
             var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             //null is handled inside 
             var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
-
-            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
 
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
@@ -185,8 +230,8 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
 
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Sample);
             return this.View(model);
         }
 
@@ -194,81 +239,19 @@ namespace WB.UI.Headquarters.Controllers
         {
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
-            this.ViewBag.SupervisorList =
-              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
-
+            
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
 
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
-            return this.View("VerifySample", model);
-        }
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Panel);
 
-        [ObserverNotAllowed]
-        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
-        {
-            PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreatePanel(
-                        questionnaireId,
-                        version,
-                        id,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        responsibleSupervisor);
-                }
-                finally
-                {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-                }
-            }).Start();
-
-            return this.RedirectToAction("SampleCreationResult", new { id });
-        }
-
-        [ObserverNotAllowed]
-        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
-        {
-            PreloadedDataByFile preloadedData = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreateSample(
-                        questionnaireId,
-                        version,
-                        id,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        responsibleSupervisor);
-                }
-                finally
-                {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-                }
-            }).Start();
-            
-            return this.RedirectToAction("SampleCreationResult", new { id });
+            return this.View(model);
         }
 
         public ActionResult SampleCreationResult(string id)
@@ -299,10 +282,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Users);
+            return this.View();
         }
 
         public ActionResult SupervisorsAndStatuses()
@@ -343,30 +323,11 @@ namespace WB.UI.Headquarters.Controllers
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
             return new DocumentFilter
-                {
-                    Users =
-                        this.supervisorsFactory.Load(new UserListViewInputModel { PageSize = int.MaxValue })
-                            .Items.Where(u => !u.IsLockedBySupervisor && !u.IsLockedByHQ)
-                            .Select(u => new UsersViewItem
-                                {
-                                    UserId = u.UserId,
-                                    UserName = u.UserName
-                                }),
-                    Responsibles = usersAndQuestionnaires.Users,
-                    Templates = usersAndQuestionnaires.Questionnaires,
-                    Statuses = statuses
-                };
+            {
+                Templates = usersAndQuestionnaires.Questionnaires,
+                Statuses = statuses
+            };
         }
 
-        public ActionResult DataExport()
-        {
-            this.ViewBag.ActivePage = MenuItem.DataExport;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
     }
 }

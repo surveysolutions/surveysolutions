@@ -7,14 +7,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
@@ -34,7 +37,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock = new Mock<IEventDispatcher>();
             eventDispatcherMock.Setup(x => x.GetAllRegistredEventHandlers()).Returns(new[] { eventHandlerMock.Object });
 
-            committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), eventSourceId , 1, DateTime.Now, new object());
+            committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), eventSourceId , 1, DateTime.Now, 0, Mock.Of<IEvent>());
             streamableEventStoreMock = new Mock<IStreamableEventStore>();
             streamableEventStoreMock.Setup(x => x.ReadFrom(eventSourceId, 0, int.MaxValue))
                 .Returns(new CommittedEventStream(eventSourceId, new[] { committedEvent }));
@@ -78,7 +81,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
-            readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
+            readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild views by event sources succeeded.");
 
         private static ReadSideService readSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;

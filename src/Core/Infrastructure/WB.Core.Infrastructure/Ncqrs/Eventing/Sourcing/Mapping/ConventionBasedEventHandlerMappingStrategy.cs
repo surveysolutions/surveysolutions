@@ -73,5 +73,28 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
             return handlers;
         }
+
+        public bool CanHandleEvent(object target, Type committedEvent)
+        {
+            var targetType = target.GetType();
+            var methodsToMatch = targetType.GetMethods();
+
+            foreach (var method in methodsToMatch)
+            {
+                var parameters = method.GetParameters();
+
+                if (// Get only methods where the name matches.
+                    Regex.IsMatch(method.Name, MethodNameRegexPattern, RegexOptions.CultureInvariant) &&
+                    // Get only methods that have 1 parameter.
+                    parameters.Length == 1 &&
+                    // Get only methods where the first parameter is equal to event.
+                    committedEvent.GetTypeInfo().IsAssignableFrom(parameters[0].ParameterType.GetTypeInfo()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -4,10 +4,12 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -27,7 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
         IEventHandler<GroupDeleted>,
@@ -40,11 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
 
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
 
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
@@ -53,14 +52,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>
+        IEventHandler<StaticTextDeleted>,
+
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>,
+
+        IEventHandler<LookupTableAdded>,
+        IEventHandler<LookupTableUpdated>,
+        IEventHandler<LookupTableDeleted>,
+        
+        IEventHandler<AttachmentUpdated>,
+        IEventHandler<AttachmentDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
 
-        public QuestionnaireDenormalizer(IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
-            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger)
+        public QuestionnaireDenormalizer(
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
+            IQuestionnaireEntityFactory questionnaireEntityFactory, 
+            ILogger logger)
         {
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
@@ -154,14 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
-
-            bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
-
-            if (isLegacyEvent)
-            {
-                logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
-                return;
-            }
 
             questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.TargetIndex);
 
@@ -278,14 +282,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: null);
 
             questionnaireDocument.Add(staticText, parentId, null);
 
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text)
+        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text, string attachmentName)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -299,14 +303,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName);
 
             questionnaireDocument.ReplaceEntity(oldStaticText, newStaticText);
 
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
+        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text, string attachmentName)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -320,18 +324,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName);
 
             questionnaireDocument.Insert(index: targetIndex, c: staticText, parent: parentId);
 
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
         #endregion
-
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.GroupPublicKey,EventConverter.NumericQuestionAddedToQuestionData(evnt));
-        }
 
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
@@ -342,11 +341,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
         {
             UpdateQuestion(evnt, EventConverter.NumericQuestionChangedToQuestionData(evnt));
-        }
-
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.GroupId, EventConverter.TextListQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
@@ -377,7 +371,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText, evnt.Payload.VariableName,
                 evnt.Payload.Description,
-                evnt.Payload.ConditionExpression);
+                evnt.Payload.ConditionExpression,
+                evnt.Payload.HideIfDisabled);
 
             this.UpdateQuestionnaire(evnt, item);
         }
@@ -465,11 +460,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.AddNewQuestionnaire(evnt.Payload.QuestionnaireDocument);
         }
 
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.ParentGroupId,EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
-        }
-
         public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             UpdateQuestion(evnt, EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
@@ -494,13 +484,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
         {
-            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text);
+            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text, attachmentName: evnt.Payload.AttachmentName);
         }
 
         public void Handle(IPublishedEvent<StaticTextCloned> evnt)
         {
             this.CloneStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
-                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text);
+                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text, attachmentName: evnt.Payload.AttachmentName);
         }
 
         public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
@@ -514,6 +504,96 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.Macros[evnt.Payload.MacroId] = new Macro();
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            var macroId = evnt.Payload.MacroId;
+            if (!document.Macros.ContainsKey(macroId))
+                return;
+
+            document.Macros[macroId].Name = evnt.Payload.Name;
+            document.Macros[macroId].Content = evnt.Payload.Content;
+            document.Macros[macroId].Description = evnt.Payload.Description;
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Macros.Remove(evnt.Payload.MacroId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableAdded> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable()
+            {
+                TableName = evnt.Payload.LookupTableName,
+                FileName = evnt.Payload.LookupTableFileName
+            };
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable
+            {
+                TableName = evnt.Payload.LookupTableName,
+                FileName = evnt.Payload.LookupTableFileName
+            };
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables.Remove(evnt.Payload.LookupTableId);
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment
+            {
+                AttachmentId = evnt.Payload.AttachmentId,
+                Name = evnt.Payload.AttachmentName,
+                ContentId = evnt.Payload.AttachmentContentId
+            });
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Attachments.RemoveAll(x => x.AttachmentId == evnt.Payload.AttachmentId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        private void AddOrUpdateAttachment(QuestionnaireDocument document, Guid attachmentId, Attachment attachment)
+        {
+            document.Attachments.RemoveAll(x => x.AttachmentId == attachmentId);
+            document.Attachments.Add(attachment);
         }
     }
 }

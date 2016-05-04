@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests
 {
     [Subject(typeof(UserChangedFeedReader))]
-    public class when_recent_feed_has_no_last_stored_event
+    internal class when_recent_feed_has_no_last_stored_event
     {
         Establish context = () =>
         {

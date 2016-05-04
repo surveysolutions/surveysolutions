@@ -44,18 +44,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
                     && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 1, null));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now,
-                1));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId, new decimal[] { 0 }, 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId, new decimal[] { 1 }, 0, null));
             eventContext = new EventContext();

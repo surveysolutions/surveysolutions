@@ -6,6 +6,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -40,28 +43,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles = null)
+        internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
+            decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
+            Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null)
         {
             InterviewLevel rosterLevel;
             var levelKey = string.Join(",", rosterVector);
             if (!interview.Levels.ContainsKey(levelKey))
             {
-                rosterLevel = new InterviewLevel(scopeVector, null, rosterVector);
+                rosterLevel = new InterviewLevel(scopeVector, sortIndex, rosterVector);
             }
             else
             {
                 rosterLevel = interview.Levels[levelKey];
-                rosterLevel.ScopeVectors.Add(scopeVector, null);
+                rosterLevel.ScopeVectors.Add(scopeVector, sortIndex);
             }
+            if (answeredQuestions != null)
+                foreach (var answeredQuestion in answeredQuestions)
+                {
+                    if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                        rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
+                            new InterviewQuestion(answeredQuestion.Key));
 
-            foreach (var answeredQuestion in answeredQuestions)
-            {
-                if (!rosterLevel.QuestionsSearchCahche.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCahche.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
-
-                var nestedQuestion = rosterLevel.QuestionsSearchCahche[answeredQuestion.Key];
-                nestedQuestion.Answer = answeredQuestion.Value;
-            }
+                    var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
+                    nestedQuestion.Answer = answeredQuestion.Value;
+                }
 
             if (rosterTitles != null)
             {
@@ -114,16 +120,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         RosterFixedTitles = rosterFixedTitles
                     }
                 }
-            };
-        }
-
-        internal static QuestionnaireDocumentVersioned CreateQuestionnaireWithVersion(QuestionnaireDocument questionnaireDocument)
-        {
-
-            return new QuestionnaireDocumentVersioned
-            {
-                Version = 1,
-                Questionnaire = questionnaireDocument
             };
         }
 
@@ -183,9 +179,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static InterviewDataAndQuestionnaireMerger CreateMerger()
+        internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
-            return new InterviewDataAndQuestionnaireMerger();
+            return new InterviewDataAndQuestionnaireMerger(
+                substitutionService: new SubstitutionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
@@ -203,13 +200,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
             result.ConnectChildrenWithParent();
             return result;
-        }
-
-        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
         }
     }
 }

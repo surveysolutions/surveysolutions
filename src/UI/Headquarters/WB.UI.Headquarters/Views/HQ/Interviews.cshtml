@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Newtonsoft.Json
+@using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
@@ -10,21 +11,19 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/hq.interviews.js")
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/hq.interviews.js")
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { area="" }, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        var statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
+        var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
         $(function() {
-            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, users, commandExecutionUrl);
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
-
-
     </script>
 }
 
@@ -33,15 +32,17 @@
     <h3 class="sinle-line-header">Interviews</h3>
 }
 
-@section  actionbar{
+@section actionbar{
+    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
     <div class="btn-group">
-        <div class="form-inline" >
+        <div class="form-inline">
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">Unapprove</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">Delete</button>
 
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: search">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="button" data-bind="click: clear">
                         <i class="glyphicon glyphicon-remove"></i>
@@ -74,6 +75,7 @@
                 <th data-bind='sortby: "UpdateDate"'>Last Update</th>
                 <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
                 <th data-bind='sortby: "Status"'>Status</th>
+                <th data-bind='sortby: "ReceivedByInterviewer"'>Received by Interviewer</th>
                 <th>Created on Client</th>
                 <th></th>
             </tr>
@@ -102,6 +104,9 @@
                     <!-- /ko -->
                 </td>
                 <td data-bind="text: Status"></td>
+                <td>
+                    <input type="checkbox" data-bind="checked: ReceivedByInterviewer, enable: false" />
+                </td>
                 <td>
                     <input type="checkbox" data-bind="checked: CreatedOnClient, enable: false" />
                 </td>
@@ -132,6 +137,11 @@
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
     </script>
+    <script type="text/html" id="confirm-unapprove-template">
+        @Html.Raw(Resources.Interviews.UnapproveConfirmMessage.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
+    </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Resources.Interviews.ContinueConfirmMessage
     </script>
@@ -143,7 +153,7 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Template</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedTemplate" class="form-control">
+                <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @if (Model.Templates.Count() > 1)
                     {
                         <option value="">Any</option>
@@ -158,16 +168,13 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Responsible</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedResponsible" class="form-control">
-                    @if (Model.Responsibles.Count() > 1)
-                    {
-                        <option value="">Any</option>
-                    }
-                    @foreach (var item in Model.Responsibles)
-                    {
-                        <option value="@item.UserId">@item.UserName</option>
-                    }
-                </select>
+                <div class="input-group">
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                        <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
+                </div>
             </p>
         </li>
         <li class="list-group-item">

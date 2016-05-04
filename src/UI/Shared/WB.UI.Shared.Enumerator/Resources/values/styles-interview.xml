@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Interview_Entity" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
+  </style>
+
+  <style name="Interview_Entity_BasicFont">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+  </style>
+
+  <style name="Interview_Entity_Title" parent="Interview_Entity_BasicFont">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/question_title_text</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+  </style>
+
+  <style name="Interview_Entity_Divider" >
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
+    <item name="android:background">#dadada</item>
+  </style>
+
+  <style name="Interview_BreadCrumbsContainer" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@color/btn_default</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:paddingRight">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:paddingTop">@dimen/Interview_BreadCrumbs_padding_top</item>
+
+  </style>
+  <style name="Interview_BreadCrumbs" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/bread_crumb_transparency</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+  
+  <style name ="Interview_Complete_Screen_Scroll">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:fillViewport">true</item>
+    <item name="android:layout_alignParentTop">true</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Text" parent="Interview_Entity_BasicFont">
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/complete_screen_title_text</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Column">
+    <item name="android:layout_width">@dimen/zero</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:gravity">center</item>
+    <item name="android:paddingLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:paddingRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Column_With_Right_Border" parent="Interview_Complete_Screen_Statistics_Column">
+    <item name="android:background">@drawable/complete_screen_statistics_column_background</item>
+  </style>
+
+
+  <style name="Interview_Complete_Screen_Statistics_Container" parent="FullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Counter" parent="FullWidthWrappingLayout">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Label" parent="FullWidthWrappingLayout">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Answered_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+    <item name="android:textColor">@color/complete_screen_statistics_answered_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Answered_Label" parent="Interview_Complete_Screen_Statistics_Label">
+    <item name="android:textColor">@color/complete_screen_statistics_answered_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Unanswered_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+    <item name="android:textColor">@color/complete_screen_statistics_unanswered_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Unanswered_Label" parent="Interview_Complete_Screen_Statistics_Label">
+    <item name="android:textColor">@color/complete_screen_statistics_unanswered_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Errors_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+    <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Statistics_Errors_Label" parent="Interview_Complete_Screen_Statistics_Label">
+    <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
+  </style>
+
+  <style name="Interview_Complete_Screen_Button">
+    <item name="android:background">@drawable/group_started</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:paddingRight">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+    <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+    <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
+    <item name="android:stateListAnimator">@null</item>
+    <item name="android:textSize">@dimen/textsize_12</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+</resources>

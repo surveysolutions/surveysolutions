@@ -3,14 +3,15 @@ using System.Net;
 using System.Threading;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiControllerTests
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             var service = new Mock<IRestService>();
 
             service
-                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>()))
+                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
                 .Throws(new RestException(someFaultReason, HttpStatusCode.Unauthorized));
 
             controller = CreateDesignerQuestionnairesApiController(

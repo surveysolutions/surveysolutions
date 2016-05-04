@@ -1,26 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class AbstractQuestionDataEvent : QuestionnaireActiveEvent
     {
-        public string ConditionExpression { get; set; }
-        public bool Featured { get; set; }
-        public string Instructions { get; set; }
-        public bool Mandatory { get; set; }
-        public bool Capital { get; set; }
-        public Guid PublicKey { get; set; }
-        public string QuestionText { get; set; }
-        public QuestionScope QuestionScope { get; set; }
-        public string StataExportCaption { get; set; }
-        public string VariableLabel { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
+        protected AbstractQuestionDataEvent()
+        {
+        }
+
+        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
+        {
+            this.ConditionExpression = conditionExpression;
+            this.HideIfDisabled = hideIfDisabled;
+            this.Featured = featured;
+            this.Instructions = instructions;
+            this.Capital = capital;
+            this.PublicKey = publicKey;
+            this.QuestionText = questionText;
+            this.QuestionScope = questionScope;
+            this.StataExportCaption = stataExportCaption;
+            this.VariableLabel = variableLabel;
+
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
+            this.ValidationConditions = this.ValidationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
+        }
+
+        public string ConditionExpression { get; private set; }
+        public bool HideIfDisabled { get; private set; }
+        public bool Featured { get; private set; }
+        public string Instructions { get; private set; }
+        public bool Capital { get; private set; }
+        public Guid PublicKey { get; private set; }
+        public string QuestionText { get; private set; }
+        public QuestionScope QuestionScope { get; private set; }
+        public string StataExportCaption { get; private set; }
+        public string VariableLabel { get; private set; }
+        [Obsolete("KP-6647")]
+        public string ValidationExpression { get; private set; }
+        [Obsolete("KP-6647")]
+        public string ValidationMessage { get; private set; }
+
+        public IList<ValidationCondition> ValidationConditions { get; set; }
     }
 }

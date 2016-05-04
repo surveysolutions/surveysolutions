@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -13,14 +12,12 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Services;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -95,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
                 && utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly) == "sync item json"
                 && utils.Deserialize<bool>(positiveResponse) == true);
@@ -109,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
-                jsonUtils: jsonUtils,
+                serializer: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler);
         };
 

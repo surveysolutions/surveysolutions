@@ -20,10 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.HasQuestion(questionId) == false
             );
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfType<InterviewException>();
+           exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__question_not_found__ = () =>
              new[] { "question", "not", "found" }.ShouldEachConformTo(

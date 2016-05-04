@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -19,9 +18,9 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
-        private readonly ICommandPreprocessor commandPreprocessor;
+        private readonly ICommandInflater commandPreprocessor;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandPreprocessor commandPreprocessor)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandInflater commandPreprocessor)
         {
             this.logger = logger;
             this.commandPreprocessor = commandPreprocessor;

@@ -12,9 +12,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -22,9 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
-            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()
                 {
                     PublicKey = independantRosterId,
@@ -59,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            SetupInstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
 
             AddInterviewLevel(interview, new ValueVector<Guid> { independantRosterId }, new decimal[] { 0 },
                 new Dictionary<Guid, object>(),
@@ -75,16 +73,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, new decimal[] { 2 },
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { rosterId, "" } });
-
-
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
+            
             user = Mock.Of<UserDocument>();
+
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
 
         It should_title_of_question_in_first_row_has_rostertitle_replaced_with_a = () =>
@@ -100,9 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
         private static Guid rosterId = Guid.Parse("20000000000000000000000000000000");
@@ -110,6 +104,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid independantRosterId = Guid.Parse("33333333333333333333333333333333");
         private static Guid questionWithSubstitutionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("43333333333333333333333333333333");
-        private static QuestionnaireDocument questionnaireDocument;
     }
 }

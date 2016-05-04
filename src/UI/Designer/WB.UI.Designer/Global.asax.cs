@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Http;
@@ -6,14 +7,17 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using NConfig;
 using Elmah;
+using System.Web.Hosting;
+using System.Reflection;
+using MultipartDataMediaFormatter;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Designer
 {
@@ -26,8 +30,18 @@ namespace WB.UI.Designer
 
         const int TimedOutExceptionCode = -2147467259;
 
+        private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
+
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
+
         protected void Application_Start()
         {
+            this.logger.Info($"Starting Designer {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
+
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
+
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -41,6 +55,13 @@ namespace WB.UI.Designer
 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             //BundleTable.EnableOptimizations = true;
+
+            GlobalConfiguration.Configuration.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
+        }
+
+        private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            logger.Fatal("UnhandledException occurred.", (Exception)e.ExceptionObject);
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -48,9 +69,12 @@ namespace WB.UI.Designer
             var httpContext = ((MvcApplication)sender).Context;
 
             var ex = Server.GetLastError();
+            var httpEx = ex as HttpException;
 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Error("Unexpected error occurred", ex);
+            if (!(httpEx != null && httpEx.GetHttpCode() == 404))
+            {
+                logger.Error("Unexpected error occurred", ex);
+            }
 
             var controller = new ErrorController();
             var routeData = new RouteData();
@@ -71,9 +95,8 @@ namespace WB.UI.Designer
                 currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
             }
 
-            if (ex is HttpException)
+            if (httpEx != null)
             {
-                var httpEx = ex as HttpException;
 
                 switch (httpEx.GetHttpCode())
                 {
@@ -125,6 +148,42 @@ namespace WB.UI.Designer
                 return;
             }
             ElmahDataFilter.Apply(e, ctx);
+        }
+
+        protected void Application_PostAuthorizeRequest()
+        {
+            HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+        }
+
+        protected void Application_End()
+        {
+            this.logger.Info("Ending application.");
+            this.logger.Info("ShutdownReason: " + HostingEnvironment.ShutdownReason.ToString());
+
+            if (HostingEnvironment.ShutdownReason == ApplicationShutdownReason.HostingEnvironment)
+            {
+                var httpRuntimeType = typeof(HttpRuntime);
+                var httpRuntime = httpRuntimeType.InvokeMember(
+                    "_theRuntime",
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
+                    null, null, null) as HttpRuntime;
+
+                var shutDownMessage = httpRuntimeType.InvokeMember(
+                    "_shutDownMessage",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
+                    null, httpRuntime, null) as string;
+
+                string shutDownStack = httpRuntimeType.InvokeMember("_shutDownStack",
+                    BindingFlags.NonPublic
+                    | BindingFlags.Instance
+                    | BindingFlags.GetField,
+                    null,
+                    httpRuntime,
+                    null) as string;
+
+                this.logger.Info("ShutDownMessage: " + shutDownMessage);
+                this.logger.Info("ShutDownStack: " + shutDownStack);
+            }
         }
     }
 }

@@ -51,14 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         && _.GetRostersFromTopToSpecifiedGroup(firstLevelRosterId) == new[] { firstLevelRosterId }
                                                         && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(Create.Event.RosterInstancesAdded(firstLevelRosterId, new decimal[0], 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(secondLevelRosterId, new decimal[] { 0 }, 0, null));
             eventContext = new EventContext();

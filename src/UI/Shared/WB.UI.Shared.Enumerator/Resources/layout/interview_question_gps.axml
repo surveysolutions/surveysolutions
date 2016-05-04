@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+  <LinearLayout style="@style/Interview_Question">
+    <include layout="@layout/interview_question__title" />
+    <LinearLayout style="@style/Interview_Question_Body">
+      <include layout="@layout/interview_question__instructions" />
+      <LinearLayout style="@style/Interview_Question_Answer"
+        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+
+        <TableLayout style="@style/FullWidthWrappingLayout"
+              android:stretchColumns="0">
+          <TableRow local:MvxBind="Visible QuestionState.IsAnswered;">
+            <DynamicImageView local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer);"
+              android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height" 
+              android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+              android:adjustViewBounds="true"
+              android:scaleType="centerCrop"
+              style="@style/Interview_Question_Multimedia_Picture"/>
+            <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                          local:MvxBind="HideKeyboardOnClick .; 
+                                         Click RemoveAnswerCommand;" />
+          </TableRow>
+          <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+            <TextView style="@style/Interview_Question_TextAnswer"
+              android:layout_marginTop="@dimen/Interview_Question_Answer_Media_Caption_margin_top"
+              android:layout_marginBottom="@dimen/Interview_Question_InputButton_margin_Bottom"
+              local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
+          </TableRow>
+          <TableRow>
+            <FrameLayout android:layout_height="wrap_content"
+             android:layout_width="wrap_content">
+              <Button style="@style/Interview_Question_InputButton"
+                local:MvxBind="HideKeyboardOnClick .; 
+                           Click SaveAnswerCommand; 
+                           Text Localization('Interview_Questions_Gps_SaveAnswer');
+                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+            </FrameLayout>
+          </TableRow>
+        </TableLayout>
+
+      </LinearLayout>
+      <include layout="@layout/interview_question__errors" />
+      <include layout="@layout/interview_question__comments" />
+    </LinearLayout>
+  </LinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+    local:MvxBind="ShowProgress IsInProgress" />
+  <View style="@style/Interview_Question_Divider" />
+</LinearLayout>

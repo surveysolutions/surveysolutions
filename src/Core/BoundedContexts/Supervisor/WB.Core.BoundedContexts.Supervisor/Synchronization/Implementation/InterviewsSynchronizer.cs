@@ -10,8 +10,8 @@ using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IEventStore eventStore;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader;
         private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext,
             IEventStore eventStore,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader,
             IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
             Func<HttpMessageHandler> httpMessageHandler,
@@ -84,7 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
             if (eventStore == null) throw new ArgumentNullException("eventStore");
-            if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
+            if (serializer == null) throw new ArgumentNullException("serializer");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
@@ -103,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
             this.eventStore = eventStore;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.interviewSummaryRepositoryReader = interviewSummaryRepositoryReader;
             this.readyToSendInterviewsRepositoryReader = readyToSendInterviewsRepositoryReader;
             this.httpMessageHandler = httpMessageHandler;
@@ -125,7 +126,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 List<LocalInterviewFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                     this.plainStorage.Query(_ => _
                         .Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed)
-                        .OrderByDescending(x => x.Timestamp)
+                        .OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId)
                         .ToList()));
 
                 this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.SynchronizingInterviewsForSupervisor0EventsCount1Format, localSupervisor, events.Count()));
@@ -270,7 +271,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
-                    this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+                    this.interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(interviewId);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -287,7 +288,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewFile()
         {
             this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
-            var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
+            var files = this.interviewSynchronizationFileStorage.GetImagesByInterviews();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
@@ -299,7 +300,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
-                    this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
+                    this.interviewSynchronizationFileStorage.RemoveInterviewImage(interviewFile.InterviewId, interviewFile.FileName);
                     this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -372,7 +373,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void StoreEventsToLocalStorage()
         {
-            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+            var lastStoredEntry =
+                this.plainStorage.Query(
+                    _ =>
+                        _.OrderByDescending(x => x.Timestamp)
+                            .ThenBy(x => x.EntryId)
+                            .Select(x => x.EntryId)
+                            .FirstOrDefault());
 
             IEnumerable<AtomFeedEntry<LocalInterviewFeedEntry>> remoteEvents = 
                 this.feedReader
@@ -427,6 +434,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
             string lastComment = interviewSummary.LastStatusChangeComment ?? string.Empty;
+            DateTime? rejectedDateTime = interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                ? interviewSummary.UpdateDate
+                : (DateTime?) null;
+            DateTime? interviewerAssignedDateTime = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                ? interviewSummary.UpdateDate
+                : (DateTime?)null;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
@@ -440,6 +453,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 PublicKey = interviewId,
                 ResponsibleId = interviewSummary.ResponsibleId,
                 Status = (int)interviewSummary.Status,
+                RejectDateTime = rejectedDateTime,
+                InterviewerAssignedDateTime = interviewerAssignedDateTime,
                 TemplateId = interviewSummary.QuestionnaireId,
                 Comments = lastComment,
                 Valid = !interviewSummary.HasErrors,
@@ -450,14 +465,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = this.archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
+                Content = this.archiver.CompressString(this.serializer.Serialize(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Interview,
-                MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metadata)),
+                MetaInfo = this.archiver.CompressString(this.serializer.Serialize(metadata)),
                 RootId = interviewId
             };
 
-            return this.jsonUtils.Serialize(syncItem);
+            return this.serializer.Serialize(syncItem);
         }
 
         private void SendInterviewData(Guid interviewId, string interviewData)
@@ -481,7 +496,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    serverOperationSucceeded = this.jsonUtils.Deserialize<bool>(result);
+                    serverOperationSucceeded = this.serializer.Deserialize<bool>(result);
                 }
                 catch (Exception exception)
                 {

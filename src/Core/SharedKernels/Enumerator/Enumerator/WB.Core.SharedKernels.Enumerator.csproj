@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.SharedKernels.Enumerator</RootNamespace>
+    <AssemblyName>WB.Core.SharedKernels.Enumerator</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregates\IStatefulInterview.cs" />
+    <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
+    <Compile Include="Entities\Interview\BaseInterviewAnswer.cs" />
+    <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
+    <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
+    <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
+    <Compile Include="Entities\Interview\InterviewGroup.cs" />
+    <Compile Include="Entities\Interview\InterviewRoster.cs" />
+    <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
+    <Compile Include="Entities\Interview\LinkedSingleOptionAnswer.cs" />
+    <Compile Include="Entities\Interview\MultimediaAnswer.cs" />
+    <Compile Include="Entities\Interview\MultiOptionAnswer.cs" />
+    <Compile Include="Entities\Interview\RealNumericAnswer.cs" />
+    <Compile Include="Entities\Interview\SingleOptionAnswer.cs" />
+    <Compile Include="Entities\Interview\TextAnswer.cs" />
+    <Compile Include="Entities\Interview\TextListAnswer.cs" />
+    <Compile Include="Entities\Interview\YesNoAnswer.cs" />
+    <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IEnumeratorSettings.cs" />
+    <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
+    <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
+    <Compile Include="Implementation\Services\AnswerToStringService.cs" />
+    <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
+    <Compile Include="Implementation\Services\IGpsLocationService.cs" />
+    <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
+    <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
+    <Compile Include="Implementation\Services\SqliteSettings.cs" />
+    <Compile Include="Implementation\Services\MvxTraceListener.cs" />
+    <Compile Include="Properties\UIResources.id-ID.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.id-ID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.th-TH.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.th-TH.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\IAttachmentContentStorage.cs" />
+    <Compile Include="Services\IExternalAppLauncher.cs" />
+    <Compile Include="Services\IFriendlyErrorMessageService.cs" />
+    <Compile Include="Services\Infrastructure\IPrincipal.cs" />
+    <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
+    <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
+    <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorageRemover.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
+    <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
+    <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
+    <Compile Include="Utils\ObservableCollectionExtensions.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\CategoricalQuestionOption.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\UIResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
+    <Compile Include="Services\IAnswerToStringService.cs" />
+    <Compile Include="Services\IInterviewViewModelFactory.cs" />
+    <Compile Include="Services\IUserInteractionService.cs" />
+    <Compile Include="Services\IUserInterfaceStateService.cs" />
+    <Compile Include="Services\IViewModelNavigationService.cs" />
+    <Compile Include="EnumeratorSharedKernelModule.cs" />
+    <Compile Include="Services\MaskText\MaskedText.cs" />
+    <Compile Include="Services\MaskText\Range.cs" />
+    <Compile Include="Services\MaskText\RawText.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
+    <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
+    <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\AnsweringViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\AnswerNotifier.cs" />
+    <Compile Include="ViewModels\InterviewDetails\BeforeScreenChangedEventArgs.cs" />
+    <Compile Include="ViewModels\InterviewDetails\BreadCrumbItemViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\BreadcrumbsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\InterviewStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\GroupStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\GroupStatus.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\GroupViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\SimpleGroupStatus.cs" />
+    <Compile Include="ViewModels\InterviewDetails\IInterviewEntityViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EnumeratorInterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\CompleteInterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\InterviewCompletedMessage.cs" />
+    <Compile Include="ViewModels\InterviewDetails\ISideBarSectionViewModelsFactory.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\CascadingSingleOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\DateTimeQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\FilteredSingleOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\GpsCoordinatesQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToQuestionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\QRBarcodeQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\RealQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionLinkedQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\CommentsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\EnablementViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionHeaderViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\ValidityViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\TextListItemViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\TextListQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\TextQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SideBarPrefillQuestion.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SideBarSectionsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModelFactory.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SideBarShownMessage.cs" />
+    <Compile Include="ViewModels\InterviewDetails\StaticTextViewModel.cs" />
+    <Compile Include="ViewModels\NavigationIdentity.cs" />
+    <Compile Include="ViewModels\NavigationState.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
+    <Compile Include="ViewModels\ObservableRangeCollection.cs" />
+    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\StartInterviewViewModel.cs" />
+    <Compile Include="Views\AttachmentContent.cs" />
+    <Compile Include="Views\AttachmentContentData.cs" />
+    <Compile Include="Views\AttachmentContentMetadata.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.Concurrent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\SQLite.Net-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite.Net.Async, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\SQLite.Net.Async-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\UIResources.es-ES.resx" />
+    <EmbeddedResource Include="Properties\UIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\UIResources.id-ID.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.id-ID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.pt-PT.resx" />
+    <EmbeddedResource Include="Properties\UIResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\UIResources.th-TH.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.th-TH.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\UIResources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

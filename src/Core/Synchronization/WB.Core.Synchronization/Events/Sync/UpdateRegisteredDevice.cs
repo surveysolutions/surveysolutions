@@ -1,5 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.Synchronization
@@ -8,8 +10,7 @@ namespace Main.Core.Events.Synchronization
     /// The new device registered
     /// </summary>
     [Serializable]
-    [EventName("RavenQuestionnaire.Core:Events:UpdateRegisteredDevice")]
-    public class UpdateRegisteredDevice
+    public class UpdateRegisteredDevice : IEvent
     {
         #region PublicProperties
 

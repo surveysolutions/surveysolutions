@@ -3,11 +3,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -17,6 +16,7 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Observer")]
+    [ValidateInput(false)]
     public class HeadquartersController : TeamController
     {
         public HeadquartersController(ICommandService commandService, 
@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 catch (Exception e)
                 {
+                    this.Logger.Error(e.Message, e);
                     this.Error(e.Message);
                     return this.View(model);
                 }

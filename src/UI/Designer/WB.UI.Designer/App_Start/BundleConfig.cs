@@ -52,6 +52,16 @@ namespace WB.UI.Designer
                     "~/Scripts/viewmodels/viewmodelbase.js",
                     "~/Scripts/viewmodels/pagebase.js",
                     "~/Scripts/viewmodels/pages/controlpanel/readside.js"));
+
+            bundles.Add(
+                new ScriptBundle("~/login").Include(
+                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/components/query-string.js",
+                    "~/Scripts/viewmodels/designer.framework.js",
+                    "~/Scripts/viewmodels/viewmodelbase.js",
+                    "~/Scripts/viewmodels/pagebase.js",
+                    "~/Scripts/viewmodels/pages/login.js"));
         }
     }
 }

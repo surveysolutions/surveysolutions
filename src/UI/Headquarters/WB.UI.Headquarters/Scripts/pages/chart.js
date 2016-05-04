@@ -2,7 +2,7 @@
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
-    var dateFormat = "MM/DD/YYYY";
+    var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(interviewChartsUrl);
 
@@ -14,16 +14,17 @@
     self.FromDate = ko.observable(null);
     self.ToDate = ko.observable(null);
 
-    self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-        self.initChart = function () {
+    self.SelectedRange = ko.observable();
+
+    self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
 
         var startDate = self.FromDate() != null ? moment(self.FromDate()) : null;
-        var endDate =  moment(self.ToDate());
+        var endDate = moment(self.ToDate());
 
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
@@ -31,32 +32,49 @@
         if (startDate != null) {
             self.Url.query['from'] = startDate.format(dateFormat);
         }
-        
+
         self.Url.query['to'] = endDate.format(dateFormat);
-        
 
         if (Modernizr.history) {
             window.history.pushState({}, "Charts", self.Url.toString());
-
         }
-
-        if (startDate != null)
-        {
-            self.ShouldShowDateValidationMessage(startDate.isAfter(endDate));
-        }
-
 
         var params = {
             templateId: selectedTemplate.templateId,
             templateVersion: selectedTemplate.version,
-            from: startDate != null ? startDate.format(dateFormat): null,
+            from: startDate != null ? startDate.format(dateFormat) : null,
             to: endDate.format(dateFormat)
         };
 
         self.SendRequest(self.ServiceUrl, params, function (data) {
+            self.setReportRange(data.From, data.To);
             self.Stats = data;
             self.drawChart();
         });
+    };
+
+    $("#dates-range").daterangepicker({
+        locale: {
+            format: dateFormat
+        },
+        maxDate: new Date()
+    },
+    function (start, end) {
+        self.setReportRange(start, end);
+        self.FromDate(start);
+        self.ToDate(end);
+
+        self.initChart();
+    });
+
+    self.setReportRange = function (start, end) {
+        if (!start || !end) return;
+
+        var formatedStartDate = start.format(dateFormat);
+        var formatedEndDate = end.format(dateFormat);
+        self.SelectedRange(formatedStartDate + "/" + formatedEndDate);
+        $('#dates-range').data('daterangepicker').setStartDate(moment(start));
+        $('#dates-range').data('daterangepicker').setEndDate(moment(end));
     };
 
     self.drawChart = function () {
@@ -104,7 +122,7 @@
                     shadow: false,
                     fillAlpha: 0.8,
                     markerOptions: {
-                        show: false,
+                        show: false
                     }
                 },
                 legend: {
@@ -115,7 +133,7 @@
                     location: 'n',
                     rendererOptions: {
                         numberColumns: 7
-                    },
+                    }
                 },
                 grid: {
                     drawBorder: false,
@@ -131,7 +149,8 @@
                         renderer: $.jqplot.DateAxisRenderer,
                         min: self.Stats.Lines[0][0][0],
                         max: self.Stats.Lines[0][self.Stats.Lines[0].length - 1][0],
-                        drawMajorGridlines: false
+                        drawMajorGridlines: false,
+                        tickOptions: { formatString: '%F' }
                     },
                     yaxis: {
                         min: 0
@@ -154,22 +173,26 @@
         if (interval !== null) {
             self.Plot.replot({ axes: { yaxis: { min: 0, tickInterval: interval } } });
         };
-        
+
         var legendLabels = $('.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle');
         var countItemsInLegend = legendLabels.length;
         legendLabels.width((interviewChart.outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
     };
 
-    self.getCustomInterval = function(maxValue) {
+    self.getCustomInterval = function (maxValue) {
         if (maxValue <= 10) {
             return 1;
         }
         return null;
     };
 
+    var updateTemplateName = function (value) {
+        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    }
+
     self.load = function () {
         var today = moment().format(dateFormat);
-        
+
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
@@ -184,7 +207,6 @@
 
         updateTemplateName(self.SelectedTemplate());
 
-
         var from = fromPoint != null ? unescape(fromPoint) : null;
         var to = unescape(self.Url.query['to']);
 
@@ -197,19 +219,7 @@
             updateTemplateName(value);
             self.initChart();
         });
-
-        self.FromDate.subscribe(function () {
-            self.initChart();
-        });
-
-        self.ToDate.subscribe(function () {
-            self.initChart();
-        });
     };
-
-    var updateTemplateName = function(value) {
-        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
-    }
 };
 
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ChartPage, Supervisor.VM.ListView);

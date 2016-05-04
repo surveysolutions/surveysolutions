@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/colorPrimary"
+      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <TextView style="@style/ToolbarTitle"
+              local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
+  </android.support.v7.widget.Toolbar>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               local:MvxBind="ShowProgress IsInProgress" />
+  <ScrollView android:layout_alignParentTop="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:scrollbarStyle="outsideOverlay"
+              android:gravity="center"
+              android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center">
+      <ImageView style="@style/Relink_Logo" />
+      
+      <LinearLayout style="@style/Relink_FormContainer">
+        <TextView style="@style/Relink_RemoteErrorMessage"
+                  android:id="@+id/relinkPage_error_message"
+                  local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
+        <TextView style="@style/Relink_Warning"
+                  android:id="@+id/relinkPage_login"
+                  android:layout_below="@+id/relinkPage_error_message"
+                  local:MvxBind="Text Localization('Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage')" />
+        <TextView style="@style/Relink_ErrorMessage"
+                  android:id="@+id/relinkPage_password"
+                  android:layout_below="@+id/relinkPage_login"
+                  local:MvxBind="Html Localization('Interviewer_RelinkDevice_RelinkMessage')" />
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content">
+          <Button style="@style/Relink_Button"
+                  local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
+          <Button style="@style/Relink_Cancel_Button"
+                  local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

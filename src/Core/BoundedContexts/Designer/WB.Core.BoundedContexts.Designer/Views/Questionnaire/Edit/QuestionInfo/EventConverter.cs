@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -11,53 +9,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     internal static class EventConverter
     {
-        public static QuestionData QRBarcodeQuestionAddedToQuestionData(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            QRBarcodeQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.QuestionId,
-                QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
-                e.Title,
-                e.VariableName,
-                e.VariableLabel,
-                e.EnablementCondition,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                false,
-                e.IsMandatory,
-                false,
-                e.Instructions,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-            return data;
-        }
-
         public static QuestionData QRBarcodeQuestionUpdatedToQuestionData(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             QRBarcodeQuestionUpdated e = evnt.Payload;
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
                 e.EnablementCondition,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 false,
-                e.IsMandatory,
                 false,
                 e.Instructions,
                 null,
@@ -69,6 +34,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -79,16 +48,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
                 e.EnablementCondition,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 false,
-                e.IsMandatory,
                 false,
                 e.Instructions,
                 null,
@@ -100,6 +67,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -110,16 +81,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.Multimedia,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
                 e.EnablementCondition,
-                null,
-                null,
+                e.HideIfDisabled,
                 Order.AZ,
                 false,
-                e.IsMandatory,
                 false,
                 e.Instructions,
                 null,
@@ -131,37 +100,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                null);
-            return data;
-        }
-
-        public static QuestionData TextListQuestionAddedToQuestionData(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            TextListQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.PublicKey,
-                QuestionType.TextList,
-                QuestionScope.Interviewer,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.VariableLabel,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                false,
-                e.Mandatory,
-                false,
-                e.Instructions,
                 null,
                 null,
                 null,
-                null,
-                null,
-                null,
-                null,
-                e.MaxAnswerCount,
-                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -172,16 +114,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 false,
-                e.Mandatory,
                 false,
                 e.Instructions,
                 null,
@@ -191,8 +131,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
                 e.MaxAnswerCount,
                 null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -203,16 +147,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 false,
-                e.Mandatory,
                 false,
                 e.Instructions,
                 null,
@@ -222,8 +164,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
                 e.MaxAnswerCount,
                 null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -239,23 +185,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 e.AnswerOrder,
                 e.Featured,
-                e.Mandatory,
                 e.Capital,
                 e.Instructions,
                 e.Mask,
                 GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
+                e.LinkedToRosterId,
                 e.IsInteger,
                 null,
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 null,
                 e.IsFilteredCombobox,
-                e.CascadeFromQuestionId);
+                e.CascadeFromQuestionId,
+                null,
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -270,23 +218,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 e.AnswerOrder,
                 e.Featured,
-                e.Mandatory,
                 e.Capital,
                 e.Instructions,
                 e.Mask,
                  GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
+                e.LinkedToRosterId,
                 e.IsInteger,
                 e.CountOfDecimalPlaces,
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 e.MaxAnswerCount,
                 e.IsFilteredCombobox,
-                e.CascadeFromQuestionId);
+                e.CascadeFromQuestionId,
+                e.YesNoView,
+                e.ValidationConditions,e.LinkedFilterExpression);
             return data;
         }
 
@@ -301,54 +250,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 e.AnswerOrder,
                 e.Featured,
-                e.Mandatory,
                 e.Capital,
                 e.Instructions,
                 e.Mask,
                 GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
+                e.LinkedToRosterId,
                 e.IsInteger,
                 null,
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 null,
                 e.IsFilteredCombobox,
-                e.CascadeFromQuestionId);
-            return data;
-        }
-
-        public static QuestionData NumericQuestionAddedToQuestionData(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            NumericQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.PublicKey,
-                QuestionType.Numeric,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.VariableLabel,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                e.Featured,
-                e.Mandatory,
-                e.Capital,
-                e.Instructions,
-                null,
-                null,
-                null,
-                e.IsInteger,
-                e.CountOfDecimalPlaces,
-                null,
-                null,
-                null,
-                null,
-                null);
+                e.CascadeFromQuestionId,
+                e.YesNoView,
+                e.ValidationConditions, e.LinkedFilterExpression);
             return data;
         }
 
@@ -363,13 +282,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 e.Featured,
-                e.Mandatory,
                 e.Capital,
                 e.Instructions,
+                null,
                 null,
                 null,
                 null,
@@ -379,6 +297,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
             return data;
         }
@@ -394,13 +315,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.StataExportCaption,
                 e.VariableLabel,
                 e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
+                e.HideIfDisabled,
                 Order.AZ,
                 e.Featured,
-                e.Mandatory,
                 e.Capital,
                 e.Instructions,
+                null,
                 null,
                 null,
                 null,
@@ -410,7 +330,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
+                null,
+                e.ValidationConditions,
                 null);
+            data.ValidationConditions = evnt.Payload.ValidationConditions;
             return data;
         }
 
@@ -420,7 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (type == QuestionType.AutoPropagate)
                 return QuestionType.Numeric;
 
-            if (type == QuestionType.YesNo || type == QuestionType.DropDownList)
+            if (type == QuestionType.YesNo)
                 return QuestionType.SingleOption;
 
             return type;

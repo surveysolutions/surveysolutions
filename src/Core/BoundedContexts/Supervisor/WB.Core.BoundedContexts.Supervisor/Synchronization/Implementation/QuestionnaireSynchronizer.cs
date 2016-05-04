@@ -4,19 +4,20 @@ using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -26,12 +27,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersSettings settings;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
         private readonly IPlainTransactionManager plainTransactionManager;
+
 
         public QuestionnaireSynchronizer(
             IAtomFeedReader feedReader, 
@@ -43,7 +46,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             ICommandService commandService,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader,
             IDeleteQuestionnaireService deleteQuestionnaireService,
-            IPlainTransactionManager plainTransactionManager)
+            IPlainTransactionManager plainTransactionManager,
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
         {
             this.feedReader = feedReader;
             this.settings = settings;
@@ -55,6 +59,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
             this.plainTransactionManager = plainTransactionManager;
+
+            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
         }
 
         public void Pull()
@@ -67,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IEnumerable<LocalQuestionnaireFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 this.plainStorage.Query(_ => _
                     .Where(x => !x.Processed)
-                    .OrderByDescending(x => x.Timestamp)
+                    .OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId)
                     .ToList()));
 
             this.headquartersPullContext.PushMessage(string.Format("Synchronizing questionnaires. Events count: {0}", events.Count()));
@@ -139,6 +145,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                         questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
 
+                    this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireFeedEntry.QuestionnaireId, 
+                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireAssemblyInBase64);
+
+                    //move denormalizers logic here
+
+                    // should be removed
                     this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                         questionnaireFeedEntry.QuestionnaireVersion,
                         questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode,
@@ -150,7 +162,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void StoreEventsToLocalStorage()
         {
-            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId).Select(x => x.EntryId).FirstOrDefault());
 
             IList<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
                 this.feedReader

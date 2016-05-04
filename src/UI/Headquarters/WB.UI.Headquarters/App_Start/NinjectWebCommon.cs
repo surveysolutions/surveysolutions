@@ -9,48 +9,58 @@ using System.Web.Mvc;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Storage.Esent;
-using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
+using WB.Infrastructure.Native.Files;
+using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 
@@ -93,16 +103,14 @@ namespace WB.UI.Headquarters
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-           // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
-
-            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-
-            Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    synchronizationBatchCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
+                    synchronizationParallelExecutorsCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount", @default: 1));
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
@@ -122,15 +130,24 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly };
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(SurveyManagementSharedKernelModule).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(SynchronizationModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
+            };
 
-            var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly }; 
-            var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
-            postgresPlainStorageSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString;
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
-
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
-            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            var cacheSettings = new ReadSideCacheSettings(
+                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -139,47 +156,73 @@ namespace WB.UI.Headquarters
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
-
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
-
+                new PostgresKeyValueModule(cacheSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
+            );
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var userPreloadingConfigurationSection = (UserPreloadingConfigurationSection)(WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ?? new UserPreloadingConfigurationSection());
+
+            var userPreloadingSettings =
+                new UserPreloadingSettings(
+                    userPreloadingConfigurationSection.VerificationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CreationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CleaningIntervalInHours,
+                    userPreloadingConfigurationSection.HowOldInDaysProcessShouldBeInOrderToBeCleaned,
+                    userPreloadingConfigurationSection.MaxAllowedRecordNumber,
+                    userPreloadingConfigurationSection.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress,
+                    userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
+                    loginFormatRegex: UserModel.UserNameRegularExpression,
+                    emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
+                    passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
+                    phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex);
+
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
+            var exportSettings = new ExportSettings(
+                WebConfigurationManager.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
+            var interviewDataExportSettings=
+            new InterviewDataExportSettings(basePath,
+                bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
+                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
+                WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
+                WebConfigurationManager.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
+
+            var sampleImportSettings = new SampleImportSettings(
+                WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
+
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(basePath, isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath,
-                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                new SurveyManagementSharedKernelModule(basePath, 
+                    interviewDetailsDataLoaderSettings,
+                    readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
-                    interviewCountLimit));
+                    interviewCountLimit),
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, exportSettings,
+                    interviewDataExportSettings, sampleImportSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
-
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
-            PrepareNcqrsInfrastucture(kernel);
+
+            CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
@@ -196,36 +239,32 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
+            ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
+
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
+            kernel.Unbind<IInterviewImportService>();
+            kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
+
             return kernel;
-        }
-
-       
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            CreateAndRegisterEventBus(kernel);
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var ignoredDenormalizersConfigSection =
-                (IgnoredDenormalizersConfigSection) WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
-            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            var eventBusConfigSection =
+                (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
+
+            var bus = new NcqrCompatibleEventDispatcher(
+                kernel.Get<IEventStore>(),
+                eventBusConfigSection.GetSettings(),
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {
