@@ -198,14 +198,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         break;
                     case QuestionType.Numeric:
                         var numericQuestion = prefilledQuestion as INumericQuestion;
-                        var @decimal = Convert.ToDecimal(answer);
-                        if (numericQuestion?.UseFormatting ?? false)
+                        decimal answerTyped;
+                        if (decimal.TryParse(answer.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out answerTyped))
                         {
-                            answer = @decimal.FormatDecimal();
-                        }
-                        else
-                        {
-                            answer = @decimal.ToString(CultureInfo.CurrentCulture);
+                            if (numericQuestion?.UseFormatting ?? false)
+                            {
+                                answer = answerTyped.FormatDecimal();
+                            }
+                            else
+                            {
+                                answer = answerTyped.ToString(CultureInfo.CurrentCulture);
+                            }
                         }
                         break;
                 }
