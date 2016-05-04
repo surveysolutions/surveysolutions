@@ -200,7 +200,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         break;
                     case QuestionType.Numeric:
                         var numericQuestion = prefilledQuestion as INumericQuestion;
-                        decimal answerTyped = decimal.Parse(answer.ToString(), CultureInfo.InvariantCulture);
+                        decimal answerTyped = decimal.Parse((string)answer, CultureInfo.InvariantCulture);
                         if (numericQuestion?.UseFormatting ?? false)
                         {
                             answer = answerTyped.FormatDecimal();
