@@ -182,13 +182,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     case QuestionType.DateTime:
                         if (answer is string)
-                            answer = DateTime.Parse((string)answer).ToLocalTime();
+                            answer = DateTime.Parse((string) answer).ToLocalTime();
                         break;
                     case QuestionType.MultyOption:
                     case QuestionType.SingleOption:
                         if (answer.GetType().IsArray)
                         {
-                            answer = (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture)).ToArray();
+                            answer =
+                                (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture))
+                                    .ToArray();
                         }
                         else
                         {
@@ -198,13 +200,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         break;
                     case QuestionType.Numeric:
                         var numericQuestion = prefilledQuestion as INumericQuestion;
-                        decimal answerTyped;
-                        if (decimal.TryParse(answer.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out answerTyped))
+                        decimal answerTyped = decimal.Parse(answer.ToString(), CultureInfo.InvariantCulture);
+                        if (numericQuestion?.UseFormatting ?? false)
                         {
-                            if (numericQuestion?.UseFormatting ?? false)
-                            {
-                                answer = answerTyped.FormatDecimal();
-                            }
+                            answer = answerTyped.FormatDecimal();
                         }
                         break;
                 }
