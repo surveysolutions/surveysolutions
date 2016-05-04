@@ -196,6 +196,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         }
                         getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion);
                         break;
+                    case QuestionType.Numeric:
+                        var numericQuestion = prefilledQuestion as INumericQuestion;
+                        var @decimal = Convert.ToDecimal(answer);
+                        if (numericQuestion?.UseFormatting ?? false)
+                        {
+                            answer = @decimal.FormatDecimal();
+                        }
+                        else
+                        {
+                            answer = @decimal.ToString(CultureInfo.CurrentCulture);
+                        }
+                        break;
                 }
             }
 
