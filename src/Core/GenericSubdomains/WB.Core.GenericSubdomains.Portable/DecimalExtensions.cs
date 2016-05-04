@@ -21,9 +21,27 @@ namespace WB.Core.GenericSubdomains.Portable
             string format = $"#{groupSeparator}#{decimalSeparator}{mantissaFormat}";
 
             var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
-            if (valueAsString.StartsWith(CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator))
+
+            valueAsString = FixLeadingZeroes(valueAsString);
+            return valueAsString;
+        }
+
+        private static string FixLeadingZeroes(string valueAsString)
+        {
+            var currencyDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+            var negativeInfinitySymbol = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
+            if (valueAsString.StartsWith(currencyDecimalSeparator))
             {
                 valueAsString = "0" + valueAsString;
+            }
+            var negativeTextWithDecimalSeparator = negativeInfinitySymbol +
+                                                   currencyDecimalSeparator;
+            if (valueAsString.StartsWith(negativeTextWithDecimalSeparator))
+            {
+                var stringWithoutNegativeSignAndDot = valueAsString.Replace(negativeTextWithDecimalSeparator, string.Empty);
+
+                valueAsString =
+                    $"{negativeInfinitySymbol}0{currencyDecimalSeparator}{stringWithoutNegativeSignAndDot}";
             }
             return valueAsString;
         }
