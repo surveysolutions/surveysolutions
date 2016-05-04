@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;

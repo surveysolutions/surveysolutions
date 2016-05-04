@@ -14,7 +14,8 @@ namespace WB.Core.SharedKernels.DataCollection
     public enum ItemType
     {
         Question = 1,
-        Group = 10
+        StaticText = 2,
+        Group = 10,
     }
 
     public class ConditionalState

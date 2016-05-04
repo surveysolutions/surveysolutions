@@ -2,7 +2,9 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -18,9 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         ICommandValidator<User, UnarchiveUserCommand>,
         ICommandValidator<User, UnarchiveUserAndUpdateCommand>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
 
-        public HeadquarterUserCommandValidator(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public HeadquarterUserCommandValidator(IPlainStorageAccessor<UserDocument> users)
         {
             this.users = users;
         }
@@ -43,14 +45,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public void Validate(User aggregate, UnarchiveUserCommand command)
         {
-            var state = aggregate.CreateSnapshot();
-            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(state.UserRoles, state.UserSupervisorId);
+            var user = users.GetById(aggregate.Id.FormatGuid());
+            if (user.Supervisor != null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserAndUpdateCommand command)
         {
-            var state = aggregate.CreateSnapshot();
-            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(state.UserRoles, state.UserSupervisorId);
+            var user = users.GetById(aggregate.Id.FormatGuid());
+            if (user.Supervisor != null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
         private bool IsActiveUserExists(string userName)
@@ -68,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (!userRoles.Contains(UserRoles.Operator))
                 return;
 
-            var user = users.GetById(supervisorId);
+            var user = users.GetById(supervisorId.FormatGuid());
             if (user == null || user.IsArchived)
                 throw new UserException(
                     HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived,

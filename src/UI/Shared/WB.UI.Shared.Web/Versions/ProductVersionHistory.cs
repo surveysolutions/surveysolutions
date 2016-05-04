@@ -11,13 +11,13 @@ namespace WB.UI.Shared.Web.Versions
     {
         private readonly IProductVersion productVersion;
         private readonly IPlainStorageAccessor<ProductVersionChange> historyStorage;
-        private readonly IPlainTransactionManager transactionManager;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
-        public ProductVersionHistory(IProductVersion productVersion, IPlainStorageAccessor<ProductVersionChange> historyStorage, IPlainTransactionManager transactionManager)
+        public ProductVersionHistory(IProductVersion productVersion, IPlainStorageAccessor<ProductVersionChange> historyStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.productVersion = productVersion;
             this.historyStorage = historyStorage;
-            this.transactionManager = transactionManager;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         private string CurrentVersion => this.productVersion.ToString();
@@ -29,21 +29,21 @@ namespace WB.UI.Shared.Web.Versions
 
             var versionChange = new ProductVersionChange(this.CurrentVersion, DateTime.UtcNow);
 
-            this.transactionManager.ExecuteInPlainTransaction(() =>
+            this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>
             {
                 this.historyStorage.Store(versionChange, versionChange.UpdateTimeUtc);
             });
         }
 
         private string GetLastRegisteredVersion()
-            => this.transactionManager.ExecuteInPlainTransaction(()
+            => this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(()
                 => this.historyStorage.Query(_
                     => _.OrderByDescending(change => change.UpdateTimeUtc)
                         .FirstOrDefault()?
                         .ProductVersion));
 
         public IEnumerable<ProductVersionChange> GetHistory()
-            => this.transactionManager.ExecuteInPlainTransaction(()
+            => this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(()
                 => this.historyStorage.Query(_
                     => _.OrderByDescending(change => change.UpdateTimeUtc)
                         .ToList()));

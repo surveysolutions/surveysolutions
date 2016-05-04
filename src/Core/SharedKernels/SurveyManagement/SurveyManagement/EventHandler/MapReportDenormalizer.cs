@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -100,6 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var gpsQuestionVariableNames = questionnaireDocument
                 .Find<GpsCoordinateQuestion>()
+                .Where(x => x != null)
                 .Select(question => question.StataExportCaption)
                 .ToList();
 

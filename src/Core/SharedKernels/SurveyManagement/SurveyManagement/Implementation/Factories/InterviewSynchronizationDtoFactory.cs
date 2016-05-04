@@ -63,8 +63,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
             var disabledQuestions = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new List<Identity>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
+
+            var validStaticTexts = new List<Identity>();
+            var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
+
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure =
@@ -105,6 +110,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
                     disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
+                }
+                foreach (var staticText in interviewLevel.StaticTexts.Values)
+                {
+                    var staticTextIdentity = new Identity(staticText.Id, interviewLevel.RosterVector);
+                    if (!staticText.IsEnabled)
+                    {
+                        disabledStaticTexts.Add(staticTextIdentity);
+                    }
+
+                    if (staticText.IsInvalid)
+                    {
+                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
+                            staticTextIdentity, staticText.FailedValidationConditions.ToList()));
+                    }
+
+                    if (!staticText.IsInvalid)
+                    {
+                        validStaticTexts.Add(staticTextIdentity);
+                    }
                 }
 
                 this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
@@ -152,8 +176,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 answeredQuestions.ToArray(),
                 disabledGroups,
                 disabledQuestions,
+                disabledStaticTexts,
                 validQuestions,
                 invalidQuestions,
+                validStaticTexts,
+                invalidStaticTexts,
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
                 linkedQuestionOptions,

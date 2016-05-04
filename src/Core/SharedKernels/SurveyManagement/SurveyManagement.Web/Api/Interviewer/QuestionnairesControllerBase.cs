@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -13,9 +14,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
@@ -47,11 +50,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             var query = new QuestionnaireBrowseInputModel()
             {
                 Page = 1,
-                PageSize = int.MaxValue
+                PageSize = int.MaxValue,
+                OnlyCensus = true
             };
 
-            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
-                .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
+            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items
+                                           .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version))
+                                           .ToList();
 
             var response = this.Request.CreateResponse(censusQuestionnaires);
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -75,9 +80,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
+
+            JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.None,
+                Binder = new NewToOldAssemblyRedirectSerializationBinder()
+            };
+
+            var questionnaireDocumentVersionedSrialized = useInOldSerializationFormat
+                ? JsonConvert.SerializeObject(questionnaireDocumentVersioned, JsonSerializerSettingsNewToOld)
+                : this.serializer.Serialize(questionnaireDocumentVersioned);
+
             var resultValue = new QuestionnaireApiView
             {
-                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned, useInOldSerializationFormat ? SerializationBinderSettings.NewToOld: SerializationBinderSettings.OldToNew),
+                QuestionnaireDocument = questionnaireDocumentVersionedSrialized,
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 

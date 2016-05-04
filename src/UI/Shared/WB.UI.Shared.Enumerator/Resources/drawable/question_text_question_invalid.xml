@@ -9,11 +9,6 @@
     android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
     android:color="#FFF6D6D0"/>
 
-  <padding
-    android:left="@dimen/Interview_Question_Answer_Input_background_padding"
-    android:top="@dimen/Interview_Question_Answer_Input_background_padding"
-    android:right="@dimen/Interview_Question_Answer_Input_background_padding"
-    android:bottom="@dimen/Interview_Question_Answer_Input_background_padding"/>
 
   <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
 

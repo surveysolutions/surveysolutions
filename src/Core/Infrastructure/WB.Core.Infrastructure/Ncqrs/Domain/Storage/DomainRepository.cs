@@ -21,12 +21,12 @@ namespace Ncqrs.Domain.Storage
             this.serviceLocator = serviceLocator;
         }
 
-        public AggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
+        public EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
             => this.Load(aggreateRootType, eventStream.SourceId, snapshot, eventStream);
 
-        public AggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
+        public EventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
         {
-            AggregateRoot aggregate;
+            EventSourcedAggregateRoot aggregate;
 
             if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, events, out aggregate))
             {
@@ -36,16 +36,16 @@ namespace Ncqrs.Domain.Storage
             return aggregate;
         }
 
-        public Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot)
+        public Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot)
         {
             Snapshot snapshot = null;
             _aggregateSnapshotter.TryTakeSnapshot(aggregateRoot, out snapshot);
             return snapshot;
         }
 
-        private AggregateRoot GetByIdFromScratch(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
+        private EventSourcedAggregateRoot GetByIdFromScratch(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
         {
-            var aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+            var aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
 
             if (aggregateRoot == null)
                 throw new ArgumentException($"Cannot create new instance of aggregate root of type {aggregateRootType.Name}");

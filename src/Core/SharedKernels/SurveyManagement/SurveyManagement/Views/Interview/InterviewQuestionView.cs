@@ -47,7 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 this.Settings = new NumericQuestionSettings
                 {
                     IsInteger = numericQuestion.IsInteger,
-                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
+                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces,
+                    UseFormating = numericQuestion.UseFormatting
                 };
             }
 
@@ -222,6 +223,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public bool IsInteger { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
+        public bool UseFormating { get; set; }
     }
 
     public class MultiQuestionSettings

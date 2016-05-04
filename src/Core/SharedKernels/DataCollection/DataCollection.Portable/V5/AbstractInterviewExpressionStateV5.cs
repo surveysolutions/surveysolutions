@@ -71,52 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.V5
             }
         }
 
-        public new ValidityChanges ProcessValidationExpressions()
-        {
-            var questionsToBeValid = new List<Identity>();
-            var questionsToBeInvalid = new List<Identity>();
+        public new ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
 
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
-            {
-                List<Identity> questionsToBeValidByScope;
-                List<Identity> questionsToBeInvalidByScope;
-
-                interviewScopeKvpValue.CalculateValidationChanges(out questionsToBeValidByScope, out questionsToBeInvalidByScope);
-
-                questionsToBeValid.AddRange(questionsToBeValidByScope);
-                questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
-            }
-
-            return new ValidityChanges(answersDeclaredValid: questionsToBeValid, answersDeclaredInvalid: questionsToBeInvalid);
-        }
-
-        public new EnablementChanges ProcessEnablementConditions()
-        {
-            var questionsToBeEnabled = new List<Identity>();
-            var questionsToBeDisabled = new List<Identity>();
-            var groupsToBeEnabled = new List<Identity>();
-            var groupsToBeDisabled = new List<Identity>();
-
-            //order by scope depth starting from top
-            //conditionally lower scope could depend only from upper scope
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
-            {
-                List<Identity> questionsToBeEnabledArray;
-                List<Identity> questionsToBeDisabledArray;
-                List<Identity> groupsToBeEnabledArray;
-                List<Identity> groupsToBeDisabledArray;
-
-                interviewScopeKvpValue.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
-                    out groupsToBeDisabledArray);
-
-                questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
-                questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
-                groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
-                groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
-            }
-
-            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
-        }
+        public new EnablementChanges ProcessEnablementConditions() => ProcessEnablementConditionsImpl(this.InterviewScopes.Values);
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {

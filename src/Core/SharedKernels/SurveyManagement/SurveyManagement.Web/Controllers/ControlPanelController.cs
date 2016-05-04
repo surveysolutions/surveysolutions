@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
@@ -8,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Storage.EventStore;
@@ -22,13 +22,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public abstract class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IEventStoreApiService eventStoreApiService;
 
-        public ControlPanelController(IServiceLocator serviceLocator,
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
+        protected ControlPanelController(IServiceLocator serviceLocator,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
@@ -38,7 +36,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
-            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
             this.transactionManagerProvider = transactionManagerProvider;
             this.eventStoreApiService = eventStoreApiService;
@@ -54,20 +51,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult NConfig() => this.View();
 
         public ActionResult Versions() => this.View();
-
-        public ActionResult IncomingDataWithErrors()
-        {
-            return this.View(this.brokenSyncPackagesStorage.GetListOfUnhandledPackages());
-        }
-
-        public FileResult GetIncomingDataWithError(string packageId)
-        {
-            return this.File(this.brokenSyncPackagesStorage.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
-        }
         
         public ActionResult Settings()
         {
-            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings();
+            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
             return this.View(settings);
         }
 
@@ -124,11 +111,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         #endregion
 
-        public ActionResult InterviewDetails() => this.View();
-
         public ActionResult SynchronizationLog() => this.View();
 
         public ActionResult EventStore() => this.View();
+        public ActionResult BrokenInterviewPackages() => this.View();
 
         public async Task<ActionResult> RunScavenge()
         {

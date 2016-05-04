@@ -17,7 +17,8 @@ namespace Main.Core.Events.Questionnaire
             string conditionExpression, 
             bool hideIfDisabled, 
             bool featured, 
-            string instructions, 
+            string instructions,
+            QuestionProperties properties,
             bool capital, 
             Guid publicKey, 
             string questionText, 
@@ -41,7 +42,7 @@ namespace Main.Core.Events.Questionnaire
             Guid? cascadeFromQuestionId, 
             IList<ValidationCondition> validationConditions,
             string linkedFilterExpression) 
-            : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
+            : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, validationConditions)
         {
             this.QuestionType = questionType;

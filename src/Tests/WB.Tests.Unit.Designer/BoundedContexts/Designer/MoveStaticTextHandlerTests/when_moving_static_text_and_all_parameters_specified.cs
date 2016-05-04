@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new StaticTextAdded() { EntityId = entityId, ParentId = chapterId });
+            questionnaire.Apply(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId));
             questionnaire.Apply(new NewGroupAdded { PublicKey = targetEntityId });
 
             eventContext = new EventContext();

@@ -53,6 +53,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -88,6 +89,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(interviewLimitCount));
 
+            this.Bind<Questionnaire>().ToSelf();
+            this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
@@ -96,6 +100,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
 
+            this.Bind<User>().ToSelf();
+            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
+
             CommandRegistry
                 .Setup<User>()
                 .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName, command.PersonName, command.PhoneNumber))
@@ -103,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
                 .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
                 .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveUserAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
+                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
                 .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
@@ -124,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedRosterVectors), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerMultipleOptionsQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedValues), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerYesNoQuestion>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerYesNoQuestion(command), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
-                .Handles<AnswerNumericIntegerQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerNumericIntegerQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
+                .Handles<AnswerNumericIntegerQuestionCommand>(command => command.InterviewId, aggregate => aggregate.AnswerNumericIntegerQuestion, config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerNumericRealQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerNumericRealQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerPictureQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerPictureQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.PictureFileName), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerQRBarcodeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerQRBarcodeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
@@ -202,6 +209,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
+            this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
@@ -217,17 +225,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
-
-            this.Bind<IBrokenSyncPackagesStorage>()
-                .To<BrokenSyncPackagesStorage>();
-
-            this.Bind<ISyncPackagesProcessor>()
-                .To<SyncPackagesProcessor>()
-                .InSingletonScope();
-
-            this.Bind<IIncomingSyncPackagesQueue>()
-              .To<IncomingSyncPackagesQueue>()
-              .InSingletonScope();
+            
+            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
@@ -265,7 +264,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-            this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
+            //this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
         }
     }
 }

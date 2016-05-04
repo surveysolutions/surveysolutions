@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
@@ -16,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.EnablementCondition = commonQuestionParameters.EnablementCondition;
             this.HideIfDisabled = commonQuestionParameters.HideIfDisabled;
             this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions, removeAllTags: true);
+            this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false);
         }
 
         public string Title { get; private set; }
@@ -24,5 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public string Instructions { get; private set; }
+        public QuestionProperties Properties { get; set; }
     }
 }

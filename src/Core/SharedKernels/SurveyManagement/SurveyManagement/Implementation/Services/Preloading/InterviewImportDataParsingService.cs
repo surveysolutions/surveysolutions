@@ -18,18 +18,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IPreloadedDataRepository preloadedDataRepository, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainTransactionManager plainTransactionManager,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.preloadedDataRepository = preloadedDataRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.plainTransactionManager = plainTransactionManager;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         public InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
         {
             var bigTemplateObject =
-                this.plainTransactionManager.ExecuteInPlainTransaction(() =>this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+                this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetById(

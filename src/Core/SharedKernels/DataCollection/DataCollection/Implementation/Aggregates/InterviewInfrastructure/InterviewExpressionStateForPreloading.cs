@@ -5,10 +5,11 @@ using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV7
+    public class InterviewExpressionStateForPreloading : ILatestInterviewExpressionState
     {
         public InterviewExpressionStateForPreloading()
         {
@@ -119,11 +120,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return true;
         }
 
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) {}
+
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) {}
+        public void DeclareStaticTextValid(IEnumerable<Identity> validStaticTexts) {}
+
+        public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) {}
+
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {
             return new InterviewExpressionStateForPreloading();
         }
 
+        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {

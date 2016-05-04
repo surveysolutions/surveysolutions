@@ -32,12 +32,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
-        private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
+        private readonly IPlainStorageAccessor<UserDocument> userStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly string unknown = "Unknown";
 
-        public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage, 
-            IReadSideRepositoryWriter<UserDocument> userStorage,
+        public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
+            IPlainStorageAccessor<UserDocument> userStorage,
             IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
@@ -252,7 +252,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             decimal[] rosterVector,
             DateTime timestamp)
         {
-            UserDocument responsible = this.userStorage.GetById(originatorId);
+            UserDocument responsible = this.userStorage.GetById(originatorId.FormatGuid());
             var originatorName = responsible == null ? this.unknown : responsible.UserName;
             var originatorRole = responsible == null || !responsible.Roles.Any()
                 ? UserRoles.Undefined

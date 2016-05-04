@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IInterviewerDashboardFactory
     {
-        Task<DashboardInformation> GetInterviewerDashboardAsync(Guid interviewerId);
+        DashboardInformation GetInterviewerDashboardAsync(Guid interviewerId);
     }
 }

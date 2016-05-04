@@ -1,235 +1,162 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.User;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class User : AggregateRootMappedByConvention, ISnapshotable<UserState>
+    public class User : IPlainAggregateRoot
     {
-        private bool isUserLockedBySupervisor;
-        private bool isUserLockedByHQ;
-        private bool isUserArchived;
-        private UserRoles[] userRoles = new UserRoles[0];
-        private Guid userSupervisorId;
-        private string userSupervisorName;
-        private string loginName;
+        private static readonly UserRoles[] RolesWhichSupportArchiving = { UserRoles.Operator, UserRoles.Supervisor };
 
-        private readonly UserRoles[] userRolesWhichAllowToBeDeleted = new[] {UserRoles.Operator, UserRoles.Supervisor};
-        
-        public User(){}
+        public Guid Id { get; private set; }
 
-        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
-            string phoneNumber)
+        public User() {}
+
+        public void SetId(Guid id)
         {
-            //// Check for uniqueness of person name and email!
-            this.ApplyEvent(
-                new NewUserCreated
-                {
-                    Name = userName,
-                    Password = password,
-                    Email = email,
-                    IsLockedBySupervisor = isLockedBySupervisor,
-                    IsLocked = isLockedByHq,
-                    Roles = roles,
-                    Supervisor = supervisor,
-                    PersonName = personName,
-                    PhoneNumber = phoneNumber,
-                    PublicKey = publicKey
-                });
+            this.Id = id;
         }
 
-        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash, 
+        public DateTime CreationDate;
+        public string Email;
+        public bool IsLockedByHQ;
+        public bool IsArchived;
+        public bool IsLockedBySupervisor;
+        public string Password;
+        public UserLight Supervisor;
+        public string UserName;
+        public DateTime LastChangeDate;
+        public string DeviceId;
+        public UserRoles[] Roles=new UserRoles[0];
+        public List<DeviceInfo> DeviceChangingHistory =new List<DeviceInfo>();
+        public string PersonName;
+        public string PhoneNumber;
+
+        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password,
+            Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
+            string phoneNumber)
+        {
+            this.UserName = userName;
+            this.Password = password;
+            this.CreationDate = DateTime.UtcNow;
+            this.Email = email;
+            this.IsLockedBySupervisor = isLockedBySupervisor;
+            this.IsLockedByHQ = isLockedByHq;
+            this.Supervisor = supervisor;
+            this.Roles = roles;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
+        }
+
+        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash,
             string personName, string phoneNumber, Guid userId)
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserChanged { Email = email, PasswordHash = passwordHash, PersonName = personName, PhoneNumber = phoneNumber});
+            this.ThrowIfUserArchived();
 
-            if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !this.isUserLockedBySupervisor)
+            this.Email = email;
+            this.Password = passwordHash;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
+
+            if (isLockedBySupervisor.HasValue)
             {
-                this.ApplyEvent(new UserLockedBySupervisor());
-            }
-            else if (isLockedBySupervisor.HasValue && !isLockedBySupervisor.Value && this.isUserLockedBySupervisor)
-            {
-                this.ApplyEvent(new UserUnlockedBySupervisor());
+                this.IsLockedBySupervisor = isLockedBySupervisor.Value;
             }
 
-            if (isLockedByHQ && !this.isUserLockedByHQ)
-            {
-                this.ApplyEvent(new UserLocked());
-            }
-            else if (!isLockedByHQ && this.isUserLockedByHQ)
-            {
-                this.ApplyEvent(new UserUnlocked());
-            }
+            this.IsLockedByHQ = isLockedByHQ;
         }
 
         public void LinkUserToDevice(LinkUserToDevice command)
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserLinkedToDevice
-                            {
-                                DeviceId = command.DeviceId
-                            });
+            this.ThrowIfUserArchived();
+
+            this.DeviceId = command.DeviceId;
+            this.DeviceChangingHistory.Add(
+                new DeviceInfo {Date = DateTime.UtcNow, DeviceId = command.DeviceId});
         }
 
         public void Lock()
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserLocked());
+            this.ThrowIfUserArchived();
+
+            this.IsLockedByHQ = true;
         }
 
         public void Unlock()
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserUnlocked());
+            this.ThrowIfUserArchived();
+
+            this.IsLockedByHQ = false;
         }
 
         public void LockBySupervisor()
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserLockedBySupervisor());
+            this.ThrowIfUserArchived();
+
+            this.IsLockedBySupervisor = true;
         }
 
         public void UnlockBySupervisor()
         {
-            ThrowIfUserArchived();
-            this.ApplyEvent(new UserUnlockedBySupervisor());
+            this.ThrowIfUserArchived();
+
+            this.IsLockedBySupervisor = false;
         }
 
         public void Archive()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
+            this.ThrowIfRoleRestrictsArchiving();
 
-            if (userRoles.Except(userRolesWhichAllowToBeDeleted).Any())
-                throw new UserException(
-                    String.Format("user in roles {0} can't be deleted", string.Join(",", userRoles)),
-                    UserDomainExceptionType.RoleDoesntSupportDelete);
-
-            this.ApplyEvent(new UserArchived());
+            this.IsArchived = true;
         }
 
         public void Unarchive()
         {
-            ThrowIfUserIsNotArchived();
-
-            this.ApplyEvent(new UserUnarchived());
+            this.ThrowIfUserIsNotArchived();
+            this.IsArchived = false;
         }
 
-        public void UnarchiveUserAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
+        public void UnarchiveAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
         {
-            ThrowIfUserIsNotArchived();
+            this.ThrowIfUserIsNotArchived();
 
-            this.ApplyEvent(new UserUnarchived());
-            this.ApplyEvent(
-                new NewUserCreated
-                {
-                    Name = loginName,
-                    Password = passwordHash,
-                    Email = email,
-                    IsLockedBySupervisor = false,
-                    IsLocked = false,
-                    Roles = userRoles,
-                    Supervisor = new UserLight(userSupervisorId, userSupervisorName),
-                    PersonName = personName,
-                    PhoneNumber = phoneNumber,
-                    PublicKey = EventSourceId
-                });
+            this.IsArchived = false;
+            this.Password = passwordHash;
+            this.Email = email;
+            this.IsLockedBySupervisor = false;
+            this.IsLockedByHQ = false;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
         }
 
         private void ThrowIfUserIsNotArchived()
         {
-            if (!isUserArchived)
+            if (!this.IsArchived)
                 throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
         }
+
         private void ThrowIfUserArchived()
         {
-            if (isUserArchived)
+            if (this.IsArchived)
                 throw new UserException("User already archived", UserDomainExceptionType.UserArchived);
         }
 
-        protected void OnUserUnarchived(UserUnarchived @event)
+        private void ThrowIfRoleRestrictsArchiving()
         {
-            isUserArchived = false;
-        }
-
-        protected void OnUserArchived(UserArchived @event)
-        {
-            isUserArchived = true;
-        }
-
-        protected void Apply(UserLinkedToDevice @event)
-        {
-        }
-
-        protected void OnNewUserCreated(NewUserCreated e)
-        {
-            this.isUserLockedBySupervisor = e.IsLockedBySupervisor;
-            this.isUserLockedByHQ = e.IsLocked;
-            this.userRoles = e.Roles;
-            this.loginName = e.Name;
-
-            if (e.Supervisor != null)
-            {
-                this.userSupervisorId = e.Supervisor.Id;
-                this.userSupervisorName = e.Supervisor.Name;
-            }
-        }
-
-        protected void OnUserLocked(UserLockedBySupervisor @event)
-        {
-            this.isUserLockedBySupervisor = true;
-        }
-
-        protected void OnUserUnlocked(UserUnlockedBySupervisor @event)
-        {
-            this.isUserLockedBySupervisor = false;
-        }
-
-        protected void OnUserLocked(UserLocked @event)
-        {
-            this.isUserLockedByHQ = true;
-        }
-
-        protected void OnUserUnlocked(UserUnlocked @event)
-        {
-            this.isUserLockedByHQ = false;
-        }
-
-        protected void OnUserChange(UserChanged e)
-        {
-        }
-
-
-        public UserState CreateSnapshot()
-        {
-            return new UserState()
-            {
-                IsUserArchived = isUserArchived,
-                IsUserLockedByHQ = isUserLockedByHQ,
-                IsUserLockedBySupervisor = isUserLockedBySupervisor,
-                LoginName = loginName,
-                UserRoles = userRoles,
-                UserSupervisorId = userSupervisorId,
-                UserSupervisorName = userSupervisorName
-            };
-        }
-
-        public void RestoreFromSnapshot(UserState snapshot)
-        {
-            isUserArchived = snapshot.IsUserArchived;
-            isUserLockedByHQ = snapshot.IsUserLockedByHQ;
-            isUserLockedBySupervisor = snapshot.IsUserLockedBySupervisor;
-            loginName = snapshot.LoginName;
-            userRoles = snapshot.UserRoles;
-            userSupervisorId = snapshot.UserSupervisorId;
-            userSupervisorName = snapshot.UserSupervisorName;
+            if (this.Roles.Except(RolesWhichSupportArchiving).Any())
+                throw new UserException(
+                    $"user in roles {string.Join(",", this.Roles)} can't be deleted",
+                    UserDomainExceptionType.RoleDoesntSupportDelete);
         }
     }
 }

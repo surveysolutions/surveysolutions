@@ -70,7 +70,7 @@
     <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
     <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
     <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
-    <Compile Include="Entities\Interview\InterviewGroup.cs" />
+    <Compile Include="Entities\Interview\InterviewEnablementState.cs" />
     <Compile Include="Entities\Interview\InterviewRoster.cs" />
     <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
     <Compile Include="Entities\Interview\LinkedSingleOptionAnswer.cs" />
@@ -148,6 +148,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />

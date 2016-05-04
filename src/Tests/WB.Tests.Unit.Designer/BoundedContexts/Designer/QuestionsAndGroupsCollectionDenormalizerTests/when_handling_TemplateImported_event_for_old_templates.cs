@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
                                         PublicKey = g4Id,
                                         Children = new List<IComposite>
                                         {
-                                            new StaticText(publicKey: st2Id, text: st2Text),
+                                            Create.StaticText(staticTextId: st2Id, text: st2Text),
                                             new TextQuestion{ PublicKey = q5Id, QuestionType = QuestionType.Text},
                                         }
                                     }
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
                         PublicKey = g5Id,
                         Children = new List<IComposite>
                         {
-                            new StaticText(publicKey: st1Id, text: st1Text),
+                            Create.StaticText(staticTextId: st1Id, text: st1Text),
                             new TextQuestion{ PublicKey = q6Id, QuestionType = QuestionType.Text},
                         }
                     },

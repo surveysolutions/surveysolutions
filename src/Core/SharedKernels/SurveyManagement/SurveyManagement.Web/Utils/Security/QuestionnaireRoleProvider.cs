@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
@@ -26,9 +27,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             get { return ServiceLocator.Current.GetInstance<IViewFactory<UserBrowseInputModel, UserBrowseView>>(); }
         }
 
-        private ITransactionManagerProvider TransactionProvider
+        private IPlainTransactionManager PlainTransactionManager
         {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager(); }
         }
 
         private IReadSideStatusService readSideStatusService
@@ -84,19 +85,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override string[] GetRolesForUser(string username)
         {
-             if (readSideStatusService.AreViewsBeingRebuiltNow())
-                 return new string[0];
+            if (readSideStatusService.AreViewsBeingRebuiltNow())
+                return new string[0];
 
-            var transactionManager = this.TransactionProvider.GetTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                transactionManager.BeginQueryTransaction();
-            }
-
-
-            try
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 UserWebView user =
                     this.UserViewFactory.Load(
@@ -110,14 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
                 }
 
                 return user.Roles.Select(r => r.ToString()).ToArray();
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    transactionManager.RollbackQueryTransaction();
-                }
-            }
+            });
         }
 
         public override string[] GetUsersInRole(string roleName)
@@ -141,32 +126,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
             if (cachedValue.HasValue)
                 return cachedValue.Value;
-
-            var transactionManager = this.TransactionProvider.GetTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                transactionManager.BeginQueryTransaction();
-            }
-
-            try
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 UserWebView user = this.UserViewFactory.Load(new UserWebViewInputModel(username.ToLower(), null));
-                
+
                 bool hasRole = user.Roles.Any(role => role.ToString().Equals(roleName));
 
                 HttpContext.Current.Items.Add(contextKey, hasRole);
 
                 return hasRole;
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    transactionManager.RollbackQueryTransaction();
-                }
-            }
+            });
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)

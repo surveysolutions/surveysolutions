@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         public static InterviewSummaryDenormalizer CreateDenormalizer()
         {
-            return CreateDenormalizer(users: Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
+            return CreateDenormalizer(users: Mock.Of<IPlainStorageAccessor<UserDocument>>());
         }
 
         public static InterviewSummaryDenormalizer CreateDenormalizer(string userId, string userName)
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return CreateDenormalizer(users: CreateUsersWriterWith2Users(user1Id, user1Name, user2Id, user2Name));
         }
 
-        public static InterviewSummaryDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
+        public static InterviewSummaryDenormalizer CreateDenormalizer(IPlainStorageAccessor<UserDocument> users = null)
         {
             return
                 new InterviewSummaryDenormalizer(
@@ -48,17 +49,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>();
         }
 
-        private static IReadSideRepositoryWriter<UserDocument> CreateUsersWriterWith1User(string userId, string userName)
+        private static IPlainStorageAccessor<UserDocument> CreateUsersWriterWith1User(string userId, string userName)
         {
-            var usersMock = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            var usersMock = new Mock<IPlainStorageAccessor<UserDocument>>();
             usersMock.Setup(_ => _.GetById(userId)).Returns(new UserDocument() { UserName = userName });
             return usersMock.Object;
         }
 
-        private static IReadSideRepositoryWriter<UserDocument> CreateUsersWriterWith2Users(string user1Id,
+        private static IPlainStorageAccessor<UserDocument> CreateUsersWriterWith2Users(string user1Id,
             string user1Name, string user2Id, string user2Name)
         {
-            var usersMock = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            var usersMock = new Mock<IPlainStorageAccessor<UserDocument>>();
             usersMock.Setup(_ => _.GetById(user1Id)).Returns(new UserDocument() {UserName = user1Name});
             usersMock.Setup(_ => _.GetById(user2Id)).Returns(new UserDocument() { UserName = user2Name });
 

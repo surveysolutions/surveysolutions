@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
     internal class InterviewHistoryFactory : IInterviewHistoryFactory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
-        private readonly IReadSideRepositoryWriter<UserDocument> userReader;
+        private readonly IPlainStorageAccessor<UserDocument> userReader;
 
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IEventStore eventStore;
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         public InterviewHistoryFactory(
             IEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
-            IReadSideRepositoryWriter<UserDocument> userReader,
+            IPlainStorageAccessor<UserDocument> userReader,
             ILogger logger, InterviewDataExportSettings interviewDataExportSettings, 
             IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {

@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                         out generatedAssembly) == Create.GenerationResult(true));
 
             var serializer = Mock.Of<ISerializer>(
-                x => x.Serialize(Moq.It.IsAny<QuestionnaireDocument>(), SerializationBinderSettings.OldToNew) == serializedQuestionnaire);
+                x => x.Serialize(Moq.It.IsAny<QuestionnaireDocument>()) == serializedQuestionnaire);
 
             var stringCompressorMock =
                 Mock.Of<IStringCompressor>(

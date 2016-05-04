@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public RosterScopeTemplateModel(
             string typeName, 
             List<QuestionTemplateModel> questions, 
+            List<StaticTextTemplateModel> staticTexts, 
             List<GroupTemplateModel> groups, 
             List<RosterTemplateModel> rosters, 
             List<RosterTemplateModel> rostersInScope, 
@@ -15,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             TypeName = typeName;
             Questions = questions;
+            StaticTexts = staticTexts;
             Groups = groups;
             Rosters = rosters;
             ConditionMethodsSortedByExecutionOrder = conditionMethodsSortedByExecutionOrder;
@@ -26,6 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string TypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
+
+        public List<StaticTextTemplateModel> StaticTexts { get; set; }
 
         public List<GroupTemplateModel> Groups { get; set; }
 

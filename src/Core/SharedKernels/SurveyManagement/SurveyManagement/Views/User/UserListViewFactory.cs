@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -7,9 +8,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
     public class UserListViewFactory : IUserListViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor;
+        private readonly IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor;
 
-        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor)
+        public UserListViewFactory(IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor)
         {
             this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }

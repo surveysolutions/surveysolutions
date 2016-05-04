@@ -83,12 +83,15 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null)
+        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null, string contentId = null,  long? size = null, AttachmentDetails details = null)
         {
             return new AttachmentContent
             {
+                ContentId = contentId,
                 Content = content ?? new byte[0],
-                ContentType = contentType ?? "whatever"
+                ContentType = contentType ?? "whatever",
+                Size = size ?? 10,
+                Details = details
             };
         }
 
@@ -106,6 +109,14 @@ namespace WB.Tests.Unit.Designer
                 QuestionnaireId = questionnaireId,
                 FileName = fileName ?? "fileName.txt",
                 LastUpdateDate = lastUpdateDate ?? DateTime.UtcNow
+            };
+        }
+
+        public static AttachmentSize AttachmentSize(long? size = null)
+        {
+            return new AttachmentSize
+            {
+                Size = size ?? 10
             };
         }
 
@@ -150,10 +161,8 @@ namespace WB.Tests.Unit.Designer
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
-            };
+                isLookupTablesFeatureSupported: true,
+                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(
@@ -198,7 +207,7 @@ namespace WB.Tests.Unit.Designer
                         Title = chapter1Title,
                         Children = new List<IComposite>()
                         {
-                            new StaticText(publicKey: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
+                            Create.StaticText(staticTextId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
                             new Group()
                             {
                                 PublicKey = GetQuestionnaireItemId(chapter1GroupId),
@@ -233,6 +242,11 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+
+        public static QuestionProperties QuestionProperties()
+        {
+            return new QuestionProperties(false, false);
+        }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
@@ -612,24 +626,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static PdfGroupView PdfGroupView()
-        {
-            return new PdfGroupView();
-        }
-
-        public static PdfQuestionnaireView PdfQuestionnaireView(Guid? publicId = null)
-        {
-            return new PdfQuestionnaireView
-            {
-                PublicId = publicId ?? Guid.Parse("FEDCBA98765432100123456789ABCDEF"),
-            };
-        }
-
-        public static PdfQuestionView PdfQuestionView()
-        {
-            return new PdfQuestionView();
-        }
-
         public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, IEvent payload = null)
         {
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<IEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
@@ -738,6 +734,7 @@ namespace WB.Tests.Unit.Designer
                 targetIndex: 0,
                 featured: false,
                 instructions: null,
+                properties: Create.QuestionProperties(),
                 responsibleId: Guid.NewGuid(),
                 capital: false,
                 questionScope: QuestionScope.Interviewer,
@@ -1045,32 +1042,36 @@ namespace WB.Tests.Unit.Designer
         public static StaticText StaticText(
             Guid? staticTextId = null,
             string text = "Static Text X",
-            string attachmentName = null)
+            string attachmentName = null,
+            string enablementCondition = null,
+            bool hideIfDisabled = false,
+            IEnumerable<ValidationCondition> validationConditions = null)
         {
-            return new StaticText(staticTextId ?? Guid.NewGuid(), text, attachmentName);
+            return new StaticText(
+                staticTextId ?? Guid.NewGuid(), 
+                text,
+                enablementCondition,
+                hideIfDisabled,
+                validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                attachmentName);
         }
 
         public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
         {
-            return ToPublishedEvent(new StaticTextAdded()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                ParentId = GetQuestionnaireItemId(parentId),
-                Text = text
-            });
+            return ToPublishedEvent(Create.Event.StaticTextAdded(entityId : GetQuestionnaireItemId(entityId),
+                parentId : GetQuestionnaireItemId(parentId),
+                text : text));
         }
 
         public static IPublishedEvent<StaticTextCloned> StaticTextClonedEvent(string entityId = null,
             string parentId = null, string sourceEntityId = null, string text = null, int targetIndex = 0)
         {
-            return ToPublishedEvent(new StaticTextCloned()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                ParentId = GetQuestionnaireItemId(parentId),
-                SourceEntityId = GetQuestionnaireItemId(sourceEntityId),
-                Text = text,
-                TargetIndex = targetIndex
-            });
+            return ToPublishedEvent(Create.Event.StaticTextCloned(
+                publicKey: GetQuestionnaireItemId(entityId),
+                parentId : GetQuestionnaireItemId(parentId),
+                sourceEntityId : GetQuestionnaireItemId(sourceEntityId),
+                text : text,
+                targetIndex : targetIndex));
         }
 
         public static IPublishedEvent<StaticTextDeleted> StaticTextDeletedEvent(string entityId = null)
@@ -1083,11 +1084,8 @@ namespace WB.Tests.Unit.Designer
 
         public static IPublishedEvent<StaticTextUpdated> StaticTextUpdatedEvent(string entityId = null, string text = null)
         {
-            return ToPublishedEvent(new StaticTextUpdated()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                Text = text
-            });
+            return ToPublishedEvent(Create.Event.StaticTextUpdated(entityId : GetQuestionnaireItemId(entityId),
+                text : text));
         }
 
         public static ISubstitutionService SubstitutionService()
@@ -1219,6 +1217,11 @@ namespace WB.Tests.Unit.Designer
             return mock.Object;
         }
 
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        {
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireVerificationReferences);
+        }
+
         public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
         {
             return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
@@ -1235,7 +1238,13 @@ namespace WB.Tests.Unit.Designer
             {
                 Code = code,
                 Message = message,
-                References = references.ToList()
+                Errors = new List<VerificationMessageError>()
+                {
+                    new VerificationMessageError()
+                    {
+                        References = references.ToList()
+                    }
+                }
             };
         }
 
@@ -1276,9 +1285,6 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-
-
-
             public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
                 return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file");
@@ -1289,9 +1295,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
 
-            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId)
+            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
+                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
             {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
             
             public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
@@ -1327,6 +1334,14 @@ namespace WB.Tests.Unit.Designer
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>());
+        }
+
+        public static AttachmentService AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
+        {
+            return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
+                attachmentMetaStorage: attachmentMetaStorage);
         }
     }
 }

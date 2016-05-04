@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -19,16 +20,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
 {
     internal class DeleteSupervisorService : IDeleteSupervisorService
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userDocumentReader;
+        private readonly IPlainStorageAccessor<UserDocument> userDocumentStorage;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
 
         public DeleteSupervisorService(
-            IQueryableReadSideRepositoryReader<UserDocument> userDocumentReader,
+            IPlainStorageAccessor<UserDocument> userDocumentStorage,
             ICommandService commandService,
             ILogger logger, IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {
-            this.userDocumentReader = userDocumentReader;
+            this.userDocumentStorage = userDocumentStorage;
             this.commandService = commandService;
             this.logger = logger;
         }
@@ -39,9 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
             try
             {
                 this.commandService.Execute(new ArchiveUserCommad(supervisorId));
-
                 var interviewerIds =
-                    userDocumentReader.Query(
+                    this.userDocumentStorage.Query(
                         _ =>
                             _.Where(u => u.Supervisor.Id == supervisorId && !u.IsArchived)
                                 .Select(u => u.PublicKey)

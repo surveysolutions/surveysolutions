@@ -119,9 +119,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
-            this.Endpoint = this.interviewerSettings.Endpoint;
-
+            this.Endpoint =  this.interviewerSettings.Endpoint;
             this.UserName = this.userIdentity.Name;
+
+#if DEBUG
+            this.Endpoint = "http://192.168.88.39/Headquarters";
+            this.UserName = "int";
+            this.Password = "1";
+#endif
 
             return Task.FromResult(true);
         }

@@ -87,14 +87,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
+            string fileFilter = null)
         {
-            return this.archiveUtils.ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter);
+            this.archiveUtils.ZipDirectoryToFile(sourceDirectory, archiveFilePath, directoryFilter, fileFilter);
         }
 
-        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
+            string fileFilter = null)
         {
-            return this.archiveUtils.ZipDirectoryToByteArrayAsync(sourceDirectory, directoryFilter, fileFilter);
+            return this.archiveUtils.ZipDirectoryToFileAsync(sourceDirectory, archiveFilePath, directoryFilter, fileFilter);
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
@@ -104,7 +106,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 if(this.exportSettings != null && this.exportSettings.EncryptionEnforced())
                     zip.Password = this.exportSettings.GetPassword();
 
-                zip.UseZip64WhenSaving=Zip64Option.AsNecessary;
+                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);

@@ -389,4 +389,7 @@
   <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
     <value>Желаемая точность GPS вопроса</value>
   </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Показать инструкцию</value>
+  </data>
 </root>

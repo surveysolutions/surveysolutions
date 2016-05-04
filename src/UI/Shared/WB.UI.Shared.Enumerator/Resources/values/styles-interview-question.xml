@@ -9,12 +9,14 @@
     <item name="android:background">@drawable/question_background_disabled</item>
   </style>
 
-  <style name="Interview_DisabledQuestion_Header" parent="Interview_Entity" />
+  <style name="Interview_DisabledQuestion_Header" parent="Interview_Entity">
+    
+  </style>
 
   <style name="Interview_DisabledQuestion_Title" parent="Interview_Entity_Title" >
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:textColor">#afafaf</item>
+    <item name="android:textColor">@color/disabledTextColor</item>
   </style>
 
   <style name="Interview_Question" parent="Interview_Entity" />
@@ -28,27 +30,40 @@
 
   <style name="Interview_Question_Instruction" parent="Interview_Question_Header" />
 
-  <style name="Interview_Question_Instruction_Title" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Instruction_Title">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Trebuchet</item>
-    <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:textColor">#2a81cb</item>
+    <item name="android:textColor">@color/instructions</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Instruction_Title_margin_top</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_DoublePadding</item>
   </style>
-
-  <style name="Interview_Question_Instruction_Details" parent="VerticalFullWidthWrappingLayout">
+  
+  <style name="Interview_Question_Instruction_ShowInstruction" parent="Interview_Question_Instruction_Title">
+    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:textColor">@color/show_instructions</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding</item>
+  </style>
+  
+  <style name="Interview_Question_Instruction_Details">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Arial</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Instructions_margin</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/btn_default</item>
   </style>
 
   <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
-    
   </style>
 
-  <style name="Interview_Question_Answer" parent="FullWidthWrappingLayout">
+  <style name="Interview_Question_Answer">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">center_horizontal</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_bottom</item>
@@ -86,13 +101,19 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
     <item name="android:focusable">true</item>
-    <item name="android:layout_width">@dimen/Interview_Question_Answer_TextEditor_width</item>
+    <item name="android:layout_width">@dimen/Zero</item>
     <item name="android:focusableInTouchMode">true</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="android:background">@drawable/question_list_item_editor_background</item>
   </style>
-  
+  <style name="Interview_Question_RemoveAnswerWrapper">
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+  </style>
    <style name="Interview_Question_Border" parent="Interview_Question_Answer_Editor">
      <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -106,6 +127,10 @@
     <item name="android:drawablePadding">@dimen/Interview_Question_Answer_FilteredComboBox_padding</item>
     <item name="android:popupBackground">@drawable/question_combobox_popup_background</item>
     <item name="android:dropDownVerticalOffset">@dimen/Interview_Question_Answer_FilteredComboBox_verticalOffset</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+   
   </style>    
   
   <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Entity_BasicFont">
@@ -220,7 +245,7 @@
     <item name="android:focusableInTouchMode">true</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textCursorDrawable">@null</item>
-    <item name="android:background">@drawable/question_list_item_editor_background</item>
+    <item name="android:background">@drawable/question_list_item_editor_background</item>   
   </style>
 
   <style name="Interview_Question_Answer_List_DeleteButton">
@@ -239,7 +264,11 @@
     <item name="android:background">@drawable/question_text_question</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
     <item name="android:textCursorDrawable">@null</item>
-    <item name="android:textStyle">normal</item>
+    <item name="android:textStyle">normal</item>  
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+  
   </style>
  <style name="Interview_Question_RemoveAnswer">
     <item name="android:layout_width">@dimen/Interview_Question_Text_DeleteButton_width</item>
@@ -289,7 +318,7 @@
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:textStyle">italic</item>
-    <item name="android:textColor">#b2b2b2</item>
+    <item name="android:textColor">@color/editorHintTextColor</item>
     <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>
@@ -332,6 +361,7 @@
     <item name="android:fontFamily">Trebuchet</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
     <item name="android:textColor">@color/commentInterviewerTextColor</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Title_margin_bottom</item>
   </style>
@@ -346,9 +376,9 @@
 
   <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
+    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
   
-
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
 
   <style name="Interview_Question_Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
@@ -370,6 +400,8 @@
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Previous_Group_Navigation_Layout_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Previous_Group_Navigation_Layout_margin_bottom</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:textAllCaps">true</item>
   </style>
 
   <style name="Interview_Previous_Group_Navigation_Button">
@@ -383,5 +415,7 @@
     <item name="android:stateListAnimator">@null</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:textAllCaps">true</item>
   </style>
 </resources>

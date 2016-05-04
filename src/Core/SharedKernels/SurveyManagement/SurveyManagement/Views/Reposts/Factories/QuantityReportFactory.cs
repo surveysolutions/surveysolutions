@@ -16,24 +16,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
 
-        public QuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+        public QuantityReportFactory(
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage, 
+            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
         {
             this.interviewstatusStorage = interviewstatusStorage;
+            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
-        private QuantityByResponsibleReportView Load(
+        private QuantityByResponsibleReportView Load<T>(
             DateTime reportStartDate,
             string period,
             int columnCount,
             int page,
             int pageSize,
-            Guid questionnaireId,
-            long questionnaireVersion,
-            InterviewExportedAction[] statuses,
-            Expression<Func<InterviewCommentedStatus, Guid>> selectUser,
-            Expression<Func<InterviewCommentedStatus, bool>> restrictUser,
-            Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
+            Func<DateTime, DateTime, IQueryable<T>> queryInterviewStatusesByDateRange,
+            Expression<Func<T, Guid>> selectUserId,
+            Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
             var from = reportStartDate.Date;
             var to = AddPeriod(from, period, columnCount);
@@ -44,30 +45,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
 
-            var allUsersQuery = QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses);
+            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
 
-            if (restrictUser != null)
-                allUsersQuery = allUsersQuery.Where(restrictUser);
-
-            var users = allUsersQuery
-                    .Select(selectUser)
+            var userIdsOfAllResponsibleForTheInterviews = interviewStatusesByDateRange
+                    .Select(selectUserId)
                     .Distinct();
 
-            var usersCount = users.Count();
+            var responsibleUsersCount = userIdsOfAllResponsibleForTheInterviews.Count();
 
-            var userIds = users.Skip((page - 1)*pageSize)
+            var responsibleUserIdsForOnePage = userIdsOfAllResponsibleForTheInterviews.Skip((page - 1)*pageSize)
                 .Take(pageSize).ToArray();
 
-            var allInterviewsInStatus =
-                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses)
-                    .Select(userIdSelector)
-                    .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
+            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(from, to)
+                    .Select(selectUserAndTimestamp)
+                    .Where(ics => ics.UserId.HasValue && responsibleUserIdsForOnePage.Contains(ics.UserId.Value))
                     .Select(i => new {UserId = i.UserId.Value, i.UserName, i.Timestamp})
                     .ToArray();
 
-            var rows = userIds.Select(u =>
+            var rows = responsibleUserIdsForOnePage.Select(u =>
             {
-                var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u).ToArray();
+                var interviewsForUser = interviewStatusChangeDateWithResponsible.Where(i => i.UserId == u).ToArray();
                 var quantityByPeriod = new List<long>();
 
                 foreach (var dateTimeRange in dateTimeRanges)
@@ -82,14 +79,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }).ToArray();
 
             var quantityTotalRow =
-                CreateQuantityTotalRow(allUsersQuery, dateTimeRanges);
+                CreateQuantityTotalRow(interviewStatusesByDateRange, dateTimeRanges, selectUserAndTimestamp);
 
-            return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, usersCount);
+            return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
         }
 
-        private QuantityTotalRow CreateQuantityTotalRow(IQueryable<InterviewCommentedStatus> interviews, DateTimeRange[] dateTimeRanges)
+        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
+            Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
-            var allInterviewsInStatus = interviews
+            var allInterviewsInStatus = interviews.Select(userIdSelector)
                   .Select(i =>  i.Timestamp.Date)
                   .ToArray();
 
@@ -102,6 +100,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
 
             return new QuantityTotalRow(quantityByPeriod.ToArray(), allInterviewsInStatus.Length);
+        }
+
+        private IQueryable<TimeSpanBetweenStatuses> QueryCompleteStatusesExcludingRestarts(
+         Guid questionnaireId,
+         long questionnaireVersion,
+         DateTime from,
+         DateTime to)
+        {
+            return interviewStatusTimeSpansStorage.Query(_ =>
+                _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                    .SelectMany(x => x.TimeSpansBetweenStatuses)
+                    .Where(ics =>ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && ics.EndStatus== InterviewExportedAction.Completed));
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -121,36 +131,62 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                          statuses.Contains(ics.Status)));
         }
 
+        private bool IsCompleteReportRequested(InterviewExportedAction[] interviewStatuses)
+        {
+            if (interviewStatuses.Length != 1)
+                return false;
+            return interviewStatuses[0] == InterviewExportedAction.Completed;
+        }
+
         public QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input)
         {
+            if (IsCompleteReportRequested(input.InterviewStatuses))
+            {
+                return Load(
+                reportStartDate: input.From,
+                period: input.Period,
+                columnCount: input.ColumnCount,
+                page: input.Page,
+                pageSize: input.PageSize,
+                queryInterviewStatusesByDateRange: (from, to) => this.QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to).Where(u => u.SupervisorId == input.SupervisorId),
+                selectUserId: u => u.InterviewerId.Value,
+                selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.EndStatusTimestamp });
+            }
             return Load(
                 reportStartDate: input.From,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
                 pageSize: input.PageSize,
-                questionnaireId: input.QuestionnaireId,
-                questionnaireVersion: input.QuestionnaireVersion,
-                statuses: input.InterviewStatuses,
-                selectUser: u => u.InterviewerId.Value,
-                restrictUser: u => u.SupervisorId == input.SupervisorId,
-                userIdSelector: i => new UserAndTimestamp(){UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
+                queryInterviewStatusesByDateRange: (from, to) => QueryInterviewStatuses(input.QuestionnaireId, input.QuestionnaireVersion, from, to, input.InterviewStatuses).Where(u => u.SupervisorId == input.SupervisorId),
+                selectUserId: u => u.InterviewerId.Value,
+                selectUserAndTimestamp: i => new UserAndTimestamp(){UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
         }
 
         public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
         {
+            if (IsCompleteReportRequested(input.InterviewStatuses))
+            {
+                return Load(
+                 reportStartDate: input.From,
+                 period: input.Period,
+                 columnCount: input.ColumnCount,
+                 page: input.Page,
+                 pageSize: input.PageSize,
+                 queryInterviewStatusesByDateRange: (from, to) => QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to),
+                 selectUserId: u => u.SupervisorId.Value,
+                 selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.EndStatusTimestamp });
+            }
+
             return Load(
                 reportStartDate:input.From,
                 period:input.Period,
                 columnCount:input.ColumnCount,
                 page:input.Page,
                 pageSize:input.PageSize,
-                questionnaireId:input.QuestionnaireId,
-                questionnaireVersion:input.QuestionnaireVersion,
-                statuses:input.InterviewStatuses,
-                selectUser:u => u.SupervisorId.Value,
-                restrictUser:null,
-                userIdSelector:i => new UserAndTimestamp(){UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp});
+                queryInterviewStatusesByDateRange: (from, to) => QueryInterviewStatuses(input.QuestionnaireId, input.QuestionnaireVersion, from, to, input.InterviewStatuses),
+                selectUserId:u => u.SupervisorId.Value,
+                selectUserAndTimestamp:i => new UserAndTimestamp(){UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp});
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)

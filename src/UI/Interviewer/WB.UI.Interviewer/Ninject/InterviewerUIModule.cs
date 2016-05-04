@@ -2,6 +2,7 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.Implementations.Services;
+using WB.UI.Interviewer.Services;
 
 namespace WB.UI.Interviewer.Ninject
 {

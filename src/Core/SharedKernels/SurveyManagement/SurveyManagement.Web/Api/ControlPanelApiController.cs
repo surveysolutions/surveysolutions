@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Http;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.Synchronization;
-using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
+    [NoTransaction]
     public class ControlPanelApiController : ApiController
     {
         public class VersionsInfo
@@ -44,53 +43,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private const int DEFAULTPAGESIZE = 12;
 
         private readonly IReadSideAdministrationService readSideAdministrationService;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly ITeamViewFactory teamViewFactory;
+        private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
+        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IInterviewPackagesService interviewPackagesService;
 
 
         public ControlPanelApiController(
             IReadSideAdministrationService readSideAdministrationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
             ITeamViewFactory teamViewFactory,
+            IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
             IProductVersion productVersion,
-            IProductVersionHistory productVersionHistory)
+            IProductVersionHistory productVersionHistory,
+            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
+            IInterviewPackagesService interviewPackagesService)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.teamViewFactory = teamViewFactory;
+            this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
+            this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.interviewPackagesService = interviewPackagesService;
         }
-
-        public InterviewDetailsSchedulerViewModel InterviewDetails()
-        {
-            return new InterviewDetailsSchedulerViewModel
-            {
-                Messages = new string[0]
-            };
-        }
-
-        [NoTransaction]
-        public int GetIncomingPackagesQueueLength()
-        {
-            object cachedLength = this.cache.Get("incomingPackagesQueueLength");
-            if (cachedLength != null)
-            {
-                return (int)cachedLength;
-            }
-
-            int incomingPackagesQueueLength = this.incomingSyncPackagesQueue.QueueLength;
-            this.cache.Add("incomingPackagesQueueLength", incomingPackagesQueueLength, DateTime.Now.AddSeconds(3));
-
-            return incomingPackagesQueueLength;
-        }
-
+        
         [NoTransaction]
         public VersionsInfo GetVersions()
         {
@@ -107,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
             => this.readSideAdministrationService.GetAllAvailableHandlers();
-
+        
         [NoTransaction]
         public ReadSideStatus GetReadSideStatus() => this.readSideAdministrationService.GetRebuildStatus();
 
@@ -132,22 +117,48 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [NoTransaction]
         public void StopReadSideRebuilding() => this.readSideAdministrationService.StopAllViewsRebuilding();
 
+        [HttpGet]
+        public int GetIncomingPackagesQueueLength() => this.incomingSyncPackagesQueue.QueueLength;
+
         [HttpPost]
-        public SynchronizationLog GetSynchronizationLog(SynchronizationLogFilter filter)
-        {
-            return this.synchronizationLogViewFactory.GetLog(filter);
-        }
+        public SynchronizationLog GetSynchronizationLog(SynchronizationLogFilter filter) => this.synchronizationLogViewFactory.GetLog(filter);
 
         [HttpGet]
         public UsersView SyncLogInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-        {
-            return this.synchronizationLogViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query);
-        }
+            => this.synchronizationLogViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query);
 
         [HttpGet]
         public SynchronizationLogDevicesView SyncLogDevices(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
+
+        [HttpPost]
+        public BrokenInterviewPackagesView GetBrokenInterviewPackages(BrokenInterviewPackageFilter filter)
+            => this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
+
+        [HttpGet]
+        public BrokenInterviewPackageExceptionTypesView GetBrokenInterviewPackageExceptionTypes(
+            string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+
+        [HttpGet]
+        public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query);
+
+        [HttpGet]
+        public IEnumerable<QuestionnaireView> Questionnaires()
+            => this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel()).Questionnaires?.Select(questionnaire=>new QuestionnaireView
+            {
+                Identity = new QuestionnaireIdentity(questionnaire.TemplateId, questionnaire.TemplateVersion).ToString(),
+                Title = $"(ver. {questionnaire.TemplateVersion}) {questionnaire.TemplateName}"
+            });
+
+        [HttpPost]
+        public void ReprocessBrokenPackages() => this.interviewPackagesService.ReprocessAllBrokenPackages();
+
+        public class QuestionnaireView
         {
-            return this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
+            public string Title{get; set; }
+            public string Identity { get; set; }
         }
     }
 }
