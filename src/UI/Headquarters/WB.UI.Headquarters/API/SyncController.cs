@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.API
         {
             var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            this.incomingSyncPackagesQueue.StorePackage(item: syncItem);
+            this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: syncItem);
 
             return Request.CreateResponse(HttpStatusCode.OK, true);
         }

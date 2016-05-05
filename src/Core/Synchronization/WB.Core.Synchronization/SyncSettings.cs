@@ -4,6 +4,10 @@ namespace WB.Core.Synchronization
 {
     public class SyncSettings
     {
+        public SyncSettings()
+        {
+        }
+
         public SyncSettings(string origin)
         {
             this.Origin = origin;

@@ -34,8 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 syncPackagesMetaReader: syncPackagesMetaReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
                 metaBuilder: metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
-                synchronizationSettings: synchronizationsettings ?? Mock.Of<SyncSettings>());
+                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>());
         }
     }
 }

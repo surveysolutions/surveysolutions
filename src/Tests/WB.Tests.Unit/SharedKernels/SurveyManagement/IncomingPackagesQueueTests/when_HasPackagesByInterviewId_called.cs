@@ -16,16 +16,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingSyncPackagesService = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId);
+            result = incomingSyncPackagesService.HasPendingPackageByInterview(interviewId);
 
         It should_sync_packages_folder_contains_some_sync_files_by_specific_interview_id = () =>
            result.ShouldBeTrue();
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
        
         private static bool result;

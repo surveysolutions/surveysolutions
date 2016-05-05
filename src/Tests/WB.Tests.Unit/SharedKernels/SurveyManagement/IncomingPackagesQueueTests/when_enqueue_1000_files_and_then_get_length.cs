@@ -21,21 +21,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             //    .Callback<string, string>((filename, content) => filenames.Add(filename));
 
             fileSystemAccessor = new FileSystemIOAccessor();
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessor);
+            incomingSyncPackagesService = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessor);
         };
 
         Because of = () =>
         {
             for (int i = 1; i <= 1000; i++)
             {
-                incomingSyncPackagesQueue.StorePackage($"{i}");
+                incomingSyncPackagesService.StoreOrProcessPackage($"{i}");
                 Thread.Sleep(10);
             }
         };
 
         It should_store_1000_elements = () =>
         {
-            List<string> fileNames = incomingSyncPackagesQueue.GetTopPackageIds(1000).ToList();
+            List<string> fileNames = incomingSyncPackagesService.GetTopPackageIds(1000).ToList();
 
             for (int i = 0; i < 1000; i++)
             {
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             }
         };
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
         //private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
 
         private static List<string> result = new List<string>();
