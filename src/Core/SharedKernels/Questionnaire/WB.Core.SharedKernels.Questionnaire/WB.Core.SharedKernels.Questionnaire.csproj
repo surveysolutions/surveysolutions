@@ -59,6 +59,7 @@
     <Compile Include="Documents\IQuestion.cs" />
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\IStaticText.cs" />
+    <Compile Include="Documents\IVariable.cs" />
     <Compile Include="Documents\IView.cs" />
     <Compile Include="Documents\LookupTable.cs" />
     <Compile Include="Documents\Macro.cs" />
@@ -91,6 +92,9 @@
     <Compile Include="Documents\UserRoles.cs" />
     <Compile Include="Documents\ValidationCondition.cs" />
     <Compile Include="Documents\ValidationConditionsBackwardCompatibility.cs" />
+    <Compile Include="Documents\Variable.cs" />
+    <Compile Include="Documents\VariableData.cs" />
+    <Compile Include="Documents\VariableType.cs" />
     <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
