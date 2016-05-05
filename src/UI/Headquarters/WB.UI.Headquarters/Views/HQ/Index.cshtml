@@ -3,6 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    ViewBag.Title = "Questionnaires";
 }
 
 @section scripts
@@ -64,17 +65,22 @@
         <tbody>
         <!-- ko foreach:Items -->
             <tr data-bind="css: {'text-muted':Disabled }">
-                <td>
+                <td style="vertical-align: middle">
                     <!-- ko if:AllowCensusMode -->
                     <span class="glyphicon glyphicon-ok pull-right margin-right-5"></span>
                     <!-- /ko -->
                 </td>
-                <td data-bind="text: Title, css: {'text-italic':Disabled }"></td>
-                <td data-bind="text: Version"></td>
-                <td data-bind="date: CreationDate"></td>
-                <td data-bind="date: LastEntryDate"></td>
+                <td style="vertical-align: middle" data-bind="text: Title, css: {'text-italic':Disabled }"></td>
+                <td style="vertical-align: middle" data-bind="text: Version"></td>
+                <td style="vertical-align: middle" data-bind="date: CreationDate"></td>
+                <td style="vertical-align: middle" data-bind="date: LastEntryDate"></td>
                 <td>
                     <!-- ko ifnot:Disabled -->
+                    <div class="btn-group">
+                        <a class="btn btn-default" data-bind="click : $parent.cloneQuestionnaire" data-toggle="tooltip" title="@Dashboard.CloneQuestionnaire">
+                            <i class="glyphicon glyphicon-duplicate"></i>
+                        </a>
+                    </div>
                     <!-- ko ifnot:AllowCensusMode -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -98,7 +104,8 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-                    
+
+
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">
