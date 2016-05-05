@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Title = x.Text,
                     ValidationConditions = x.ValidationConditions.ToList()
                 });
-            var entitiesWithLongValidations = questions.Union(staticTexts).ToList();
+            var entitiesWithLongValidations = questions.Concat(staticTexts).ToList();
 
             int index = 1;
             entitiesWithLongValidations.ForEach(x => x.Index = index++);
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     EnablementCondition = x.ConditionExpression.Trim()
                 });
 
-            var entitiesWithLongConditions = questions.Union(groupsAndRosters).Union(staticTexts).ToList();
+            var entitiesWithLongConditions = questions.Concat(groupsAndRosters).Concat(staticTexts).ToList();
 
             int index = 1;
             entitiesWithLongConditions.ForEach(x => x.Index = index++);
