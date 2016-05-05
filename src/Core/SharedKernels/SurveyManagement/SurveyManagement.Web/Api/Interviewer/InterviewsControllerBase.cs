@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -31,7 +30,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly IJsonAllTypesSerializer synchronizationSerializer;
         protected readonly IGlobalInfoProvider globalInfoProvider;
         protected readonly IInterviewInformationFactory interviewsFactory;
-        protected readonly SyncSettings synchronizationSettings;
 
         public InterviewsControllerBase(
             IPlainInterviewFileStorage plainInterviewFileStorage,
@@ -41,8 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer,
-            SyncSettings synchronizationSettings)
+            IJsonAllTypesSerializer synchronizationSerializer)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;
@@ -52,7 +49,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.syncPackagesMetaReader = syncPackagesMetaReader;
             this.metaBuilder = metaBuilder;
             this.synchronizationSerializer = synchronizationSerializer;
-            this.synchronizationSettings = synchronizationSettings;
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]

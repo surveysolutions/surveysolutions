@@ -14,16 +14,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingSyncPackagesService = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingSyncPackagesQueue.QueueLength;
+            result = incomingSyncPackagesService.QueueLength;
 
         It should_result_length_of_queue_be_equal_to_cound_of_files_in_folder = () =>
            result.ShouldEqual(2);
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
        
         private static int result;

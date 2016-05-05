@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             var fileSystemMock = new Mock<IFileSystemAccessor>();
             fileSystemMock.Setup(x => x.WriteAllText(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Throws<NullReferenceException>();
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemMock.Object);
+            incomingSyncPackagesService = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemMock.Object);
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomingSyncPackagesQueue.StorePackage("nastya"));
+            incomingSyncPackagesService.StoreOrProcessPackage("nastya"));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         It should_throw_exception_of_type_NullReferenceException = () =>
           exception.ShouldBeOfExactType<NullReferenceException>();
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
         private static Exception exception;
     }
 }

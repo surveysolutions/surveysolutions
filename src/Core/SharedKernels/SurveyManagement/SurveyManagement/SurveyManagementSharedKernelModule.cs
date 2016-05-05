@@ -226,7 +226,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
             
-            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
+            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesService>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();

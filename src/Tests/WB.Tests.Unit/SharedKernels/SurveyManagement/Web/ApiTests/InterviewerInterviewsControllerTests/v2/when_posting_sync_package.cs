@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
 
         It should_store_package_to_storage = () =>
             mockOfInterviewPackagesService.Verify(x =>
-                x.StorePackage(Moq.It.IsAny<InterviewPackage>()), Times.Once);
+                x.StoreOrProcessPackage(Moq.It.IsAny<InterviewPackage>()), Times.Once);
 
         private static InterviewsApiV2Controller controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");

@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -36,8 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer,
-            SyncSettings synchronizationSettings) : base(
+            IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -45,8 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer,
-                synchronizationSettings : synchronizationSettings)
+                synchronizationSerializer: synchronizationSerializer)
         {
         }
 
@@ -98,14 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 Events = package.Events
             };
 
-            if (this.synchronizationSettings.UseBackgroundJobForProcessingPackages)
-            {
-                this.interviewPackagesService.StorePackage(interviewPackage);
-            }
-            else
-            {
-                this.interviewPackagesService.ProcessPackage(interviewPackage);
-            }
+            this.interviewPackagesService.StoreOrProcessPackage(interviewPackage);
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);

@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
@@ -17,12 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             mockOfPackagesStorage = new Mock<IPlainStorageAccessor<InterviewPackage>>();
 
             var compressor = Mock.Of<IArchiveUtils>(x => x.CompressString(expectedPackage.Events) == compressedEvents);
+            var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
 
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object,
-                    archiver: compressor);
+                    archiver: compressor, syncSettings: syncSettings);
         };
 
-        Because of = () => interviewPackagesService.StorePackage(new InterviewPackage
+        Because of = () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
         {
             InterviewId = expectedPackage.InterviewId,
             QuestionnaireId = expectedPackage.QuestionnaireId,
