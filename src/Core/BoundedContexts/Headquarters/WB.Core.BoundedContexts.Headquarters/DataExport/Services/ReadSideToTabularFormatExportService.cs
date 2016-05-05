@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => _
                         .Where(expression)
-                        .OrderBy(x => x.SummaryId)
+                        .OrderBy(x => x.InterviewId)
                         .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
                         .Select(x => x.InterviewId)
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
