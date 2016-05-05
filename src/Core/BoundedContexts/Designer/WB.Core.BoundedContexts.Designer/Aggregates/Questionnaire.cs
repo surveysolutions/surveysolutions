@@ -703,6 +703,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.RemoveEntity(e.EntityId);   
         }
 
+        internal void Apply(VariableAdded e)
+        {
+            var variable = this.questionnaireEntityFactory.CreateVariable(e);
+            this.innerDocument.Add(c: variable, parent: e.ParentId, parentPropagationKey: null);
+
+        }
+
+        internal void Apply(VariableUpdated e)
+        {
+            var oldVariable = this.innerDocument.Find<IVariable>(e.EntityId);
+            var newVariable = this.questionnaireEntityFactory.CreateVariable(e);
+            this.innerDocument.ReplaceEntity(oldVariable, newVariable);
+
+        }
+
+        internal void Apply(VariableCloned e)
+        {
+            var variable = this.questionnaireEntityFactory.CreateVariable(e);
+            this.innerDocument.Insert(e.TargetIndex, variable, e.ParentId);
+        }
+
+        internal void Apply(VariableDeleted e)
+        {
+            this.innerDocument.RemoveEntity(e.EntityId);
+        }
+
         public QuestionnaireState CreateSnapshot()
         {
             return new QuestionnaireState
