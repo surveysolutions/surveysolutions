@@ -135,6 +135,11 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        public ActionResult CloneQuestionnaire(Guid id, long version)
+        {
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
