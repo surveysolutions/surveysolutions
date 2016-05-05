@@ -316,6 +316,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>
