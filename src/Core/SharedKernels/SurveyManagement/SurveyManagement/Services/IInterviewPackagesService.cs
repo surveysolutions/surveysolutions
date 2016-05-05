@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     public interface IInterviewPackagesService
     {
         [Obsolete("Since v 5.7")]
-        void StorePackage(string item);
-        void StorePackage(InterviewPackage interview);
+        void StoreOrProcessPackage(string item);
+        void StoreOrProcessPackage(InterviewPackage interview);
         int QueueLength { get; }
         int InvalidPackagesCount { get; }
         IReadOnlyCollection<string> GetTopPackageIds(int count);

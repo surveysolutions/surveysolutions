@@ -222,7 +222,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
+    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />

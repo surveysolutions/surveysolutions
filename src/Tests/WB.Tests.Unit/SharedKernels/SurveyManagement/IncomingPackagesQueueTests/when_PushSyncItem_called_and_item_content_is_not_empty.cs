@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             mockOfCompressor.Setup(x => x.IsZipStream(Moq.It.IsAny<Stream>())).Returns(true);
             mockOfCompressor.Setup(x => x.DecompressString(syncItem.MetaInfo)).Returns(decompressedMetaInfo);
             mockOfCompressor.Setup(x => x.DecompressString(syncItem.Content)).Returns(decompressedContent);
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(serializer: mockOfSerializer.Object,
+            incomingSyncPackagesService = CreateIncomingPackagesQueue(serializer: mockOfSerializer.Object,
                 archiver: mockOfCompressor.Object, interviewPackageStorage: mockOfPackagesAccessor.Object);
         };
 
-        Because of = () => incomingSyncPackagesQueue.StorePackage(contentOfSyncItem);
+        Because of = () => incomingSyncPackagesService.StoreOrProcessPackage(contentOfSyncItem);
 
         It should_deserialize_sync_item = () =>
           mockOfSerializer.Verify(x => x.Deserialize<SyncItem>(contentOfSyncItem), Times.Once);
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         It should_store_interview_package_to_storage = () =>
           mockOfPackagesAccessor.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
 
         private static readonly SyncItem syncItem = new SyncItem()
         {

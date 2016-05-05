@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
@@ -22,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(Moq.It.IsAny<string>()) == new SyncItem() &&
                                           x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>()) == new InterviewMetaInfo { Status = 0 } &&
                                           x.Deserialize<AggregateRootEvent[]>(decompressedEvents) == new AggregateRootEvent[0]);
-            
+            var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
+
             brokenPackagesStorage = new TestPlainStorage<BrokenInterviewPackage>();
             packagesStorage = new TestPlainStorage<InterviewPackage>();
             
@@ -30,9 +32,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
 
             interviewPackagesService = CreateInterviewPackagesService(
                 serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
-                interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object);
+                interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
+                syncSettings: syncSettings);
+            
 
-            interviewPackagesService.StorePackage(new InterviewPackage
+            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
             {
                 InterviewId = Guid.Parse("11111111111111111111111111111111"),
                 QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),

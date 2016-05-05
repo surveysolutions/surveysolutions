@@ -41,8 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer,
-            SyncSettings synchronizationSettings) : base(
+            IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage, 
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -50,8 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer,
-                synchronizationSettings: synchronizationSettings)
+                synchronizationSerializer: synchronizationSerializer)
         {
         }
 
@@ -94,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.PostPackage)]
-        public void Post(Guid id, [FromBody]string package) => this.interviewPackagesService.StorePackage(item: package);
+        public void Post(Guid id, [FromBody]string package) => this.interviewPackagesService.StoreOrProcessPackage(item: package);
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
 

@@ -41,11 +41,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         }
 
         [Obsolete("Since v 5.8")]
-        public virtual void StorePackage(string item) { }
+        public virtual void StoreOrProcessPackage(string item) { }
 
-        public void StorePackage(InterviewPackage interviewPackage)
+        public void StoreOrProcessPackage(InterviewPackage interviewPackage)
         {
-            this.interviewPackageStorage.Store(interviewPackage, null);
+            if (this.syncSettings.UseBackgroundJobForProcessingPackages)
+            {
+                this.interviewPackageStorage.Store(interviewPackage, null);
+            }
+            else
+            {
+                this.ProcessPackage(interviewPackage);
+            }
         }
 
         public virtual int QueueLength

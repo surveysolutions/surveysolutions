@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
-                syncSettings: new SyncSettings(origin),
+                syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer, 
                 interviewPackageStorage: packagesStorage,
@@ -69,7 +69,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     });
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StorePackage(
+                () => interviewPackagesService.StoreOrProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,

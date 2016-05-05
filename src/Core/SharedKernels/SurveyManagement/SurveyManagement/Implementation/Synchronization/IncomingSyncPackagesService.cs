@@ -21,7 +21,7 @@ using WB.Core.Synchronization;
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
     [Obsolete("Since v 5.8")]
-    internal class IncomingSyncPackagesQueue : InterviewPackagesService
+    internal class IncomingSyncPackagesService : InterviewPackagesService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingUnprocessedPackagesDirectory;
@@ -29,10 +29,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IArchiveUtils archiver;
-        private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
+        private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesService));
         private readonly object cacheLockObject = new object();
         
-        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
+        public IncomingSyncPackagesService(IFileSystemAccessor fileSystemAccessor,
             SyncSettings syncSettings,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         }
 
         [Obsolete("Since v 5.8")]
-        public override void StorePackage(string item)
+        public override void StoreOrProcessPackage(string item)
         {
             if (string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
 
@@ -114,14 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 IncomingDate = DateTime.UtcNow
             };
 
-            if (this.syncSettings.UseBackgroundJobForProcessingPackages)
-            {
-                base.StorePackage(interviewPackage);
-            }
-            else
-            {
-                base.ProcessPackage(interviewPackage);
-            }
+            base.StoreOrProcessPackage(interviewPackage);
         }
 
         public override int QueueLength => this.GetCachedFilesInIncomingDirectory()
@@ -217,7 +210,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Read content from file. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                this.StorePackage(fileContent);
+                this.StoreOrProcessPackage(fileContent);
 
                 this.fileSystemAccessor.DeleteFile(pathToPackage);
                 this.GetCachedFilesInIncomingDirectory().Remove(pathToPackage);

@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
-                syncSettings: new SyncSettings(origin),
+                syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer, 
                 interviewPackageStorage: packagesStorage,
@@ -74,7 +74,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StorePackage(new InterviewPackage
+                () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
                 {
                     InterviewId = expectedCommand.InterviewId,
                     QuestionnaireId = expectedCommand.QuestionnaireId,
