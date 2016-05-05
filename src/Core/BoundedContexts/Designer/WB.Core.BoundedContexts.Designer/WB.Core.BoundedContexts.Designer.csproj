@@ -207,6 +207,11 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
+    <Compile Include="Events\Questionnaire\VariableAdded.cs" />
+    <Compile Include="Events\Questionnaire\VariableCloned.cs" />
+    <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
+    <Compile Include="Events\Questionnaire\VariableUpdated.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
