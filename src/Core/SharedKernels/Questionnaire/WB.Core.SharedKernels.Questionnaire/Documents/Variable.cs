@@ -9,9 +9,12 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public Variable(Guid publicKey, VariableData variableData)
         {
             this.PublicKey = publicKey;
-            this.Type = variableData.Type;
-            this.Name = variableData.Name;
-            this.Body = variableData.Expression;
+            if (variableData != null)
+            {
+                this.Type = variableData.Type;
+                this.Name = variableData.Name;
+                this.Body = variableData.Expression;
+            }
         }
 
         public Guid PublicKey { get; }

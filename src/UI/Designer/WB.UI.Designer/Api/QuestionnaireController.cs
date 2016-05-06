@@ -84,17 +84,18 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public HttpResponseMessage EditVariable(string id, Guid variableId)
         {
+            var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
+
+            if (variableView == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                $"variable with id {variableId} was not found in questionnaire {id}");
+
             var result = Request.CreateResponse(HttpStatusCode.OK, new
             {
-                Id = Guid.NewGuid(),
-                Expression = "num * 5",
-                VariableName = "variableNum5",
-                TypeOptions = new List<QuestionnaireInfoFactory.SelectOption>
-                {
-                    new QuestionnaireInfoFactory.SelectOption { Text = "decimal-ui", Value = "decimal"},
-                    new QuestionnaireInfoFactory.SelectOption { Text = "numeric-ui", Value = VariableType.Numeric.ToString() }
-                },
-                Type = VariableType.Numeric
+                Id = variableView.ItemId,
+                Expression = variableView.VariableData.Expression,
+                name = variableView.VariableData.Name,
+                TypeOptions = variableView.TypeOptions,
+                Type = variableView.VariableData.Type
             });
 
             return result;
