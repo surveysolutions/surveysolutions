@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             }
         }
 
-        public void EnableeVariables(IEnumerable<Identity> variablesToEnable)
+        public void EnableVariables(IEnumerable<Identity> variablesToEnable)
         {
             foreach (Identity variable in variablesToEnable)
             {
