@@ -507,10 +507,13 @@
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\attachments.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\variable.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
+    <Content Include="UpdatedDesigner\app\views\treevariable.html" />
+    <Content Include="UpdatedDesigner\app\views\variable.html" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
     <Content Include="UpdatedDesigner\app\views\attachment-preview.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
