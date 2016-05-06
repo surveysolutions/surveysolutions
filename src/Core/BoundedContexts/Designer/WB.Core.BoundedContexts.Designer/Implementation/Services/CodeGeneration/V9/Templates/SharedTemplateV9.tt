@@ -92,7 +92,7 @@ void VariablesStatesInLevelConstructor(List<VariableTemplateModel> variables)
 	foreach (var variable in variables)
 	{#>
 		EnablementStates.Add(<#=variable.StateName#>.ItemId, <#=variable.StateName#>);
-		AddUpdaterVariableToMap(IdOf.<#=variable.IdName#>, ()=><#=variable.VariableName#>);
+		AddUpdaterVariableToMap(IdOf.<#=variable.IdName#>, new VariableAccessor(()=><#=variable.VariableName#>, (value)=>{ <#=variable.VariablePreviousValueName#>=(<#=variable.TypeName#>)value;},()=><#=variable.VariablePreviousValueName#>));
 		<#+ 
 	}
 }
@@ -132,9 +132,16 @@ void QuestionsCopyOperatorsInCopyMembers(List<QuestionTemplateModel> questions)
 		}
 	}
 }
+void VariablesCopyOperatorsInCopyMembers(List<VariableTemplateModel> variables)
+{
+	foreach (var v in variables) 
+	{		
 #>
-
-<#+
+			<#=v.VariablePreviousValueName#> = this.<#=v.VariablePreviousValueName#>,   
+<#+	
+		
+	}
+}
 void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
 {
 	foreach (var question in questions) 
@@ -168,6 +175,7 @@ void VariablesStateDefenitions(List<VariableTemplateModel> variables)
 #>
 
 	private ConditionalState <#= variable.StateName#> = new ConditionalState(IdOf.<#=variable.IdName#>, ItemType.Variable);
+	private <#=variable.TypeName#> <#=variable.VariablePreviousValueName#> = null;
 	public <#=variable.TypeName#> <#=variable.VariableName#>
 	{
 		get { 		
