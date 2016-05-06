@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V7.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V8.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V9.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.FileSystem;
@@ -216,6 +217,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         },
                         isLookupTablesFeatureSupported: true,
                         expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV8(expressionStateModel).TransformText());
+                case 15:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV9" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7",
+                            "WB.Core.SharedKernels.DataCollection.V8",
+                            "WB.Core.SharedKernels.DataCollection.V9",
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV9(expressionStateModel).TransformText());
             }
 
             throw new VersionNotFoundException($"Version '{version}' is not supported.");

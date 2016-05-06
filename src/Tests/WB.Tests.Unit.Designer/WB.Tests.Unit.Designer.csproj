@@ -350,6 +350,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_real_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_15_with_variables.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
