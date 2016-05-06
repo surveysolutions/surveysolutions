@@ -167,11 +167,15 @@ void VariablesStateDefenitions(List<VariableTemplateModel> variables)
 	{
 #>
 
-	private ConditionalState <#= variable.StateName#> = new ConditionalState(IdOf.<#=variable.IdName#>);
+	private ConditionalState <#= variable.StateName#> = new ConditionalState(IdOf.<#=variable.IdName#>, ItemType.Variable);
 	public <#=variable.TypeName#> <#=variable.VariableName#>
 	{
-		get { return <#=variable.StateName#>.State != State.Disabled ? <#=variable.Expression#>: (<#=variable.TypeName#>)null; }
-			
+		get { 		
+			if(<#=variable.StateName#>.State == State.Disabled )
+				return null;
+			else
+				return <#=variable.Expression#>; 
+		}			
 	}
 <#+
 	}

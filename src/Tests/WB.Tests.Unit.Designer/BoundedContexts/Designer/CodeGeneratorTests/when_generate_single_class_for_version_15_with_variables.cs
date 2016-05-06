@@ -12,7 +12,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         Establish context = () =>
         {
             questionnaire =
-                Create.QuestionnaireDocument();
+                Create.QuestionnaireDocument(children: new[]
+                    {
+                        Create.Variable()
+                    });
 
             generator = Create.CodeGenerator();
         };

@@ -846,6 +846,12 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.Integer, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
