@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
-    internal class when_expression_state_executes_variables_but_result_of_Excecution_didnt_change : CodeGenerationTestsContext
+    internal class when_expression_state_executes_variables_but_result_excecution_throw_exception : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -26,25 +26,24 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id:questionId, variable:"txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        Create.NumericIntegerQuestion(id:questionId, variable:"num"),
+                        Create.Variable(id: variableId, expression: "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: new Version(15, 0, 0)) as
                         IInterviewExpressionStateV9;
-                state.EnableVariables(new [] { Create.Identity(variableId) });
-                state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.SerVariablePreviousValue(Create.Identity(variableId), 6);
-                 var variables = state.ProcessVariables();
+
+                state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 0);
+                var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    CountOfChangedVariables = variables.ChangedVariableValues.Count
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
                 };
             });
 
-        It should_result_not_return_the_variable_changed_result = () =>
-             results.CountOfChangedVariables.ShouldEqual(0);
+        It should_result_of_the_variable_be_equal_to_null = () =>
+             results.IntVariableResult.ShouldEqual(null);
 
         Cleanup stuff = () =>
         {
@@ -58,7 +57,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
         [Serializable]
         public class InvokeResults
         {
-            public int CountOfChangedVariables { get; set; }
+            public int? IntVariableResult { get; set; }
         }
     }
 }
