@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
-    internal class when_expression_state_executes_variables : CodeGenerationTestsContext
+    internal class when_expression_state_executes_disabled_variable : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -23,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
                 Guid variableId = Guid.Parse("11111111111111111111111111111112");
-                        Guid questionId = Guid.Parse("21111111111111111111111111111112");
+                Guid questionId = Guid.Parse("21111111111111111111111111111112");
 
                 AssemblyContext.SetupServiceLocator();
 
@@ -38,16 +34,17 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
+                state.DisableVariables(new[] { Create.Identity(variableId)});
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?) variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
                 };
             });
 
-        It should_result_of_the_variable_be_equal_to_length_of_answer_on_text_question = () =>
-             results.IntVariableResult.ShouldEqual(6);
+        It should_result_of_the_variable_be_null = () =>
+             results.IntVariableResult.ShouldEqual(null);
 
         Cleanup stuff = () =>
         {

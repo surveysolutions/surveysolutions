@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             this.PublicKey = publicKey;
             this.Type = variableData.Type;
             this.Name = variableData.Name;
-            this.Body = variableData.Body;
+            this.Body = variableData.Expression;
         }
 
         public Guid PublicKey { get; }
