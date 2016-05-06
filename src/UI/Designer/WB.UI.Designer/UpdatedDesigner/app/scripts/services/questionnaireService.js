@@ -38,6 +38,11 @@
                     return $http.get(url);
                 };
 
+                questionnaireService.getVariableDetailsById = function (questionnaireId, variableId) {
+                    var url = string.format('{0}/editVariable/{1}?variableId={2}', urlBase, questionnaireId, variableId);
+                    return $http.get(url);
+                };
+
                 questionnaireService.getStaticTextDetailsById = function (questionnaireId, staticTextId) {
                     var url = string.format('{0}/editStaticText/{1}?staticTextId={2}', urlBase, questionnaireId, staticTextId);
                     return $http.get(url);

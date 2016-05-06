@@ -264,6 +264,30 @@
                     return commandCall("AddStaticText", command);
                 };
 
+                commandService.addVariable = function (questionnaireId, variable, parentId, index) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        entityId: variable.itemId,
+                        text: variable.text,
+                        parentId: parentId,
+                        index: index
+                    };
+                    return commandCall("AddVariable", command);
+                };
+
+                commandService.updateVariable = function(questionnaireId, variable) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        entityId: variable.itemId,
+                        text: variable.text,
+                        expression: variable.expression,
+                        variable: variable.variable,
+                        type: variable.type
+                    }
+
+                    return commandCall("UpdateVariable", command);
+                }
+
                 commandService.updateGroup = function(questionnaireId, group) {
                     var command = {
                         questionnaireId: questionnaireId,

@@ -495,6 +495,29 @@
                     });
             };
 
+            $scope.addVariable = function(parent) {
+                var emptyVariable = utilityService.createEmptyVariable(parent);
+
+                commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId)
+                    .success(function() {
+                        parent.items.push(emptyVariable);
+                        emitAddedItemState("variable", emptyVariable.itemId);
+                    });
+            };
+
+            $scope.addVariableAfter = function(item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+                var index = getItemIndexByIdFromParentItemsList(parent, item.itemId) + 1;
+
+                var emptyVariable = utilityService.createEmptyVariable(parent);
+
+                commandService.addStaticText($state.params.questionnaireId, emptyVariable, parent.itemId, index)
+                    .success(function() {
+                        parent.items.splice(index, 0, emptyVariable);
+                        emitAddedItemState("variable", emptyVariable.itemId);
+                    });
+            };
+
             $scope.addQuestionAfter = function (item) {
                 var parent = item.getParentItem() || $scope.currentChapter;
                 var index = getItemIndexByIdFromParentItemsList(parent, item.itemId) + 1;
@@ -604,8 +627,9 @@
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
-
+                        var obj = utilityService.createEmptyVariable();
                         $scope.items = result.chapter.items;
+                        $scope.items.push(obj);
                         $scope.currentChapter = result.chapter;
                         $rootScope.updateVariableNames(result.variableNames);
                         connectTree();

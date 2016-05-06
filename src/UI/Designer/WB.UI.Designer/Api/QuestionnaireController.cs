@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
@@ -77,6 +78,26 @@ namespace WB.UI.Designer.Api
             }
 
             return chapterInfoView;
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public HttpResponseMessage EditVariable(string id, Guid variableId)
+        {
+            var result = Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                Id = Guid.NewGuid(),
+                Expression = "num * 5",
+                VariableName = "variableNum5",
+                TypeOptions = new List<QuestionnaireInfoFactory.SelectOption>
+                {
+                    new QuestionnaireInfoFactory.SelectOption { Text = "decimal-ui", Value = "decimal"},
+                    new QuestionnaireInfoFactory.SelectOption { Text = "numeric-ui", Value = VariableType.Numeric.ToString() }
+                },
+                Type = VariableType.Numeric
+            });
+
+            return result;
         }
 
         [HttpGet]
