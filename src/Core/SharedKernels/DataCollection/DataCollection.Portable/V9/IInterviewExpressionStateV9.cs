@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
     {
         VariableValueChanges ProcessVariables();
         void DisableVariables(IEnumerable<Identity> variablesToDisable);
-        void EnableeVariables(IEnumerable<Identity> variablesToEnable);
+        void EnableVariables(IEnumerable<Identity> variablesToEnable);
         void SerVariablePreviousValue(Identity variableId, object value);
 
         new IInterviewExpressionStateV9 Clone();

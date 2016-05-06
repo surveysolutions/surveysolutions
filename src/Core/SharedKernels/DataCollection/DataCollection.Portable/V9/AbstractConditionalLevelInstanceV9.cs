@@ -85,7 +85,17 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
             foreach (var variableAccessor in VariableMap)
             {
-                var newVariableValue = variableAccessor.Value();
+                object newVariableValue = null;
+                try
+                {
+                    newVariableValue = variableAccessor.Value();
+                }
+#pragma warning disable
+                catch (Exception ex)
+                {
+                }
+#pragma warning restore
+
                 if (!VariablePreviousValues.ContainsKey(variableAccessor.Key) ||
                     !VariablePreviousValues[variableAccessor.Key].Equals(newVariableValue))
                     result.ChangedVariableValues.Add(new Identity(variableAccessor.Key, RosterVector),
