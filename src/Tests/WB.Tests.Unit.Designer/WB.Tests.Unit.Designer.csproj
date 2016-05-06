@@ -332,6 +332,7 @@
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_content.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_already_existing_attachment_content.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
+    <Compile Include="BoundedContexts\Designer\AddVariableHandlerTests\when_adding_variable_to_chapter.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_15_with_variables.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
+    <Compile Include="BoundedContexts\Designer\DeleteVariableHandlerTests\when_deleting_variable_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />
@@ -373,6 +375,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_with_validation_expression_and_without_validation_meassage.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_static_text_with_empty_and_too_long_validation_messages_and_expressions.cs" />
+    <Compile Include="BoundedContexts\Designer\UpdateVariableHandlerTest\when_updating_variable_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_cloning_questionnaire_with_attachment.cs" />

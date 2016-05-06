@@ -469,6 +469,20 @@ namespace WB.Tests.Unit.Designer
                     validationExpression : validationExpression
                 );
             }
+
+            public static VariableAdded VariableAdded(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null, 
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableAdded(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
         }
     }
 }
