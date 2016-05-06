@@ -196,6 +196,10 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\Variable\AddVariable.cs" />
+    <Compile Include="Commands\Questionnaire\Variable\DeleteVariable.cs" />
+    <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
+    <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
     <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
