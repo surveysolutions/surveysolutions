@@ -2,11 +2,11 @@
 {
     public class VariableData
     {
-        public VariableData(VariableType type, string name, string epression)
+        public VariableData(VariableType type, string name, string expression)
         {
             this.Type = type;
             this.Name = name;
-            this.Expression = epression;
+            this.Expression = expression;
         }
 
         public VariableType Type { get; }
