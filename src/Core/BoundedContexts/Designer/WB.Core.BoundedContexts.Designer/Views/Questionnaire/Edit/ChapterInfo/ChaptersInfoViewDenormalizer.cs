@@ -37,6 +37,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, StaticTextUpdated>,
         IUpdateHandler<GroupInfoView, StaticTextCloned>,
         IUpdateHandler<GroupInfoView, StaticTextDeleted>,
+
+        IUpdateHandler<GroupInfoView, VariableAdded>,
+        IUpdateHandler<GroupInfoView, VariableUpdated>,
+        IUpdateHandler<GroupInfoView, VariableCloned>,
+        IUpdateHandler<GroupInfoView, VariableDeleted>,
+
         IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>,
         IUpdateHandler<GroupInfoView, GroupBecameARoster>,
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
@@ -335,12 +341,55 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextDeleted> @event)
         {
-            var entityId = @event.Payload.EntityId.FormatGuid();
-            var parentGroupOfEntity = this.FindParentOfEntity(state, entityId);
+            this.removeEntity(state, @event.Payload.EntityId.FormatGuid());
 
-            parentGroupOfEntity.Items.Remove(
-                parentGroupOfEntity.Items.Find(entity => entity.ItemId == entityId));
+            return state;
+        }
 
+        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableAdded> @event)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: state, groupId: @event.Payload.ParentId.FormatGuid());
+            if (groupView == null)
+            {
+                return state;
+            }
+
+            var staticTextInfoView = new VariableView()
+            {
+                ItemId = @event.Payload.EntityId.FormatGuid(),
+                VariableData = @event.Payload.VariableData
+            };
+
+            groupView.Items.Add(staticTextInfoView);
+            
+            return state;
+        }
+
+        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableUpdated> @event)
+        {
+            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.EventSourceId.FormatGuid());
+
+            if (variableView == null)
+                return state;
+
+            variableView.VariableData = @event.Payload.VariableData;
+            return state;
+        }
+
+        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableCloned> @event)
+        {
+            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.Payload.EntityId.FormatGuid());
+
+            if (variableView == null)
+                return state;
+
+            variableView.VariableData = @event.Payload.VariableData;
+            return state;
+        }
+
+        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableDeleted> @event)
+        {
+            removeEntity(state, @event.Payload.EntityId.FormatGuid());
             return state;
         }
 
@@ -450,6 +499,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             }
 
             return findedGroup;
+        }
+
+        private void removeEntity(GroupInfoView state, string entityId)
+        {
+            var parentGroupOfEntity = this.FindParentOfEntity(state, entityId);
+
+            parentGroupOfEntity.Items.Remove(
+                parentGroupOfEntity.Items.Find(entity => entity.ItemId == entityId));
         }
 
         private void AddQuestion(GroupInfoView questionnaire,
