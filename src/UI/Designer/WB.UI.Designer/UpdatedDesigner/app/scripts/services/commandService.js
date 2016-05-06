@@ -268,9 +268,9 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         entityId: variable.itemId,
-                        text: variable.text,
                         parentId: parentId,
-                        index: index
+                        index: index,
+                        variableData: {}
                     };
                     return commandCall("AddVariable", command);
                 };

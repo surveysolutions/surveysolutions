@@ -6,9 +6,11 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Properties;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -34,6 +36,41 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly Type[] QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new[]
         {typeof (TextDetailsView), typeof (NumericDetailsView), typeof (DateTimeDetailsView)};
+
+        private static readonly SelectOption[] VariableTypeOptions =
+        {
+            new SelectOption
+            {
+                Value = VariableType.Boolean.ToString(),
+                Text = "Boolean"
+            },
+            new SelectOption
+            {
+                Value = VariableType.Numeric.ToString(),
+                Text = "Decimal"
+            },
+            new SelectOption
+            {
+                Value = VariableType.DateTime.ToString(),
+                Text = "Date/Time"
+            },
+            new SelectOption
+            {
+                Value = VariableType.Integer.ToString(),
+                Text = "Integer"
+            },
+            new SelectOption
+            {
+                Value = VariableType.String.ToString(),
+                Text = "String"
+            },
+            new SelectOption
+            {
+                Value = VariableType.Boolean.ToString(),
+                Text = "Boolean"
+            },
+
+        };
 
         private static readonly SelectOption[] QuestionTypeOptions =
         {
@@ -237,6 +274,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             result.ValidationConditions.AddRange(staticTextDetailsView.ValidationConditions);
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
+
+            return result;
+        }
+
+        public VariableView GetVariableEditView(string questionnaireId, Guid variableId)
+        {
+            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+
+            VariableView result = questionnaire?.Variables?.FirstOrDefault(x => x.Id == variableId);
+            if (result == null)
+                return null;
+
+            result.TypeOptions = VariableTypeOptions;
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, result);
 
             return result;
         }

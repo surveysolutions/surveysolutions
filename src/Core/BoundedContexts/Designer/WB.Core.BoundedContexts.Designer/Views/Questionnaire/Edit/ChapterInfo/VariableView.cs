@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class VariableView : IQuestionnaireItem
+    public class VariableView : DescendantItemView, IQuestionnaireItem
     {
+        public VariableView()
+        {
+            this.Breadcrumbs = new Breadcrumb[] {};
+            this.VariableData = new VariableData(VariableType.Boolean, null, null);
+        }
+
         public string ItemId { get; set; }
 
         public VariableData VariableData { get; set; }
@@ -16,5 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             get { return new List<IQuestionnaireItem>(); }
             set { }
         }
+
+        public Breadcrumb[] Breadcrumbs { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] TypeOptions { get; set; }
     }
 }

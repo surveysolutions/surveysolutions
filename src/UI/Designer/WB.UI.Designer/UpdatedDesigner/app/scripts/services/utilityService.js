@@ -127,8 +127,7 @@
                 utilityService.createEmptyVariable = function (parent) {
                     var newId = utilityService.guid();
                     var emptyVariable = {
-                        "itemId": newId,
-                        "text": "",
+                        itemId: newId,
                         itemType: 'Variable',
                         getParentItem: function () { return parent; }
                     };

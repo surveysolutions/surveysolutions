@@ -6,7 +6,7 @@
                 $scope.activeVariable.breadcrumbs = variable.breadcrumbs;
 
                 $scope.activeVariable.itemId = $state.params.itemId;
-                $scope.activeVariable.variable = variable.variableName || variable.variable;
+                $scope.activeVariable.variable = variable.name;
                 $scope.activeVariable.expression = variable.expression;
                 $scope.activeVariable.type = variable.type;
 

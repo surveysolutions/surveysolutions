@@ -627,9 +627,7 @@
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
-                        var obj = utilityService.createEmptyVariable();
                         $scope.items = result.chapter.items;
-                        $scope.items.push(obj);
                         $scope.currentChapter = result.chapter;
                         $rootScope.updateVariableNames(result.variableNames);
                         connectTree();
