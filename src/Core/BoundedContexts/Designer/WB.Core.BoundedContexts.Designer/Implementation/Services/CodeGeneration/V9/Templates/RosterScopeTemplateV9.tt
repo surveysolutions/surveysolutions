@@ -106,6 +106,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 
 <#
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
+	VariablesCopyOperatorsInCopyMembers(Model.Variables);
 #>
 		};
 
@@ -123,7 +124,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 #>
 	//static texts
 <#
-	foreach (var staticText in Model.StaticTexts) 
+	foreach (var staticText in Model.StaticTexts)  
 	{
 #>
 	private ConditionalState <#=staticText.StateName#> = new ConditionalState(IdOf.<#=staticText.IdName#>, ItemType.StaticText);
@@ -132,7 +133,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 #>
 	//groups
 <#
-	foreach (var @group in Model.Groups) 
+	foreach (var @group in Model.Groups)  
 	{
 #>
 	private ConditionalState <#= @group.StateName#> = new ConditionalState(IdOf.<#=@group.IdName#>, ItemType.Group);

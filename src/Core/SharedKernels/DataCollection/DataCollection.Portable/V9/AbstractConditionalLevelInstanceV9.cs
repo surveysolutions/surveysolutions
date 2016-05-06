@@ -11,8 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, Func<object>> VariableMap { get; private set; }
-        protected Dictionary<Guid, object> VariablePreviousValues { get; private set; }
+        protected Dictionary<Guid, VariableAccessor> VariableMap { get; private set; }
 
         protected AbstractConditionalLevelInstanceV9(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances,
@@ -21,8 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.VariableMap = new Dictionary<Guid, Func<object>>();
-            this.VariablePreviousValues = new Dictionary<Guid, object>();
+            this.VariableMap = new Dictionary<Guid, VariableAccessor>();
         }
 
         protected AbstractConditionalLevelInstanceV9(decimal[] rosterVector, Identity[] rosterKey,
@@ -63,9 +61,9 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        protected void AddUpdaterVariableToMap(Guid id, Func<object> setter)
+        protected void AddUpdaterVariableToMap(Guid id, VariableAccessor acessor)
         {
-            this.VariableMap.Add(id, setter);
+            this.VariableMap.Add(id, acessor);
         }
 
         public void DisableVariable(Guid variableId)
@@ -88,16 +86,15 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 object newVariableValue = null;
                 try
                 {
-                    newVariableValue = variableAccessor.Value();
+                    newVariableValue = variableAccessor.Value.GetValue();
                 }
 #pragma warning disable
                 catch (Exception ex)
                 {
                 }
 #pragma warning restore
-
-                if (!VariablePreviousValues.ContainsKey(variableAccessor.Key) ||
-                    !VariablePreviousValues[variableAccessor.Key].Equals(newVariableValue))
+                var previousValue = variableAccessor.Value.GetPreviousValue();
+                if (previousValue==null ||!previousValue.Equals(newVariableValue))
                     result.ChangedVariableValues.Add(new Identity(variableAccessor.Key, RosterVector),
                         newVariableValue);
             }
@@ -107,7 +104,9 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         public void SerVariablePreviousValue(Guid variableId, object value)
         {
-            VariablePreviousValues[variableId] = value;
+            if(!VariableMap.ContainsKey(variableId))
+                return;
+            VariableMap[variableId].SetPreviousValue(value);
         }
 
         protected EnablementChanges ProcessEnablementConditionsIncludingVariables()
@@ -132,5 +131,19 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 enablementChanges.StaticTextsToBeDisabled, enablementChanges.StaticTextsToBeEnabled,
                 variablesToBeDisabled, variablesToBeEnabled);
         }
+    }
+
+    public class VariableAccessor
+    {
+        public VariableAccessor(Func<object> getValue, Action<object> setPreviousValue, Func<object> getPreviousValue)
+        {
+            this.GetValue = getValue;
+            this.SetPreviousValue = setPreviousValue;
+            this.GetPreviousValue = getPreviousValue;
+        }
+
+        public Func<object> GetValue { get; private set; }
+        public Action<object> SetPreviousValue { get; private set; }
+        public Func<object> GetPreviousValue { get; private set; }
     }
 }
