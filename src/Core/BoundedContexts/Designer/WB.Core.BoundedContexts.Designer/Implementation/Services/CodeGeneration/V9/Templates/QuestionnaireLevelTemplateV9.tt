@@ -45,6 +45,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 			ValidStaticTexts = new HashSet<Guid>(this.ValidStaticTexts),
 <#
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
+	VariablesCopyOperatorsInCopyMembers(Model.Variables);
 #>
 		};
 
