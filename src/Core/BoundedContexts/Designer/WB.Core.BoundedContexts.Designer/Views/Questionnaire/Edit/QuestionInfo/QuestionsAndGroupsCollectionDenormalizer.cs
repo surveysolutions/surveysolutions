@@ -42,6 +42,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupStoppedBeingARoster>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireDeleted>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableUpdated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableDeleted>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableCloned>
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -572,6 +576,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
             currentState.StaticTexts.Add(staticTextDetailsView);
             return currentState;
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableAdded> @event)
+        {
+            throw new NotImplementedException();
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableUpdated> @event)
+        {
+            throw new NotImplementedException();
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableDeleted> @event)
+        {
+            throw new NotImplementedException();
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableCloned> @event)
+        {
+            throw new NotImplementedException();
         }
     }
 }
