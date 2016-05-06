@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
+            this.Write(" \r\n");
             
             #line 28 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\QuestionnaireLevelTemplateV9.tt"
 
@@ -1420,7 +1421,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(variable.IdName));
         #line hidden
         
         #line 170 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(");\r\n\tpublic ");
+this.Write(", ItemType.Variable);\r\n\tpublic ");
 
         
         #line default
@@ -1448,55 +1449,41 @@ this.Write(this.ToStringHelper.ToStringWithCulture(variable.VariableName));
         #line hidden
         
         #line 171 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write("\r\n\t{\r\n\t\tget { return ");
+this.Write("\r\n\t{\r\n\t\tget { \t\t\r\n\t\t\tif(");
 
         
         #line default
         #line hidden
         
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 174 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(variable.StateName));
 
         
         #line default
         #line hidden
         
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(".State != State.Disabled ? ");
+        #line 174 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+this.Write(".State == State.Disabled )\r\n\t\t\t\treturn null;\r\n\t\t\telse\r\n\t\t\t\treturn ");
 
         
         #line default
         #line hidden
         
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 177 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(variable.Expression));
 
         
         #line default
         #line hidden
         
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(": (");
+        #line 177 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+this.Write("; \r\n\t\t}\t\t\t\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
-
-        
-        #line default
-        #line hidden
-        
-        #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(")null; }\r\n\t\t\t\r\n\t}\r\n");
-
-        
-        #line default
-        #line hidden
-        
-        #line 176 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 180 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 
 	}
 }
@@ -1509,70 +1496,70 @@ void RosterCollectionsDefenitions(List<RosterTemplateModel> rosters)
         #line default
         #line hidden
         
-        #line 183 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 187 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write("\tpublic RosterRowList<");
 
         
         #line default
         #line hidden
         
-        #line 184 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
 
         
         #line default
         #line hidden
         
-        #line 184 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 184 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
 
         
         #line default
         #line hidden
         
-        #line 184 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write("\r\n\t{\r\n\t\tget\r\n\t\t{\r\n\t\t\tvar rosters = this.GetInstances(this.RosterKey, IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 192 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.RosterScopeName));
 
         
         #line default
         #line hidden
         
-        #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 192 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(".Last());\r\n\t\t\treturn  new RosterRowList<");
 
         
         #line default
         #line hidden
         
-        #line 189 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 193 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
 
         
         #line default
         #line hidden
         
-        #line 189 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 193 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(">(rosters);\r\n\t\t}\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 192 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 196 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 
 	}
 }
@@ -1586,56 +1573,56 @@ void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
         #line default
         #line hidden
         
-        #line 200 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 204 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write("\tpublic static Dictionary<decimal, ");
 
         
         #line default
         #line hidden
         
-        #line 201 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 205 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
 
         
         #line default
         #line hidden
         
-        #line 201 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 205 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 201 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+        #line 205 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
-
-        
-        #line default
-        #line hidden
-        
-        #line 201 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(" \r\n\t{\r\n\t\tget { return LookupTables.");
-
-        
-        #line default
-        #line hidden
-        
-        #line 203 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
-
-        
-        #line default
-        #line hidden
-        
-        #line 203 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write("; }\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
         #line 205 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+this.Write(" \r\n\t{\r\n\t\tget { return LookupTables.");
+
+        
+        #line default
+        #line hidden
+        
+        #line 207 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+
+        
+        #line default
+        #line hidden
+        
+        #line 207 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
+this.Write("; }\r\n\t}\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 209 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
 
 	}
 }
