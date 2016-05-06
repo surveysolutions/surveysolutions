@@ -2,15 +2,15 @@
 {
     public class VariableData
     {
-        public VariableData(VariableType type, string name, string body)
+        public VariableData(VariableType type, string name, string epression)
         {
             this.Type = type;
             this.Name = name;
-            this.Body = body;
+            this.Expression = epression;
         }
 
         public VariableType Type { get; }
         public string Name { get; }
-        public string Body { get; }
+        public string Expression { get; }
     }
 }

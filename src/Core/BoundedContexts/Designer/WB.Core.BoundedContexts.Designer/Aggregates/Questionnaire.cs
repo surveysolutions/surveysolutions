@@ -3297,12 +3297,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
                     "Question text contains illegal substitution references to self");
 
-            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope;
+            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
             ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences,
-                out unknownReferences, out questionsIncorrectTypeOfReferenced, out questionsIllegalPropagationScope);
+                out unknownReferences, 
+                out questionsIncorrectTypeOfReferenced, 
+                out questionsIllegalPropagationScope, 
+                out variablesIllegalPropagationScope);
 
             if (unknownReferences.Count > 0)
                 throw new QuestionnaireException(
@@ -3318,8 +3321,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (questionsIllegalPropagationScope.Count > 0)
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question text contains illegal substitution references to questions: " +
-                        String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+                    "Question text contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+
+            if (variablesIllegalPropagationScope.Count > 0)
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question text contains illegal substitution references to variables: " + String.Join(", ", variablesIllegalPropagationScope.ToArray()));
         }
 
         private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
@@ -3714,11 +3721,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
             out List<string> unknownReferences, 
             out List<string> questionsIncorrectTypeOfReferenced,
-            out List<string> questionsIllegalPropagationScope)
+            out List<string> questionsIllegalPropagationScope,
+            out List<string> variablesIllegalPropagationScope)
         {
             unknownReferences = new List<string>();
             questionsIncorrectTypeOfReferenced = new List<string>();
             questionsIllegalPropagationScope = new List<string>();
+            variablesIllegalPropagationScope = new List<string>();
 
             var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
@@ -3770,6 +3779,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
                         questionsIllegalPropagationScope.Add(substitutionReference);
+                }
+                else if (isVariableReferance)
+                {
+                    var currentVariable = questions[substitutionReference];
+
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), propagationQuestionsVector))
+                        variablesIllegalPropagationScope.Add(substitutionReference);
                 }
             }
         }
