@@ -224,6 +224,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\StaticTextTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\VariableTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
       <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -292,6 +293,29 @@
       <DependentUpon>SharedTemplateV8.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\InterviewExpressionStateTemplateV9.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\InterviewExpressionStateTemplateV9.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV9.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\QuestionnaireLevelTemplateV9.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\QuestionnaireLevelTemplateV9.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV9.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\RosterScopeTemplateV9.cs">
+      <DependentUpon>RosterScopeTemplateV9.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\RosterScopeTemplateV9.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.cs">
+      <DependentUpon>SharedTemplateV9.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
@@ -772,6 +796,22 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <None Include="Implementation\Services\CodeGeneration\V9\Templates\InterviewExpressionStateTemplateV9.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV9.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V9\Templates\QuestionnaireLevelTemplateV9.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV9.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV9.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V9\Templates\RosterScopeTemplateV9.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV9.cs</LastGenOutput>
+    </None>
     <None Include="Implementation\Services\CodeGeneration\V8\Templates\RosterScopeTemplateV8.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RosterScopeTemplateV8.cs</LastGenOutput>
