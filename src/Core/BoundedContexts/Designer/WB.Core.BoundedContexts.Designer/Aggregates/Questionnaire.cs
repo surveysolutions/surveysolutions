@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -2248,6 +2249,76 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
         #endregion
 
+
+        #region Variable command handlers
+        public void AddVariableAndMoveIfNeeded(AddVariable command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
+            this.innerDocument.ConnectChildrenWithParent();
+            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
+
+            this.ApplyEvent(new VariableAdded(
+                command.EntityId, 
+                command.ResponsibleId,
+                command.ParentId, 
+                command.VariableData));
+            
+            if (command.Index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = command.EntityId,
+                    GroupKey = command.ParentId,
+                    TargetIndex = command.Index.Value,
+                    ResponsibleId = command.ResponsibleId
+                });
+            }
+        }
+
+        public void UpdateVariable(UpdateVariable command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            
+            this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
+
+            this.ApplyEvent(new VariableUpdated(command.EntityId, command.ResponsibleId, command.VariableData));
+        }
+
+        public void DeleteVariable(Guid entityId, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+
+            this.ApplyEvent(new VariableDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+        }
+
+        public void MoveVariable(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
+            this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
+
+            // if we don't have a target group we would like to move source group into root of questionnaire
+            var targetGroup = this.GetGroupById(targetEntityId);
+            var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable.GetParent() as IGroup);
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = entityId,
+                GroupKey = targetEntityId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
+            });
+        }
+        #endregion
+
         #region Shared Person command handlers
 
         public void AddSharedPerson(Guid personId, string email, ShareType shareType, Guid responsibleId)
@@ -3641,7 +3712,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
-            out List<string> unknownReferences, out List<string> questionsIncorrectTypeOfReferenced,
+            out List<string> unknownReferences, 
+            out List<string> questionsIncorrectTypeOfReferenced,
             out List<string> questionsIllegalPropagationScope)
         {
             unknownReferences = new List<string>();
@@ -3653,6 +3725,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 .Where(q => !string.IsNullOrEmpty(q.StataExportCaption))
                 .GroupBy(q => q.StataExportCaption, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+            var variables = this.innerDocument.GetEntitiesByType<Variable>()
+                .Where(v => v.PublicKey != questionPublicKey && !string.IsNullOrEmpty(v.Name))
+                .GroupBy(v => v.Name, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
 
             var propagationQuestionsVector = GetQuestionnaireItemDepthAsVector(@group.PublicKey);
 
@@ -3670,9 +3748,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     continue;
                 }
 
-                if (!questions.ContainsKey(substitutionReference))
+                bool isQuestionReferance = questions.ContainsKey(substitutionReference);
+                bool isVariableReferance = variables.ContainsKey(substitutionReference);
+
+                if (!isQuestionReferance && !isVariableReferance)
+                {
                     unknownReferences.Add(substitutionReference);
-                else
+                }
+                else if (isQuestionReferance)
                 {
                     var currentQuestion = questions[substitutionReference];
                     bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
@@ -3685,9 +3768,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (
-                        !this.IsReferencedItemInTheSameScopeWithReferencesItem(
-                            this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
