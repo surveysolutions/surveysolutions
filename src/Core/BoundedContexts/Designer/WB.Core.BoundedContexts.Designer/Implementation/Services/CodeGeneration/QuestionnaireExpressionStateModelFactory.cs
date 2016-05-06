@@ -52,7 +52,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
 
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
-            
+
+            var variable = new VariableTemplateModel()
+            {
+                Expression = "2*2",
+                Id = Guid.Parse("11111111111111111111111111111112"),
+                TypeName = "int?",
+                VariableName = "var1",
+                RosterScopeName = expressionState.QuestionnaireLevelModel.RosterScopeName,
+                ParentScopeTypeName = expressionState.QuestionnaireLevelModel.ParentTypeName
+            };
+            expressionState.AllVariables.Add(variable);
+            expressionState.QuestionnaireLevelModel.Variables.Add(variable);
+
             expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
                 expressionState.QuestionnaireLevelModel.Questions,
                 expressionState.QuestionnaireLevelModel.StaticTexts,
@@ -185,6 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
             var staticTexts = rostersInScope.SelectMany(r => r.StaticTexts).ToList();
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
+            var variables = rostersInScope.SelectMany(r => r.Variables).ToList();
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
@@ -192,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 questions, staticTexts, groups, rostersInScope, template.ConditionsPlayOrder);
 
             return new RosterScopeTemplateModel(rosterScopeType, questions, staticTexts, groups, rosters, rostersInScope,
-                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions);
+                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions, variables);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
