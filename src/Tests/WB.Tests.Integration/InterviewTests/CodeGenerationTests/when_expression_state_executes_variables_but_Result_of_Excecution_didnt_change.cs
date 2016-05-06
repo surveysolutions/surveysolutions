@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
-    internal class when_expression_state_executes_variables : CodeGenerationTestsContext
+    internal class when_expression_state_executes_variables_but_result_of_Excecution_didnt_change : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -23,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
                 Guid variableId = Guid.Parse("11111111111111111111111111111112");
-                        Guid questionId = Guid.Parse("21111111111111111111111111111112");
+                Guid questionId = Guid.Parse("21111111111111111111111111111112");
 
                 AssemblyContext.SetupServiceLocator();
 
@@ -36,18 +32,19 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: new Version(15, 0, 0)) as
                         IInterviewExpressionStateV9;
-
+                state.EnableeVariables(new [] { Create.Identity(variableId) });
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                var variables = state.ProcessVariables();
+                state.SerVariablePreviousValue(Create.Identity(variableId), 6);
+                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?) variables.ChangedVariableValues[Create.Identity(variableId)]
+                    CountOfChangedVariables = variables.ChangedVariableValues.Count
                 };
             });
 
-        It should_result_of_the_variable_be_equal_to_length_of_answer_on_text_question = () =>
-             results.IntVariableResult.ShouldEqual(6);
+        It should_result_not_return_the_variable_changed_result = () =>
+             results.CountOfChangedVariables.ShouldEqual(0);
 
         Cleanup stuff = () =>
         {
@@ -61,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
         [Serializable]
         public class InvokeResults
         {
-            public int? IntVariableResult { get; set; }
+            public int CountOfChangedVariables { get; set; }
         }
     }
 }

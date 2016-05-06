@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
-    internal class when_expression_state_executes_variables : CodeGenerationTestsContext
+    internal class when_expression_state_executes_enablement_conditions_and_variable_must_be_enabled : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -23,31 +19,45 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
                 Guid variableId = Guid.Parse("11111111111111111111111111111112");
-                        Guid questionId = Guid.Parse("21111111111111111111111111111112");
+                Guid questionId = Guid.Parse("21111111111111111111111111111112");
+                Guid groupId = Guid.Parse("31111111111111111111111111111112");
 
                 AssemblyContext.SetupServiceLocator();
 
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id:questionId, variable:"txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        Create.Group(id: groupId, enablementCondition:"true", children: new IComposite[]
+                        {
+                            Create.TextQuestion(id: questionId, variable: "txt"),
+                            Create.Variable(id: variableId, expression: "txt.Length")
+                        })
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: new Version(15, 0, 0)) as
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
+                state.DisableVariables(new[] { Create.Identity(variableId) });
+                state.DisableGroups(new[] { Create.Identity(groupId) });
+                state.SaveAllCurrentStatesAsPrevious();
+
+                var enablementConditions = state.ProcessEnablementConditions();
+
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?) variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)],
+                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(Create.Identity(variableId))
                 };
             });
 
         It should_result_of_the_variable_be_equal_to_length_of_answer_on_text_question = () =>
              results.IntVariableResult.ShouldEqual(6);
+
+        It should_variable_id_be_returned_as_enabled = () =>
+           results.IsVariableEnabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -62,6 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
         public class InvokeResults
         {
             public int? IntVariableResult { get; set; }
+            public bool IsVariableEnabled { get; set; }
         }
     }
 }
