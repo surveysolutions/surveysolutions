@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -146,6 +147,11 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<MoveStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveStaticText(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
                 .Handles<UpdateStaticText>(command => command.QuestionnaireId, aggregate => aggregate.UpdateStaticText)
                 .Handles<DeleteStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))
+                // Variable
+                .Handles<AddVariable>(command => command.QuestionnaireId, aggregate => aggregate.AddVariableAndMoveIfNeeded)
+                .Handles<MoveVariable>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveVariable(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
+                .Handles<UpdateVariable>(command => command.QuestionnaireId, aggregate => aggregate.UpdateVariable)
+                .Handles<DeleteVariable>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteVariable(command.EntityId, command.ResponsibleId))
                 // Sharing
                 .Handles<AddSharedPersonToQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))
                 .Handles<RemoveSharedPersonFromQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId));
