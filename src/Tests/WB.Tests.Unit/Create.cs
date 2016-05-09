@@ -600,8 +600,7 @@ namespace WB.Tests.Unit
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory(),
-                Mock.Of<IExportViewFactory>());
+                new QuestionnaireRosterStructureFactory());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
