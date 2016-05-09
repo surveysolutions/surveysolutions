@@ -11,13 +11,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_creating_interview_with_preloaded_data : InterviewTestsContext
+    internal class when_creating_interview_with_preloaded_data_interviewer_provided : InterviewTestsContext
     {
         private Establish context = () =>
         {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            interviewerId = Guid.Parse("11111111111111111111111111111111");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var fixedRosterGroup = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = "answer";
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId, null);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId, interviewerId);
 
         Cleanup stuff = () =>
         {
@@ -47,10 +48,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewFromPreloadedDataCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
 
-        It should_raise_valid_TextQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<TextQuestionAnswered>(@event
-                => @event.Answer == prefilledQuestionAnswer && @event.QuestionId == prefilledQuestionId);
-
+        It should_raise_InterviewerAssigned_event = () =>
+            eventContext.ShouldContainEvent<InterviewerAssigned>(@event => @event.InterviewerId == interviewerId);
 
         private static EventContext eventContext;
         private static Guid userId;
@@ -58,6 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static PreloadedDataDto preloadedDataDto;
         private static DateTime answersTime;
         private static Guid supervisorId;
+        private static Guid interviewerId;
         private static Guid prefilledQuestionId;
         private static string prefilledQuestionAnswer;
         private static Interview interview;
