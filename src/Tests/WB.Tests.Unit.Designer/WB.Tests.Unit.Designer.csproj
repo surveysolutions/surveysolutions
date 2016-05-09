@@ -355,6 +355,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteVariableHandlerTests\when_deleting_variable_and_all_parameters_specified.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_a_variable.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />

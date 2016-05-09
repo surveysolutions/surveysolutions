@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -88,6 +89,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            bool hasVariables = questionnaireDocument.Find<Variable>().Any();
+            if (hasVariables)
+                return version_15;
+
             bool hasStaticTextsWithConditions = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
             if (hasStaticTextsWithConditions)
                 return version_14;
