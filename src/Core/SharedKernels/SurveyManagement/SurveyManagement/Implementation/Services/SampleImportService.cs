@@ -224,7 +224,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ICommandService commandInvoker,
             QuestionnaireDocument questionnaireDocument)
         {
-                Guid responsibleId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
+                Guid supervisorId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
 
                 commandInvoker.Execute(
                     new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
@@ -233,7 +233,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         version,
                         preloadedDataRecord.PreloadedDataDto,
                         DateTime.UtcNow,
-                        responsibleId));
+                        supervisorId,
+                        preloadedDataRecord.InterviewerId));
         }
 
         private static TimeSpan CalculateEstimatedTime(int interviewIndex, int totalInterviews, DateTime startTime, DateTime currentTime)
