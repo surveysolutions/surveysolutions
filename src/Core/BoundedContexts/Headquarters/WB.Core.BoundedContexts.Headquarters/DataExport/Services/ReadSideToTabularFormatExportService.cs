@@ -40,7 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
 
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             InterviewDataExportSettings exportSettings, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.exportSettings = exportSettings;
-            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
@@ -151,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             if (questionnaireExportStructure == null)
                 return;
@@ -201,8 +202,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureRepository.GetById(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
+            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             return questionnaireExportStructure;
         }
     }

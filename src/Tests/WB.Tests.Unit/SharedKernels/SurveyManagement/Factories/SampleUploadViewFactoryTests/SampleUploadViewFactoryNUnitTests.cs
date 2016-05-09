@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null, QuestionnaireExportStructure questionnaireExportStructure=null)
         {
             return new SampleUploadViewFactory(questionnaires ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireExportStructure));
+                Mock.Of<IQuestionnaireProjectionsRepository>(_=>_.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireExportStructure));
         }
 
         private SampleUploadViewInputModel CreateSampleUploadViewInputModel(Guid? questionnaireId=null)

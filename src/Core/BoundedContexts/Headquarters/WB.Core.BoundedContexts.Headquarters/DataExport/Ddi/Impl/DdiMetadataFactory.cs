@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly ILogger logger;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
@@ -37,15 +38,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             ILogger logger,
             IMetaDescriptionFactory metaDescriptionFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
@@ -119,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
         {
             return
-                this.questionnaireExportStructureStorage.GetById(questionnaireId.ToString());
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(questionnaireId);
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)

@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -134,7 +135,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             interviewDataStorage.Store(interviewData, interviewId);
 
             return new InterviewsExportDenormalizer(interviewDataStorage, interviewReferenceStorage,
-                exportViewFactory, exportRecords,new InMemoryKeyValueStorage<QuestionnaireExportStructure>());
+                exportViewFactory, exportRecords,Mock.Of<IQuestionnaireProjectionsRepository>());
         }
     }
 }
