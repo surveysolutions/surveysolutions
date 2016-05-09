@@ -423,6 +423,10 @@ input[type=date] {
 	margin-bottom: 5px;
 	position: relative;
 }
+.validation-expression, .validation-message {
+    min-height: 14px;
+
+}
 .condition span, .instructions span, .validation-expression span, .validation-message span{
 	position: absolute;
 	display: block;
