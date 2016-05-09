@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     internal class DataExportStatusReader : IDataExportStatusReader
     {
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -41,20 +42,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IParaDataAccessor paraDataAccessor, 
             IFileSystemAccessor fileSystemAccessor,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.paraDataAccessor = paraDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status = null)
         {
             var questionnaire =
-                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             if (questionnaire == null)
                 return null;

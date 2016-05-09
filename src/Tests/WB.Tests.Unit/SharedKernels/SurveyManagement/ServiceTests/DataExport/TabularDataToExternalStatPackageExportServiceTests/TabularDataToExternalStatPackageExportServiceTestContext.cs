@@ -40,9 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
                 dataQueryFactory ?? Mock.Of< IDataQueryFactory> (),
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), new QuestionnaireLabelFactory(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
+                Mock.Of<IQuestionnaireProjectionsRepository>(
                     _ =>
-                        _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure));
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

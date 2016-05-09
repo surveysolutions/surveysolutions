@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
@@ -34,13 +35,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage) : 
+            ILogger logger, IQuestionnaireProjectionsRepository questionnaireProjectionsRepository) : 
             base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
@@ -57,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
             {
                 var questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
                 this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
             });

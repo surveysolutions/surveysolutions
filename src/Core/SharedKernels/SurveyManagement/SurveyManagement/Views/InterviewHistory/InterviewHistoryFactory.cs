@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<UserDocument> userReader;
 
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IEventStore eventStore;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ILogger logger;
@@ -27,14 +27,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IPlainStorageAccessor<UserDocument> userReader,
             ILogger logger, InterviewDataExportSettings interviewDataExportSettings, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public InterviewHistoryView Load(Guid interviewId)
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer =
-                new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, interviewDataExportSettings, questionnaireExportStructureStorage);
+                new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, interviewDataExportSettings, this.questionnaireProjectionsRepository);
 
             var events = this.eventStore.Read(interviewId, 0);
             foreach (var @event in events)

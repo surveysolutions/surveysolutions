@@ -37,7 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
         private IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
-        private IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireExportStructure>>();
         private IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>();
         #endregion
 
@@ -82,7 +81,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, newVersion).ToString();
 
             this.referenceInfoForLinkedQuestionsStorage.Store(this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(document, newVersion), questionnaireEntityId);
-            this.questionnaireExportStructureStorage.Store(this.exportViewFactory.CreateQuestionnaireExportStructure(document,newVersion), questionnaireEntityId);
             this.questionnaireRosterStructureStorage.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(document,newVersion), questionnaireEntityId);
             this.questionnaireQuestionsInfoStorage.Store(new QuestionnaireQuestionsInfo{
                 QuestionIdToVariableMap =

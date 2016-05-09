@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
     {
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
         private readonly IExportViewFactory exportViewFactory;
 
@@ -40,13 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences,
             IExportViewFactory exportViewFactory, 
             IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.interviewDatas = interviewDatas;
             this.interviewReferences = interviewReferences;
             this.exportViewFactory = exportViewFactory;
             this.exportRecords = exportRecords;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public override object[] Writers => new object[] { this.exportRecords };
@@ -63,9 +64,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 var interviewReference = this.interviewReferences.GetById(interviewId);
 
                 var questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
+                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
                         new QuestionnaireIdentity(interviewReference.QuestionnaireId,
-                            interviewReference.QuestionnaireVersion).ToString());
+                            interviewReference.QuestionnaireVersion));
 
                 InterviewDataExportView interviewDataExportView =
                     this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));

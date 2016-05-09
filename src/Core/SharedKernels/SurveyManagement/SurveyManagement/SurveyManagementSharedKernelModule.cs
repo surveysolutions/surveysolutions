@@ -91,6 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<Questionnaire>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+            this.Bind<IQuestionnaireProjectionsRepository>().To<QuestionnaireProjectionsRepository>().InSingletonScope();
 
             CommandRegistry
                 .Setup<Questionnaire>()
