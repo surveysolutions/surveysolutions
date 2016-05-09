@@ -1,25 +1,27 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.Latest;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V8;
+using WB.Core.SharedKernels.DataCollection.V9;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.Latest
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V9
 {
-    public class InterviewExpressionStateV8ToLatestAdapter : ILatestInterviewExpressionState
+    public class InterviewExpressionStateV8ToV9Adapter : IInterviewExpressionStateV9
     {
         private readonly IInterviewExpressionStateV8 adaptee;
 
-        public InterviewExpressionStateV8ToLatestAdapter(IInterviewExpressionStateV8 adaptee)
+        public InterviewExpressionStateV8ToV9Adapter(IInterviewExpressionStateV8 adaptee)
         {
             this.adaptee = adaptee;
         }
 
-        public static ILatestInterviewExpressionState AdaptIfNeeded(IInterviewExpressionStateV8 adaptee)
-            => adaptee as ILatestInterviewExpressionState ?? new InterviewExpressionStateV8ToLatestAdapter(adaptee);
+        public static IInterviewExpressionStateV9 AdaptIfNeeded(IInterviewExpressionStateV8 adaptee)
+            => adaptee as IInterviewExpressionStateV9 ?? new InterviewExpressionStateV8ToV9Adapter(adaptee);
 
         public void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer) => this.adaptee.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
         public void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer) => this.adaptee.UpdateNumericRealAnswer(questionId, rosterVector, answer);
@@ -54,7 +56,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         
         public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
             => this.adaptee.ApplyStaticTextFailedValidations(failedValidationConditions);
-        
+
+        public VariableValueChanges ProcessVariables()
+        {
+            return  new VariableValueChanges();
+        }
+
+        public void DisableVariables(IEnumerable<Identity> variablesToDisable)
+        {
+            throw new NotImplementedException("Variables are missing is questionnairies older then V9, it's nothing to disable");
+        }
+
+        public void EnableVariables(IEnumerable<Identity> variablesToEnable)
+        {
+            throw new NotImplementedException("Variables are missing is questionnairies older then V9, it's nothing to enable");
+        }
+
+        public void SerVariablePreviousValue(Identity variableId, object value)
+        {
+            throw new NotImplementedException("Variables are missing is questionnairies older then V9, it's nothing to set");
+        }
+
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone() => this.Clone();
@@ -62,12 +84,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone() => this.Clone();
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone() => this.Clone();
         IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone() => this.Clone();
-        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone() => this.Clone();
+        IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone() => this.Clone();
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle) => this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
         public void SetInterviewProperties(IInterviewProperties properties) => this.adaptee.SetInterviewProperties(properties);
 
         public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) => this.adaptee.ApplyFailedValidations(failedValidationConditions);
 
-        private ILatestInterviewExpressionState Clone() => new InterviewExpressionStateV8ToLatestAdapter(this.adaptee.Clone());
+        private IInterviewExpressionStateV9 Clone() => new InterviewExpressionStateV8ToV9Adapter(this.adaptee.Clone());
     }
 }
