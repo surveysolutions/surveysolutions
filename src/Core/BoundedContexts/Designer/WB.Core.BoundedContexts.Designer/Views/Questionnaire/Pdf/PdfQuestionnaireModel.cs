@@ -328,5 +328,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool StaticTextHasAttachedImage(IStaticText staticText) => !string.IsNullOrWhiteSpace(staticText.AttachmentName) &&
                                                                           this.questionnaire.Attachments.Any(x => x.Name == staticText.AttachmentName);
+
+        public string GetQuestionScope(IQuestion question)
+        {
+            if (question.QuestionScope == QuestionScope.Interviewer && question.Featured)
+            {
+                return "prefilled";
+            }
+            return question.QuestionScope.ToString();
+        }
+
+        public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
     }
 }
