@@ -47,8 +47,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Static texts: enablement conditions and validations</summary>
         private readonly Version version_14 = new Version(14, 0, 0);
 
+        /// <summary>Variables</summary>
+        private readonly Version version_15 = new Version(15, 0, 0);
 
-        public Version GetLatestSupportedVersion() => this.version_14;
+
+        public Version GetLatestSupportedVersion() => this.version_15;
 
         public bool IsClientVersionSupported(Version clientVersion)
         {
