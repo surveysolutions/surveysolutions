@@ -465,6 +465,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups);
         }
 
+        public virtual void Apply(VariablesDisabled @event)
+        {
+            this.ExpressionProcessorStatePrototype.DisableVariables(@event.Variables);
+        }
+
+        public virtual void Apply(VariablesEnabled @event)
+        {
+            this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
+        }
+
+        public virtual void Apply(VariablesValuesChanged @event)
+        {
+            foreach (var changedVariableValueDto in @event.ChangedVariables)
+            {
+                this.ExpressionProcessorStatePrototype.SerVariablePreviousValue(changedVariableValueDto.VariableIdentity, changedVariableValueDto.VariableValue);
+            }
+        }
+
         public virtual void Apply(QuestionsDisabled @event)
         {
             this.interviewState.DisableQuestions(@event.Questions);
@@ -673,7 +691,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
                 var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null,
-                    null, null, null);
+                    null, null, null,null);
                 interviewChangeStructures.State.ApplyInterviewChanges(fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
@@ -727,7 +745,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
-                var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null, null, null);
+                var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null, null, null,null);
                 interviewChangeStructures.State.ApplyInterviewChanges(fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
@@ -2004,6 +2022,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
                     interviewChanges.AnswerAsRosterTitle);
 
+            if (interviewChanges.VariableValueChanges != null)
+                this.ApplyVariableValueChangesEvents(interviewChanges.VariableValueChanges);
+
             if (interviewChanges.EnablementChanges != null)
                 this.ApplyEnablementChangesEvents(interviewChanges.EnablementChanges);
 
@@ -2028,6 +2049,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new SubstitutionTitlesChanged(changedQuestionIds.ToArray()));
             }
         }
+
+        private void ApplyVariableValueChangesEvents(VariableValueChanges variableValueChanges)
+        {
+            if (variableValueChanges.ChangedVariableValues.Count > 0)
+            {
+                this.ApplyEvent(new VariablesValuesChanged(variableValueChanges.ChangedVariableValues.Select(c=> new ChangedVariableValueDto(c.Key,c.Value)).ToArray()));
+            }
+        }
+
         private void ApplyLinkedQuestionOptionsChangesEvents(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
         {
             if (linkedQuestionOptionsChanges.Length > 0)
@@ -2055,6 +2085,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                     this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
                         interviewChanges.AnswerAsRosterTitle);
+
+                if (interviewChanges.VariableValueChanges != null)
+                    this.ApplyVariableValueChangesEvents(interviewChanges.VariableValueChanges);
 
                 if (interviewChanges.ValidityChanges != null)
                     validityChanges.Add(interviewChanges.ValidityChanges);
@@ -2100,6 +2133,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (enablementChanges.StaticTextsToBeEnabled.Any())
             {
                 this.ApplyEvent(new StaticTextsEnabled(enablementChanges.StaticTextsToBeEnabled.ToArray()));
+            }
+            if (enablementChanges.VariablesToBeDisabled.Any())
+            {
+                this.ApplyEvent(new VariablesDisabled(enablementChanges.VariablesToBeDisabled.ToArray()));
+            }
+            if (enablementChanges.VariablesToBeEnabled.Any())
+            {
+                this.ApplyEvent(new VariablesEnabled(enablementChanges.VariablesToBeEnabled.ToArray()));
             }
         }
 
@@ -2659,6 +2700,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             return new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
@@ -2667,7 +2710,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 AnswerUtils.AnswerToString(answer),
                 substitutionChanges,
-                changedLinkedOptions);
+                changedLinkedOptions,
+                variableValuesChanges);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state,
@@ -2753,6 +2797,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             return new InterviewChanges(interviewByAnswerChange, 
                 enablementChanges, 
                 validationChanges,
@@ -2761,7 +2807,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles, 
                 answerFormattedAsRosterTitle,
                 substitutionChanges, 
-                changedLinkedOptions);
+                changedLinkedOptions,
+                variableValuesChanges);
         }
 
         private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
@@ -2844,6 +2891,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
@@ -2853,7 +2902,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutionChanges,
-                changedLinkedOptions);
+                changedLinkedOptions,
+                variableValuesChanges);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, 
@@ -2935,6 +2985,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             return new InterviewChanges(answerChanges, 
                 enablementChanges,
                 validationChanges,
@@ -2943,7 +2995,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutionChanges,
-                changedLinkedOptions);
+                changedLinkedOptions,
+                variableValuesChanges);
         }
 
         // do not triggers roster
@@ -3099,6 +3152,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             var interviewChanges= new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
@@ -3107,7 +3162,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 null,
                 substitutionChanges,
-                changedLinkedOptions);
+                changedLinkedOptions,
+                variableValuesChanges);
 
             interviewChanges.AnswersForLinkedQuestionsToRemove.AddRange(answersToRemoveByCascading);
             
@@ -3201,6 +3257,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
+            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
@@ -3209,7 +3267,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
-                substitutedQuestions, changedLinkedOptions);
+                substitutedQuestions, 
+                changedLinkedOptions,
+                variableValuesChanges);
         }
 
         private List<Identity> GetLinkedQuestionsAnswersToRemove(
@@ -4603,6 +4663,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 enablementChanges,
                 validationChanges,
+                null,
                 null,
                 null,
                 null,

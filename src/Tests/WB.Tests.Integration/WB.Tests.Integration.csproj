@@ -243,6 +243,7 @@
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables_but_result_excecution_throw_exception.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables_but_Result_of_Excecution_didnt_change.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes__unchanged_variables_of_cloned_expression_state.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
@@ -327,6 +328,9 @@
     <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
+    <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
+    <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
     <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
