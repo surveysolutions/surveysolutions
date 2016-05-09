@@ -17,21 +17,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IPreloadedDataRepository preloadedDataRepository, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.preloadedDataRepository = preloadedDataRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
@@ -40,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             var questionnaireExportStructure =
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
             var questionnaireRosterStructure =
                 this.questionnaireRosterStructureStorage.GetById(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());

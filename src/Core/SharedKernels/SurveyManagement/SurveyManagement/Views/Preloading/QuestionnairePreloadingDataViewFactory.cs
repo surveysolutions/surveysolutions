@@ -13,19 +13,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
 {
     public class QuestionnairePreloadingDataViewFactory : IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
 
-        public QuestionnairePreloadingDataViewFactory(IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+        public QuestionnairePreloadingDataViewFactory(IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public QuestionnairePreloadingDataItem Load(QuestionnairePreloadingDataInputModel input)
         {
             var questionnaire =
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion).ToString());
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion));
+
             if (questionnaire == null)
                 return null;
             var firstLevel = questionnaire.HeaderToLevelMap[new ValueVector<Guid>()];

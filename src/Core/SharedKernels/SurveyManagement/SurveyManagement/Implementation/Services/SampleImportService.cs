@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     {
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly SampleImportSettings sampleImportSettings;
@@ -43,15 +44,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             SampleImportSettings sampleImportSettings, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IPlainTransactionManagerProvider plainTransactionManagerProvider, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.sampleImportSettings = sampleImportSettings;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -108,8 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.plainTransactionManager.BeginTransaction();
                 bigTemplate = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
                 questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireId, version).ToString());
+                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireId, version));
                 questionnaireRosterStructure =
                     this.questionnaireRosterStructureStorage.GetById(
                         new QuestionnaireIdentity(questionnaireId, version).ToString());

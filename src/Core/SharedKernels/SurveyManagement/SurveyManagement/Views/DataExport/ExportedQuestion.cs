@@ -133,6 +133,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                     {
                         FillYesNoAnswers(answers, header, result);
                     }
+                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
+                    {
+                        FillMultioptionOrderedAnswers(answers, header, result);
+                    }
                     else
                     {
                         this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
@@ -152,7 +156,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             for (int i = 0; i < result.Length; i++)
             {
                 int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(exportCulture) : "0";
+                result[i] = checkedOptionIndex > -1?"1":"0";
+            }
+        }
+
+        private static void FillMultioptionOrderedAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            for (int i = 0; i < result.Length; i++)
+            {
+                int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                result[i] = checkedOptionIndex > -1? (checkedOptionIndex + 1).ToString(exportCulture):"0";
             }
         }
 

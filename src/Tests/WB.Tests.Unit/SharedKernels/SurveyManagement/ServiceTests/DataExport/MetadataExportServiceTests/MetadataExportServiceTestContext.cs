@@ -45,13 +45,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 Mock.Of<ILogger>(),
                 metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
                 questionnaireLabelFactory ?? new QuestionnaireLabelFactory(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
-                    _ =>
-                        _.GetById(Moq.It.IsAny<string>()) ==
-                        new QuestionnaireExportStructure()),
                 Mock.Of<IPlainQuestionnaireRepository>(
                     _ =>
-                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument));
+                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
+                Mock.Of<IQuestionnaireProjectionsRepository>(
+                    _ =>
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        new QuestionnaireExportStructure()));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

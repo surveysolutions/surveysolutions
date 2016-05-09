@@ -1428,7 +1428,7 @@ namespace WB.Tests.Unit
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId =null)
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId =null, bool areAnswersOrdered=false)
         {
             return new MultyOptionsQuestion
             {
@@ -1440,7 +1440,8 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                AreAnswersOrdered = areAnswersOrdered
             };
         }
 

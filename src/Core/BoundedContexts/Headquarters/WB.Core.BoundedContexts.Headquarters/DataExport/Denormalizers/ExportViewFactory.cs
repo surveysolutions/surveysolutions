@@ -242,6 +242,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_YesNo;
                 }
+                else if(multioptionQuestion.AreAnswersOrdered)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Ordered;
+                }
             }
 
             exportedHeaderItem.VariableName = question.StataExportCaption;
