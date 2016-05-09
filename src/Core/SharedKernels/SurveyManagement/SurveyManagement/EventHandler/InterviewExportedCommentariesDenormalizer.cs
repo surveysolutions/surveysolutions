@@ -36,7 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly string unknown = "Unknown";
 
-        public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
+        public InterviewExportedCommentariesDenormalizer(
+            IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
             IPlainStorageAccessor<UserDocument> userStorage,
             IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {

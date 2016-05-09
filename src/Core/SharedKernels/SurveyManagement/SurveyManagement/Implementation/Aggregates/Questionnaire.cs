@@ -31,7 +31,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
-        private readonly IExportViewFactory exportViewFactory;
 
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
@@ -46,14 +45,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, 
-            IExportViewFactory exportViewFactory)
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
-            this.exportViewFactory = exportViewFactory;
         }
 
         public void SetId(Guid id) => this.Id = id;
