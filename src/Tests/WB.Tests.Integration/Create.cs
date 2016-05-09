@@ -519,8 +519,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(), 
-                new QuestionnaireRosterStructureFactory(),
-                Mock.Of<IExportViewFactory>());
+                new QuestionnaireRosterStructureFactory());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
