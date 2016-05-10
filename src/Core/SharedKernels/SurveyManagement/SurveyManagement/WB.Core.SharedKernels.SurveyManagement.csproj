@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CloneQuestionnaire.cs" />
     <Compile Include="Commands\DeleteQuestionnaire.cs" />
     <Compile Include="Commands\DisableQuestionnaire.cs" />
     <Compile Include="Commands\ImportFromDesigner.cs" />

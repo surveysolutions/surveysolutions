@@ -57,47 +57,69 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         public void ImportFromDesigner(ImportFromDesigner command)
         {
-            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
+            QuestionnaireDocument questionnaireDocument = CastToQuestionnaireDocumentOrThrow(command.Source);
 
-            document.ConnectChildrenWithParent();
+            questionnaireDocument.ConnectChildrenWithParent();
 
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
-            {
-                throw new QuestionnaireException($"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.Id}");
-            }
+                throw new QuestionnaireException(
+                    $"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.Id}");
 
-            var newVersion = this.GetNextVersion();
+            this.StoreQuestionnaireAndProjectionsAsNewVersion(
+                questionnaireDocument, command.SupportingAssembly,
+                command.AllowCensusMode, command.QuestionnaireContentVersion);
+        }
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(this.Id, newVersion, document);
-            this.questionnaireAssemblyFileAccessor.StoreAssembly(this.Id, newVersion, command.SupportingAssembly);
+        public void CloneQuestionnaire(CloneQuestionnaire command)
+        {
+            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
+
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
+
+            questionnaireDocument.Title = command.NewTitle;
+
+            this.StoreQuestionnaireAndProjectionsAsNewVersion(
+                questionnaireDocument, assemblyAsBase64, command.CensusMode, questionnaireBrowseItem.QuestionnaireContentVersion);
+        }
+
+        private void StoreQuestionnaireAndProjectionsAsNewVersion(
+            QuestionnaireDocument questionnaireDocument, string assemblyAsBase64,
+            bool isCensus, long questionnaireContentVersion)
+        {
+            var identity = new QuestionnaireIdentity(this.Id, this.GetNextVersion());
+
+            this.plainQuestionnaireRepository.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
+
+            string projectionId = GetProjectionId(identity);
+
             this.questionnaireBrowseItemStorage.Store(
-                new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion, command.AllowCensusMode,
-                    command.QuestionnaireContentVersion),
-                new QuestionnaireIdentity(this.Id, newVersion).ToString());
-            
-            var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, newVersion).ToString();
+                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion),
+                projectionId);
 
-            this.referenceInfoForLinkedQuestionsStorage.Store(this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(document, newVersion), questionnaireEntityId);
-            this.questionnaireRosterStructureStorage.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(document,newVersion), questionnaireEntityId);
-            this.questionnaireQuestionsInfoStorage.Store(new QuestionnaireQuestionsInfo{
-                QuestionIdToVariableMap =
-                    document.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
-            }, questionnaireEntityId);
+            this.referenceInfoForLinkedQuestionsStorage.Store(
+                this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaireDocument, identity.Version),
+                projectionId);
+
+            this.questionnaireRosterStructureStorage.Store(
+                this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaireDocument, identity.Version),
+                projectionId);
+
+            this.questionnaireQuestionsInfoStorage.Store(
+                new QuestionnaireQuestionsInfo
+                {
+                    QuestionIdToVariableMap = questionnaireDocument
+                        .Find<IQuestion>()
+                        .ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
+                },
+                projectionId);
         }
 
         public void DisableQuestionnaire(DisableQuestionnaire command)
         {
-            var questionnaire = GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
-
-            if (questionnaire==null)
-                throw new QuestionnaireException(string.Format(
-                    "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
-                    this.Id.FormatGuid(), command.QuestionnaireVersion));
-
-            if (questionnaire.Disabled)
-                throw new QuestionnaireException(string.Format(
-                    "Questionnaire {0} ver {1} is already in delete process.",
-                    this.Id.FormatGuid(), command.QuestionnaireVersion));
+            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
 
             var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
@@ -109,16 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         public void DeleteQuestionnaire(DeleteQuestionnaire command)
         {
-            var questionnaire = GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
-            if (questionnaire == null)
-                throw new QuestionnaireException(string.Format(
-                    "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
-                    this.Id.FormatGuid(), command.QuestionnaireVersion));
-
-            if (!questionnaire.Disabled)
-                throw new QuestionnaireException(string.Format(
-                 "Questionnaire {0} ver {1} is not disabled.",
-                 this.Id.FormatGuid(), command.QuestionnaireVersion));
+            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
 
             var browseItem = questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
@@ -137,7 +150,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
                     this.Id, command.Version));
 
-            //this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
+            throw new NotSupportedException("This command is no longer supported and should be reimplemented if we decide to resurrect Supervisor");
+        }
+
+        private long GetNextVersion()
+        {
+            var availableVersions =
+                this.questionnaireBrowseItemStorage.Query(
+                    _ => _.Where(q => q.QuestionnaireId == this.Id).Select(q => q.Version));
+
+            if (!availableVersions.Any())
+                return 1;
+
+            return availableVersions.Max() + 1;
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
@@ -145,26 +170,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             var document = source as QuestionnaireDocument;
 
             if (document == null)
-                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}. QuestionnaireId: {1}",
-                    source.GetType(), source.PublicKey));
+                throw new QuestionnaireException(
+                    $"Cannot import questionnaire with a document of a not supported type {source.GetType()}. QuestionnaireId: {source.PublicKey}");
 
             return document;
         }
 
-        private long GetNextVersion()
+        private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
         {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(questionnaireId, questionnaireVersion);
 
-            var availableVersions =
-                this.questionnaireBrowseItemStorage.Query(
-                    _ => _.Where(q => q.QuestionnaireId == this.Id).Select(q => q.Version));
-            if (!availableVersions.Any())
-                return 1;
-            return availableVersions.Max() + 1;
+            if (questionnaireBrowseItem == null)
+                throw new QuestionnaireException(
+                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is absent in repository.");
+
+            if (questionnaireBrowseItem.Disabled)
+                throw new QuestionnaireException(
+                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is disabled and probably is being deleted.");
         }
 
-        private QuestionnaireBrowseItem GetQuestionnaireBrowseItem(Guid id, long version)
+        private QuestionnaireBrowseItem GetQuestionnaireBrowseItem(Guid questionnaireId, long questionnaireVersion)
         {
-            return this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(id, version).ToString());
+            string projectionId = GetProjectionId(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+
+            var questionnaire = this.questionnaireBrowseItemStorage.GetById(projectionId);
+            return questionnaire;
         }
+
+        private static string GetProjectionId(QuestionnaireIdentity identity) => identity.ToString();
     }
 }

@@ -99,7 +99,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
-                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
 
             this.Bind<User>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
