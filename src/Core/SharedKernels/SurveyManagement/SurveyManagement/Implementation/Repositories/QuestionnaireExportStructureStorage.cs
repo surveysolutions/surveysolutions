@@ -8,14 +8,14 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
 {
-    internal class QuestionnaireProjectionsRepository: IQuestionnaireProjectionsRepository
+    internal class QuestionnaireExportStructureStorage: IQuestionnaireExportStructureStorage
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IExportViewFactory exportViewFactory;
 
         private readonly MemoryCache cache = new MemoryCache(nameof(QuestionnaireExportStructure));
 
-        public QuestionnaireProjectionsRepository(IPlainQuestionnaireRepository plainQuestionnaireRepository, IExportViewFactory exportViewFactory)
+        public QuestionnaireExportStructureStorage(IPlainQuestionnaireRepository plainQuestionnaireRepository, IExportViewFactory exportViewFactory)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.exportViewFactory = exportViewFactory;

@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             interviewDataStorage.Store(interviewData, interviewId);
 
             return new InterviewsExportDenormalizer(interviewDataStorage, interviewReferenceStorage,
-                exportViewFactory, exportRecords,Mock.Of<IQuestionnaireProjectionsRepository>());
+                exportViewFactory, exportRecords,Mock.Of<IQuestionnaireExportStructureStorage>());
         }
     }
 }

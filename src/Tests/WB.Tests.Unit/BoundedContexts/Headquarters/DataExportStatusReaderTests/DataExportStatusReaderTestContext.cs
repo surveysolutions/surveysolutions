@@ -20,13 +20,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IParaDataAccessor paraDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IQuestionnaireProjectionsRepository questionnaireReader =null)
+            IQuestionnaireExportStructureStorage questionnaireReader =null)
         {
             var questionnaireExportStructure = Create.QuestionnaireExportStructure();
             return new DataExportStatusReader(dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
                 paraDataAccessor ?? Mock.Of<IParaDataAccessor>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>(
+                Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
         }
     }

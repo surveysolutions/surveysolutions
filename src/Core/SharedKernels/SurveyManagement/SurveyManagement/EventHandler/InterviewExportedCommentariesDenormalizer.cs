@@ -33,17 +33,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IPlainStorageAccessor<UserDocument> userStorage;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
             IPlainStorageAccessor<UserDocument> userStorage,
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.userStorage = userStorage;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public override object[] Writers => new[] {this.interviewCommentariesStorage};
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             QuestionnaireExportStructure questionnaire =
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),interviewCommentaries.QuestionnaireVersion));
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),interviewCommentaries.QuestionnaireVersion));
             if (questionnaire == null)
                 return;
 
