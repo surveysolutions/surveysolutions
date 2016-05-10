@@ -13,17 +13,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
 {
     public class QuestionnairePreloadingDataViewFactory : IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>
     {
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
-        public QuestionnairePreloadingDataViewFactory(IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+        public QuestionnairePreloadingDataViewFactory(IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public QuestionnairePreloadingDataItem Load(QuestionnairePreloadingDataInputModel input)
         {
             var questionnaire =
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion));
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion));
 
             if (questionnaire == null)
                 return null;

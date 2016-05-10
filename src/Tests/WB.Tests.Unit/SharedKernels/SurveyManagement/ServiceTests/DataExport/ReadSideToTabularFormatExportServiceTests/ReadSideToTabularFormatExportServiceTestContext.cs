@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 new TestInMemoryWriter<InterviewSummary>(),
                 new InterviewDataExportSettings(),
-                Mock.Of<IQuestionnaireProjectionsRepository>(
+                Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
                         _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
         }
