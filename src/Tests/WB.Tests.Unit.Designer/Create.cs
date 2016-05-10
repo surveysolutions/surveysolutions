@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -1354,6 +1355,11 @@ namespace WB.Tests.Unit.Designer
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
                 attachmentMetaStorage: attachmentMetaStorage);
+        }
+
+        public static ITopologicalSorter<T> TopologicalSorter<T>()
+        {
+            return new TopologicalSorter<T>();
         }
     }
 }
