@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('VariableCtrl',
-        function ($scope, $state, questionnaireService, commandService, hotkeys) {
+        function ($scope, $rootScope ,$state, questionnaireService, commandService, hotkeys) {
             var bindVariable = function (variable) {
                 $scope.activeVariable = $scope.activeVariable || {};
                 $scope.activeVariable.breadcrumbs = variable.breadcrumbs;
@@ -14,7 +14,7 @@
                 $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: variable.type }).text;
             };
 
-            var saveVariable = function() {
+            $scope.saveVariable = function(callback) {
                 if ($scope.variableForm.$valid) {
                     commandService.updateVariable($state.params.questionnaireId, $scope.activeVariable).success(function () {
                         $scope.initialVariable = angular.copy($scope.activeVariable);
@@ -45,7 +45,7 @@
                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                    callback: function (event) {
                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                           saveVariable();
+                           $scope.saveVariable();
                            $scope.variableForm.$setPristine();
                            event.preventDefault();
                        }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Caching;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,7 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 cachedQuestionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(
                     this.plainQuestionnaireRepository.GetQuestionnaireDocument(id), id.Version);
 
-                this.cache.Set(idStringKey, cachedQuestionnaireExportStructure,
+                this.cache.Set(idStringKey, 
+                    cachedQuestionnaireExportStructure,
                     DateTime.Now.AddMinutes(5));
             }
 

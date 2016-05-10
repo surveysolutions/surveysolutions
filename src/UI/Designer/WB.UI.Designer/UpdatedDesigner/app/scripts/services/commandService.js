@@ -279,10 +279,11 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         entityId: variable.itemId,
-                        text: variable.text,
-                        expression: variable.expression,
-                        variable: variable.variable,
-                        type: variable.type
+                        variableData: {
+                            expression: variable.expression,
+                            name: variable.variable,
+                            type: variable.type
+                        }
                     }
 
                     return commandCall("UpdateVariable", command);
