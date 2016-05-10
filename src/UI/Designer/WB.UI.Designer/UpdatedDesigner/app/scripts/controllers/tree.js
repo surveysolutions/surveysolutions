@@ -637,7 +637,6 @@
 
                     $rootScope.$emit('itemPasted');
                     $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
-
                 });
             };
 
