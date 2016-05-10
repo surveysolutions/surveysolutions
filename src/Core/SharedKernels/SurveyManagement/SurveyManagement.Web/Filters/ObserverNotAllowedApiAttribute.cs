@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
@@ -14,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             {
                 filterContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
                 {
-                    Content = new StringContent("Observer is not allowed to perform this action")
+                    Content = new StringContent(Strings.ObserverNotAllowed)
                 };
             }
             else

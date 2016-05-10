@@ -252,6 +252,11 @@
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\InterviewersListViewModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
+    <Compile Include="Properties\Pages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -287,6 +292,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\Pages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>

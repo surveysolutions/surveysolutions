@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         /// Gets or sets UserName.
         /// </summary>
         [Required]
-        [Display(Name = "User name")]
+        [Display(ResourceType = typeof(FieldsAndValidations), Name = "LogOnModel_UserName")]
         public string UserName { get; set; }
 
         /// <summary>
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         /// </summary>
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(FieldsAndValidations), Name = "LogOnModel_Password")]
         public string Password { get; set; }
 
     }

@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
 
 @{
@@ -23,7 +24,7 @@
 {
     <table>
         <tr>
-            <td  style="white-space: nowrap;"><span style="color: #36AEE5">Yes</span><span style="color: #E6E8E9"> / </span><span style="color: #36AEE5">No</span></td>
+            <td  style="white-space: nowrap;"><span style="color: #36AEE5">@Pages.YesNoQuestion_Yes</span><span style="color: #E6E8E9"> / </span><span style="color: #36AEE5">@Pages.YesNoQuestion_No</span></td>
             <td></td>
         </tr>
         @foreach (var option in Model.Options)

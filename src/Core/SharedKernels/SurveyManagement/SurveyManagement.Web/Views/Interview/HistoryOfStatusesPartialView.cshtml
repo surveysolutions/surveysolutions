@@ -1,4 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus.ChangeStatusView
 
 <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
@@ -6,16 +7,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="statusHistoryModalLabel">Interview change status history</h4>
+                <h4 class="modal-title" id="statusHistoryModalLabel">@Pages.HistoryOfStatuses_Title</h4>
             </div>
             <div class="modal-body">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 150px">State</th>
-                            <th>with comment</th>
-                            <th style="width: 180px">on</th>
-                            <th>by</th>
+                            <th style="width: 150px">@Pages.HistoryOfStatuses_State</th>
+                            <th>@Pages.HistoryOfStatuses_Comment</th>
+                            <th style="width: 180px">@Pages.HistoryOfStatuses_On</th>
+                            <th>@Pages.HistoryOfStatuses_By</th>
                         </tr>
                     </thead>
                     <tbody>
