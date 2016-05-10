@@ -52,6 +52,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "AddVariable", typeof(AddVariable) },
                     { "UpdateVariable", typeof(UpdateVariable) },
                     { "DeleteVariable", typeof(DeleteVariable) },
+                    { "MoveVariable", typeof(MoveVariable) },
                     
                     //obsolete
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
