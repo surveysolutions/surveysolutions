@@ -8,17 +8,14 @@
             <div class="form-group col-xs-6">
                 <label class="wb-label">Variable type</label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
-                    <button id="questionTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
-                        <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
-                        <span class="vertical-line"></span>
+                    <button id="variableTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
                         {{activeVariable.typeName}}
                         <span class="dropdown-arrow"></span>
                     </button>
 
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="questionTypeBtn">
+                    <ul class="dropdown-menu" role="menu">
                         <li role="presentation" ng-repeat="type in activeVariable.typeOptions">
                             <a role="menuitem" tabindex="-1" ng-click="setType(type.value)">
-                                <i class="icon {{answerTypeClass[type.value]}}"></i>
                                 {{type.text}}
                             </a>
                         </li>
