@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class VariableView : DescendantItemView, IQuestionnaireItem
+    public class VariableView : DescendantItemView, INameable, IQuestionnaireItem
     {
         public VariableView()
         {
@@ -27,5 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public Breadcrumb[] Breadcrumbs { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] TypeOptions { get; set; }
+
+        public string Variable => this.VariableData.Name;
     }
 }
