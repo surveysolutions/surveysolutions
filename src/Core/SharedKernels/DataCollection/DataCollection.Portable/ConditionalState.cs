@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         Question = 1,
         StaticText = 2,
-        Variable=3,
+        Variable = 3,
         Group = 10
     }
 
