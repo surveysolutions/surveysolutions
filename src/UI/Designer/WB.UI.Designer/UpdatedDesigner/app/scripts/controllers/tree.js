@@ -18,7 +18,8 @@
                 question: 'question',
                 roster: 'roster',
                 group: 'group',
-                staticText: 'statictext'
+                staticText: 'statictext',
+                variable: 'variable'
             };
 
             $scope.itemTemplate = function (itemType) {
@@ -218,6 +219,7 @@
                     case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
                     case 'StaticText': return itemTypes.staticText;
                     case 'Chapter': return itemTypes.group;
+                    case 'Variable': return itemTypes.variable;
                 }
                 throw 'unknown item type: ' + item;
             };
