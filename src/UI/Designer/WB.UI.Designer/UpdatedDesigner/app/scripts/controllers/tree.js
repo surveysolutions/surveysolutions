@@ -337,6 +337,23 @@
                 });
             };
 
+            $scope.deleteVariable = function (item) {
+                var itemIdToDelete = item.itemId || $state.params.itemId;
+
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.name || "Untitled variable"));
+
+                modalInstance.result.then(function (confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).success(function () {
+                            questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                            $scope.resetSelection();
+                            $rootScope.$emit('varibleDeleted', itemIdToDelete);
+                        });
+                    }
+                });
+            };
+
+
             var deleteGroupPermanently = function (itemIdToDelete) {
                 commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
                     .success(function () {

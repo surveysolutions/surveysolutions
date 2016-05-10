@@ -383,6 +383,15 @@
                     return commandCall("DeleteQuestion", command);
                 };
 
+                commandService.deleteVariable = function (questionnaireId, itemId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        entityId: itemId
+                    };
+
+                    return commandCall("DeleteVariable", command);
+                };
+
                 commandService.deleteStaticText = function (questionnaireId, itemId) {
                     var command = {
                         questionnaireId: questionnaireId,

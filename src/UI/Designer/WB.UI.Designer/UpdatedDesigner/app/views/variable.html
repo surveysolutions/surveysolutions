@@ -1,7 +1,7 @@
 ﻿<form role="form" name="variableForm" unsaved-warning-form>
     <div class="form-holder">
         <div class="breadcrumbs-container">
-            <div data-item-breadcrumbs data-crumbs="activeGroup.breadcrumbs"></div>
+            <div data-item-breadcrumbs data-crumbs="activeVariable.breadcrumbs"></div>
         </div>
 
         <div class="row">
@@ -27,13 +27,14 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left"/></label><br/>
+                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label>
+                <br />
                 <input id="edit-question-variable-name" type="text" ng-model="activeVariable.variable" spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
         </div>
         <div class="form-group">
-            <label for="edit-group-condition">Expression <help key="expression"/></label>
+            <label for="edit-group-condition">Expression <help key="expression" /></label>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeVariable.expression"></div>
             </div>
@@ -45,7 +46,7 @@
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()" unsaved-warning-clear unsaved-warning-clear>Cancel</button>
         </div>
         <div class="pull-right">
-            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()" unsaved-warning-clear>Delete</button>
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteVariable(activeVariable)" unsaved-warning-clear>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter" />
         </div>
     </div>
