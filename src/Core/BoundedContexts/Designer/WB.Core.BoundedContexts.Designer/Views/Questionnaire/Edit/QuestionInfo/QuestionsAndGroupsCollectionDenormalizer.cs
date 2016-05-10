@@ -592,7 +592,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return null;
             }
 
-            var oldstaticTextDetailsView = state.Variables.FirstOrDefault(x => x.Id == @event.EventSourceId);
+            var oldstaticTextDetailsView = state.Variables.FirstOrDefault(x => x.Id == @event.Payload.EntityId);
             if (oldstaticTextDetailsView == null)
             {
                 return state;
