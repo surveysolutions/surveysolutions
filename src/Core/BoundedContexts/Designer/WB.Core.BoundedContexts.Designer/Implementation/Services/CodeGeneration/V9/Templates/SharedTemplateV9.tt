@@ -92,7 +92,7 @@ void VariablesStatesInLevelConstructor(List<VariableTemplateModel> variables)
 	foreach (var variable in variables)
 	{#>
 		EnablementStates.Add(<#=variable.StateName#>.ItemId, <#=variable.StateName#>);
-		AddUpdaterVariableToMap(IdOf.<#=variable.IdName#>, new VariableAccessor(()=><#=variable.VariableName#>, (value)=>{ <#=variable.VariablePreviousValueName#>=(<#=variable.TypeName#>)value;},()=><#=variable.VariablePreviousValueName#>));
+		AddVariableAccessorToMap(IdOf.<#=variable.IdName#>, new VariableAccessor(()=><#=variable.VariableName#>, (value)=>{ <#=variable.VariablePreviousValueName#>=(<#=variable.TypeName#>)value;},()=><#=variable.VariablePreviousValueName#>));
 		<#+ 
 	}
 }
@@ -168,7 +168,7 @@ void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
 <#+
 	}
 }
-void VariablesStateDefenitions(List<VariableTemplateModel> variables)
+void VariablesStateDefinitions(List<VariableTemplateModel> variables)
 {
 	foreach (var variable in variables) 
 	{
