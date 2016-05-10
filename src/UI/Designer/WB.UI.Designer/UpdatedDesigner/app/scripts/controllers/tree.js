@@ -33,7 +33,6 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            
             $rootScope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
 
             var scrollDown = 'down';
@@ -267,13 +266,16 @@
             };
 
             $scope.isGroup = function (item) {
-
-                return !($scope.isQuestion(item) || $scope.isStaticText(item));
+                return !($scope.isQuestion(item) || $scope.isStaticText(item) || $scope.isVariable(item));
             };
 
             $scope.isStaticText = function (item) {
                 return item.hasOwnProperty('text');
             };
+
+            $scope.isVariable = function(item) {
+                return item.hasOwnProperty('variableData');
+            }
 
             $scope.showStartScreen = function () {
                 return _.isEmpty($scope.items);
@@ -313,7 +315,15 @@
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
-                        } else {
+                            
+                        }
+                        else if ($scope.isVariable(movedItem)) {
+                            questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .error(function () {
+                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                });
+                        }
+                        else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
@@ -437,13 +447,15 @@
                 var itemToMoveId = $state.params.itemId;
                 var itemToMove = questionnaireService.findItem($scope.items, itemToMoveId);
 
-
                 var moveCommand;
                 if ($scope.isStaticText(itemToMove)) {
                     moveCommand = questionnaireService.moveStaticText;
                 }
                 else if ($scope.isGroup(itemToMove)) {
                     moveCommand = questionnaireService.moveGroup;
+                }
+                else if ($scope.isVariable(itemToMove)) {
+                    moveCommand = questionnaireService.moveVariable;
                 }
                 else {
                     moveCommand = questionnaireService.moveQuestion;
@@ -530,7 +542,7 @@
 
                 var emptyVariable = utilityService.createEmptyVariable(parent);
 
-                commandService.addStaticText($state.params.questionnaireId, emptyVariable, parent.itemId, index)
+                commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId, index)
                     .success(function() {
                         parent.items.splice(index, 0, emptyVariable);
                         emitAddedItemState("variable", emptyVariable.itemId);

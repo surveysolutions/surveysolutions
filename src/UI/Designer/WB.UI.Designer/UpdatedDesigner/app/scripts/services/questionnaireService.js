@@ -78,6 +78,16 @@
                     );
                 };
 
+                questionnaireService.moveVariable = function (entityId, index, destGroupId, questionnaireId) {
+                    return commandService.execute('MoveVariable', {
+                            targetEntityId: destGroupId,
+                            targetIndex: index,
+                            entityId: entityId,
+                            questionnaireId: questionnaireId
+                        }
+                    );
+                };
+
                 questionnaireService.removeItemWithId = function(items, itemId) {
                     var item = questionnaireService.findItem(items, itemId);
                     if (item) {
