@@ -310,8 +310,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             var selectionIndex = this.SelectionStart;
             this.AfterTextChanged -= this.NumericEditText_AfterTextChanged;
             this.Text = text;
-            var value = (text?.Length ?? 0) - (this.previousText?.Length ?? 0);
-            var newSelectionIndex = selectionIndex + (value != 0 ? (value > 0 ? value - 1 : value + 1) : 0);
+            var numberOfInsertedOfDeletedChars = (text?.Length ?? 0) - (this.previousText?.Length ?? 0);
+            var newSelectionIndex = selectionIndex +
+                                    (numberOfInsertedOfDeletedChars != 0
+                                        ? (numberOfInsertedOfDeletedChars > 0
+                                            ? numberOfInsertedOfDeletedChars - 1
+                                            : numberOfInsertedOfDeletedChars + 1)
+                                        : 0);
             this.SetSelection(newSelectionIndex < 0 ? 0 : newSelectionIndex);
 
             this.previousText = text;
