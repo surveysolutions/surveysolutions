@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        protected void AddUpdaterVariableToMap(Guid id, VariableAccessor acessor)
+        protected void AddVariableAccessorToMap(Guid id, VariableAccessor acessor)
         {
             this.VariableMap.Add(id, acessor);
         }
@@ -109,9 +109,9 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             VariableMap[variableId].SetPreviousValue(value);
         }
 
-        protected EnablementChanges ProcessEnablementConditionsIncludingVariables()
+        protected new virtual EnablementChanges ProcessEnablementConditionsImpl()
         {
-            var enablementChanges = this.ProcessEnablementConditionsImpl();
+            var enablementChanges = base.ProcessEnablementConditionsImpl();
 
             var variablesToBeEnabled = this.EnablementStates.Values
                 .Where(x => x.Type == ItemType.Variable)

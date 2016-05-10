@@ -23,7 +23,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	}
 	 
 	private <#=Model.TypeName#>(  
-		decimal[] rosterVector, 
+		decimal[] rosterVector,  
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
@@ -120,7 +120,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 <#
 	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);
-	VariablesStateDefenitions(Model.Variables);
+	VariablesStateDefinitions(Model.Variables);
 #>
 	//static texts
 <#
@@ -164,7 +164,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 
 	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
 
-	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsIncludingVariables();
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
 
 	private void SetParentImpl(IExpressionExecutable parent)
 	{			
