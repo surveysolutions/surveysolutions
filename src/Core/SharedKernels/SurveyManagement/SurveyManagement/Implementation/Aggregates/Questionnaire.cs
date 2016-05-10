@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         public void DeleteQuestionnaire(DeleteQuestionnaire command)
         {
-            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
+            this.ThrowIfQuestionnaireIsAbsentOrNotDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
 
             var browseItem = questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
@@ -178,15 +178,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
         {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItemOrThrow(questionnaireId, questionnaireVersion);
+
+            if (questionnaireBrowseItem.Disabled)
+                throw new QuestionnaireException(
+                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is disabled and probably is being deleted.");
+        }
+
+        private void ThrowIfQuestionnaireIsAbsentOrNotDisabled(Guid questionnaireId, long questionnaireVersion)
+        {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItemOrThrow(questionnaireId, questionnaireVersion);
+
+            if (!questionnaireBrowseItem.Disabled)
+                throw new QuestionnaireException(
+                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is not disabled.");
+        }
+
+        private QuestionnaireBrowseItem GetQuestionnaireBrowseItemOrThrow(Guid questionnaireId, long questionnaireVersion)
+        {
             QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(questionnaireId, questionnaireVersion);
 
             if (questionnaireBrowseItem == null)
                 throw new QuestionnaireException(
                     $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is absent in repository.");
 
-            if (questionnaireBrowseItem.Disabled)
-                throw new QuestionnaireException(
-                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is disabled and probably is being deleted.");
+            return questionnaireBrowseItem;
         }
 
         private QuestionnaireBrowseItem GetQuestionnaireBrowseItem(Guid questionnaireId, long questionnaireVersion)
