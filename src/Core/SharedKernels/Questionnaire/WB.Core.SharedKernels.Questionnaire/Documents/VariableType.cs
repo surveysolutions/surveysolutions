@@ -2,10 +2,10 @@
 {
     public enum VariableType
     {
-        Integer,
-        Long,
-        Boolean,
-        DateTime,
-        String
+        Integer = 1,
+        Decimal = 2,
+        Boolean = 3,
+        DateTime = 4,
+        String = 5
     }
 }
