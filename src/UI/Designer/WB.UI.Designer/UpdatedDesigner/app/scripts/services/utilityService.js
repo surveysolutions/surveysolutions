@@ -129,6 +129,7 @@
                     var emptyVariable = {
                         itemId: newId,
                         itemType: 'Variable',
+                        variableData: {},
                         getParentItem: function () { return parent; }
                     };
                     return emptyVariable;

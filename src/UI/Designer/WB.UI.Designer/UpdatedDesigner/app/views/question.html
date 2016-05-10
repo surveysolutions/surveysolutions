@@ -4,7 +4,9 @@
     </div>
     <div class="form-holder">
 
-        <div class="breadcrumbs-container"><div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div></div>
+        <div class="breadcrumbs-container">
+            <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
+        </div>
 
         <div class="row">
             <div class="form-group col-xs-6">
@@ -64,16 +66,16 @@
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction"/></label>
+                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
 
-                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions"/>
+                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
                 <label for="cb-hide-instructions"><span></span>Hide instruction</label>
 
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
 
             <div class="form-group col-xs-1">
-                <button type="button" class="btn cross instructions-cross" 
+                <button type="button" class="btn cross instructions-cross"
                         ng-click="showInstruction=false;activeQuestion.instructions='';activeQuestion.hideInstructions=false;questionForm.$setDirty();"></button>
             </div>
         </div>
@@ -82,8 +84,8 @@
             <div class="enabling-group-marker"></div>
             <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
 
-                <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
-                <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
@@ -128,7 +130,7 @@
             </div>
         </div>
 
-    <script type="text/ng-template" id="SingleOption-template.html">
+        <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -189,7 +191,7 @@
             <div class="table-holder">
                 <div class="row">
                     <div class="col-xs-5" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked">
-                        <div  class="checkbox checkbox-in-column">
+                        <div class="checkbox checkbox-in-column">
                             <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
                             <label for="cb-is-cascading"><span></span>Cascading combo box</label>
                         </div>
@@ -223,7 +225,7 @@
             </div>
         </script>
 
-    <script type="text/ng-template" id="linkTemplate.html">
+        <script type="text/ng-template" id="linkTemplate.html">
             <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
                 <label for="linkedEntitySource">Bind to question from roster group</label>
@@ -233,7 +235,7 @@
 
                         <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
                             <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
-                            <span class="chosen-item"  ng-if="activeQuestion.linkedToEntity.type!=='roster'"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
+                            <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
                             <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">{{activeQuestion.linkedToEntity.title}}</span>
                         </span>
                         <span class="dropdown-arrow"></span>
@@ -266,7 +268,7 @@
                 </p>
                 <hr />
                 <label for="linkedFilterExpression">Filter</label>
-                
+
                 <div class="pseudo-form-control">
                     <div id="linkedFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
                 </div>
@@ -386,12 +388,12 @@
                     </div>
                 </div>
 
-            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
-            </div>
+                <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
+                </div>
             </div>
         </script>
 
-    <script type="text/ng-template" id="Numeric-template.html">
+        <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-md-5">
                     <div class="checkbox checkbox-in-column">

@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
-                Value = VariableType.Numeric.ToString(),
+                Value = VariableType.Decimal.ToString(),
                 Text = "Decimal"
             },
             new SelectOption
@@ -63,13 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = VariableType.String.ToString(),
                 Text = "String"
-            },
-            new SelectOption
-            {
-                Value = VariableType.Boolean.ToString(),
-                Text = "Boolean"
-            },
-
+            }
         };
 
         private static readonly SelectOption[] QuestionTypeOptions =
