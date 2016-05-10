@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
             this.CommandService.Execute(new CloneQuestionnaire(
-                id, version, "I am cloned and not census", censusMode: false, userId: this.GlobalInfo.GetCurrentUser().Id));
+                id, version, "I am cloned and not census", userId: this.GlobalInfo.GetCurrentUser().Id));
 
             return this.RedirectToAction(nameof(this.Index));
         }

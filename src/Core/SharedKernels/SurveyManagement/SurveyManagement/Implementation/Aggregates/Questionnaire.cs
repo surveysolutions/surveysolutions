@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             questionnaireDocument.Title = command.NewTitle;
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                questionnaireDocument, assemblyAsBase64, command.CensusMode, questionnaireBrowseItem.QuestionnaireContentVersion);
+                questionnaireDocument, assemblyAsBase64, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.QuestionnaireContentVersion);
         }
 
         private void StoreQuestionnaireAndProjectionsAsNewVersion(
