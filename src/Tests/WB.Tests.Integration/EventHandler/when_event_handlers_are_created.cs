@@ -121,7 +121,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
-            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireProjectionsRepository)
+            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage)
         };
 
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)
