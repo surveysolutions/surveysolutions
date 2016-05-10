@@ -10,6 +10,7 @@ using Android.Util;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
+using Math = System.Math;
 using String = System.String;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
@@ -307,17 +308,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private string previousText;
         private void SetTextImpl(string text)
         {
-            var selectionIndex = this.SelectionStart;
+            var newSelectionStart = this.SelectionStart;
             this.AfterTextChanged -= this.NumericEditText_AfterTextChanged;
             this.Text = text;
-            var numberOfInsertedOfDeletedChars = (text?.Length ?? 0) - (this.previousText?.Length ?? 0);
-            var newSelectionIndex = selectionIndex +
-                                    (numberOfInsertedOfDeletedChars != 0
-                                        ? (numberOfInsertedOfDeletedChars > 0
-                                            ? numberOfInsertedOfDeletedChars - 1
-                                            : numberOfInsertedOfDeletedChars + 1)
-                                        : 0);
-            this.SetSelection(newSelectionIndex < 0 ? 0 : newSelectionIndex);
+            var numberOfInsertedOrDeletedChars = (text?.Length ?? 0) - (this.previousText?.Length ?? 0);
+            if (numberOfInsertedOrDeletedChars != 0)
+            {
+                var cursorPositionAjustment = numberOfInsertedOrDeletedChars > 0 ? -1 : 1;
+                newSelectionStart += numberOfInsertedOrDeletedChars + cursorPositionAjustment;
+                newSelectionStart = Math.Max(newSelectionStart, 0);
+            }
+            
+            this.SetSelection(newSelectionStart);
 
             this.previousText = text;
             this.AfterTextChanged += this.NumericEditText_AfterTextChanged;
