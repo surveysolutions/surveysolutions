@@ -3,7 +3,7 @@
     public enum VariableType
     {
         Integer,
-        Numeric,
+        Long,
         Boolean,
         DateTime,
         String
