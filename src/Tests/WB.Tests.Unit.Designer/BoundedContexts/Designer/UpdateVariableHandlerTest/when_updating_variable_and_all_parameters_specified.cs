@@ -65,6 +65,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "name";
         private static string variableExpression = "expression";
-        private static VariableType variableType = VariableType.Numeric;
+        private static VariableType variableType = VariableType.Decimal;
     }
 }

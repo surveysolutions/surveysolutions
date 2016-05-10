@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableUpdated> @event)
         {
-            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.EventSourceId.FormatGuid());
+            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.Payload.EntityId.FormatGuid());
 
             if (variableView == null)
                 return state;

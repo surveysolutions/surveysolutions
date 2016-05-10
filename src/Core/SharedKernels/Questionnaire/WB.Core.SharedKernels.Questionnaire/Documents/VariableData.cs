@@ -2,6 +2,10 @@
 {
     public class VariableData
     {
+        protected VariableData()
+        {
+        }
+
         public VariableData(VariableType type, string name, string expression)
         {
             this.Type = type;
@@ -9,8 +13,8 @@
             this.Expression = expression;
         }
 
-        public VariableType Type { get; }
-        public string Name { get; }
-        public string Expression { get; }
+        public VariableType Type { get; set; }
+        public string Name { get; set; }
+        public string Expression { get; set; }
     }
 }

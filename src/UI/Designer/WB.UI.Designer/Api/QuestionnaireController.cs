@@ -95,7 +95,8 @@ namespace WB.UI.Designer.Api
                 Expression = variableView.VariableData.Expression,
                 name = variableView.VariableData.Name,
                 TypeOptions = variableView.TypeOptions,
-                Type = variableView.VariableData.Type
+                Type = variableView.VariableData.Type,
+                breadcrumbs = variableView.Breadcrumbs
             });
 
             return result;
