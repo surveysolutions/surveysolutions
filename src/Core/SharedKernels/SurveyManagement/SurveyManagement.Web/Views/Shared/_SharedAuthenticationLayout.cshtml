@@ -3,6 +3,7 @@
 @using Microsoft.Practices.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
 <html>
@@ -23,7 +24,7 @@
     <footer>
         <p class="text-muted">
             <div class="text-center">
-                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
             </div>
             <div class="text-center">
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())

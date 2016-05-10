@@ -180,4 +180,31 @@
   <data name="SupervisorFieldName" xml:space="preserve">
     <value>Supervisor</value>
   </data>
+  <data name="LogOnModel_UserName" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="LogOnModel_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+    <value>Enter valid Guid in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, please</value>
+  </data>
+  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+    <value>You must choose a file to upload</value>
+  </data>
+  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+    <value>Please select file</value>
+  </data>
+  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+    <value>CSV File</value>
+  </data>
+  <data name="BatchUploadModel_Required" xml:space="preserve">
+    <value>You must choose a file to upload</value>
+  </data>
+  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+    <value>Please select file</value>
+  </data>
+  <data name="BatchUploadModel_FileName" xml:space="preserve">
+    <value>CSV File</value>
+  </data>
 </root>

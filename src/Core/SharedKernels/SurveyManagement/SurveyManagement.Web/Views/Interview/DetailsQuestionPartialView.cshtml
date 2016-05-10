@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
 
@@ -59,7 +60,7 @@
         <div class="form-horizontal">
             <div class="has-feedback">
                 <div>
-                    <input type="text" class="form-control" placeholder="Write a comment..." data-bind="enterKey: addComment.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+                    <input type="text" class="form-control" placeholder="@Pages.DetailsQuestionPartialView_WriteCommentPlaceholder" data-bind="enterKey: addComment.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
                     <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>

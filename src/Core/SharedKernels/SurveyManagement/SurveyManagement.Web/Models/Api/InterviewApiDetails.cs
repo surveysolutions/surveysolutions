@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
@@ -53,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                         var key = CreateLeveKeyFromPropagationVector(rosterApiItem.RosterVector.Take(rosterApiItem.RosterVector.Length - 1).ToArray());
 
                         if (!rosters.ContainsKey(key))
-                            throw new Exception("Error in structure");
+                            throw new Exception(Strings.ErrorInStructure);
 
                         rosters[key].Rosters.Add(rosterApiItem);
                     }

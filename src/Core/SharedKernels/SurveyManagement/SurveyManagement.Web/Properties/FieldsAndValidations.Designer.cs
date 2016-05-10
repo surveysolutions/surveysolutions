@@ -61,6 +61,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CSV File.
+        /// </summary>
+        public static string BatchUploadModel_FileName {
+            get {
+                return ResourceManager.GetString("BatchUploadModel_FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must choose a file to upload.
+        /// </summary>
+        public static string BatchUploadModel_Required {
+            get {
+                return ResourceManager.GetString("BatchUploadModel_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select file.
+        /// </summary>
+        public static string BatchUploadModel_ValidationErrorMessage {
+            get {
+                return ResourceManager.GetString("BatchUploadModel_ValidationErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password and confirmation password do not match.
         /// </summary>
         public static string ConfirmPasswordErrorMassage {
@@ -120,6 +147,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string IsLockedFieldName {
             get {
                 return ResourceManager.GetString("IsLockedFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string LogOnModel_Password {
+            get {
+                return ResourceManager.GetString("LogOnModel_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name.
+        /// </summary>
+        public static string LogOnModel_UserName {
+            get {
+                return ResourceManager.GetString("LogOnModel_UserName", resourceCulture);
             }
         }
         
@@ -228,6 +273,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string SupervisorFieldName {
             get {
                 return ResourceManager.GetString("SupervisorFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter valid Guid in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, please.
+        /// </summary>
+        public static string TroubleshootModel_InterviewId_ErrorMessage {
+            get {
+                return ResourceManager.GetString("TroubleshootModel_InterviewId_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CSV File.
+        /// </summary>
+        public static string UserBatchUploadModel_File_CSV_File {
+            get {
+                return ResourceManager.GetString("UserBatchUploadModel_File_CSV_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must choose a file to upload.
+        /// </summary>
+        public static string UserBatchUploadModel_Required_ErrorMessage {
+            get {
+                return ResourceManager.GetString("UserBatchUploadModel_Required_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select file.
+        /// </summary>
+        public static string UserBatchUploadModel_Validation_ErrorMessage {
+            get {
+                return ResourceManager.GetString("UserBatchUploadModel_Validation_ErrorMessage", resourceCulture);
             }
         }
         
