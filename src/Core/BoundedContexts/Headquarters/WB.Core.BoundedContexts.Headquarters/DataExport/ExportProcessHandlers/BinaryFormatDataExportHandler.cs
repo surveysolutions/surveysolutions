@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IArchiveUtils archiveUtils, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.archiveUtils = archiveUtils;
             this.interviewDatas = interviewDatas;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             QuestionnaireExportStructure questionnaire =
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
                         dataExportProcessDetails.Questionnaire.Version));
        

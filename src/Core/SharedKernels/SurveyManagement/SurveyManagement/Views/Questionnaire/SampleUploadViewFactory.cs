@@ -19,13 +19,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
     public class SampleUploadViewFactory : IViewFactory<SampleUploadViewInputModel, SampleUploadView>
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
         public SampleUploadViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.questionnaires = questionnaires;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public SampleUploadView Load(SampleUploadViewInputModel input)
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
                 return null;
 
             var questionnaireExportStructure =
-                questionnaireProjectionsRepository.GetQuestionnaireExportStructure(questionnaireId);
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
 
             if (questionnaireExportStructure == null)
                 return null;

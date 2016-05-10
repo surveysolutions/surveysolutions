@@ -134,7 +134,7 @@
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireProjectionsRepository.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
@@ -158,7 +158,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Repositories\IQuestionnaireProjectionsRepository.cs" />
+    <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
     <Compile Include="Services\AndroidPackageInfo.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />

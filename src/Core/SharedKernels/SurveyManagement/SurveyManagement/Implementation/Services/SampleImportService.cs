@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly SampleImportSettings sampleImportSettings;
@@ -46,14 +46,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.sampleImportSettings = sampleImportSettings;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.plainTransactionManager.BeginTransaction();
                 bigTemplate = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
                 questionnaireExportStructure =
-                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                         new QuestionnaireIdentity(questionnaireId, version));
                 questionnaireRosterStructure =
                     this.questionnaireRosterStructureStorage.GetById(

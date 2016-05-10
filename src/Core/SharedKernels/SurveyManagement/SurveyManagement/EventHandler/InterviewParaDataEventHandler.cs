@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<UserDocument> userReader;
 
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
@@ -71,13 +71,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IPlainStorageAccessor<UserDocument> userReader,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
 
@@ -438,7 +438,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var cachedQuestionnaireExportStructure =
                 this.cacheQuestionnaireExportStructure.GetOrAdd(
                     new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                    (key) => this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
+                    (key) => this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
 
             ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
             return cachedQuestionnaireExportStructure;
