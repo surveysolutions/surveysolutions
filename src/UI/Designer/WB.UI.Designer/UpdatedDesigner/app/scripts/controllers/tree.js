@@ -669,6 +669,12 @@
                 staticText.hasCondition = data.hasCondition;
             });
 
+            $rootScope.$on('variableUpdated', function (event, data) {
+                var variable = questionnaireService.findItem($scope.items, data.itemId);
+                if (_.isNull(variable)) return;
+                variable.variableData.name = data.name;
+            });
+
             $rootScope.$on('groupUpdated', function (event, data) {
                 if ($scope.currentChapter.itemId === data.itemId) {
                     $scope.currentChapter.title = data.title;

@@ -63,13 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = VariableType.String.ToString(),
                 Text = "String"
-            },
-            new SelectOption
-            {
-                Value = VariableType.Boolean.ToString(),
-                Text = "Boolean"
-            },
-
+            }
         };
 
         private static readonly SelectOption[] QuestionTypeOptions =

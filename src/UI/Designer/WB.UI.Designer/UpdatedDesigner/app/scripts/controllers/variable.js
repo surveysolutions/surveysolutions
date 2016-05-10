@@ -1,6 +1,12 @@
 ﻿angular.module('designerApp')
     .controller('VariableCtrl',
-        function ($scope, $rootScope ,$state, questionnaireService, commandService, hotkeys) {
+        function ($scope, $rootScope, $state, questionnaireService, commandService, hotkeys) {
+            var markFormAsChanged = function () {
+                if ($scope.variableForm) {
+                    $scope.variableForm.$setDirty();
+                }
+            }
+
             var bindVariable = function (variable) {
                 $scope.activeVariable = $scope.activeVariable || {};
                 $scope.activeVariable.breadcrumbs = variable.breadcrumbs;
@@ -14,13 +20,20 @@
                 $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: variable.type }).text;
             };
 
+            $scope.setType = function (type) {
+                $scope.activeVariable.type = type;
+                $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: type }).text;
+
+                markFormAsChanged();
+            };
+
             $scope.saveVariable = function(callback) {
                 if ($scope.variableForm.$valid) {
                     commandService.updateVariable($state.params.questionnaireId, $scope.activeVariable).success(function () {
                         $scope.initialVariable = angular.copy($scope.activeVariable);
                         $rootScope.$emit('variableUpdated', {
                             itemId: $scope.activeVariable.itemId,
-                            title: $scope.activeVariable.title
+                            name: $scope.activeVariable.variable
                         });
                         if (_.isFunction(callback)) {
                             callback();
@@ -38,6 +51,7 @@
             if (hotkeys.get(saveCombination) !== false) {
                 hotkeys.del(saveCombination);
             }
+
             hotkeys.bindTo($scope)
                .add({
                    combo: saveCombination,
