@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
 
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IDataQueryFactory dataQueryFactory;
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IDataQueryFactory dataQueryFactory,
             IDatasetWriterFactory datasetWriterFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.dataQueryFactory = dataQueryFactory;
         }
 
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                             new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
 
                 if (questionnaireExportStructure == null)

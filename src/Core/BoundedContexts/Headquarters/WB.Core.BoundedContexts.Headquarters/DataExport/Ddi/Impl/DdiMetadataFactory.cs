@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 
         private readonly ILogger logger;
 
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
@@ -34,14 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             IMetaDescriptionFactory metaDescriptionFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
         {
             return
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(questionnaireId);
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)
