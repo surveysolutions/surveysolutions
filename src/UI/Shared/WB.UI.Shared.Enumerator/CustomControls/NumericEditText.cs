@@ -304,11 +304,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 : this.Format(textWithoutSign));
         }
 
+        private string previousText;
         private void SetTextImpl(string text)
         {
+            var selectionIndex = this.SelectionStart;
             this.AfterTextChanged -= this.NumericEditText_AfterTextChanged;
             this.Text = text;
-            this.SetSelection(text.Length);
+            var value = (text?.Length ?? 0) - (this.previousText?.Length ?? 0);
+            var newSelectionIndex = selectionIndex + (value != 0 ? (value > 0 ? value - 1 : value + 1) : 0);
+            this.SetSelection(newSelectionIndex < 0 ? 0 : newSelectionIndex);
+
+            this.previousText = text;
             this.AfterTextChanged += this.NumericEditText_AfterTextChanged;
         }
 
