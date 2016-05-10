@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
@@ -10,6 +11,88 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
     /// <seealso cref="http://en.wikipedia.org/wiki/Topological_sorting"/>
     public class TopologicalSorter<T> : ITopologicalSorter<T>
     {
+        public List<List<T>> DetectCycles(Dictionary<T, T[]> dependencies)
+        {
+            if (dependencies == null)
+            {
+                throw new ArgumentException("dependencies");
+            }
+
+            var vertices = BuildDependencyGraph(dependencies);
+
+            var listOfConnectedComponents = new List<List<Vertex<T>>>();
+            var index = 0;
+            var nodeStatck = new Stack<Vertex<T>>();
+
+            
+            foreach (var vertex in vertices)
+            {
+                if (vertex.Index < 0)
+                {
+                    StrongConnect(vertex, listOfConnectedComponents, index, nodeStatck);
+                }
+            }
+
+            return listOfConnectedComponents.Where(AreVericesInCycle).Select(x => x.Select(v => v.Value).ToList()).ToList();
+        }
+
+        private bool AreVericesInCycle(List<Vertex<T>> vertices)
+        {
+            if (vertices.Count > 1)
+                return true;
+
+            var vertex = vertices.Single();
+
+            return vertex.Dependencies.Select(x => x.Value).Contains(vertex.Value);
+        }
+
+        private static List<Vertex<T>> BuildDependencyGraph(Dictionary<T, T[]> dependencies)
+        {
+            var uniqueVertexValues = dependencies.Keys.Union(dependencies.SelectMany(x => x.Value)).Distinct();
+
+            Dictionary<T, Vertex<T>> vertices = uniqueVertexValues
+                .ToDictionary(vertextValue => vertextValue, vertextValue => new Vertex<T>(vertextValue));
+
+            foreach (var dependency in dependencies)
+            {
+                dependency.Value.ForEach(x => vertices[dependency.Key].Dependencies.Add(vertices[x]));
+            }
+
+            return vertices.Values.ToList();
+        }
+
+        private static void StrongConnect(Vertex<T> vertex, List<List<Vertex<T>>> listOfDetectedCycles, int index, Stack<Vertex<T>> nodeStatck)
+        {
+            vertex.Index = index;
+            vertex.LowLink = index;
+            index++;
+            nodeStatck.Push(vertex);
+
+            foreach (Vertex<T> dependency in vertex.Dependencies)
+            {
+                if (dependency.Index < 0)
+                {
+                    StrongConnect(dependency, listOfDetectedCycles, index, nodeStatck);
+                    vertex.LowLink = Math.Min(vertex.LowLink, dependency.LowLink);
+                }
+                else if (nodeStatck.Contains(dependency))
+                {
+                    vertex.LowLink = Math.Min(vertex.LowLink, dependency.Index);
+                }
+            }
+
+            if (vertex.LowLink != vertex.Index) return;
+            List<Vertex<T>> cycle = new List<Vertex<T>>();
+            Vertex<T> nodeInCycle;
+            do
+            {
+                nodeInCycle = nodeStatck.Pop();
+                cycle.Add(nodeInCycle);
+            } while (vertex != nodeInCycle);
+
+            listOfDetectedCycles.Add(cycle);
+        }
+
         public List<T> Sort(Dictionary<T, T[]> dependencies)
         {
             if (dependencies == null || dependencies.Values
@@ -57,7 +140,7 @@ function visit(node n)
 
             foreach (var dependentItem in dependencies[item])
             {
-                this.Visit(dependentItem, temporaryMarked, dependencies,unmarkedNodes, orderedItems);
+                this.Visit(dependentItem, temporaryMarked, dependencies, unmarkedNodes, orderedItems);
             }
             temporaryMarked.Remove(item);
             orderedItems.Insert(0, item);
