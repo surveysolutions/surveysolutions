@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Person,
         Macro,
         LookupTable,
-        Attachment
+        Attachment,
+        Variable
     }
 }
