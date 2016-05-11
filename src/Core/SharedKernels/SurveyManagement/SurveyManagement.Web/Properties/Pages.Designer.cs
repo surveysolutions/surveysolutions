@@ -808,6 +808,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active users.
+        /// </summary>
+        public static string Interviewers_ActiveUsers {
+            get {
+                return ResourceManager.GetString("Interviewers_ActiveUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive.
+        /// </summary>
+        public static string Interviewers_Archive {
+            get {
+                return ResourceManager.GetString("Interviewers_Archive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived users.
+        /// </summary>
+        public static string Interviewers_ArchivedUsers {
+            get {
+                return ResourceManager.GetString("Interviewers_ArchivedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to interviewer(s) will be archived..
         /// </summary>
         public static string Interviewers_ArchiveInterviewers {
@@ -840,6 +867,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string Interviewers_ArchiveStatusTitle {
             get {
                 return ResourceManager.GetString("Interviewers_ArchiveStatusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        public static string Interviewers_Connected {
+            get {
+                return ResourceManager.GetString("Interviewers_Connected", resourceCulture);
             }
         }
         
@@ -880,6 +916,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not connected.
+        /// </summary>
+        public static string Interviewers_NotConnected {
+            get {
+                return ResourceManager.GetString("Interviewers_NotConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         public static string Interviewers_SupervisorTitle {
@@ -894,6 +939,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string Interviewers_Title {
             get {
                 return ResourceManager.GetString("Interviewers_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unarchive.
+        /// </summary>
+        public static string Interviewers_Unarchive {
+            get {
+                return ResourceManager.GetString("Interviewers_Unarchive", resourceCulture);
             }
         }
         
@@ -952,6 +1006,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide filter.
+        /// </summary>
+        public static string Layout_HideFilter {
+            get {
+                return ResourceManager.GetString("Layout_HideFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legal.
         /// </summary>
         public static string Layout_Legal {
@@ -975,6 +1038,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string Layout_RightsReserved {
             get {
                 return ResourceManager.GetString("Layout_RightsReserved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show filter.
+        /// </summary>
+        public static string Layout_ShowFilter {
+            get {
+                return ResourceManager.GetString("Layout_ShowFilter", resourceCulture);
             }
         }
         

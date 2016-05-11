@@ -22,14 +22,14 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Settings {
+    internal class MapReport {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Settings() {
+        internal MapReport() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.Settings", global::System.Reflection.Assembly.Load("App_GlobalResources"));
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.MapReport", global::System.Reflection.Assembly.Load("App_GlobalResources"));
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable encryption.
+        ///   Looks up a localized string similar to details.
         /// </summary>
-        internal static string EnableEncryption {
+        internal static string details {
             get {
-                return ResourceManager.GetString("EnableEncryption", resourceCulture);
+                return ResourceManager.GetString("details", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export encryption settings.
+        ///   Looks up a localized string similar to Not all markers were loaded for current zoom level. Please zoom in and reload markers..
         /// </summary>
-        internal static string ExportEncryptionSettings {
+        internal static string NotAllMarkers {
             get {
-                return ResourceManager.GetString("ExportEncryptionSettings", resourceCulture);
+                return ResourceManager.GetString("NotAllMarkers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Encryption.
+        ///   Looks up a localized string similar to Reload markers on map.
         /// </summary>
-        internal static string ExportEncryption_Title {
+        internal static string ReloadMarkers {
             get {
-                return ResourceManager.GetString("ExportEncryption_Title", resourceCulture);
+                return ResourceManager.GetString("ReloadMarkers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to View interview content.
         /// </summary>
-        internal static string Password {
+        internal static string ViewInterviewContent {
             get {
-                return ResourceManager.GetString("Password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to regenerate password? You will need to regenerate exported data in order to open it..
-        /// </summary>
-        internal static string RegeneratePasswordConfirm {
-            get {
-                return ResourceManager.GetString("RegeneratePasswordConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        internal static string Settings_Title {
-            get {
-                return ResourceManager.GetString("Settings_Title", resourceCulture);
+                return ResourceManager.GetString("ViewInterviewContent", resourceCulture);
             }
         }
     }

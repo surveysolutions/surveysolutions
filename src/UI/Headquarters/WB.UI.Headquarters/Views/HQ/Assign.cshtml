@@ -3,7 +3,7 @@
 
 @model Core.Supervisor.Views.Assign.AssignSurveyView
 @{
-    ViewBag.Title = "Assignment";
+    ViewBag.Title = Common.Assignment;
 }
 @section styles{
 
@@ -35,7 +35,7 @@
             <!-- /ko -->
             <!-- /ko -->
             <div class="control-group info" data-bind="validationElement: responsible">
-                <label class="control-label">Responsible</label>
+                <label class="control-label">@Common.Responsible</label>
                 <div class="controls">
                     <select class="span12" data-bind="options: supervisors, optionsText: 'name', value: responsible"></select>
                     <span class="help-inline" data-bind="validationMessage: responsible"></span>
@@ -43,7 +43,7 @@
             </div>
         </div>
         <p id="assignmentButton">
-            <button class="btn btn-success btn-large" data-bind="click: save, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;Save</button>
+            <button class="btn btn-success btn-large" data-bind="click: save, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;@Common.Save</button>
         </p>
     </div>
 </div>
@@ -51,7 +51,7 @@
     <div class="inner">
         <div class="title">
             <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
+            <span>@Common.ErrorsLog</span>
         </div>
         <div class="body">
             <ul data-bind="foreach: errors" class="error-list">

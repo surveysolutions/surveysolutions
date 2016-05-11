@@ -1,10 +1,11 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model WB.Core.SharedKernels.SurveyManagement.Views.SampleImport.ImportResult
 
 @if (Model.IsSuccessed)
 {
-    <h4>@(Model.IsCompleted ? "Parsing is completed" : "Parsing is in process...")</h4>
+    <h4>@(Model.IsCompleted ? Import.ParsingCompleted : Import.ParsingInProgress)</h4>
     if (Model.Header != null)
     {
         <div  style="height: 500px; overflow-y: scroll;">
@@ -37,7 +38,7 @@
 }
 else
 {
-    <h4>Parsing error</h4>
+    <h4>@Import.ParsingError</h4>
     <div>@Model.ErrorMessage</div>
 }
 
@@ -53,7 +54,7 @@ else
     {
         <fieldset class="form-horizontal">
             <div class="control-group">
-                <div class="control-label">Select responsible</div>
+                <div class="control-label">@Import.SelectResponsible</div>
                 <div class="controls">
                     <select name="responsibleSupervisor" class="input-block-level">
                         @foreach (UserListItem item in ViewBag.SupervisorList)
@@ -64,7 +65,7 @@ else
                 </div>
             </div>
             <div class="form-actions">
-                <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>
+                <button class="btn btn-large btn-primary pull-right" type="submit">@Import.CreateSample</button>
             </div>
         </fieldset>
     }
