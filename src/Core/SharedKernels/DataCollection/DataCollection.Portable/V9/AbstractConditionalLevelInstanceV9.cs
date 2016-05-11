@@ -11,7 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.V9
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, VariableAccessor> VariableMap { get; private set; }
+        protected Dictionary<Guid, Func<object>> VariableMap { get; private set; }
+        protected Dictionary<Guid, object> VariablePreviousStates { get; private set; }
 
         protected AbstractConditionalLevelInstanceV9(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances,
@@ -20,7 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.VariableMap = new Dictionary<Guid, VariableAccessor>();
+            this.VariableMap = new Dictionary<Guid, Func<object>>();
+            this.VariablePreviousStates = new Dictionary<Guid, object>();
         }
 
         protected AbstractConditionalLevelInstanceV9(decimal[] rosterVector, Identity[] rosterKey,
@@ -35,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> rosterGenerators;
 
-        protected new IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> RosterGenerators
+        protected new virtual IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> RosterGenerators
             => this.rosterGenerators ?? (this.rosterGenerators = this.InitializeRosterGenerators());
 
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> InitializeRosterGenerators()
@@ -56,27 +58,36 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         public abstract IExpressionExecutableV9 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances);
 
-        public new IExpressionExecutableV9 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey)
+        public new virtual IExpressionExecutableV9 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey)
         {
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        protected void AddVariableAccessorToMap(Guid id, VariableAccessor acessor)
+        protected virtual void FillVariablePreviousStates(Dictionary<Guid, object> variablePreviousStates)
         {
-            this.VariableMap.Add(id, acessor);
+            foreach (var variablePreviousState in variablePreviousStates)
+            {
+                this.VariablePreviousStates[variablePreviousState.Key] = variablePreviousState.Value;
+            }
         }
 
-        public void DisableVariable(Guid variableId)
+        protected virtual void AddVariableAccessorToMap(Guid id, Func<object> getValue)
+        {
+            this.VariableMap.Add(id, getValue);
+        }
+
+        public virtual void DisableVariable(Guid variableId)
         {
             if (this.EnablementStates.ContainsKey(variableId))
                 this.EnablementStates[variableId].State = State.Disabled;
         }
 
-        public void EnableVariable(Guid variableId)
+        public virtual void EnableVariable(Guid variableId)
         {
             if (this.EnablementStates.ContainsKey(variableId))
                 this.EnablementStates[variableId].State = State.Enabled;
         }
+
         public VariableValueChanges ProcessVariables()
         {
             var result = new VariableValueChanges();
@@ -86,15 +97,15 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 object newVariableValue = null;
                 try
                 {
-                    newVariableValue = variableAccessor.Value.GetValue();
+                    newVariableValue = variableAccessor.Value();
                 }
 #pragma warning disable
                 catch (Exception ex)
                 {
                 }
 #pragma warning restore
-                var previousValue = variableAccessor.Value.GetPreviousValue();
-                if (previousValue==null ||!previousValue.Equals(newVariableValue))
+               
+                if (IsVariableValueChanged(variableAccessor.Key, newVariableValue))
                     result.ChangedVariableValues.Add(new Identity(variableAccessor.Key, RosterVector),
                         newVariableValue);
             }
@@ -102,11 +113,22 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             return result;
         }
 
-        public void SerVariablePreviousValue(Guid variableId, object value)
+        private bool IsVariableValueChanged(Guid variableId, object newValue)
         {
-            if(!VariableMap.ContainsKey(variableId))
-                return;
-            VariableMap[variableId].SetPreviousValue(value);
+            var previousValue = VariablePreviousStates.ContainsKey(variableId)
+                ? VariablePreviousStates[variableId]
+                : null;
+
+            if (previousValue == null)
+            {
+                return newValue != null;
+            }
+            return !previousValue.Equals(newValue);
+        }
+
+        public virtual void SetPreviousVariableValue(Guid variableId, object value)
+        {
+            VariablePreviousStates[variableId] = value;
         }
 
         protected new virtual EnablementChanges ProcessEnablementConditionsImpl()
@@ -131,19 +153,5 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 enablementChanges.StaticTextsToBeDisabled, enablementChanges.StaticTextsToBeEnabled,
                 variablesToBeDisabled, variablesToBeEnabled);
         }
-    }
-
-    public class VariableAccessor
-    {
-        public VariableAccessor(Func<object> getValue, Action<object> setPreviousValue, Func<object> getPreviousValue)
-        {
-            this.GetValue = getValue;
-            this.SetPreviousValue = setPreviousValue;
-            this.GetPreviousValue = getPreviousValue;
-        }
-
-        public Func<object> GetValue { get; private set; }
-        public Action<object> SetPreviousValue { get; private set; }
-        public Func<object> GetPreviousValue { get; private set; }
     }
 }
