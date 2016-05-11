@@ -28,7 +28,6 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);
-            
             eventContext = new EventContext();
         };
 

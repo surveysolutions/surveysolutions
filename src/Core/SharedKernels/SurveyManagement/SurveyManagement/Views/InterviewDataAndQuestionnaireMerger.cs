@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
@@ -30,23 +31,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             public InterviewData Interview { get; }
             public QuestionnaireDocument Questionnaire { get; }
             public Dictionary<string, Guid> VariableToQuestionId { get; }
+            public Dictionary<string, Guid> VariableToVariableId { get; }
             public Dictionary<string, AttachmentInfoView> Attachments { get; }
+            public InterviewVariables InterviewVariables { get; }
 
             public InterviewInfoInternal(
                 InterviewData interview,
                 QuestionnaireDocument questionnaire,
                 Dictionary<string, Guid> variableToQuestionId,
-                Dictionary<string, AttachmentInfoView> attachments)
+                Dictionary<string, Guid> variableToVariableId,
+                Dictionary<string, AttachmentInfoView> attachments, 
+                InterviewVariables interviewVariables)
             {
                 this.Interview = interview;
                 this.Questionnaire = questionnaire;
                 this.VariableToQuestionId = variableToQuestionId;
+                this.VariableToVariableId = variableToVariableId;
                 this.Attachments = attachments;
+                this.InterviewVariables = interviewVariables;
             }
         }
 
         public InterviewDetailsView Merge(InterviewData interview, QuestionnaireDocument questionnaire, UserLight responsible, 
-            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews)
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews, InterviewVariables interviewVariables)
         {
             questionnaire.ConnectChildrenWithParent();
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
@@ -65,7 +72,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 interview: interview,
                 questionnaire: questionnaire,
                 variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
-                attachments: attachmentInfos);
+                variableToVariableId:questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
+                attachments: attachmentInfos,
+                interviewVariables: interviewVariables);
 
             var interviewGroups = new List<InterviewGroupView>();
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
@@ -293,7 +302,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             }
 
             if (!interviewInfo.VariableToQuestionId.ContainsKey(variableName))
-                return null;
+                return SubstituteVariableValue(variableName, currentInterviewLevel.RosterVector, interviewInfo);
 
             Guid questionId = interviewInfo.VariableToQuestionId[variableName];
 
@@ -306,6 +315,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 return null;
 
             return GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
+        }
+
+        private string SubstituteVariableValue(string variableName, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo)
+        {
+            if (interviewInfo.InterviewVariables == null)
+                return null;
+
+            if (!interviewInfo.VariableToVariableId.ContainsKey(variableName))
+                return null;
+            var variableId = interviewInfo.VariableToVariableId[variableName];
+            var variableRosterVector = questionRosterVector;
+
+            while (true)
+            {
+                var variableStringIdentity = new Identity(variableId, variableRosterVector).ToString();
+                if (interviewInfo.InterviewVariables.VariableValues.ContainsKey(variableStringIdentity))
+                {
+                    var variableValue = interviewInfo.InterviewVariables.VariableValues[variableStringIdentity];
+
+#warning this line must be relaced with culture specific variable formatting
+                    return variableValue?.ToString();
+                }
+                if (variableRosterVector.Length == 0)
+                    break;
+
+                variableRosterVector = variableRosterVector.Take(variableRosterVector.Length - 1).ToArray();
+            }
+
+            return null;
         }
 
         private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
