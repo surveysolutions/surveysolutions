@@ -18,7 +18,7 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v16/questionnaires")]
+    [RoutePrefix("api/v17/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
@@ -49,13 +49,13 @@ namespace WB.UI.Designer.Api
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v16/login")]
+        [Route("~/api/v17/login")]
         [HttpGet]
         public void Login()
         {
         }
 
-        [Route("~/api/v16/attachment/{id}")]
+        [Route("~/api/v17/attachment/{id}")]
         [HttpGet]
         public HttpResponseMessage Attachment(string id)
         {
@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Api
             };
         }
 
-        [Route("")]
+        [Route("")] 
         public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
             var userId = this.userHelper.WebUser.UserId;
