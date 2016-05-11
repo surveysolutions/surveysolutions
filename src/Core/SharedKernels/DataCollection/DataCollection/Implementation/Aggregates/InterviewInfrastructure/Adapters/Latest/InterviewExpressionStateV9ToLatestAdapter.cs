@@ -71,9 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
             this.adaptee.EnableVariables(variablesToEnable);
         }
 
-        public void SerVariablePreviousValue(Identity variableId, object value)
+        public void SetPreviousVariableValue(Identity variableIdentity, object value)
         {
-            this.adaptee.SerVariablePreviousValue(variableId,value);
+            this.adaptee.SetPreviousVariableValue(variableIdentity,value);
         }
 
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
