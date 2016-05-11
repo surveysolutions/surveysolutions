@@ -641,6 +641,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
                 ParentGroupId = parentId,
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression)
             };
 
             state.Variables.Add(variableView);

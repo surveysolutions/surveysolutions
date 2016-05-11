@@ -17,10 +17,10 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             }
         }
 
-        public Guid PublicKey { get; }
-        public VariableType Type { get; }
-        public string Name { get; }
-        public string Expression { get; }
+        public Guid PublicKey { get; set; }
+        public VariableType Type { get; set; }
+        public string Name { get; set; }
+        public string Expression { get; set; }
 
         public List<IComposite> Children
         {
