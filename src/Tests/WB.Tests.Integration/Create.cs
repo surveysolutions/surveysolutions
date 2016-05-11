@@ -819,5 +819,10 @@ namespace WB.Tests.Integration
             return new Variable(publicKey: id ?? Guid.NewGuid(),
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
+
+        public static ChangedVariableValueDto ChangedVariableValueDto(Guid? variableId=null, RosterVector vector=null, object value=null)
+        {
+            return new ChangedVariableValueDto(Create.Identity(variableId ?? Guid.NewGuid(), vector?? new RosterVector(new decimal[0])), value);
+        }
     }
 }
