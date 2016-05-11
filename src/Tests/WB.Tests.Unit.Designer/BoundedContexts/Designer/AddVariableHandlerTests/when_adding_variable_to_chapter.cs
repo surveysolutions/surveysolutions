@@ -2,15 +2,13 @@
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTests
 {
-    [Ignore("spuv")]
     internal class when_adding_variable_to_chapter : QuestionnaireTestsContext
     {
         Establish context = () =>
@@ -31,22 +29,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
             eventContext = null;
         };
 
-        It should_raise_StaticTextAdded_event = () =>
+        It should_raise_VariableAdded_event = () =>
             eventContext.ShouldContainEvent<VariableAdded>();
 
-        It should_raise_StaticTextAdded_event_with_EntityId_specified = () =>
+        It should_raise_VariableAdded_event_with_EntityId_specified = () =>
             eventContext.GetSingleEvent<VariableAdded>().EntityId.ShouldEqual(entityId);
 
-        It should_raise_StaticTextAdded_event_with_ParentId_specified = () =>
+        It should_raise_VariableAdded_event_with_ParentId_specified = () =>
             eventContext.GetSingleEvent<VariableAdded>().ParentId.ShouldEqual(chapterId);
 
-        It should_raise_StaticTextAdded_event_with_name_specified = () =>
+        It should_raise_VariableAdded_event_with_name_specified = () =>
             eventContext.GetSingleEvent<VariableAdded>().VariableData.Name.ShouldEqual(variableName);
 
-        It should_raise_StaticTextAdded_event_with_expression_specified = () =>
+        It should_raise_VariableAdded_event_with_expression_specified = () =>
             eventContext.GetSingleEvent<VariableAdded>().VariableData.Expression.ShouldEqual(variableExpression);
 
-        It should_raise_StaticTextAdded_event_with_type_specified = () =>
+        It should_raise_VariableAdded_event_with_type_specified = () =>
             eventContext.GetSingleEvent<VariableAdded>().VariableData.Type.ShouldEqual(variableType);
 
         It should_raise_QuestionnaireItemMoved_event = () =>
