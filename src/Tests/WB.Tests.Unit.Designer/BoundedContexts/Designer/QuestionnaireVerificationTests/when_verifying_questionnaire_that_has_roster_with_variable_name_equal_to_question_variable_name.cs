@@ -35,29 +35,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code_WB0093 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0093");
+        It should_return_WB0026_error = () =>
+           verificationMessages.ShouldContainCritical("WB0026");
 
         It should_return_message_with_level_critical = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_message_with_two_references = () =>
-            verificationMessages.First().References.Count().ShouldEqual(2);
+            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
-        It should_return_message_with_first_references_with_Group_type = () =>
-            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_with_first_references_with_Roster_type = () =>
+            verificationMessages.GetCritical("WB0026").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_with_first_references_with_id_equals_rosterId = () =>
-            verificationMessages.First().References.First().Id.ShouldEqual(rosterId);
+            verificationMessages.GetCritical("WB0026").References.First().Id.ShouldEqual(rosterId);
 
         It should_return_message_with_second_references_with_Question_type = () =>
-         verificationMessages.First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetCritical("WB0026").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_with_second_references_with_id_equals_questionId = () =>
-          verificationMessages.First().References.Last().Id.ShouldEqual(questionId);
+            verificationMessages.GetCritical("WB0026").References.Last().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
