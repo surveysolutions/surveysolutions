@@ -237,4 +237,7 @@
   <data name="Attachment_Updated" xml:space="preserve">
     <value>Attachment "{0}" updated</value>
   </data>
+  <data name="Variable" xml:space="preserve">
+    <value>Variable</value>
+  </data>
 </root>
