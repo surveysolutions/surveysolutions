@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<LinkedOptionsChanged>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
-        private readonly IAnswerToStringService answerToStringService;
+        private readonly IStringConverter answerToStringService;
         private Guid linkedToQuestionId;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private HashSet<Guid> parentRosterIds;
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
+            IStringConverter answerToStringService,
             IPlainQuestionnaireRepository questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher, 

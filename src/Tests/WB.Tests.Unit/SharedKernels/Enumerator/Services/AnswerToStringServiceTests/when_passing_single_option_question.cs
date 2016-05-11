@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         static Guid questionId = Id.g1;
         static IQuestionnaire questionnaireMock;
         static SingleOptionAnswer singleOptionAnswer;
-        static IAnswerToStringService answerToStringService;
+        static IStringConverter answerToStringService;
     }
 }
