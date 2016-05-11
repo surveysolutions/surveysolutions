@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -329,12 +330,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
             while (true)
             {
-                var variableStringIdentity = new Identity(variableId, variableRosterVector).ToString();
-                if (interviewInfo.InterviewVariables.VariableValues.ContainsKey(variableStringIdentity))
+                var variableIdentity = new InterviewItemId(variableId, variableRosterVector);
+                if (interviewInfo.InterviewVariables.VariableValues.ContainsKey(variableIdentity))
                 {
-                    var variableValue = interviewInfo.InterviewVariables.VariableValues[variableStringIdentity];
+                    var variableValue = interviewInfo.InterviewVariables.VariableValues[variableIdentity];
 
-#warning this line must be relaced with culture specific variable formatting
+#warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
                     return variableValue?.ToString();
                 }
                 if (variableRosterVector.Length == 0)
