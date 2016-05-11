@@ -7130,8 +7130,8 @@ textarea {
 .icon {
   width: 20px;
   height: 20px;
-  background: url(i/icons.png);
-  background-position-x: 0px;
+  background: url(i/icons1.png);
+  background-position-x: 0;
   overflow: hidden;
 }
 .icon-numeric {
@@ -7168,13 +7168,16 @@ textarea {
   background-position: 0 -300px;
 }
 .icon-macro {
-  background-position: 0 -388px;
+  background-position: 0 -390px;
 }
 .icon-lookup {
-  background-position: 0 -413px;
+  background-position: 0 -420px;
 }
 .icon-attachment {
-  background-position: 0 -442px;
+  background-position: 0 -450px;
+}
+.icon-variable {
+  background-position: 0 -480px;
 }
 .icon-error.icon-numeric {
   background-position: -30px 0;
@@ -7210,13 +7213,16 @@ textarea {
   background-position: -30px -300px;
 }
 .icon-error.icon-macro {
-  background-position: -30px -388px;
+  background-position: -30px -390px;
 }
 .icon-error.icon-lookup {
-  background-position: -30px -413px;
+  background-position: -30px -420px;
 }
 .icon-error.icon-attachment {
-  background-position: -30px -442px;
+  background-position: -30px -450px;
+}
+.icon-error.icon-variable {
+  background-position: -30px -480px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7304,7 +7310,7 @@ input#edit-group-title {
   vertical-align: middle;
   width: 20px;
   height: 20px;
-  background-image: url(i/icons.png);
+  background-image: url(i/icons1.png);
   background-position-x: 0;
   overflow: hidden;
 }

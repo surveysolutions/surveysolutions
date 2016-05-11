@@ -4,7 +4,7 @@
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" id="{{item.itemId}}" ui-sref="questionnaire.chapter.variable({itemId: item.itemId})">
         <div class="item-text">
-            <div class="icon icon-statictext"></div>
+            <div class="icon icon-variable"></div>
         </div>
         <div class="qname-block">
             <span ng-bind-html="item.variableData.name | escape | highlight:search.searchText"></span>
