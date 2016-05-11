@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         private IDictionary<string, IExpressionExecutableV9> interviewScopes;
 
-        public new IDictionary<string, IExpressionExecutableV9> InterviewScopes
+        public new virtual IDictionary<string, IExpressionExecutableV9> InterviewScopes
             => this.interviewScopes ?? (this.interviewScopes = this.InitializeInterviewScopes());
 
         private IDictionary<string, IExpressionExecutableV9> InitializeInterviewScopes()
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             throw new NotSupportedException($"Interview scope expression executable V8 ({expressionExecutableV8.GetType().FullName}) cannot be converted to V9");
         }
 
-        public new IEnumerable<IExpressionExecutableV9> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
+        public new virtual IEnumerable<IExpressionExecutableV9> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
             => base.GetRosterInstances(rosterKey, scopeId).Cast<IExpressionExecutableV9>();
 
         public new virtual EnablementChanges ProcessEnablementConditions()
@@ -57,40 +57,35 @@ namespace WB.Core.SharedKernels.DataCollection.V9
         protected new virtual IExpressionExecutableV9 GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
             => (IExpressionExecutableV9) base.GetRosterByIdAndVector(questionId, rosterVector);
 
-        public VariableValueChanges ProcessVariables()
+        public virtual VariableValueChanges ProcessVariables()
             => VariableValueChanges.Concat(this.InterviewScopes
                 .Values
                 .OrderBy(x => x.GetLevel()) // order by scope depth starting from top because conditionally lower scope could depend only from upper scope
                 .Select(scope => scope.ProcessVariables()));
 
-        public void DisableVariables(IEnumerable<Identity> variablesToDisable)
+        public virtual void DisableVariables(IEnumerable<Identity> variablesToDisable)
         {
             foreach (Identity variable in variablesToDisable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(variable.Id, variable.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.DisableVariable(variable.Id);
+                targetLevel?.DisableVariable(variable.Id);
             }
         }
 
-        public void EnableVariables(IEnumerable<Identity> variablesToEnable)
+        public virtual void EnableVariables(IEnumerable<Identity> variablesToEnable)
         {
             foreach (Identity variable in variablesToEnable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(variable.Id, variable.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.EnableVariable(variable.Id);
+                targetLevel?.EnableVariable(variable.Id);
             }
         }
 
-        public void SerVariablePreviousValue(Identity variableId, object value)
+        public virtual void SetPreviousVariableValue(Identity variableIdentity, object value)
         {
-            var targetLevel = this.GetRosterByIdAndVector(variableId.Id, variableId.RosterVector);
-            if (targetLevel == null) return;
+            var targetLevel = this.GetRosterByIdAndVector(variableIdentity.Id, variableIdentity.RosterVector);
 
-            targetLevel.SerVariablePreviousValue(variableId.Id, value);
+            targetLevel?.SetPreviousVariableValue(variableIdentity.Id, value);
         }
 
         IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone() => (IInterviewExpressionStateV9) this.Clone();
