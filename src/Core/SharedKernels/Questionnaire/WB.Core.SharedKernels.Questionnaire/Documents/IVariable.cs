@@ -5,8 +5,8 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public interface IVariable : IComposite
     {
-        VariableType Type { get; }
-        string Name { get; }
-        string Expression { get; }
+        VariableType Type { get; set; }
+        string Name { get; set; }
+        string Expression { get; set; }
     }
 }

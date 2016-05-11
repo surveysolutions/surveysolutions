@@ -348,20 +348,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableAdded> @event)
         {
-            var groupView = this.FindGroup(questionnaireOrGroup: state, groupId: @event.Payload.ParentId.FormatGuid());
-            if (groupView == null)
-            {
-                return state;
-            }
-
-            var staticTextInfoView = new VariableView()
-            {
-                ItemId = @event.Payload.EntityId.FormatGuid(),
-                VariableData = @event.Payload.VariableData
-            };
-
-            groupView.Items.Add(staticTextInfoView);
-            
+            this.AddVariable(state, @event.Payload, @event.Payload.ParentId);
             return state;
         }
 
@@ -378,12 +365,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableCloned> @event)
         {
-            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.Payload.EntityId.FormatGuid());
-
-            if (variableView == null)
-                return state;
-
-            variableView.VariableData = @event.Payload.VariableData;
+            this.AddVariable(state, @event.Payload, @event.Payload.ParentId);
             return state;
         }
 
@@ -391,6 +373,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             removeEntity(state, @event.Payload.EntityId.FormatGuid());
             return state;
+        }
+
+        private void AddVariable(GroupInfoView state, QuestionnaireVariableEvent @event, Guid parentId)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: state, groupId: parentId.FormatGuid());
+            if (groupView == null)
+                return;
+
+            var variableView = new VariableView()
+            {
+                ItemId = @event.EntityId.FormatGuid(),
+                VariableData = @event.VariableData
+            };
+
+            groupView.Items.Add(variableView);
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<QuestionnaireItemMoved> @event)
