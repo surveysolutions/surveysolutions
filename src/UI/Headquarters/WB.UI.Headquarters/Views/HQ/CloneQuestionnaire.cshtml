@@ -1,0 +1,50 @@
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.CloneQuestionnaireModel
+
+@{
+    ViewBag.Title = "Clone Questionnaire";
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $('#umbrella').hide();
+    </script>
+}
+
+<div class="main">
+
+    @Html.Partial("_alerts")
+
+    <div class="page-header">
+        <h2>
+            Clone questionnaire '@Model.OriginalTitle' version @Model.Version @(this.Model.IsCensus ? "in census mode" : "in regular mode")
+        </h2>
+    </div>
+
+    <form class="form-horizontal" method="POST">
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.Version)
+        @Html.HiddenFor(x => x.OriginalTitle)
+        @Html.HiddenFor(x => x.IsCensus)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.NewTitle, new { @class = "col-sm-2 control-label required" })
+            <div class="col-sm-2">
+                @Html.TextBoxFor(x => x.NewTitle, new { @class = "form-control", autocomplete = "off" })
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.NewTitle, null, new { @class = "help-block" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Clone</button>
+                @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </form>
+
+</div>
