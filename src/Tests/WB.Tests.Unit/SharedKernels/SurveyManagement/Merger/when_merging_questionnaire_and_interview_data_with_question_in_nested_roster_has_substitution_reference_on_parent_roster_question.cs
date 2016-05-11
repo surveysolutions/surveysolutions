@@ -36,9 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             var variable = Create.Variable(variableName: "va", type: VariableType.String);
             interviewVariables = new InterviewVariables();
 
-            interviewVariables.VariableValues[Create.Identity(variable.PublicKey, Create.RosterVector(0)).ToString()] =
+            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
                 "nastya0";
-            interviewVariables.VariableValues[Create.Identity(variable.PublicKey, Create.RosterVector(1)).ToString()] =
+            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
               "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()
