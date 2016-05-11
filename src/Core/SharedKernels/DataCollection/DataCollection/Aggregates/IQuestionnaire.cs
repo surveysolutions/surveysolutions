@@ -43,6 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetQuestionIdByVariable(string variable);
 
+        Guid GetVariableIdByVariableName(string variableName);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -193,5 +195,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetTextQuestionMask(Guid questionId);
         bool GetHideInstructions(Guid questionId);
         bool ShouldUseFormatting(Guid questionId);
+        bool HasVariable(string variableName);
+        bool HasQuestion(string variableName);
     }
 }

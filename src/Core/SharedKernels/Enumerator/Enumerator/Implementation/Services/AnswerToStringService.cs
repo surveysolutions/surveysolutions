@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    internal class AnswerToStringService : IAnswerToStringService
+    internal class AnswerToStringService : IStringConverter
     {
         public string AnswerToUIString(Guid questionId, BaseInterviewAnswer answer, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
@@ -114,6 +114,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         
             return answer.ToString();
+        }
+
+        public string VariableValueToUIString(object variableValue)
+        {
+            if (variableValue == null) return string.Empty;
+
+            var variableValueAsString = variableValue.ToString();
+
+            TypeSwitch.Do(
+                variableValue,
+                TypeSwitch.Case<int>(value =>{variableValueAsString = value.ToString(CultureInfo.CurrentCulture);}),
+                TypeSwitch.Case<decimal>(value => { variableValueAsString = value.ToString(CultureInfo.CurrentCulture); }),
+                TypeSwitch.Case<DateTime>(value => { variableValueAsString = value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern); }),
+                TypeSwitch.Case<bool>(value => { variableValueAsString = value.ToString(); }));
+
+            return variableValueAsString;
         }
     }
 }

@@ -135,7 +135,7 @@
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
-    <Compile Include="Services\IAnswerToStringService.cs" />
+    <Compile Include="Services\IStringConverter.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IUserInterfaceStateService.cs" />

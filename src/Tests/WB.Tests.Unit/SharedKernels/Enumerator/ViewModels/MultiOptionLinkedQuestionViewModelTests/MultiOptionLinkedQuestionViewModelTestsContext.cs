@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         protected static MultiOptionLinkedToQuestionQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
             AnsweringViewModel answering = null, 
             IStatefulInterviewRepository interviewRepository = null, 
-            IAnswerToStringService answerToStringService = null, 
+            IStringConverter answerToStringService = null, 
             IPlainQuestionnaireRepository questionnaireStorage = null, 
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,

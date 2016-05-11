@@ -477,6 +477,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(VariablesValuesChanged @event)
         {
+            this.interviewState.ChangeVariables(@event.ChangedVariables);
+
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
                 this.ExpressionProcessorStatePrototype.SerVariablePreviousValue(changedVariableValueDto.VariableIdentity, changedVariableValueDto.VariableValue);
