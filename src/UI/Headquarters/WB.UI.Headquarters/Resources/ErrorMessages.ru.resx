@@ -117,127 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Group" xml:space="preserve">
-    <value>Section</value>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Требуемый вопросник «{0}» имеет ошибки. Пожалуйста, проверьте на вопросник по дизайнер.</value>
   </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Время ожидания при подключении к «Дизайн» веб-сайт. Пожалуйста проверьте подключение к Интернету.</value>
   </data>
-  <data name="Question" xml:space="preserve">
-    <value>Question</value>
+  <data name="ServerError" xml:space="preserve">
+    <value>Произошла внутренняя ошибка сервера. Пожалуйста, свяжитесь с поддержкой клиентов обзор решений.</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Сервер недоступен.  Пожалуйста, убедитесь, что веб-сайт «Дизайн» доступен и оно не находится в режиме обслуживания</value>
   </data>
-  <data name="Roster" xml:space="preserve">
-    <value>Roster</value>
-  </data>
-  <data name="StaticText" xml:space="preserve">
-    <value>Static text</value>
-  </data>
-  <data name="added" xml:space="preserve">
-    <value>added</value>
-  </data>
-  <data name="created" xml:space="preserve">
-    <value>created</value>
-  </data>
-  <data name="cloned" xml:space="preserve">
-    <value>cloned</value>
-  </data>
-  <data name="deleted" xml:space="preserve">
-    <value>deleted</value>
-  </data>
-  <data name="changed" xml:space="preserve">
-    <value>changed</value>
-  </data>
-  <data name="became_a_roster" xml:space="preserve">
-    <value>became a roster</value>
-  </data>
-  <data name="became_a_group" xml:space="preserve">
-    <value>became a group</value>
-  </data>
-  <data name="moved" xml:space="preserve">
-    <value>moved</value>
-  </data>
-  <data name="replaced" xml:space="preserve">
-    <value>replaced</value>
-  </data>
-  <data name="unknown" xml:space="preserve">
-    <value>unknown</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="QuestionnaireChangeHistory" xml:space="preserve">
-    <value>Questionnaire change history</value>
-  </data>
-  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
-    <value>This list does not contain any records</value>
-  </data>
-  <data name="Timestamp" xml:space="preserve">
-    <value>Timestamp</value>
-  </data>
-  <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>UserName</value>
-  </data>
-  <data name="imported" xml:space="preserve">
-    <value>imported</value>
-  </data>
-  <data name="Change" xml:space="preserve">
-    <value>Change</value>
-  </data>
-  <data name="from" xml:space="preserve">
-    <value> from</value>
-  </data>
-  <data name="to" xml:space="preserve">
-    <value> to</value>
-  </data>
-  <data name="Macro" xml:space="preserve">
-    <value>Macro</value>
-  </data>
-  <data name="Macro_EmptyMacroAdded" xml:space="preserve">
-    <value>Empty macro with no name added</value>
-  </data>
-  <data name="Macro_Deleted" xml:space="preserve">
-    <value>Macro "{0}" deleted</value>
-  </data>
-  <data name="Macro_Updated" xml:space="preserve">
-    <value>Macro "{0}" updated</value>
-  </data>
-  <data name="LookupTable_EmptyTableAdded" xml:space="preserve">
-    <value>Empty lookup table with no name added</value>
-  </data>
-  <data name="LookupTable_Deleted" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
-  </data>
-  <data name="LookupTable_Updated" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
-  </data>
-  <data name="LookupTable_EmptyTableDeleted" xml:space="preserve">
-    <value>Lookup table with no name deleted</value>
-  </data>
-  <data name="LookupTable_EmptyTableUpdated" xml:space="preserve">
-    <value>Lookup table with no name updated</value>
-  </data>
-  <data name="Macro_EmptyMacroDeleted" xml:space="preserve">
-    <value>Macro with no name deleted</value>
-  </data>
-  <data name="Macro_EmptyMacroUpdated" xml:space="preserve">
-    <value>Macro with no name upfated</value>
-  </data>
-  <data name="LookupTable" xml:space="preserve">
-    <value>Lookup table</value>
-  </data>
-  <data name="Attachment_Deleted" xml:space="preserve">
-    <value>Attachment "{0}" deleted</value>
-  </data>
-  <data name="Attachment_Updated" xml:space="preserve">
-    <value>Attachment "{0}" updated</value>
-  </data>
-  <data name="Variable" xml:space="preserve">
-    <value>Variable</value>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Не удается найти запрошенный вопросник «{0}». Пожалуйста обновите список анкет.</value>
   </data>
 </root>
