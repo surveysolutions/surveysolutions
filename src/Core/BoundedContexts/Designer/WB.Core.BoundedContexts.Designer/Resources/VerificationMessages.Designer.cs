@@ -288,11 +288,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another Lookup table with the same name already exists..
+        ///   Looks up a localized string similar to Entities with with the same name found..
         /// </summary>
-        internal static string WB0026_NameForLookupTableIsNotUnique {
+        internal static string WB0026_EntityWithTheSameNamesFound {
             get {
-                return ResourceManager.GetString("WB0026_NameForLookupTableIsNotUnique", resourceCulture);
+                return ResourceManager.GetString("WB0026_EntityWithTheSameNamesFound", resourceCulture);
             }
         }
         
@@ -315,11 +315,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with the same variable name already exists..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0029_LookupWithTheSameVariableNameAlreadyExists {
+        internal static string WB0029_ {
             get {
-                return ResourceManager.GetString("WB0029_LookupWithTheSameVariableNameAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("WB0029_", resourceCulture);
             }
         }
         
@@ -561,9 +561,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Circular references are not allowed..
         /// </summary>
-        internal static string WB0056_QuestionShouldNotHaveCircularReferences {
+        internal static string WB0056_EntityShouldNotHaveCircularReferences {
             get {
-                return ResourceManager.GetString("WB0056_QuestionShouldNotHaveCircularReferences", resourceCulture);
+                return ResourceManager.GetString("WB0056_EntityShouldNotHaveCircularReferences", resourceCulture);
             }
         }
         
@@ -613,11 +613,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another question with the same variable name already exists..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0062_VariableNameForQuestionIsNotUnique {
+        internal static string WB0062_ {
             get {
-                return ResourceManager.GetString("WB0062_VariableNameForQuestionIsNotUnique", resourceCulture);
+                return ResourceManager.GetString("WB0062_", resourceCulture);
             }
         }
         
@@ -667,11 +667,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another roster with the same roster ID already exists..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0068_RosterHasNotUniqueVariableName {
+        internal static string WB0068_ {
             get {
-                return ResourceManager.GetString("WB0068_RosterHasNotUniqueVariableName", resourceCulture);
+                return ResourceManager.GetString("WB0068_", resourceCulture);
             }
         }
         
@@ -901,11 +901,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with the same variable name already exists..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0093_QuestionWithTheSameVariableNameAlreadyExists {
+        internal static string WB0093_ {
             get {
-                return ResourceManager.GetString("WB0093_QuestionWithTheSameVariableNameAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("WB0093_", resourceCulture);
             }
         }
         
@@ -1069,6 +1069,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0111_AttachmentHasEmptyContent {
             get {
                 return ResourceManager.GetString("WB0111_AttachmentHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable has invalid name..
+        /// </summary>
+        internal static string WB0112_VariableHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0112_VariableHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable cannot have empty name..
+        /// </summary>
+        internal static string WB0113_VariableHasEmptyVariableName {
+            get {
+                return ResourceManager.GetString("WB0113_VariableHasEmptyVariableName", resourceCulture);
             }
         }
         
