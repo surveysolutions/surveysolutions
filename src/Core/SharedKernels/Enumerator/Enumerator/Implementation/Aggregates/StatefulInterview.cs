@@ -731,6 +731,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
+        public object GetVariableValue(Identity variableIdentity)
+        {
+            return this.interviewState.VariableValues.ContainsKey(variableIdentity)
+                ? this.interviewState.VariableValues[variableIdentity]
+                : null;
+        }
+
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();

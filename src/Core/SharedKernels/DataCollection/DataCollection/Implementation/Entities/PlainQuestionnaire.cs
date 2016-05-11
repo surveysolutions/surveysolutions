@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -36,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
+        private Dictionary<Guid, IVariable> variableCache = null;
         private Dictionary<Guid, IStaticText> staticTextCache = null;
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<string, IGroup> groupCache = null;
@@ -82,6 +84,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             get
             {
                 return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
+            }
+        }
+
+        private Dictionary<Guid, IVariable> VariablesCache
+        {
+            get
+            {
+                return this.variableCache ?? (this.variableCache
+                    = this.innerDocument
+                        .Find<IVariable>(_ => true)
+                        .ToDictionary(
+                            variable => variable.PublicKey,
+                            variable => variable));
             }
         }
 
@@ -241,6 +256,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid GetQuestionIdByVariable(string variable)
         {
             return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+        }
+
+        public Guid GetVariableIdByVariableName(string variableName)
+        {
+            return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
@@ -689,6 +709,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var numericQuestion = this.GetQuestion(questionId) as INumericQuestion;
             return numericQuestion?.UseFormatting ?? false;
+        }
+
+        public bool HasVariable(string variableName)
+        {
+            return this.VariablesCache.Values.Any(x => x.Name == variableName);
+        }
+
+        public bool HasQuestion(string variableName)
+        {
+            return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
