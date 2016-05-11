@@ -593,7 +593,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireDocument questionnaire)
             =>
                 new VariableTemplateModel(variable.PublicKey, variable.Name,
-                    this.macrosSubstitutionService.InlineMacros(variable.Body, questionnaire.Macros.Values),
+                    this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values),
                     CreateVariablesCSharpType(variable.Type), currentScope.RosterScopeName, currentScope.TypeName);
 
         private StaticTextTemplateModel CreateStaticTextTemplateModel(IStaticText staticText, RosterScopeBaseModel currentScope, QuestionnaireDocument questionnaire)

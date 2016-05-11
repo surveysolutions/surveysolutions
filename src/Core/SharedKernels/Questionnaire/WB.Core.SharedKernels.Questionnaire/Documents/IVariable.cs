@@ -7,6 +7,6 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
     {
         VariableType Type { get; }
         string Name { get; }
-        string Body { get; }
+        string Expression { get; }
     }
 }

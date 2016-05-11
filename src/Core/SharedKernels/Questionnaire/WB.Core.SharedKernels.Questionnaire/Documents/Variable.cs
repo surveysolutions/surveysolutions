@@ -13,14 +13,14 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             {
                 this.Type = variableData.Type;
                 this.Name = variableData.Name;
-                this.Body = variableData.Expression;
+                this.Expression = variableData.Expression;
             }
         }
 
         public Guid PublicKey { get; }
         public VariableType Type { get; }
         public string Name { get; }
-        public string Body { get; }
+        public string Expression { get; }
 
         public List<IComposite> Children
         {
