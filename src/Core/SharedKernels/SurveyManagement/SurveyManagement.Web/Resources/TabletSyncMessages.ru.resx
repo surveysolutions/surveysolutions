@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Сбой синхронизации. Идентификатор устройства Android не была представлена. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>Сбой синхронизации. Не найден файл с последней версией. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>Сбой синхронизации. Неправильные файлы рассчитывать. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>Сбой синхронизации. Неправильный тип. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>Сбой синхронизации. Ваше приложение не совместим с сервера. Обновление приложения интервьюер</value>
+  </data>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>Сбой синхронизации. Ваше приложение не совместим с сервера. Удалите приложение и загрузить новую версию приложения интервьюер</value>
+  </data>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>Неверное устройство идентификатор. Что-то случилось с установкой приложения клиента, пожалуйста, пришлите информацию таблетки.</value>
+  </data>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>Сбой синхронизации. Недопустимая последовательность идентификатор. Что-то случилось с установкой клиента app, нажмите кнопку «Отправить планшетный информация».</value>
+  </data>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>Сбой синхронизации. Пользователь не авторизован. Пожалуйста, проверьте ваш логин/пароль для {0}.</value>
+  </data>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Ваша учетная запись не имеет роль, позволяя этой операции.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Сервер сейчас на режим обслуживания. Извините за причиненные неудобства. Пожалуйста повторите попытку позже.</value>
+  </data>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>Сбой синхронизации. Переустановите приложение. Отсутствует идентификатор установки. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>Частично сбой синхронизации. Завершенных интервью были отправлены на сервер, но вы не будете получать новые назначения. Пожалуйста, перейдите к android настройки-&gt; Apps-&gt; интервьюер и нажмите кнопку Очистить данные. Затем синхронизировать с нуля.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Сбой синхронизации. Произошла внутренняя ошибка сервера. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>Сбой синхронизации.  Синхронизацию пакета с идентификатором «{0}» не найден на сервере. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Сбой синхронизации. Код неправильно андроид устройства была предоставлена. Пожалуйста, свяжитесь с разработчиками.</value>
+  </data>
+</root>

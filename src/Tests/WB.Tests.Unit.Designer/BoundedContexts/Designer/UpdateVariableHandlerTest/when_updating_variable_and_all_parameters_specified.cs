@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerTest
 {
-    [Ignore("spuv")]
     internal class when_updating_variable_and_all_parameters_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
@@ -28,7 +24,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 entityId: entityId,
                 type: variableType,
                 name: variableName,
-                expression: variableExpression 
+                expression: variableExpression,
+                userId: responsibleId
                 );
         };
 

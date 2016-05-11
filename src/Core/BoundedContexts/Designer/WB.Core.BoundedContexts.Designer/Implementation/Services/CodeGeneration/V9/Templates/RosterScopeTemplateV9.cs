@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line default
             #line hidden
             this.Write(@"(  
-		decimal[] rosterVector, 
+		decimal[] rosterVector,  
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
@@ -333,7 +333,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);
-	VariablesStateDefenitions(Model.Variables);
+	VariablesStateDefinitions(Model.Variables);
 
             
             #line default
@@ -456,7 +456,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
 
-	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsIncludingVariables();
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
 
 	private void SetParentImpl(IExpressionExecutable parent)
 	{			
@@ -1099,7 +1099,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(variable.StateName));
         #line hidden
         
         #line 94 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(");\r\n\t\tAddUpdaterVariableToMap(IdOf.");
+this.Write(");\r\n\t\tAddVariableAccessorToMap(IdOf.");
 
         
         #line default
@@ -1656,7 +1656,7 @@ this.Write(" : null; }\r\n\t\t\t\r\n\t}\r\n");
 
 	}
 }
-void VariablesStateDefenitions(List<VariableTemplateModel> variables)
+void VariablesStateDefinitions(List<VariableTemplateModel> variables)
 {
 	foreach (var variable in variables) 
 	{

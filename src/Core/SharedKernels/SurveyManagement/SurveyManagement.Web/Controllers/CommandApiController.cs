@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Filters;
@@ -19,8 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
-        private const string DefaultErrorMessage = "Unexpected error occurred";
-
+        
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
                                  IGlobalInfoProvider globalInfo)
@@ -64,9 +64,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (OverflowException e)
                 {
-                    this.Logger.Error(DefaultErrorMessage, e);
+                    this.Logger.Error(Strings.UnexpectedErrorOccurred, e);
                     response.IsSuccess = false;
-                    response.DomainException = DefaultErrorMessage;
+                    response.DomainException = Strings.UnexpectedErrorOccurred;
                 }
                 catch (Exception e)
                 {
@@ -78,8 +78,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         var userException = e.GetSelfOrInnerAs<UserException>();
                         if (userException == null)
                         {
-                            this.Logger.Error(DefaultErrorMessage, e);
-                            response.DomainException = DefaultErrorMessage;
+                            this.Logger.Error(Strings.UnexpectedErrorOccurred, e);
+                            response.DomainException = Strings.UnexpectedErrorOccurred;
                         }
                         else
                         {

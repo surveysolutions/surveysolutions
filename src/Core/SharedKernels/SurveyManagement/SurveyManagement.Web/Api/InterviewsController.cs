@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
@@ -111,10 +112,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var userInfo = this.userViewFactory.Load(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
 
             if(userInfo == null)
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Pages.InterviewsController_NoUse);
 
             if(!userInfo.Roles.Contains(UserRoles.Operator))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Pages.InterviewsController_UserNotInterviewer);
 
             var executor = this.globalInfoProvider.GetCurrentUser();
             return TryExecuteCommand(new AssignInterviewerCommand(request.Id, executor.Id, userInfo.PublicKey, DateTime.UtcNow));

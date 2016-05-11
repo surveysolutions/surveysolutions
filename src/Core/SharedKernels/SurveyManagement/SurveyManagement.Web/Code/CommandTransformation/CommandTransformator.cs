@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
@@ -90,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                     }
                     catch (OverflowException)
                     {
-                        throw new OverflowException(string.Format("Values {0} is too big or too small", answer.Answer));
+                        throw new OverflowException(string.Format(Strings.CommandTransformator_ParseNumericError, answer.Answer));
                     }
                     break;
                 case QuestionType.DateTime:
@@ -106,14 +107,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                 case QuestionType.GpsCoordinates:
                     var splitedCoordinates = answerAsString.Split('$');
                     if(splitedCoordinates.Length!=2)
-                        throw new FormatException(String.Format("value '{0}' is not in the correct format.", answerAsString));
+                        throw new FormatException(String.Format(Strings.CommandTransformator_IncorrectFormatError, answerAsString));
                     answerValue = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
                     break;
             }
 
             if (answerValue == null)
             {
-                throw new Exception("Error when parse question answer");    
+                throw new Exception(Strings.CommandTransformator_ParseQuestionError);    
             }
 
             return new KeyValuePair<Guid, object>(answer.Id, answerValue);

@@ -1,6 +1,7 @@
 using System;
 using System.Security.Principal;
 using System.Web.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 {
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
         public bool IsInRole(string role)
         {
             if (this.identity == null)
-                throw new Exception("Principal not fully constructed");
+                throw new Exception(Strings.CustomPrincipal_IdentityIsNullError);
             if (!this.identity.IsAuthenticated || role == null)
                 return false;
             

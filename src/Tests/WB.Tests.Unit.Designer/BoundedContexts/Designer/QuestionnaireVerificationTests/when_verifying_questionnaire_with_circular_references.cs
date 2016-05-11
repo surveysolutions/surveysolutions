@@ -33,13 +33,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         new TextQuestion
                         {
                             PublicKey = question1Id,
-                            ConditionExpression = "[b]>0",
+                            ConditionExpression = "b>0",
                             StataExportCaption = "a"
                         },
                         new TextQuestion
                         {
                             PublicKey = question2Id,
-                            ConditionExpression = "[a]>0",
+                            ConditionExpression = "a>0",
                             StataExportCaption = "b"
                         }
                     }
@@ -49,12 +49,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
             expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("[a]>0"))
-                .Returns(new[] { question1Id.ToString() });
+                .Setup(x => x.GetIdentifiersUsedInExpression("a>0"))
+                .Returns(new[] { "a" });
 
             expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("[b]>0"))
-                .Returns(new[] { question2Id.ToString()});
+                .Setup(x => x.GetIdentifiersUsedInExpression("b>0"))
+                .Returns(new[] { "b" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
@@ -62,17 +62,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_2_messages = () =>
-            verificationMessages.Count().ShouldEqual(2);
-
         It should_return_message_with_code__WB0056 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0056");
+            verificationMessages.ShouldContainError("WB0056");
 
         It should_return_message_with_level_general = () =>
-            verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.GetError("WB0056").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_message_with_two_references = () =>
-            verificationMessages.First().References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0056").References.Count().ShouldEqual(2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

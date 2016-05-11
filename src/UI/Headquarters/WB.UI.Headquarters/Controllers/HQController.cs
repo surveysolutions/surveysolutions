@@ -31,6 +31,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
@@ -54,6 +55,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Filters;
 using Binder = System.Reflection.Binder;
 
 namespace WB.UI.Headquarters.Controllers
@@ -138,8 +140,44 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
-            this.CommandService.Execute(new CloneQuestionnaire(
-                id, version, "I am cloned and not census", userId: this.GlobalInfo.GetCurrentUser().Id));
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
+            if (questionnaireBrowseItem == null)
+                return new HttpNotFoundResult($"Questionnaire with id {id.FormatGuid()} and version {version} is not found.");
+
+            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
+        }
+
+        [HttpPost]
+        [PreventDoubleSubmit]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
+        {
+            if (!this.ModelState.IsValid)
+                return this.View(model);
+
+            try
+            {
+                this.CommandService.Execute(new CloneQuestionnaire(
+                    model.Id, model.Version, model.NewTitle, userId: this.GlobalInfo.GetCurrentUser().Id));
+            }
+            catch (QuestionnaireException exception)
+            {
+                this.Error(exception.Message);
+                return this.View(model);
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
+                this.Error("Unexpected error occurred. Sorry for the inconvenience. Please contact support@mysurvey.solutions or try again later.");
+                return this.View(model);
+            }
+
+            this.Success(
+                model.NewTitle == model.OriginalTitle
+                    ? $"Questionnaire '{model.OriginalTitle}' was successfully cloned."
+                    : $"Questionnaire '{model.OriginalTitle}' was successfully cloned with new title '{model.NewTitle}'.");
 
             return this.RedirectToAction(nameof(this.Index));
         }
