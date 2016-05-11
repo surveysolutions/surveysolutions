@@ -18,7 +18,7 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v17/questionnaires")]
+    [RoutePrefix("api/v17/questionnaires")]// if you change version of the controller don't forget to mark previous version as obsolete in QuestionnairesObsoleteController
     public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
