@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 {
     internal class InterviewSynchronizationDtoFactoryTestContext
     {
-        protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
+        protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document, IReadSideKeyValueStorage<InterviewVariables> interviewVariableStorage=null)
         {
             document.ConnectChildrenWithParent();
             return new InterviewSynchronizationDtoFactory(
@@ -32,7 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                         _.GetById(Moq.It.IsAny<string>()) ==
                         new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document),
+               interviewVariableStorage??Mock.Of<IReadSideKeyValueStorage<InterviewVariables>>());
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
@@ -44,7 +45,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                         _.GetById(Moq.It.IsAny<string>()) ==
                         questionnaireRosterStructure),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IPlainQuestionnaireRepository>());
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IReadSideKeyValueStorage<InterviewVariables>>());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

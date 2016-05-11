@@ -1276,6 +1276,8 @@ namespace WB.Tests.Unit
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(), 
+                new Dictionary<InterviewItemId, object>(),
+                new HashSet<InterviewItemId>(),  
                 wasCompleted ?? false);
         }
 
@@ -2932,6 +2934,11 @@ namespace WB.Tests.Unit
         {
             return new Variable(publicKey: id ?? Guid.NewGuid(),
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
+        public static InterviewVariables InterviewVariables()
+        {
+           return new InterviewVariables();
         }
     }
 }
