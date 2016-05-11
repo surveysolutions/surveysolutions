@@ -235,6 +235,7 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\StatusChangeApiModel.cs" />
+    <Compile Include="Models\CloneQuestionnaireModel.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />

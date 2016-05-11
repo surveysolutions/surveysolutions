@@ -138,6 +138,13 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
+            if (questionnaireBrowseItem == null)
+                return new HttpNotFoundResult($"Questionnaire with id {id.FormatGuid()} and version {version} is not found.");
+
+            //return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title));
+
             this.CommandService.Execute(new CloneQuestionnaire(
                 id, version, "I am cloned and not census", userId: this.GlobalInfo.GetCurrentUser().Id));
 

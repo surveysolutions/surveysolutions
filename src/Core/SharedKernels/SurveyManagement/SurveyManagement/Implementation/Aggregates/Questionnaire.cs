@@ -73,6 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         public void CloneQuestionnaire(CloneQuestionnaire command)
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
+            ThrowIfTitleIsEmpty(command.NewTitle);
 
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
@@ -174,6 +175,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                     $"Cannot import questionnaire with a document of a not supported type {source.GetType()}. QuestionnaireId: {source.PublicKey}");
 
             return document;
+        }
+
+        private void ThrowIfTitleIsEmpty(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                throw new QuestionnaireException("Questionnaire title should not be empty.");
         }
 
         private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
