@@ -11,14 +11,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         /// <summary>
         /// Gets or sets UserName.
         /// </summary>
-        [Required]
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [Display(ResourceType = typeof(FieldsAndValidations), Name = "LogOnModel_UserName")]
         public string UserName { get; set; }
 
         /// <summary>
         /// Gets or sets Password.
         /// </summary>
-        [Required]
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(FieldsAndValidations), Name = "LogOnModel_Password")]
         public string Password { get; set; }

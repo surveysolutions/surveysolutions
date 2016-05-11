@@ -4,7 +4,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
-    ViewBag.Title = "Index";
+    ViewBag.Title = BatchUpload.BatchUpload_Title;
 }
 
 @section scripts
@@ -14,7 +14,7 @@
             $('.prefilled-file-upload').bind('change', function() {
                 var fileSize = this.files[0].size / 1024 / 1024;
                 if (fileSize > 300) {
-                    bootbox.alert('The file size can not exceed 300MB.');
+                    bootbox.alert('@BatchUpload.FileSizeLimit');
                     $(".prefilled-file-upload").val('');
                 }
             });

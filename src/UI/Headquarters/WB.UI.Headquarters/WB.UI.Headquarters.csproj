@@ -537,6 +537,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\CloneQuestionnaire.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CloneQuestionnaire.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -546,6 +551,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Dashboard.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -566,6 +581,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Common.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -770,6 +795,27 @@
     <Content Include="App_GlobalResources\Settings.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Settings.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Common.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Common.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\CloneQuestionnaire.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>CloneQuestionnaire.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.Designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

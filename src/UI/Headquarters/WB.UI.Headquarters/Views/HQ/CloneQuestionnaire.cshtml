@@ -1,7 +1,7 @@
 ﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.CloneQuestionnaireModel
 
 @{
-    ViewBag.Title = "Clone Questionnaire";
+    ViewBag.Title = CloneQuestionnaire.CloneQuestionnaireTitle;
 }
 
 @section scripts
@@ -17,7 +17,7 @@
 
     <div class="page-header">
         <h2>
-            Clone questionnaire '@Model.OriginalTitle' version @Model.Version @(this.Model.IsCensus ? "in census mode" : "in regular mode")
+            @CloneQuestionnaire.ToCloneQuestionnaire '@Model.OriginalTitle' version @Model.Version @(this.Model.IsCensus ? CloneQuestionnaire.inCensusMode : CloneQuestionnaire.inRegularMode)
         </h2>
     </div>
 
@@ -41,7 +41,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Clone</button>
+                <button type="submit" class="btn btn-primary">@CloneQuestionnaire.Clone</button>
                 @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
             </div>
         </div>

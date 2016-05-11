@@ -8,15 +8,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
 
-        [Required(ErrorMessageResourceName = "RequiredUserNameErrorMessage",
-            ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [Required(ErrorMessageResourceName = "RequiredUserNameErrorMessage", ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [Display(Name = "UserNameFieldName", ResourceType = typeof (FieldsAndValidations), Order = 1)]
         [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = "UserNameErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string UserName { get; set; }
 
-        [Required(ErrorMessageResourceName = "RequiredPasswordErrorMessage",
-            ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [Required(ErrorMessageResourceName = "RequiredPasswordErrorMessage",ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [PasswordStringLength(100, ErrorMessageResourceName = "PasswordLengthMessage", ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [PasswordRegularExpression(ErrorMessageResourceName = "PasswordErrorMessage", ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [DataType(DataType.Password)]

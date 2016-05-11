@@ -117,70 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API Users</value>
-  </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
-  </data>
-  <data name="DataExport" xml:space="preserve">
+  <data name="DataExport_Title" xml:space="preserve">
     <value>Data Export</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>Select type and format of data to export</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Binary Data</value>
   </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
+  <data name="ParaData" xml:space="preserve">
+    <value>Para Data</value>
   </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="Format" xml:space="preserve">
+    <value>Format</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Survey Setup</value>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Last update date</value>
   </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of synchronized interviews, but unprocessed yet</value>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
   </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Are you sure you want to stop</value>
   </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Speed</value>
+  <data name="export" xml:space="preserve">
+    <value>export</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Team and Roles</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Team members and Statuses</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Teams and Roles</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch User Upload</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
+  <data name="Metadata" xml:space="preserve">
+    <value>Metadata</value>
   </data>
 </root>
