@@ -1,39 +1,15 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using CsvHelper;
-using CsvHelper.Configuration;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Microsoft.CSharp.RuntimeBinder;
-using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -43,11 +19,9 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -56,7 +30,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
-using Binder = System.Reflection.Binder;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -170,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception exception)
             {
                 this.Logger.Error($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
-                this.Error("Unexpected error occurred. Sorry for the inconvenience. Please contact support@mysurvey.solutions or try again later.");
+                this.Error(global::Resources.CloneQuestionnaire.UnexpectedError);
                 return this.View(model);
             }
 
@@ -193,12 +166,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
@@ -226,12 +193,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);

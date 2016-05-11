@@ -117,70 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="CloneQuestionnaireTitle" xml:space="preserve">
+    <value>Clone Questionnaire</value>
   </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
+  <data name="ToCloneQuestionnaire" xml:space="preserve">
+    <value>Clone questionnaire</value>
   </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>Data Export</value>
+  <data name="inCensusMode" xml:space="preserve">
+    <value>in census mode</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="inRegularMode" xml:space="preserve">
+    <value>in regular mode</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
   </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Survey Setup</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of synchronized interviews, but unprocessed yet</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Speed</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Team and Roles</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Team members and Statuses</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Teams and Roles</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch User Upload</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Unexpected error occurred. Sorry for the inconvenience. Please contact support@mysurvey.solutions or try again later.</value>
   </data>
 </root>
