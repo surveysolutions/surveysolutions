@@ -2515,6 +2515,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
+            var entityToInsertAsVariable = entityToInsert as IVariable;
+            if (entityToInsertAsVariable != null)
+            {
+                if (targetToPasteIn.PublicKey == this.EventSourceId)
+                    throw new QuestionnaireException(string.Format("Variable cannot be pasted here."));
+
+                this.ApplyEvent(new VariableCloned(
+                    entityId: pasteItemId,
+                    parentId: targetToPasteIn.PublicKey,
+                    sourceEntityId: entityToInsert.PublicKey,
+                    sourceQuestionnaireId: sourceDocument.PublicKey,
+                    targetIndex: targetIndex,
+                    responsibleId: responsibleId,
+                    variableData: new VariableData(entityToInsertAsVariable.Type,
+                                                   entityToInsertAsVariable.Name,
+                                                   entityToInsertAsVariable.Expression)));
+
+                return;
+            }
+
             throw new QuestionnaireException(string.Format("Unknown item type. Paste failed."));
         }
 
