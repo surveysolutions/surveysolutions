@@ -5,9 +5,8 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerTests
 {
-    [Ignore("spuv")]
     internal class when_deleting_variable_and_all_parameters_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
@@ -28,11 +27,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
             eventContext = null;
         };
 
-        It should_raise_StaticTextDeleted_event = () =>
-            eventContext.ShouldContainEvent<StaticTextDeleted>();
+        It should_raise_VariableDeleted_event = () =>
+            eventContext.ShouldContainEvent<VariableDeleted>();
 
-        It should_raise_StaticTextDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<StaticTextDeleted>().EntityId.ShouldEqual(entityId);
+        It should_raise_VariableDeleted_event_with_EntityId_specified = () =>
+            eventContext.GetSingleEvent<VariableDeleted>().EntityId.ShouldEqual(entityId);
         
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
