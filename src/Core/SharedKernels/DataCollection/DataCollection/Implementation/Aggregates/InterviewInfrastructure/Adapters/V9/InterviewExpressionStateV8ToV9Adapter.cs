@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
             throw new NotImplementedException("Variables are missing is questionnairies older then V9, it's nothing to enable");
         }
 
-        public void SerVariablePreviousValue(Identity variableId, object value)
+        public void SetPreviousVariableValue(Identity variableIdentity, object value)
         {
             throw new NotImplementedException("Variables are missing is questionnairies older then V9, it's nothing to set");
         }

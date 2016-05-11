@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
                 state.EnableVariables(new [] { Create.Identity(variableId) });
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.SerVariablePreviousValue(Create.Identity(variableId), 6);
+                state.SetPreviousVariableValue(Create.Identity(variableId), 6);
                  var variables = state.ProcessVariables();
 
                 return new InvokeResults()
