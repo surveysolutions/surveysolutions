@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_message_with_code__WB0019 = () =>
             verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        private It should_return_WB0019_error_with_2_references_on_questions = () =>
+        It should_return_WB0019_error_with_2_references_on_questions = () =>
             verificationMessages.Single()
                 .References.ToList()
                 .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
