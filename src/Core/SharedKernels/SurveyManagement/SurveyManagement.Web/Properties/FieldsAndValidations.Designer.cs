@@ -88,6 +88,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title is required.
+        /// </summary>
+        public static string CloneQuestionnaireModel_NewTitle_Error_Required {
+            get {
+                return ResourceManager.GetString("CloneQuestionnaireModel_NewTitle_Error_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string CloneQuestionnaireModel_NewTitle_Label {
+            get {
+                return ResourceManager.GetString("CloneQuestionnaireModel_NewTitle_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password and confirmation password do not match.
         /// </summary>
         public static string ConfirmPasswordErrorMassage {

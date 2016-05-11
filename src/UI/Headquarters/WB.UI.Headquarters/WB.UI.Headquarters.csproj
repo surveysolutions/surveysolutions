@@ -499,6 +499,7 @@
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\Settings\ExportEncryptionSettings.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
+    <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

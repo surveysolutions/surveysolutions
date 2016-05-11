@@ -207,4 +207,10 @@
   <data name="BatchUploadModel_FileName" xml:space="preserve">
     <value>CSV File</value>
   </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>Questionnaire title is required</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>Title</value>
+  </data>
 </root>
