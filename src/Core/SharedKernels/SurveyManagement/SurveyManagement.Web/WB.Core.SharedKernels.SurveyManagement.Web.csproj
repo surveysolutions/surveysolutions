@@ -292,15 +292,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\FieldsAndValidations.ru.resx" />
     <EmbeddedResource Include="Properties\Pages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Pages.ru.resx" />
+    <EmbeddedResource Include="Properties\Strings.ru.resx" />
+    <EmbeddedResource Include="Properties\SyncLogMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\Archived.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EnumNames.ru.resx" />
+    <EmbeddedResource Include="Resources\Interviews.ru.resx" />
+    <EmbeddedResource Include="Resources\LimitsIndicator.ru.resx" />
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.ru.resx" />
+    <EmbeddedResource Include="Resources\TabletSyncMessages.ru.resx" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
