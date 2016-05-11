@@ -137,7 +137,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var itemsToAdd = new[]
             {
                 QuestionnaireItemType.Group, QuestionnaireItemType.Person, QuestionnaireItemType.Question,
-                QuestionnaireItemType.Roster, QuestionnaireItemType.StaticText
+                QuestionnaireItemType.Roster, QuestionnaireItemType.StaticText, QuestionnaireItemType.Variable, 
             };
 
             switch (actionType)
@@ -179,8 +179,10 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return "question";
                 case QuestionnaireItemType.Roster:
                     return "roster";
-                    case QuestionnaireItemType.StaticText:
+                case QuestionnaireItemType.StaticText:
                     return "static-text";
+                case QuestionnaireItemType.Variable:
+                    return "variable";
             }
             return string.Empty;
         }
