@@ -449,16 +449,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     ValidationConditions = staticText.ValidationConditions
                 }).ToList();
 
+            var variables = questionnaire.GetEntitiesByType<IVariable>().Select(variable => new VariableView()
+            {
+                Id = variable.PublicKey,
+                ParentGroupId = variable.GetParent().PublicKey,
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression)
+            }).ToList();
+
             var questionCollection = new QuestionsAndGroupsCollectionView
             {
                 Questions = questions,
                 Groups = groups,
-                StaticTexts = staticTexts
+                StaticTexts = staticTexts,
+                Variables = variables
             };
 
             groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
             staticTexts.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
+            variables.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
 
             return questionCollection;
         }
