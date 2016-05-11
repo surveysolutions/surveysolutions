@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         void EnableVariable(Guid variableId);
         void DisableVariable(Guid variableId);
-        void SerVariablePreviousValue(Guid variableId, object value);
+        void SetPreviousVariableValue(Guid variableId, object value);
         VariableValueChanges ProcessVariables();
 
         new IExpressionExecutableV9 GetParent();

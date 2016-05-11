@@ -481,7 +481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
-                this.ExpressionProcessorStatePrototype.SerVariablePreviousValue(changedVariableValueDto.VariableIdentity, changedVariableValueDto.VariableValue);
+                this.ExpressionProcessorStatePrototype.SetPreviousVariableValue(changedVariableValueDto.VariableIdentity, changedVariableValueDto.VariableValue);
             }
         }
 

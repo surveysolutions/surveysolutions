@@ -62,9 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             foreach (Identity staticText in staticTextsToDisable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DisableStaticText(staticText.Id);
+                targetLevel?.DisableStaticText(staticText.Id);
             }
         }
 
@@ -73,9 +72,8 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             foreach (Identity staticText in staticTextsToEnable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.EnableStaticText(staticText.Id);
+                targetLevel?.EnableStaticText(staticText.Id);
             }
         }
 
@@ -84,9 +82,8 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             foreach (Identity staticText in validStaticTexts)
             {
                 var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DeclareStaticTextValid(staticText.Id);
+                targetLevel?.DeclareStaticTextValid(staticText.Id);
             }
         }
 
@@ -95,9 +92,8 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             foreach (var failedValidationCondition in failedValidationConditions)
             {
                 var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
-                if (targetLevel == null) return;
 
-                (targetLevel as IExpressionExecutableV8).ApplyStaticTextFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
+                (targetLevel as IExpressionExecutableV8)?.ApplyStaticTextFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
             }
         }
 
