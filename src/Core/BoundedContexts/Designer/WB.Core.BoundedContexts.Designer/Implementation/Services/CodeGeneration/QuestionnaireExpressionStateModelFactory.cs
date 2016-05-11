@@ -619,7 +619,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 case VariableType.Boolean:
                     return "bool?";
                 case VariableType.DateTime:
-                    return "string?";
+                    return "DateTime?";
                 case VariableType.String:
                     return "string";
                 default:

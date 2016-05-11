@@ -106,13 +106,13 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 
 <#
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
-	VariablesCopyOperatorsInCopyMembers(Model.Variables);
 #>
 		};
 
 		((IRosterLevel)level).SetRowName(this.@rowname);
 			
 		level.FillEnablementStates(this.EnablementStates);
+		level.FillVariablePreviousStates(this.VariablePreviousStates);
 		 
 		return level;
 	}

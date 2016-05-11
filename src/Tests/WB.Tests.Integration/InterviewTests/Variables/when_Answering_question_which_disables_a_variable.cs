@@ -41,9 +41,8 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         Because of = () =>
             interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "Nastya");
 
-        It should_raise_VariablesValuesChanged_event_for_the_variable_with_value_equal_to_null = () =>
-           eventContext.ShouldContainEvent<VariablesValuesChanged>(@event
-               => @event.ChangedVariables[0].VariableValue == null && @event.ChangedVariables[0].VariableIdentity.Id == variableId);
+        It should_not_raise_VariablesValuesChanged_event_for_the_variable_with_value_equal_to_null = () =>
+           eventContext.ShouldNotContainEvent<VariablesValuesChanged>();
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
            eventContext.ShouldContainEvent<VariablesDisabled>(@event
