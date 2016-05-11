@@ -1421,7 +1421,7 @@
     <Content Include="UpdatedDesigner\content\i\cross.png" />
     <Content Include="UpdatedDesigner\content\i\d-loading.gif" />
     <Content Include="UpdatedDesigner\content\i\d-normal.gif" />
-    <Content Include="UpdatedDesigner\content\i\icons.png" />
+    <Content Include="UpdatedDesigner\content\i\icons1.png" />
     <Content Include="UpdatedDesigner\content\i\loading-bg.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
