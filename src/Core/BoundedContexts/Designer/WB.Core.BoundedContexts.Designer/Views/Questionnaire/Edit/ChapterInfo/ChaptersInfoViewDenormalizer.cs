@@ -348,7 +348,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableAdded> @event)
         {
-            this.AddVariable(state, @event.Payload, @event.Payload.ParentId);
+            this.AddVariable(state,
+                @event.Payload.ParentId,
+                @event.Payload.EntityId,
+                @event.Payload.VariableData);
             return state;
         }
 
@@ -365,7 +368,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableCloned> @event)
         {
-            this.AddVariable(state, @event.Payload, @event.Payload.ParentId);
+            this.AddVariable(state,
+                @event.Payload.ParentId,
+                @event.Payload.EntityId,
+                @event.Payload.VariableData);
             return state;
         }
 
@@ -375,16 +381,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return state;
         }
 
-        private void AddVariable(GroupInfoView state, QuestionnaireVariableEvent @event, Guid parentId)
+        private void AddVariable(GroupInfoView questionnaire, Guid parentId, Guid entityId, VariableData variableData, int? orderIndex = null)
         {
-            var groupView = this.FindGroup(questionnaireOrGroup: state, groupId: parentId.FormatGuid());
+            var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId.FormatGuid());
             if (groupView == null)
                 return;
 
             var variableView = new VariableView()
             {
-                ItemId = @event.EntityId.FormatGuid(),
-                VariableData = @event.VariableData
+                ItemId = entityId.FormatGuid(),
+                VariableData = variableData
             };
 
             groupView.Items.Add(variableView);
@@ -702,6 +708,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
                     continue;
                 }
+
+                var variableChild = child as IVariable;
+                if (variableChild != null)
+                {
+                    this.AddVariable(questionnaire: currentState,
+                        parentId: variableChild.GetParent().PublicKey,
+                        entityId: variableChild.PublicKey,
+                        variableData: new VariableData(variableChild.Type, variableChild.Name, variableChild.Expression));
+
+                    continue;
+                }
+
+                
 
                 throw new ArgumentException(string.Format("Unknown questionnaire item type in item with id {0}, received type is: {1}", child.PublicKey, child.GetType()));
             }
