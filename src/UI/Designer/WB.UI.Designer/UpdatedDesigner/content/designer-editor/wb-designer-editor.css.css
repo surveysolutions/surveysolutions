@@ -1351,6 +1351,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   width: 100%;
   background: transparent;
 }
+.item .item-body .variable-name {
+  color: #3da802;
+}
 .item .item-body .qname-block {
   position: absolute;
   right: 0;
