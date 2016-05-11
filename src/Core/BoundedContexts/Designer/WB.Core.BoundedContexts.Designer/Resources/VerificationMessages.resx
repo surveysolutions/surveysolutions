@@ -150,14 +150,14 @@
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
     <value>Question with title substitution cannot reference itself.</value>
   </data>
-  <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Question with title substitution references a nonexistent question.</value>
+  <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Question with title substitution references a nonexistent question or variable.</value>
   </data>
-  <data name="WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Question with title substitution references a question type that is not supported.</value>
+  <data name="WB0018_QuestionWithTitleSubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>Question with title substitution references a entity that is not supported in substitutions.</value>
   </data>
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with title substitution cannot reference questions from a deeper roster level.</value>
+    <value>Question with title substitution cannot reference items from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
     <value>Max number of answers is greater than number of question's options.</value>
@@ -393,8 +393,8 @@
   <data name="WB0029_" xml:space="preserve">
     <value />
   </data>
-  <data name="WB0026_EntityWithTheSameNamesFound" xml:space="preserve">
-    <value>Entities with with the same name found.</value>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>Items with with the same name found.</value>
   </data>
   <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
     <value>Lookup table has invalid name.</value>
