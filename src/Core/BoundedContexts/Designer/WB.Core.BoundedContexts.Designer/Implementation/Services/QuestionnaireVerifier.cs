@@ -1236,7 +1236,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var dependencies = new Dictionary<string, string[]>();
             var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
-            var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Body));
+            var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Expression));
 
             foreach (var question in questionsWithConditions)
             {
@@ -1245,7 +1245,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var variable in variables)
             {
-                dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Body).ToArray());
+                dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
             }
 
             var cycles = topologicalSorter.DetectCycles(dependencies);
@@ -1313,9 +1313,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return this.ReferencedQuestionsOrVariables(referencedQuestion.ConditionExpression, questionnaire);
             }
 
-            if (!string.IsNullOrWhiteSpace(referencedVariable?.Body))
+            if (!string.IsNullOrWhiteSpace(referencedVariable?.Expression))
             {
-                return this.ReferencedQuestionsOrVariables(referencedVariable.Body, questionnaire);
+                return this.ReferencedQuestionsOrVariables(referencedVariable.Expression, questionnaire);
             }
 
             return Enumerable.Empty<IComposite>();
