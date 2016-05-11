@@ -1,10 +1,11 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model LogOnModel
 @{
     Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
-    ViewBag.Title = "Log On";
+    ViewBag.Title = Pages.LogOn_Title;
 }
 @section scripts
 {
@@ -12,7 +13,7 @@
 }
 
 <div style="margin-top: 40px;">
-    @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
+    @Html.BootstrapValidationSummary(Pages.LogOn_UnsuccessfulLogin)
 </div>
 
 <div class="well form-signin">
@@ -20,7 +21,7 @@
     {
         <fieldset>
             <legend>
-                Please log in
+                @Pages.LogOn_Legend
             </legend>
             <div class="form-group">
                 @Html.LabelFor(m => m.UserName, new { @class = "control-label col-sm-4" })
@@ -39,7 +40,7 @@
         </fieldset>
         <div class="form-group">
             <div class="col-sm-offset-4 col-sm-8">
-                <button class="btn btn-primary btn-lg" type="submit">Log in</button>
+                <button class="btn btn-primary btn-lg" type="submit">@Pages.LogOn_LogIn</button>
             </div>
         </div>
     }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles
@@ -15,7 +16,7 @@
 <div id="menu" class="col-sm-3 col-md-2 sidebar">
     <div class="panel panel-default">
         <div class="panel-heading with-btn">
-            Filter
+            @Pages.Layout_Filter
             <div class="btn-group btn-group-sm pull-right">
                 <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-left"></span> Hide filter</button>
             </div>
@@ -43,7 +44,7 @@
         <div id="list">
             <!-- ko if:IsPageLoaded()  -->
             <p class="text-center" data-bind="visible: Pager().TotalItemCount() == 0">
-                No results found
+                @Pages.Layout_NoResults
             </p>
             <!-- /ko -->
             <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">

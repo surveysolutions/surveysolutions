@@ -168,4 +168,40 @@
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
   </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Invalid property</value>
+  </data>
+  <data name="CommandTransformator_ParseNumericError" xml:space="preserve">
+    <value>Values {0} is too big or too small</value>
+  </data>
+  <data name="CommandTransformator_IncorrectFormatError" xml:space="preserve">
+    <value>value '{0}' is not in the correct format.</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Error when parse question answer</value>
+  </data>
+  <data name="CustomPrincipal_IdentityIsNullError" xml:space="preserve">
+    <value>Principal not fully constructed</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Status set by Survey Solutions support team</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observer is not allowed to perform this action</value>
+  </data>
+  <data name="ErrorInStructure" xml:space="preserve">
+    <value>Error in structure</value>
+  </data>
+  <data name="OperationNotImplemented" xml:space="preserve">
+    <value>The method or operation is not implemented.</value>
+  </data>
+  <data name="OperationNotAllowed" xml:space="preserve">
+    <value>Operation is not allowed.</value>
+  </data>
+  <data name="WriteToSyncLogAttribute_UnknownPackageType" xml:space="preserve">
+    <value>Unknown interview package type</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Unexpected error occurred</value>
+  </data>
 </root>

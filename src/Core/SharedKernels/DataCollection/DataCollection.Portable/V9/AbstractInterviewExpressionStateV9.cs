@@ -58,15 +58,10 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             => (IExpressionExecutableV9) base.GetRosterByIdAndVector(questionId, rosterVector);
 
         public VariableValueChanges ProcessVariables()
-        {
-            var result = new VariableValueChanges();
-
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
-            {
-                result.AppendChanges(interviewScopeKvpValue.ProcessVariables());
-            }
-            return result;
-        }
+            => VariableValueChanges.Concat(this.InterviewScopes
+                .Values
+                .OrderBy(x => x.GetLevel()) // order by scope depth starting from top because conditionally lower scope could depend only from upper scope
+                .Select(scope => scope.ProcessVariables()));
 
         public void DisableVariables(IEnumerable<Identity> variablesToDisable)
         {

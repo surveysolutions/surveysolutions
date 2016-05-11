@@ -4,17 +4,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class VariableTemplateModel
     {
-        public Guid Id { get; set; }
-        public string VariableName { get; set; }
-        public string Expression { get; set; }
-        public string TypeName { get; set; }
+        public VariableTemplateModel(Guid id, string variableName, string expression, string typeName, string rosterScopeName, string parentScopeTypeName)
+        {
+            this.Id = id;
+            this.VariableName = variableName;
+            this.Expression = expression;
+            this.TypeName = typeName;
+            this.RosterScopeName = rosterScopeName;
+            this.ParentScopeTypeName = parentScopeTypeName;
+        }
 
-        public string RosterScopeName { set; get; }
-        public string ParentScopeTypeName { get; set; }
+        public Guid Id { get; }
+        public string VariableName { get; }
+        public string Expression { get; }
+        public string TypeName { get; }
+
+        public string RosterScopeName { get; }
+        public string ParentScopeTypeName { get; }
 
         public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
         public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+
         public string VariablePreviousValueName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.PreviousSuffix;
     }
 }

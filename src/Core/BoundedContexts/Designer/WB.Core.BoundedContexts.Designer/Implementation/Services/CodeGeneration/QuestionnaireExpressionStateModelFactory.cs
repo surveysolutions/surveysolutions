@@ -377,8 +377,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     if (child is IVariable)
                     {
                         var variable = this.CreateVariableTemplateModel((IVariable)child, currentScope, questionnaireDoc);
+
+                        currentScope.Variables.Add(variable);
+
                         expressionState.AllVariables.Add(variable);
-                        expressionState.QuestionnaireLevelModel.Variables.Add(variable);
+
                         continue;
                     }
                     if (child is IStaticText)
@@ -559,18 +562,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             linkedQuestionFilters.ForEach(x => x.ParentScopeTypeName = typeName);
 
-            var roster = new RosterTemplateModel
-            {
-                Id = childAsIGroup.PublicKey,
-                Conditions = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
-                VariableName = varName,
-                TypeName = typeName,
-                RosterScopeName = CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
-                RosterScope = currentRosterScope,
-                ParentTypeName = currentScope.TypeName,
-                ParentScopeTypeName = currentScope.TypeName,
-                LinkedQuestionFilterExpressions = linkedQuestionFilters
-            };
+            var roster = new RosterTemplateModel(
+                rosterScopeName: CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
+                typeName: typeName,
+                rosterScope: currentRosterScope,
+                parentTypeName: currentScope.TypeName,
+                conditions: macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression,questionnaireDoc.Macros.Values),
+                id: childAsIGroup.PublicKey,
+                variableName: varName,
+                parentScopeTypeName: currentScope.TypeName,
+                linkedQuestionFilterExpressions: linkedQuestionFilters);
+
             return roster;
         }
 
@@ -588,15 +590,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             };
 
         private VariableTemplateModel CreateVariableTemplateModel(IVariable variable, RosterScopeBaseModel currentScope,
-            QuestionnaireDocument questionnaire) => new VariableTemplateModel()
-            {
-                Expression = this.macrosSubstitutionService.InlineMacros(variable.Body, questionnaire.Macros.Values),
-                Id = variable.PublicKey,
-                TypeName = CreateVariablesCSharpType(variable.Type),
-                VariableName = variable.Name,
-                RosterScopeName = currentScope.RosterScopeName,
-                ParentScopeTypeName = currentScope.TypeName
-            };
+            QuestionnaireDocument questionnaire)
+            =>
+                new VariableTemplateModel(variable.PublicKey, variable.Name,
+                    this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values),
+                    CreateVariablesCSharpType(variable.Type), currentScope.RosterScopeName, currentScope.TypeName);
+
         private StaticTextTemplateModel CreateStaticTextTemplateModel(IStaticText staticText, RosterScopeBaseModel currentScope, QuestionnaireDocument questionnaire)
             => new StaticTextTemplateModel(
                 staticText.PublicKey,

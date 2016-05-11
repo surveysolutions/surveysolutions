@@ -75,6 +75,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
+            this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
 
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();

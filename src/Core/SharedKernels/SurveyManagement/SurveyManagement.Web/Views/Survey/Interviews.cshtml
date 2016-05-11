@@ -2,6 +2,7 @@
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -34,7 +35,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Interviews</h3>
+    <h3 class="sinle-line-header">@Pages.Survey_Header</h3>
 }
 @section actionbar{
     <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
@@ -82,12 +83,12 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
-                <th data-bind='sortby: "ResponsibleName"'>Responsible</th>
-                <th data-bind='sortby: "UpdateDate"'>Last Update</th>
-                <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
-                <th data-bind='sortby: "Status"'>Status</th>
-                <th data-bind='sortby: "ReceivedByInterviewer"'>Received by Interviewer</th>
-                <th>Created on Client</th>
+                <th data-bind='sortby: "ResponsibleName"'>@Pages.Survey_ResponsibleTitle</th>
+                <th data-bind='sortby: "UpdateDate"'>@Pages.Survey_LastUpdateTitle</th>
+                <th data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
+                <th data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
+                <th data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
+                <th>@Pages.Survey_CreatedOnClientTitle</th>
                 <th></th>
             </tr>
         </thead>
@@ -181,7 +182,7 @@
                 <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @if (Model.Templates.Count() > 1)
                     {
-                        <option value="">Any</option>
+                        <option value="">@Pages.AnyOption</option>
                     }
                     @foreach (var item in Model.Templates)
                     {
@@ -191,7 +192,7 @@
             </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Responsible</h4>
+            <h4 class="list-group-item-heading">@Pages.Survey_ResponsibleTitle</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
                     <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
@@ -206,7 +207,7 @@
             <h4 class="list-group-item-heading">Status</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: SelectedStatus" class="form-control">
-                    <option value="">Any</option>
+                    <option value="">@Pages.AnyOption</option>
                     @foreach (var item in Model.Statuses)
                     {
                         <option value="@item.Status">@item.StatusName</option>

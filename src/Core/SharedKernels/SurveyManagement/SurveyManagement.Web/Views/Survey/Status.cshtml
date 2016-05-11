@@ -1,10 +1,11 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Survey.SurveyStatusViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 @{
-    ViewBag.Title = "Status";
+    ViewBag.Title = Pages.Survey_Status_Title;
 }
 
 
@@ -26,7 +27,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Interviewers and Surveys.</h3>
+    <h3 class="sinle-line-header">@Pages.Survey_Status_Header</h3>
 }
 
 @section filters

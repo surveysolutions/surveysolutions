@@ -348,20 +348,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableAdded> @event)
         {
-            var groupView = this.FindGroup(questionnaireOrGroup: state, groupId: @event.Payload.ParentId.FormatGuid());
-            if (groupView == null)
-            {
-                return state;
-            }
-
-            var staticTextInfoView = new VariableView()
-            {
-                ItemId = @event.Payload.EntityId.FormatGuid(),
-                VariableData = @event.Payload.VariableData
-            };
-
-            groupView.Items.Add(staticTextInfoView);
-            
+            this.AddVariable(state,
+                @event.Payload.ParentId,
+                @event.Payload.EntityId,
+                @event.Payload.VariableData);
             return state;
         }
 
@@ -378,12 +368,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<VariableCloned> @event)
         {
-            var variableView = this.FindEntity<VariableView>(questionnaireOrGroup: state, entityId: @event.Payload.EntityId.FormatGuid());
-
-            if (variableView == null)
-                return state;
-
-            variableView.VariableData = @event.Payload.VariableData;
+            this.AddVariable(state,
+                @event.Payload.ParentId,
+                @event.Payload.EntityId,
+                @event.Payload.VariableData);
             return state;
         }
 
@@ -391,6 +379,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             removeEntity(state, @event.Payload.EntityId.FormatGuid());
             return state;
+        }
+
+        private void AddVariable(GroupInfoView questionnaire, Guid parentId, Guid entityId, VariableData variableData, int? orderIndex = null)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId.FormatGuid());
+            if (groupView == null)
+                return;
+
+            var variableView = new VariableView()
+            {
+                ItemId = entityId.FormatGuid(),
+                VariableData = variableData
+            };
+
+            groupView.Items.Add(variableView);
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<QuestionnaireItemMoved> @event)
@@ -705,6 +708,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
                     continue;
                 }
+
+                var variableChild = child as IVariable;
+                if (variableChild != null)
+                {
+                    this.AddVariable(questionnaire: currentState,
+                        parentId: variableChild.GetParent().PublicKey,
+                        entityId: variableChild.PublicKey,
+                        variableData: new VariableData(variableChild.Type, variableChild.Name, variableChild.Expression));
+
+                    continue;
+                }
+
+                
 
                 throw new ArgumentException(string.Format("Unknown questionnaire item type in item with id {0}, received type is: {1}", child.PublicKey, child.GetType()));
             }

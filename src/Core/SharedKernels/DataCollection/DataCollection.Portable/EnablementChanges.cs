@@ -18,7 +18,10 @@ namespace WB.Core.SharedKernels.DataCollection
                 questionsToBeDisabled,
                 questionsToBeEnabled,
                 null,
-                null, null, null) {}
+                null, 
+                null, 
+                null) {}
+
         public EnablementChanges(
             List<Identity> groupsToBeDisabled,
             List<Identity> groupsToBeEnabled,
@@ -30,7 +33,9 @@ namespace WB.Core.SharedKernels.DataCollection
                 groupsToBeEnabled,
                 questionsToBeDisabled,
                 questionsToBeEnabled,
-                staticTextsToBeDisabled, staticTextsToBeEnabled, null, null)
+                staticTextsToBeDisabled, staticTextsToBeEnabled, 
+                null, 
+                null)
         {
         }
 

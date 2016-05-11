@@ -4,6 +4,7 @@
 @using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 @using WB.Core.SharedKernels.DataCollection.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
 
@@ -116,10 +117,10 @@
         {
             var geoLocationAnswer = Model.Answer as GeoPosition;
             <span>
-                <div>latitude: <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
-                <div>longitude: <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
-                <div>accuracy: <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
-                <div>altitude: <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
+                <div>@Pages.GPS_latitude : <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
+                <div>@Pages.GPS_longitude : <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
+                <div>@Pages.GPS_accuracy : <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
+                <div>@Pages.GPS_altitude : <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
             </span>
         }
         break;
