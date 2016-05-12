@@ -24,20 +24,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 {
     public class Questionnaire : IPlainAggregateRoot
     {
-        #region Dependencies
-
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
 
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
-
-        private IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
-        private IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
-        private IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>();
-        #endregion
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
+        private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
 
         private Guid Id { get; set; }
 
@@ -45,12 +41,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
+            IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
+            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
+            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
+            this.referenceInfoForLinkedQuestionsStorage = referenceInfoForLinkedQuestionsStorage;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
         }
 
         public void SetId(Guid id) => this.Id = id;
