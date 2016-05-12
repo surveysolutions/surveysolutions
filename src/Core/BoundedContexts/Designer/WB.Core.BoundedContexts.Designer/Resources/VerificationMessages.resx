@@ -168,10 +168,10 @@
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
     <value>Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used.</value>
   </data>
-  <data name="WB0027_QuestionnaireHaveAutopropagatedGroups" xml:space="preserve">
-    <value />
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Expression has a syntax error.</value>
   </data>
-  <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
+  <data name="WB0028_" xml:space="preserve">
     <value />
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">

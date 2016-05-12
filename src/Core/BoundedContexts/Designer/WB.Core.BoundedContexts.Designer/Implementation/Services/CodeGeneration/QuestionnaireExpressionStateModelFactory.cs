@@ -173,6 +173,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     string.Empty));
             }
 
+            foreach (var variable in questionnaireTemplate.AllVariables)
+            {
+                methodModels.Add(ExpressionLocation.Variable(variable.Id).Key, new ConditionDescriptionModel(
+
+                    variable.ParentScopeTypeName,
+                    variable.ExpressionMethodName,
+                    codeGenerationSettings.Namespaces,
+                    variable.Expression,
+                    false,
+                    variable.VariableName,
+                    returnType: variable.TypeName));
+            }
+
             return methodModels;
         }
 

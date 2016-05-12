@@ -106,14 +106,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(
-            IExpressionProcessor expressionProcessor, 
+            IExpressionProcessor expressionProcessor,
             IFileSystemAccessor fileSystemAccessor,
-            ISubstitutionService substitutionService, 
+            ISubstitutionService substitutionService,
             IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IExpressionProcessorGenerator expressionProcessorGenerator,
             IDesignerEngineVersionService engineVersionService,
-            IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService, 
+            IMacrosSubstitutionService macrosSubstitutionService,
+            ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
             ITopologicalSorter<string> topologicalSorter)
         {
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),               
+            Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
             Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
@@ -205,10 +205,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
             Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
-            
+
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
-                    
+
             LookupVerifier(LookupTableNameIsKeyword, "WB0052", VerificationMessages.WB0052_LookupNameIsKeyword),
             LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName),
             LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName),
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return QuestionnaireVerificationReferenceType.Question;
 
             var group = questionnaire.Find<IGroup>(id);
-           
+
             return IsRosterGroup(group)
                 ? QuestionnaireVerificationReferenceType.Roster
                 : QuestionnaireVerificationReferenceType.Group;
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(ReadOnlyQuestionnaireDocument document, VerificationState state)
         {
-            var gpsPrefilledQuestions= document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
+            var gpsPrefilledQuestions = document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
             if (gpsPrefilledQuestions.Length < 2)
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
             var customEnablementCondition = GetCustomEnablementCondition(entity);
-            
+
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
 
@@ -320,7 +320,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 return false;
-            
+
             if (string.IsNullOrEmpty(question.LinkedFilterExpression))
                 return false;
 
@@ -346,8 +346,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
-            if (state.HasExceededLimitByConditionExpresssionCharactersLength || 
-                state.HasExceededLimitByValidationExpresssionCharactersLength || 
+            if (state.HasExceededLimitByConditionExpresssionCharactersLength ||
+                state.HasExceededLimitByValidationExpresssionCharactersLength ||
                 state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength)
                 yield break;
 
@@ -361,7 +361,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 yield return CreateExpressionSyntaxError(new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList());
             }
-        } 
+        }
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(ReadOnlyQuestionnaireDocument questionnaire)
         {
@@ -369,15 +369,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
             var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
             var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
-            return new Tuple<bool, decimal>(isOversized, questionnaireMegaByteCount) ;
+            return new Tuple<bool, decimal>(isOversized, questionnaireMegaByteCount);
         }
-        
+
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
         {
             string resultAssembly;
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire), 
+                questionnaire, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire),
                 out resultAssembly);
         }
 
@@ -385,7 +385,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
             {
-                var enumerable = question.Answers.Select(x => new {x.AnswerText, x.ParentValue})
+                var enumerable = question.Answers.Select(x => new { x.AnswerText, x.ParentValue })
                     .Distinct().ToList();
                 var uniqueCount = enumerable.Count();
                 var result = uniqueCount != question.Answers.Count;
@@ -501,7 +501,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return IsFilteredComboboxQuestion(question) && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
-        
+
         private static bool StaticTextRefersAbsentAttachment(IStaticText staticText, ReadOnlyQuestionnaireDocument document)
         {
             if (string.IsNullOrWhiteSpace(staticText.AttachmentName))
@@ -620,7 +620,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
             Func<LookupTable, LookupTableContent, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => 
+            return (questionnaire, state) =>
                 from lookupTable in questionnaire.LookupTables
                 let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
                 where lookupTableContent != null
@@ -714,7 +714,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select QuestionnaireVerificationMessage.Error(code, message,verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
+                select QuestionnaireVerificationMessage.Error(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
 
         private static bool MacroHasEmptyName(Macro macro, ReadOnlyQuestionnaireDocument questionnaire)
@@ -737,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return string.IsNullOrWhiteSpace(table.TableName);
         }
-        
+
         private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
@@ -778,7 +778,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
         {
-            return question.MaxAllowedAnswers.HasValue && !(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue) &&
+            return question.MaxAllowedAnswers.HasValue && !(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) &&
                    (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }
 
@@ -974,7 +974,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool IsCategoricalRosterSizeQuestion(IQuestion question)
         {
-            return IsCategoricalMultiAnswersQuestion(question) && !(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue);
+            return IsCategoricalMultiAnswersQuestion(question) && !(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private static bool IsCategoricalMultiAnswersQuestion(IQuestion question)
@@ -1045,11 +1045,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(variableName))
                 return true;
 
-           if (variableName.Length > DefaultVariableLengthLimit)
+            if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
             return VariableNameRegex.IsMatch(variableName);
         }
-        
+
         private static bool VariableHasEmptyVariableName(IVariable variable)
         {
             return string.IsNullOrWhiteSpace(variable.Name);
@@ -1073,7 +1073,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             return !IsVariableNameValid(variable.Name);
         }
-        
+
         private static bool RosterHasInvalidVariableName(IGroup group)
         {
             if (!group.IsRoster)
@@ -1093,7 +1093,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
         }
-      
+
         private static bool TextListQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return IsSupervisorQuestion(question);
@@ -1126,12 +1126,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
-        
+
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                 question, question.ValidationExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedEntity => referencedEntity is IQuestion && ((IQuestion) referencedEntity).QuestionType == QuestionType.Multimedia);
+                isReferencedQuestionIncorrect: referencedEntity => referencedEntity is IQuestion && ((IQuestion)referencedEntity).QuestionType == QuestionType.Multimedia);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
@@ -1143,7 +1143,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var noErrors=new EntityVerificationResult<IComposite> { HasErrors = false };
+            var noErrors = new EntityVerificationResult<IComposite> { HasErrors = false };
 
             if (!group.RosterTitleQuestionId.HasValue)
                 return noErrors;
@@ -1270,7 +1270,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
         }
-        
+
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1314,7 +1314,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         CreateReference(questionLinkedOnRoster));
                     continue;
                 }
-                if(!sourceRoster.IsRoster)
+                if (!sourceRoster.IsRoster)
                 {
                     yield return QuestionnaireVerificationMessage.Error("WB0103",
                         VerificationMessages.WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster,
@@ -1360,30 +1360,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterVariableNameMappedOnRosters = questionnaire
                 .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
                 .Select(r => new
-                        {
-                            Name = r.VariableName,
-                            Reference = CreateRosterReference(r.PublicKey)
-                        })
+                {
+                    Name = r.VariableName,
+                    Reference = CreateRosterReference(r.PublicKey)
+                })
                 .Union(questionnaire.Find<IQuestion>(q => true)
                         .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                         .Select(r => new
-                                {
-                                    Name = r.StataExportCaption,
-                                    Reference = CreateQuestionReference(r.PublicKey)
-                                }))
+                        {
+                            Name = r.StataExportCaption,
+                            Reference = CreateQuestionReference(r.PublicKey)
+                        }))
                 .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                        .Select(r => new 
-                                {
-                                    Name = r.Value.TableName,
-                                    Reference = CreateLookupReference(r.Key)
-                                }))
+                        .Select(r => new
+                        {
+                            Name = r.Value.TableName,
+                            Reference = CreateLookupReference(r.Key)
+                        }))
                 .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
                         .Where(x => !string.IsNullOrEmpty(x.Name))
                         .Select(r => new
-                                {
-                                    Name = r.Name,
-                                    Reference = CreateVariableReference(r.PublicKey)
-                                })
+                        {
+                            Name = r.Name,
+                            Reference = CreateVariableReference(r.PublicKey)
+                        })
                 ).ToList();
 
 
@@ -1435,7 +1435,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return errorByAllQuestionsWithSubstitutions;
         }
-        
+
         private static QuestionnaireVerificationReference CreateGroupReference(Guid groupId)
         {
             return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId);
@@ -1469,6 +1469,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationReference CreateAttachmentReference(Guid attachmentId)
         {
             return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Attachment, attachmentId);
+        }
+
+        private static QuestionnaireVerificationReference CreateStaticTextReference(Guid textId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.StaticText, textId);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
@@ -1529,9 +1534,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return variable;
         }
 
-        private  QuestionnaireVerificationMessage GetVerificationErrorBySubstitutionReferenceOrNull(
+        private QuestionnaireVerificationMessage GetVerificationErrorBySubstitutionReferenceOrNull(
             IQuestion questionWithSubstitution,
-            string substitutionReference, 
+            string substitutionReference,
             Guid[] vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
             ReadOnlyQuestionnaireDocument questionnaire)
         {
@@ -1582,7 +1587,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(
-            IQuestion questionsWithSubstitution, 
+            IQuestion questionsWithSubstitution,
             IComposite entityToSubstitute)
         {
             return QuestionnaireVerificationMessage.Error("WB0019",
@@ -1653,53 +1658,53 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
-            if (expressionLocation.ExpressionType != ExpressionLocationType.General)
+            QuestionnaireVerificationReference reference;
+
+            switch (expressionLocation.ItemType)
             {
+                case ExpressionLocationItemType.Group:
+                case ExpressionLocationItemType.Roster:
+                    reference = CreateQuestionReference(expressionLocation.Id);
+                    break;
+                case ExpressionLocationItemType.Question:
+                    reference = CreateQuestionReference(expressionLocation.Id);
+                    
+                    break;
+                case ExpressionLocationItemType.StaticText:
+                    reference = CreateStaticTextReference(expressionLocation.Id);
+                    break;
+                case ExpressionLocationItemType.LookupTable:
+                    reference = CreateLookupReference(expressionLocation.Id);
+                    break;
+                case ExpressionLocationItemType.Variable:
+                    reference = CreateVariableReference(expressionLocation.Id);
+                    break;
+                case ExpressionLocationItemType.Questionnaire:
+                    return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
+                default:
+                    throw new ArgumentException("expressionLocation");
+            }
 
-                QuestionnaireVerificationReferenceType questionnaireVerificationReferenceType;
-
-                switch (expressionLocation.ItemType)
-                {
-                    case ExpressionLocationItemType.Group:
-                    case ExpressionLocationItemType.Roster:
-                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Group;
-                        break;
-                    case ExpressionLocationItemType.Question:
-                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Question;
-                        break;
-                    case ExpressionLocationItemType.StaticText:
-                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.StaticText;
-                        break;
-                    default:
-                        throw new ArgumentException("expressionLocation");
-                }
-
-
-                var reference = new QuestionnaireVerificationReference(questionnaireVerificationReferenceType, expressionLocation.Id);
-
-                if (expressionLocation.ExpressionType == ExpressionLocationType.Validation)
-                {
+            switch (expressionLocation.ExpressionType)
+            {
+                case ExpressionLocationType.Validation:
                     reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
                         VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
-                }
-                else if (expressionLocation.ExpressionType == ExpressionLocationType.Condition)
-                {
+                case ExpressionLocationType.Condition:
                     return QuestionnaireVerificationMessage.Error("WB0003",
                         VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);
-                }
-                else if (expressionLocation.ExpressionType == ExpressionLocationType.Filter)
-                {
+                case ExpressionLocationType.Filter:
                     return QuestionnaireVerificationMessage.Error("WB0110",
                         VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
-                }
+                case ExpressionLocationType.Expression:
+                    return QuestionnaireVerificationMessage.Error("WB0027",
+                        VerificationMessages.WB0027_VariableExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
             }
 
             return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
         }
-
-
-
+        
         private static bool NoQuestionsExist(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
@@ -1774,7 +1779,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(
             IComposite entity,
-            Guid[] vectorOfRosterSizeQuestions, 
+            Guid[] vectorOfRosterSizeQuestions,
             ReadOnlyQuestionnaireDocument questionnaire)
         {
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
@@ -1811,7 +1816,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsCategoricalLinkedQuestion(IQuestion question)
         {
             return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
-                   (question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue);
+                   (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private static bool IsFilteredComboboxQuestion(IQuestion question)

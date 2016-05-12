@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string QuestionnaireScope = "@__questionnaire_scope";
         public const string EnablementPrefix = "IsEnabled__";
         public const string ValidationPrefix = "IsValid__";
+        public const string VariablePrefix = "GetVariable__";
         public const string IdSuffix = "__id";
         public const string StateSuffix = "__state";
         public const string LookupPrefix = "@Lookup__";
