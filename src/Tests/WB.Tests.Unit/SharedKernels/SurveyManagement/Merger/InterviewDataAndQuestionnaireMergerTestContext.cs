@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
             decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
-            Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null)
+            Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null, Dictionary<Guid, object> variables = null)
         {
             InterviewLevel rosterLevel;
             var levelKey = string.Join(",", rosterVector);
@@ -76,7 +76,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     rosterLevel.RosterRowTitles.Add(rosterTitle.Key, rosterTitle.Value);
                 }
             }
-
+            if (variables != null)
+            {
+                rosterLevel.Variables = variables;
+            }
             interview.Levels[levelKey] = rosterLevel;
         }
 

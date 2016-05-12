@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore;
         private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAttachmentContentService attachmentContentService;
@@ -28,8 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             IInterviewDataAndQuestionnaireMerger merger, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
-            IAttachmentContentService attachmentContentService, 
-            IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore)
+            IAttachmentContentService attachmentContentService)
         {
             this.merger = merger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -37,7 +35,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             this.interviewStore = interviewStore;
             this.userStore = userStore;
             this.attachmentContentService = attachmentContentService;
-            this.interviewVariablesStore = interviewVariablesStore;
         }
 
         public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
@@ -57,8 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 
             var attachmentIdAndTypes = attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
             var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), 
-                this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId), attachmentIdAndTypes,
-                this.interviewVariablesStore.GetById(input.InterviewId));
+                this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId), attachmentIdAndTypes);
 
             var interviewTroubleshootView = new InterviewTroubleshootView
             {
