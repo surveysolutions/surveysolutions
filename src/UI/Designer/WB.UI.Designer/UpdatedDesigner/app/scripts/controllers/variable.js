@@ -1,6 +1,8 @@
 ﻿angular.module('designerApp')
     .controller('VariableCtrl',
         function ($scope, $rootScope, $state, questionnaireService, commandService, hotkeys) {
+            $scope.currentChapterId = $state.params.chapterId;
+
             var markFormAsChanged = function () {
                 if ($scope.variableForm) {
                     $scope.variableForm.$setDirty();
