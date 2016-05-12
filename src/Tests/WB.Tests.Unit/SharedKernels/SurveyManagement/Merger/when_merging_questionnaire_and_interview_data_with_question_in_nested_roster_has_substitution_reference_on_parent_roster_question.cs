@@ -34,12 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
             var variable = Create.Variable(variableName: "va", type: VariableType.String);
-            interviewVariables = new InterviewVariables();
+            //interviewVariables = new InterviewVariables();
 
-            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
-                "nastya0";
-            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
-              "nastya1";
+            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
+            //    "nastya0";
+            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
+            //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()
                 {
@@ -82,10 +82,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId }, new decimal[] { 0 },
               new Dictionary<Guid, object> { { substitutionReferenceQuestionId ,18} },
-              new Dictionary<Guid, string>() { { parentRosterId, "1" } });
+              new Dictionary<Guid, string>() { { parentRosterId, "1" } },
+              variables:new Dictionary<Guid,object>() { {variable.PublicKey, "nastya0"} });
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId }, new decimal[] { 1 },
                 new Dictionary<Guid, object> { { substitutionReferenceQuestionId, 4 } },
-                new Dictionary<Guid, string>() { { parentRosterId, "2" } });
+                new Dictionary<Guid, string>() { { parentRosterId, "2" } },
+              variables: new Dictionary<Guid, object>() { { variable.PublicKey, "nastya1" } });
 
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId, nestedRosterId }, new decimal[] { 0, 0 },
                 new Dictionary<Guid, object>(),
@@ -106,7 +108,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null, interviewVariables);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
 
         It should_title_of_question_in_first_row_of_first_roster_has_rostertitle_replaced_with_a = () =>
@@ -126,7 +128,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static InterviewVariables interviewVariables;
         private static UserDocument user;
 
         private static Guid nestedRosterId;

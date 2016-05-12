@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -27,17 +28,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                     children: new[] {Create.Variable(id: variableId, variableName: "txt")})
             });
 
-            interviewVariables = Create.InterviewVariables();
-            interviewVariables.VariableValues.Add(new InterviewItemId(variableId, new decimal[] {1}), 1);
-            interviewVariables.VariableValues.Add(new InterviewItemId(variableId, new decimal[] {2}), 2);
-            interviewVariables.VariableValues.Add(new InterviewItemId(variableId, new decimal[] {3}), null);
-            interviewVariables.DisabledVariables.Add(new InterviewItemId(variableId, new decimal[] {3}));
-            var variableStorage =
-                Mock.Of<IReadSideKeyValueStorage<InterviewVariables>>(
-                    _ => _.GetById(Moq.It.IsAny<string>()) == interviewVariables);
+            var fixedRosterScope = new ValueVector<Guid>(new[] {rosterId});
 
-            interviewSynchronizationDtoFactory = CreateInterviewSynchronizationDtoFactory(questionnaireDocument,
-                variableStorage);
+            AddInterviewLevel(interviewData, scopeVector: fixedRosterScope,
+                rosterVector: new decimal[] {1}, variables: new Dictionary<Guid, object>() {{variableId, 1}});
+
+            AddInterviewLevel(interviewData, scopeVector: fixedRosterScope,
+                rosterVector: new decimal[] {2}, variables: new Dictionary<Guid, object>() {{variableId, 2}});
+
+            AddInterviewLevel(interviewData, scopeVector: fixedRosterScope,
+                rosterVector: new decimal[] {3}, variables: new Dictionary<Guid, object>() {{variableId, null}},
+                disableVariables: new HashSet<Guid>() {variableId});
+
+            interviewSynchronizationDtoFactory = CreateInterviewSynchronizationDtoFactory(questionnaireDocument);
         };
 
         Because of = () =>
@@ -56,6 +59,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 
         private static Guid rosterId = Guid.Parse("21111111111111111111111111111111");
         private static Guid variableId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewVariables interviewVariables;
     }
 }

@@ -2868,10 +2868,5 @@ namespace WB.Tests.Unit
             return new Variable(publicKey: id ?? Guid.NewGuid(),
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
-
-        public static InterviewVariables InterviewVariables()
-        {
-           return new InterviewVariables();
-        }
     }
 }
