@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         x => new ChangedVariable(new Identity(x.Key.Id, x.Key.InterviewItemRosterVector), x.Value))
                         .ToArray());
             }
-            if (@event.InterviewData.DisabledVariables != null)
+            if (@event.InterviewData.DisabledVariables != null && @event.InterviewData.DisabledVariables.Any())
             {
                 this.ExpressionProcessorStatePrototype.DisableVariables(
                     @event.InterviewData.DisabledVariables.Select(x => new Identity(x.Id, x.InterviewItemRosterVector))
