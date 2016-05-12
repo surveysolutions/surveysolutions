@@ -172,7 +172,7 @@ void VariablesStateDefinitions(List<VariableTemplateModel> variables)
 			if(<#=variable.StateName#>.State == State.Disabled )
 				return null;
 			else
-				return <#=variable.Expression#>; 
+				return <#=variable.ExpressionMethodName#>(); 
 		}			
 	}
 <#+

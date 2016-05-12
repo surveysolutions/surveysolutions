@@ -25,5 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
         public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+        public string ExpressionMethodName => CodeGenerator.VariablePrefix + VariableName;
     }
 }

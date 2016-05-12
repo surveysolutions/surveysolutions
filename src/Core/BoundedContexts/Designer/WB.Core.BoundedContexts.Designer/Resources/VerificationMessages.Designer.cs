@@ -297,20 +297,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Expression has a syntax error..
         /// </summary>
-        internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {
+        internal static string WB0027_VariableExpresssionHasIncorrectSyntax {
             get {
-                return ResourceManager.GetString("WB0027_QuestionnaireHaveAutopropagatedGroups", resourceCulture);
+                return ResourceManager.GetString("WB0027_VariableExpresssionHasIncorrectSyntax", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0028_QuestionnaireHaveAutopropagatedQuestions {
+        internal static string WB0028_ {
             get {
-                return ResourceManager.GetString("WB0028_QuestionnaireHaveAutopropagatedQuestions", resourceCulture);
+                return ResourceManager.GetString("WB0028_", resourceCulture);
             }
         }
         
