@@ -117,22 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Экспортировать шифрования</value>
+  <data name="Clone" xml:space="preserve">
+    <value>Клон</value>
   </data>
-  <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Вы уверены, что вы хотите восстановить пароль? Вам нужно будет восстановить экспортированные данные для того, чтобы открыть его.</value>
+  <data name="CloneQuestionnaireTitle" xml:space="preserve">
+    <value>Клон вопросник</value>
   </data>
-  <data name="Settings_Title" xml:space="preserve">
-    <value>Параметры</value>
+  <data name="inCensusMode" xml:space="preserve">
+    <value>в режиме переписи</value>
   </data>
-  <data name="EnableEncryption" xml:space="preserve">
-    <value>Включить шифрование</value>
+  <data name="inRegularMode" xml:space="preserve">
+    <value>в обычном режиме</value>
   </data>
-  <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Экспорт параметров шифрования</value>
+  <data name="ToCloneQuestionnaire" xml:space="preserve">
+    <value>Клон вопросник</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Пароль</value>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Произошла непредвиденная ошибка. Извините за причиненные неудобства. Пожалуйста, свяжитесь support@mysurvey.solutions или повторите попытку позже.</value>
   </data>
 </root>
