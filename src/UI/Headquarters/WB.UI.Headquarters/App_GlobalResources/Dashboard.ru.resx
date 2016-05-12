@@ -171,4 +171,7 @@
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
   </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
 </root>

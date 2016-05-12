@@ -264,4 +264,61 @@
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Select</value>
   </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>The file size can not exceed 300MB.</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Import sample</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>File wasn't parsed. Only tab-delimited file can be uploaded.</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>File format is not supported, data inside it will be ignored</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Sample Creation Result</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Sample creation was succefully completed.</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Upload new data</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Verify sample data</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Import of interviews is in progress. Wait until running operation is finished.</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Create sample from this data</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Sample import is successfuly completed</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Sample import is completed with errors</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Import status</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Interview(s) created</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Estimated Time</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Download invalid interviews</value>
+  </data>
 </root>

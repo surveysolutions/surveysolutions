@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 @{
-    ViewBag.Title = "Finish installation";
+    ViewBag.Title = Common.FinishInstallation;
     Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
 }
 
@@ -12,8 +12,8 @@
 }
 
 <div class="page-header">
-    <h2>Finish installation</h2>
-    To complete installation, please, create new Administrator user
+    <h2>@Common.FinishInstallation</h2>
+    @Common.CreateAdmin
 </div>
 
 
@@ -59,7 +59,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Create and try to login</button>
+                <button type="submit" class="btn btn-primary">@Common.Create</button>
             </div>
         </div>
     </fieldset>

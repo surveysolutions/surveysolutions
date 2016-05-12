@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LoginToDesigner()
         {
-            this.Attention("Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode");
+            this.Attention(global::Resources.Common.BeforeSignInToDesigner);
             return this.View();
         }
 
@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.Error(
                         string.Format(
-                            "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
+                            global::Resources.Common.LoginToDesignerError,
                             GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
                 }

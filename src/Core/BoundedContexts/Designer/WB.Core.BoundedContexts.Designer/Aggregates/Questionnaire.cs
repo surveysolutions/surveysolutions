@@ -3802,7 +3802,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
                 else if (isVariableReferance)
                 {
-                    var currentVariable = questions[substitutionReference];
+                    var currentVariable = variables[substitutionReference];
 
                     if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), propagationQuestionsVector))
                         variablesIllegalPropagationScope.Add(substitutionReference);
