@@ -328,21 +328,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             var variableId = interviewInfo.VariableToVariableId[variableName];
             var variableRosterVector = questionRosterVector;
 
-            while (true)
+            do
             {
                 var variableIdentity = new InterviewItemId(variableId, variableRosterVector);
                 if (interviewInfo.InterviewVariables.VariableValues.ContainsKey(variableIdentity))
                 {
                     var variableValue = interviewInfo.InterviewVariables.VariableValues[variableIdentity];
 
-#warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
+        #warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
                     return variableValue?.ToString();
                 }
-                if (variableRosterVector.Length == 0)
-                    break;
 
                 variableRosterVector = variableRosterVector.Take(variableRosterVector.Length - 1).ToArray();
-            }
+            } while (variableRosterVector.Length >= 0);
 
             return null;
         }
