@@ -1259,7 +1259,9 @@ namespace WB.Tests.Unit
             bool? wasCompleted = false,
             List<Identity> disabledStaticTexts = null,
             List<Identity> validStaticTexts = null,
-            List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null)
+            List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null,
+            Dictionary<InterviewItemId, object> variables=null,
+            HashSet<InterviewItemId> disabledVariables=null)
         {
             return new InterviewSynchronizationDto(
                 interviewId ?? Guid.NewGuid(),
@@ -1280,9 +1282,9 @@ namespace WB.Tests.Unit
                 invalidStaticTexts,
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
-                new Dictionary<InterviewItemId, RosterVector[]>(), 
-                new Dictionary<InterviewItemId, object>(),
-                new HashSet<InterviewItemId>(),  
+                new Dictionary<InterviewItemId, RosterVector[]>(),
+                variables??new Dictionary<InterviewItemId, object>(),
+                disabledVariables??new HashSet<InterviewItemId>(),  
                 wasCompleted ?? false);
         }
 
