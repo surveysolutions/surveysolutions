@@ -10,9 +10,9 @@ namespace WB.Tests.Unit
     {
         private readonly Dictionary<object, T> entites;
 
-        public TestPlainStorage()
+        public TestPlainStorage(Dictionary<object, T> entites = null)
         {
-            this.entites = new Dictionary<object, T>();
+            this.entites = entites ?? new Dictionary<object, T>();
         }
 
         public T GetById(object id)
