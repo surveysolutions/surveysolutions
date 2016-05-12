@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_cloning_questionnaire_and_its_browse_item_is_missing : QuestionnaireTestsContext
+    internal class when_cloning_questionnaire_and_its_browse_item_is_missing
     {
         Establish context = () =>
         {
