@@ -214,7 +214,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 this.interviewState.ApplyLinkedOptionQuestionChanges(changedLinkedOptions);
             }
+            if (@event.InterviewData.Variables != null)
+            {
+                this.interviewState.VariableValues.Clear();
 
+                this.interviewState.ChangeVariables(
+                    @event.InterviewData.Variables.Select(
+                        x => new ChangedVariable(new Identity(x.Key.Id, x.Key.InterviewItemRosterVector), x.Value))
+                        .ToArray());
+            }
+            if (@event.InterviewData.DisabledVariables != null)
+            {
+                this.ExpressionProcessorStatePrototype.DisableVariables(
+                    @event.InterviewData.DisabledVariables.Select(x => new Identity(x.Id, x.InterviewItemRosterVector))
+                        .ToArray());
+            }
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.InterviewData.ValidAnsweredQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
             //should call this.ExpressionProcessorStatePrototype.ApplyFailedValidations(...) when sync is ready
             this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.InterviewData.InvalidAnsweredQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
