@@ -236,7 +236,7 @@ Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solution
     <value>Số mục đã hoàn thành: {0}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Số mục chưa phỏng vấn: {0}</value>
+    <value>Số mục chưa phỏng vấn</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
     <value>Số mục đã bắt đầu phỏng vấn: {0}</value>
