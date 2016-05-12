@@ -71,6 +71,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ValidStaticTexts = new ConcurrentHashSet<Identity>();
             this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+
+            this.VariableValues = new ConcurrentDictionary<Identity, object>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -114,7 +116,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
                 ValidStaticTexts = new ConcurrentHashSet<Identity>(this.ValidStaticTexts),
-                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
+                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts),
+
+                VariableValues = new ConcurrentDictionary<Identity, object>(this.VariableValues)
             };
         }
 
