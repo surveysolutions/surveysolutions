@@ -6,9 +6,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class VariablesValuesChanged: InterviewPassiveEvent
     {
-        public ChangedVariableValueDto[] ChangedVariables { get; private set; }
+        public ChangedVariable[] ChangedVariables { get; private set; }
 
-        public VariablesValuesChanged(ChangedVariableValueDto[] changedVariables)
+        public VariablesValuesChanged(ChangedVariable[] changedVariables)
         {
             this.ChangedVariables = changedVariables;
         }

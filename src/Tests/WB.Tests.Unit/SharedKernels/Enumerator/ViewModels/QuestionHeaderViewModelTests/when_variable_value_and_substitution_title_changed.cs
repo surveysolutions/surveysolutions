@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var substitutedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var substitutedVariableIdentity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
 
-            changedVariables = new[]{new ChangedVariableValueDto(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  555)};
+            changedVariables = new[]{new ChangedVariable(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  555)};
             changedTitleIds =new []{new Identity(substitutionTargetQuestionId, Empty.RosterVector)};
 
             answer = new TextAnswer();
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetVariableValue(substitutedVariableIdentity) == changedVariables[0].VariableValue &&
+                x.GetVariableValue(substitutedVariableIdentity) == changedVariables[0].NewValue &&
                 x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionId, Empty.RosterVector) == answer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
@@ -66,12 +66,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             Create.CommittedEvent(payload:new VariablesValuesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
             Create.CommittedEvent(payload: new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].VariableValue}");
+        It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
         static IEventSourcedAggregateRoot fakeInterview;
-        private static ChangedVariableValueDto[] changedVariables;
+        private static ChangedVariable[] changedVariables;
         private static Identity[] changedTitleIds;
         static TextAnswer answer;
     }

@@ -81,11 +81,11 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             }
         }
 
-        public virtual void SetPreviousVariableValue(Identity variableIdentity, object value)
+        public virtual void UpdateVariableValue(Identity variableIdentity, object value)
         {
             var targetLevel = this.GetRosterByIdAndVector(variableIdentity.Id, variableIdentity.RosterVector);
 
-            targetLevel?.SetPreviousVariableValue(variableIdentity.Id, value);
+            targetLevel?.UpdateVariableValue(variableIdentity.Id, value);
         }
 
         IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone() => (IInterviewExpressionStateV9) this.Clone();

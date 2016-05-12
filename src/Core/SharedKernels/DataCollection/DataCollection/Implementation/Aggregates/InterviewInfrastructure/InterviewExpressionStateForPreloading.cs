@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void EnableVariables(IEnumerable<Identity> variablesToEnable) { }
 
-        public void SetPreviousVariableValue(Identity variableIdentity, object value) { }
+        public void UpdateVariableValue(Identity variableIdentity, object value) { }
 
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {

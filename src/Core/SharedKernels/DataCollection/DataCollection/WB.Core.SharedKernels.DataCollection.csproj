@@ -94,7 +94,7 @@
     <Compile Include="Events\Interview\VariablesValuesChanged.cs" />
     <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedLinkedOptions.cs" />
-    <Compile Include="Events\Interview\Dtos\ChangedVariableValueDto.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedVariable.cs" />
     <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
     <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
     <Compile Include="Events\Interview\LinkedOptionsChanged.cs" />

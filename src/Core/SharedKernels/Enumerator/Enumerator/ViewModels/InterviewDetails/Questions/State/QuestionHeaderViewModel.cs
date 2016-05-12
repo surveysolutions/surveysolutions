@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(VariablesValuesChanged @event)
         {
             var changedVariables = this.substitutionVariables.ByVariables.Where(
-                substitution => @event.ChangedVariables.Any(variable => variable.VariableIdentity.Id == substitution.Id));
+                substitution => @event.ChangedVariables.Any(variable => variable.Identity.Id == substitution.Id));
 
             if (!changedVariables.Any()) return;
 
