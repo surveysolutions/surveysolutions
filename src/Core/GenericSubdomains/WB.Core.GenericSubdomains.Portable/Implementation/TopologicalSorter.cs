@@ -82,15 +82,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
 
             if (vertex.LowLink != vertex.Index) return;
-            List<Vertex<T>> cycle = new List<Vertex<T>>();
-            Vertex<T> nodeInCycle;
+
+            List<Vertex<T>> stronglyConnectedComponents = new List<Vertex<T>>();
+            Vertex<T> nodeInStronglyConnectedComponents;
             do
             {
-                nodeInCycle = nodeStatck.Pop();
-                cycle.Add(nodeInCycle);
-            } while (vertex != nodeInCycle);
+                nodeInStronglyConnectedComponents = nodeStatck.Pop();
+                stronglyConnectedComponents.Add(nodeInStronglyConnectedComponents);
+            } while (vertex != nodeInStronglyConnectedComponents);
 
-            listOfDetectedCycles.Add(cycle);
+            listOfDetectedCycles.Add(stronglyConnectedComponents);
         }
 
         public List<T> Sort(Dictionary<T, T[]> dependencies)

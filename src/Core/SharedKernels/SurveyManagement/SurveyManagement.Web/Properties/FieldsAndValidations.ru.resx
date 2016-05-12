@@ -207,4 +207,10 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>Название анкеты требуется</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>Название</value>
+  </data>
 </root>

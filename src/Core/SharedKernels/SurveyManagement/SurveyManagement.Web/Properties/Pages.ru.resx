@@ -552,4 +552,28 @@
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>Активные пользователи</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>Архив</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>Архивированные пользователей</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>Подключен</value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>Не подключен</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+  </data>
+  <data name="Layout_HideFilter" xml:space="preserve">
+    <value>Скрыть фильтр</value>
+  </data>
+  <data name="Layout_ShowFilter" xml:space="preserve">
+    <value>Показать фильтр</value>
+  </data>
 </root>

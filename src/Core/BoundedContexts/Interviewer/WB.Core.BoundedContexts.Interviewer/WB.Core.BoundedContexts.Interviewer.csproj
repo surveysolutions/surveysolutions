@@ -143,6 +143,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.vi-VN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.vi-VN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\InterviewerUIResources.zh-CN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -260,6 +265,10 @@
       <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.vi-VN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.zh-CN.Designer.cs</LastGenOutput>

@@ -219,6 +219,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             this.Kernel.RegisterDenormalizer<InterviewStatusTimeSpanDenormalizer>();
             this.Kernel.RegisterDenormalizer<LinkedOptionsDenormalizer>();
+            this.Kernel.RegisterDenormalizer<VariablesDenormalizer>();
 
             this.Kernel.Load(new QuartzNinjectModule());
 

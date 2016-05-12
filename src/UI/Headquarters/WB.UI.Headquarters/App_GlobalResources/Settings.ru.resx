@@ -126,4 +126,13 @@
   <data name="Settings_Title" xml:space="preserve">
     <value>Параметры</value>
   </data>
+  <data name="EnableEncryption" xml:space="preserve">
+    <value>Включить шифрование</value>
+  </data>
+  <data name="ExportEncryptionSettings" xml:space="preserve">
+    <value>Экспорт параметров шифрования</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
 </root>

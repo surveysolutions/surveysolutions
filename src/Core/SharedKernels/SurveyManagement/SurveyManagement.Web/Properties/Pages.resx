@@ -552,4 +552,28 @@
   <data name="Upload_Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
+  <data name="Layout_HideFilter" xml:space="preserve">
+    <value>Hide filter</value>
+  </data>
+  <data name="Layout_ShowFilter" xml:space="preserve">
+    <value>Show filter</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>Active users</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>Archived users</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
 </root>

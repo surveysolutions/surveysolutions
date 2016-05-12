@@ -56,8 +56,8 @@
 
                 if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
-                    <button type="button" class="btn btn-default" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
-                    <button type="button" class="btn btn-default" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">Unarchive</button>
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
                 }
             }
 
@@ -83,7 +83,7 @@
             <h4 class="list-group-item-heading">@Pages.Interviewers_SupervisorTitle</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <input class="form-control" placeholder="@Pages.AnyOption" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
                     <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -96,9 +96,9 @@
             <h4 class="list-group-item-heading">@Pages.Interviewers_ConnectedToDeviceTitle</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: ConnectedToDevice" class="form-control">
-                    <option value="">Any</option>
-                    <option value="true">Connected</option>
-                    <option value="false">Not connected</option>
+                    <option value="">@Pages.AnyOption</option>
+                    <option value="true">@Pages.Interviewers_Connected</option>
+                    <option value="false">@Pages.Interviewers_NotConnected</option>
                 </select>
             </p>
         </li>
@@ -106,8 +106,8 @@
             <h4 class="list-group-item-heading">@Pages.Interviewers_ArchiveStatusTitle</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: Archived" class="form-control">
-                    <option value="false">Active users</option>
-                    <option value="true">Archived users</option>
+                    <option value="false">@Pages.Interviewers_ActiveUsers</option>
+                    <option value="true">@Pages.Interviewers_ArchivedUsers</option>
                 </select>
             </p>
         </li>
