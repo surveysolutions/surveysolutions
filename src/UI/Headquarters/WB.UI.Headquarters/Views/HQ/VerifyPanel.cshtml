@@ -3,7 +3,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
-    ViewBag.Title = Common.VerifyPanelData;
+    ViewBag.Title = BatchUpload.VerifyPanelData;
 }
 
 @section scripts
@@ -79,7 +79,7 @@
             <div class="form-horizontal">
                 <fieldset>
                     <legend>
-                        @Common.DataValid
+                        @BatchUpload.DataValid
                     </legend>
                     <div class="form-group">
                         <label class="control-label col-sm-4">@Common.Responsible</label>
@@ -96,7 +96,7 @@
                             }
                             else
                             {
-                                <h4 class="list-group-item-heading">@Common.ResponsibleSupervisorWillBeAssigned</h4>
+                                <h4 class="list-group-item-heading">@BatchUpload.ResponsibleSupervisorWillBeAssigned</h4>
                             }
                         </div>
                     </div>

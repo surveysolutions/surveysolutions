@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 
 @{
-    ViewBag.Title = Common.SignInToDesignerTitle;
+    ViewBag.Title = QuestionnaireImport.SignInToDesignerTitle;
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
 }
 
@@ -11,11 +11,9 @@
     @Scripts.Render("~/validate")
 }
 
-
-
 <div class="container-fluid">
     <div class="page-header">
-        <h2>@Common.SignInToDesigner</h2>
+        <h2>@QuestionnaireImport.SignInToDesigner</h2>
     </div>
     
     <div class="col-sm-offset-4 col-sm-3">

@@ -8,9 +8,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class UserBatchUploadModel
     {
-        [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = "UserBatchUploadModel_Required_ErrorMessage")]
-        [ValidateFile(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = "UserBatchUploadModel_Validation_ErrorMessage")]
-        [Display(ResourceType = typeof(FieldsAndValidations), Name = "UserBatchUploadModel_File_CSV_File")]
+        [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.UserBatchUploadModel_Required_ErrorMessage))]
+        [ValidateFile(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.UserBatchUploadModel_Validation_ErrorMessage))]
+        [Display(ResourceType = typeof(FieldsAndValidations), Name = nameof(FieldsAndValidations.UserBatchUploadModel_File_CSV_File))]
         public HttpPostedFileBase File { get; set; }
 
         public string[] AvaliableDataColumnNames { get; set; }

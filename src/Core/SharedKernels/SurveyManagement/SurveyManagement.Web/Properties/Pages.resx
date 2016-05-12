@@ -471,7 +471,7 @@
   <data name="Layout_Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
-  <data name="Layout_NoResults" xml:space="preserve">
+  <data name="NoResults" xml:space="preserve">
     <value>No results found</value>
   </data>
   <data name="Layout_WorldBank" xml:space="preserve">
@@ -552,10 +552,10 @@
   <data name="Upload_Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
-  <data name="Layout_HideFilter" xml:space="preserve">
+  <data name="HideFilter" xml:space="preserve">
     <value>Hide filter</value>
   </data>
-  <data name="Layout_ShowFilter" xml:space="preserve">
+  <data name="ShowFilter" xml:space="preserve">
     <value>Show filter</value>
   </data>
   <data name="Interviewers_Archive" xml:space="preserve">

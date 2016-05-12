@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 
 @{
-    ViewBag.Title = Common.InterviewChart;
+    ViewBag.Title = Reports.InterviewChart;
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
@@ -54,7 +54,7 @@
 
 @section header
 {
-    <h3>@Common.CumulativeInterviewChart</h3>
+    <h3>@Reports.CumulativeInterviewChart</h3>
 }
 
 @section filters
@@ -72,7 +72,7 @@
             </p>
         </li>
         <li class="list-group-item" id="dates-range">
-            <h4 class="list-group-item-heading">@("Dates range")</h4>
+            <h4 class="list-group-item-heading">@Reports.DatesRange</h4>
             <div class="input-group">
                 <input type="text" class="form-control" data-bind="value: SelectedRange" readonly="readonly"/>
                 <span style="cursor: pointer" class="input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using Resources;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LoginToDesigner()
         {
-            this.Attention(global::Resources.Common.BeforeSignInToDesigner);
+            this.Attention(QuestionnaireImport.BeforeSignInToDesigner);
             return this.View();
         }
 
@@ -81,11 +81,12 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.Error(
-                        string.Format(
-                            global::Resources.Common.LoginToDesignerError,
-                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
+
+                    this.Error(string.Format(
+                            QuestionnaireImport.LoginToDesignerError,
+                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
+                    
                 }
             }
 
