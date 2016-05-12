@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     {
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
@@ -35,8 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
@@ -44,7 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.interviewVariablesStore = interviewVariablesStore;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -167,10 +164,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
             }
             Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions = CreateLinkedQuestionsOptions(interview);
-
-            var interviewVariables = this.interviewVariablesStore.GetById(interview.InterviewId);
-            Dictionary<InterviewItemId, object> variableValues = CreateVariableValues(interviewVariables);
-            HashSet<InterviewItemId> disabledVariables = CreateDisabledVariables(interviewVariables);
+            
+            Dictionary<InterviewItemId, object> variableValues = CreateVariableValues(interview);
+            HashSet<InterviewItemId> disabledVariables = CreateDisabledVariables(interview);
 
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
@@ -197,27 +193,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 interview.CreatedOnClient);
         }
 
-        private static HashSet<InterviewItemId> CreateDisabledVariables(InterviewVariables interviewVariables)
+        private static HashSet<InterviewItemId> CreateDisabledVariables(InterviewData interview)
         {
             var result = new HashSet<InterviewItemId>();
-            if (interviewVariables != null)
+
+            foreach (var interviewLevel in interview.Levels)
             {
-                foreach (var variable in interviewVariables.DisabledVariables)
+                foreach (var disabledVariable in interviewLevel.Value.DisabledVariables)
                 {
-                    result.Add(variable);
+                    result.Add(new InterviewItemId(disabledVariable,interviewLevel.Value.RosterVector));
                 }
             }
+
             return result;
         }
 
-        private Dictionary<InterviewItemId, object> CreateVariableValues(InterviewVariables interviewVariables)
+        private Dictionary<InterviewItemId, object> CreateVariableValues(InterviewData interview)
         {
             var result = new Dictionary<InterviewItemId, object>();
-            if (interviewVariables != null)
+            foreach (var interviewLevel in interview.Levels)
             {
-                foreach (var variableValue in interviewVariables.VariableValues )
+                foreach (var variable in interviewLevel.Value.Variables)
                 {
-                    result.Add(variableValue.Key, variableValue.Value);
+                    result.Add(new InterviewItemId(variable.Key, interviewLevel.Value.RosterVector), variable.Value);
                 }
             }
             return result;

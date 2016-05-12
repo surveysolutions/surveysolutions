@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, attachmentInfos, null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, attachmentInfos);
 
         It should_static_text_exist= () =>
             GetStaticText().ShouldNotBeNull();

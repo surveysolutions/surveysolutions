@@ -34,27 +34,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             public Dictionary<string, Guid> VariableToQuestionId { get; }
             public Dictionary<string, Guid> VariableToVariableId { get; }
             public Dictionary<string, AttachmentInfoView> Attachments { get; }
-            public InterviewVariables InterviewVariables { get; }
 
             public InterviewInfoInternal(
                 InterviewData interview,
                 QuestionnaireDocument questionnaire,
                 Dictionary<string, Guid> variableToQuestionId,
                 Dictionary<string, Guid> variableToVariableId,
-                Dictionary<string, AttachmentInfoView> attachments, 
-                InterviewVariables interviewVariables)
+                Dictionary<string, AttachmentInfoView> attachments)
             {
                 this.Interview = interview;
                 this.Questionnaire = questionnaire;
                 this.VariableToQuestionId = variableToQuestionId;
                 this.VariableToVariableId = variableToVariableId;
                 this.Attachments = attachments;
-                this.InterviewVariables = interviewVariables;
             }
         }
 
         public InterviewDetailsView Merge(InterviewData interview, QuestionnaireDocument questionnaire, UserLight responsible, 
-            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews, InterviewVariables interviewVariables)
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews)
         {
             questionnaire.ConnectChildrenWithParent();
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
@@ -74,8 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 questionnaire: questionnaire,
                 variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
                 variableToVariableId:questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
-                attachments: attachmentInfos,
-                interviewVariables: interviewVariables);
+                attachments: attachmentInfos);
 
             var interviewGroups = new List<InterviewGroupView>();
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
@@ -303,7 +299,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             }
 
             if (!interviewInfo.VariableToQuestionId.ContainsKey(variableName))
-                return SubstituteVariableValue(variableName, currentInterviewLevel.RosterVector, interviewInfo);
+                return SubstituteVariableValue(variableName, currentInterviewLevel, upperInterviewLevels, interviewInfo);
 
             Guid questionId = interviewInfo.VariableToQuestionId[variableName];
 
@@ -318,29 +314,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             return GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
         }
 
-        private string SubstituteVariableValue(string variableName, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo)
+        private string SubstituteVariableValue(string variableName, InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
         {
-            if (interviewInfo.InterviewVariables == null)
-                return null;
-
             if (!interviewInfo.VariableToVariableId.ContainsKey(variableName))
                 return null;
-            var variableId = interviewInfo.VariableToVariableId[variableName];
-            var variableRosterVector = questionRosterVector;
 
+            var variableId = interviewInfo.VariableToVariableId[variableName];
+            var questionRosterVector = currentInterviewLevel.RosterVector;
+            var allInterviewLevelsToLookForTheVariable =
+                upperInterviewLevels.Union(new[] {currentInterviewLevel}).ToArray();
+
+            var rosterLevelDepth = currentInterviewLevel.RosterVector.Length;
             do
             {
-                var variableIdentity = new InterviewItemId(variableId, variableRosterVector);
-                if (interviewInfo.InterviewVariables.VariableValues.ContainsKey(variableIdentity))
-                {
-                    var variableValue = interviewInfo.InterviewVariables.VariableValues[variableIdentity];
+                var variableRosterVector = questionRosterVector.Take(rosterLevelDepth).ToArray();
+                var levelToLookForTheVariable =
+                    allInterviewLevelsToLookForTheVariable.FirstOrDefault(
+                        x => x.RosterVector.Length == rosterLevelDepth && x.RosterVector.SequenceEqual(variableRosterVector));
 
-        #warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
+                if (levelToLookForTheVariable != null && levelToLookForTheVariable.Variables.ContainsKey(variableId))
+                {
+                    var variableValue = levelToLookForTheVariable.Variables[variableId];
+
+#warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
                     return variableValue?.ToString();
                 }
 
-                variableRosterVector = variableRosterVector.Take(variableRosterVector.Length - 1).ToArray();
-            } while (variableRosterVector.Length >= 0);
+                rosterLevelDepth--;
+            } while (rosterLevelDepth >= 0);
 
             return null;
         }

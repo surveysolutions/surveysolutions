@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
 
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore;
         private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IInterviewPackagesService incomingSyncPackagesQueue,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
-            IAttachmentContentService attachmentContentService, IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore)
+            IAttachmentContentService attachmentContentService)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -43,7 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
-            this.interviewVariablesStore = interviewVariablesStore;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -65,8 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             
             var attachmentIdAndTypes = attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
 
-            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes,
-                this.interviewVariablesStore.GetById(interviewId));
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
             var interviewEntityViews = interviewDetailsView.Groups
                 .SelectMany(group => group.Entities)
