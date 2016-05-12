@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     GetInterviewExpressionState(questionnaireDocument, version: new Version(15, 0, 0)) as
                         IInterviewExpressionStateV9;
 
-                state.SetPreviousVariableValue(Create.Identity(variableId), 6);
+                state.UpdateVariableValue(Create.Identity(variableId), 6);
                 state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 0);
                 var variables = state.ProcessVariables();
 

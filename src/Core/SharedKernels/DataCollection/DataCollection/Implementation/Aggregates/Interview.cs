@@ -481,7 +481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
-                this.ExpressionProcessorStatePrototype.SetPreviousVariableValue(changedVariableValueDto.VariableIdentity, changedVariableValueDto.VariableValue);
+                this.ExpressionProcessorStatePrototype.UpdateVariableValue(changedVariableValueDto.Identity, changedVariableValueDto.NewValue);
             }
         }
 
@@ -2056,7 +2056,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (variableValueChanges.ChangedVariableValues.Count > 0)
             {
-                this.ApplyEvent(new VariablesValuesChanged(variableValueChanges.ChangedVariableValues.Select(c=> new ChangedVariableValueDto(c.Key,c.Value)).ToArray()));
+                this.ApplyEvent(new VariablesValuesChanged(variableValueChanges.ChangedVariableValues.Select(c=> new ChangedVariable(c.Key,c.Value)).ToArray()));
             }
         }
 
