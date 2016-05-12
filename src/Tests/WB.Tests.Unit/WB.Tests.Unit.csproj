@@ -576,6 +576,9 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_navigating_to_not_existing_group.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_and_substitution_title_changed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed_and_current_culture_is_russian.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_get_disable_event.cs" />
