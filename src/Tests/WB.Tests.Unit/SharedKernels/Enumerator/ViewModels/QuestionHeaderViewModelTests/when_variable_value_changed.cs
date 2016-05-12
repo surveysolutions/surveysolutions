@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
@@ -21,6 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             changedVariables = new[]
             {
                 new ChangedVariableValueDto(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  new DateTime(2016, 1, 31)),
@@ -69,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.CommittedEvent(payload:new VariablesValuesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your first variable is 01/31/2016 and second is 7.77");
+        It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your first variable is 1/31/2016 and second is 7.77");
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
