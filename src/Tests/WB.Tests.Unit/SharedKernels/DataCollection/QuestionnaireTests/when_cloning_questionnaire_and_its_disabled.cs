@@ -1,22 +1,19 @@
 using System;
 using Machine.Specifications;
-using Moq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_cloning_questionnaire_and_its_browse_item_is_missing : QuestionnaireTestsContext
+    internal class when_cloning_questionnaire_and_its_disabled : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             var questionnaireBrowseItemStorage = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                id: questionnaireIdentity.ToString(), entity: null);
+                id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem(disabled: true));
 
             questionnaire = Create.DataCollectionQuestionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
@@ -28,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     questionnaireIdentity: questionnaireIdentity)));
 
         It should_throw_QuestionnaireException_containing_specific_words = () =>
-            questionnaireException.Message.ToLower().ToSeparateWords().ShouldContain("questionnaire", "absent", "repository");
+            questionnaireException.Message.ToLower().ToSeparateWords().ShouldContain("questionnaire", "disabled");
 
         It should_throw_QuestionnaireException_containing_questionnaire_id = () =>
             questionnaireException.Message.ShouldContain(questionnaireIdentity.QuestionnaireId.FormatGuid());

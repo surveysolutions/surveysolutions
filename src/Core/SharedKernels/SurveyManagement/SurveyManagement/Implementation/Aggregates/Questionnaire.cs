@@ -193,7 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             if (questionnaireBrowseItem.Disabled)
                 throw new QuestionnaireException(
-                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is disabled and probably is being deleted.");
+                    $"Questionnaire {questionnaireId.FormatGuid()} ver {questionnaireVersion} is disabled and probably is being deleted.");
         }
 
         private void ThrowIfQuestionnaireIsAbsentOrNotDisabled(Guid questionnaireId, long questionnaireVersion)
@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             if (questionnaireBrowseItem == null)
                 throw new QuestionnaireException(
-                    $"Questionnaire {this.Id.FormatGuid()} ver {questionnaireVersion} is absent in repository.");
+                    $"Questionnaire {questionnaireId.FormatGuid()} ver {questionnaireVersion} is absent in repository.");
 
             return questionnaireBrowseItem;
         }
