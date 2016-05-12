@@ -88,20 +88,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition references a nonexistent question..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0004_CustomValidationExpressionReferencesNotExistingQuestion {
+        internal static string WB0004_ {
             get {
-                return ResourceManager.GetString("WB0004_CustomValidationExpressionReferencesNotExistingQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0004_", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition references a nonexistent question..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0005_CustomEnablementConditionReferencesNotExistingQuestion {
+        internal static string WB0005_ {
             get {
-                return ResourceManager.GetString("WB0005_CustomEnablementConditionReferencesNotExistingQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0005_", resourceCulture);
             }
         }
         
