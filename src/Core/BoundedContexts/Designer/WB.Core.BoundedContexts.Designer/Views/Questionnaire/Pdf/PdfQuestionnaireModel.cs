@@ -339,5 +339,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
+
+        public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
+        public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
+        public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;
+        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
+
+        public char ConditionsAppendixIndex => 'A';
+        public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);
+        public char InstructionsAppendixIndex => IsValidationsAppendixEmpty ? ValidationsAppendixIndex : (char)(ValidationsAppendixIndex + 1);
+        public char OptionsAppendixIndex => IsOptionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
     }
 }
