@@ -502,6 +502,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide filter.
+        /// </summary>
+        public static string HideFilter {
+            get {
+                return ResourceManager.GetString("HideFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to by.
         /// </summary>
         public static string HistoryOfStatuses_By {
@@ -1006,15 +1015,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide filter.
-        /// </summary>
-        public static string Layout_HideFilter {
-            get {
-                return ResourceManager.GetString("Layout_HideFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Legal.
         /// </summary>
         public static string Layout_Legal {
@@ -1024,29 +1024,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No results found.
-        /// </summary>
-        public static string Layout_NoResults {
-            get {
-                return ResourceManager.GetString("Layout_NoResults", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All Rights Reserved..
         /// </summary>
         public static string Layout_RightsReserved {
             get {
                 return ResourceManager.GetString("Layout_RightsReserved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show filter.
-        /// </summary>
-        public static string Layout_ShowFilter {
-            get {
-                return ResourceManager.GetString("Layout_ShowFilter", resourceCulture);
             }
         }
         
@@ -1141,6 +1123,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No results found.
+        /// </summary>
+        public static string NoResults {
+            get {
+                return ResourceManager.GetString("NoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found.
         /// </summary>
         public static string NotFound_Title {
@@ -1218,6 +1209,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show filter.
+        /// </summary>
+        public static string ShowFilter {
+            get {
+                return ResourceManager.GetString("ShowFilter", resourceCulture);
             }
         }
         

@@ -30,19 +30,19 @@
                 </button>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Common.Admin</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
                 else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Common.Headquarters</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
                 else if (User.IsInRole(UserRoles.Observer.ToString()))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Common.Observer</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
                 }
                 else
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Common.Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
             </div>
             <div class="collapse navbar-collapse">
@@ -69,7 +69,7 @@
     @if (User.Identity.IsObserver())
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
-            @Html.Raw(string.Format(Common.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@Common.ClickToReturn</a>
+            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@Users.ClickToReturn</a>
         </div>
     }
     <div class="container-fluid">

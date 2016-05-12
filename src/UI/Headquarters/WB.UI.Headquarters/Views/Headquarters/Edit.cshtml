@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 
 @{
-    ViewBag.Title = string.Format(Common.EditFormat, Model.UserName);
+    ViewBag.Title = string.Format(Users.EditFormat, Model.UserName);
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
@@ -17,7 +17,7 @@
 
 <div class="page-header">
     <h2>
-        @Common.Edit: &nbsp;
+        @Users.Edit : &nbsp;
         <small>
             @Model.UserName
         </small>

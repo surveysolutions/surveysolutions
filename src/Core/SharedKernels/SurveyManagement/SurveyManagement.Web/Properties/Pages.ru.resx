@@ -417,7 +417,7 @@
   <data name="Layout_Legal" xml:space="preserve">
     <value>Юридические</value>
   </data>
-  <data name="Layout_NoResults" xml:space="preserve">
+  <data name="NoResults" xml:space="preserve">
     <value>Результаты не найдены</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
@@ -570,10 +570,10 @@
   <data name="Interviewers_Unarchive" xml:space="preserve">
     <value>Разархивировать</value>
   </data>
-  <data name="Layout_HideFilter" xml:space="preserve">
+  <data name="HideFilter" xml:space="preserve">
     <value>Скрыть фильтр</value>
   </data>
-  <data name="Layout_ShowFilter" xml:space="preserve">
+  <data name="ShowFilter" xml:space="preserve">
     <value>Показать фильтр</value>
   </data>
 </root>

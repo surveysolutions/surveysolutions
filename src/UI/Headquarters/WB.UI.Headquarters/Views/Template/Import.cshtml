@@ -39,7 +39,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Designer Questionnaires</h3>
+    <h3 class="sinle-line-header">@QuestionnaireImport.DesignerQuestionnaires</h3>
 }
 
 @section gridnavigation
@@ -70,10 +70,10 @@
                 <td data-bind="text: Title"></td>
                 <td>
                     <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire">
-                        <i class="glyphicon glyphicon-info-sign"></i> @Common.Import
+                        <i class="glyphicon glyphicon-info-sign"></i> @QuestionnaireImport.Import
                     </a>
                     <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaireCensus">
-                        <i class="glyphicon glyphicon-info-sign"></i> @Common.ImportInCensus
+                        <i class="glyphicon glyphicon-info-sign"></i> @QuestionnaireImport.ImportInCensus
                     </a>
                 </td>
             </tr>

@@ -83,7 +83,7 @@
 <div id="list">
     <!-- ko if:IsPageLoaded()  -->
     <p class="text-center" data-bind="visible: Pager().TotalItemCount() == 0">
-        @Pages.Layout_NoResults
+        @Pages.NoResults
     </p>
     <!-- /ko -->
     <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">

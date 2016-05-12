@@ -18,7 +18,7 @@
         <div class="panel-heading with-btn">
             @Pages.Layout_Filter
             <div class="btn-group btn-group-sm pull-right">
-                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-left"></span> @Pages.Layout_HideFilter</button>
+                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-left"></span> @Pages.HideFilter</button>
             </div>
         </div>
         @RenderSection("filters", false)
@@ -31,7 +31,7 @@
         <div class="panel-body">
 
             <span data-bind="visible: !IsFilterOpen()">
-                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.Layout_ShowFilter</button>
+                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.ShowFilter</button>
             </span>
             @RenderSection("actionbar", false)
         </div>
@@ -44,7 +44,7 @@
         <div id="list">
             <!-- ko if:IsPageLoaded()  -->
             <p class="text-center" data-bind="visible: Pager().TotalItemCount() == 0">
-                @Pages.Layout_NoResults
+                @Pages.NoResults
             </p>
             <!-- /ko -->
             <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">

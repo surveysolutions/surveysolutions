@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data is valid.
+        /// </summary>
+        internal static string DataValid {
+            get {
+                return ResourceManager.GetString("DataValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         internal static string Delete {
@@ -457,6 +466,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible supervisor will be assigned automatically.
+        /// </summary>
+        internal static string ResponsibleSupervisorWillBeAssigned {
+            get {
+                return ResourceManager.GetString("ResponsibleSupervisorWillBeAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Row.
         /// </summary>
         internal static string Row {
@@ -660,6 +678,15 @@ namespace Resources {
         internal static string Verify {
             get {
                 return ResourceManager.GetString("Verify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify panel data.
+        /// </summary>
+        internal static string VerifyPanelData {
+            get {
+                return ResourceManager.GetString("VerifyPanelData", resourceCulture);
             }
         }
         
