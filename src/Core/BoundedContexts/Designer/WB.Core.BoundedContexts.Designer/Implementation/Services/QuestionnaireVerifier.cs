@@ -8,7 +8,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
-
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -159,7 +158,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
             Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
             Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
-            //Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
             Verifier<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
             Verifier<IQuestion>(QuestionHasInvalidVariableName, "WB0077", VerificationMessages.WB0077_QuestionHasInvalidVariableName),
             Verifier<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
@@ -200,11 +198,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
             Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
-
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+
+            Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
+            Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
             
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
@@ -224,10 +224,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
             ErrorsByQuestionsWithSubstitutions,
-            ErrorsByQuestionsWithDuplicateVariableName,
-            ErrorsByRostersWithDuplicateVariableName,
             ErrorsByMacrosWithDuplicateName,
-            ErrorsByLookupTablesWithDuplicateName,
             ErrorsByAttachmentsWithDuplicateName,
             ErrorsByLookupTablesWithDuplicateVariableName,
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
@@ -1052,6 +1049,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             return VariableNameRegex.IsMatch(variableName);
         }
+        
+        private static bool VariableHasEmptyVariableName(IVariable variable)
+        {
+            return string.IsNullOrWhiteSpace(variable.Name);
+        }
 
         private static bool RosterHasEmptyVariableName(IGroup group)
         {
@@ -1065,6 +1067,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrEmpty(question.StataExportCaption);
         }
 
+        private static bool VariableHasInvalidName(IVariable variable)
+        {
+            if (string.IsNullOrWhiteSpace(variable.Name))
+                return false;
+            return !IsVariableNameValid(variable.Name);
+        }
+        
         private static bool RosterHasInvalidVariableName(IGroup group)
         {
             if (!group.IsRoster)
@@ -1258,70 +1267,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         .Select(x => CreateReference(x))
                         .ToArray();
 
-                yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences, references);
+                yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
         }
-
-        private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            if (String.IsNullOrEmpty(question.ConditionExpression))
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
-
-            var referencedEntities = new List<IComposite>();
-
-            var referencedQuestionsOrVariables = this.ReferencedQuestionsOrVariables(question.ConditionExpression, questionnaire);
-
-            foreach (var entity in referencedQuestionsOrVariables)
-            {
-                var internalReferencedQuestion = this.GetReferencedEntitesForQuestionOrVariable(questionnaire, entity).ToArray();
-
-                if (!internalReferencedQuestion.Any())
-                    continue;
-
-                foreach (var internalQuestion in internalReferencedQuestion)
-                {
-                    if (internalQuestion.PublicKey == question.PublicKey)
-                    {
-                        referencedEntities.Add(question);
-                        if (question.PublicKey != entity.PublicKey)
-                        {
-                            referencedEntities.Add(entity);
-                        }
-                    }
-                }
-            }
-
-            if (referencedEntities.Any())
-            {
-                return new EntityVerificationResult<IComposite>
-                {
-                    HasErrors = true,
-                    ReferencedEntities = referencedEntities
-                };
-            }
-
-            return new EntityVerificationResult<IComposite> { HasErrors = false };
-        }
-
-        private IEnumerable<IComposite> GetReferencedEntitesForQuestionOrVariable(ReadOnlyQuestionnaireDocument questionnaire, IComposite entity)
-        {
-            var referencedQuestion = entity as IQuestion;
-            var referencedVariable = entity as Variable;
-
-            if (!string.IsNullOrWhiteSpace(referencedQuestion?.ConditionExpression))
-            {
-                return this.ReferencedQuestionsOrVariables(referencedQuestion.ConditionExpression, questionnaire);
-            }
-
-            if (!string.IsNullOrWhiteSpace(referencedVariable?.Expression))
-            {
-                return this.ReferencedQuestionsOrVariables(referencedVariable.Expression, questionnaire);
-            }
-
-            return Enumerable.Empty<IComposite>();
-        }
-
-
+        
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1375,18 +1324,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsWithDuplicateVariableName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var questionsDuplicates = questionnaire.Find<IQuestion>(q => true)
-                .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
-                .SelectMany(group => group.Skip(1));
-
-            foreach (IQuestion questionsDuplicate in questionsDuplicates)
-                yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
-        }
-
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByMacrosWithDuplicateName(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
             return questionnaire
@@ -1417,92 +1354,52 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 group.Select(e => CreateAttachmentReference(e.AttachmentId)).ToArray()));
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateName(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            return questionnaire
-                    .LookupTables
-                    .Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                    .GroupBy(x => x.Value.TableName, StringComparer.InvariantCultureIgnoreCase)
-                    .Where(group => group.Count() > 1)
-                    .Select(group =>
-                            QuestionnaireVerificationMessage.Critical(
-                                "WB0026",
-                                VerificationMessages.WB0026_NameForLookupTableIsNotUnique,
-                                group.Select(e => CreateLookupReference(e.Key)).ToArray()));
-        }
-
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateVariableName(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
             var rosterVariableNameMappedOnRosters = questionnaire
                 .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase)
-                .ToDictionary(r => r.Key, r => r.ToArray());
+                .Select(r => new
+                        {
+                            Name = r.VariableName,
+                            Reference = CreateRosterReference(r.PublicKey)
+                        })
+                .Union(questionnaire.Find<IQuestion>(q => true)
+                        .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+                        .Select(r => new
+                                {
+                                    Name = r.StataExportCaption,
+                                    Reference = CreateQuestionReference(r.PublicKey)
+                                }))
+                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
+                        .Select(r => new 
+                                {
+                                    Name = r.Value.TableName,
+                                    Reference = CreateLookupReference(r.Key)
+                                }))
+                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
+                        .Where(x => !string.IsNullOrEmpty(x.Name))
+                        .Select(r => new
+                                {
+                                    Name = r.Name,
+                                    Reference = CreateVariableReference(r.PublicKey)
+                                })
+                ).ToList();
 
-            var questionsVariableNamesMappedOnQuestions = questionnaire.Find<IQuestion>(q => true)
-                 .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
-                 .ToDictionary(r => r.Key, r => r.ToArray());
 
-            var lookupTablesNames = questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                .Select(x => new { LookupTableName = x.Value.TableName, LookupTableId = x.Key })
-                .GroupBy(x => x.LookupTableName, StringComparer.InvariantCultureIgnoreCase)
-                .ToDictionary(x => x.Key, x => x.Select(l => l.LookupTableId));
-
-            foreach (var lookup in lookupTablesNames)
-            {
-                if (rosterVariableNameMappedOnRosters.ContainsKey(lookup.Key))
-                    yield return
-                        QuestionnaireVerificationMessage.Critical("WB0029",
-                            VerificationMessages.WB0029_LookupWithTheSameVariableNameAlreadyExists,
-                            CreateReference(rosterVariableNameMappedOnRosters[lookup.Key].First()),
-                            CreateLookupReference(lookup.Value.First()));
-
-                if (questionsVariableNamesMappedOnQuestions.ContainsKey(lookup.Key))
-                    yield return
-                        QuestionnaireVerificationMessage.Critical("WB0029",
-                            VerificationMessages.WB0029_LookupWithTheSameVariableNameAlreadyExists,
-                            CreateReference(questionsVariableNamesMappedOnQuestions[lookup.Key].First()),
-                            CreateLookupReference(lookup.Value.First()));
-            }
-        }
-
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByRostersWithDuplicateVariableName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var rosterVariableNameMappedOnRosters = questionnaire
-                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase)
-                .ToDictionary(r => r.Key, r => r.ToArray());
-
-            var questionsVariableNamesMappedOnQuestions = questionnaire.Find<IQuestion>(q => true)
-                 .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
-                 .ToDictionary(r => r.Key, r => r.ToArray());
-
-            foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
-            {
-                if (questionsVariableNamesMappedOnQuestions.ContainsKey(rosterVariableNameMappedOnRoster.Key))
-                    yield return
-                        QuestionnaireVerificationMessage.Critical("WB0093",
-                            VerificationMessages.WB0093_QuestionWithTheSameVariableNameAlreadyExists,
-                            CreateReference(rosterVariableNameMappedOnRoster.Value.First()),
-                            CreateReference(questionsVariableNamesMappedOnQuestions[rosterVariableNameMappedOnRoster.Key].First()));
-
-                if (rosterVariableNameMappedOnRoster.Value.Length < 2)
-                    continue;
-
-                yield return QuestionnaireVerificationMessage.Critical("WB0068",
-                    VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
-                    rosterVariableNameMappedOnRoster.Value.Select(x => CreateReference(x)).ToArray());
-            }
+            return rosterVariableNameMappedOnRosters
+                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => QuestionnaireVerificationMessage.Critical(
+                                "WB0026",
+                                VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
+                                group.Select(x => x.Reference).ToArray()));
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsWithSubstitutions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
-            IEnumerable<IQuestion> questionsWithSubstitutions =
-                questionnaire.Find<IQuestion>(question => substitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+            IEnumerable<IQuestion> questionsWithSubstitutions = questionnaire.Find<IQuestion>(question => substitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
 
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationMessage>();
 
@@ -1514,31 +1411,49 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                var substitutionReferences = substitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
+                string[] substitutionReferences = substitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
 
                 if (vectorOfRosterSizeQuestionsForQuestionWithSubstitution != null)
                 {
-                    VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
-                        identifier => GetVerificationErrorBySubstitutionReferenceOrNull(
-                            questionWithSubstitution, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire));
+                    var resultErrors = substitutionReferences
+                        .Select(identifier => GetVerificationErrorBySubstitutionReferenceOrNull(questionWithSubstitution, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
+                        .Where(errorOrNull => errorOrNull != null);
+
+                    foreach (var error in resultErrors)
+                    {
+                        var verificationError = error;
+                        if (!errorByAllQuestionsWithSubstitutions.Any(e => e.Code == verificationError.Code && e.References.SequenceEqual(verificationError.References)))
+                        {
+                            errorByAllQuestionsWithSubstitutions.Add(error);
+                        }
+                    }
                 }
             }
 
             return errorByAllQuestionsWithSubstitutions;
         }
-
-        private IEnumerable<IComposite> ReferencedQuestionsOrVariables(string expression, ReadOnlyQuestionnaireDocument questionnaire)
+        
+        private static QuestionnaireVerificationReference CreateGroupReference(Guid groupId)
         {
-            var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(expression);
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId);
+        }
 
-            IEnumerable<IComposite> incorrectReferencedQuestions = identifiersUsedInExpression
-                .Select(variable => GetEntityByVariable(variable, questionnaire))
-                .Where(referencedQuestion => referencedQuestion != null)
-                .ToList();
-            return incorrectReferencedQuestions;
+        private static QuestionnaireVerificationReference CreateVariableReference(Guid variableId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Variable, variableId);
+        }
+
+        private static QuestionnaireVerificationReference CreateRosterReference(Guid rosterId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Roster, rosterId);
+        }
+
+        private static QuestionnaireVerificationReference CreateQuestionReference(Guid questionId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId);
         }
 
         private static QuestionnaireVerificationReference CreateMacrosReference(Guid macroId)
@@ -1558,13 +1473,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
-            return new QuestionnaireVerificationReference(
-                entity is IGroup
-                    ? QuestionnaireVerificationReferenceType.Group
-                    : (entity is IStaticText
-                        ? QuestionnaireVerificationReferenceType.StaticText
-                        : QuestionnaireVerificationReferenceType.Question),
-                entity.PublicKey);
+            if (entity is IVariable)
+                return CreateVariableReference(entity.PublicKey);
+
+            if (entity is IGroup)
+                return CreateGroupReference(entity.PublicKey);
+
+            if (entity is IQuestion)
+                return CreateQuestionReference(entity.PublicKey);
+
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.StaticText, entity.PublicKey);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity, int failedValidationIndex)
@@ -1611,8 +1529,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return variable;
         }
 
-        private  QuestionnaireVerificationMessage GetVerificationErrorBySubstitutionReferenceOrNull(IQuestion questionWithSubstitution,
-            string substitutionReference, Guid[] vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
+        private  QuestionnaireVerificationMessage GetVerificationErrorBySubstitutionReferenceOrNull(
+            IQuestion questionWithSubstitution,
+            string substitutionReference, 
+            Guid[] vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
             ReadOnlyQuestionnaireDocument questionnaire)
         {
             if (substitutionReference == questionWithSubstitution.StataExportCaption)
@@ -1628,26 +1548,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
                 return null;
             }
-            var questionSourceOfSubstitution =
-                questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
+            var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
 
-            if (questionSourceOfSubstitution == null)
+            if (entityToSubstitute == null)
             {
-                return QuestionWithTitleSubstitutionReferencesNotExistingQuestion(questionWithSubstitution);
+                return QuestionWithSubstitutionReferencesNotExistingQuestionOrVariable(questionWithSubstitution);
             }
 
-            if (!QuestionTypesValidToBeSubstitutionReferences.Contains(questionSourceOfSubstitution.QuestionType))
+            var isNotVariable = !(entityToSubstitute is IVariable);
+            var isQuestionaOfUnsupportedType = (entityToSubstitute is IQuestion) && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
+            if (isNotVariable && isQuestionaOfUnsupportedType)
             {
-                return
-                    QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(questionWithSubstitution, questionSourceOfSubstitution);
+                return QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(questionWithSubstitution, entityToSubstitute);
             }
 
-            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(questionSourceOfSubstitution,
+            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(entityToSubstitute,
                 vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions, questionnaire))
             {
                 return
-                    QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(questionWithSubstitution,
-                        questionSourceOfSubstitution);
+                    QuestionWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(
+                        questionWithSubstitution,
+                        entityToSubstitute);
             }
 
             return null;
@@ -1660,27 +1581,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(questionsWithSubstitution));
         }
 
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(
+            IQuestion questionsWithSubstitution, 
+            IComposite entityToSubstitute)
         {
             return QuestionnaireVerificationMessage.Error("WB0019",
                 VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
                 CreateReference(questionsWithSubstitution),
-                CreateReference(questionSourceOfSubstitution));
+                CreateReference(entityToSubstitute));
         }
 
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IComposite questionsWithSubstitution, IComposite entityToSubstitute)
         {
             return QuestionnaireVerificationMessage.Error("WB0018",
-                VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType,
+                VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesUnsupportedEntity,
                 CreateReference(questionsWithSubstitution),
-                CreateReference(questionSourceOfSubstitution));
+                CreateReference(entityToSubstitute));
         }
 
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionReferencesNotExistingQuestion(IQuestion questionsWithSubstitution)
+        private static QuestionnaireVerificationMessage QuestionWithSubstitutionReferencesNotExistingQuestionOrVariable(IQuestion questionsWithSubstitution)
         {
             return QuestionnaireVerificationMessage.Error("WB0017",
-                VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion,
-                CreateReference(questionsWithSubstitution));
+                VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestionOrVariable,
+                CreateQuestionReference(questionsWithSubstitution.PublicKey));
         }
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
@@ -1724,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationMessage VariableNameIsUsedAsOtherQuestionVariableName(IQuestion sourseQuestion)
         {
             return QuestionnaireVerificationMessage.Critical("WB0062",
-                VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
+                VerificationMessages.WB0062_,
                 CreateReference(sourseQuestion));
         }
 
@@ -1776,23 +1699,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
-            List<QuestionnaireVerificationMessage> errorList, 
-            Func<T, QuestionnaireVerificationMessage> getErrorOrNull)
-        {
-            var resultErrors = enumerableToVerify
-                .Select(getErrorOrNull)
-                .Where(errorOrNull => errorOrNull != null);
-
-            foreach (var error in resultErrors)
-            {
-                var verificationError = error;
-                if (!errorList.Any(e => e.Code == verificationError.Code && e.References.SequenceEqual(verificationError.References)))
-                {
-                    errorList.Add(error);
-                }
-            }
-        }
 
         private static bool NoQuestionsExist(ReadOnlyQuestionnaireDocument questionnaire)
         {
@@ -1840,7 +1746,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite item, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            IGroup parent = item is IQuestion
+            IGroup parent = (item is IQuestion) || (item is IVariable)
                 ? (IGroup)item.GetParent()
                 : (IGroup)item;
 
@@ -1866,11 +1772,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return parentGroups;
         }
 
-        private static bool QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(IQuestion question,
-            Guid[] vectorOfRosterSizeQuestions, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(
+            IComposite entity,
+            Guid[] vectorOfRosterSizeQuestions, 
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
-                GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
+                GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(entity, questionnaire);
 
             if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution == null) return false;
             if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length == 0) return false;
@@ -1887,11 +1795,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         (rosterSizeQuestionId, indexInArray) =>
                             vectorOfRosterSizeQuestionsReverse[indexInArray] != rosterSizeQuestionId).Any();
             }
-            else
-            {
-                return true;
-            }
-
+            return true;
         }
 
         private static bool IsSupervisorQuestion(IQuestion question)

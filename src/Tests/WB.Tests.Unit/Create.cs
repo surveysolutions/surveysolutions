@@ -1276,6 +1276,8 @@ namespace WB.Tests.Unit
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(), 
+                new Dictionary<InterviewItemId, object>(),
+                new HashSet<InterviewItemId>(),  
                 wasCompleted ?? false);
         }
 
@@ -2926,6 +2928,17 @@ namespace WB.Tests.Unit
             var result = Substitute.For<IPlainQuestionnaireRepository>();
             result.GetQuestionnaire(null).ReturnsForAnyArgs(questionnaire);
             return result;
+        }
+
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.Integer, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
+        public static InterviewVariables InterviewVariables()
+        {
+           return new InterviewVariables();
         }
     }
 }

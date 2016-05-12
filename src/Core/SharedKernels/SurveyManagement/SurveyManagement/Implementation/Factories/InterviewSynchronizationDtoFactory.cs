@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     {
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
+        private readonly IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
@@ -34,7 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IReadSideKeyValueStorage<InterviewVariables> interviewVariablesStore)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
@@ -42,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.interviewVariablesStore = interviewVariablesStore;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -165,6 +168,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             }
             Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions = CreateLinkedQuestionsOptions(interview);
 
+            var interviewVariables = this.interviewVariablesStore.GetById(interview.InterviewId);
+            Dictionary<InterviewItemId, object> variableValues = CreateVariableValues(interviewVariables);
+            HashSet<InterviewItemId> disabledVariables = CreateDisabledVariables(interviewVariables);
+
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
                 comments,
@@ -184,8 +191,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
                 linkedQuestionOptions,
+                variableValues,
+                disabledVariables,
                 interview.WasCompleted,
                 interview.CreatedOnClient);
+        }
+
+        private static HashSet<InterviewItemId> CreateDisabledVariables(InterviewVariables interviewVariables)
+        {
+            var result = new HashSet<InterviewItemId>();
+            if (interviewVariables != null)
+            {
+                foreach (var variable in interviewVariables.DisabledVariables)
+                {
+                    result.Add(variable);
+                }
+            }
+            return result;
+        }
+
+        private Dictionary<InterviewItemId, object> CreateVariableValues(InterviewVariables interviewVariables)
+        {
+            var result = new Dictionary<InterviewItemId, object>();
+            if (interviewVariables != null)
+            {
+                foreach (var variableValue in interviewVariables.VariableValues )
+                {
+                    result.Add(variableValue.Key, variableValue.Value);
+                }
+            }
+            return result;
         }
 
         private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)

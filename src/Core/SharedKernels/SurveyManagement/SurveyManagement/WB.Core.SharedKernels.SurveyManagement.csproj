@@ -127,6 +127,7 @@
     <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
+    <Compile Include="EventHandler\VariablesDenormalizer.cs" />
     <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
     <Compile Include="Views\Interview\InterviewQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewSummary.cs" />
+    <Compile Include="Views\Interview\InterviewVariables.cs" />
     <Compile Include="Views\Interview\LastInterviewStatus.cs" />
     <Compile Include="Views\Interview\QuestionAnswer.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />

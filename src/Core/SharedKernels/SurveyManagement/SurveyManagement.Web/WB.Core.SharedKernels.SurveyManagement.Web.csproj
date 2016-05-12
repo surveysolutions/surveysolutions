@@ -448,6 +448,7 @@
     <EmbeddedResource Include="Resources\Archived.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Archived.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -549,7 +550,6 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\users.js" />
     <EmbeddedResource Include="Scripts\viewmodels\viewmodelbase.js" />
-    <EmbeddedResource Include="Views\Backup\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Designer.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />

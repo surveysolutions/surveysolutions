@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -32,6 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
+            var variable = Create.Variable(variableName: "va", type: VariableType.String);
+            interviewVariables = new InterviewVariables();
+
+            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
+                "nastya0";
+            interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
+              "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()
                 {
@@ -41,6 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     Children = new List<IComposite>
                     {
+                        variable,
                         new NumericQuestion()
                         {
                             PublicKey = substitutionReferenceQuestionId,
@@ -59,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                 {
                                     PublicKey = questionWithSubstitutionId,
                                     QuestionType = QuestionType.Numeric,
-                                    QuestionText = "test %var_source%",
+                                    QuestionText = "test %var_source% %va%",
                                     StataExportCaption = "var"
                                 }
                             }
@@ -97,26 +106,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null, interviewVariables);
 
 
         It should_title_of_question_in_first_row_of_first_roster_has_rostertitle_replaced_with_a = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 0 }).Title.ShouldEqual("test 18");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 0 }).Title.ShouldEqual("test 18 nastya0");
 
         It should_title_of_question_in_second_row_of_first_roster_has_rostertitle_replaced_with_b = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 1 }).Title.ShouldEqual("test 18");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 1 }).Title.ShouldEqual("test 18 nastya0");
 
         It should_title_of_question_in_first_row_of_second_roster_has_rostertitle_replaced_with_a = () =>
-           GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 0 }).Title.ShouldEqual("test 4");
+           GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 0 }).Title.ShouldEqual("test 4 nastya1");
 
         It should_title_of_question_in_second_row_of_second_roster_has_rostertitle_replaced_with_b = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 1 }).Title.ShouldEqual("test 4");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 1 }).Title.ShouldEqual("test 4 nastya1");
 
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
+        private static InterviewVariables interviewVariables;
         private static UserDocument user;
 
         private static Guid nestedRosterId;

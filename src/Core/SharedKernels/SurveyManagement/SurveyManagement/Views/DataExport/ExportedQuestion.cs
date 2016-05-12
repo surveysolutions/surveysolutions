@@ -131,7 +131,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                 {
                     if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
                     {
-                        FillYesNoAnswers(answers, header, result);
+                        FillYesNoAnswers(answers, header, result, false);
+                    }
+                    else if(header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNoOrdered)
+                    {
+                        FillYesNoAnswers(answers, header, result, true);
                     }
                     else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
                     {
@@ -177,7 +181,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
         }
 
-        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result, bool ordered)
         {
             AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
             int filledYesAnswersCount = 0;
@@ -195,9 +199,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                                 .Where(x => x.Yes)
                                 .Select((item, index) => new {item, index})
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
-
-                        result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
-                        filledYesAnswersCount++;
+                        if (ordered)
+                            result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
+                        else
+                            result[i] = "1";
+                       filledYesAnswersCount++;
                     }
                     else
                     {

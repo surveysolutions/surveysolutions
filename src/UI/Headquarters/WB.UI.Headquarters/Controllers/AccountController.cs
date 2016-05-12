@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -72,10 +73,10 @@ namespace WB.UI.Headquarters.Controllers
                         }
                     }
 
-                    this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
+                    this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
                 }
                 else
-                    this.ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
+                    this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
             }
 
             return this.View(model);
