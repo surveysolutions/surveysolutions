@@ -219,4 +219,7 @@
   <data name="Week" xml:space="preserve">
     <value>Неделя</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>От</value>
+  </data>
 </root>

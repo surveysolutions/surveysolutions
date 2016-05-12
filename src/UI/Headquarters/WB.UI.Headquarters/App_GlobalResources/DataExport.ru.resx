@@ -117,100 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>CSV-файл</value>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Двоичные данные</value>
   </data>
-  <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Вы должны выбрать файл для загрузки</value>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Вы уверены, что вы хотите, чтобы остановить</value>
   </data>
-  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>Пожалуйста, выберите файл</value>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>Выберите тип и формат данных для экспорта</value>
   </data>
-  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
-    <value>Пароль и подтверждение пароля не совпадают</value>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>Экспорт данных</value>
   </data>
-  <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Подтверждение пароля</value>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
   </data>
-  <data name="EmailErrorMessage" xml:space="preserve">
-    <value>Это не действительный адрес электронной почты</value>
+  <data name="export" xml:space="preserve">
+    <value>экспорт</value>
   </data>
-  <data name="EmailFieldName" xml:space="preserve">
-    <value>Отправить по электронной почте</value>
+  <data name="Format" xml:space="preserve">
+    <value>Формат</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Недопустимый пользователь</value>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Дата последнего обновления</value>
   </data>
-  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Заблокирован, руководитель</value>
+  <data name="Metadata" xml:space="preserve">
+    <value>Метаданные</value>
   </data>
-  <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Заблокирован администратором или HQ</value>
+  <data name="Name" xml:space="preserve">
+    <value>Имя</value>
   </data>
-  <data name="LogOnModel_Password" xml:space="preserve">
-    <value>Пароль</value>
+  <data name="ParaData" xml:space="preserve">
+    <value>Пункт данные</value>
   </data>
-  <data name="LogOnModel_UserName" xml:space="preserve">
-    <value>Имя пользователя</value>
+  <data name="Progress" xml:space="preserve">
+    <value>Прогресс</value>
   </data>
-  <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Пароль должен содержать по крайней мере один номер, один верхний регистр символов и один нижний регистр символов</value>
-  </data>
-  <data name="PasswordFieldName" xml:space="preserve">
-    <value>Пароль</value>
-  </data>
-  <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>Пароль должен быть по крайней мере {2} символов</value>
-  </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Входное имя слишком длинное</value>
-  </data>
-  <data name="PersonNameFieldName" xml:space="preserve">
-    <value>Полное имя</value>
-  </data>
-  <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Неправильный номер телефона</value>
-  </data>
-  <data name="PhoneNumberFieldName" xml:space="preserve">
-    <value>Номер телефона</value>
-  </data>
-  <data name="RequiredEmailErrorMessage" xml:space="preserve">
-    <value>Электронной почты требуется</value>
-  </data>
-  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
-    <value>Требуется пароль</value>
-  </data>
-  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Требуется супервайзер</value>
-  </data>
-  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
-    <value>Требуется имя пользователя</value>
-  </data>
-  <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Руководитель</value>
-  </data>
-  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Пожалуйста введите действительный идентификатор Guid в формате xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx,</value>
-  </data>
-  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
-    <value>CSV-файл</value>
-  </data>
-  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Вы должны выбрать файл для загрузки</value>
-  </data>
-  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
-    <value>Пожалуйста, выберите файл</value>
-  </data>
-  <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Имя должно быть от 3 до 15 символов и содержит только буквы, цифры и символ подчеркивания</value>
-  </data>
-  <data name="UserNameFieldName" xml:space="preserve">
-    <value>Имя пользователя</value>
-  </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Название анкеты требуется</value>
-  </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
-    <value>Название</value>
+  <data name="StartDate" xml:space="preserve">
+    <value>Дата начала</value>
   </data>
 </root>

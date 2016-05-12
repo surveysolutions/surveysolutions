@@ -180,4 +180,7 @@
   <data name="Users" xml:space="preserve">
     <value>Пользователи</value>
   </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Члены команды и статусы</value>
+  </data>
 </root>

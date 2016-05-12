@@ -132,4 +132,10 @@
   <data name="TemplateNotFound" xml:space="preserve">
     <value>Не удается найти запрошенный вопросник «{0}». Пожалуйста обновите список анкет.</value>
   </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>Имя пользователя или пароль неверны.</value>
+  </data>
+  <data name="SiteAccessNotAllowed" xml:space="preserve">
+    <value>У вас нет доступа к этому сайту. Обратитесь к администратору.</value>
+  </data>
 </root>
