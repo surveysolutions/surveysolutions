@@ -264,4 +264,61 @@
   <data name="Verify" xml:space="preserve">
     <value>Проверить</value>
   </data>
+  <data name="Column" xml:space="preserve">
+    <value>Колонка</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Создание образца из данных</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Загрузка поврежденных интервью</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Предполагаемое время</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>Файл не был обработан. Могут быть загружены только файл с разделителями табуляции.</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>Размер файла не может превышать 300 МБ.</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>Формат файла не поддерживается, данные внутри него будут игнорироваться</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>В настоящее время импорт интервью. Дождитесь выполнения завершения операции.</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Пример импорта</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Статус импорта</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Интервью (ы) создан</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Обработка...</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Строка</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Создание образца был успешном завершено.</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Пример создания результат</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Пример импорта завершается с ошибками</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Пример импорта успешно завершена</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Загрузить новые данные</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Проверка образца данных</value>
+  </data>
 </root>
