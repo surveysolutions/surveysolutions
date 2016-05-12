@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_cloning_questionnaire_and_its_disabled : QuestionnaireTestsContext
+    internal class when_cloning_questionnaire_and_its_disabled
     {
         Establish context = () =>
         {
