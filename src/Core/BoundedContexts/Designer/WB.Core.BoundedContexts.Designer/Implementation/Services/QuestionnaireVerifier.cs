@@ -1657,7 +1657,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 case ExpressionLocationItemType.Group:
                 case ExpressionLocationItemType.Roster:
-                    reference = CreateQuestionReference(expressionLocation.Id);
+                    reference = CreateGroupReference(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Question:
                     reference = CreateQuestionReference(expressionLocation.Id);
