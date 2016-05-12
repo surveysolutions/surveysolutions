@@ -163,13 +163,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.questionIdentity, this.interviewId);
             }
 
-            foreach (var substitutionVariable in this.substitutionVariables.ByVariables)
+            foreach (var substitution in this.substitutionVariables.ByVariables)
             {
-                var variableValue = interview.GetVariableValue(new Identity(substitutionVariable.Id, this.questionIdentity.RosterVector));
+                var variableValue = interview.GetVariableValue(new Identity(substitution.Id, this.questionIdentity.RosterVector));
                 var variableValueAsString = this.stringConverter.VariableValueToUIString(variableValue);
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
-                    questionTitle, substitutionVariable.Name,
+                    questionTitle, substitution.Name,
                     string.IsNullOrEmpty(variableValueAsString) ? this.substitutionService.DefaultSubstitutionText : variableValueAsString);
             }
 
