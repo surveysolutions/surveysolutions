@@ -47,6 +47,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -59,6 +60,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -519,7 +521,11 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(), 
-                new QuestionnaireRosterStructureFactory());
+                new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
