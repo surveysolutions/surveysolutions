@@ -92,7 +92,7 @@ void VariablesStatesInLevelConstructor(List<VariableTemplateModel> variables)
 	foreach (var variable in variables)
 	{#>
 		EnablementStates.Add(<#=variable.StateName#>.ItemId, <#=variable.StateName#>);
-		AddVariableAccessorToMap(IdOf.<#=variable.IdName#>, ()=><#=variable.VariableName#>);
+		AddVariableValueGetterToMap(IdOf.<#=variable.IdName#>, ()=><#=variable.VariableName#>);
 		<#+ 
 	}
 }
