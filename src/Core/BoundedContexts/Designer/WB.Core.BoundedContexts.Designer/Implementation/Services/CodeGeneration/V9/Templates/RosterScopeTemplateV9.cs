@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(@"(  
+            this.Write(@"(   
 		decimal[] rosterVector,  
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
@@ -1099,7 +1099,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(variable.StateName));
         #line hidden
         
         #line 94 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V9\Templates\SharedTemplateV9.tt"
-this.Write(");\r\n\t\tAddVariableAccessorToMap(IdOf.");
+this.Write(");\r\n\t\tAddVariableValueGetterToMap(IdOf.");
 
         
         #line default
