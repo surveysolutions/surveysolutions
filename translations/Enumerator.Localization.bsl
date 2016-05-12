@@ -293,7 +293,7 @@
             <li lc="uk-UA" tx="Вийшла нова версія програми. Будь ласка, оновіть додаток" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Existe una nueva versión de la aplicación. Por favor, actualice la aplicación" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว  กรุณาปรับปรุงเวอร์ชั่นของโปรแกรม Survey Solutions ในเครื่องของท่าน" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đã có phiên bản mới của ứng dụng. Xin vui lòng cập nhật!" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Đã có phiên bản mới của ứng dụng. Xin vui lòng cập nhật!" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Versi baru dari aplikasi telah dirilis. Silahkan, memperbarui aplikasi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Nova versão do aplicativo foi lançado. Por favor, atualizar o aplicativo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إصدار نسخة جديدة من التطبيق. من فضلك، تحديث التطبيق" ts="Translated" qs="AutoTranslated" />
@@ -428,7 +428,7 @@
             <li lc="uk-UA" tx="Ні" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="No" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่มี" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Không" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Tidak" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
@@ -607,7 +607,7 @@
             <li lc="uk-UA" tx="Розділ не розпочато" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sección no iniciada" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอนที่ยังไม่เริ่ม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Số mục chưa phỏng vấn: {0}" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Số mục chưa phỏng vấn" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seção não começada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم لم تبدأ" ts="Translated" qs="AutoTranslated" />
@@ -688,7 +688,7 @@
             <li lc="uk-UA" tx="Інструкція" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Instrucción" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คำแนะนำ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Hướng dẫn:" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Hướng dẫn:" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Instruksi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Instrução" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليمات" ts="Translated" qs="AutoTranslated" />
@@ -986,7 +986,7 @@
             <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Діагностіка" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="诊断" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Xem lỗi " ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Xem lỗi " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1116,7 +1116,7 @@
             <li lc="uk-UA" tx="Ні" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="No" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่ใช่" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không được" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Không được" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Tidak" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
