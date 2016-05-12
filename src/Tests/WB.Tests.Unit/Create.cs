@@ -1818,15 +1818,15 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new QuestionnaireAssemblyImported { Version = version }, eventSourceId: questionnaireId);
         }
 
-        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId = null, string title = "Questionnaire Browse Item X")
-        {
-            return new QuestionnaireBrowseItem
+        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(
+            Guid? questionnaireId = null, string title = "Questionnaire Browse Item X", bool disabled = false)
+            => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 Version = 1,
                 Title = title,
+                Disabled = disabled,
             };
-        }
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
