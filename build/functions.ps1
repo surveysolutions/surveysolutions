@@ -186,7 +186,7 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
 
         $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
-        .\packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe $assembly /xml:$resultXml | Write-Host
+        .\packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe $assembly --out:$resultXml | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
     }
 
