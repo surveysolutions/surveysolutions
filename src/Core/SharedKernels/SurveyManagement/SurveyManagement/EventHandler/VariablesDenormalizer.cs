@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             foreach (var changedVariable in @event.Payload.ChangedVariables)
             {
-                state.VariableValues[new InterviewItemId(changedVariable.VariableIdentity.Id, changedVariable.VariableIdentity.RosterVector)] = changedVariable.VariableValue;
+                state.VariableValues[new InterviewItemId(changedVariable.Identity.Id, changedVariable.Identity.RosterVector)] = changedVariable.NewValue;
             }
 
             return state;

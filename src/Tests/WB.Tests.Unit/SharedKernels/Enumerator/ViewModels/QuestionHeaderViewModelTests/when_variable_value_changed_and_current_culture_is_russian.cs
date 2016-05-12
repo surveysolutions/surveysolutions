@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             changedVariables = new[]
             {
-                new ChangedVariableValueDto(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  new DateTime(2016, 1, 31)),
-                new ChangedVariableValueDto(new Identity(Guid.Parse("22222222222222222222222222222222"), RosterVector.Empty),  7.77m),
+                new ChangedVariable(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  new DateTime(2016, 1, 31)),
+                new ChangedVariable(new Identity(Guid.Parse("22222222222222222222222222222222"), RosterVector.Empty),  7.77m),
             };
 
             var interviewId = "interviewId";
@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var answer = new TextAnswer();
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetVariableValue(substitutedVariable1Identity) == changedVariables[0].VariableValue &&
-                x.GetVariableValue(substitutedVariable2Identity) == changedVariables[1].VariableValue);
+                x.GetVariableValue(substitutedVariable1Identity) == changedVariables[0].NewValue &&
+                x.GetVariableValue(substitutedVariable2Identity) == changedVariables[1].NewValue);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
         static IEventSourcedAggregateRoot fakeInterview;
-        private static ChangedVariableValueDto[] changedVariables;
+        private static ChangedVariable[] changedVariables;
         private static CultureInfo clientCulture;
     }
 }

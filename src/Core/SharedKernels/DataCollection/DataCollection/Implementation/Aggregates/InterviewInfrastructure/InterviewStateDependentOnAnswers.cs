@@ -445,9 +445,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.LinkedMultipleOptionsAnswers.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
 
-        public void ChangeVariables(ChangedVariableValueDto[] changedVariables)
+        public void ChangeVariables(ChangedVariable[] changedVariables)
         {
-            changedVariables.ForEach(variable => this.VariableValues[variable.VariableIdentity] = variable.VariableValue);
+            changedVariables.ForEach(variable => this.VariableValues[variable.Identity] = variable.NewValue);
         }
     }
 }

@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             return !previousValue.Equals(newValue);
         }
 
-        public virtual void SetPreviousVariableValue(Guid variableId, object value)
+        public virtual void UpdateVariableValue(Guid variableId, object value)
         {
             VariablePreviousStates[variableId] = value;
         }
