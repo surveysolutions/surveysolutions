@@ -25,7 +25,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	StaticTextsStatesInLevelConstructor(Model.StaticTexts); 
 	RostersStatesInLevelConstructor(Model.Rosters);
 #> 
-<#
+<# 
 	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder)
     {
 #> 

@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, Func<object>> VariableMap { get; private set; }
+        protected Dictionary<Guid, Func<object>> VariableValueGetterMap { get; private set; }
         protected Dictionary<Guid, object> VariablePreviousStates { get; private set; }
 
         protected AbstractConditionalLevelInstanceV9(decimal[] rosterVector, Identity[] rosterKey,
@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.VariableMap = new Dictionary<Guid, Func<object>>();
+            this.VariableValueGetterMap = new Dictionary<Guid, Func<object>>();
             this.VariablePreviousStates = new Dictionary<Guid, object>();
         }
 
@@ -71,9 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             }
         }
 
-        protected virtual void AddVariableAccessorToMap(Guid id, Func<object> getValue)
+        protected virtual void AddVariableValueGetterToMap(Guid id, Func<object> variableValueGetter)
         {
-            this.VariableMap.Add(id, getValue);
+            this.VariableValueGetterMap.Add(id, variableValueGetter);
         }
 
         public virtual void DisableVariable(Guid variableId)
@@ -92,12 +92,12 @@ namespace WB.Core.SharedKernels.DataCollection.V9
         {
             var result = new VariableValueChanges();
 
-            foreach (var variableAccessor in VariableMap)
+            foreach (var variableAccessor in this.VariableValueGetterMap)
             {
                 object newVariableValue = null;
                 try
                 {
-                    newVariableValue = variableAccessor.Value();
+                    newVariableValue = variableAccessor.Value.Invoke();
                 }
 #pragma warning disable
                 catch (Exception ex)
