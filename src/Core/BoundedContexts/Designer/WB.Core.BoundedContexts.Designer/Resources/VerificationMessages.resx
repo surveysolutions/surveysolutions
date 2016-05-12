@@ -126,11 +126,11 @@
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
     <value>Enabling condition has a syntax error.</value>
   </data>
-  <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Validation condition references a nonexistent question.</value>
+  <data name="WB0004_" xml:space="preserve">
+    <value />
   </data>
-  <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Enabling condition references a nonexistent question.</value>
+  <data name="WB0005_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
     <value>Roster size question is missing.</value>

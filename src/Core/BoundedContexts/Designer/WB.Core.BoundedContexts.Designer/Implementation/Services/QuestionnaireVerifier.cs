@@ -1649,13 +1649,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(sourceQuestion));
         }
 
-        private static QuestionnaireVerificationMessage VariableNameIsUsedAsOtherQuestionVariableName(IQuestion sourseQuestion)
-        {
-            return QuestionnaireVerificationMessage.Critical("WB0062",
-                VerificationMessages.WB0062_,
-                CreateReference(sourseQuestion));
-        }
-
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
             QuestionnaireVerificationReference reference;
@@ -1811,12 +1804,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsPreFilledQuestion(IQuestion question)
         {
             return question.Featured;
-        }
-
-        private static bool IsCategoricalLinkedQuestion(IQuestion question)
-        {
-            return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
-                   (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private static bool IsFilteredComboboxQuestion(IQuestion question)
