@@ -111,6 +111,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        [ObserverNotAllowed]
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
             QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));

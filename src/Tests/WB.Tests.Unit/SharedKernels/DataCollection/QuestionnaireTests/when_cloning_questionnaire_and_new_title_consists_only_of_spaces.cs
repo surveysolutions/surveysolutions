@@ -1,8 +1,10 @@
 using System;
 using Machine.Specifications;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -10,7 +12,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaire = SetupQuestionnaireWithProjectionsReadyForCloning(questionnaireIdentity);
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
+                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem());
+
+            questionnaire = Create.DataCollectionQuestionnaire(
+                questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
         Because of = () =>

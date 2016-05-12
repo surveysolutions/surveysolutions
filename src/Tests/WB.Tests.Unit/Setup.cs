@@ -250,6 +250,9 @@ namespace WB.Tests.Unit
 
         public static IPlainStorageAccessor<TEntity> PlainStorageAccessorWithOneEntity<TEntity>(object id, TEntity entity)
             where TEntity : class
-            => Mock.Of<IPlainStorageAccessor<TEntity>>(_ => _.GetById(id) == entity);
+            => new TestPlainStorage<TEntity>(new Dictionary<object, TEntity>
+            {
+                { id, entity },
+            });
     }
 }
