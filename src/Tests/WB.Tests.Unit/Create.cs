@@ -165,6 +165,8 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
+        public static CommandFactory Command => new CommandFactory();
+
         public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewAnswersCommandValidator(interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
@@ -594,14 +596,17 @@ namespace WB.Tests.Unit
         }
 
         public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
-        {
-            return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+            => new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory());
-        }
+                new QuestionnaireRosterStructureFactory(),
+                questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>());
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, 
@@ -2693,79 +2698,6 @@ namespace WB.Tests.Unit
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] {});
-        }
-
-        internal static class Command
-        {
-            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            {
-                return new AddLookupTable(questionnaireId, lookupTableName, null, lookupTableId, responsibleId);
-            }
-
-            public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            {
-                return new AddMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-            }
-
-            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
-                Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
-                DateTime? answerTime = null)
-            {
-                return new AnswerYesNoQuestion(
-                    interviewId: Guid.NewGuid(),
-                    userId: userId ?? Guid.NewGuid(),
-                    questionId: questionId ?? Guid.NewGuid(),
-                    rosterVector: rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
-                    answerTime: answerTime ?? DateTime.UtcNow,
-                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
-            }
-
-            public static DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
-            {
-                return new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
-            }
-
-            public static DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            {
-                return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-            }
-
-            public static ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
-                Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
-                long questionnaireContentVersion = 1)
-            {
-                return new ImportFromDesigner(
-                    responsibleId ?? Guid.NewGuid(),
-                    new QuestionnaireDocument
-                    {
-                        PublicKey = questionnaireId ?? Guid.NewGuid(),
-                        Title = title,
-                    },
-                    false,
-                    base64StringOfAssembly,
-                    questionnaireContentVersion);
-            }
-
-            public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
-            {
-                return new LinkUserToDevice(userId, deviceId);
-            }
-
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName,"file");
-            }
-
-            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
-            {
-                return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
-            }
-
-            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
-            {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
-            }
         }
 
         private class SyncAsyncExecutorStub : IAsyncExecutor
