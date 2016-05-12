@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
