@@ -1819,11 +1819,12 @@ namespace WB.Tests.Unit
         }
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(
-            Guid? questionnaireId = null, string title = "Questionnaire Browse Item X", bool disabled = false)
+            Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
+            string title = "Questionnaire Browse Item X", bool disabled = false)
             => new QuestionnaireBrowseItem
             {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                Version = 1,
+                QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
+                Version = questionnaireIdentity?.Version ?? version ?? 1,
                 Title = title,
                 Disabled = disabled,
             };

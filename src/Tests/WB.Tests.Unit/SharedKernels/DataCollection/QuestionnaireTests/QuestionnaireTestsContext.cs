@@ -59,15 +59,5 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 }
             };
         }
-
-        protected static Questionnaire SetupQuestionnaireWithProjectionsReadyForCloning(QuestionnaireIdentity questionnaireIdentity)
-        {
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem());
-
-            return Create.DataCollectionQuestionnaire(
-                questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
-        }
     }
 }
