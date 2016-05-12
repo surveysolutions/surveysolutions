@@ -1347,6 +1347,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         staticText.ValidationConditions));
                     continue;
                 }
+
+                var variable = questionnaireItem as IVariable;
+                if (variable != null)
+                {
+                    events.AddRange(this.CreateVariableClonedEvents(
+                        itemId, 
+                        groupId, 
+                        sourceItemId, 
+                        sourceQuestionnaireId,
+                        itemTargetIndex, 
+                        responsibleId, variable.Type, variable.Name, variable.Expression));
+                    continue;
+                }
             }
         }
 
@@ -4680,6 +4693,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationConditions : validationConditions,
                 hideIfDisabled: hideIfDisabled
             );
+        }
+
+        private IEnumerable<IEvent> CreateVariableClonedEvents(Guid itemId, Guid parentGroupId, Guid sourceItemId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, VariableType type, string name, string expression)
+        {
+            yield return new VariableCloned(
+                entityId: itemId,
+                parentId: parentGroupId,
+                sourceEntityId: sourceItemId,
+                sourceQuestionnaireId: sourceQuestionnaireId,
+                targetIndex: targetIndex,
+                responsibleId: responsibleId,
+                variableData: new VariableData(type, name, expression));
         }
 
         #endregion
