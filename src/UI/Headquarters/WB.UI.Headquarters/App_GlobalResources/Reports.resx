@@ -117,19 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotAllMarkers" xml:space="preserve">
-    <value>Not all markers were loaded for current zoom level. Please zoom in and reload markers.</value>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Cumulative Interview Chart</value>
   </data>
-  <data name="ViewInterviewContent" xml:space="preserve">
-    <value>View interview content</value>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Interview Chart</value>
   </data>
-  <data name="details" xml:space="preserve">
-    <value>details</value>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Dates range</value>
   </data>
-  <data name="ReloadMarkers" xml:space="preserve">
-    <value>Reload markers on map</value>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Supervisors and Surveys</value>
   </data>
-  <data name="MapReportTitle" xml:space="preserve">
-    <value>Map Report</value>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Surveys and Statuses</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Teams and Statuses</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Survey Name</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by supervisor</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by supervisor</value>
+  </data>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Approved by HQ</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Rejected by HQ</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Completion date</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
 </root>

@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 @{
-    ViewBag.Title = Common.Create;
+    ViewBag.Title = Users.CreateAPIUser;
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
@@ -15,7 +15,7 @@
 }
 @Html.Partial("_alerts")
 <div class="page-header">
-    <h2>@Common.CreateAPIUser</h2>
+    <h2>@Users.CreateAPIUser</h2>
 </div>
 
 @using (Html.BeginForm())

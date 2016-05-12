@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using Resources;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -144,7 +145,7 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception exception)
             {
                 this.Logger.Error($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
-                this.Error(global::Resources.CloneQuestionnaire.UnexpectedError);
+                this.Error(QuestionnaireClonning.UnexpectedError);
                 return this.View(model);
             }
 

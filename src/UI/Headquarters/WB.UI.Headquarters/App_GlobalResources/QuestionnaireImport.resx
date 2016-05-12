@@ -117,19 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotAllMarkers" xml:space="preserve">
-    <value>Not all markers were loaded for current zoom level. Please zoom in and reload markers.</value>
+  <data name="BeforeSignInToDesigner" xml:space="preserve">
+    <value>Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
   </data>
-  <data name="ViewInterviewContent" xml:space="preserve">
-    <value>View interview content</value>
+  <data name="LoginToDesignerError" xml:space="preserve">
+    <value>Could not connect to designer. Please check that designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
   </data>
-  <data name="details" xml:space="preserve">
-    <value>details</value>
+  <data name="SignInToDesigner" xml:space="preserve">
+    <value>Please sign in to designer</value>
   </data>
-  <data name="ReloadMarkers" xml:space="preserve">
-    <value>Reload markers on map</value>
+  <data name="SignInToDesignerTitle" xml:space="preserve">
+    <value>Sign in to designer</value>
   </data>
-  <data name="MapReportTitle" xml:space="preserve">
-    <value>Map Report</value>
+  <data name="DesignerQuestionnaires" xml:space="preserve">
+    <value>Designer Questionnaires</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportInCensus" xml:space="preserve">
+    <value>Import with census mode</value>
   </data>
 </root>

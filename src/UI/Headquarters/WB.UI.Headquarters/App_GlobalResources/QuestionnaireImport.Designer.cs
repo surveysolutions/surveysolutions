@@ -22,14 +22,14 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MapReport {
+    internal class QuestionnaireImport {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal MapReport() {
+        internal QuestionnaireImport() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.MapReport", global::System.Reflection.Assembly.Load("App_GlobalResources"));
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.QuestionnaireImport", global::System.Reflection.Assembly.Load("App_GlobalResources"));
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,65 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to details.
+        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
         /// </summary>
-        internal static string details {
+        internal static string BeforeSignInToDesigner {
             get {
-                return ResourceManager.GetString("details", resourceCulture);
+                return ResourceManager.GetString("BeforeSignInToDesigner", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map Report.
+        ///   Looks up a localized string similar to Designer Questionnaires.
         /// </summary>
-        internal static string MapReportTitle {
+        internal static string DesignerQuestionnaires {
             get {
-                return ResourceManager.GetString("MapReportTitle", resourceCulture);
+                return ResourceManager.GetString("DesignerQuestionnaires", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not all markers were loaded for current zoom level. Please zoom in and reload markers..
+        ///   Looks up a localized string similar to Import.
         /// </summary>
-        internal static string NotAllMarkers {
+        internal static string Import {
             get {
-                return ResourceManager.GetString("NotAllMarkers", resourceCulture);
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload markers on map.
+        ///   Looks up a localized string similar to Import with census mode.
         /// </summary>
-        internal static string ReloadMarkers {
+        internal static string ImportInCensus {
             get {
-                return ResourceManager.GetString("ReloadMarkers", resourceCulture);
+                return ResourceManager.GetString("ImportInCensus", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View interview content.
+        ///   Looks up a localized string similar to Could not connect to designer. Please check that designer is available and try &lt;a href=&apos;{0}&apos;&gt;again&lt;/a&gt;.
         /// </summary>
-        internal static string ViewInterviewContent {
+        internal static string LoginToDesignerError {
             get {
-                return ResourceManager.GetString("ViewInterviewContent", resourceCulture);
+                return ResourceManager.GetString("LoginToDesignerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please sign in to designer.
+        /// </summary>
+        internal static string SignInToDesigner {
+            get {
+                return ResourceManager.GetString("SignInToDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in to designer.
+        /// </summary>
+        internal static string SignInToDesignerTitle {
+            get {
+                return ResourceManager.GetString("SignInToDesignerTitle", resourceCulture);
             }
         }
     }

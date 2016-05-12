@@ -534,10 +534,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.ru.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\CloneQuestionnaire.Designer.cs">
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CloneQuestionnaire.resx</DependentUpon>
+      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -589,6 +589,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -598,6 +608,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Settings.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
@@ -802,9 +817,9 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
     </Content>
-    <Content Include="App_GlobalResources\CloneQuestionnaire.resx">
+    <Content Include="App_GlobalResources\QuestionnaireClonning.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>CloneQuestionnaire.Designer.cs</LastGenOutput>
+      <LastGenOutput>QuestionnaireClonning.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Import.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -813,6 +828,18 @@
     <Content Include="App_GlobalResources\MapReport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MapReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -863,7 +890,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

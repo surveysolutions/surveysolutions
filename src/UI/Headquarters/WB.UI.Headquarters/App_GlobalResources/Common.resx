@@ -117,56 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
-  </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
-  </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
-  </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save changes</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
-  </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
-  </data>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
-  </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Assignment</value>
@@ -210,77 +174,11 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
-  <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
-  </data>
-  <data name="InterviewChart" xml:space="preserve">
-    <value>Interview Chart</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="Variables" xml:space="preserve">
-    <value>Variables</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="CompletionDate" xml:space="preserve">
-    <value>Completion date</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
   </data>
-  <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Supervisors and Surveys</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Completed</value>
-  </data>
   <data name="CreateNewInterview" xml:space="preserve">
     <value>Create new interview</value>
-  </data>
-  <data name="VerifyPanelData" xml:space="preserve">
-    <value>Verify panel data</value>
-  </data>
-  <data name="DataValid" xml:space="preserve">
-    <value>Data is valid</value>
-  </data>
-  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Responsible supervisor will be assigned automatically</value>
-  </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
-  </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
-  </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -293,15 +191,6 @@
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
-  </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
-  </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
-  </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Approve</value>
@@ -318,35 +207,8 @@
   <data name="SignIn" xml:space="preserve">
     <value>Sign in</value>
   </data>
-  <data name="SignInToDesigner" xml:space="preserve">
-    <value>Please sign in to designer</value>
-  </data>
-  <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Sign in to designer</value>
-  </data>
-  <data name="Import" xml:space="preserve">
-    <value>Import</value>
-  </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
-  </data>
-  <data name="ImportInCensus" xml:space="preserve">
-    <value>Import with census mode</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
-  </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
-  </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
     <value>All Rights Reserved</value>
@@ -356,14 +218,5 @@
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>The World Bank Group</value>
-  </data>
-  <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
-  </data>
-  <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Could not connect to designer. Please check that designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
   </data>
 </root>

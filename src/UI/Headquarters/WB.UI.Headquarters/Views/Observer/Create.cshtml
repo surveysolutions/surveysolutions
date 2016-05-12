@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 @{
-    ViewBag.Title = Common.CreateObserver;
+    ViewBag.Title = Users.CreateObserver;
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
@@ -15,7 +15,7 @@
 }
 @Html.Partial("_alerts")
 <div class="page-header">
-    <h2>@Common.CreateObserver</h2>
+    <h2>@Users.CreateObserver</h2>
 </div>
 
 @using (Html.BeginForm())
