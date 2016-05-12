@@ -193,7 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                         new { controller = "Interview", action = "Details", id = synchronizationChunkMeta.InterviewId }));
             }
 
-            return Strings.WriteToSyncLogAttribute_UnknownPackageType;
+            return "Unknown interview package type";
         }
 
         private string GetInterviewerLogMessage(HttpActionExecutedContext context)

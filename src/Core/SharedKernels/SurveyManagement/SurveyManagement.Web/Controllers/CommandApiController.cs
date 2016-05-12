@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
-        
+        private const string DefaultErrorMessage = "Unexpected error occurred";
+
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
                                  IGlobalInfoProvider globalInfo)
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (OverflowException e)
                 {
-                    this.Logger.Error(Strings.UnexpectedErrorOccurred, e);
+                    this.Logger.Error(DefaultErrorMessage, e);
                     response.IsSuccess = false;
                     response.DomainException = Strings.UnexpectedErrorOccurred;
                 }
@@ -78,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         var userException = e.GetSelfOrInnerAs<UserException>();
                         if (userException == null)
                         {
-                            this.Logger.Error(Strings.UnexpectedErrorOccurred, e);
+                            this.Logger.Error(DefaultErrorMessage, e);
                             response.DomainException = Strings.UnexpectedErrorOccurred;
                         }
                         else

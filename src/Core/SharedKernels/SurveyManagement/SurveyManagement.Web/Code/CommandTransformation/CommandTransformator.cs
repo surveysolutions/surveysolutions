@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                     }
                     catch (OverflowException)
                     {
-                        throw new OverflowException(string.Format(Strings.CommandTransformator_ParseNumericError, answer.Answer));
+                        throw new OverflowException($"Value '{answer.Answer}' is too big or too small.");
                     }
                     break;
                 case QuestionType.DateTime:
@@ -107,14 +107,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                 case QuestionType.GpsCoordinates:
                     var splitedCoordinates = answerAsString.Split('$');
                     if(splitedCoordinates.Length!=2)
-                        throw new FormatException(String.Format(Strings.CommandTransformator_IncorrectFormatError, answerAsString));
+                        throw new FormatException($"Value '{answerAsString}' is not in the correct format.");
                     answerValue = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
                     break;
             }
 
             if (answerValue == null)
             {
-                throw new Exception(Strings.CommandTransformator_ParseQuestionError);    
+                throw new Exception("Error when parse question answer");
             }
 
             return new KeyValuePair<Guid, object>(answer.Id, answerValue);
