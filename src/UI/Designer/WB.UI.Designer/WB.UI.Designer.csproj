@@ -512,6 +512,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\userService.js" />
     <Content Include="UpdatedDesigner\app\views\treevariable.html" />
     <Content Include="UpdatedDesigner\app\views\variable.html" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
@@ -1341,6 +1342,8 @@
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.nonblock.js" />
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.picon.css" />
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.reference.js" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.js" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.min.js" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\dev\prettyCheckable.js" />
@@ -1604,6 +1607,10 @@
     <Content Include="Views\Pdf\_RenderChildren.cshtml" />
     <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.min.map" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\LICENSE-MIT" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

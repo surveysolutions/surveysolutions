@@ -1,6 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Web.Http;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
 {
@@ -28,11 +30,13 @@ namespace WB.UI.Designer.Api
 
         private readonly IRecaptchaService recaptchaService;
         private readonly IAuthenticationService authenticationService;
+        private readonly IMembershipUserService membership;
 
-        public UsersController(IRecaptchaService recaptchaService, IAuthenticationService authenticationService)
+        public UsersController(IRecaptchaService recaptchaService, IAuthenticationService authenticationService, IMembershipUserService membership)
         {
             this.recaptchaService = recaptchaService;
             this.authenticationService = authenticationService;
+            this.membership = membership;
         }
 
         [HttpPost]
@@ -56,6 +60,14 @@ namespace WB.UI.Designer.Api
                 return new LoginResponseModel() { Status = LoginStatus.CaptchaRequired };
 
             return new LoginResponseModel() { Status = userIsAuthorized ? LoginStatus.Success : LoginStatus.InvalidLoginOrPassword };
+        }
+
+
+        [Authorize]
+        [HttpGet]
+        public string CurrentLogin()
+        {
+            return this.membership.WebUser.UserName;
         }
 
         private bool ShouldShowCaptchaByUserName(string userName)
