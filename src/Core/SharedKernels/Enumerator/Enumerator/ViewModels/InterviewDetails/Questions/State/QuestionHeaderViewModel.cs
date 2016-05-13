@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<SubstitutionTitlesChanged>,
-        ILiteEventHandler<VariablesValuesChanged>, IDisposable
+        ILiteEventHandler<VariablesChanged>, IDisposable
     {
         private class SubstitutionVariables
         {
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(VariablesValuesChanged @event)
+        public void Handle(VariablesChanged @event)
         {
             var changedVariables = this.substitutionVariables.ByVariables.Where(
                 substitution => @event.ChangedVariables.Any(variable => variable.Identity.Id == substitution.Id));

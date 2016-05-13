@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "Nastya");
 
         It should_not_raise_VariablesValuesChanged_event_for_the_variable_with_value_equal_to_null = () =>
-           eventContext.ShouldNotContainEvent<VariablesValuesChanged>();
+           eventContext.ShouldNotContainEvent<VariablesChanged>();
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
            eventContext.ShouldContainEvent<VariablesDisabled>(@event

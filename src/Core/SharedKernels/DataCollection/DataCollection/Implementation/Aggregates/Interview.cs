@@ -489,7 +489,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
         }
 
-        public virtual void Apply(VariablesValuesChanged @event)
+        public virtual void Apply(VariablesChanged @event)
         {
             this.interviewState.ChangeVariables(@event.ChangedVariables);
 
@@ -2070,7 +2070,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (variableValueChanges.ChangedVariableValues.Count > 0)
             {
-                this.ApplyEvent(new VariablesValuesChanged(variableValueChanges.ChangedVariableValues.Select(c=> new ChangedVariable(c.Key,c.Value)).ToArray()));
+                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c=> new ChangedVariable(c.Key,c.Value)).ToArray()));
             }
         }
 
