@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
 using Machine.Specifications;
-using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
@@ -24,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            changedCulture = new ChangeCurrentCulture(CultureInfo.InvariantCulture);
             changedVariables = new[]
             {
                 new ChangedVariable(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  new DateTime(2016, 1, 31)),
@@ -73,12 +71,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.CommittedEvent(payload:new VariablesValuesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your first variable is 1/31/2016 and second is 7.77");
+        It should_change_item_title = () => viewModel.Title.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
+
+        Cleanup cleanup = () => changedCulture.Dispose();
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
         static IEventSourcedAggregateRoot fakeInterview;
         private static ChangedVariable[] changedVariables;
+        public static ChangeCurrentCulture changedCulture;
     }
 }
 

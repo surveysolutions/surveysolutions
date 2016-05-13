@@ -23,7 +23,7 @@ namespace WB.UI.Interviewer.ViewModel
         public InterviewerInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IStringConverter answerToStringService,
+            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
             NavigationState navigationState,

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         It should_return_formatted_according_to_local_culture_string = () => 
             stringAnswer.ShouldEqual($"1{cultureInfo.NumberFormat.CurrencyGroupSeparator}234,42256");
 
-        static IStringConverter service;
+        static IAnswerToStringService service;
         static IQuestionnaire questionnaire;
         static Guid questionId;
         static string stringAnswer;
