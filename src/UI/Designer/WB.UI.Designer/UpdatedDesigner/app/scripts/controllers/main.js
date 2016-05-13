@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -10,7 +10,6 @@ angular.module('designerApp')
                 visible: false,
                 time: new Date()
             };
-
             $scope.questionnaire = {
                 questionsCount: 0,
                 groupsCount: 0,
@@ -414,6 +413,10 @@ angular.module('designerApp')
                     $rootScope.$emit('questionnaireLoaded');
                 });
             };
+
+            userService.getCurrentUserName().success(function(result) {
+                $scope.currentUserName = result;
+            });
 
             getQuestionnaire();
         }

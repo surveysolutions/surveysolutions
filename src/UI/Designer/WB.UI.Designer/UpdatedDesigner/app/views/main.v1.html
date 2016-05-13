@@ -6,7 +6,18 @@
             <div class="buttons">
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank">History</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser" ng-click="showShareInfo()">Settings</button>
-                <a class="btn" href="../../account/logoff">LOG OUT</a>
+
+                <div class="btn-group">
+                    <a class="btn btn-default">Hi, {{::currentUserName}}</a>
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="../../account/logoff">LOG OUT</a></li>
+                    </ul>
+                </div>
+                
             </div>
         </div>
         <div class="questionnarie-title">
