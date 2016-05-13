@@ -57,37 +57,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsClientVersionSupported(Version clientVersion)
         {
             var engineVersion = this.GetLatestSupportedVersion();
-            if (engineVersion > clientVersion)
-            {
-                if (clientVersion < version_9)
-                    return false;
-            }
-            return true;
+            return (clientVersion >= this.version_10 && engineVersion <= clientVersion);
         }
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
             Version questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
 
-            if (clientVersion < this.version_15 && questionnaireContentVersion == this.version_15)
-                return false;
-
-            if (clientVersion < this.version_14 && questionnaireContentVersion == this.version_14)
-                return false;
-
-            if (clientVersion < this.version_13 && questionnaireContentVersion == this.version_13)
-                return false;
-
-            if (clientVersion < this.version_12 && questionnaireContentVersion == this.version_12)
-                return false;
-
-            if (clientVersion < this.version_11 && questionnaireContentVersion == this.version_11)
-                return false;
-
-            if (clientVersion == this.version_9 && questionnaireContentVersion == this.version_10)
-                return false;
-
-            return true;
+            return clientVersion >= questionnaireContentVersion;
         }
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
@@ -125,11 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (countOfLookupTables > 0)
                 return version_11;
 
-            var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
-            if (countOfHiddenQuestions > 0)
-                return version_10;
-
-            return this.version_9;
+            return this.version_10;
         }
     }
 }
