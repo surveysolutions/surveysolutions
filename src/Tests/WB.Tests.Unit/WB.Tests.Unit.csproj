@@ -471,6 +471,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_staticTexts_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_variable_value_for_question_in_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_looking_for_options_of_linked_question_which_linked_on_nested_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_looking_for_options_of_linked_question_which_linked_on_nested_roster_title.cs" />

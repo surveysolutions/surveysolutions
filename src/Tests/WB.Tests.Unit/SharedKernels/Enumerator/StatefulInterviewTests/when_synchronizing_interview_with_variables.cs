@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
-        It should_return_variable_set_value = () => interview.GetVariableValue(variableIdentity).ShouldEqual("test");
+        It should_return_variable_set_value = () => interview.GetVariableValueByOrDeeperRosterLevel(variableIdentity.Id, variableIdentity.RosterVector).ShouldEqual("test");
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             answer = new TextAnswer();
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetVariableValue(substitutedVariableIdentity) == changedVariables[0].NewValue &&
+                x.GetVariableValueByOrDeeperRosterLevel(substitutedVariableIdentity.Id, substitutedVariableIdentity.RosterVector) == changedVariables[0].NewValue &&
                 x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionId, Empty.RosterVector) == answer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
