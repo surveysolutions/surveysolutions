@@ -88,11 +88,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Variable cannot have empty expression..
         /// </summary>
-        internal static string WB0004_ {
+        internal static string WB0004_VariableHasEmptyExpression {
             get {
-                return ResourceManager.GetString("WB0004_", resourceCulture);
+                return ResourceManager.GetString("WB0004_VariableHasEmptyExpression", resourceCulture);
             }
         }
         
