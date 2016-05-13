@@ -703,6 +703,7 @@
                 var variable = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(variable)) return;
                 variable.variableData.name = data.name;
+                $rootScope.addLocalVariableName(data.name);
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {

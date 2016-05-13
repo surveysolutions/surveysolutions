@@ -1,0 +1,20 @@
+﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@model WB.Core.SharedKernels.QuestionnaireEntities.IVariable
+
+@{
+    PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
+    var variable = Model;
+}
+<div class="variable">
+    <div class="variable_container">
+        <div class="question-meta">
+            <div class="type">Variable</div>
+        </div>
+        <div class="variable-title">@variable.Name</div>
+        <div class="common-info">
+            <div class="variable-expression">
+                @variable.Expression
+            </div>
+        </div>
+    </div>
+</div>

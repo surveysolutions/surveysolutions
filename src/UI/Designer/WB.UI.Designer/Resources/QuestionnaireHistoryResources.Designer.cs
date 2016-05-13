@@ -277,7 +277,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with no name upfated.
+        ///   Looks up a localized string similar to Macro with no name updated.
         /// </summary>
         public static string Macro_EmptyMacroUpdated {
             get {
@@ -426,6 +426,60 @@ namespace WB.UI.Designer.Resources {
         public static string Variable {
             get {
                 return ResourceManager.GetString("Variable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty variable with no name added.
+        /// </summary>
+        public static string VariableAdded {
+            get {
+                return ResourceManager.GetString("VariableAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable &quot;{0}&quot; added.
+        /// </summary>
+        public static string VariableAddedWithName {
+            get {
+                return ResourceManager.GetString("VariableAddedWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable with no name deleted.
+        /// </summary>
+        public static string VariableDeleted {
+            get {
+                return ResourceManager.GetString("VariableDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable &quot;{0}&quot; deleted.
+        /// </summary>
+        public static string VariableDeletedWithName {
+            get {
+                return ResourceManager.GetString("VariableDeletedWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable with no name updated.
+        /// </summary>
+        public static string VariableUpdated {
+            get {
+                return ResourceManager.GetString("VariableUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable &quot;{0}&quot; updated.
+        /// </summary>
+        public static string VariableUpdatedWithName {
+            get {
+                return ResourceManager.GetString("VariableUpdatedWithName", resourceCulture);
             }
         }
     }
