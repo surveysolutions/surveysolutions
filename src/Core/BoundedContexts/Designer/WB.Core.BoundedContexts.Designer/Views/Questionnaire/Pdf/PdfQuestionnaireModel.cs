@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         private readonly QuestionnaireDocument questionnaire;
         public PdfSettings Settings { get; }
+        public bool UseInlineFonts { get; set; }
 
         public ModificationStatisticsByUser Created { get; set; }
         public ModificationStatisticsByUser LastModified { get; set; }
