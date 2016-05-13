@@ -344,6 +344,9 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
+    <Compile Include="GenericSubdomains\TopologicalSorterTests\when_detecting_cycles_in_directed_graph_with_no_cycles.cs" />
+    <Compile Include="GenericSubdomains\TopologicalSorterTests\when_detecting_cycles_in_directed_graph_with_3_cycles.cs" />
+    <Compile Include="GenericSubdomains\TopologicalSorterTests\when_detecting_cycles_in_directed_graph_with_self_reference_vertex.cs" />
     <Compile Include="GenericSubdomains\Utils\DecimalExtensionsTests.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
