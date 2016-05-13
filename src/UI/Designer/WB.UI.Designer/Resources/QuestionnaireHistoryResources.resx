@@ -226,7 +226,7 @@
     <value>Macro with no name deleted</value>
   </data>
   <data name="Macro_EmptyMacroUpdated" xml:space="preserve">
-    <value>Macro with no name upfated</value>
+    <value>Macro with no name updated</value>
   </data>
   <data name="LookupTable" xml:space="preserve">
     <value>Lookup table</value>
@@ -239,5 +239,23 @@
   </data>
   <data name="Variable" xml:space="preserve">
     <value>Variable</value>
+  </data>
+  <data name="VariableAdded" xml:space="preserve">
+    <value>Empty variable with no name added</value>
+  </data>
+  <data name="VariableAddedWithName" xml:space="preserve">
+    <value>Variable "{0}" added</value>
+  </data>
+  <data name="VariableDeleted" xml:space="preserve">
+    <value>Variable with no name deleted</value>
+  </data>
+  <data name="VariableDeletedWithName" xml:space="preserve">
+    <value>Variable "{0}" deleted</value>
+  </data>
+  <data name="VariableUpdated" xml:space="preserve">
+    <value>Variable with no name updated</value>
+  </data>
+  <data name="VariableUpdatedWithName" xml:space="preserve">
+    <value>Variable "{0}" updated</value>
   </data>
 </root>
