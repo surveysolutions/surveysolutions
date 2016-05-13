@@ -534,6 +534,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Common.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireClonning.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -589,15 +609,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireImport.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Reports.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reports.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.ru.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -613,6 +648,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.ru.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
@@ -840,6 +880,38 @@
     <Content Include="App_GlobalResources\Reports.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Common.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Common.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireClonning.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.ru.designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
