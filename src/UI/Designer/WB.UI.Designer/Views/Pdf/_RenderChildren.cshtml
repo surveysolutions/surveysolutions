@@ -22,4 +22,8 @@
     {
         Html.RenderPartial("_RenderStaticText", child);
     }
+    else if (questionnaire.IsVariable(child))
+    {
+        Html.RenderPartial("_RenderVariable", child);
+    }
 }

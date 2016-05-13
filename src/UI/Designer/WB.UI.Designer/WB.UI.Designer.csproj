@@ -1604,6 +1604,7 @@
     <Content Include="Views\Pdf\_RenderChildren.cshtml" />
     <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
+    <Content Include="Views\Pdf\_RenderVariable.cshtml" />
     <Content Include="UpdatedDesigner\vendor\position-calculator\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\position-calculator\bower.json" />
     <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.min.map" />

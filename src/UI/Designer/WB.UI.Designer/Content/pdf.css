@@ -221,7 +221,7 @@ h1{
 	padding: 35px 70px 0px 123px;
 	border-bottom: 1px solid #000;
 }
-.question-container, .roster, .static-text, .group{
+.question-container, .roster, .static-text, .group, .variable{
 	margin-bottom: -1px;
 	border-bottom: 1px solid #000;
 	border-top: 1px solid #000;
@@ -414,6 +414,9 @@ input[type=date] {
 	word-break: break-all;
 	text-transform: none;
 }
+.variable .common-info {
+    padding-bottom: 0px;
+}
 .section_header .common-info{
 	font-size: 12px;
 	line-height: 12px;
@@ -445,15 +448,15 @@ input[type=date] {
 .roster, .group{
 	padding: 40px 0 15px 1px;
 }
-.static-text{
+.static-text, .variable{
 	padding: 15px 0 15px 1px;
 }
-.roster:after, .static-text:after, .group:after{
+.roster:after, .static-text:after, .variable:after, .group:after{
 	display: block;
 	content: "";
 	clear: both;
 }
-.roster_container, .static-text_container, .group_container{
+.roster_container, .static-text_container, .group_container, .variable_container{
 	float: left;
 	font-family: 'RobotoMedium';
 	font-size: 17.7px;
@@ -472,7 +475,7 @@ input[type=date] {
 	line-height: 12px;
 	margin-right: 15px;
 }
-.static_text{
+.static_text, .variable-title{
 	font-size: 18px;
 	line-height: 20px;
 }
