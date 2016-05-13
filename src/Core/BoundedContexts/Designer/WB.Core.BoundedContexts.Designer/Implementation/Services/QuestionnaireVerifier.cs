@@ -204,7 +204,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
 
             Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
-            Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
+            Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName, VerificationMessageLevel.Critical),
+            Verifier<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression, VerificationMessageLevel.Critical),
 
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
@@ -649,14 +650,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
-            Func<TEntity, bool> hasError, string code, string message)
+        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(hasError)
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
+                    .Select(entity => level == VerificationMessageLevel.General 
+                        ? QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity))
+                        : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
@@ -1048,6 +1050,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
             return VariableNameRegex.IsMatch(variableName);
+        }
+        
+        private static bool VariableHasEmptyExpression(IVariable variable)
+        {
+            return string.IsNullOrWhiteSpace(variable.Expression);
         }
 
         private static bool VariableHasEmptyVariableName(IVariable variable)

@@ -126,8 +126,8 @@
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
     <value>Enabling condition has a syntax error.</value>
   </data>
-  <data name="WB0004_" xml:space="preserve">
-    <value />
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>Variable cannot have empty expression.</value>
   </data>
   <data name="WB0005_" xml:space="preserve">
     <value />
