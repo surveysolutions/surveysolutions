@@ -147,6 +147,13 @@
                         <a href="#options_appendix" class="section_name appendix">Appendix @questionnaire.OptionsAppendixIndex &#8212; OPTIONS</a>
                     </dd>
                 }
+                @if (!questionnaire.IsVariablesAppendixEmpty)
+                {
+                    <dt>&nbsp;</dt>
+                    <dd>
+                        <a href="#variables_appendix" class="section_name appendix">Appendix @questionnaire.VariablesAppendixIndex &#8212; VARIABLES</a>
+                    </dd>
+                }
                 <dt>&nbsp;</dt>
                 <dd>
                     <a href="#legend_appendix" class="section_name appendix">Legend</a>
@@ -239,7 +246,8 @@
                     </li>
                 }
             </ul>
-        </article>}
+        </article>
+    }
     @if (!questionnaire.IsOptionsAppendixEmpty)
     {
         <article class="appendix_section">
@@ -260,6 +268,29 @@
                                 {
                                     <span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
                                 }
+                            </p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </article>
+    } 
+    @if (!questionnaire.IsVariablesAppendixEmpty)
+    {
+        <article class="appendix_section">
+            <h2 id="variables_appendix">Appendix @questionnaire.VariablesAppendixIndex &#8212; Variables</h2>
+            <ul class="container">
+                @for (var i = 0; i < questionnaire.VariableWithLongExpressions.Count; i++)
+                {
+                    var variable = questionnaire.VariableWithLongExpressions[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#@questionnaire.GetItemRef(variable.PublicKey)" id="@questionnaire.GetVariableRef(variable.PublicKey)">
+                                <span>@variable.Name</span>: 
+                            </a>
+                            <p>
+                                @variable.Expression
                             </p>
                         </div>
                     </li>
