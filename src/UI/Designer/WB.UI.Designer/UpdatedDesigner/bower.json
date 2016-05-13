@@ -44,19 +44,23 @@
     "prettycheckable": "~2.1.2",
     "ng-file-upload": "^12.0.4",
     "angular-moment": "^0.10.3",
-    "moment": "^2.12.0"
+    "moment": "^2.12.0",
+    "position-calculator": "^1.1.2"
   },
   "resolutions": {
     "angular": "^1.5.2"
   },
   "overrides": {
     "prettycheckable": {
-      "main": ["dist/prettyCheckable.min"]
+      "main": [
+        "dist/prettyCheckable.min"
+      ]
     },
     "ace-builds": {
-    "main": [
-      "src-noconflict/ace.js",
-      "src-noconflict/ext-language_tools.js"]
+      "main": [
+        "src-noconflict/ace.js",
+        "src-noconflict/ext-language_tools.js"
+      ]
     }
   }
 }
