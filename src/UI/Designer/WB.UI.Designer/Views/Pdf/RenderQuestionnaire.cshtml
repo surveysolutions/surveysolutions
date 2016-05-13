@@ -14,6 +14,7 @@
 <head>
     <meta charset="utf-8">
     <title>@questionnaire.Title</title>
+    @Styles.Render(questionnaire.UseInlineFonts ? "~/Content/pdf-inline-fonts.css" : "~/Content/pdf-fonts.css");
     @Styles.Render("~/Content/pdf.css")
 </head>
 <body>
@@ -274,7 +275,7 @@
                 }
             </ul>
         </article>
-    } 
+    }
     @if (!questionnaire.IsVariablesAppendixEmpty)
     {
         <article class="appendix_section">
@@ -287,7 +288,7 @@
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
                             <a href="#@questionnaire.GetItemRef(variable.PublicKey)" id="@questionnaire.GetVariableRef(variable.PublicKey)">
-                                <span>@variable.Name</span>: 
+                                <span>@variable.Name</span>:
                             </a>
                             <p>
                                 @variable.Expression

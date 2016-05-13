@@ -30,6 +30,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
             var questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName);
+            questionnaire.UseInlineFonts = true;
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -43,6 +44,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult PrintPreview(Guid id)
         {
             var questionnaire = this.LoadQuestionnaire(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            questionnaire.UseInlineFonts = false;
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
