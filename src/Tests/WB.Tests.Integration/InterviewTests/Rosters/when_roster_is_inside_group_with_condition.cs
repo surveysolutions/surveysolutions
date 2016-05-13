@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -36,8 +37,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             {
                                 Create.NumericIntegerQuestion(q2Id, variable: "q2"),
                             }),
-                    Create.NumericIntegerQuestion(q3Id, variable: "q3", enablementCondition: "r.Any(r=>IsAnswered(r.q2))")
-                    );
+                    Create.NumericIntegerQuestion(q3Id, variable: "q3", validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition("r.Any(r=>IsAnswered(r.q2))")
+                    }));
 
                 var result = new InvokeResults();
 
@@ -73,7 +76,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid rosterId = Guid.Parse("44444444444444444444444444444444");
-        private static readonly Guid groupId = Guid.Parse("99999999999999999999999999999999");
 
         [Serializable]
         internal class InvokeResults
@@ -109,7 +111,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                 Create.NumericIntegerQuestion(q2Id, variable: "q2"),
                             })
                     }),
-                    Create.NumericIntegerQuestion(q3Id, variable: "q3", enablementCondition: "r.Any(r=>IsAnswered(r.q2))")
+                    Create.NumericIntegerQuestion(q3Id, variable: "q3", validationConditions: new List<ValidationCondition> { Create.ValidationCondition("r.Any(r=>IsAnswered(r.q2))") })
                     );
 
                 var result = new InvokeResults();
