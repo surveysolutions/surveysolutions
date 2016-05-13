@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -51,7 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
-        private readonly IStringConverter stringConverter;
+        private readonly IAnswerToStringService answerToStringService;
+        private readonly IVariableToUIStringService variableToUiStringService;
         private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private Identity questionIdentity;
@@ -108,15 +110,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
-            IStringConverter stringConverter,
-            IRosterTitleSubstitutionService rosterTitleSubstitutionService)
+            IAnswerToStringService answerToStringService,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService,
+            IVariableToUIStringService variableToUiStringService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
             this.substitutionService = substitutionService;
-            this.stringConverter = stringConverter;
+            this.answerToStringService = answerToStringService;
             this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
+            this.variableToUiStringService = variableToUiStringService;
         }
 
         public ICommand ShowInstructions
@@ -166,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (var substitution in this.substitutionVariables.ByVariables)
             {
                 var variableValue = interview.GetVariableValue(new Identity(substitution.Id, this.questionIdentity.RosterVector));
-                var variableValueAsString = this.stringConverter.VariableValueToUIString(variableValue);
+                var variableValueAsString = this.variableToUiStringService.VariableToUIString(variableValue);
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, substitution.Name,
@@ -176,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
                 var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitution.Id, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.stringConverter.AnswerToUIString(substitution.Id, baseInterviewAnswer, interview, questionnaire) : null;
+                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitution.Id, baseInterviewAnswer, interview, questionnaire) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, substitution.Name, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);

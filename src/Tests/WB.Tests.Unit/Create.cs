@@ -215,7 +215,7 @@ namespace WB.Tests.Unit
             return new AnswerNotifier(Create.LiteEventRegistry());
         }
 
-        public static IStringConverter AnswerToStringService()
+        public static IAnswerToStringService AnswerToStringService()
         {
             return new AnswerToStringService();
         }
