@@ -144,6 +144,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -2871,6 +2872,17 @@ namespace WB.Tests.Unit
             var result = Substitute.For<IPlainQuestionnaireRepository>();
             result.GetQuestionnaire(null).ReturnsForAnyArgs(questionnaire);
             return result;
+        }
+
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.Integer, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
+        public static ITopologicalSorter<int> TopologicalSorter()
+        {
+            return new TopologicalSorter<int>();
         }
     }
 }

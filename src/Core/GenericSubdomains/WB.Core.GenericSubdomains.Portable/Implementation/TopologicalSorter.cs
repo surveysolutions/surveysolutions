@@ -6,8 +6,9 @@ using WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter;
 namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
     /// <summary>
-    /// Implementation of the Tarjan stronly connected components algorithm.
+    /// Implementation of the Tarjan stronly connected components algorithm. 
     /// </summary>
+    /// <see cref="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm"/>
     /// <seealso cref="http://en.wikipedia.org/wiki/Topological_sorting"/>
     public class TopologicalSorter<T> : ITopologicalSorter<T>
     {
@@ -29,7 +30,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             {
                 if (vertex.Index < 0)
                 {
-                    StrongConnect(vertex, listOfConnectedComponents, index, nodeStatck);
+                    StrongConnect(vertex, listOfConnectedComponents, ref index, nodeStatck);
                 }
             }
 
@@ -61,7 +62,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             return vertices.Values.ToList();
         }
 
-        private static void StrongConnect(Vertex<T> vertex, List<List<Vertex<T>>> listOfDetectedCycles, int index, Stack<Vertex<T>> nodeStatck)
+        private static void StrongConnect(Vertex<T> vertex, List<List<Vertex<T>>> listOfDetectedCycles, ref int index, Stack<Vertex<T>> nodeStatck)
         {
             vertex.Index = index;
             vertex.LowLink = index;
@@ -72,7 +73,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             {
                 if (dependency.Index < 0)
                 {
-                    StrongConnect(dependency, listOfDetectedCycles, index, nodeStatck);
+                    StrongConnect(dependency, listOfDetectedCycles, ref index, nodeStatck);
                     vertex.LowLink = Math.Min(vertex.LowLink, dependency.LowLink);
                 }
                 else if (nodeStatck.Contains(dependency))
