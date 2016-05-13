@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public int RostersCount { get; set; } = 0;
             public int QuestionsCount { get; set; } = 0;
             public int StaticTextsCount { get; set; } = 0;
+            public int VariablesCount { get; set; } = 0;
         }
 
         public class QuestionnaireStatistics : GroupStatistics
@@ -126,6 +127,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return text != null;
         }
 
+        public bool IsVariable(IComposite item)
+        {
+            var variable = item as IVariable;
+            return variable != null;
+        }
+
         public string GetBreadcrumbsForGroup(Guid groupId)
         {
             var parents = this.GetAllParentGroupsStartingFromBottom(this.Find<Group>(groupId), this.questionnaire).ToList();
@@ -163,8 +170,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     statistics.RostersCount++;
                 else if (this.IsGroup(item))
                     statistics.GroupsCount++;
-                else
+                else if (this.IsStaticText(item))
                     statistics.StaticTextsCount++;
+                else if (this.IsVariable(item))
+                    statistics.VariablesCount++;
             }
             return statistics;
         }

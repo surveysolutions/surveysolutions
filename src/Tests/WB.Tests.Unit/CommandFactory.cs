@@ -34,17 +34,12 @@ namespace WB.Tests.Unit
                 answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] { });
 
         public CloneQuestionnaire CloneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity = null, string newTitle = null)
-            => CloneQuestionnaire(
-                questionnaireId: questionnaireIdentity?.QuestionnaireId,
-                questionnaireVersion: questionnaireIdentity?.Version,
-                newTitle: newTitle);
-
-        public CloneQuestionnaire CloneQuestionnaire(
-            Guid? questionnaireId = null, long? questionnaireVersion = null, string newTitle = null)
+            QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? questionnaireId = null, long? questionnaireVersion = null,
+            string newTitle = null)
             => new CloneQuestionnaire(
-                questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 777,
+                questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
+                questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
                 Guid.NewGuid());
 

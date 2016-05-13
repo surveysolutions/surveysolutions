@@ -112,6 +112,10 @@
                             {
                                 <li>Static texts: <span>@statistics.StaticTextsCount</span></li>
                             }
+                            @if (statistics.VariablesCount > 0)
+                            {
+                                <li>Variables: <span>@statistics.VariablesCount</span></li>
+                            }
                         </ul>
                     </dd>
                 }
