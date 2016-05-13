@@ -321,4 +321,13 @@
   <data name="VerifySampleData" xml:space="preserve">
     <value>Проверка образца данных</value>
   </data>
+  <data name="DataValid" xml:space="preserve">
+    <value>Данные действительны</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>Ответственный руководитель будет присвоен автоматически</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Проверка данных группы</value>
+  </data>
 </root>
