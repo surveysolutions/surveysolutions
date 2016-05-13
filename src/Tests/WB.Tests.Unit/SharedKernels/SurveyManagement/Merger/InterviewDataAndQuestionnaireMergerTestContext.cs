@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -185,7 +186,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
             return new InterviewDataAndQuestionnaireMerger(
-                substitutionService: new SubstitutionService());
+                substitutionService: new SubstitutionService(),
+                variableToUiStringService: new VariableToUIStringService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

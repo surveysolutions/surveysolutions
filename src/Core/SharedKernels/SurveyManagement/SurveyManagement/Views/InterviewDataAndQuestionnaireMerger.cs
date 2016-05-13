@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -20,11 +21,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
     public class InterviewDataAndQuestionnaireMerger : IInterviewDataAndQuestionnaireMerger
     {
         private readonly ISubstitutionService substitutionService;
+        private readonly IVariableToUIStringService variableToUiStringService;
 
         public InterviewDataAndQuestionnaireMerger(
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService, 
+            IVariableToUIStringService variableToUiStringService)
         {
             this.substitutionService = substitutionService;
+            this.variableToUiStringService = variableToUiStringService;
         }
 
         private class InterviewInfoInternal
@@ -336,8 +340,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 {
                     var variableValue = levelToLookForTheVariable.Variables[variableId];
 
-#warning this line must be replaced with culture specific variable formatting when Roma imlement formating on Interviewer
-                    return variableValue?.ToString();
+                    return this.variableToUiStringService.VariableToUIString(variableValue);
                 }
 
                 rosterLevelDepth--;

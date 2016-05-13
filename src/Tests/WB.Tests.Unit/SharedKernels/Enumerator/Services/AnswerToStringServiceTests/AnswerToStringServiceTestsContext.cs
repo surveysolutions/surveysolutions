@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
 {
     internal class AnswerToStringServiceTestsContext
     {
-        public static IStringConverter CreateAnswerToStringService()
+        public static IAnswerToStringService CreateAnswerToStringService()
         {
             return new AnswerToStringService();
         }

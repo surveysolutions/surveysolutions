@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
@@ -23,9 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
-            clientCulture = new CultureInfo("ru-Ru");
-            Thread.CurrentThread.CurrentCulture = clientCulture;
-
+            changedCulture = new ChangeCurrentCulture(new CultureInfo("ru-Ru"));
             changedVariables = new[]
             {
                 new ChangedVariable(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  new DateTime(2016, 1, 31)),
@@ -75,11 +72,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Your first variable is 31.01.2016 and second is 7,77");
 
+        Cleanup cleanup = () => changedCulture.Dispose();
+
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
         static IEventSourcedAggregateRoot fakeInterview;
         private static ChangedVariable[] changedVariables;
-        private static CultureInfo clientCulture;
+        public static ChangeCurrentCulture changedCulture;
     }
 }
 

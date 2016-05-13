@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -26,7 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
-            this.Bind<IStringConverter>().To<AnswerToStringService>();
+            this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
+            this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();
 
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();

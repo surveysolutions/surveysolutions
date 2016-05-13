@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         static string result;
         static IQuestionnaire questionnaire;
         static LinkedSingleOptionAnswer singleOptionAnswer;
-        static IStringConverter answerToStringService;
+        static IAnswerToStringService answerToStringService;
         static Guid sourceOfLinkId = Id.g1;
         static Guid linkedId = Id.g2;
         static IStatefulInterview statefulInterviewMock;
