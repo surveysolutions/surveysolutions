@@ -10,10 +10,16 @@
         <div class="question-meta">
             <div class="type">Variable</div>
         </div>
-        <div class="variable-title">@variable.Name</div>
+        <div id="@questionnaire.GetItemRef(variable.PublicKey)" class="variable-title">@variable.Name</div>
         <div class="common-info">
             <div class="variable-expression">
-                @variable.Expression
+                @questionnaire.GetVariableExpressionExcerpt(variable)
+                @if (questionnaire.VariableExpressionIsTooLong(variable))
+                {
+                    <div class="more">
+                        And <a href="#@questionnaire.GetVariableRef(variable.PublicKey)">@(variable.Expression.Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(variable.PublicKey, "VE")]</a>
+                    </div>
+                }
             </div>
         </div>
     </div>
