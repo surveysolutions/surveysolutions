@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -24,6 +25,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 {
     public class Questionnaire : IPlainAggregateRoot
     {
+        private const int MaxTitleLength = 500;
+        private static readonly Regex InvalidTitleRegex = new Regex(@"^[\w \-\(\)\\/]*$", RegexOptions.Compiled);
+
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
@@ -186,8 +190,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             if (string.IsNullOrWhiteSpace(title))
                 throw new QuestionnaireException("Questionnaire title should not be empty.");
 
-            if (title.Length > 500)
-                throw new QuestionnaireException("Questionnaire's title can't have more than 500 symbols");
+            if (title.Length > MaxTitleLength)
+                throw new QuestionnaireException($"Questionnaire title can't have more than {MaxTitleLength} symbols.");
+
+            if (!InvalidTitleRegex.IsMatch(title))
+                throw new QuestionnaireException("Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
         }
 
         private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
