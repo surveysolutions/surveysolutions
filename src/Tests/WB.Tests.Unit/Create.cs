@@ -597,7 +597,8 @@ namespace WB.Tests.Unit
 
         public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
+            IFileSystemAccessor fileSystemAccessor = null)
             => new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
@@ -606,7 +607,8 @@ namespace WB.Tests.Unit
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>());
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, 

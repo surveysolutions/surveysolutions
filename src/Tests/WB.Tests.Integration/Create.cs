@@ -525,7 +525,8 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>());
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
+                Mock.Of<IFileSystemAccessor>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
