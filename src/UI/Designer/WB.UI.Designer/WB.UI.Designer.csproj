@@ -513,6 +513,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\userService.js" />
+    <Content Include="UpdatedDesigner\app\scripts\ui-js.js" />
     <Content Include="UpdatedDesigner\app\views\treevariable.html" />
     <Content Include="UpdatedDesigner\app\views\variable.html" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
