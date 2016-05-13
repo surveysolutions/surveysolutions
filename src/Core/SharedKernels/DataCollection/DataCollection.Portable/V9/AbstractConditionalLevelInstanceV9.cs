@@ -92,12 +92,12 @@ namespace WB.Core.SharedKernels.DataCollection.V9
         {
             var result = new VariableValueChanges();
 
-            foreach (var variableAccessor in this.VariableValueGetterMap)
+            foreach (var variableValueGetterPair in this.VariableValueGetterMap)
             {
                 object newVariableValue = null;
                 try
                 {
-                    newVariableValue = variableAccessor.Value.Invoke();
+                    newVariableValue = variableValueGetterPair.Value.Invoke();
                 }
 #pragma warning disable
                 catch (Exception ex)
@@ -105,8 +105,8 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 }
 #pragma warning restore
                
-                if (IsVariableValueChanged(variableAccessor.Key, newVariableValue))
-                    result.ChangedVariableValues.Add(new Identity(variableAccessor.Key, RosterVector),
+                if (IsVariableValueChanged(variableValueGetterPair.Key, newVariableValue))
+                    result.ChangedVariableValues.Add(new Identity(variableValueGetterPair.Key, RosterVector),
                         newVariableValue);
             }
 
