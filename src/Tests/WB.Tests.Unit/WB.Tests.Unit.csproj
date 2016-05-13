@@ -436,6 +436,7 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_and_its_browse_item_is_missing.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_and_its_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_and_new_title_consists_only_of_spaces.cs" />
+    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_and_new_title_is_501_symbol_long.cs" />
     <Compile Include="SharedKernels\DataCollection\ValidityChangesTests\when_creating_with_single_invalid_question.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
