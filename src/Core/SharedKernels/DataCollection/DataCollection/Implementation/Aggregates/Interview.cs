@@ -1089,80 +1089,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new Identity(questionId, questionRosterVector);
         }
 
-        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> questionIds, RosterVector rosterVector, IQuestionnaire questionnare)
-        {
-            return questionIds.SelectMany(questionId =>
-                GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnare));
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> staticTextIds,
-            RosterVector rosterVector,
-            IQuestionnaire questionnaire)
-        {
-            return staticTextIds.SelectMany(questionId =>
-                GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnaire));
-        }
-
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
             IReadOnlyInterviewStateDependentOnAnswers state,
             IEnumerable<Guid> entityIds, RosterVector rosterVector, IQuestionnaire questionnare)
         {
             return entityIds.SelectMany(entityId =>
                 GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare));
-        }
-
-
-        protected IEnumerable<Identity> GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
-          IReadOnlyInterviewStateDependentOnAnswers state,
-          Guid staticTextId, 
-          RosterVector rosterVector, 
-          IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int staticTextRosterLevel = questionnare.GetRosterLevelForEntity(staticTextId);
-
-            if (staticTextRosterLevel < vectorRosterLevel)
-                throw new InterviewException(
-                    $"StaticText {FormatQuestionForException(staticTextId, questionnare)} expected to have roster level not upper than {vectorRosterLevel} but it is {staticTextRosterLevel}. InterviewId: {this.EventSourceId}");
-
-            Guid[] parentRosterGroupsStartingFromTop =
-                questionnare.GetRostersFromTopToSpecifiedEntity(staticTextId).ToArray();
-
-            IEnumerable<RosterVector> staticTextRosterVectors = ExtendRosterVector(state,
-                rosterVector, staticTextRosterLevel, parentRosterGroupsStartingFromTop);
-
-            foreach (decimal[] questionRosterVector in staticTextRosterVectors)
-            {
-                yield return new Identity(staticTextId, questionRosterVector);
-            }
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid questionId, RosterVector rosterVector, IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
-
-            if (questionRosterLevel < vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel, EventSourceId));
-
-            Guid[] parentRosterGroupsStartingFromTop =
-                questionnare.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
-
-            IEnumerable<RosterVector> questionRosterVectors = ExtendRosterVector(state,
-                rosterVector, questionRosterLevel, parentRosterGroupsStartingFromTop);
-
-            foreach (decimal[] questionRosterVector in questionRosterVectors)
-            {
-                yield return new Identity(questionId, questionRosterVector);
-            }
         }
 
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
@@ -1233,11 +1165,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] groupRosterVector = rosterVector.Shrink(groupRosterLevel);
 
             return new Identity(groupId, groupRosterVector);
-        }
-
-        private static bool IsQuestionUnderRosterGroup(IQuestionnaire questionnaire, Guid questionId)
-        {
-            return questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).Any();
         }
 
         #endregion
@@ -3064,7 +2991,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId)
                 .Where(question => !questionnaire.DoesCascadingQuestionHaveOptionsForParentValue(question, selectedValue)).ToList();
 
-            var cascadingQuestionsToDisableIdentities = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+            var cascadingQuestionsToDisableIdentities = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
                 cascadingQuestionsToDisable, rosterVector, questionnaire);
 
             expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
@@ -3208,7 +3135,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
 
-            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
                 underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
 
             IEnumerable<Identity> underlyingQuestionsBeingRemovedByRemovedRosterInstances = (
@@ -3417,7 +3344,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionLinkedOnQuestion);
                 IEnumerable<Identity> targetQuestions =
-                    this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(updatedState,
+                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState,
                         referencedQuestionId, new decimal[0], questionnaire);
 
                 var optionRosterVectors =
@@ -3451,7 +3378,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
 
                 IEnumerable<Identity> linkedQuestionInstances =
-                    this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                         linkedQuestionId, new decimal[0], questionnaire);
 
                 foreach (var instanceOfTheLinkedQuestionsQuestions in linkedQuestionInstances)
@@ -3490,7 +3417,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionId);
 
-            var instances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, 
+            var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, 
                 substitutedQuestionIds, 
                 rosterVector, 
                 questionnaire);
@@ -3501,7 +3428,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers state)
         {
             IEnumerable<Guid> dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
-            IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuestionIds, rosterVector, questionnaire);
+            IEnumerable<Identity> questions = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, dependentQuestionIds, rosterVector, questionnaire);
 
             return questions.Where(state.WasQuestionAnswered);
         }
@@ -4559,7 +4486,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                      IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
 
-                     IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                     IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
                          underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
 
                      var underlyingDisabledQuestionsByRemovedRosterInstances = (

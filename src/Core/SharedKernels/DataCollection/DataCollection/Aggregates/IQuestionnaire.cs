@@ -111,6 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllQuestions();
 
+        ReadOnlyCollection<Guid> GetAllVariables();
+
         ReadOnlyCollection<Guid> GetAllStaticTexts();
 
         ReadOnlyCollection<Guid> GetAllGroups();
