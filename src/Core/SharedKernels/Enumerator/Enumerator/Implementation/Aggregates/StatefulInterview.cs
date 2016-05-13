@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
-            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
 
             var validQuestions = allQuestionInstances.Where(this.delta.ValidityChanged.Contains).Where(question => this.IsValid(question)).ToArray();
@@ -308,6 +308,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var enabledQuestions = allQuestionInstances.Where(this.delta.EnablementChanged.Contains).Where(question => this.IsEnabled(question)).ToArray();
             var disabledQuestions = allQuestionInstances.Where(this.delta.EnablementChanged.Contains).Where(question => !this.IsEnabled(question)).ToArray();
+            var linkedQuestionsOption = this.interviewState.LinkedQuestionOptions.Select(question => new ChangedLinkedOptions(question.Key, question.Value)).ToArray();
 
             ReadOnlyCollection<Guid> allGroups = questionnaire.GetAllGroups();
             ReadOnlyCollection<Identity> allGroupInstances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
@@ -315,9 +316,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var enabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => this.IsEnabled(group)).ToArray();
             var disabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => !this.IsEnabled(group)).ToArray();
+            var variableValues = this.interviewState.VariableValues.Select(v => new ChangedVariable(v.Key, v.Value)).ToArray();
 
             ReadOnlyCollection<Guid> allStaticTextIds = questionnaire.GetAllStaticTexts();
-            ReadOnlyCollection<Identity> allStaticTextIdentities = this.GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+            ReadOnlyCollection<Identity> allStaticTextIdentities = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, allStaticTextIds, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
             var validStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains).Where(this.IsValid).ToArray();
             var invalidStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains)
@@ -327,6 +329,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     this.GetFailedValidationConditions(staticText))).ToList();
             var enabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(this.IsEnabled).ToArray();
             var disabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(staticText => !this.IsEnabled(staticText)).ToArray();
+
+            ReadOnlyCollection<Guid> allVariables = questionnaire.GetAllVariables();
+            ReadOnlyCollection<Identity> alVariableInstances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allVariables, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+
+            var enabledVariables = alVariableInstances.Where(this.delta.EnablementChanged.Contains).ToArray();
+            var disableVariables = alVariableInstances.Where(v => !this.delta.EnablementChanged.Contains(v)).ToArray();
+
 
             if (validQuestions.Length > 0) this.ApplyEvent(new AnswersDeclaredValid(validQuestions));
             if (invalidQuestions.Count > 0) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestions));
@@ -343,6 +353,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             if (validStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTexts));
             if (invalidStaticTexts.Count > 0) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTexts));
 
+            if (linkedQuestionsOption.Length > 0) this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionsOption));
+
+            if (enabledVariables.Length > 0) this.ApplyEvent(new VariablesEnabled(enabledVariables));
+            if (disableVariables.Length > 0) this.ApplyEvent(new VariablesDisabled(disableVariables));
+            if (variableValues.Length > 0) this.ApplyEvent(new VariablesChanged(variableValues));
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -422,6 +437,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 groupOrRoster.IsDisabled = false;
             });
             @event.Groups.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(VariablesEnabled @event)
+        {
+            base.Apply(@event);
+            
+            @event.Variables.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+
+        public new void Apply(VariablesDisabled @event)
+        {
+            base.Apply(@event);
+            
+            @event.Variables.ForEach(x => this.delta.EnablementChanged.Remove(new Identity(x.Id, x.RosterVector)));
         }
 
         public new void Apply(QuestionsDisabled @event)
@@ -993,7 +1023,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             return this
-                .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
                 .Count();
         }
 
@@ -1003,7 +1033,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this
-                .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
                 .ToList();
 
             return questionInstances.Count(this.IsEnabled);
@@ -1072,7 +1102,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this
-                .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
                 .ToList();
 
             return questionInstances.Count(this.WasAnswered);
@@ -1091,7 +1121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this
-                .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
                 .Select(ConversionHelper.ConvertIdentityToString)
                 .ToList();
 
@@ -1109,7 +1139,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingStaticTexts(groupIdentity.Id);
 
             List<Identity> questionInstances = this
-                .GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
                 .ToList();
 
             IEnumerable<Identity> allInvalidChildStaticTexts = this.interviewState.InvalidStaticTexts.Where(x => questionInstances.Contains(x.Key))
@@ -1159,7 +1189,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildQuestions(groupIdentity.Id);
 
             IEnumerable<Identity> questionInstances = this
-                .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire);
+                .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire);
 
             return questionInstances;
         }
@@ -1374,7 +1404,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             IEnumerable<Guid> staticTextIds = questionnaire.GetChildStaticTexts(group.Id);
 
-            IEnumerable<Identity> questions = GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+            IEnumerable<Identity> questions = GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, staticTextIds, group.RosterVector, questionnaire);
 
             return questions.Where(this.IsEnabled).ToReadOnlyCollection();
@@ -1386,7 +1416,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             IEnumerable<Guid> questionIds = questionnaire.GetChildInterviewerQuestions(group.Id);
 
-            IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+            IEnumerable<Identity> questions = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, questionIds, group.RosterVector, questionnaire);
 
             return questions.Where(this.IsEnabled).ToReadOnlyCollection();
