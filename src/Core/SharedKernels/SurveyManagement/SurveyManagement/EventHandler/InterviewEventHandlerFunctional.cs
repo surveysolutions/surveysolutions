@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
         IUpdateHandler<InterviewData, AnswerRemoved>,
 
-        IUpdateHandler<InterviewData, VariablesValuesChanged>,
+        IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
         IUpdateHandler<InterviewData, VariablesEnabled>
     {
@@ -707,7 +707,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return state;
         }
 
-        public InterviewData Update(InterviewData interview, IPublishedEvent<VariablesValuesChanged> @event)
+        public InterviewData Update(InterviewData interview, IPublishedEvent<VariablesChanged> @event)
         {
             foreach (var changedVariable in @event.Payload.ChangedVariables)
             {

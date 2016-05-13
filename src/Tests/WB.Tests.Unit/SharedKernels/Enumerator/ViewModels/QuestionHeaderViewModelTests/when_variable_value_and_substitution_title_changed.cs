@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new VariablesValuesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
+            Create.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
             Create.CommittedEvent(payload: new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
