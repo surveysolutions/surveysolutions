@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         public void CloneQuestionnaire(CloneQuestionnaire command)
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
-            ThrowIfTitleIsEmpty(command.NewTitle);
+            ThrowIfTitleIsInvalid(command.NewTitle);
 
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
@@ -181,10 +181,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             return document;
         }
 
-        private void ThrowIfTitleIsEmpty(string title)
+        private static void ThrowIfTitleIsInvalid(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new QuestionnaireException("Questionnaire title should not be empty.");
+
+            if (title.Length > 500)
+                throw new QuestionnaireException("Questionnaire's title can't have more than 500 symbols");
         }
 
         private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
