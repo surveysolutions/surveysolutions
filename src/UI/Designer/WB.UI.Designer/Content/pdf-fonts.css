@@ -1,0 +1,30 @@
+﻿
+@font-face {
+    font-family: 'lucidaconsole';
+    src: url('../fonts/lucidaconsole.eot');
+    src: url('../fonts/lucidaconsole.eot') format('embedded-opentype'),
+         url('../fonts/lucidaconsole.woff2') format('woff2'),
+         url('../fonts/lucidaconsole.woff') format("woff"),
+	     url('../fonts/lucidaconsole.ttf') format("truetype"),
+         url('../fonts/lucidaconsole.svg#lucidaconsole') format('svg');
+}
+
+@font-face {
+    font-family: 'NotoSansRegular';
+    src: url('../fonts/NotoSansRegular.eot');
+    src: url('../fonts/NotoSansRegular.eot') format('embedded-opentype'),
+         url('../fonts/NotoSansRegular.woff2') format('woff2'),
+         url('../fonts/NotoSansRegular.woff') format('woff'),
+         url('../fonts/NotoSansRegular.ttf') format('truetype'),
+         url('../fonts/NotoSansRegular.svg#NotoSansRegular') format('svg');
+}
+
+@font-face {
+    font-family: 'NotoSansItalic';
+    src: url('../fonts/NotoSansItalic.eot');
+    src: url('../fonts/NotoSansItalic.eot') format('embedded-opentype'),
+         url('../fonts/NotoSansItalic.woff2') format('woff2'),
+         url('../fonts/NotoSansItalic.woff') format('woff'),
+         url('../fonts/NotoSansItalic.ttf') format('truetype'),
+         url('../fonts/NotoSansItalic.svg#NotoSansItalic') format('svg');
+}
