@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "Nastya");
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            eventContext.ShouldContainEvent<VariablesValuesChanged>(@event
+            eventContext.ShouldContainEvent<VariablesChanged>(@event
                 => (int?) @event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id== variableId);
 
         private static EventContext eventContext;

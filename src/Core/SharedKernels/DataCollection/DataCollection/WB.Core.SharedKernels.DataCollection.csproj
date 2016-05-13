@@ -91,7 +91,7 @@
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />
     <Compile Include="Events\Interview\VariablesEnabled.cs" />
-    <Compile Include="Events\Interview\VariablesValuesChanged.cs" />
+    <Compile Include="Events\Interview\VariablesChanged.cs" />
     <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedLinkedOptions.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedVariable.cs" />

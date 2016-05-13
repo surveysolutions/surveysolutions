@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new VariablesValuesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
+            Create.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Your first variable is 31.01.2016 and second is 7,77");
 
