@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
@@ -8,6 +9,7 @@ using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -38,6 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         private Guid Id { get; set; }
 
@@ -49,7 +52,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
-            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
+            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -59,6 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             this.referenceInfoForLinkedQuestionsStorage = referenceInfoForLinkedQuestionsStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -81,9 +86,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         public void CloneQuestionnaire(CloneQuestionnaire command)
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
-            ThrowIfTitleIsInvalid(command.NewTitle);
 
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+
+            this.ThrowIfTitleIsInvalid(command.NewTitle, questionnaireDocument);
+
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
             QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
 
@@ -185,7 +192,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             return document;
         }
 
-        private static void ThrowIfTitleIsInvalid(string title)
+        private void ThrowIfTitleIsInvalid(string title, QuestionnaireDocument questionnaireDocument)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new QuestionnaireException("Questionnaire title should not be empty.");
@@ -195,6 +202,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             if (!InvalidTitleRegex.IsMatch(title))
                 throw new QuestionnaireException("Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
+
+            IGroup rosterWithNameEqualToQuestionnaireTitle = questionnaireDocument.Find<IGroup>(
+                group => this.IsRosterWithNameEqualToQuestionnaireTitle(@group, title)).FirstOrDefault();
+
+            if (rosterWithNameEqualToQuestionnaireTitle != null)
+                throw new QuestionnaireException($"Questionnaire title is similar to roster ID '{rosterWithNameEqualToQuestionnaireTitle.VariableName}'.");
+        }
+
+        private bool IsRosterWithNameEqualToQuestionnaireTitle(IGroup group, string title)
+        {
+            if (!group.IsRoster)
+                return false;
+
+            var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(title);
+
+            return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private void ThrowIfQuestionnaireIsAbsentOrDisabled(Guid questionnaireId, long questionnaireVersion)
