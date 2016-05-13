@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var substitution in this.substitutionVariables.ByVariables)
             {
-                var variableValue = interview.GetVariableValue(new Identity(substitution.Id, this.questionIdentity.RosterVector));
+                var variableValue = interview.GetVariableValueByOrDeeperRosterLevel(substitution.Id, this.questionIdentity.RosterVector);
                 var variableValueAsString = this.variableToUiStringService.VariableToUIString(variableValue);
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(

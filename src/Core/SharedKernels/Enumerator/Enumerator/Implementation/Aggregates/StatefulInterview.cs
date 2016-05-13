@@ -731,11 +731,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
-        public object GetVariableValue(Identity variableIdentity)
+        public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
-            return this.interviewState.VariableValues.ContainsKey(variableIdentity)
-                ? this.interviewState.VariableValues[variableIdentity]
-                : null;
+            do
+            {
+                var variableIdentity = new Identity(variableId, variableRosterVector);
+
+                if (this.interviewState.VariableValues.ContainsKey(variableIdentity))
+                    return this.interviewState.VariableValues[variableIdentity];
+
+                if (variableRosterVector.Length == 0) break;
+
+                variableRosterVector = variableRosterVector.Shrink(variableRosterVector.Length - 1);
+            } while (variableRosterVector.Length >= 0);
+
+            return null;
         }
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)

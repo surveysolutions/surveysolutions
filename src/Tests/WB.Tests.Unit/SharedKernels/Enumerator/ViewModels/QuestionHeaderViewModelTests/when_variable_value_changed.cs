@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var answer = new TextAnswer();
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetVariableValue(substitutedVariable1Identity) == changedVariables[0].NewValue &&
-                x.GetVariableValue(substitutedVariable2Identity) == changedVariables[1].NewValue);
+                x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable1Identity.Id, substitutedVariable1Identity.RosterVector) == changedVariables[0].NewValue &&
+                x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable2Identity.Id, substitutedVariable2Identity.RosterVector) == changedVariables[1].NewValue);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
