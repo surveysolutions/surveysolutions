@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IVariable> variableCache = null;
         private Dictionary<Guid, IStaticText> staticTextCache = null;
         private Dictionary<Guid, IQuestion> questionCache = null;
+        
         private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
         private List<Guid> sectionCache = null;
@@ -126,6 +127,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private Dictionary<Guid, IVariable> VariableCache
+        {
+            get
+            {
+                return this.variableCache ?? (this.variableCache
+                    = this.innerDocument
+                        .Find<IVariable>(_ => true)
+                        .ToDictionary(
+                            variable => variable.PublicKey,
+                            variable => variable));
+            }
+        }
+
         private Dictionary<string, IGroup> GroupCache
         {
             get
@@ -150,6 +164,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
+
+        private IEnumerable<IVariable> AllVariables => this.VariableCache.Values;
 
         private IEnumerable<IGroup> AllGroups => this.GroupCache.Values;
 
@@ -552,6 +568,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
+
+        public
+        ReadOnlyCollection<Guid> GetAllVariables()
+              => this.AllVariables.Select(variable => variable.PublicKey).ToReadOnlyCollection();
 
         public ReadOnlyCollection<Guid> GetAllStaticTexts()
             => this.AllStaticTexts.Select(staticText => staticText.PublicKey).ToReadOnlyCollection();

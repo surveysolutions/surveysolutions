@@ -50,10 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                     && _.GetAllUnderlyingQuestions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
                     && _.GetAllUnderlyingQuestions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
-                    && _.GetRosterLevelForQuestion(questionFromRosterId) == 1
-                    && _.GetRosterLevelForQuestion(questionFromNestedRosterId) == 2
-                    && _.GetRostersFromTopToSpecifiedQuestion(questionFromRosterId) == new[] { parentRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedQuestion(questionFromNestedRosterId) == new[] { parentRosterGroupId, nestedRosterGroupId }
+                    && _.GetRosterLevelForEntity(questionFromRosterId) == 1
+                    && _.GetRosterLevelForEntity(questionFromNestedRosterId) == 2
+                    && _.GetRostersFromTopToSpecifiedEntity(questionFromRosterId) == new[] { parentRosterGroupId }
+                    && _.GetRostersFromTopToSpecifiedEntity(questionFromNestedRosterId) == new[] { parentRosterGroupId, nestedRosterGroupId }
                     );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
