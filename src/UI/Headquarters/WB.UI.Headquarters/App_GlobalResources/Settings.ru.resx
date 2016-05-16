@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Экспортировать шифрования</value>
+    <value>Шифровать экспортируемые данные</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Вы уверены, что вы хотите восстановить пароль? Вам нужно будет восстановить экспортированные данные для того, чтобы открыть его.</value>
+    <value>Вы уверены, что вы хотите изменить пароль? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
-    <value>Параметры</value>
+    <value>Настройки</value>
   </data>
   <data name="EnableEncryption" xml:space="preserve">
     <value>Включить шифрование</value>

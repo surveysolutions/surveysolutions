@@ -3257,13 +3257,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Dictionary<Guid, RosterVector[]> GetLinkedQuestionOptionsChanges(
             ILatestInterviewExpressionState interviewExpressionState, 
-            InterviewStateDependentOnAnswers currentState, 
-            IQuestionnaire questionnaire,
-            List<AnswerChange> interviewByAnswerChanges,
-            EnablementChanges enablementChanges,
-            RosterCalculationData rosterCalculationData,
-            List<RosterIdentity> rosterInstancesWithAffectedTitles,
-            string answerAsRosterTitle)
+            InterviewStateDependentOnAnswers updatedState, 
+            IQuestionnaire questionnaire)
         {
             if (interviewExpressionState.AreLinkedQuestionsSupported())
             {
@@ -3274,53 +3269,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(currentState, questionnaire,
-                    interviewByAnswerChanges, enablementChanges, rosterCalculationData,
-                    rosterInstancesWithAffectedTitles, answerAsRosterTitle);
+                return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(updatedState, questionnaire);
             }
         }
 
         private Dictionary<Guid, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
-            InterviewStateDependentOnAnswers currentState, 
-            IQuestionnaire questionnaire,
-            List<AnswerChange> interviewByAnswerChanges,
-            EnablementChanges enablementChanges,
-            RosterCalculationData rosterCalculationData,
-            List<RosterIdentity> rosterInstancesWithAffectedTitles,
-            string answerAsRosterTitle)
+            InterviewStateDependentOnAnswers updatedState, 
+            IQuestionnaire questionnaire)
         {
             var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedToRoster();
             var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
             if(!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
                 return new Dictionary<Guid, RosterVector[]>();
-
-            var updatedState = currentState.Clone();
-
-            if (enablementChanges != null)
-                updatedState.ApplyEnablementChanges(enablementChanges);
-
-            if (rosterCalculationData != null)
-                updatedState.ApplyRosterData(rosterCalculationData);
-
-            if (rosterInstancesWithAffectedTitles != null)
-            {
-                updatedState.ChangeRosterTitles(
-                    rosterInstancesWithAffectedTitles.Select(
-                        r =>
-                            new ChangedRosterInstanceTitleDto(
-                                new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId), answerAsRosterTitle)).ToArray());
-            }
-            if (interviewByAnswerChanges != null)
-            {
-                foreach (var interviewByAnswerChange in interviewByAnswerChanges)
-                {
-                    string questionKey =
-                        ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId,
-                            interviewByAnswerChange.RosterVector);
-                    updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
-                    updatedState.AnsweredQuestions.Add(questionKey);
-                }
-            }
 
             var result = new Dictionary<Guid, RosterVector[]>();
             foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
@@ -3368,9 +3328,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerAsRosterTitle)
         {
             var currentLinkedOptions = currentState.LinkedQuestionOptions;
-            var newCurrentLinkedOptions = GetLinkedQuestionOptionsChanges(interviewExpressionState, currentState,
-                questionnaire, interviewByAnswerChanges, enablementChanges, rosterCalculationData,
-                rosterInstancesWithAffectedTitles, answerAsRosterTitle);
+
+            var updatedState = currentState.Clone();
+
+            if (enablementChanges != null)
+                updatedState.ApplyEnablementChanges(enablementChanges);
+
+            if (rosterCalculationData != null)
+                updatedState.ApplyRosterData(rosterCalculationData);
+
+            if (rosterInstancesWithAffectedTitles != null)
+            {
+                updatedState.ChangeRosterTitles(
+                    rosterInstancesWithAffectedTitles.Select(
+                        r =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId), answerAsRosterTitle)).ToArray());
+            }
+            if (interviewByAnswerChanges != null)
+            {
+                foreach (var interviewByAnswerChange in interviewByAnswerChanges)
+                {
+                    string questionKey =
+                        ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId,
+                            interviewByAnswerChange.RosterVector);
+                    updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
+                    updatedState.AnsweredQuestions.Add(questionKey);
+                }
+            }
+            var newCurrentLinkedOptions = GetLinkedQuestionOptionsChanges(interviewExpressionState, updatedState, questionnaire);
 
             foreach (var linkedQuestionConditionalExecutionResult in newCurrentLinkedOptions)
             {
@@ -3378,8 +3364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
 
                 IEnumerable<Identity> linkedQuestionInstances =
-                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                        linkedQuestionId, new decimal[0], questionnaire);
+                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, linkedQuestionId, new decimal[0], questionnaire);
 
                 foreach (var instanceOfTheLinkedQuestionsQuestions in linkedQuestionInstances)
                 {
@@ -4601,7 +4586,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
+            VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
             var enablementAndValidityChanges = new InterviewChanges(
                 null,
                 enablementChanges,
@@ -4612,7 +4597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 null,
                 null,
-                null);
+                variableValueChanges);
             return enablementAndValidityChanges;
         }
 
