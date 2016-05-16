@@ -64,7 +64,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             Version questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
 
-            return clientVersion >= questionnaireContentVersion;
+            if (clientVersion < questionnaireContentVersion)
+                return false;
+
+            return true;
         }
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
