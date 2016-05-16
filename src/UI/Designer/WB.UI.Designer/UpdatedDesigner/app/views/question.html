@@ -225,7 +225,7 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="linkTemplate.html">
+    <script type="text/ng-template" id="linkTemplate.html">
             <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
                 <label for="linkedEntitySource">Bind to question from roster group</label>
@@ -235,8 +235,13 @@
 
                         <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
                             <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
-                            <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
-                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">{{activeQuestion.linkedToEntity.title}}</span>
+                            <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'">
+                              <i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>
+                              {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
+                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">
+                              {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -250,15 +255,29 @@
                                role="menuitem"
                                tabindex="-1"
                                class="linked-roster-source"
-                               href="javascript:void(0);">{{::breadCrumb.title}}</a>
+                               href="javascript:void(0);">
+                                  <div >
+                                        <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                        <span ng-bind-html="breadCrumb.title"></span>
+                                    </div>
+                                    <div class="var-block">
+                                        <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                    </div>
+                            </a>
 
-                            <a ng-if="!breadCrumb.isSectionPlaceHolder&& breadCrumb.type!=='roster'"
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type!=='roster'"
                                ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-question-source"
-                               href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
+                               href="javascript:void(0);">                                
+                                <div>
+                                        <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                        <span ng-bind-html="breadCrumb.title"></span>
+                                </div>
+                                    <div class="var-block" >
+                                        <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div>                                                            
                             </a>
                         </li>
                     </ul>
@@ -275,31 +294,44 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="CascadingComboBox-Template.html">
+    <script type="text/ng-template" id="CascadingComboBox-Template.html">
             <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
                     <button class="btn dropdown-toggle" dropdown-toggle id="singleOptionQuestionSource" type="button">
-                        <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>
-
-                        <span class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
+                        <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>                        
+                        
+                        <div class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
                             <span class="path">{{activeQuestion.cascadeFromQuestion.breadcrumbs}}</span>
-                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{activeQuestion.cascadeFromQuestion.title}}</span>
-                        </span>
+                            <div class="selected-block">
+                                <div >                                    
+                                    <span class="chosen-item "><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{activeQuestion.cascadeFromQuestion.title}}</span>
+                                </div>
+                                <div class="var-block" >
+                                    <span class="var-name" ng-bind-html="activeQuestion.cascadeFromQuestion.varName"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <span class="dropdown-arrow"></span>
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
                         <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfSingleQuestions track by $index">
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
-
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
                                ng-click="setCascadeSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
                                href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
+                                <div>
+                                    <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                    <span ng-bind-html="breadCrumb.title"></span>
+                                </div>
+                                <div class="var-block">
+                                    <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div> 
                             </a>
                         </li>
                     </ul>
