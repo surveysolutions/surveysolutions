@@ -121,73 +121,73 @@
     <value>Отмена</value>
   </data>
   <data name="CommandTransformator_IncorrectFormatError" xml:space="preserve">
-    <value>значение «{0}» это не правильный формат.</value>
+    <value>значение «{0}» имеет не правильный формат.</value>
   </data>
   <data name="CommandTransformator_ParseNumericError" xml:space="preserve">
-    <value>{0} значения является слишком большой или слишком маленький</value>
+    <value>{0} значения является слишком большим или слишком маленьким</value>
   </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Ошибка когда разобрать вопрос ответ</value>
+    <value>Ошибка при попытке принять ответ</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Статус поддержки решений для опросов</value>
+    <value>Статус установлен командой поддержки Survey Solutions</value>
   </data>
   <data name="CustomPrincipal_IdentityIsNullError" xml:space="preserve">
-    <value>Главный построены не полностью</value>
+    <value>Основа построена не полностью</value>
   </data>
   <data name="ErrorInStructure" xml:space="preserve">
     <value>Ошибка в структуре</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
-    <value>Успешно обновлены сведения об учетной записи</value>
+    <value>Сведения об учетной записи успешно обновлены</value>
   </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Управление учетной записью</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Одобрено штаб-квартиры</value>
+    <value>Утверждено Хедквотером</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Утверждена руководителем</value>
+    <value>Утверждено Супервизором</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Создан</value>
+    <value>Создано</value>
   </data>
   <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Удалены</value>
+    <value>Удалено</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Интервьюер назначен</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
-    <value>Готовы к интервью</value>
+    <value>Готово к интервью</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Отвергнуто штаб-квартиры</value>
+    <value>Отклонено Хедквотером</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Отклонено руководителем</value>
+    <value>Отклонено Супервизором</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Перезагрузки</value>
+    <value>Перезапущено</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Восстановлен</value>
+    <value>Восстановлено</value>
   </data>
   <data name="InterviewStatus_SentToCapi" xml:space="preserve">
-    <value>Отправлен в Capi</value>
+    <value>Отправлено на планшет</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Назначен руководитель</value>
+    <value>Супервизор назначен</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Для выполнения этого действия не разрешается наблюдателя</value>
+    <value>Выполнение этого действия обозревателём запрещено</value>
   </data>
   <data name="OperationNotAllowed" xml:space="preserve">
-    <value>Операция не разрешена.</value>
+    <value>Операция запрещена</value>
   </data>
   <data name="OperationNotImplemented" xml:space="preserve">
     <value>Метод или операция не реализованы.</value>
@@ -202,6 +202,6 @@
     <value>Недопустимое свойство</value>
   </data>
   <data name="WriteToSyncLogAttribute_UnknownPackageType" xml:space="preserve">
-    <value>Тип пакета неизвестное интервью</value>
+    <value>Неизвестный тип интервью пакета</value>
   </data>
 </root>

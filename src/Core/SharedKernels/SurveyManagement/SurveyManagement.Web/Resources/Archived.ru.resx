@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActiveInterviewers" xml:space="preserve">
-    <value>Активные интервьюеров</value>
+    <value>Активные интервьюеры</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Активные супервайзеров</value>
+    <value>Активные супервизоры</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
-    <value>Архивированные интервьюеров</value>
+    <value>Архив Интервьюеров</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Архивированные супервайзеров</value>
+    <value>Архив Супервизоров</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Дата создания</value>
@@ -136,7 +136,7 @@
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Отправить по электронной почте</value>
+    <value>Электронная почта</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -148,9 +148,9 @@
     <value>Разархивировать</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>Interviewer(s) будут разархивированы.</value>
+    <value>Интервьювер(ы) будут разархивированы.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>руководитель будет разархивированы.</value>
+    <value>Супервизор(ы) будут разархивированы.</value>
   </data>
 </root>
