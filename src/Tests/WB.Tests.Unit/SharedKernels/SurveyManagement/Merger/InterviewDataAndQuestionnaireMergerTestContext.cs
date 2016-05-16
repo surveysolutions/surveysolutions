@@ -97,6 +97,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             return null;
         }
 
+        internal static InterviewStaticTextView GetStaticText(InterviewDetailsView interviewDetailsView, 
+            Guid staticTextId,
+            decimal[] questionRosterVector)
+        {
+            var interviewGroupView = interviewDetailsView.Groups.FirstOrDefault(g => 
+                g.Entities.Any(q => q.Id == staticTextId) && 
+                g.RosterVector.SequenceEqual(questionRosterVector));
+
+            return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
+        }
+
         internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo(QuestionnaireDocument questionnaireDocument = null)
         {
             if (questionnaireDocument == null)
