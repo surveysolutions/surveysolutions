@@ -157,10 +157,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     }
                     break;
                 case QuestionType.Numeric:
-                    if (this.Settings.IsInteger)
-                        return ((decimal)(long) answer).FormatDecimal() ?? "";
-                    else
-                        return ((decimal)answer).FormatDecimal() ?? "";
+                    var intAnswer = answer as int?;
+                    var longAnswer = intAnswer ??  (answer as long?);
+                    var decimalAnswer = longAnswer ?? (answer as decimal?);
+
+                    return decimalAnswer.FormatDecimal();
                 case QuestionType.GpsCoordinates:
                 case QuestionType.TextList:
                 case QuestionType.Text:
