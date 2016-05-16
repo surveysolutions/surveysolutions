@@ -1276,7 +1276,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var variable in variables)
             {
-                dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
+                if (!dependencies.ContainsKey(variable.Name))
+                    dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
             }
 
             var cycles = topologicalSorter.DetectCycles(dependencies);
