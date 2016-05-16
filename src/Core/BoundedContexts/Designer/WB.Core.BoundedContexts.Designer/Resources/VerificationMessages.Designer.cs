@@ -433,7 +433,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max answer count must be in range [1, 40]..
+        ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, 40]..
         /// </summary>
         internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
             get {
