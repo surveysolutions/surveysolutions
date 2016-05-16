@@ -142,10 +142,10 @@
     <value>Отклонить интервью</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
-    <value>Отклонить</value>
+    <value>Отменить утверждение</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
-    <value>Отклонить интервью</value>
+    <value>Отменить утверждение интервью</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Индекс</value>
@@ -157,10 +157,10 @@
     <value>Тип исключения</value>
   </data>
   <data name="BrokenInterviewPackages_Header" xml:space="preserve">
-    <value>Сломанной интервью пакеты</value>
+    <value>Сломанные интервью пакеты</value>
   </data>
   <data name="BrokenInterviewPackages_IncomingDateTitle" xml:space="preserve">
-    <value>Входящие Дата</value>
+    <value>Входящая Дата</value>
   </data>
   <data name="BrokenInterviewPackages_InterviewTitle" xml:space="preserve">
     <value>Интервью</value>
@@ -169,13 +169,13 @@
     <value>Дата обработки</value>
   </data>
   <data name="BrokenInterviewPackages_ReprocessAllTitle" xml:space="preserve">
-    <value>Повторно обработать все</value>
+    <value>Обработать все повторно</value>
   </data>
   <data name="BrokenInterviewPackages_SizeTitle" xml:space="preserve">
     <value>Размер</value>
   </data>
   <data name="BrokenInterviewPackages_Title" xml:space="preserve">
-    <value>Панель управления: Сломанной интервью пакеты</value>
+    <value>Панель управления: Сломанные интервью пакеты</value>
   </data>
   <data name="CloseLabel" xml:space="preserve">
     <value>Закрыть</value>
@@ -220,34 +220,34 @@
     <value>Запрещено</value>
   </data>
   <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
-    <value>Вы уверены, что вы хотите удалить анкету? Все интервью, проведенных в текущем вопросника будут потеряны.</value>
+    <value>Вы уверены, что вы хотите удалить вопросник? Все интервью, собранные в рамках вопросника будут потеряны.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
-    <value>Вы не имеете разрешения для этого действия.</value>
+    <value>У вас нет прав для выполнения этого действия</value>
   </data>
   <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
-    <value>Ваш предыдущий запрос не является полным. Пожалуйста, дождитесь его завершения и повторите операцию.</value>
+    <value>Ваш предыдущий запрос не завершён. Пожалуйста, дождитесь его завершения и повторите операцию.</value>
   </data>
   <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
-    <value>Подождите</value>
+    <value>Пожалуйста подождите</value>
   </data>
   <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
-    <value>Для этого зум был достигнут уровня количество очков. Просьба увеличить уровень и обновление очков.</value>
+    <value>Достигнуто максимальное количество отметок для выбранного приближения. Пожалуйста приблизьте и обновление отметки.</value>
   </data>
   <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
-    <value>Не все точки были загружены</value>
+    <value>Не все отметки были загружены</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
-    <value>Существует нет никакой информации о географического расположения точек.</value>
+    <value>Нет никакой информации об отметках геолокации</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
-    <value>Метки не были добавлены</value>
+    <value>Отметки не были добавлены</value>
   </data>
   <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
     <value>Произошла непредвиденная ошибка. Мы приносим извинения за неудобства.</value>
   </data>
   <data name="GPS_accuracy" xml:space="preserve">
-    <value>точность</value>
+    <value>Точность</value>
   </data>
   <data name="GPS_altitude" xml:space="preserve">
     <value>Высота</value>
@@ -262,7 +262,7 @@
     <value>Монитор проверки работоспособности</value>
   </data>
   <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Страница проверки здоровья</value>
+    <value>Страница проверки работоспособности</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>по</value>
@@ -274,43 +274,43 @@
     <value>на</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
-    <value>Государство</value>
+    <value>Состояние</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Интервью журнал изменений статуса</value>
+    <value>Журнал изменений статуса интервью</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
-    <value>Статус поддержки решений для опросов</value>
+    <value>Статус установлен службой поддержки Survey Solutions</value>
   </data>
   <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
-    <value>Повторение последней статуса был неудачным.</value>
+    <value>Повтор последнего статуса завершился неудачей.</value>
   </data>
   <data name="InterviewController_RevalidationFailed" xml:space="preserve">
-    <value>Повторная проверка не выполнена.</value>
+    <value>Повторная проверка завершилась неудачей.</value>
   </data>
   <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
     <value>все</value>
   </data>
   <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
-    <value>ответил</value>
+    <value>отвеченные</value>
   </data>
   <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
-    <value>прокомментировал</value>
+    <value>коментированные</value>
   </data>
   <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
-    <value>включено</value>
+    <value>включённые</value>
   </data>
   <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
-    <value>помеченные</value>
+    <value>отмеченные</value>
   </data>
   <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
     <value>Группы</value>
   </data>
   <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
-    <value>скрыт</value>
+    <value>скрытые</value>
   </data>
   <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
     <value>Скрыть группы</value>
@@ -319,7 +319,7 @@
     <value>Недопустимый</value>
   </data>
   <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
-    <value>Интервью имеет ожидающих синхронизации пакетов в очереди</value>
+    <value>Интервью имеет пакеты ожидающие синхронизацию</value>
   </data>
   <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
     <value>Ответственный</value>
@@ -331,13 +331,13 @@
     <value>Статус</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
-    <value>руководителя</value>
+    <value>супервизор</value>
   </data>
   <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
-    <value>без ответа</value>
+    <value>неотвеченные</value>
   </data>
   <data name="InterviewerController_EditSuccess" xml:space="preserve">
-    <value>Информация о {0}  успешно обновлен</value>
+    <value>Информация о {0} успешно обновлена</value>
   </data>
   <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
     <value>Интервьюер был успешно создан</value>
@@ -346,10 +346,10 @@
     <value>Не удалось обновить информацию пользователя, поскольку текущий пользователь не существует</value>
   </data>
   <data name="InterviewerCreate_CreateIn" xml:space="preserve">
-    <value>Создайте интервьюер в</value>
+    <value>Создать интервьюера в</value>
   </data>
   <data name="InterviewerCreate_Team" xml:space="preserve">
-    <value>команда</value>
+    <value>команде</value>
   </data>
   <data name="InterviewerCreate_Title" xml:space="preserve">
     <value>Создать</value>
@@ -358,22 +358,22 @@
     <value>Идентификатор устройства</value>
   </data>
   <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
-    <value>Интервьюер не сделал пока синхронизации. Нет никакой информации об устройствах в использовании.</value>
+    <value>Интервьюер еще не синхронизировался. Нет информации об устройствах.</value>
   </data>
   <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
-    <value>Начать использовать Дата</value>
+    <value>Дата начала использования</value>
   </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Интервьюер: {0}</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>Interviewer(s), будут подвергаться архивации.</value>
+    <value>пользователи будут архивированы.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>Если интервьюер завершила интервью в режиме переписи на его таблетка тогда данные будут потеряны.</value>
+    <value>Интервью на планшете будут потеряны если они созданы в census режиме.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Архивный статус</value>
@@ -385,13 +385,13 @@
     <value>Дата создания</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
-    <value>Отправить по электронной почте</value>
+    <value>Электронная почта</value>
   </data>
   <data name="Interviewers_Header" xml:space="preserve">
     <value>Интервьюеры</value>
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
-    <value>Руководитель</value>
+    <value>Супервизоры</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -400,31 +400,31 @@
     <value>Имя</value>
   </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
-    <value>Интервью история</value>
+    <value>История интервью</value>
   </data>
   <data name="InterviewsController_Error" xml:space="preserve">
-    <value>Произошла ошибка запроса Api</value>
+    <value>Произошла ошибка Api запроса</value>
   </data>
   <data name="InterviewsController_NoUse" xml:space="preserve">
     <value>Пользователь не был найден.</value>
   </data>
   <data name="InterviewsController_UserNotInterviewer" xml:space="preserve">
-    <value>Пользователь не является интервьюер.</value>
+    <value>Пользователь не является интервьюером.</value>
   </data>
   <data name="Layout_Filter" xml:space="preserve">
     <value>Фильтр</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Юридические</value>
+    <value>Legal</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>Результаты не найдены</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
-    <value>Все права защищены.</value>
+    <value>All Rights Reserved.</value>
   </data>
   <data name="Layout_WorldBank" xml:space="preserve">
-    <value>Группа Всемирного банка</value>
+    <value>The World Bank Group</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
     <value>Пожалуйста, войдите</value>
@@ -436,19 +436,19 @@
     <value>Войдите в систему</value>
   </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
-    <value>Вход был неудачным. Исправьте ошибки и повторите попытку.</value>
+    <value>Вход не выполнен. Пожалуйста, исправьте ошибки и повторите попытку.</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>В настоящее время приложение обновляется до новой версии. Этот ручной работы и может потребовать значительное количество времени. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
+    <value>В настоящее время приложение обновляется до новой версии. Этот может потребовать значительное количество времени. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
-    <value>Приложение теперь перезагрузка, и это может занять до 10 минут или больше. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
+    <value>Приложение перезагружается и это может занять до 10 минут или больше. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
   </data>
   <data name="Maintenance_Title" xml:space="preserve">
     <value>Техническое обслуживание</value>
   </data>
   <data name="MaintenanceReadSide_Header" xml:space="preserve">
-    <value>В разделе Обслуживание...</value>
+    <value>В процессе технического обслуживания...</value>
   </data>
   <data name="MaintenanceRebuild_Header" xml:space="preserve">
     <value>Перезагрузка...</value>
@@ -460,10 +460,10 @@
     <value>Идентификатор устройства</value>
   </data>
   <data name="PackagesInfo_Header" xml:space="preserve">
-    <value>Таблетка информационные пакеты</value>
+    <value>Информационные пакеты планшета</value>
   </data>
   <data name="PackagesInfo_Size" xml:space="preserve">
-    <value>Size(bytes)</value>
+    <value>Размер (байты)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
     <value>Индекс</value>
@@ -484,7 +484,7 @@
     <value>Создан на клиенте</value>
   </data>
   <data name="Survey_HasErrorsTitle" xml:space="preserve">
-    <value>Нas ошибки</value>
+    <value>Имеет ошибки</value>
   </data>
   <data name="Survey_Header" xml:space="preserve">
     <value>Интервью</value>
@@ -493,7 +493,7 @@
     <value>Последнее обновление:</value>
   </data>
   <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
-    <value>Получил интервьюер</value>
+    <value>Получено интервьюером</value>
   </data>
   <data name="Survey_ResponsibleTitle" xml:space="preserve">
     <value>Ответственный</value>
@@ -508,10 +508,10 @@
     <value>Статус</value>
   </data>
   <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
-    <value>Утверждена HQ</value>
+    <value>Утверждено Хедквотером</value>
   </data>
   <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
-    <value>Утверждена руководителем</value>
+    <value>Утверждено Супервизором</value>
   </data>
   <data name="SurveysStatuses_Completed" xml:space="preserve">
     <value>Завершено</value>
@@ -520,13 +520,13 @@
     <value>Интервьюер назначен</value>
   </data>
   <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
-    <value>Отвергнуто HQ</value>
+    <value>Отклонено Хедквотером</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
-    <value>Отклонено руководителем</value>
+    <value>Отклонено Супервизором</value>
   </data>
   <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
-    <value>Назначен руководитель</value>
+    <value>Супервизор назначен</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
     <value>Название исследования</value>
@@ -544,7 +544,7 @@
     <value>Загрузить</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
-    <value>Папка, которая содержит веб-сайт имеет долгий путь. Просьба перейти на сайт в верхней папки.</value>
+    <value>Папка, которая содержит веб-сайт имеет долгий путь. Просьба переместить сайт в выше.</value>
   </data>
   <data name="YesNoQuestion_No" xml:space="preserve">
     <value>Нет</value>

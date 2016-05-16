@@ -124,52 +124,52 @@
     <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
   <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Удаление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, сортировка индекс: {2}&lt;/li&gt;</value>
+    <value>&lt;li&gt;Удаление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, индекс сортировки: {2}&lt;/li&gt;</value>
   </data>
   <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>Устройство может быть назначен интервьюер</value>
+    <value>Устройство может быть назначено интервьюеру</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;Выполните повторную компоновку требуется&lt;/font&gt;</value>
+    <value>&lt;font color="orange"&gt;Необходима перепривязка&lt;/font&gt;</value>
   </data>
   <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Требуется обновление. Интервьюер двигатель версия - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Требуется обновление. Версия движка интервьюера - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[ПУСТОЙ УСТРОЙСТВО]&lt;/b&gt;</value>
+    <value>&lt;b&gt;[ПУСТОЕ УСТРОЙСТВО]&lt;/b&gt;</value>
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
-    <value>Скачать содержимое вложения: {0}</value>
+    <value>Загрузить вложения: {0}</value>
   </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>Скачайте список переписных листов:&lt;br&gt;&lt;ul&gt;{0}&lt;/ul&gt;</value>
+    <value>Загрузить список census вопросников:&lt;br&gt;&lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
   <data name="GetInterview" xml:space="preserve">
-    <value>Скачать интервью: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Загрузить интервью: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
-    <value>Скачайте информацию интервьюер.&lt;br&gt;Руководитель: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Загрузить информацию об интервьюервере.&lt;br&gt;Супервизор: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetInterviewPackage" xml:space="preserve">
-    <value>Скачать интервью пакета: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Загрузить интервью пакет: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>Скачайте список интервью пакетов.&lt;br&gt;&lt;ul&gt; {1} &lt;/ul&gt; Последний пакет синхронизации: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Загрузить список интервью пакетов.&lt;br&gt;&lt;ul&gt; {1} &lt;/ul&gt; Последний синхронизационный пакет: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
-    <value>Скачайте список интервью.&lt;br&gt;&lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>Загрузить список интервью.&lt;br&gt;&lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
   <data name="GetQuestionnaire" xml:space="preserve">
-    <value>Скачать анкету: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Загрузить вопросник: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>Скачать анкету Ассамблеи: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Загрузить сборку вопросника: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>Скачать анкету вложения: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Загрузить вложения опросника: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>Интервьюер имеет устройство уже</value>
+    <value>Интервьювер уже привязан к устройству</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
     <value>&lt;font color="green" '=""&gt;Интервью пакет &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
@@ -178,21 +178,21 @@
     <value>&lt;font color="green" '=""&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
-    <value>Интервьюер ссылку на устройство</value>
+    <value>Привязать интервьювера к планшету</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>Без новых интервью пакеты для загрузки</value>
+    <value>Нет новых интервью пакетов для загрузки</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
-    <value>Добавлено интервью: &lt;b&gt; &lt;a href="{0}" target="_blank"&gt;{1}&lt;/a&gt;&lt;/b&gt;</value>
+    <value>Выгружено интервью: &lt;b&gt; &lt;a href="{0}" target="_blank"&gt;{1}&lt;/a&gt;&lt;/b&gt;</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Вопросник Ассамблеи &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработано&lt;/font&gt;</value>
+    <value>&lt;font color="green" '=""&gt;Сборка вопросника &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработана&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Анкета &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработано&lt;/font&gt;</value>
+    <value>&lt;font color="green" '=""&gt;Вопросник &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработан&lt;/font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Обновление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, сортировка индекс: {2}&lt;/li&gt;</value>
+    <value>&lt;li&gt;Обновление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, индекс сортировки: {2}&lt;/li&gt;</value>
   </data>
 </root>
