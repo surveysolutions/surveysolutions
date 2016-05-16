@@ -442,7 +442,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         Id = q.Id.FormatGuid(),
                         Title = q.Title,
                         Breadcrumbs = GetBreadcrumbsAsString(questionsCollection,q),
-                        Type = q.Type.ToString().ToLower()
+                        Type = q.Type.ToString().ToLower(),
+                        VarName = q.VariableName
                     }).ToList();
             return questions;
         }
@@ -456,7 +457,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Id = roster.Id.FormatGuid(),
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = rosterPlaceholder.Title,
-                Type = this.rosterType
+                Type = this.rosterType,
+                VarName = roster.VariableName
             };
             return rosterTitlePlaceholder;
         }
@@ -530,7 +532,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = q.Id.FormatGuid(),
                     Title = q.Title,
                     Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
-                    Type = q.Type.ToString().ToLower()
+                    Type = q.Type.ToString().ToLower(),
+                    VarName = q.VariableName
                 }).ToArray();
 
 
@@ -552,7 +555,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = question.Id,
                     IsSectionPlaceHolder = false,
                     Breadcrumbs = brief.Key,
-                    Type = question.Type
+                    Type = question.Type,
+                    VarName = question.VarName
                 }));
             }
             return result;
