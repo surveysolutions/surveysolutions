@@ -4586,7 +4586,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
+            VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
             var enablementAndValidityChanges = new InterviewChanges(
                 null,
                 enablementChanges,
@@ -4597,7 +4597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 null,
                 null,
-                null);
+                variableValueChanges);
             return enablementAndValidityChanges;
         }
 
