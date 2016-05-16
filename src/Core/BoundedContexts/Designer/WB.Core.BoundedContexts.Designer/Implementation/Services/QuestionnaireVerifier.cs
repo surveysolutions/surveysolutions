@@ -1271,7 +1271,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var question in questionsWithConditions)
             {
-                dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
+                if (!dependencies.ContainsKey(question.StataExportCaption))
+                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
             }
 
             foreach (var variable in variables)
