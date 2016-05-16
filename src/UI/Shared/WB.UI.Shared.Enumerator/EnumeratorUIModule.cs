@@ -1,5 +1,6 @@
 using Ninject.Modules;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 
@@ -13,6 +14,7 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
+            this.Bind<SubstitutionReplacerService>().ToSelf();
         }
     }
 }
