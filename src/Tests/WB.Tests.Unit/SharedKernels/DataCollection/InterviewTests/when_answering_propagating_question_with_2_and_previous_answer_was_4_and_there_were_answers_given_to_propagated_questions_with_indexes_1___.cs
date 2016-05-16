@@ -42,9 +42,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 && _.HasQuestion(propagatedQuestionId) == true
                 && _.GetQuestionType(propagatedQuestionId) == QuestionType.Text
-                && _.GetRosterLevelForQuestion(propagatedQuestionId) == 1
-                && _.GetRostersFromTopToSpecifiedQuestion(propagatedQuestionId) == new [] { propagatedGroupId }
+                && _.GetRosterLevelForEntity(propagatedQuestionId) == 1
+                && _.GetRosterLevelForEntity(propagatedQuestionId) == 1
+                && _.GetRostersFromTopToSpecifiedQuestion(propagatedQuestionId) == new[] { propagatedGroupId }
+                && _.GetRostersFromTopToSpecifiedEntity(propagatedQuestionId) == new[] { propagatedGroupId }
                 && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new[] { propagatedGroupId });
+            
 
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);

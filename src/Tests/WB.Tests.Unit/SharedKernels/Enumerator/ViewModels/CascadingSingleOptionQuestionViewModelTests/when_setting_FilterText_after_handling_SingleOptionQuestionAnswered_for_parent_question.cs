@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var secondParentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 2);
 
             StatefulInterviewMock.Setup(x => x.Id).Returns(interviewGuid);
-            StatefulInterviewMock.Setup(x => x.QuestionnaireId).Returns(questionnaireId);
+            StatefulInterviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
@@ -34,9 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository);
+                questionnaireRepository: questionnaireRepository,
+                optionsRepository: optionsRepository);
 
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
@@ -75,12 +78,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         protected static readonly List<CategoricalQuestionOption> options = new List<CategoricalQuestionOption>
         {
-            Create.CascadingOptionModel(1, "title abc 1", 1),
-            Create.CascadingOptionModel(2, "title def 2", 1),
-            Create.CascadingOptionModel(3, "title klo 3", 1),
-            Create.CascadingOptionModel(4, "title gha 4", 2),
-            Create.CascadingOptionModel(5, "title ccc 5", 2),
-            Create.CascadingOptionModel(6, "title bcw 6", 2)
+            Create.CategoricalQuestionOption(1, "title abc 1", 1),
+            Create.CategoricalQuestionOption(2, "title def 2", 1),
+            Create.CategoricalQuestionOption(3, "title klo 3", 1),
+            Create.CategoricalQuestionOption(4, "title gha 4", 2),
+            Create.CategoricalQuestionOption(5, "title ccc 5", 2),
+            Create.CategoricalQuestionOption(6, "title bcw 6", 2)
         };
 
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

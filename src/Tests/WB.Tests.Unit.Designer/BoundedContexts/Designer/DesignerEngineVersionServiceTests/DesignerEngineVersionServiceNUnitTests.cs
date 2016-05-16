@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             var result =
                 designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
-                    Create.QuestionnaireDocument(), new Version(9, 0, 0));
+                    Create.QuestionnaireDocument(), new Version(10, 0, 0));
 
             Assert.That(result, Is.True);
         }

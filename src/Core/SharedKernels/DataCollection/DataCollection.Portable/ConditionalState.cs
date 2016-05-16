@@ -15,7 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         Question = 1,
         StaticText = 2,
-        Group = 10,
+        Variable = 3,
+        Group = 10
     }
 
     public class ConditionalState

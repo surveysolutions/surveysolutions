@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IArchiveUtils archiveUtils;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IArchiveUtils archiveUtils, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
@@ -83,9 +84,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            QuestionnaireExportStructure questionnaire = this.questionnaireExportStructureStorage
-                .GetById(new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
-                    dataExportProcessDetails.Questionnaire.Version).ToString());
+            QuestionnaireExportStructure questionnaire =
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
+                        dataExportProcessDetails.Questionnaire.Version));
        
             var multimediaQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(

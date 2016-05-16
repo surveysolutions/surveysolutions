@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {
@@ -142,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
-            throw new NotSupportedException("The method or operation is not implemented.");
+            throw new NotSupportedException(Strings.OperationNotImplemented);
         }
 
         public override MembershipUserCollection FindUsersByEmail(
@@ -169,7 +170,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override string GetPassword(string username, string answer)
         {
-            throw new NotSupportedException("The method or operation is not implemented.");
+            throw new NotSupportedException(Strings.OperationNotImplemented);
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)

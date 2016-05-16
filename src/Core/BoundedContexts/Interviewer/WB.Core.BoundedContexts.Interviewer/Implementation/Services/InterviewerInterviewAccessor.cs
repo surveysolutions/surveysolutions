@@ -129,9 +129,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            var storedEvents = this.eventStore.Read(interviewId, 0);
+            List<CommittedEvent> storedEvents = this.eventStore.Read(interviewId, 0).ToList();
 
-            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents.ToList());
+            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
 
             AggregateRootEvent[] eventsToSend = optimizedEvents
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))

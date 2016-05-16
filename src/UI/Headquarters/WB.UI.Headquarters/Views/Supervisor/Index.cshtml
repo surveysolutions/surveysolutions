@@ -26,7 +26,7 @@
 @section header
 {
     <div class="page-header">
-        <h2 class="sinle-line-header">Supervisors</h2>
+        <h2 class="sinle-line-header">@Users.Supervisors</h2>
     </div>
 }
 
@@ -37,11 +37,11 @@
             @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
             {
                 <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
-                    <i class="glyphicon glyphicon-user"></i> Add supervisor
+                    <i class="glyphicon glyphicon-user"></i> @Users.AddSupervisor
                 </a>
             }
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: filter">
+                <input type="text" class="form-control" placeholder="@Common.Search" data-bind="value: SearchBy, enterKey: filter">
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="button" data-bind="click: filter">
                         <i class="glyphicon glyphicon-search"></i>
@@ -53,7 +53,7 @@
     </div>
     <div class="btn-group pull-right">
         <a class="btn btn-default" href="@Url.Action("Archived", "Supervisor", new {area = string.Empty})">
-            <i class="glyphicon glyphicon glyphicon-book"></i> Archived supervisors
+            <i class="glyphicon glyphicon glyphicon-book"></i> @Users.ArchivedSupervisors
         </a>
     </div>
 }
@@ -64,11 +64,11 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
         <tr>
-            <th data-bind='sortby : "UserName"'>Name</th>
-            <th data-bind='sortby : "CreationDate"'>Creation date</th>
-            <th data-bind='sortby : "Email"'>Email</th>
-            <th data-bind='sortby : "NotConnectedToDeviceInterviewersCount"'>Not linked to device</th>
-            <th data-bind='sortby : "InterviewersCount"'>Total Interviewers</th>
+            <th data-bind='sortby : "UserName"'>@Users.UserName</th>
+            <th data-bind='sortby : "CreationDate"'>@Users.CreationDate</th>
+            <th data-bind='sortby : "Email"'>@Users.Email</th>
+            <th data-bind='sortby : "NotConnectedToDeviceInterviewersCount"'>@Users.NotLinkedToDevice</th>
+            <th data-bind='sortby : "InterviewersCount"'>@Users.TotalInterviewers</th>
             <th></th>
 
         </tr>

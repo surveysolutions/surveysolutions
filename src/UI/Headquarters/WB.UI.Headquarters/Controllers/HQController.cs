@@ -1,38 +1,17 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using CsvHelper;
-using CsvHelper.Configuration;
-using Main.Core.Documents;
+using Resources;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Microsoft.CSharp.RuntimeBinder;
-using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -41,11 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -53,7 +30,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Services;
-using Binder = System.Reflection.Binder;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -135,6 +112,51 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        [ObserverNotAllowed]
+        public ActionResult CloneQuestionnaire(Guid id, long version)
+        {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
+            if (questionnaireBrowseItem == null)
+                return new HttpNotFoundResult($"Questionnaire with id {id.FormatGuid()} and version {version} is not found.");
+
+            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
+        }
+
+        [HttpPost]
+        [PreventDoubleSubmit]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
+        {
+            if (!this.ModelState.IsValid)
+                return this.View(model);
+
+            try
+            {
+                this.CommandService.Execute(new CloneQuestionnaire(
+                    model.Id, model.Version, model.NewTitle, userId: this.GlobalInfo.GetCurrentUser().Id));
+            }
+            catch (QuestionnaireException exception)
+            {
+                this.Error(exception.Message);
+                return this.View(model);
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
+                this.Error(QuestionnaireClonning.UnexpectedError);
+                return this.View(model);
+            }
+
+            this.Success(
+                model.NewTitle == model.OriginalTitle
+                    ? $"Questionnaire '{model.OriginalTitle}' was successfully cloned."
+                    : $"Questionnaire '{model.OriginalTitle}' was successfully cloned with new title '{model.NewTitle}'.");
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -146,12 +168,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
@@ -179,12 +195,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);

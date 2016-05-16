@@ -13,7 +13,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<RosterIdentity> rosterInstancesWithAffectedTitles, 
             string answerAsRosterTitle,
             List<Identity> changedQuestionTitles,
-            ChangedLinkedOptions[] linkedQuestionOptionsChanges)
+            ChangedLinkedOptions[] linkedQuestionOptionsChanges,
+            VariableValueChanges variableValueChanges)
         {
             this.AnswerAsRosterTitle = answerAsRosterTitle;
             this.ChangedQuestionTitles = changedQuestionTitles;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.AnswersForLinkedQuestionsToRemove = answersForLinkedQuestionsToRemove;
             this.RosterInstancesWithAffectedTitles = rosterInstancesWithAffectedTitles;
             this.LinkedQuestionOptionsChanges = linkedQuestionOptionsChanges;
+            this.VariableValueChanges = variableValueChanges;
         }
 
         public string AnswerAsRosterTitle { set; get; }
@@ -38,5 +40,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public RosterCalculationData RosterCalculationData { set; get; }
         public List<Identity> AnswersForLinkedQuestionsToRemove { set; get; }
         public List<RosterIdentity> RosterInstancesWithAffectedTitles { set; get; }
+        public VariableValueChanges VariableValueChanges { get; set; }
     }
 }

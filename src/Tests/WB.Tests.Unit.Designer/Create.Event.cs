@@ -469,6 +469,53 @@ namespace WB.Tests.Unit.Designer
                     validationExpression : validationExpression
                 );
             }
+
+            public static VariableAdded VariableAdded(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null, 
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableAdded(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableUpdated VariableUpdated(Guid? entityId = null, Guid? responsibleId = null, 
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableUpdated(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableCloned VariableCloned(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null,
+                Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null, int targetIndex = 0,
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableCloned(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    sourceQuestionnaireId,
+                    sourceEntityId ?? Guid.NewGuid(),
+                    targetIndex,
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableDeleted VariableDeleted(Guid? entityId = null)
+            {
+                return new VariableDeleted() { EntityId = entityId.GetValueOrDefault(Guid.NewGuid()) };
+            }
         }
     }
 }

@@ -15,37 +15,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public string UserName { get; set; }
 
-        [PasswordStringLength(100, ErrorMessageResourceName = "PasswordLengthMessage", ErrorMessageResourceType = typeof(FieldsAndValidations))]
-        [PasswordRegularExpression(ErrorMessageResourceName = "PasswordErrorMessage", ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [PasswordStringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordLengthMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [PasswordRegularExpression(ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [DataType(DataType.Password)]
-        [Display(Name = "PasswordFieldName", ResourceType = typeof (FieldsAndValidations), Order = 1)]
+        [Display(Name = nameof(FieldsAndValidations.PasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 1)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "ConfirmPasswordFieldName", ResourceType = typeof (FieldsAndValidations), Order = 2)]
-        [Compare("Password", ErrorMessageResourceName = "ConfirmPasswordErrorMassage",
-            ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 2)]
+        [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
         
-        [EmailAddress(ErrorMessageResourceName = "EmailErrorMessage",
-            ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
-        [Display(Name = "EmailFieldName", ResourceType = typeof(FieldsAndValidations), Order = 3)]
+        [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [Display(Name = nameof(FieldsAndValidations.EmailFieldName), ResourceType = typeof(FieldsAndValidations), Order = 3)]
         public string Email { get; set; }
 
-        [StringLength(100, ErrorMessageResourceName = "PersonNameErrorMessage",
-            ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
-        [Display(Name = "PersonNameFieldName", ResourceType = typeof(FieldsAndValidations), Order = 4)]
+        [StringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PersonNameErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [Display(Name = nameof(FieldsAndValidations.PersonNameFieldName), ResourceType = typeof(FieldsAndValidations), Order = 4)]
         public string PersonName { get; set; }
 
-        [Phone(ErrorMessageResourceName = "PhoneErrorMessage",
-            ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
-        [Display(Name = "PhoneNumberFieldName", ResourceType = typeof(FieldsAndValidations), Order = 5)]
+        [Phone(ErrorMessageResourceName = nameof(FieldsAndValidations.PhoneErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [Display(Name = nameof(FieldsAndValidations.PhoneNumberFieldName), ResourceType = typeof(FieldsAndValidations), Order = 5)]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 6)]
+        [Display(Name = nameof(FieldsAndValidations.IsLockedFieldName), ResourceType = typeof (FieldsAndValidations), Order = 6)]
         public bool IsLocked { get; set; }
 
-        [Display(Name = "IsLockedBySupervisorFieldName", ResourceType = typeof(FieldsAndValidations), Order = 7)]
+        [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
         public bool IsLockedBySupervisor { get; set; }
 
         public IList<DeviceInfo> DevicesHistory { get; set; }

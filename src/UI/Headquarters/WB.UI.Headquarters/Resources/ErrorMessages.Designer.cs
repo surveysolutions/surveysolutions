@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user name or password provided is incorrect..
+        /// </summary>
+        internal static string IncorrectUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("IncorrectUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
@@ -93,6 +102,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ServiceUnavailable {
             get {
                 return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no access to this site. Contact your administrator..
+        /// </summary>
+        internal static string SiteAccessNotAllowed {
+            get {
+                return ResourceManager.GetString("SiteAccessNotAllowed", resourceCulture);
             }
         }
         

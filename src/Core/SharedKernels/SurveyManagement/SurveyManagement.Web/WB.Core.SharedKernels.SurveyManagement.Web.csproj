@@ -48,7 +48,7 @@
       <HintPath>..\..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -84,8 +84,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -178,8 +178,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -235,6 +235,7 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\StatusChangeApiModel.cs" />
+    <Compile Include="Models\CloneQuestionnaireModel.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
@@ -252,6 +253,11 @@
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\InterviewersListViewModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
+    <Compile Include="Properties\Pages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -287,10 +293,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\FieldsAndValidations.ru.resx" />
+    <EmbeddedResource Include="Properties\Pages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Pages.ru.resx" />
+    <EmbeddedResource Include="Properties\Strings.ru.resx" />
+    <EmbeddedResource Include="Properties\SyncLogMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\Archived.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EnumNames.ru.resx" />
+    <EmbeddedResource Include="Resources\Interviews.ru.resx" />
+    <EmbeddedResource Include="Resources\LimitsIndicator.ru.resx" />
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.ru.resx" />
+    <EmbeddedResource Include="Resources\TabletSyncMessages.ru.resx" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
@@ -427,6 +448,7 @@
     <EmbeddedResource Include="Resources\Archived.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Archived.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -528,7 +550,6 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\users.js" />
     <EmbeddedResource Include="Scripts\viewmodels\viewmodelbase.js" />
-    <EmbeddedResource Include="Views\Backup\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Designer.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />

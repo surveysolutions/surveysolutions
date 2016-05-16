@@ -30,19 +30,19 @@
                 </button>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">Admin</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
                 else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">Headquarters</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
                 else if (User.IsInRole(UserRoles.Observer.ToString()))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">Observer</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
                 }
                 else
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
             </div>
             <div class="collapse navbar-collapse">
@@ -69,7 +69,7 @@
     @if (User.Identity.IsObserver())
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
-            This is the content that <b>@User.Identity.Name</b> sees. Click <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">here</a> to return to your account.
+            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@Users.ClickToReturn</a>
         </div>
     }
     <div class="container-fluid">
@@ -83,7 +83,7 @@
             </div>
             <div id="umbrella">
                 <div id="umbrella-message">
-                    Loading, please wait
+                    @Common.Loading
                 </div>
             </div>
             @RenderBody()
@@ -91,7 +91,7 @@
                 <div class="panel panel-danger">
                     <div class="panel-heading">
                         <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
-                        <span>Errors log</span>
+                        <span>@Common.ErrorsLog</span>
                     </div>
                     <div class="panel-body">
                         <ul data-bind="foreach: Errors" class="list-group">
@@ -109,7 +109,7 @@
         <hr>
         <footer>
             <div class="text-center">
-                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.
             </div>
             <div class="text-center">
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())
@@ -127,7 +127,7 @@
                 @if (LegacyOptions.SupervisorFunctionsEnabled)
                 {
                     <text>|</text>
-                    <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">Get Interviewer App</a>
+                    <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
                 }
 
             </div>

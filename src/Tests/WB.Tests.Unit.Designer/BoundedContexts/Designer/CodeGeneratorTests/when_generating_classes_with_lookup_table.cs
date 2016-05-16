@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, @Lookup__Price> price");
 
         It should_generate_lookup_table_field_price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price  = new Dictionary<decimal, @Lookup__Price>()");
+            generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price = @Lookup__Price_Generator.GetTable();");
 
 
         private static Version version = new Version(11, 0, 0);

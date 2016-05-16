@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     {
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly SampleImportSettings sampleImportSettings;
@@ -43,15 +44,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             SampleImportSettings sampleImportSettings, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IPlainTransactionManagerProvider plainTransactionManagerProvider, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.sampleImportSettings = sampleImportSettings;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -108,8 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.plainTransactionManager.BeginTransaction();
                 bigTemplate = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
                 questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireId, version).ToString());
+                    this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireId, version));
                 questionnaireRosterStructure =
                     this.questionnaireRosterStructureStorage.GetById(
                         new QuestionnaireIdentity(questionnaireId, version).ToString());
@@ -131,7 +133,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     questionnaireRosterStructure, bigTemplate);
 
             result.SetStatusMessage("Data parsing");
-            var interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
+            PreloadedDataRecord[] interviewForCreate = null;
+            try
+            {
+                interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
+            }
+            catch(Exception exc)
+            {
+                Logger.Error("error on preloded data creation", exc );
+            }
 
             if (interviewForCreate == null)
             {
@@ -216,7 +226,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ICommandService commandInvoker,
             QuestionnaireDocument questionnaireDocument)
         {
-                Guid responsibleId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
+                Guid supervisorId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
 
                 commandInvoker.Execute(
                     new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
@@ -225,7 +235,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         version,
                         preloadedDataRecord.PreloadedDataDto,
                         DateTime.UtcNow,
-                        responsibleId));
+                        supervisorId,
+                        preloadedDataRecord.InterviewerId));
         }
 
         private static TimeSpan CalculateEstimatedTime(int interviewIndex, int totalInterviews, DateTime startTime, DateTime currentTime)

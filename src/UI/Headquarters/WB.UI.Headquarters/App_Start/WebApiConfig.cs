@@ -20,6 +20,8 @@ namespace WB.UI.Headquarters
     {
         public static void Register(HttpConfiguration config)
         {
+            #pragma warning disable 4014
+
             config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
 
             config.TypedRoute("api/interviewer/v1", c => c.Action<InterviewerApiV1Controller>(x => x.Get()));
@@ -97,6 +99,8 @@ namespace WB.UI.Headquarters
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             config.MessageHandlers.Add(new EnforceHttpsHandler());
+
+            #pragma warning restore 4014
         }
     }
 }

@@ -95,8 +95,13 @@
     <Compile Include="V8\AbstractInterviewExpressionStateV8.cs" />
     <Compile Include="V8\IExpressionExecutableV8.cs" />
     <Compile Include="V8\IInterviewExpressionStateV8.cs" />
+    <Compile Include="V9\AbstractConditionalLevelInstanceV9.cs" />
+    <Compile Include="V9\AbstractInterviewExpressionStateV9.cs" />
+    <Compile Include="V9\IExpressionExecutableV9.cs" />
+    <Compile Include="V9\IInterviewExpressionStateV9.cs" />
     <Compile Include="ValidationDescription.cs" />
     <Compile Include="ValidityChanges.cs" />
+    <Compile Include="VariableValueChanges.cs" />
     <Compile Include="YesNoAnswers.cs" />
   </ItemGroup>
   <ItemGroup>

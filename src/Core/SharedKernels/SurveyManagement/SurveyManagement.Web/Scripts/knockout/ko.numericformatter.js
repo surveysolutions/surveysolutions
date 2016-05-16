@@ -37,9 +37,12 @@
     format: function (val, comma, period) {
         comma = comma || ',';
         period = period || '.';
+        var negativeSign = '-';
         var periodLength = 3;
         var split = val.toString().split(comma).join('').split('.');
-        var numeric = split[0];
+        var isNegative = split[0].startsWith(negativeSign);
+        var numeric = isNegative ? split[0].substr(1) : split[0];
+        var numericSign = isNegative ? negativeSign : '';
         var decimal = split.length > 1 ? period + split[1] : '';
         var countOfPeriods = parseInt((numeric.length - 1) / periodLength);
         var separatedNumeric ='';
@@ -47,7 +50,7 @@
             var subValue = numeric.substr(numeric.length - ((i + 1) * periodLength), periodLength);
             separatedNumeric = comma + subValue + separatedNumeric;
         }
-        return numeric.substr(0, numeric.length - countOfPeriods * periodLength) + separatedNumeric + decimal;
+        return numericSign + numeric.substr(0, numeric.length - countOfPeriods * periodLength) + separatedNumeric + decimal;
     },
     getNewCursorPosition: function (oldText, newText, oldCursorPosition) {
         var newCursorPosition = 0;

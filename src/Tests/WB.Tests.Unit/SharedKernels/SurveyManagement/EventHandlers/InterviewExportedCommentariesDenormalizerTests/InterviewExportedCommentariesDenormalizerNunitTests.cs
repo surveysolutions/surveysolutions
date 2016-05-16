@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
         private InterviewExportedCommentariesDenormalizer CreateInterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage = null,
             IPlainStorageAccessor<UserDocument> userStorage = null,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null)
+            IQuestionnaireExportStructureStorage questionnaireReader = null)
         {
             return new InterviewExportedCommentariesDenormalizer(
                 interviewCommentariesStorage ?? new TestInMemoryWriter<InterviewCommentaries>(),
                 userStorage ?? new TestPlainStorage<UserDocument>(),
-                questionnaireReader??Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>());
+                questionnaireReader??Mock.Of<IQuestionnaireExportStructureStorage>());
         }
 
         [Test]

@@ -5,12 +5,10 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
 
@@ -62,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     return this.View(model);
                 }
              
-                this.Success("Interviewer was successfully created");
+                this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
                 return this.Back();
             }
             
@@ -101,12 +99,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user == null)
                 {
-                    this.Error("Could not update user information because current user does not exist");
+                    this.Error(Pages.InterviewerController_UpdateUseFailure);
                 }
 
                 this.UpdateAccount(user: user, editModel: model);
                 
-                this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                this.Success(string.Format(Pages.InterviewerController_EditSuccess, user.UserName));
                 return this.Back();
             }
            

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
             IPlainQuestionnaireRepository questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null)
+            IStatefulInterviewRepository interviewRepository = null,
+            IOptionsRepository optionsRepository = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -38,7 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
-                EventRegistry.Object);
+                EventRegistry.Object,
+                optionsRepository ?? Mock.Of<IOptionsRepository>());
         }
 
         protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithCascadingQuestion()
@@ -46,21 +48,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetRosterLevelForEntity(parentIdentity.Id) == 1
                 && _.GetCascadingQuestionParentId(questionIdentity.Id) == parentIdentity.Id
-                && _.GetAnswerOptionsAsValues(questionIdentity.Id) == new decimal[] { 1, 2, 3, 4, 5, 6 }
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 1) == "title abc 1"
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 2) == "title def 2"
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 3) == "title klo 3"
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 4) == "title gha 4"
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 5) == "title ccc 5"
-                && _.GetAnswerOptionTitle(questionIdentity.Id, 6) == "title bcw 6"
-                && _.GetCascadingParentValue(questionIdentity.Id, 1) == 1
-                && _.GetCascadingParentValue(questionIdentity.Id, 2) == 1
-                && _.GetCascadingParentValue(questionIdentity.Id, 3) == 1
-                && _.GetCascadingParentValue(questionIdentity.Id, 4) == 2
-                && _.GetCascadingParentValue(questionIdentity.Id, 5) == 2
-                && _.GetCascadingParentValue(questionIdentity.Id, 6) == 2
+           
             );
             return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+        }
+
+
+        protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            var optionsRepository = new Mock<IOptionsRepository>();
+
+            optionsRepository
+                .Setup(x => x.GetQuestionOptions(questionnaireIdentity ?? questionnaireId, questionId))
+                .Returns(Options);
+
+            return optionsRepository.Object;
         }
 
         protected static void SetUp()
@@ -86,20 +88,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static List<CategoricalQuestionOption> Options = new List<CategoricalQuestionOption>
         {
-            Create.CascadingOptionModel(1, "title abc 1", 1),
-            Create.CascadingOptionModel(2, "title def 2", 1),
-            Create.CascadingOptionModel(3, "title klo 3", 1),
-            Create.CascadingOptionModel(4, "title gha 4", 2),
-            Create.CascadingOptionModel(5, "title ccc 5", 2),
-            Create.CascadingOptionModel(6, "title bcw 6", 2)
+            Create.CategoricalQuestionOption(1, "title abc 1", 1),
+            Create.CategoricalQuestionOption(2, "title def 2", 1),
+            Create.CategoricalQuestionOption(3, "title klo 3", 1),
+            Create.CategoricalQuestionOption(4, "title gha 4", 2),
+            Create.CategoricalQuestionOption(5, "title ccc 5", 2),
+            Create.CategoricalQuestionOption(6, "title bcw 6", 2)
         };
 
         protected static readonly string interviewId = "Some interviewId";
 
-        protected static readonly string questionnaireId = "Questionnaire Id";
-
         protected static Guid interviewGuid = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
+
+        protected static readonly QuestionnaireIdentity questionnaireId =
+            Create.QuestionnaireIdentity(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"), 1);
     }
 }
