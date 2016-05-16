@@ -55,9 +55,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Version GetLatestSupportedVersion() => this.version_15;
 
         public bool IsClientVersionSupported(Version clientVersion)
-        {
+        { 
             var engineVersion = this.GetLatestSupportedVersion();
-            return (clientVersion >= this.version_10 && engineVersion <= clientVersion);
+            return (clientVersion >= this.version_10 && engineVersion >= clientVersion);
         }
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
