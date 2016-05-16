@@ -26,6 +26,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.CommittedEvent(payload: Create.Event.StaticTextsEnabled()),
                 Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredInvalid()),
                 Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredValid()),
+                Create.CommittedEvent(payload: Create.Event.LinkedOptionsChanged()),
+                Create.CommittedEvent(payload: Create.Event.VariablesDisabled()),
+                Create.CommittedEvent(payload: Create.Event.VariablesEnabled()),
+                Create.CommittedEvent(payload: Create.Event.VariablesChanged()),
 
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsDisabled()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsEnabled()),
@@ -37,6 +41,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.LinkedOptionsChanged()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesDisabled()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesEnabled()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesChanged()),
                 firstCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
 
                 lastAggregatedGroupsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
@@ -49,6 +57,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedStaticTextsInvalid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
                 lastAggregatedStaticTextsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
                 lastAggregatedStaticTextsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
+                lastAggregatedLinkedOptionsChanged = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.LinkedOptionsChanged()),
+                lastAggregatedVariablesDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesDisabled()),
+                lastAggregatedVariablesEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesEnabled()),
+                lastAggregatedVariablesValuesChanged = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesChanged()),
                 lastCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
             };
 
@@ -75,6 +87,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedStaticTextsInvalid,
                 lastAggregatedStaticTextsEnabled,
                 lastAggregatedStaticTextsDisabled,
+                lastAggregatedLinkedOptionsChanged,
+                lastAggregatedVariablesDisabled,
+                lastAggregatedVariablesEnabled,
+                lastAggregatedVariablesValuesChanged,
 
                 lastCompletion,
             });
@@ -94,6 +110,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static CommittedEvent lastAggregatedStaticTextsInvalid;
         private static CommittedEvent lastAggregatedStaticTextsEnabled;
         private static CommittedEvent lastAggregatedStaticTextsDisabled;
+        private static CommittedEvent lastAggregatedLinkedOptionsChanged;
+        private static CommittedEvent lastAggregatedVariablesDisabled;
+        private static CommittedEvent lastAggregatedVariablesEnabled;
+        private static CommittedEvent lastAggregatedVariablesValuesChanged;
         private static CommittedEvent lastCompletion;
     }
 }

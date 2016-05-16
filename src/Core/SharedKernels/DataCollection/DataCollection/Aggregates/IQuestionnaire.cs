@@ -43,6 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetQuestionIdByVariable(string variable);
 
+        Guid GetVariableIdByVariableName(string variableName);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -108,6 +110,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsRosterGroup(Guid groupId);
 
         ReadOnlyCollection<Guid> GetAllQuestions();
+
+        ReadOnlyCollection<Guid> GetAllVariables();
 
         ReadOnlyCollection<Guid> GetAllStaticTexts();
 
@@ -193,5 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetTextQuestionMask(Guid questionId);
         bool GetHideInstructions(Guid questionId);
         bool ShouldUseFormatting(Guid questionId);
+        bool HasVariable(string variableName);
+        bool HasQuestion(string variableName);
     }
 }

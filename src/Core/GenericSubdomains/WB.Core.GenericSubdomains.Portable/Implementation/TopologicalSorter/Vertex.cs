@@ -36,5 +36,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter
         public T Value { get; set; }
 
         public ICollection<Vertex<T>> Dependencies { get; set; }
+
+        public override string ToString()
+        {
+            var dependencies = string.Join(", ", Dependencies.Select(x => x.Value));
+            return $"{this.Value}: {dependencies}";
+        }
     }
 }

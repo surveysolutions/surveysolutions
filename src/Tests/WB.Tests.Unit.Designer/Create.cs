@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -31,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -846,6 +848,12 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
@@ -1310,6 +1318,11 @@ namespace WB.Tests.Unit.Designer
             {
                 return new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
             }
+
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
+            {
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1342,6 +1355,11 @@ namespace WB.Tests.Unit.Designer
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
                 attachmentMetaStorage: attachmentMetaStorage);
+        }
+
+        public static ITopologicalSorter<T> TopologicalSorter<T>()
+        {
+            return new TopologicalSorter<T>();
         }
     }
 }

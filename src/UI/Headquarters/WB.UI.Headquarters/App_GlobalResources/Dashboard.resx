@@ -144,6 +144,9 @@
   <data name="Census" xml:space="preserve">
     <value>Census</value>
   </data>
+  <data name="CloneQuestionnaire" xml:space="preserve">
+    <value>Clone questionnaire</value>
+  </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Creation Date</value>
   </data>
@@ -157,7 +160,7 @@
     <value>Last Entry Date</value>
   </data>
   <data name="NewInterview" xml:space="preserve">
-    <value>New Interview</value>
+    <value>New interview</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
@@ -167,5 +170,8 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
   </data>
 </root>

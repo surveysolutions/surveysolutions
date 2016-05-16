@@ -39,25 +39,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code__WB0062 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0062");
+        It should_return_WB0026_error = () =>
+            verificationMessages.ShouldContainCritical("WB0026");
 
         It should_return_message_with_level_critical = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
-
+            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_message_with_1_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
         It should_return_message_reference_with_type_Question = () =>
-            verificationMessages.Single()
-                .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetCritical("WB0026").References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_secondQuestion = () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(secondQuestionId);
+        It should_return_message_reference_with_first_and_second_question_Id = () =>
+            verificationMessages.GetCritical("WB0026").References.Select(x => x.Id).ShouldContainOnly(firstQuestionId, secondQuestionId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

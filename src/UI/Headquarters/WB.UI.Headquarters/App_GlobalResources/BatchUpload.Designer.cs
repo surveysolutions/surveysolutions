@@ -124,6 +124,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column.
+        /// </summary>
+        internal static string Column {
+            get {
+                return ResourceManager.GetString("Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create sample from this data.
+        /// </summary>
+        internal static string CreateSample {
+            get {
+                return ResourceManager.GetString("CreateSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create users.
         /// </summary>
         internal static string CreateUsers {
@@ -151,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data is valid.
+        /// </summary>
+        internal static string DataValid {
+            get {
+                return ResourceManager.GetString("DataValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         internal static string Delete {
@@ -169,11 +196,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download invalid interviews.
+        /// </summary>
+        internal static string DownloadInvalidInterviews {
+            get {
+                return ResourceManager.GetString("DownloadInvalidInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to download template archive.
         /// </summary>
         internal static string DownloadTemplateArchive {
             get {
                 return ResourceManager.GetString("DownloadTemplateArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimated Time.
+        /// </summary>
+        internal static string EstimatedTime {
+            get {
+                return ResourceManager.GetString("EstimatedTime", resourceCulture);
             }
         }
         
@@ -187,11 +232,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File wasn&apos;t parsed. Only tab-delimited file can be uploaded..
+        /// </summary>
+        internal static string FileNotParsed {
+            get {
+                return ResourceManager.GetString("FileNotParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File size.
         /// </summary>
         internal static string FileSize {
             get {
                 return ResourceManager.GetString("FileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file size can not exceed 300MB..
+        /// </summary>
+        internal static string FileSizeLimit {
+            get {
+                return ResourceManager.GetString("FileSizeLimit", resourceCulture);
             }
         }
         
@@ -223,6 +286,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File format is not supported, data inside it will be ignored.
+        /// </summary>
+        internal static string FormatNotSupported {
+            get {
+                return ResourceManager.GetString("FormatNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import of interviews is in progress. Wait until running operation is finished..
+        /// </summary>
+        internal static string ImportInProgress {
+            get {
+                return ResourceManager.GetString("ImportInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must choose a file to upload.
         /// </summary>
         internal static string ImportInterviews_ChooseFile {
@@ -246,6 +327,24 @@ namespace Resources {
         internal static string ImportInterviews_SelectSupervisor {
             get {
                 return ResourceManager.GetString("ImportInterviews_SelectSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import sample.
+        /// </summary>
+        internal static string ImportSample {
+            get {
+                return ResourceManager.GetString("ImportSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import status.
+        /// </summary>
+        internal static string ImportStatus {
+            get {
+                return ResourceManager.GetString("ImportStatus", resourceCulture);
             }
         }
         
@@ -286,6 +385,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview(s) created.
+        /// </summary>
+        internal static string NumberInterviewCreated {
+            get {
+                return ResourceManager.GetString("NumberInterviewCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to out of.
         /// </summary>
         internal static string OutOf {
@@ -309,6 +417,15 @@ namespace Resources {
         internal static string PrefilledQuestionsRequired {
             get {
                 return ResourceManager.GetString("PrefilledQuestionsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        internal static string Processing {
+            get {
+                return ResourceManager.GetString("Processing", resourceCulture);
             }
         }
         
@@ -349,6 +466,60 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible supervisor will be assigned automatically.
+        /// </summary>
+        internal static string ResponsibleSupervisorWillBeAssigned {
+            get {
+                return ResourceManager.GetString("ResponsibleSupervisorWillBeAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Row.
+        /// </summary>
+        internal static string Row {
+            get {
+                return ResourceManager.GetString("Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample creation was succefully completed..
+        /// </summary>
+        internal static string SampleCreationCompleted {
+            get {
+                return ResourceManager.GetString("SampleCreationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample Creation Result.
+        /// </summary>
+        internal static string SampleCreationResult {
+            get {
+                return ResourceManager.GetString("SampleCreationResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample import is completed with errors.
+        /// </summary>
+        internal static string SampleImportWithErrors {
+            get {
+                return ResourceManager.GetString("SampleImportWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample import is successfuly completed.
+        /// </summary>
+        internal static string SampleSuccess {
+            get {
+                return ResourceManager.GetString("SampleSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         internal static string Status {
@@ -381,6 +552,15 @@ namespace Resources {
         internal static string Uploaded {
             get {
                 return ResourceManager.GetString("Uploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new data.
+        /// </summary>
+        internal static string UploadNewData {
+            get {
+                return ResourceManager.GetString("UploadNewData", resourceCulture);
             }
         }
         
@@ -498,6 +678,24 @@ namespace Resources {
         internal static string Verify {
             get {
                 return ResourceManager.GetString("Verify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify panel data.
+        /// </summary>
+        internal static string VerifyPanelData {
+            get {
+                return ResourceManager.GetString("VerifyPanelData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify sample data.
+        /// </summary>
+        internal static string VerifySampleData {
+            get {
+                return ResourceManager.GetString("VerifySampleData", resourceCulture);
             }
         }
     }

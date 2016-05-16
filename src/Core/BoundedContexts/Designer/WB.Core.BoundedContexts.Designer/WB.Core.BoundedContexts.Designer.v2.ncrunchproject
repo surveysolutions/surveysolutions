@@ -1,4 +1,5 @@
-<ProjectConfiguration>
+﻿<ProjectConfiguration>
+  <AutoDetectNugetBuildDependencies>true</AutoDetectNugetBuildDependencies>
   <BuildPriority>1000</BuildPriority>
   <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
   <ConsiderInconclusiveTestsAsPassing>false</ConsiderInconclusiveTestsAsPassing>
@@ -25,4 +26,5 @@
   <IgnoredTests>
     <AllTestsSelector />
   </IgnoredTests>
+  <HiddenWarnings>AssemblyReferenceToBuildOutputDirectory</HiddenWarnings>
 </ProjectConfiguration>

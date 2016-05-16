@@ -24,9 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in invalidQuestions)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DeclareAnswerInvalid(identity.Id);
+                targetLevel?.DeclareAnswerInvalid(identity.Id);
             }
         }
 
@@ -35,9 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in validQuestions)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DeclareAnswerValid(identity.Id);
+                targetLevel?.DeclareAnswerValid(identity.Id);
             }
         }
 
@@ -46,9 +44,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in groupsToDisable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DisableGroup(identity.Id);
+                targetLevel?.DisableGroup(identity.Id);
             }
         }
 
@@ -57,9 +54,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in groupsToEnable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.EnableGroup(identity.Id);
+                targetLevel?.EnableGroup(identity.Id);
             }
         }
 
@@ -68,9 +64,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in questionsToDisable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.DisableQuestion(identity.Id);
+                targetLevel?.DisableQuestion(identity.Id);
             }
         }
 
@@ -79,9 +74,8 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             foreach (var identity in questionsToEnable)
             {
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
 
-                targetLevel.EnableQuestion(identity.Id);
+                targetLevel?.EnableQuestion(identity.Id);
             }
         }
         

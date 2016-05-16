@@ -82,7 +82,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             return result;
         }
 
-        internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles = null)
+        internal static void AddInterviewLevel(
+            InterviewData interview, 
+            ValueVector<Guid> scopeVector, 
+            decimal[] rosterVector, 
+            Dictionary<Guid, object> answeredQuestions = null, 
+            Dictionary<Guid, string> rosterTitles = null,
+            Dictionary<Guid, object> variables = null,
+            HashSet<Guid> disableVariables=null)
         {
             InterviewLevel rosterLevel;
             var levelKey = string.Join(",", rosterVector);
@@ -95,17 +102,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                 rosterLevel = interview.Levels[levelKey];
                 rosterLevel.ScopeVectors.Add(scopeVector, null);
             }
-
-            foreach (var answeredQuestion in answeredQuestions)
+            if (answeredQuestions != null)
             {
-                if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
+                foreach (var answeredQuestion in answeredQuestions)
+                {
+                    if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                        rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
+                            new InterviewQuestion(answeredQuestion.Key));
 
-                var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
+                    var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
 
-                nestedQuestion.Answer = answeredQuestion.Value;
+                    nestedQuestion.Answer = answeredQuestion.Value;
+                }
             }
-
             if (rosterTitles != null)
             {
                 foreach (var rosterTitle in rosterTitles)
@@ -113,7 +122,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                     rosterLevel.RosterRowTitles.Add(rosterTitle.Key, rosterTitle.Value);
                 }
             }
-
+            if (variables != null)
+            {
+                rosterLevel.Variables = variables;
+            }
+            if (disableVariables != null)
+            {
+                rosterLevel.DisabledVariables = disableVariables;
+            }
             interview.Levels[levelKey] = rosterLevel;
         }
     }

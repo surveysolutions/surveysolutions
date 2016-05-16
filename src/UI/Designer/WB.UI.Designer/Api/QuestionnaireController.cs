@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
@@ -77,6 +78,28 @@ namespace WB.UI.Designer.Api
             }
 
             return chapterInfoView;
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public HttpResponseMessage EditVariable(string id, Guid variableId)
+        {
+            var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
+
+            if (variableView == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                $"variable with id {variableId} was not found in questionnaire {id}");
+
+            var result = Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                Id = variableView.ItemId,
+                Expression = variableView.VariableData.Expression,
+                name = variableView.VariableData.Name,
+                TypeOptions = variableView.TypeOptions,
+                Type = variableView.VariableData.Type,
+                breadcrumbs = variableView.Breadcrumbs
+            });
+
+            return result;
         }
 
         [HttpGet]

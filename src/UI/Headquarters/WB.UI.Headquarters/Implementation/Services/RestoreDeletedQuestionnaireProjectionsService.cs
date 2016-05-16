@@ -22,25 +22,27 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
-        private readonly IExportViewFactory exportViewFactory;
 
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
         private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
 
-        public RestoreDeletedQuestionnaireProjectionsService(IPlainQuestionnaireRepository plainQuestionnaireRepository,IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IExportViewFactory exportViewFactory, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage, IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage, IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
+        public RestoreDeletedQuestionnaireProjectionsService(IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
+            IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
+            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
-            this.exportViewFactory = exportViewFactory;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
             this.referenceInfoForLinkedQuestionsStorage = referenceInfoForLinkedQuestionsStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
         }
 
@@ -58,7 +60,6 @@ namespace WB.UI.Headquarters.Implementation.Services
                 var questionnaireEntityId = new QuestionnaireIdentity(allDeletedQuestionnaireId.QuestionnaireId, allDeletedQuestionnaireId.Version).ToString();
 
                 this.referenceInfoForLinkedQuestionsStorage.Store(this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(document, allDeletedQuestionnaireId.Version), questionnaireEntityId);
-                this.questionnaireExportStructureStorage.Store(this.exportViewFactory.CreateQuestionnaireExportStructure(document, allDeletedQuestionnaireId.Version), questionnaireEntityId);
                 this.questionnaireRosterStructureStorage.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(document, allDeletedQuestionnaireId.Version), questionnaireEntityId);
                 this.questionnaireQuestionsInfoStorage.Store(new QuestionnaireQuestionsInfo
                 {

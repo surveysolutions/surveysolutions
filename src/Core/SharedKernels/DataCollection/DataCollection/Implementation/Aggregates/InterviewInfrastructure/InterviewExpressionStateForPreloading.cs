@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V8;
+using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -115,6 +116,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
+        IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool AreLinkedQuestionsSupported()
         {
             return true;
@@ -126,6 +132,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void DeclareStaticTextValid(IEnumerable<Identity> validStaticTexts) {}
 
         public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) {}
+
+        public VariableValueChanges ProcessVariables()
+        {
+           return new VariableValueChanges();
+        }
+
+        public void DisableVariables(IEnumerable<Identity> variablesToDisable) {}
+
+        public void EnableVariables(IEnumerable<Identity> variablesToEnable) { }
+
+        public void UpdateVariableValue(Identity variableIdentity, object value) { }
 
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {

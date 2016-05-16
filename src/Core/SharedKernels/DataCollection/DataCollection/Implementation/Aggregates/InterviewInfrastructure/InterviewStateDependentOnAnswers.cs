@@ -71,6 +71,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ValidStaticTexts = new ConcurrentHashSet<Identity>();
             this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+
+            this.VariableValues = new ConcurrentDictionary<Identity, object>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -90,6 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
         public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
+        public ConcurrentDictionary<Identity, object> VariableValues { set; get; }
 
 
         public InterviewStateDependentOnAnswers Clone()
@@ -113,7 +116,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
                 ValidStaticTexts = new ConcurrentHashSet<Identity>(this.ValidStaticTexts),
-                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
+                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts),
+
+                VariableValues = new ConcurrentDictionary<Identity, object>(this.VariableValues)
             };
         }
 
@@ -438,6 +443,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)
         {
             return this.LinkedMultipleOptionsAnswers.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public void ChangeVariables(ChangedVariable[] changedVariables)
+        {
+            changedVariables.ForEach(variable => this.VariableValues[variable.Identity] = variable.NewValue);
         }
     }
 }

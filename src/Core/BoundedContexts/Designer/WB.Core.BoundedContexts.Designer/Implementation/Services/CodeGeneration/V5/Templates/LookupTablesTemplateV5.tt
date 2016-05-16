@@ -15,18 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	foreach (var table in LookupTables) 
     {
 #>
-		private static readonly Dictionary<decimal, <#= table.TypeName#>> <#= table.TableNameField #>  = new Dictionary<decimal, <#= table.TypeName#>>()
-		{
-<#
-			foreach (var row in table.Rows) 
-			{
-#>
-			{<#= row.RowCode #>m, new <#= table.TypeName#>(<#= row.RowCode #>m, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>)  },
-<# 
-			}
-#>
-		};
-
+		private static readonly Dictionary<decimal, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
 		public static Dictionary<decimal, <#= table.TypeName#>> <#= table.TableName #> 
 		{
 			get { return <#= table.TableNameField #>; }
@@ -35,6 +24,32 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	}
 #>
 	}
+
+<#
+	foreach (var table in LookupTables) 
+    {
+#>
+	public static class <#= table.TypeName#>_Generator
+	{
+		public static Dictionary<decimal, <#= table.TypeName#>> GetTable()
+		{
+			var table = new Dictionary<decimal, <#= table.TypeName#>>();
+<#
+		    foreach (var row in table.Rows) 
+		    {
+#>
+			    table.Add(<#= row.RowCode #>m, new <#= table.TypeName#>(<#= row.RowCode #>m, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>));
+<# 
+		    }
+#>
+            return table;
+		}
+    }
+
+<#	
+    }
+#>
+
 
 <#
 	foreach (var table in LookupTables) 
