@@ -121,37 +121,37 @@
     <value>Среднее</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>Среднее распределение дел продолжительность</value>
+    <value>Средняя продолжительность назначений</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Разница во времени между моментом интервью назначается интервьюера и момент, когда полное нажатие на планшете.</value>
+    <value>Временной промежуток между назначением интервью и моментом, когда интервью завершается на планшете.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Среднее время обработки HQ</value>
+    <value>Среднее время обработки Хедквотером</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Разница во времени между моментом, руководитель утверждает вопросник и что вопросник будет утвержден или отклонен на HQ.</value>
+    <value>Временной промежуток между моментом, когда Супервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен на Хедквотером.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
-    <value>Интервью средняя продолжительность</value>
+    <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Разница во времени между моментом, когда первый ответ записывается на планшете и при нажатии на полный.</value>
+    <value>Временной промежуток между первым отвеченым вопросом и завершением интервью на планшете.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
-    <value>Среднее время обработки в общее дело</value>
+    <value>Среднее время обработки</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Разница во времени между первой уступки и моментом, когда интервью одобрен HQ.</value>
+    <value>Временной промежуток между первым назначением и интервью и моментом, когда интервью утверждено Хедкотером.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Время обработки средний руководитель</value>
+    <value>Среднее время обработки супервизором</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Разница во времени между полное нажатие кнопки и руководитель принимает или отклоняет этот вопросник.</value>
+    <value>Временной промежуток между завершением интервью и утверждением или отклонением супервизором.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value> Вернуться к руководителям</value>
+    <value>Вернуться к супервизорам</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>По</value>
@@ -169,31 +169,31 @@
     <value>Количество завершенных интервью</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Количество пополнений интервью по {0}. Отклонил и затем завершили интервью, учитываются как отдельные завершения события.</value>
+    <value>Количество завершенных интервью по {0}. Отклонение и последующее завершение интервью учитываются как отдельный случай.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Количество интервью, утвержденных HQ</value>
+    <value>Количество интервью, утвержденных хедквотером</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Количество интервью, собранные {0} Это были утверждены HQ.</value>
+    <value>Количество интервью, собранных {0}, которые были утверждены хедквотером.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Количество транзакций интервью, HQ</value>
+    <value>Количество интервью обработанных хедквотером</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Количество разрешений и отказов, выполняемых HQ на вопросники, собранные {0}.</value>
+    <value>Количество утверждений и оклонений интервью, выполненных хедквотером на вопроснике, собранных {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Количество транзакций в интервью руководителя</value>
+    <value>Количество интервью обработанных супервизором</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Количество разрешений и отказов, выполняемых руководителем на вопросники, собранные {0}.</value>
+    <value>Количество утверждений и оклонений интервью, выполненных супервизором на вопроснике, собранных {0}.</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Период</value>
   </data>
   <data name="PeriodCount" xml:space="preserve">
-    <value>Периода количество</value>
+    <value>Длительность</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Вопросник</value>
@@ -214,7 +214,7 @@
     <value>Тип</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>ver.</value>
+    <value>версия</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Неделя</value>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Одобрено штаб-квартиры</value>
+    <value>Утверждено Хедквотером</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Утверждена руководителем</value>
+    <value>Утверждено Супервизором</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Завершено</value>
