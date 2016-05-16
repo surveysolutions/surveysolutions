@@ -197,6 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
             Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
+            Verifier<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
@@ -313,6 +314,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var exceeded = substituteMacroses.Length > MaxExpressionLength;
 
             state.HasExceededLimitByConditionExpresssionCharactersLength |= exceeded;
+
+            return exceeded;
+        }
+
+        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrEmpty(variable.Expression))
+                return false;
+
+            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values);
+
+            var exceeded = substituteMacroses.Length > MaxExpressionLength;
+
+            state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength |= exceeded;
 
             return exceeded;
         }
