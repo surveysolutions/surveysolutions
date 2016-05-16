@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApiUsers" xml:space="preserve">
-    <value>Пользователи API</value>
+    <value>API пользователи</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Накопительное интервью диаграммы</value>
+    <value>Графики</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Экспорт данных</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквотеры</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Справка</value>
@@ -139,28 +139,28 @@
     <value>Интервью</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Отчет-карта</value>
+    <value>Карта</value>
   </data>
   <data name="Observers" xml:space="preserve">
-    <value>Наблюдатели</value>
+    <value>Обозреватели</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Обзор установки</value>
+    <value>Настройка обследований</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Количество синхронизированных интервью, но пока необработанных</value>
+    <value>Количество синхронизированных, но пока необработанных интервью</value>
   </data>
   <data name="Reports" xml:space="preserve">
-    <value>Доклады</value>
+    <value>Отчеты</value>
   </data>
   <data name="Speed" xml:space="preserve">
     <value>Скорость</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Руководители</value>
+    <value>Супервизоры</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Обследования и статусы</value>
@@ -175,7 +175,7 @@
     <value>Команды и статусы</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
-    <value>Пакетной загрузки пользователя</value>
+    <value>Загрузка пользователей</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Пользователи</value>

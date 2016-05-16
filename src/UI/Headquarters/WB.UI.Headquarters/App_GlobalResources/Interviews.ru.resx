@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью (ы) будут утверждены.&lt;/h3&gt;
-&lt;b&gt;внимание!&lt;/b&gt; Можно утвердить интервью с только следующие состояния: &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt; Можно утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="DeleteConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью (ы) будут удалены.&lt;/h3&gt;
-&lt;b&gt;внимание!&lt;/b&gt; Вы можете удалить интервью с только следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью (ы), будут отклонены.&lt;/h3&gt;
-&lt;b&gt;внимание!&lt;/b&gt; Вы можете отказаться от интервью с только следующие состояния: &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="UnapproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью (ы) будет неутвержденных.&lt;/h3&gt;
-&lt;b&gt;внимание!&lt;/b&gt; Вы можете отклонить интервью с только следующие состояния: &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
 </root>

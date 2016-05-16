@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewsLeftFormat" xml:space="preserve">
-    <value>Вы можете создать {0} новые интервью (ы)</value>
+    <value>Вы можете создать {0} новых интервью</value>
   </data>
   <data name="YouAreInTestingMode" xml:space="preserve">
     <value>Вы находитесь в режиме тестирования</value>
   </data>
   <data name="YouHaveExceededYourLimitFormat" xml:space="preserve">
-    <value>Вы превысили лимит {0} интервью (ы). Больше нельзя создавать новые интервью...</value>
+    <value>Вы превысили лимит в {0} интервью. Создавать новые интервью больше нельзя ...</value>
   </data>
 </root>
