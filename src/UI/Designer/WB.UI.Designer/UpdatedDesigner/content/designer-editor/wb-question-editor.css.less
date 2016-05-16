@@ -102,6 +102,14 @@ input#edit-question-title, input#edit-group-title {
                 }
 
                 &:before {
+                    @w: 75px;
+                    display: block;
+                    position: absolute;
+                    height: 100%;
+                    content: '';
+                    width: @w;
+                    top: 0px;
+                    left: -@w;
                      #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
                 }
 
