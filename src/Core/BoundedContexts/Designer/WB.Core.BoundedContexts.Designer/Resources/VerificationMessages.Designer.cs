@@ -97,11 +97,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Variable expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0005_ {
+        internal static string WB0005_VariableExpressionHasLengthMoreThan10000Characters {
             get {
-                return ResourceManager.GetString("WB0005_", resourceCulture);
+                return ResourceManager.GetString("WB0005_VariableExpressionHasLengthMoreThan10000Characters", resourceCulture);
             }
         }
         
