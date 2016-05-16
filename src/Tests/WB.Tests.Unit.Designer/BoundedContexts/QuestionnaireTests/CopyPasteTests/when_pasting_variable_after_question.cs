@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        static VariableType variableType = VariableType.Integer;
+        static VariableType variableType = VariableType.LongInteger;
         static string variableName = "name";
         static string variableExpression = "Expression";
         static QuestionnaireDocument doc;

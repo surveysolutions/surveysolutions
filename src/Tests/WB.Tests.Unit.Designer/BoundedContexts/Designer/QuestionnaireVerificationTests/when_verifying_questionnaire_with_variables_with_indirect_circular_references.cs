@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Create.Chapter(children: new IComposite[]
                 {
-                    Create.Variable(variable1Id, VariableType.Integer, "v1", expression: "q1.StartsWith(\"a\")"),
+                    Create.Variable(variable1Id, VariableType.LongInteger, "v1", expression: "q1.StartsWith(\"a\")"),
                     Create.TextQuestion(Question1Id, variable: "q1", enablementCondition: "v2 > 10"),
-                    Create.Variable(variable2Id, VariableType.Integer, "v2", expression: "v1 == 8")
+                    Create.Variable(variable2Id, VariableType.LongInteger, "v2", expression: "v1 == 8")
                 })
             });
 
