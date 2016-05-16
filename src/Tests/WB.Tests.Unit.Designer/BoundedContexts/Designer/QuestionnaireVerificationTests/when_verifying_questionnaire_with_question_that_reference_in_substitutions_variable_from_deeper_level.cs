@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.TextQuestion(questionId, text: "Var: %variable1%"),
                 Create.FixedRoster(rosterId, fixedTitles: new[] {"1", "2", "3"}, children: new List<IComposite>
                 {
-                    Create.Variable(variableId, VariableType.Integer, "variable1")
+                    Create.Variable(variableId, VariableType.LongInteger, "variable1")
                 })
             }));
 

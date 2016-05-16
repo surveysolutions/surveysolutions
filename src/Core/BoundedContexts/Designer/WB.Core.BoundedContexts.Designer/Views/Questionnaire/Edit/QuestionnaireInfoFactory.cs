@@ -56,8 +56,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
-                Value = VariableType.Integer.ToString(),
-                Text = "Integer"
+                Value = VariableType.LongInteger.ToString(),
+                Text = "Long Integer"
             },
             new SelectOption
             {
