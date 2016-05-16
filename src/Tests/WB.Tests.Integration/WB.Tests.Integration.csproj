@@ -261,6 +261,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_for_roster_with_linked_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_raises_exception_in_static_text_validation.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
