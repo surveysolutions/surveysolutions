@@ -17,14 +17,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IPreloadedDataRepository preloadedDataRepository, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.preloadedDataRepository = preloadedDataRepository;
@@ -40,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             var questionnaireExportStructure =
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
             var questionnaireRosterStructure =
                 this.questionnaireRosterStructureStorage.GetById(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());

@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         }
 
       	private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
@@ -44,14 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
@@ -145,8 +145,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
             var questionnaireExportStructure =
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(questionnaireId, version).ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireId, version));
             var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(
                     new QuestionnaireIdentity(questionnaireId, version).ToString());
 

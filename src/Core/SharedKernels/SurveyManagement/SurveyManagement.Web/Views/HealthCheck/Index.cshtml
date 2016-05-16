@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @{
-    this.ViewBag.Title = "Health Check Page";
+    this.ViewBag.Title = Pages.HealthCheck_IndexTitle;
     Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
 }
 @Styles.Render("~/Content/main")
@@ -8,7 +9,7 @@
 <div class="row health-check">
     <div class="col-md-8 col-md-offset-2">
 
-        <h1 class="page-header">Health check monitor</h1>
+        <h1 class="page-header">@Pages.HealthCheck_Header</h1>
 
         <div>
             <div class="panel-body">

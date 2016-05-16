@@ -131,7 +131,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                 {
                     if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
                     {
-                        FillYesNoAnswers(answers, header, result);
+                        FillYesNoAnswers(answers, header, result, false);
+                    }
+                    else if(header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNoOrdered)
+                    {
+                        FillYesNoAnswers(answers, header, result, true);
+                    }
+                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
+                    {
+                        FillMultioptionOrderedAnswers(answers, header, result);
                     }
                     else
                     {
@@ -152,7 +160,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             for (int i = 0; i < result.Length; i++)
             {
                 int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(exportCulture) : "0";
+                result[i] = checkedOptionIndex > -1?"1":"0";
+            }
+        }
+
+        private static void FillMultioptionOrderedAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            for (int i = 0; i < result.Length; i++)
+            {
+                int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                result[i] = checkedOptionIndex > -1? (checkedOptionIndex + 1).ToString(exportCulture):"0";
             }
         }
 
@@ -164,7 +181,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
         }
 
-        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result, bool ordered)
         {
             AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
             int filledYesAnswersCount = 0;
@@ -182,9 +199,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                                 .Where(x => x.Yes)
                                 .Select((item, index) => new {item, index})
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
-
-                        result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
-                        filledYesAnswersCount++;
+                        if (ordered)
+                            result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
+                        else
+                            result[i] = "1";
+                       filledYesAnswersCount++;
                     }
                     else
                     {

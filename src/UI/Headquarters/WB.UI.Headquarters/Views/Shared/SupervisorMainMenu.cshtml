@@ -5,14 +5,14 @@
 <ul class="nav navbar-nav" role="menu">
     <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
+            <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
             <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                <a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a>
+                <a href="@Url.Action("Index", "Survey")">@MainMenu.SurveysAndStatuses</a>
             </li>
             <li class="@(page == MenuItem.Summary ? "active" : "")">
-                <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a>
+                <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">@MainMenu.TeamMembersAndStatuses</a>
             </li>
             <li class="@(page == MenuItem.NumberOfCompletedInterviews ? "active" : "")">
                 <a href="@Url.Action("QuantityByInterviewers", "PeriodicStatusReport", new {area = ""})">@MainMenu.Quantity</a>
@@ -24,7 +24,7 @@
     </li>
 
     <li class="@(page == MenuItem.Docs ? "active" : "")">
-        <a href="@Url.Action("Interviews", "Survey")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
+        <a href="@Url.Action("Interviews", "Survey")"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Interviews</a>
     </li>
 
     <li class="@(page == MenuItem.Teams ? "active" : "")">

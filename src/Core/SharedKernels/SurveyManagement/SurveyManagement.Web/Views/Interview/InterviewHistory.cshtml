@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory.InterviewHistoryView
            
 
@@ -9,7 +10,7 @@
 }
 
 <div class="page-header">
-    <h2>Interview History</h2>
+    <h2>@Pages.InterviewHistory_Header</h2>
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-condensed table-break-words questionnaires-table">

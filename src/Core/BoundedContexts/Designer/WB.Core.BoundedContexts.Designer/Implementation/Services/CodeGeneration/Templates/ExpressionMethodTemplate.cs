@@ -65,7 +65,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\r\n   {   \r\n      private bool ");
+            this.Write("\r\n   {   \r\n      private ");
+            
+            #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
             
             #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));

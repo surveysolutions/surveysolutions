@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -23,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
 
             var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireId == questionnaireId
+                => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
                    && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer);
 
@@ -31,9 +28,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository);
+                questionnaireRepository: questionnaireRepository,
+                optionsRepository: optionsRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };

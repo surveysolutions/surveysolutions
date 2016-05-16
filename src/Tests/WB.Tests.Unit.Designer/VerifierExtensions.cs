@@ -17,5 +17,11 @@ namespace WB.Tests.Unit.Designer
             => verificationMessages.Single(message
                 => message.MessageLevel == VerificationMessageLevel.General
                 && message.Code == code);
+
+        public static QuestionnaireVerificationMessage GetCritical(
+           this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+           => verificationMessages.Single(message
+               => message.MessageLevel == VerificationMessageLevel.Critical
+               && message.Code == code);
     }
 }

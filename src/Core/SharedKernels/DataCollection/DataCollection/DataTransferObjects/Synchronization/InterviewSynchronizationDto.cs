@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
             IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedValidationConditions,
             Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions,
+            Dictionary<InterviewItemId, object> variables,
+            HashSet<InterviewItemId> disabledVariables,
             bool wasCompleted,
             bool createdOnClient = false)
         {
@@ -57,6 +59,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
             this.ValidStaticTexts = validStaticTexts;
             this.InvalidStaticTexts = invalidStaticTexts;
+
+            this.Variables = variables;
+            this.DisabledVariables = disabledVariables;
         }
 
         public Guid Id { get;  set; }
@@ -71,6 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public AnsweredQuestionSynchronizationDto[] Answers { get;  set; }
         public HashSet<InterviewItemId> DisabledGroups { get;  set; }
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
+        public HashSet<InterviewItemId> DisabledVariables { get; set; }
         public IList<Identity> DisabledStaticTexts { get; set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
@@ -78,6 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; } 
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
         public Dictionary<InterviewItemId, RosterVector[]> LinkedQuestionOptions { get; set; }
+        public Dictionary<InterviewItemId, object> Variables { get; set; }
 
         public bool WasCompleted { get; set; }
         public IList<Identity> ValidStaticTexts { get; set; }

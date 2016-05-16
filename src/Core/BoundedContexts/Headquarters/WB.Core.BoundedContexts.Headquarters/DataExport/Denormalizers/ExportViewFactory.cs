@@ -240,7 +240,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
                 else if (multioptionQuestion.YesNoView)
                 {
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_YesNo;
+                    exportedHeaderItem.QuestionSubType = multioptionQuestion.AreAnswersOrdered
+                        ? QuestionSubtype.MultyOption_YesNoOrdered
+                        : QuestionSubtype.MultyOption_YesNo;
+                }
+                else if(multioptionQuestion.AreAnswersOrdered)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Ordered;
                 }
             }
 

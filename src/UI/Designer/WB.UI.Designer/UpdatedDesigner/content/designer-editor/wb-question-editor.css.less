@@ -1,3 +1,5 @@
+@import (reference) "../../vendor/bootstrap/less/bootstrap.less";
+
 input#edit-question-title, input#edit-group-title {
     .edit-question-title-fontstyle();
 }
@@ -9,7 +11,7 @@ input#edit-question-title, input#edit-group-title {
     vertical-align: middle;
     width: 20px;
     height: 20px;
-    background-image: url(../i/icons.png);
+    background-image: url(../i/icons1.png);
     background-position-x: 0;
     overflow: hidden;
 }
@@ -69,11 +71,52 @@ input#edit-question-title, input#edit-group-title {
                 letter-spacing: normal;
                 font-weight: normal;
             }
+            .var-name-line{
+                color: #3da802;
+                font-weight: bold;
+            }
         }
 
         .dropdown-arrow {
             top: 14px;
         }
+
+        .selected-block{
+            width:100%;
+            position:relative;
+        }
+
+        .var-block{
+                position:absolute; 
+                margin: auto; 
+                top: 0; 
+                bottom: 0; 
+                right: 0; 
+                display:table; 
+                background-color:#fff;
+
+                .var-name{
+                    color: #3da802;
+                    vertical-align:middle;
+                    display:table-cell;
+                }
+
+                &:before {
+                    @w: 75px;
+                    display: block;
+                    position: absolute;
+                    height: 100%;
+                    content: '';
+                    width: @w;
+                    top: 0px;
+                    left: -@w;
+                    #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
+                }
+
+                &:hover {
+                  background-color:  #f1f2f3;                
+                }
+            }
     }
 
     .dropdown-menu {
@@ -104,7 +147,7 @@ input#edit-question-title, input#edit-group-title {
             margin-left: 10px;
             &.linked-question-source {
                 margin-left: 0px;
-                padding: 5px;
+                padding-right: 5px;
                 padding-left: 20px;
             }
             &.linked-roster-source{ 
@@ -134,6 +177,21 @@ input#edit-question-title, input#edit-group-title {
             &:hover {
                 background:  #f1f2f3;
                 border-radius: 4px;
+                .var-block{
+                    background-color:  #f1f2f3;
+
+                     &:before {
+                         @w: 75px;
+                         display: block;
+                         position: absolute;
+                         height: 100%;
+                         content: '';
+                         width: @w;
+                         top: 0px;
+                         left: -@w;
+                         #gradient > .horizontal(rgba(241, 242, 243, 0.0), rgba(241, 242, 243, 1.0));
+                     }
+                }
             }
         }
 

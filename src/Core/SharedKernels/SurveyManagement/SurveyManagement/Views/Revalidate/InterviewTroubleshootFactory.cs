@@ -53,7 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
             var attachmentIdAndTypes = attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
-            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId), attachmentIdAndTypes);
+            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), 
+                this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId), attachmentIdAndTypes);
 
             var interviewTroubleshootView = new InterviewTroubleshootView
             {

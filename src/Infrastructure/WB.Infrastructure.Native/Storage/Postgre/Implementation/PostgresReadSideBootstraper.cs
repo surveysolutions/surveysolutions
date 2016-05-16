@@ -43,7 +43,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
                 if (tableExists != DBNull.Value)
                 {
-                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));CREATE INDEX answerstofeaturedquestions_answervalue ON answerstofeaturedquestions (answervalue text_pattern_ops); ";
+                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));CREATE INDEX answerstofeaturedquestions_answervalue ON answerstofeaturedquestions (answervalue text_pattern_ops);CREATE INDEX InterviewDataExportRecords_Id_text_pattern_ops_idx ON InterviewDataExportRecords(Id text_pattern_ops); ";
                     dbCommand.ExecuteNonQuery();
                 }
             }

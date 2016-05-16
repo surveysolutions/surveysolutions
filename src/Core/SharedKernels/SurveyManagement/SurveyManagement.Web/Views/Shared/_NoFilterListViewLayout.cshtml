@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
 }
@@ -25,7 +26,7 @@
     <!-- ko if:IsPageLoaded()  -->
     <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
     <p class="text-center">
-        No results found
+        @Pages.NoResults
     </p>
     <!-- /ko -->
     <!-- ko if:Pager().TotalItemCount() > 0 -->

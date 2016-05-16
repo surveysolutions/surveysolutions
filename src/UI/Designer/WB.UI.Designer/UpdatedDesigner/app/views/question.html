@@ -4,11 +4,13 @@
     </div>
     <div class="form-holder">
 
-        <div class="breadcrumbs-container"><div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div></div>
+        <div class="breadcrumbs-container">
+            <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
+        </div>
 
         <div class="row">
             <div class="form-group col-xs-6">
-                <label for="edit-group-title" class="wb-label">Question type</label><br>
+                <label class="wb-label">Question type</label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
                     <button id="questionTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
@@ -64,16 +66,16 @@
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction"/></label>
+                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
 
-                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions"/>
+                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
                 <label for="cb-hide-instructions"><span></span>Hide instruction</label>
 
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
 
             <div class="form-group col-xs-1">
-                <button type="button" class="btn cross instructions-cross" 
+                <button type="button" class="btn cross instructions-cross"
                         ng-click="showInstruction=false;activeQuestion.instructions='';activeQuestion.hideInstructions=false;questionForm.$setDirty();"></button>
             </div>
         </div>
@@ -82,8 +84,8 @@
             <div class="enabling-group-marker"></div>
             <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
 
-                <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
-                <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
@@ -128,7 +130,7 @@
             </div>
         </div>
 
-    <script type="text/ng-template" id="SingleOption-template.html">
+        <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -189,7 +191,7 @@
             <div class="table-holder">
                 <div class="row">
                     <div class="col-xs-5" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked">
-                        <div  class="checkbox checkbox-in-column">
+                        <div class="checkbox checkbox-in-column">
                             <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
                             <label for="cb-is-cascading"><span></span>Cascading combo box</label>
                         </div>
@@ -233,8 +235,13 @@
 
                         <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
                             <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
-                            <span class="chosen-item"  ng-if="activeQuestion.linkedToEntity.type!=='roster'"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
-                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">{{activeQuestion.linkedToEntity.title}}</span>
+                            <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'">
+                              <i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>
+                              {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
+                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">
+                              {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -248,15 +255,29 @@
                                role="menuitem"
                                tabindex="-1"
                                class="linked-roster-source"
-                               href="javascript:void(0);">{{::breadCrumb.title}}</a>
+                               href="javascript:void(0);">
+                                  <div >
+                                        <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                        <span ng-bind-html="breadCrumb.title"></span>
+                                    </div>
+                                    <div class="var-block">
+                                        <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                    </div>
+                            </a>
 
-                            <a ng-if="!breadCrumb.isSectionPlaceHolder&& breadCrumb.type!=='roster'"
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type!=='roster'"
                                ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-question-source"
-                               href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
+                               href="javascript:void(0);">                                
+                                <div>
+                                        <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                        <span ng-bind-html="breadCrumb.title"></span>
+                                </div>
+                                    <div class="var-block" >
+                                        <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div>                                                            
                             </a>
                         </li>
                     </ul>
@@ -266,38 +287,51 @@
                 </p>
                 <hr />
                 <label for="linkedFilterExpression">Filter</label>
-                
+
                 <div class="pseudo-form-control">
                     <div id="linkedFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
                 </div>
             </div>
         </script>
 
-        <script type="text/ng-template" id="CascadingComboBox-Template.html">
+    <script type="text/ng-template" id="CascadingComboBox-Template.html">
             <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
                     <button class="btn dropdown-toggle" dropdown-toggle id="singleOptionQuestionSource" type="button">
-                        <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>
-
-                        <span class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
+                        <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>                        
+                        
+                        <div class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
                             <span class="path">{{activeQuestion.cascadeFromQuestion.breadcrumbs}}</span>
-                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{activeQuestion.cascadeFromQuestion.title}}</span>
-                        </span>
+                            <div class="selected-block">
+                                <div >                                    
+                                    <span class="chosen-item "><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{activeQuestion.cascadeFromQuestion.title}}</span>
+                                </div>
+                                <div class="var-block" >
+                                    <span class="var-name" ng-bind-html="activeQuestion.cascadeFromQuestion.varName"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <span class="dropdown-arrow"></span>
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
                         <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfSingleQuestions track by $index">
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
-
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
                                ng-click="setCascadeSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
                                href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
+                                <div>
+                                    <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                    <span ng-bind-html="breadCrumb.title"></span>
+                                </div>
+                                <div class="var-block">
+                                    <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div> 
                             </a>
                         </li>
                     </ul>
@@ -386,12 +420,12 @@
                     </div>
                 </div>
 
-            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
-            </div>
+                <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
+                </div>
             </div>
         </script>
 
-    <script type="text/ng-template" id="Numeric-template.html">
+        <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-md-5">
                     <div class="checkbox checkbox-in-column">

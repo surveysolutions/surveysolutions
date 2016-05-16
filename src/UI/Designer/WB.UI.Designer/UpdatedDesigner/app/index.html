@@ -62,7 +62,7 @@
     <script src="../vendor/jquery/dist/jquery.js"></script>
     <script src="../vendor/jquery-cookie/jquery.cookie.js"></script>
     <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="../vendor/lodash/lodash.js"></script>
+    <script src="../vendor/underscore/underscore.js"></script>
     <script src="../vendor/ace-builds/src-noconflict/ace.js"></script>
     <script src="../vendor/angular/angular.js"></script>
     <script src="../vendor/angular-cookies/angular-cookies.js"></script>
@@ -90,13 +90,12 @@
     <script src="../vendor/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
     <script src="../vendor/ng-context-menu/dist/ng-context-menu.js"></script>
     <script src="../vendor/angular-ui-ace/ui-ace.js"></script>
-    <script src="../vendor/ace-builds/src-noconflict/theme-github-custom.js"></script>
-    <script src="../vendor/ace-builds/src-noconflict/mode-csharp.js"></script>
     <script src="../vendor/ace-builds/src-noconflict/ext-language_tools.js"></script>
     <script src="../vendor/ng-file-upload/ng-file-upload-shim.js"></script> <!-- for no html5 browsers support -->
     <script src="../vendor/ng-file-upload/ng-file-upload.js"></script>
     <script src="../vendor/moment/moment.js"></script>
     <script src="../vendor/angular-moment/angular-moment.js"></script>
+    <script src="../vendor/position-calculator/dist/position-calculator.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -108,6 +107,7 @@
     <script src="scripts/controllers/macros.js"></script>
     <script src="scripts/controllers/chapters.js"></script>
     <script src="scripts/controllers/group.js"></script>
+    <script src="scripts/controllers/variable.js"></script>
     <script src="scripts/controllers/question.js"></script>
     <script src="scripts/controllers/roster.js"></script>
     <script src="scripts/controllers/share.js"></script>
@@ -133,7 +133,9 @@
     <script src="scripts/directives/matchOptionsPattern.js"></script>
     <script src="scripts/extensions/ace/mode-csharp-extended.js"></script>
     <script src="scripts/extensions/ace/theme-github-extended.js"></script>
+    <script src="scripts/services/userService.js"></script>
+    <script src="scripts/ui-js.js"></script>
     <!-- endbuild -->
-    <!-- endinject -->
+<!-- endinject -->
 </body>
 </html>

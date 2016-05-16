@@ -2,11 +2,23 @@
     <a class="designer-logo" href="../../"></a>
     <div class="header-line">
         <div class="header-menu">
-            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong>
+            <!--This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong>-->
             <div class="buttons">
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank">History</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser" ng-click="showShareInfo()">Settings</button>
-                <a class="btn" href="../../account/logoff">LOG OUT</a>
+
+                <div class="btn-group">
+                    <a class="btn btn-default">Hi, {{::currentUserName}}</a>
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="../../account/manage">Change password</a></li>
+                        <li><a href="../../account/logoff">Log out</a></li>
+                    </ul>
+                </div>
+                
             </div>
         </div>
         <div class="questionnarie-title">
@@ -120,7 +132,7 @@
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
-                                <ng-form name="macroForm">
+                                <ng-form name="macro.form">
                                     <a href ng-click="deleteMacro($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
@@ -132,9 +144,9 @@
                                         <div class="divider"></div>
                                         <textarea placeholder="description" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
                                     </div>
-                                    <div class="actions" ng-show="macroForm.$dirty">
-                                        <button type="submit" ng-disabled="macroForm.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro, macroForm)">Save</button>
-                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro, macroForm)">Cancel</button>
+                                    <div class="actions" ng-show="macro.form.$dirty">
+                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)">Save</button>
+                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)">Cancel</button>
                                         <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)">{{ macro.isDescriptionVisible? "hide" : "add" }} description</button>
                                     </div>
                                 </ng-form>
@@ -167,8 +179,8 @@
                     </div>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
-                            <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file, lookupTableForm)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                <ng-form name="lookupTableForm">
+                            <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                <ng-form name="table.form">
                                     <a href ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="table.name" name="name" class="form-control table-name" type="text" />
                                     <div class="divider"></div>
@@ -178,14 +190,14 @@
                                         Drop File here
                                     </div>
 
-                                    <div class="actions clearfix" ng-class="{dirty: lookupTableForm.$dirty }">
-                                        <div ng-show="lookupTableForm.$dirty" class="pull-left">
-                                            <button type="submit" ng-disabled="lookupTableForm.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table, lookupTableForm);$event.stopPropagation()">Save</button>
-                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table, lookupTableForm);$event.stopPropagation()">Cancel</button>
+                                    <div class="actions clearfix" ng-class="{dirty: table.form.$dirty }">
+                                        <div ng-show="table.form.$dirty" class="pull-left">
+                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()">Save</button>
+                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()">Cancel</button>
                                         </div>
                                         <div class="permanent-actions clearfix">
                                             <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
-                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file, lookupTableForm);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
+                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
                                                 <span ng-hide="table.hasUploadedFile">Select file</span>
                                                 <span ng-show="table.hasUploadedFile">Update file</span>
                                             </button>
@@ -239,8 +251,8 @@
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
                         <div class="attachment-list">
-                            <ng-form name="attachmentForm" ng-repeat="attachment in attachments">
-                                <div class="attachments-panel-item" ng-class="{'has-error': attachmentForm.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                            <ng-form name="attachment.form" ng-repeat="attachment in attachments">
+                                <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
@@ -263,13 +275,13 @@
                                                 Drop File here
                                             </div>
                                             <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
-                                            <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
-                                                <div ng-show="attachmentForm.$dirty" class="pull-left">
-                                                    <button type="submit" ng-disabled="attachmentForm.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment, attachmentForm);$event.stopPropagation()">Save</button>
-                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment, attachmentForm);$event.stopPropagation()">Cancel</button>
+                                            <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
+                                                <div ng-show="attachment.form.$dirty" class="pull-left">
+                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()">Save</button>
+                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
-                                                    <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
+                                                    <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span>Update</span>
                                                     </button>
                                                     <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
@@ -327,6 +339,7 @@
                                             <span ng-if="reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
                                             <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-error icon-attachment"></span>
+                                            <span ng-if="reference.type == 'Variable'" class="icon icon-error icon-variable"></span>
                                             <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}{{referencesWithErrors.compilationErrorMessages != null ? ': ' + referencesWithErrors.compilationErrorMessages[0] : ''}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>

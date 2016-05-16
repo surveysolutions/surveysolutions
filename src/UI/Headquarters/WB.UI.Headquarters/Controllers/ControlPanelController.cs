@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Storage.EventStore;
-using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
@@ -155,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.Error(string.Format("User '{0}' does not exists", model.UserName));
             }
 
-            return View(model);
+            return RedirectToAction("ResetPrivilegedUserPassword");
         }
     }
 }

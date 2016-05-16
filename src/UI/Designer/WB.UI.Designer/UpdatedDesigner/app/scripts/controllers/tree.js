@@ -18,7 +18,8 @@
                 question: 'question',
                 roster: 'roster',
                 group: 'group',
-                staticText: 'statictext'
+                staticText: 'statictext',
+                variable: 'variable'
             };
 
             $scope.itemTemplate = function (itemType) {
@@ -32,7 +33,6 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            
             $rootScope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
 
             var scrollDown = 'down';
@@ -218,6 +218,7 @@
                     case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
                     case 'StaticText': return itemTypes.staticText;
                     case 'Chapter': return itemTypes.group;
+                    case 'Variable': return itemTypes.variable;
                 }
                 throw 'unknown item type: ' + item;
             };
@@ -265,13 +266,16 @@
             };
 
             $scope.isGroup = function (item) {
-
-                return !($scope.isQuestion(item) || $scope.isStaticText(item));
+                return !($scope.isQuestion(item) || $scope.isStaticText(item) || $scope.isVariable(item));
             };
 
             $scope.isStaticText = function (item) {
                 return item.hasOwnProperty('text');
             };
+
+            $scope.isVariable = function(item) {
+                return item.hasOwnProperty('variableData');
+            }
 
             $scope.showStartScreen = function () {
                 return _.isEmpty($scope.items);
@@ -311,7 +315,15 @@
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
-                        } else {
+                            
+                        }
+                        else if ($scope.isVariable(movedItem)) {
+                            questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .error(function () {
+                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                });
+                        }
+                        else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
@@ -336,6 +348,23 @@
                     }
                 });
             };
+
+            $scope.deleteVariable = function (item) {
+                var itemIdToDelete = item.itemId || $state.params.itemId;
+
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.name || "Untitled variable"));
+
+                modalInstance.result.then(function (confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).success(function () {
+                            questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                            $scope.resetSelection();
+                            $rootScope.$emit('varibleDeleted', itemIdToDelete);
+                        });
+                    }
+                });
+            };
+
 
             var deleteGroupPermanently = function (itemIdToDelete) {
                 commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
@@ -418,13 +447,15 @@
                 var itemToMoveId = $state.params.itemId;
                 var itemToMove = questionnaireService.findItem($scope.items, itemToMoveId);
 
-
                 var moveCommand;
                 if ($scope.isStaticText(itemToMove)) {
                     moveCommand = questionnaireService.moveStaticText;
                 }
                 else if ($scope.isGroup(itemToMove)) {
                     moveCommand = questionnaireService.moveGroup;
+                }
+                else if ($scope.isVariable(itemToMove)) {
+                    moveCommand = questionnaireService.moveVariable;
                 }
                 else {
                     moveCommand = questionnaireService.moveQuestion;
@@ -492,6 +523,29 @@
                     .success(function () {
                         parent.items.push(emptyStaticText);
                         emitAddedItemState("statictext", emptyStaticText.itemId);
+                    });
+            };
+
+            $scope.addVariable = function(parent) {
+                var emptyVariable = utilityService.createEmptyVariable(parent);
+
+                commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId)
+                    .success(function() {
+                        parent.items.push(emptyVariable);
+                        emitAddedItemState("variable", emptyVariable.itemId);
+                    });
+            };
+
+            $scope.addVariableAfter = function(item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+                var index = getItemIndexByIdFromParentItemsList(parent, item.itemId) + 1;
+
+                var emptyVariable = utilityService.createEmptyVariable(parent);
+
+                commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId, index)
+                    .success(function() {
+                        parent.items.splice(index, 0, emptyVariable);
+                        emitAddedItemState("variable", emptyVariable.itemId);
                     });
             };
 
@@ -583,7 +637,6 @@
 
                     $rootScope.$emit('itemPasted');
                     $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
-
                 });
             };
 
@@ -604,7 +657,6 @@
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
-
                         $scope.items = result.chapter.items;
                         $scope.currentChapter = result.chapter;
                         $rootScope.updateVariableNames(result.variableNames);
@@ -645,6 +697,13 @@
 
                 staticText.hasValidation = data.hasValidation;
                 staticText.hasCondition = data.hasCondition;
+            });
+
+            $rootScope.$on('variableUpdated', function (event, data) {
+                var variable = questionnaireService.findItem($scope.items, data.itemId);
+                if (_.isNull(variable)) return;
+                variable.variableData.name = data.name;
+                $rootScope.addLocalVariableName(data.name);
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {

@@ -6,5 +6,9 @@
   {
     "outputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.css",
     "inputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.less"
+  },
+  {
+    "outputFile": "Content/pdf.css",
+    "inputFile": "Content/pdf.less"
   }
 ]

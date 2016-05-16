@@ -61,11 +61,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable encryption.
+        /// </summary>
+        internal static string EnableEncryption {
+            get {
+                return ResourceManager.GetString("EnableEncryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export encryption settings.
+        /// </summary>
+        internal static string ExportEncryptionSettings {
+            get {
+                return ResourceManager.GetString("ExportEncryptionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Encryption.
         /// </summary>
         internal static string ExportEncryption_Title {
             get {
                 return ResourceManager.GetString("ExportEncryption_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
             }
         }
         

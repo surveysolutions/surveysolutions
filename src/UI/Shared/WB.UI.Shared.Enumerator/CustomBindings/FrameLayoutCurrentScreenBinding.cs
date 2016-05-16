@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Widget;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Core.Views;
-using MvvmCross.Droid.Support.V7.Fragging.Fragments;
+using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 
 @{
-    ViewBag.Title = string.Format("Edit: {0}", Model.UserName);
+    ViewBag.Title = string.Format(Users.EditFormat, Model.UserName);
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
@@ -17,7 +17,7 @@
 
 <div class="page-header">
     <h2>
-        Edit: &nbsp;
+        @Users.Edit: &nbsp;
         <small>
             @Model.UserName
         </small>
@@ -35,7 +35,7 @@
                 }
                 <div class="form-group">
                     <div class="col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
                         @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
                     </div>
                 </div>

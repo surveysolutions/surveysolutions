@@ -8,7 +8,8 @@
             string[] namespaces,
             string expression, 
             bool generateSelf, 
-            string variableName)
+            string variableName,
+            string returnType = "bool")
         {
             this.ClassName = className;
             this.MethodName = methodName;
@@ -16,6 +17,7 @@
             this.Expression = expression;
             this.VariableName = variableName;
             this.GenerateSelf = generateSelf;
+            this.ReturnType = returnType;
         }
 
         public string ClassName { set; get; }
@@ -24,5 +26,6 @@
         public string Expression { set; get; }
         public string VariableName { set; get; }
         public bool GenerateSelf { set; get; }
+        public string ReturnType { get; set; }
     }
 }

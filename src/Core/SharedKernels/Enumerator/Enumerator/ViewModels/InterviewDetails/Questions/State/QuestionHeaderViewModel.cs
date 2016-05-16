@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -12,13 +12,25 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<SubstitutionTitlesChanged>, IDisposable
+        ILiteEventHandler<SubstitutionTitlesChanged>,
+        ILiteEventHandler<VariablesChanged>, IDisposable
     {
+        private class SubstitutionVariables
+        {
+            public IEnumerable<SubstitutionVariable> ByQuestions { get; set; }
+            public IEnumerable<SubstitutionVariable> ByVariables { get; set; }
+        }
+        private class SubstitutionVariable
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+        }
+
         public string Instruction { get; set; }
         private string title;
         public string Title
@@ -41,11 +53,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
         private readonly IAnswerToStringService answerToStringService;
+        private readonly IVariableToUIStringService variableToUiStringService;
         private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
         private bool isInstructionsHidden;
+
+        private SubstitutionVariables substitutionVariables;
 
         public void Init(string interviewId, Identity questionIdentity)
         {
@@ -55,15 +70,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            this.Title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            var questionTitle = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            this.Title = questionTitle;
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
             this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
             this.questionIdentity = questionIdentity;
             this.interviewId = interviewId;
 
+            this.substitutionVariables = this.GetSubstitutionVariables(questionnaire, questionTitle);
+
             this.CalculateSubstitutions(questionnaire, interview);
 
             this.registry.Subscribe(this, interviewId);
+        }
+
+        private SubstitutionVariables GetSubstitutionVariables(IQuestionnaire questionnaire, string titleWithSubstitutions)
+        {
+            var variableNames = this.substitutionService.GetAllSubstitutionVariableNames(titleWithSubstitutions);
+
+            return new SubstitutionVariables
+            {
+                ByQuestions = variableNames.Where(questionnaire.HasQuestion).Select(variable => new SubstitutionVariable
+                {
+                    Name = variable,
+                    Id = questionnaire.GetQuestionIdByVariable(variable)
+                }),
+                ByVariables = variableNames.Where(questionnaire.HasVariable).Select(x => new SubstitutionVariable
+                {
+                    Name = x,
+                    Id = questionnaire.GetVariableIdByVariableName(x)
+                })
+            };
         }
 
         protected QuestionHeaderViewModel() { }
@@ -74,7 +111,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
-            IRosterTitleSubstitutionService rosterTitleSubstitutionService)
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService,
+            IVariableToUIStringService variableToUiStringService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -82,6 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.substitutionService = substitutionService;
             this.answerToStringService = answerToStringService;
             this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
+            this.variableToUiStringService = variableToUiStringService;
         }
 
         public ICommand ShowInstructions
@@ -90,6 +129,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(() => IsInstructionsHidden = false);
             }
+        }
+
+        public void Handle(VariablesChanged @event)
+        {
+            var changedVariables = this.substitutionVariables.ByVariables.Where(
+                substitution => @event.ChangedVariables.Any(variable => variable.Identity.Id == substitution.Id));
+
+            if (!changedVariables.Any()) return;
+
+            var interview = this.interviewRepository.Get(this.interviewId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+            this.CalculateSubstitutions(questionnaire, interview);
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
@@ -107,23 +159,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void CalculateSubstitutions(IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            string questionTitle = questionnaire.GetQuestionTitle(this.questionIdentity.Id);
+            var questionTitle = questionnaire.GetQuestionTitle(questionIdentity.Id);
+
             if (this.substitutionService.ContainsRosterTitle(questionTitle))
             {
                 questionTitle = this.rosterTitleSubstitutionService.Substitute(questionTitle,
                     this.questionIdentity, this.interviewId);
             }
-            string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
 
-            foreach (var variable in variablesToReplace)
+            foreach (var substitution in this.substitutionVariables.ByVariables)
             {
-                var substitutedQuestionId = questionnaire.GetQuestionIdByVariable(variable);
-
-                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionId, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionId, baseInterviewAnswer, interview, questionnaire) : null;
+                var variableValue = interview.GetVariableValueByOrDeeperRosterLevel(substitution.Id, this.questionIdentity.RosterVector);
+                var variableValueAsString = this.variableToUiStringService.VariableToUIString(variableValue);
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
-                    questionTitle, variable, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);
+                    questionTitle, substitution.Name,
+                    string.IsNullOrEmpty(variableValueAsString) ? this.substitutionService.DefaultSubstitutionText : variableValueAsString);
+            }
+
+            foreach (var substitution in this.substitutionVariables.ByQuestions)
+            {
+                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitution.Id, this.questionIdentity.RosterVector);
+                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitution.Id, baseInterviewAnswer, interview, questionnaire) : null;
+
+                questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
+                    questionTitle, substitution.Name, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);
             }
 
             this.Title = questionTitle;
