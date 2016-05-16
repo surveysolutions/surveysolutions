@@ -2,24 +2,27 @@
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
-    [Subject(typeof(QuestionHeaderViewModel))]
-    internal class QuestionHeaderViewModelTestsContext
+    [Subject(typeof(StaticTextViewModel))]
+    internal class StaticTextViewModelTestsContext
     {
-        public static QuestionHeaderViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null, 
+        public static StaticTextViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             ILiteEventRegistry registry = null,
-            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null,
+            AttachmentViewModel attachmentViewModel = null,
+            StaticTextStateViewModel questionState = null,
+            SubstitutionReplacerService substitutionReplacerService = null)
         {
             if (rosterTitleSubstitutionService == null)
             {
@@ -29,10 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 rosterTitleSubstitutionService = substStub.Object;
             }
 
-            return new QuestionHeaderViewModel(questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                registry ?? Create.LiteEventRegistry(),
-                new SubstitutionReplacerService(
+            return new StaticTextViewModel(
+                questionnaireRepository: questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                interviewRepository: interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                registry: registry ?? Create.LiteEventRegistry(),
+                questionState: questionState ?? Mock.Of<StaticTextStateViewModel>(),
+                attachmentViewModel: attachmentViewModel ?? Mock.Of<AttachmentViewModel>(),
+                substitutionReplacerService: new SubstitutionReplacerService(
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                     new SubstitutionService(),
