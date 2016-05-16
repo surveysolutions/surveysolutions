@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children = new List<IComposite>()
                     {
                         new StaticText(staticTextWithSubstitutionId, "test %v1%", null, false, null),
-                        new Variable(variableId, new VariableData(VariableType.Integer, "v1", "5"))
+                        new Variable(variableId, new VariableData(VariableType.LongInteger, "v1", "5"))
                     }
                 });
 
