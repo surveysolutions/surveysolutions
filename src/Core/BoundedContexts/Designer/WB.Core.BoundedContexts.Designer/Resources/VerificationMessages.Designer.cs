@@ -1233,5 +1233,50 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
+        /// </summary>
+        internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
+            get {
+                return ResourceManager.GetString("WB0250_ValidationConditionRefersToAFutureQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enablement condition refers to a future question. Consider reversing the order..
+        /// </summary>
+        internal static string WB0251_EnablementConditionRefersToAFutureQuestion {
+            get {
+                return ResourceManager.GetString("WB0251_EnablementConditionRefersToAFutureQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format..
+        /// </summary>
+        internal static string WB0253_TooFewVariableLabelsAreDefined {
+            get {
+                return ResourceManager.GetString("WB0253_TooFewVariableLabelsAreDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use function IsValidEmail() to validate email address..
+        /// </summary>
+        internal static string WB0254_UseFunctionIsValidEmailToValidateEmailAddress {
+            get {
+                return ResourceManager.GetString("WB0254_UseFunctionIsValidEmailToValidateEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question is too short. This might be an incomplete question..
+        /// </summary>
+        internal static string WB0255_QuestionIsTooShort {
+            get {
+                return ResourceManager.GetString("WB0255_QuestionIsTooShort", resourceCulture);
+            }
+        }
     }
 }

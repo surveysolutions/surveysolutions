@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
             return questionnaire
-                    .GetAllEntitiesIdAndTypePairs()
+                    .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
                     .GroupBy(x => x.Id)
                     .Where(group => group.Count() > 1)
                     .Select(group =>

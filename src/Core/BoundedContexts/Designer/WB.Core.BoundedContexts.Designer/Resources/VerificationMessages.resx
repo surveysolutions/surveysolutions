@@ -507,4 +507,19 @@
   <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
     <value>Variable cannot have empty name.</value>
   </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Validation condition #{0} refers to a future question. Consider reversing the order.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Enablement condition refers to a future question. Consider reversing the order.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Use function IsValidEmail() to validate email address.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>Question is too short. This might be an incomplete question.</value>
+  </data>
 </root>
