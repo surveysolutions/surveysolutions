@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             TypeSwitch.Do(
                 variable,
                 TypeSwitch.Case<int>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture); }),
-                TypeSwitch.Case<decimal>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture); }),
+                TypeSwitch.Case<double>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture); }),
                 TypeSwitch.Case<DateTime>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern); }),
                 TypeSwitch.Case<bool>(value => { variableAsString = value.ToString(); }));
 

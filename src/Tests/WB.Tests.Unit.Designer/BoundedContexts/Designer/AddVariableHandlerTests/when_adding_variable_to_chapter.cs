@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "name";
         private static string variableExpression = "expression";
-        private static VariableType variableType = VariableType.Decimal;
+        private static VariableType variableType = VariableType.Double;
         private static int index = 5;
     }
 }
