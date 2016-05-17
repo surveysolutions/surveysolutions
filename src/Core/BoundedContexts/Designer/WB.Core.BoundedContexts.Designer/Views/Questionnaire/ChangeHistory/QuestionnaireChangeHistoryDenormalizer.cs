@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -665,6 +666,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 {
                     questionnaireStateTacker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
                     continue;
+                }
+                var variable = compositeElement as IVariable;
+                if (variable != null)
+                {
+                    questionnaireStateTacker.VariableState[variable.PublicKey] = variable.Name;
                 }
             }
             questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
