@@ -626,7 +626,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             switch (variableType)
             {
                 case VariableType.LongInteger:
-                    return "int?";
+                    return "long?";
                 case VariableType.Decimal:
                     return "decimal?";
                 case VariableType.Boolean:
