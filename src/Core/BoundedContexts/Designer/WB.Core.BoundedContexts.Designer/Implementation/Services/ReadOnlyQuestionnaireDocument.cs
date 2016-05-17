@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             this.Questionnaire = questionnaire;
             this.Questionnaire.ConnectChildrenWithParent();
-            this.allItems = this.Questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
+            this.allItems = CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);
         }
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
@@ -51,9 +51,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Find(condition).FirstOrDefault();
 
-        public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairs()
+        public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
         {
             return this.allItems.Select(x => new QuestionnaireItemTypeReference(x.PublicKey, x.GetType()));
+        }
+
+        private IComposite[] CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(QuestionnaireDocument questionnaire)
+        {
+            var result = new List<IComposite>();
+            var stack = new Stack<IComposite>();
+            stack.Push(questionnaire);
+            while (stack.Any())
+            {
+                var current = stack.Pop();
+                for (int i = current.Children.Count - 1; i >= 0; i--)
+                {
+                    var child = current.Children[i];
+                    stack.Push(child);
+                }
+                result.Add(current);
+            }
+            return result.Skip(1).ToArray();
         }
     }
 }

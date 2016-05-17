@@ -436,7 +436,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\Values\settings.xml" />
+    <AndroidResource Include="Resources\Values\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
