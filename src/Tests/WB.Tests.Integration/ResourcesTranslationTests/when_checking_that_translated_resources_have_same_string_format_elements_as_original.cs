@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 from translatedResourceFile in translatedResourceFiles
                 let resourceFileName = Path.GetFileName(translatedResourceFile)
                 from inconsistentResource in GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(translatedResourceFile)
-                select string.Format("{0}: {1}", resourceFileName, inconsistentResource);
+                select $"{resourceFileName}: {inconsistentResource}";
 
         It should_find_translated_resource_files = () =>
             translatedResourceFiles.ShouldNotBeEmpty();
@@ -40,7 +40,10 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             foreach (var translatedResource in translatedResources)
             {
                 if (!originalResources.ContainsKey(translatedResource.Key))
-                    yield return string.Format("{0}: no original resource string found", translatedResource.Key);
+                {
+                    yield return $"{translatedResource.Key}: no original resource string found";
+                    continue;
+                }
 
                 string originalResourceValue = originalResources[translatedResource.Key];
 
@@ -48,7 +51,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 string originalStringFormatEntries = GetStringFormatEntriesAsString(originalResourceValue);
 
                 if (translatedStringFormatEntries != originalStringFormatEntries)
-                    yield return string.Format("{0}: has '{1}', but should have '{2}'", translatedResource.Key, translatedStringFormatEntries, originalStringFormatEntries);
+                    yield return $"{translatedResource.Key}: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
             }
         }
     }
