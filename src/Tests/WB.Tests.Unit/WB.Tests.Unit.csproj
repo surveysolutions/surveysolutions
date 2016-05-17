@@ -552,6 +552,9 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_previous_request_is_in_progress.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_signed_out.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_setting_text_existing_option.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\RealQuestionViewModelTestContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\when_answering_numeric_question_with_big_value.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\when_answering_numeric_question_with_big_negative_value.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\IntegerQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_negative_value.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_big_negative_value.cs" />
