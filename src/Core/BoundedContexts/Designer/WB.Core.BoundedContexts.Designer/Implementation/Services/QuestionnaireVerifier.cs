@@ -1271,13 +1271,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var question in questionsWithConditions)
             {
-                if (!dependencies.ContainsKey(question.StataExportCaption))
+                if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
                     dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
             }
 
             foreach (var variable in variables)
             {
-                if (!dependencies.ContainsKey(variable.Name))
+                if (variable.Name != null && !dependencies.ContainsKey(variable.Name))
                     dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
             }
 
