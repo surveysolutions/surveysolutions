@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null,
             AttachmentViewModel attachmentViewModel = null,
             StaticTextStateViewModel questionState = null,
-            SubstitutionReplacerService substitutionReplacerService = null)
+            SubstitutionViewModel substitutionViewModel = null)
         {
             if (rosterTitleSubstitutionService == null)
             {
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var plainQuestionnaireRepository = questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>();
 
-            var replacerService = new SubstitutionReplacerService(
+            var replacerService = new SubstitutionViewModel(
                 statefulInterviewRepository,
                 plainQuestionnaireRepository,
                 new SubstitutionService(),
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository,
                                        plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
                 attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
-                substitutionReplacerService: replacerService);
+                substitutionViewModel: replacerService);
         }
     }
 }

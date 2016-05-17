@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             return new QuestionHeaderViewModel(questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 registry ?? Create.LiteEventRegistry(),
-                new SubstitutionReplacerService(
+                new SubstitutionViewModel(
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                     new SubstitutionService(),

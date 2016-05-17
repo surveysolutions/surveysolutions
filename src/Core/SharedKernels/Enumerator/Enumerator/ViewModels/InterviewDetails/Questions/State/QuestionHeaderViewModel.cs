@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ILiteEventRegistry registry;
-        private readonly SubstitutionReplacerService substitutionReplacerService;
+        private readonly SubstitutionViewModel substitutionViewModel;
 
         private Identity questionIdentity;
         private string interviewId;
@@ -56,9 +56,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = questionIdentity;
             this.interviewId = interviewId;
 
-            this.substitutionReplacerService.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
+            this.substitutionViewModel.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
 
-            this.Title = this.substitutionReplacerService.ReplaceSubstitutions();
+            this.Title = this.substitutionViewModel.ReplaceSubstitutions();
 
             this.registry.Subscribe(this, interviewId);
         }
@@ -69,12 +69,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
-            SubstitutionReplacerService substitutionReplacerService)
+            SubstitutionViewModel substitutionViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
-            this.substitutionReplacerService = substitutionReplacerService;
+            this.substitutionViewModel = substitutionViewModel;
         }
 
         public ICommand ShowInstructions
@@ -87,10 +87,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(VariablesChanged @event)
         {
-            if (!this.substitutionReplacerService.HasVariablesInText(
+            if (!this.substitutionViewModel.HasVariablesInText(
                 @event.ChangedVariables.Select(variable => variable.Identity))) return;
 
-            this.Title = this.substitutionReplacerService.ReplaceSubstitutions();
+            this.Title = this.substitutionViewModel.ReplaceSubstitutions();
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (thisQuestionChanged)
             {
-                this.Title = this.substitutionReplacerService.ReplaceSubstitutions();
+                this.Title = this.substitutionViewModel.ReplaceSubstitutions();
             }
         }
 

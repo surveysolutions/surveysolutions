@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
-        private readonly SubstitutionReplacerService substitutionReplacerService;
+        private readonly SubstitutionViewModel substitutionViewModel;
         private static readonly Regex htmlRemovalRegex = new Regex("<.*?>");
 
         public AttachmentViewModel Attachment { get; set; }
@@ -32,12 +32,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             AttachmentViewModel attachmentViewModel,
             StaticTextStateViewModel questionState,
             ILiteEventRegistry registry,
-            SubstitutionReplacerService substitutionReplacerService)
+            SubstitutionViewModel substitutionViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
-            this.substitutionReplacerService = substitutionReplacerService;
+            this.substitutionViewModel = substitutionViewModel;
             this.Attachment = attachmentViewModel;
             this.QuestionState = questionState;
         }
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.QuestionState.Init(interviewId, entityIdentity);
             
-            this.substitutionReplacerService.Init(interviewId, entityIdentity, questionnaire.GetStaticText(entityIdentity.Id));
+            this.substitutionViewModel.Init(interviewId, entityIdentity, questionnaire.GetStaticText(entityIdentity.Id));
 
             this.UpdateUITexts();
 
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(VariablesChanged @event)
         {
-            if (!this.substitutionReplacerService.HasVariablesInText(
+            if (!this.substitutionViewModel.HasVariablesInText(
                 @event.ChangedVariables.Select(variable => variable.Identity))) return;
 
             this.UpdateUITexts();
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateUITexts()
         {
-            this.RawStaticText = this.substitutionReplacerService.ReplaceSubstitutions();
+            this.RawStaticText = this.substitutionViewModel.ReplaceSubstitutions();
             this.StaticText = RemoveHtmlTags(this.RawStaticText);
         }
     }

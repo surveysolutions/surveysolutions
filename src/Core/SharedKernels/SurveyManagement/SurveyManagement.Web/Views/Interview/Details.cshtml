@@ -188,7 +188,7 @@
 
     public string Stringify(decimal[] array)
     {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+        return string.Join("_", array.Select(x => x.ToString("N0", CultureInfo.InvariantCulture)));
     }
 
     private static bool IsFilteredCombobox(InterviewQuestionView entityView)
