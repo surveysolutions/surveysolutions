@@ -610,6 +610,11 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\SingleOptionRosterLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\when_question_is_linked_to_second_level_question_and_title_changes.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_roster_title_substitution_is_used.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_substitution_title_changed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_and_substitution_title_changed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_changed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_changed_and_current_culture_is_russian.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
