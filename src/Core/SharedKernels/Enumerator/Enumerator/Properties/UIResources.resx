@@ -384,7 +384,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Diagnostics</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>{0:N0} meters</value>
+    <value>Number of meters to set accuracy</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
     <value>Desired accuracy of GPS questions</value>

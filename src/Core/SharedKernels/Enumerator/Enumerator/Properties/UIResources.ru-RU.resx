@@ -384,7 +384,7 @@
     <value>Диагностика</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>{0:N0} метров</value>
+    <value>Значение в метрах для задания точности.</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
     <value>Желаемая точность GPS вопроса</value>
