@@ -52,21 +52,21 @@
                 attachment.name = attachmentDto.name;
 
                 attachment.file = null;
+                attachment.content = {};
+                attachment.meta = {};
+                attachment.content.details = {};
 
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
-                    attachment.content = {};
                     attachment.content.size = attachmentDto.content.size;
                     attachment.content.type = attachmentDto.content.contentType;
 
                     if (!_.isUndefined(attachmentDto.content.details) && !_.isNull(attachmentDto.content.details)) {
-                        attachment.content.details = {};
                         attachment.content.details.height = attachmentDto.content.details.height;
                         attachment.content.details.width = attachmentDto.content.details.width;
                     }
                 }
 
                 if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.meta = {};
                     attachment.meta.lastUpdated = moment(attachmentDto.meta.lastUpdated);
                     attachment.meta.fileName = attachmentDto.meta.fileName;
                 }
