@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
-            throw new NotSupportedException(Strings.OperationNotImplemented);
+            throw new NotSupportedException("The method or operation is not implemented.");
         }
 
         public override MembershipUserCollection FindUsersByEmail(
@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override string GetPassword(string username, string answer)
         {
-            throw new NotSupportedException(Strings.OperationNotImplemented);
+            throw new NotSupportedException("The method or operation is not implemented.");
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)

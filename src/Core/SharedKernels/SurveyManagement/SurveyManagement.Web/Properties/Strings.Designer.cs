@@ -70,24 +70,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to value &apos;{0}&apos; is not in the correct format..
-        /// </summary>
-        public static string CommandTransformator_IncorrectFormatError {
-            get {
-                return ResourceManager.GetString("CommandTransformator_IncorrectFormatError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Values {0} is too big or too small.
-        /// </summary>
-        public static string CommandTransformator_ParseNumericError {
-            get {
-                return ResourceManager.GetString("CommandTransformator_ParseNumericError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error when parse question answer.
         /// </summary>
         public static string CommandTransformator_ParseQuestionError {
@@ -102,24 +84,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string ControlPanelController_RepeatLastInterviewStatus {
             get {
                 return ResourceManager.GetString("ControlPanelController_RepeatLastInterviewStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Principal not fully constructed.
-        /// </summary>
-        public static string CustomPrincipal_IdentityIsNullError {
-            get {
-                return ResourceManager.GetString("CustomPrincipal_IdentityIsNullError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error in structure.
-        /// </summary>
-        public static string ErrorInStructure {
-            get {
-                return ResourceManager.GetString("ErrorInStructure", resourceCulture);
             }
         }
         
@@ -268,24 +232,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operation is not allowed..
-        /// </summary>
-        public static string OperationNotAllowed {
-            get {
-                return ResourceManager.GetString("OperationNotAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The method or operation is not implemented..
-        /// </summary>
-        public static string OperationNotImplemented {
-            get {
-                return ResourceManager.GetString("OperationNotImplemented", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string SurverManagement_MainMenu_ManageAccount {
@@ -309,15 +255,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string ViewHelpers_Invalid_property {
             get {
                 return ResourceManager.GetString("ViewHelpers_Invalid_property", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown interview package type.
-        /// </summary>
-        public static string WriteToSyncLogAttribute_UnknownPackageType {
-            get {
-                return ResourceManager.GetString("WriteToSyncLogAttribute_UnknownPackageType", resourceCulture);
             }
         }
     }
