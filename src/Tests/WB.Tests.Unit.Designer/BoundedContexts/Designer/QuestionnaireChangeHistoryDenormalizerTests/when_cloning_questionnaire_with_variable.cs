@@ -36,12 +36,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
             denormalizer.Handle(variableDeleted);
         };
 
-        It should_be_able_to_record_variable_related_changes_in_copy = () => { };
+        It should_be_able_to_record_variable_related_changes_in_copy = () => GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(2);
 
         static Guid variableId;
         static string variableName;
         static QuestionnaireChangeHistoryDenormalizer denormalizer;
-        private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
-        private static IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage;
+        static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
+        static IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage;
     }
 }
