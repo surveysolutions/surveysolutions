@@ -690,6 +690,7 @@ namespace WB.Tests.Unit.Designer
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
+            string variableLabel =null,
             params Answer[] answers)
         {
             return new TextQuestion("Question X")
@@ -700,6 +701,7 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
+                VariableLabel = variableLabel,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
