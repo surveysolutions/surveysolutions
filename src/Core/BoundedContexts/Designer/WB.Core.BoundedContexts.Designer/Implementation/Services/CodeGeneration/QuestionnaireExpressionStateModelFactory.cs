@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             UpdateReferencesOnParentRosters(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
-            UpdateReferencesOnParentQuestions(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+            UpdateReferencesOnParentQuestionsAndVariables(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public static void UpdateReferencesOnParentQuestions(
+        public static void UpdateReferencesOnParentQuestionsAndVariables(
            Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
            QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -313,7 +313,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(questionnaireLevelModel.Questions)
                     .Select(x => new HierarchyReferenceModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
+                var allParentsVariablesToTop = parentRosters
+                    .SelectMany(x => x.Variables)
+                    .Union(questionnaireLevelModel.Variables)
+                    .Select(x => new HierarchyReferenceModel {TypeName = x.TypeName, VariableName = x.VariableName})
+                    .ToList();
+
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop;
+                rosterScopeModel.AllParentsVariablesToTop = allParentsVariablesToTop;
             }
         }
 
