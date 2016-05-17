@@ -544,6 +544,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\HQ.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Import.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -912,6 +917,11 @@
     <Content Include="App_GlobalResources\Users.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Users.ru.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\HQ.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>HQ.designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
