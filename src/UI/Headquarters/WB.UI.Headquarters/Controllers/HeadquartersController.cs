@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -58,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
                     return this.View(model);
                 }
 
-                this.Success("Headquarters user was successfully created");
+                this.Success(HQ.UserWasCreated);
                 return this.RedirectToAction("Index");
             }
 
@@ -106,20 +107,20 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user == null)
                 {
-                    this.Error("Could not update user information because current user does not exist");
+                    this.Error(HQ.UserNotExists);
                     return this.View(model);
                 }
 
                 bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
 
                 if (isAdmin)
-                    this.Error("Could not update user information because you don't have permission to perform this operation");
+                    this.Error(HQ.NoPermission);
                 else
                 {
                     this.UpdateAccount(user: user, editModel: model);
 
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated",
-                            user.UserName));
+                    this.Success(string.Format(HQ.UserWasUpdatedFormat, user.UserName));
+
                     return this.RedirectToAction("Index");
                 }
 
