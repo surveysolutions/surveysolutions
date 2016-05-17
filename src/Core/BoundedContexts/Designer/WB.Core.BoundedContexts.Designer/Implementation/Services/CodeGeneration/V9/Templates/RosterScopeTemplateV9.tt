@@ -67,6 +67,12 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	public <#=parentQuestion.TypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }										
 <#
 	}
+	foreach (var parentVariable in Model.AllParentsVariablesToTop) 
+	{
+#>
+	public <#=parentVariable.TypeName#> <#=parentVariable.VariableName#> { get { return this.@_parent.<#=parentVariable.VariableName#>; } }										
+<#
+	}
 #>
 
 	public decimal @rowcode { get { return this.RosterVector.Last(); } }
