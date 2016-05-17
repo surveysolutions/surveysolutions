@@ -120,23 +120,11 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="CommandTransformator_IncorrectFormatError" xml:space="preserve">
-    <value>значение «{0}» имеет не правильный формат.</value>
-  </data>
-  <data name="CommandTransformator_ParseNumericError" xml:space="preserve">
-    <value>{0} значения является слишком большим или слишком маленьким</value>
-  </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
     <value>Ошибка при попытке принять ответ</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
     <value>Статус установлен командой поддержки Survey Solutions</value>
-  </data>
-  <data name="CustomPrincipal_IdentityIsNullError" xml:space="preserve">
-    <value>Основа построена не полностью</value>
-  </data>
-  <data name="ErrorInStructure" xml:space="preserve">
-    <value>Ошибка в структуре</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
     <value>Сведения об учетной записи успешно обновлены</value>
@@ -186,12 +174,6 @@
   <data name="ObserverNotAllowed" xml:space="preserve">
     <value>Выполнение этого действия обозревателём запрещено</value>
   </data>
-  <data name="OperationNotAllowed" xml:space="preserve">
-    <value>Операция запрещена</value>
-  </data>
-  <data name="OperationNotImplemented" xml:space="preserve">
-    <value>Метод или операция не реализованы.</value>
-  </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Управление учетной записью</value>
   </data>
@@ -200,8 +182,5 @@
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>Недопустимое свойство</value>
-  </data>
-  <data name="WriteToSyncLogAttribute_UnknownPackageType" xml:space="preserve">
-    <value>Неизвестный тип интервью пакета</value>
   </data>
 </root>
