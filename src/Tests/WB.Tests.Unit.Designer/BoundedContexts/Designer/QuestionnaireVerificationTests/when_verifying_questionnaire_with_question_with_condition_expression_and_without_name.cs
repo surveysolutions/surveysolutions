@@ -4,8 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -24,24 +22,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new Group
+                Create.Group(groupId, children: new IComposite[]
                 {
-                    PublicKey = groupId,
-                    IsRoster = false,
-                    Children = new List<IComposite>
-                    {
-                        new TextQuestion
-                        {
-                            PublicKey = question1Id,
-                            ConditionExpression = "b>0",
-                        },
-                        new TextQuestion
-                        {
-                            PublicKey = question2Id,
-                            StataExportCaption = "b"
-                        }
-                    }
-                }
+                     Create.TextQuestion(question1Id, variable: null, enablementCondition: "b>0"),
+                     Create.TextQuestion(question2Id, variable:  "b")
+                })
             });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
