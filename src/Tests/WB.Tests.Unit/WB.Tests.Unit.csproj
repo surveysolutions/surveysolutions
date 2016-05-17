@@ -610,7 +610,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\SingleOptionRosterLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\when_question_is_linked_to_second_level_question_and_title_changes.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_roster_title_substitution_is_used.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_initializing_and_roster_title_is_used.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_substitution_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_and_substitution_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_changed.cs" />
