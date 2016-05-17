@@ -20,6 +20,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 .Root
                 .TreeToEnumerable(_ => _.Elements())
                 .Where(element => element.Name == "data")
+                .OrderBy(element => element.Attribute("name").Value)
                 .Select(element => element.Attribute("name").Value);
         }
 
@@ -30,6 +31,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 .Root
                 .TreeToEnumerable(_ => _.Elements())
                 .Where(element => element.Name == "data")
+                .OrderBy(element => element.Attribute("name").Value)
                 .ToDictionary(
                     element => element.Attribute("name").Value,
                     element => element.Elements().Single().Value
