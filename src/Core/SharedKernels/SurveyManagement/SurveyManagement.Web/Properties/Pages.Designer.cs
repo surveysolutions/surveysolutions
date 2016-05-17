@@ -160,87 +160,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception.
-        /// </summary>
-        public static string BrokenInterviewPackages_ExceptionTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_ExceptionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exception type.
-        /// </summary>
-        public static string BrokenInterviewPackages_ExceptionTypeTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_ExceptionTypeTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Broken interview packages.
-        /// </summary>
-        public static string BrokenInterviewPackages_Header {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Incoming date.
-        /// </summary>
-        public static string BrokenInterviewPackages_IncomingDateTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_IncomingDateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interview.
-        /// </summary>
-        public static string BrokenInterviewPackages_InterviewTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_InterviewTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processing date.
-        /// </summary>
-        public static string BrokenInterviewPackages_ProcessingDateTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_ProcessingDateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reprocess All.
-        /// </summary>
-        public static string BrokenInterviewPackages_ReprocessAllTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_ReprocessAllTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Size.
-        /// </summary>
-        public static string BrokenInterviewPackages_SizeTitle {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_SizeTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Control Panel: Broken interview packages.
-        /// </summary>
-        public static string BrokenInterviewPackages_Title {
-            get {
-                return ResourceManager.GetString("BrokenInterviewPackages_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CloseLabel {
@@ -250,65 +169,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Control Panel: EvenStore.
-        /// </summary>
-        public static string ControlPanel_EvenStoreTitle {
-            get {
-                return ResourceManager.GetString("ControlPanel_EvenStoreTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Control Panel.
-        /// </summary>
-        public static string ControlPanel_IndexTitle {
-            get {
-                return ResourceManager.GetString("ControlPanel_IndexTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Control Panel: NConfig.
-        /// </summary>
-        public static string ControlPanel_NConfigTitle {
-            get {
-                return ResourceManager.GetString("ControlPanel_NConfigTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
             get {
                 return ResourceManager.GetString("Create", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Diagnostic Results.
-        /// </summary>
-        public static string Designer_DiagnosticResultsTitle {
-            get {
-                return ResourceManager.GetString("Designer_DiagnosticResultsTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Perform Diagnostic.
-        /// </summary>
-        public static string Designer_PerformDiagnostic {
-            get {
-                return ResourceManager.GetString("Designer_PerformDiagnostic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Control Panel: Designer Diagnostics.
-        /// </summary>
-        public static string Designer_Title {
-            get {
-                return ResourceManager.GetString("Designer_Title", resourceCulture);
             }
         }
         
@@ -975,33 +840,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string InterviewHistory_Header {
             get {
                 return ResourceManager.GetString("InterviewHistory_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error occurred on Api request.
-        /// </summary>
-        public static string InterviewsController_Error {
-            get {
-                return ResourceManager.GetString("InterviewsController_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User was not found..
-        /// </summary>
-        public static string InterviewsController_NoUse {
-            get {
-                return ResourceManager.GetString("InterviewsController_NoUse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User is not an interviewer..
-        /// </summary>
-        public static string InterviewsController_UserNotInterviewer {
-            get {
-                return ResourceManager.GetString("InterviewsController_UserNotInterviewer", resourceCulture);
             }
         }
         
