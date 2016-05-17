@@ -151,7 +151,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
-                    command.CommandText = "SELECT COUNT(*) FROM events";
+                    command.CommandText = "select reltuples::bigint from pg_class where relname='events'";
 
                     var scalar = command.ExecuteScalar();
                     return scalar is DBNull ? 0 : Convert.ToInt32(scalar);
