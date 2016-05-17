@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -32,19 +33,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                 rosterTitleSubstitutionService = substStub.Object;
             }
 
+            var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
+            var plainQuestionnaireRepository = questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>();
+
+            var replacerService = new SubstitutionReplacerService(
+                statefulInterviewRepository,
+                plainQuestionnaireRepository,
+                new SubstitutionService(),
+                new AnswerToStringService(),
+                new VariableToUIStringService(),
+                rosterTitleSubstitutionService);
+
+            var liteEventRegistry = registry ?? Create.LiteEventRegistry();
+
             return new StaticTextViewModel(
-                questionnaireRepository: questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                interviewRepository: interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                registry: registry ?? Create.LiteEventRegistry(),
-                questionState: questionState ?? Mock.Of<StaticTextStateViewModel>(),
-                attachmentViewModel: attachmentViewModel ?? Mock.Of<AttachmentViewModel>(),
-                substitutionReplacerService: new SubstitutionReplacerService(
-                    interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                    questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                    new SubstitutionService(),
-                    new AnswerToStringService(),
-                    new VariableToUIStringService(),
-                    rosterTitleSubstitutionService));
+                questionnaireRepository: plainQuestionnaireRepository,
+                interviewRepository: statefulInterviewRepository,
+                registry: liteEventRegistry,
+                questionState: questionState ??
+                               new StaticTextStateViewModel(
+                                   new EnablementViewModel(statefulInterviewRepository, liteEventRegistry),
+                                   new ValidityViewModel(liteEventRegistry, statefulInterviewRepository,
+                                       plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
+                attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
+                substitutionReplacerService: replacerService);
         }
     }
 }
