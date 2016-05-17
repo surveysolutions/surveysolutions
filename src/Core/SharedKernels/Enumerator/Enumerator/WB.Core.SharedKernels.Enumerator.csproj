@@ -154,7 +154,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\State\SubstitutionReplacerService.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\SubstitutionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
