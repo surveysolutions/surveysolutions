@@ -68,7 +68,7 @@
                                 }
 
                                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
-                                    _.remove($scope.questionnaire.chapters);
+                                    $scope.questionnaire.chapters = [];
                                     _.forEach(questionnaire.chapters, function (c) {
                                         $scope.questionnaire.chapters.push(c);
                                     });
