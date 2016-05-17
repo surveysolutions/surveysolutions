@@ -150,56 +150,11 @@
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Индекс</value>
   </data>
-  <data name="BrokenInterviewPackages_ExceptionTitle" xml:space="preserve">
-    <value>Исключение</value>
-  </data>
-  <data name="BrokenInterviewPackages_ExceptionTypeTitle" xml:space="preserve">
-    <value>Тип исключения</value>
-  </data>
-  <data name="BrokenInterviewPackages_Header" xml:space="preserve">
-    <value>Сломанные интервью пакеты</value>
-  </data>
-  <data name="BrokenInterviewPackages_IncomingDateTitle" xml:space="preserve">
-    <value>Входящая Дата</value>
-  </data>
-  <data name="BrokenInterviewPackages_InterviewTitle" xml:space="preserve">
-    <value>Интервью</value>
-  </data>
-  <data name="BrokenInterviewPackages_ProcessingDateTitle" xml:space="preserve">
-    <value>Дата обработки</value>
-  </data>
-  <data name="BrokenInterviewPackages_ReprocessAllTitle" xml:space="preserve">
-    <value>Обработать все повторно</value>
-  </data>
-  <data name="BrokenInterviewPackages_SizeTitle" xml:space="preserve">
-    <value>Размер</value>
-  </data>
-  <data name="BrokenInterviewPackages_Title" xml:space="preserve">
-    <value>Панель управления: Сломанные интервью пакеты</value>
-  </data>
   <data name="CloseLabel" xml:space="preserve">
     <value>Закрыть</value>
   </data>
-  <data name="ControlPanel_EvenStoreTitle" xml:space="preserve">
-    <value>Панель управления: EvenStore</value>
-  </data>
-  <data name="ControlPanel_IndexTitle" xml:space="preserve">
-    <value>Панель управления</value>
-  </data>
-  <data name="ControlPanel_NConfigTitle" xml:space="preserve">
-    <value>Панель управления: NConfig</value>
-  </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
-  </data>
-  <data name="Designer_DiagnosticResultsTitle" xml:space="preserve">
-    <value>Результаты диагностики</value>
-  </data>
-  <data name="Designer_PerformDiagnostic" xml:space="preserve">
-    <value>Выполнение диагностики</value>
-  </data>
-  <data name="Designer_Title" xml:space="preserve">
-    <value>Панель управления: Дизайнер диагностика</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
     <value>Написать комментарий...</value>
@@ -401,15 +356,6 @@
   </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>История интервью</value>
-  </data>
-  <data name="InterviewsController_Error" xml:space="preserve">
-    <value>Произошла ошибка Api запроса</value>
-  </data>
-  <data name="InterviewsController_NoUse" xml:space="preserve">
-    <value>Пользователь не был найден.</value>
-  </data>
-  <data name="InterviewsController_UserNotInterviewer" xml:space="preserve">
-    <value>Пользователь не является интервьюером.</value>
   </data>
   <data name="Layout_Filter" xml:space="preserve">
     <value>Фильтр</value>

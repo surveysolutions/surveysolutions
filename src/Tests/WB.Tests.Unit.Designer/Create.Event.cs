@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -515,6 +516,11 @@ namespace WB.Tests.Unit.Designer
             public static VariableDeleted VariableDeleted(Guid? entityId = null)
             {
                 return new VariableDeleted() { EntityId = entityId.GetValueOrDefault(Guid.NewGuid()) };
+            }
+
+            public static QuestionnaireCloned QuestionnaireCloned(QuestionnaireDocument source)
+            {
+                return new QuestionnaireCloned() {QuestionnaireDocument = source};
             }
         }
     }

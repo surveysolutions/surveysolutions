@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
         public bool IsInRole(string role)
         {
             if (this.identity == null)
-                throw new Exception(Strings.CustomPrincipal_IdentityIsNullError);
+                throw new Exception("Principal not fully constructed");
             if (!this.identity.IsAuthenticated || role == null)
                 return false;
             
