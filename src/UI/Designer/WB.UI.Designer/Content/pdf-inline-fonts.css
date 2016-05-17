@@ -2,90 +2,15 @@
     Util to convert ttf to other font types: https://everythingfonts.com/font-face
     Util to convert file to base64: http://www.opinionatedgeek.com/dotnet/tools/base64encode/
 */
-@font-face {  font-family: 'NotoSansRegular'; src: url('../fonts/NotoSans-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansArmenianRegular'; src: url('../fonts/NotoSansArmenian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansAvestanRegular'; src: url('../fonts/NotoSansAvestan-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBalineseRegular'; src: url('../fonts/NotoSansBalinese-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBamumRegular'; src: url('../fonts/NotoSansBamum-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBatakRegular'; src: url('../fonts/NotoSansBatak-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBengaliRegular'; src: url('../fonts/NotoSansBengali-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBrahmiRegular'; src: url('../fonts/NotoSansBrahmi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBugineseRegular'; src: url('../fonts/NotoSansBuginese-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansBuhidRegular'; src: url('../fonts/NotoSansBuhid-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCanadianAboriginalRegular'; src: url('../fonts/NotoSansCanadianAboriginal-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCarianRegular'; src: url('../fonts/NotoSansCarian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansChamRegular'; src: url('../fonts/NotoSansCham-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCherokeeRegular'; src: url('../fonts/NotoSansCherokee-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCopticRegular'; src: url('../fonts/NotoSansCoptic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCuneiformRegular'; src: url('../fonts/NotoSansCuneiform-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansCypriotRegular'; src: url('../fonts/NotoSansCypriot-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansDeseretRegular'; src: url('../fonts/NotoSansDeseret-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansDevanagariRegular'; src: url('../fonts/NotoSansDevanagari-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansEgyptianHieroglyphsRegular'; src: url('../fonts/NotoSansEgyptianHieroglyphs-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansEthiopicRegular'; src: url('../fonts/NotoSansEthiopic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansGeorgianRegular'; src: url('../fonts/NotoSansGeorgian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansGlagoliticRegular'; src: url('../fonts/NotoSansGlagolitic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansGothicRegular'; src: url('../fonts/NotoSansGothic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansGujaratiRegular'; src: url('../fonts/NotoSansGujarati-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansGurmukhiRegular'; src: url('../fonts/NotoSansGurmukhi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansHanunooRegular'; src: url('../fonts/NotoSansHanunoo-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansHebrewRegular'; src: url('../fonts/NotoSansHebrew-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansImperialAramaicRegular'; src: url('../fonts/NotoSansImperialAramaic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansInscriptionalPahlaviRegular'; src: url('../fonts/NotoSansInscriptionalPahlavi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansInscriptionalParthianRegular'; src: url('../fonts/NotoSansInscriptionalParthian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansJavaneseRegular'; src: url('../fonts/NotoSansJavanese-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansKaithiRegular'; src: url('../fonts/NotoSansKaithi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansKannadaRegular'; src: url('../fonts/NotoSansKannada-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansKayahLiRegular'; src: url('../fonts/NotoSansKayahLi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansKharoshthiRegular'; src: url('../fonts/NotoSansKharoshthi-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansKhmerRegular'; src: url('../fonts/NotoSansKhmer-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLaoRegular'; src: url('../fonts/NotoSansLao-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLepchaRegular'; src: url('../fonts/NotoSansLepcha-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLimbuRegular'; src: url('../fonts/NotoSansLimbu-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLinearBRegular'; src: url('../fonts/NotoSansLinearB-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLisuRegular'; src: url('../fonts/NotoSansLisu-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLycianRegular'; src: url('../fonts/NotoSansLycian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansLydianRegular'; src: url('../fonts/NotoSansLydian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansMalayalamRegular'; src: url('../fonts/NotoSansMalayalam-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansMandaicRegular'; src: url('../fonts/NotoSansMandaic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansMeeteiMayekRegular'; src: url('../fonts/NotoSansMeeteiMayek-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansMongolianRegular'; src: url('../fonts/NotoSansMongolian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansMyanmarRegular'; src: url('../fonts/NotoSansMyanmar-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansNewTaiLueRegular'; src: url('../fonts/NotoSansNewTaiLue-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansNKoRegular'; src: url('../fonts/NotoSansNKo-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOghamRegular'; src: url('../fonts/NotoSansOgham-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOlChikiRegular'; src: url('../fonts/NotoSansOlChiki-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOldItalicRegular'; src: url('../fonts/NotoSansOldItalic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOldPersianRegular'; src: url('../fonts/NotoSansOldPersian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOldSouthArabianRegular'; src: url('../fonts/NotoSansOldSouthArabian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOldTurkicRegular'; src: url('../fonts/NotoSansOldTurkic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOriyaRegular'; src: url('../fonts/NotoSansOriya-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansOsmanyaRegular'; src: url('../fonts/NotoSansOsmanya-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansPhagsPaRegular'; src: url('../fonts/NotoSansPhagsPa-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansPhoenicianRegular'; src: url('../fonts/NotoSansPhoenician-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansRejangRegular'; src: url('../fonts/NotoSansRejang-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansRunicRegular'; src: url('../fonts/NotoSansRunic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSamaritanRegular'; src: url('../fonts/NotoSansSamaritan-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSaurashtraRegular'; src: url('../fonts/NotoSansSaurashtra-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansShavianRegular'; src: url('../fonts/NotoSansShavian-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSinhalaRegular'; src: url('../fonts/NotoSansSinhala-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSundaneseRegular'; src: url('../fonts/NotoSansSundanese-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSylotiNagriRegular'; src: url('../fonts/NotoSansSylotiNagri-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSymbolsRegular'; src: url('../fonts/NotoSansSymbols-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSyriacEasternRegular'; src: url('../fonts/NotoSansSyriacEastern-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSyriacEstrangelaRegular'; src: url('../fonts/NotoSansSyriacEstrangela-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansSyriacWesternRegular'; src: url('../fonts/NotoSansSyriacWestern-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTagalogRegular'; src: url('../fonts/NotoSansTagalog-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTagbanwaRegular'; src: url('../fonts/NotoSansTagbanwa-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTaiLeRegular'; src: url('../fonts/NotoSansTaiLe-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTaiThamRegular'; src: url('../fonts/NotoSansTaiTham-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTaiVietRegular'; src: url('../fonts/NotoSansTaiViet-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTamilRegular'; src: url('../fonts/NotoSansTamil-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTeluguRegular'; src: url('../fonts/NotoSansTelugu-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansThaanaRegular'; src: url('../fonts/NotoSansThaana-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansThaiRegular'; src: url('../fonts/NotoSansThai-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTibetanRegular'; src: url('../fonts/NotoSansTibetan-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansTifinaghRegular'; src: url('../fonts/NotoSansTifinagh-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansUgariticRegular'; src: url('../fonts/NotoSansUgaritic-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansVaiRegular'; src: url('../fonts/NotoSansVai-Regular.ttf') format('truetype'); }
-@font-face {  font-family: 'NotoSansYiRegular'; src: url('../fonts/NotoSansYi-Regular.ttf') format('truetype'); }
+
+@font-face {  font-family: 'NotoSansDevanagariRegular'; src: url('../fonts/NotoSansDevanagari-Regular.ttf') format('truetype'); unicode-range: U+0900-097F; }
+@font-face {  font-family: 'NotoSansArmenianRegular'; src: url('../fonts/NotoSansArmenian-Regular.ttf') format('truetype'); unicode-range: U+0531-058F; }
+@font-face {  font-family: 'NotoSansEthiopicRegular'; src: url('../fonts/NotoSansEthiopic-Regular.ttf') format('truetype'); unicode-range: U+1200-1399; }
+@font-face {  font-family: 'NotoSansGeorgianRegular'; src: url('../fonts/NotoSansGeorgian-Regular.ttf') format('truetype'); unicode-range: U+10A0-10FC; }
+@font-face {  font-family: 'NotoSansHebrewRegular'; src: url('../fonts/NotoSansHebrew-Regular.ttf') format('truetype');unicode-range: U+0591-05F4; }
+@font-face {  font-family: 'NotoSansMyanmarRegular'; src: url('../fonts/NotoSansMyanmar-Regular.ttf') format('truetype'); unicode-range: U+1000-109F;}
+@font-face {  font-family: 'NotoSansMongolianRegular'; src: url('../fonts/NotoSansMongolian-Regular.ttf') format('truetype');unicode-range: U+1800-18AA; }
+@font-face {  font-family: 'NotoSansThaiRegular'; src: url('../fonts/NotoSansThai-Regular.ttf') format('truetype');unicode-range: U+0E01-0E5B;  }
+@font-face {  font-family: 'NotoSansBengaliRegular'; src: url('../fonts/NotoSansBengali-Regular.ttf') format('truetype'); unicode-range: U+0964-09FB; }
+@font-face {  font-family: 'NotoSansRegular'; src: url('../fonts/NotoSans-Regular.ttf') format('truetype');unicode-range: U+0021-0527;  }
+@font-face {  font-family: 'NotoNaskhArabicRegular'; src: url('../fonts/NotoNaskhArabic-Regular.ttf') format('truetype');unicode-range: U+0600-077D; }
