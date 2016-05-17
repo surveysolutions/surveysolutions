@@ -87,8 +87,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.Success(
                     string.Format(
-                        @"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>",
-                        this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
+                        @"{0} <a class=""btn btn-success"" href=""{1}""><i class=""icon-plus""></i>{2}</a>",
+                        HQ.InterviewWasCreated,
+                        this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value }),
+                        HQ.CreateOneMore));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
             return this.View(this.Filters());
@@ -118,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers
             QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
 
             if (questionnaireBrowseItem == null)
-                return new HttpNotFoundResult($"Questionnaire with id {id.FormatGuid()} and version {version} is not found.");
+                return new HttpNotFoundResult(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
 
             return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
         }
@@ -151,8 +153,8 @@ namespace WB.UI.Headquarters.Controllers
 
             this.Success(
                 model.NewTitle == model.OriginalTitle
-                    ? $"Questionnaire '{model.OriginalTitle}' was successfully cloned."
-                    : $"Questionnaire '{model.OriginalTitle}' was successfully cloned with new title '{model.NewTitle}'.");
+                    ? string.Format(HQ.QuestionnaireClonedFormat, model.OriginalTitle)
+                    : string.Format(HQ.QuestionnaireClonedAndRenamedFormat, model.OriginalTitle, model.NewTitle));
 
             return this.RedirectToAction(nameof(this.Index));
         }
