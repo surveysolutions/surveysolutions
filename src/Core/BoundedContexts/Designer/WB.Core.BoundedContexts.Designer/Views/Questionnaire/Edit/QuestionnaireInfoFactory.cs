@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
-                Value = VariableType.Decimal.ToString(),
-                Text = "Decimal"
+                Value = VariableType.Double.ToString(),
+                Text = "Double"
             },
             new SelectOption
             {

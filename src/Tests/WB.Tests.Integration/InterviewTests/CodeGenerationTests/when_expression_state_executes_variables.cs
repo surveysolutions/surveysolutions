@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?) variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (long?) variables.ChangedVariableValues[Create.Identity(variableId)]
                 };
             });
 
@@ -61,7 +61,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
         [Serializable]
         public class InvokeResults
         {
-            public int? IntVariableResult { get; set; }
+            public long? IntVariableResult { get; set; }
         }
     }
 }
