@@ -91,7 +91,7 @@ namespace WB.UI.Interviewer.Activities
 
             this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy, 
                 UIResources.Prefs_GpsDesiredAccuracyTitle,
-                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, interviewerSettings.GpsDesiredAccuracy),
+                UIResources.Prefs_GpsDesiredAccuracySubTitle,
                 interviewerSettings.GpsDesiredAccuracy.ToString());
             this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
                 InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
