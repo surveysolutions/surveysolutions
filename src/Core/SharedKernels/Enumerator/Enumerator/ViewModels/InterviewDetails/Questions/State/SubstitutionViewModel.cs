@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class SubstitutionReplacerService
+    public class SubstitutionViewModel
     {
         private SubstitutionVariables substitutionVariables;
 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string textWithSubstitutions;
         private Identity entityIdentity;
 
-        public SubstitutionReplacerService(IStatefulInterviewRepository interviewRepository,
+        public SubstitutionViewModel(IStatefulInterviewRepository interviewRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
@@ -81,12 +81,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     Name = variable,
                     Id = questionnaire.GetQuestionIdByVariable(variable)
-                }),
+                }).ToList(),
                 ByVariables = variableNames.Where(questionnaire.HasVariable).Select(x => new SubstitutionVariable
                 {
                     Name = x,
                     Id = questionnaire.GetVariableIdByVariableName(x)
-                })
+                }).ToList()
             };
         }
 
