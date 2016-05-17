@@ -1,0 +1,70 @@
+﻿using System;
+using Machine.Specifications;
+using Main.Core.Entities.Composite;
+using Moq;
+using Ncqrs.Eventing;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using It = Machine.Specifications.It;
+
+namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
+{
+    internal class when_substitution_title_changed : StaticTextViewModelTestsContext
+    {
+        Establish context = () =>
+        {
+            var interviewId = "interviewId";
+            var staticTextWithSubstitutionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var substitedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            var answer = new TextAnswer();
+            answer.SetAnswer("new value");
+            var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitedQuestionId, Empty.RosterVector) == answer);
+
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
+
+            var questionnaireMock = Create.PlainQuestionnaire(Create.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.StaticText(publicKey: staticTextWithSubstitutionId, text: "Old title %substitute%"),
+                Create.NumericRealQuestion(variable: "substitute", id: substitedQuestionId)
+            }));
+
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
+
+            ILiteEventRegistry registry = Create.LiteEventRegistry();
+            liteEventBus = Create.LiteEventBus(registry);
+
+            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
+
+            Identity id = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
+            viewModel.Init(interviewId, id, null);
+
+            changedTitleIds =
+                new Identity[]
+                {
+                    new Identity(staticTextWithSubstitutionId, Empty.RosterVector)
+                };
+            fakeInterview = Create.Interview();
+        };
+
+        Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
+            Create.CommittedEvent(payload:new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
+
+        It should_change_item_title = () => viewModel.StaticText.ShouldEqual("Old title new value");
+
+        static StaticTextViewModel viewModel;
+        static ILiteEventBus liteEventBus;
+        static IEventSourcedAggregateRoot fakeInterview;
+        private static Identity[] changedTitleIds;
+    }
+}
+
