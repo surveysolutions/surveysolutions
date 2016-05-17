@@ -43,6 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<HierarchyReferenceModel> AllParentsQuestionsToTop  { set; get; }
 
+        public IEnumerable<HierarchyReferenceModel> AllParentsVariablesToTop { set; get; }
+
         public IEnumerable<HierarchyReferenceModel> AllParentsRostersToTop { set; get; }
 
         public string ParentTypeName { set; get; }
