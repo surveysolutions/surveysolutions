@@ -552,9 +552,6 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_previous_request_is_in_progress.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_signed_out.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_setting_text_existing_option.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\RealQuestionViewModelTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\when_answering_numeric_question_with_big_value.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\RealQuestionViewModelTests\when_answering_numeric_question_with_big_negative_value.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\IntegerQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_negative_value.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_big_negative_value.cs" />
@@ -613,7 +610,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\SingleOptionRosterLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\when_question_is_linked_to_second_level_question_and_title_changes.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_roster_title_substitution_is_used.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_initializing_and_roster_title_is_used.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_substitution_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_and_substitution_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_variable_value_changed.cs" />
