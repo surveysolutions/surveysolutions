@@ -19,3 +19,7 @@ CREATE INDEX event_source_indx
   USING btree
   (eventsourceid);
 
+CREATE INDEX globalsequence_indx
+  ON events
+  USING btree
+  (globalsequence);
