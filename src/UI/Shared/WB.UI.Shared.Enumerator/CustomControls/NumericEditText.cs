@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
-        private const int maxDigitsInDecimal = 16;
+        private const int maxDigitsInDecimal = 28;
         private const int maxFractionDigits = 15;
         private const string leadingZeroFilterRegex = "^0+(?!$)";
         private const string nonLocalizedAndroidDecimalSeparator = ".";

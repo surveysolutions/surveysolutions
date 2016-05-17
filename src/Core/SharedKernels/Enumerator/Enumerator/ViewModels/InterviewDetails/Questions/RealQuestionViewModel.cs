@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public decimal? Answer
         {
             get { return this.answer; }
-            private set
+            set
             {
                 if (this.answer != value)
                 {
@@ -127,7 +127,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
             }
-            
+
+            decimal jsonSerializerDecimalLimit = 9999999999999999m;
+
+            if (this.Answer > jsonSerializerDecimalLimit || this.Answer < -jsonSerializerDecimalLimit)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Real_ParsingError);
+                return;
+            }
+
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
