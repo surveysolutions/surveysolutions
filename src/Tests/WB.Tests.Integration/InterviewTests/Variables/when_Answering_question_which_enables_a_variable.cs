@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
         It should_raise_VariablesValuesChanged_event_for_the_variable_with_value_equal_to_6 = () =>
            eventContext.ShouldContainEvent<VariablesChanged>(@event
-               => (int?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
+               => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
            eventContext.ShouldContainEvent<VariablesEnabled>(@event
