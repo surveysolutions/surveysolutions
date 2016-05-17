@@ -627,8 +627,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 case VariableType.LongInteger:
                     return "long?";
-                case VariableType.Decimal:
-                    return "decimal?";
+                case VariableType.Double:
+                    return "double?";
                 case VariableType.Boolean:
                     return "bool?";
                 case VariableType.DateTime:
