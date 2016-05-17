@@ -123,12 +123,6 @@
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
   </data>
-  <data name="BrokenInterviewPackages_Title" xml:space="preserve">
-    <value>Control Panel: Broken interview packages</value>
-  </data>
-  <data name="Designer_Title" xml:space="preserve">
-    <value>Control Panel: Designer Diagnostics</value>
-  </data>
   <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
     <value>Approved by HQ</value>
   </data>
@@ -203,15 +197,6 @@
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Index</value>
-  </data>
-  <data name="ControlPanel_EvenStoreTitle" xml:space="preserve">
-    <value>Control Panel: EvenStore</value>
-  </data>
-  <data name="ControlPanel_IndexTitle" xml:space="preserve">
-    <value>Control Panel</value>
-  </data>
-  <data name="ControlPanel_NConfigTitle" xml:space="preserve">
-    <value>Control Panel: NConfig</value>
   </data>
   <data name="HealthCheck_IndexTitle" xml:space="preserve">
     <value>Health Check Page</value>
@@ -326,15 +311,6 @@
   </data>
   <data name="GPS_altitude" xml:space="preserve">
     <value>altitude</value>
-  </data>
-  <data name="InterviewsController_NoUse" xml:space="preserve">
-    <value>User was not found.</value>
-  </data>
-  <data name="InterviewsController_UserNotInterviewer" xml:space="preserve">
-    <value>User is not an interviewer.</value>
-  </data>
-  <data name="InterviewsController_Error" xml:space="preserve">
-    <value>Error occurred on Api request</value>
   </data>
   <data name="InterviewController_RevalidationFailed" xml:space="preserve">
     <value>Revalidation was unsuccessful.</value>
@@ -518,36 +494,6 @@
   </data>
   <data name="AnyOption" xml:space="preserve">
     <value>Any</value>
-  </data>
-  <data name="BrokenInterviewPackages_Header" xml:space="preserve">
-    <value>Broken interview packages</value>
-  </data>
-  <data name="BrokenInterviewPackages_ReprocessAllTitle" xml:space="preserve">
-    <value>Reprocess All</value>
-  </data>
-  <data name="BrokenInterviewPackages_InterviewTitle" xml:space="preserve">
-    <value>Interview</value>
-  </data>
-  <data name="BrokenInterviewPackages_IncomingDateTitle" xml:space="preserve">
-    <value>Incoming date</value>
-  </data>
-  <data name="BrokenInterviewPackages_ProcessingDateTitle" xml:space="preserve">
-    <value>Processing date</value>
-  </data>
-  <data name="BrokenInterviewPackages_SizeTitle" xml:space="preserve">
-    <value>Size</value>
-  </data>
-  <data name="BrokenInterviewPackages_ExceptionTypeTitle" xml:space="preserve">
-    <value>Exception type</value>
-  </data>
-  <data name="BrokenInterviewPackages_ExceptionTitle" xml:space="preserve">
-    <value>Exception</value>
-  </data>
-  <data name="Designer_DiagnosticResultsTitle" xml:space="preserve">
-    <value>Diagnostic Results</value>
-  </data>
-  <data name="Designer_PerformDiagnostic" xml:space="preserve">
-    <value>Perform Diagnostic</value>
   </data>
   <data name="Upload_Upload" xml:space="preserve">
     <value>Upload</value>

@@ -112,10 +112,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var userInfo = this.userViewFactory.Load(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
 
             if(userInfo == null)
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Pages.InterviewsController_NoUse);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
 
             if(!userInfo.Roles.Contains(UserRoles.Operator))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Pages.InterviewsController_UserNotInterviewer);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
 
             var executor = this.globalInfoProvider.GetCurrentUser();
             return TryExecuteCommand(new AssignInterviewerCommand(request.Id, executor.Id, userInfo.PublicKey, DateTime.UtcNow));

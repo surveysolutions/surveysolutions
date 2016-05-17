@@ -3,10 +3,10 @@
 
 @{
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
-    this.ViewBag.Title = Pages.Designer_Title;
+    this.ViewBag.Title = "Control Panel: Designer Diagnostics";
 }
 
-<b> @Pages.Designer_DiagnosticResultsTitle :</b><br/>
+<b> Diagnostic Results:</b><br/>
 <pre style="height: 300px; overflow-y: scroll;">
 @Html.Raw(this.Model)
 </pre>
@@ -16,5 +16,5 @@
     <input type="text" name="login"/>
     <input type="text" name="password"/>
 
-    <button type="submit">@Pages.Designer_PerformDiagnostic</button>
+    <button type="submit">Perform Diagnostic</button>
 }

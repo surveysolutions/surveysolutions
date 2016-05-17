@@ -66,12 +66,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override void CreateRole(string roleName)
         {
-            throw new Exception(Strings.OperationNotAllowed);
+            throw new Exception("Operation is not allowed.");
         }
 
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            throw new Exception(Strings.OperationNotAllowed);
+            throw new Exception("Operation is not allowed.");
         }
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)

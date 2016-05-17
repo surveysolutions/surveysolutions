@@ -19,12 +19,12 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
-    internal class when_merging_questionnaire_and_interview_data_with_static_text_question_which_uses_variable_in_substitution : InterviewDataAndQuestionnaireMergerTestContext
+    internal class when_merging_questionnaire_and_interview_data_with_static_text_question_which_uses_numeric_question_in_substitution : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>
         {
             staticTextWithSubstitutionId = Guid.Parse("11111111111111111111111111111111");
-            variableId = Guid.Parse("20000000000000000000000000000000");
+            numericQuestionId = Guid.Parse("20000000000000000000000000000000");
             groupId    = Guid.Parse("55555555555555555555555555555555");
 
             interviewId = Guid.Parse("43333333333333333333333333333333");
@@ -38,8 +38,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     RosterFixedTitles = new[] { "a", "b", "c" },
                     Children = new List<IComposite>()
                     {
-                        new StaticText(staticTextWithSubstitutionId, "test %v1%", null, false, null),
-                        new Variable(variableId, new VariableData(VariableType.LongInteger, "v1", "5"))
+                        new StaticText(staticTextWithSubstitutionId, "test %q1%", null, false, null),
+                        new NumericQuestion()
+                        {
+                            PublicKey = numericQuestionId,
+                            StataExportCaption  = "q1",
+                            QuestionType = QuestionType.Numeric,
+                            IsInteger = true
+                        }
                     }
                 });
 
@@ -48,17 +54,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
 
             AddInterviewLevel(interview, new ValueVector<Guid> { groupId }, new decimal[] { 0 },
-                new Dictionary<Guid, object>(),
-                new Dictionary<Guid, string>() { { groupId, "a" } },
-                variables: new Dictionary<Guid, object>() { { variableId, 1 } });
+                new Dictionary<Guid, object>() { { numericQuestionId, 1 } },
+                new Dictionary<Guid, string>() { { groupId, "a" } });
             AddInterviewLevel(interview, new ValueVector<Guid> { groupId }, new decimal[] { 1 },
-                new Dictionary<Guid, object>(),
-                new Dictionary<Guid, string>() { { groupId, "b" } },
-                variables: new Dictionary<Guid, object>() { { variableId, 2 } });
+                new Dictionary<Guid, object>() { { numericQuestionId, 2 } },
+                new Dictionary<Guid, string>() { { groupId, "b" } });
             AddInterviewLevel(interview, new ValueVector<Guid> { groupId }, new decimal[] { 2 },
                 new Dictionary<Guid, object>(),
-                new Dictionary<Guid, string>() { { groupId, "c" } },
-                variables: new Dictionary<Guid, object>());
+                new Dictionary<Guid, string>() { { groupId, "c" } });
             
             user = Mock.Of<UserDocument>();
 
@@ -85,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
-        private static Guid variableId;
+        private static Guid numericQuestionId;
         private static Guid groupId;
         private static Guid staticTextWithSubstitutionId;
         private static Guid interviewId;

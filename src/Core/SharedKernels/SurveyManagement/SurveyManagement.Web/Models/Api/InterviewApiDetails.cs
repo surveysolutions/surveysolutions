@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                         var key = CreateLeveKeyFromPropagationVector(rosterApiItem.RosterVector.Take(rosterApiItem.RosterVector.Length - 1).ToArray());
 
                         if (!rosters.ContainsKey(key))
-                            throw new Exception(Strings.ErrorInStructure);
+                            throw new Exception("Error in structure");
 
                         rosters[key].Rosters.Add(rosterApiItem);
                     }
