@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     UserId = person.Id,
                     Name = accountsDocumentReader.GetById(person.Id)?.UserName,
                     Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.Id)?.Date
-                }),
+                }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
