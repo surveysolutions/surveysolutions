@@ -4,6 +4,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NLog;
+using NLog.Layouts;
 using NLog.Targets;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
@@ -59,8 +60,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
 
-            var logFilePath = AndroidPathUtils.GetPathToLogFile();
-            LogManager.Configuration.AllTargets.OfType<FileTarget>().ForEach(aTarget => aTarget.FileName = logFilePath);
+            LogManager.Configuration.Variables["interviewerPublicDir"] = new SimpleLayout(AndroidPathUtils.GetPathToExternalInterviewerDirectory());
             this.Bind<ILoggerProvider>().To<NLogLoggerProvider>();
             this.Bind<ILogger>().ToMethod(context =>
             {

@@ -21,7 +21,12 @@ namespace WB.Infrastructure.Shared.Enumerator
 
         public static string GetPathToSubfolderInExternalDirectory(string subFolderName)
         {
-            return GetPathToSubfolderInDirectory(PortablePath.Combine(GetPathToExternalDirectory(), "Interviewer"), subFolderName);
+            return GetPathToSubfolderInDirectory(GetPathToExternalInterviewerDirectory(), subFolderName);
+        }
+
+        public static string GetPathToExternalInterviewerDirectory()
+        {
+            return PortablePath.Combine(GetPathToExternalDirectory(), "Interviewer");
         }
 
         public static string GetPathToFileInLocalSubDirectory(string subFolderName, string fileName)
