@@ -2564,26 +2564,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<decimal> rosterInstanceIds = Enumerable.Range(0, rosterSize).Select(index => (decimal)index).ToList();
 
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer);
-
             var rostersWithoutRosterTitleQuestions = rosterIds
                 .Where(rosterId => !questionnaire.IsRosterTitleQuestionAvailable(rosterId));
 
+            Dictionary<decimal, string> numericRosterTitles = null;
+
             if (rostersWithoutRosterTitleQuestions.Any())
             {
-                Dictionary<decimal, string> numericRosterTitles = Enumerable.Range(0, rosterSize).ToDictionary(
+                numericRosterTitles = Enumerable.Range(0, rosterSize).ToDictionary(
                     index => (decimal) index,
                     index => (index + 1).ToString(CultureInfo.InvariantCulture));
-
-                var rosterTitlesForRostersWithoutRosterTitleQuestions =
-                    rostersWithoutRosterTitleQuestions
-                        .ToDictionary(
-                            rosterId => rosterId,
-                            rosterId => numericRosterTitles);
-
-                rosterCalculationData.SetTitlesForRosterInstances(rosterTitlesForRostersWithoutRosterTitleQuestions);
             }
 
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, numericRosterTitles, questionnaire, getAnswer);
+            
             //Update State
             expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
 
@@ -3540,10 +3534,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var nestedRosterIds = questionnaire.GetNestedRostersOfGroupById(rosterId);
 
-            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterScopeRosterVector)
-                => nestedRosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterScopeRosterVector, outerRosterVector);
-
             foreach (var nestedRosterId in nestedRosterIds)
             {
                 var rosterInstanceIds = this.GetRosterInstancesById(state, questionnaire, nestedRosterId, outerRosterVector, getAnswer);
@@ -4297,9 +4287,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             return new Dictionary<decimal, Tuple<string, int?>>();
                         try
                         {
+                            var isRosterTitleAvaliable = questionnaire.IsRosterTitleQuestionAvailable(rosterId);
                             var intAnswer = Convert.ToInt32(answerOnRosterSizeQuestion);
                             return Enumerable.Range(0, intAnswer)
-                                .ToDictionary(x => (decimal)x, x => new Tuple<string, int?>(null, x));
+                                .ToDictionary(x => (decimal) x,
+                                    x =>
+                                        new Tuple<string, int?>(
+                                            isRosterTitleAvaliable
+                                                ? null
+                                                : (x + 1).ToString(CultureInfo.InvariantCulture), x));
                         }
                         catch (InvalidCastException e)
                         {

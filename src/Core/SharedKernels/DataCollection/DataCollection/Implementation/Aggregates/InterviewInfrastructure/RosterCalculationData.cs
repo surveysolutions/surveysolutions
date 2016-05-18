@@ -72,11 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.TitlesForRosterInstancesByInstanceId = titlesForRosterInstances;
         }
 
-        public void SetTitlesForRosterInstances(Dictionary<Guid, Dictionary<decimal, string>> titlesForRosterInstances)
-        {
-            this.TitlesForRosterInstancesByRosterIdAndInstanceId = titlesForRosterInstances;
-        }
-
         public bool AreTitlesForRosterInstancesSpecified()
         {
             return this.TitlesForRosterInstancesByInstanceId != null || this.TitlesForRosterInstancesByRosterIdAndInstanceId != null;
