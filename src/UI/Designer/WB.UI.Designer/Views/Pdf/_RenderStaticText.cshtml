@@ -40,7 +40,7 @@
                 }
             }
         </div>
-        <div id="@questionnaire.GetItemRef(staticText.PublicKey)" class="static_text">@staticText.Text</div>
+        <div id="@questionnaire.GetItemRef(staticText.PublicKey)" class="static_text">@questionnaire.SanitizeHtml(staticText.Text)</div>
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>

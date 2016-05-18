@@ -9,7 +9,7 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@question.QuestionText</div>
+        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@questionnaire.SanitizeHtml(question.QuestionText)</div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {
