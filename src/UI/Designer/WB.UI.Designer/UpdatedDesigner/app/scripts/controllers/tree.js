@@ -400,7 +400,7 @@
 
                                     var links = _.reduce(result, function (result, item) {
                                         return result + '<a href=#' + $state.params.questionnaireId +
-                                            "/chapter/" + item.chapterId + "/question/" + item.id + '>' + _.trunc(item.title, 30) + '</a>';
+                                            "/chapter/" + item.chapterId + "/question/" + item.id + '>' + item.title.substring(0, 30) + '</a>';
                                     }, "");
 
                                     notificationService.notify({
