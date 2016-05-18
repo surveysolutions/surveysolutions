@@ -732,6 +732,11 @@
     <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
     <EmbeddedResource Include="Scripts\spin.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.extenders.js" />
+    <EmbeddedResource Include="Content\img\google-maps-markers\m1.png" />
+    <EmbeddedResource Include="Content\img\google-maps-markers\m2.png" />
+    <EmbeddedResource Include="Content\img\google-maps-markers\m3.png" />
+    <EmbeddedResource Include="Content\img\google-maps-markers\m4.png" />
+    <EmbeddedResource Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Scripts\spin.min.js" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />
