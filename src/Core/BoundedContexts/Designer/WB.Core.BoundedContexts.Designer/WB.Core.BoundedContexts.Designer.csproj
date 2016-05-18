@@ -492,11 +492,6 @@
     <Compile Include="Mappings\AccountDocumentMap.cs" />
     <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
     <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
-    <Compile Include="Resources\RoslynCompilerResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RoslynCompilerResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\VerificationMessages.Designer.cs">
       <DependentUpon>VerificationMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -734,10 +729,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\RoslynCompilerResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RoslynCompilerResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\VerificationMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
@@ -748,9 +739,6 @@
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\WB.Core.SharedKernels.DataCollection.Portable.Profile24.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt">
