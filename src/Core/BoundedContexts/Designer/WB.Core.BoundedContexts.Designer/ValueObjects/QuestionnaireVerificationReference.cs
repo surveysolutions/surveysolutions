@@ -39,5 +39,29 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 return (this.Id.GetHashCode() * 397) ^ (int)this.Type;
             }
         }
+
+        public static QuestionnaireVerificationReference CreateForGroup(Guid groupId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId);
+
+        public static QuestionnaireVerificationReference CreateForVariable(Guid variableId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Variable, variableId);
+
+        public static QuestionnaireVerificationReference CreateForRoster(Guid rosterId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Roster, rosterId);
+
+        public static QuestionnaireVerificationReference CreateForQuestion(Guid questionId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId);
+
+        public static QuestionnaireVerificationReference CreateForMacro(Guid macroId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macroId);
+
+        public static QuestionnaireVerificationReference CreateForLookupTable(Guid lookupTableId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.LookupTable, lookupTableId);
+
+        public static QuestionnaireVerificationReference CreateForAttachment(Guid attachmentId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Attachment, attachmentId);
+
+        public static QuestionnaireVerificationReference CreateForStaticText(Guid staticTextId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.StaticText, staticTextId);
     }
 }
