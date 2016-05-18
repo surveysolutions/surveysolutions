@@ -27,17 +27,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.substitutionService = substitutionService;
         }
 
-        public string Substitute(string questionTitle, Identity questionIdentity, string interviewId)
+        public string Substitute(string title, Identity entityIdentity, string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            Guid nearestRosterId = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionIdentity.Id).Last();
+            Guid nearestRosterId = questionnaire.GetRostersFromTopToSpecifiedEntity(entityIdentity.Id).Last();
 
-            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId, questionIdentity.RosterVector);
+            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId, entityIdentity.RosterVector);
 
             var replaceTo = string.IsNullOrEmpty(roster.Title) ? this.substitutionService.DefaultSubstitutionText : roster.Title;
-            var result = this.substitutionService.ReplaceSubstitutionVariable(questionTitle, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);
+            var result = this.substitutionService.ReplaceSubstitutionVariable(title, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);
             return result;
         }
     }

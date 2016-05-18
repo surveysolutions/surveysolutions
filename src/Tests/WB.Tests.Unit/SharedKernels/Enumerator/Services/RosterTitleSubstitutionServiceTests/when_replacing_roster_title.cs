@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                 x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == new InterviewRoster { Title = rosterTitle });
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.GetRostersFromTopToSpecifiedQuestion(questionid) == new [] { Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") });
+                => _.GetRostersFromTopToSpecifiedEntity(questionid) == new [] { Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") });
 
             var questionnaireStorageStub = Mock.Of<IPlainQuestionnaireRepository>(_
                 => _.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire
