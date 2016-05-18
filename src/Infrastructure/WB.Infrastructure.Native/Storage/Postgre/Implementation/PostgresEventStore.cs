@@ -170,17 +170,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var countOfAllEvents = this.CountOfAllEvents();
             int processed = 0;
-
-            while (processed < countOfAllEvents)
+            IEnumerable<CommittedEvent> eventsBatch;
+            do
             {
-                foreach (var committedEvent in this.ReadEventsBatch(processed))
+                eventsBatch = this.ReadEventsBatch(processed).ToList();
+                foreach (var committedEvent in eventsBatch)
                 {
                     processed++;
                     yield return committedEvent;
                 }
-            }
+            } while (eventsBatch.Any());
         }
 
         private IEnumerable<CommittedEvent> ReadEventsBatch(int processed)
