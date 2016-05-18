@@ -691,9 +691,10 @@ namespace WB.Tests.Unit.Designer
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
             string variableLabel =null,
+            string title= "Question X test",
             params Answer[] answers)
         {
-            return new TextQuestion("Question X")
+            return new TextQuestion(title)
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = questionType,
