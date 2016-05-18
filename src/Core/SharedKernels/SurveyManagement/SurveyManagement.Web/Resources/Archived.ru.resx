@@ -145,12 +145,12 @@
     <value>Имя</value>
   </data>
   <data name="Unarchive" xml:space="preserve">
-    <value>Разархивировать</value>
+    <value>Восстановить</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>Интервьювер(ы) будут разархивированы.</value>
+    <value>Интервьюверы будут восстановлены.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>Супервизор(ы) будут разархивированы.</value>
+    <value>Супервизор(ы) будут восстановлены.</value>
   </data>
 </root>

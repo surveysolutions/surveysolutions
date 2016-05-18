@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                questionnaire
                    .Attachments
                    .Where(x => hasError(x, questionnaire))
-                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateAttachmentReference(entity.AttachmentId)));
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
 
@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                    this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Where(x => hasError(x, questionnaire))
-                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateAttachmentReference(entity.AttachmentId)));
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
