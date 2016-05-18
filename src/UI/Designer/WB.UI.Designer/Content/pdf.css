@@ -53,7 +53,7 @@ body {
   color: #000;
   background: #fff;
   font: 14px/16px, sans-serif;
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
 }
 b {
   font-weight: normal;
@@ -165,7 +165,7 @@ article {
   text-transform: uppercase;
 }
 .table_of_contents dl dd .appendix {
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
 }
 .table_of_contents .group-statistics {
   font-size: 12px;
@@ -190,7 +190,7 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
 }
 .page_path {
   float: left;
@@ -249,7 +249,7 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
 }
 .type span {
   margin-top: 6px;
@@ -286,6 +286,7 @@ article {
   cursor: pointer;
   position: relative;
   padding-left: 28px;
+  display: flex;
 }
 .answer-editor input + label::before {
   content: "";
@@ -324,7 +325,7 @@ article {
   margin-right: 10px;
   vertical-align: top;
   text-align: right;
-  display: inline-block;
+  float: left;
 }
 .option > span {
   display: inline-block;
@@ -431,7 +432,7 @@ input[type=date] {
 }
 .condition span,
 .validation-expression span {
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
   top: -1px;
 }
 .roster,
@@ -471,6 +472,9 @@ input[type=date] {
   line-height: 12px;
   margin-right: 15px;
 }
+.static_text {
+  font-style: italic;
+}
 .static_text,
 .variable-title {
   font-size: 18px;
@@ -483,7 +487,7 @@ input[type=date] {
   margin-right: 3px;
 }
 .roster-title span {
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
   text-transform: none;
   font-weight: normal;
   margin-right: 5px;
@@ -664,7 +668,7 @@ input[type=date],
 .validation-expression .more,
 .validation-message .more,
 .appendix_detail {
-  font-family: NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMyanmarRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoSansBengaliRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
 }
 @media print {
   header {
