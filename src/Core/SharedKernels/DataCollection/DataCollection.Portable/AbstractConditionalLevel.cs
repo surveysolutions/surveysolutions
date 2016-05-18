@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        protected void UpdateAllNestedItemsState(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
+        protected virtual void UpdateAllNestedItemsState(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
         {
             if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
 
