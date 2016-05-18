@@ -121,15 +121,15 @@
     <value>детали</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
-    <value>Отчет-карта</value>
+    <value>Карта</value>
   </data>
   <data name="NotAllMarkers" xml:space="preserve">
-    <value>Не все маркеры были загружены для текущего масштаба. Пожалуйста, масштаб и обновите маркеров.</value>
+    <value>Не все маркеры были загружены для текущего масштаба. Пожалуйста, масштабируйте и обновите маркеры.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Перезагрузка маркеры на карте</value>
+    <value>Перезагрузка маркеров на карте</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
-    <value>Просмотреть содержание интервью</value>
+    <value>Перейти к интервью</value>
   </data>
 </root>

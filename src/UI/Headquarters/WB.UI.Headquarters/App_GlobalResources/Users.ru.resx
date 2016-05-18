@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddAPIUser" xml:space="preserve">
-    <value>Добавить пользователя API</value>
+    <value>Добавить  API пользователя</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
-    <value>Добавить штаб-квартиры</value>
+    <value>Добавить хедквотера</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Добавление администратора</value>
+    <value>Добавление супервизора</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Администратор</value>
   </data>
   <data name="APIUsers" xml:space="preserve">
-    <value>Пользователи API</value>
+    <value>API Пользователи</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Архивированные супервайзеров</value>
+    <value>Архивные супервизоры</value>
   </data>
   <data name="ClickToReturn" xml:space="preserve">
-    <value>Нажмите, чтобы вернуться к вашей учетной записи.</value>
+    <value>Нажмите сюда, чтобы вернуться к вашей учетной записи.</value>
   </data>
   <data name="CreateAdmin" xml:space="preserve">
-    <value>Для завершения установки, пожалуйста, создайте нового пользователя администратора</value>
+    <value>Для завершения установки, пожалуйста, создайте нового администратор пользователя</value>
   </data>
   <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Создание и попробуйте войти</value>
+    <value>Создайте и попробуйте войти</value>
   </data>
   <data name="CreateAPIUser" xml:space="preserve">
-    <value>Создайте пользователя API</value>
+    <value>Создать API пользователя</value>
   </data>
   <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Создание штаб-квартиры</value>
+    <value>Создать хедквотера</value>
   </data>
   <data name="CreateObserver" xml:space="preserve">
-    <value>Создание наблюдателя</value>
+    <value>Создать обозревателя</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Создание администратора</value>
+    <value>Создать супервизора</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Дата создания</value>
@@ -166,16 +166,16 @@
     <value>Редактировать: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Отправить по электронной почте</value>
+    <value>Электронная почта</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Завершите установку</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквотеры</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Олицетворение этого пользователя в режиме только для чтения</value>
+    <value>Просмотр от лица этого пользователя</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Интервьюер</value>
@@ -184,25 +184,25 @@
     <value>Интервьюеры</value>
   </data>
   <data name="Locked" xml:space="preserve">
-    <value>К морю</value>
+    <value>Заблокирован</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
     <value>Не связан с устройством</value>
   </data>
   <data name="Observer" xml:space="preserve">
-    <value>Наблюдатель</value>
+    <value>Обозреватель</value>
   </data>
   <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>Это содержание, видит, что &lt;b&gt;{0}&lt;/b&gt;.</value>
+    <value>Этот контент видит &lt;b&gt;{0}&lt;/b&gt;.</value>
   </data>
   <data name="Observers" xml:space="preserve">
-    <value>Наблюдатели</value>
+    <value>Обозреватели</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Руководитель</value>
+    <value>Супервизор</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Руководители</value>
+    <value>Супервизоры</value>
   </data>
   <data name="TotalInterviewers" xml:space="preserve">
     <value>Всего интервьюеров</value>

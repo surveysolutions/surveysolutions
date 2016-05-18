@@ -202,10 +202,10 @@
     <value>Файл не содержит необходимые столбцы вопросов для хедквотера:&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
-    <value>Готов для создания пользователя</value>
+    <value>Готов к созданию пользователя</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
-    <value>Готов для проверки</value>
+    <value>Готов к проверке</value>
   </data>
   <data name="RecordsCount" xml:space="preserve">
     <value>Количество записей</value>
@@ -223,7 +223,7 @@
     <value>Дата загрузки</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
-    <value>Загружены</value>
+    <value>Загружено</value>
   </data>
   <data name="UploadNewFile" xml:space="preserve">
     <value>Загрузить новый файл</value>
@@ -232,7 +232,7 @@
     <value>Загрузить образец</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Чтобы загрузить образец интервью, пожалуйста, подготовьте файл (размером до 300 МБ) с данными, разделенными табуляцией (.tab файл). Файл должен соответствовать шаблону ниже и содержать значения переменных из вашего вопросника, которые должны быть отвечены хедквотером.</value>
+    <value>Чтобы загрузить образец интервью, пожалуйста подготовьте файл (размером до 300 МБ) с данными, разделенными табуляцией (.tab файл). Файл должен соответствовать шаблону ниже и содержать значения переменных из вашего вопросника, которые должны быть отвечены хедквотером.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
     <value>Загрузка пользователей</value>
@@ -247,7 +247,7 @@
     <value>Загрузка пользователей</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
-    <value>Процесс, занружающий пользователей, не найден</value>
+    <value>Процесс, загружающий пользователей, не найден</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
     <value>пользователей было создано. </value>
@@ -277,7 +277,7 @@
     <value>Предполагаемое время</value>
   </data>
   <data name="FileNotParsed" xml:space="preserve">
-    <value>Файл не был обработан. Могут быть загружены только файл с разделителями табуляции.</value>
+    <value>Файл не был обработан. Могут быть загружены только файлы с разделитем табуляции.</value>
   </data>
   <data name="FileSizeLimit" xml:space="preserve">
     <value>Размер файла не может превышать 300 МБ.</value>
@@ -286,7 +286,7 @@
     <value>Формат файла не поддерживается, данные внутри него будут игнорироваться</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>В настоящее время импорт интервью. Дождитесь выполнения завершения операции.</value>
+    <value>В настоящее время происходит процесс создания интервью. Дождитесь выполнения операции.</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Пример импорта</value>
@@ -295,7 +295,7 @@
     <value>Статус импорта</value>
   </data>
   <data name="NumberInterviewCreated" xml:space="preserve">
-    <value>Интервью (ы) создан</value>
+    <value>Создано интервью</value>
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Обработка...</value>
@@ -304,16 +304,16 @@
     <value>Строка</value>
   </data>
   <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>Создание образца был успешном завершено.</value>
+    <value>Создание образца было успешно завершено.</value>
   </data>
   <data name="SampleCreationResult" xml:space="preserve">
-    <value>Пример создания результат</value>
+    <value>Результат</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Пример импорта завершается с ошибками</value>
+    <value>Создание завершено с ошибками</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Пример импорта успешно завершена</value>
+    <value>Созданиезавершено успешно</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
     <value>Загрузить новые данные</value>
@@ -325,7 +325,7 @@
     <value>Данные действительны</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Ответственный руководитель будет присвоен автоматически</value>
+    <value>Ответственный супервизор будет присвоен автоматически</value>
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Проверка данных группы</value>

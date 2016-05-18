@@ -142,10 +142,10 @@
     <value>Отклонить интервью</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
-    <value>Отменить утверждение</value>
+    <value>Откатить</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
-    <value>Отменить утверждение интервью</value>
+    <value>Откатить интервью</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Индекс</value>
@@ -379,16 +379,16 @@
     <value>Войти</value>
   </data>
   <data name="LogOn_Title" xml:space="preserve">
-    <value>Войдите в систему</value>
+    <value>Вход</value>
   </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Вход не выполнен. Пожалуйста, исправьте ошибки и повторите попытку.</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>В настоящее время приложение обновляется до новой версии. Этот может потребовать значительное количество времени. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
+    <value>В настоящее время приложение обновляется до новой версии. Это может занять некоторе время. Извините за предоставленные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
-    <value>Приложение перезагружается и это может занять до 10 минут или больше. Извините за причиненные неудобства. После завершения процесса вы будете автоматически перенаправлены на страницу, которую вы запросили.</value>
+    <value>Приложение перезагружается и это может занять до 10 минут и более. Извините за предоставленные неудобства. После завершения операции вы будете автоматически перенаправлены на запрашиваемую страницу.</value>
   </data>
   <data name="Maintenance_Title" xml:space="preserve">
     <value>Техническое обслуживание</value>
@@ -427,16 +427,16 @@
     <value>Поиск</value>
   </data>
   <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
-    <value>Создан на клиенте</value>
+    <value>Создано на клиенте</value>
   </data>
   <data name="Survey_HasErrorsTitle" xml:space="preserve">
-    <value>Имеет ошибки</value>
+    <value>С ошибками</value>
   </data>
   <data name="Survey_Header" xml:space="preserve">
     <value>Интервью</value>
   </data>
   <data name="Survey_LastUpdateTitle" xml:space="preserve">
-    <value>Последнее обновление:</value>
+    <value>Обновлено:</value>
   </data>
   <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
     <value>Получено интервьюером</value>
@@ -445,7 +445,7 @@
     <value>Ответственный</value>
   </data>
   <data name="Survey_Status_Header" xml:space="preserve">
-    <value>Интервьюеры и обследования</value>
+    <value>Интервьюеры и исследования</value>
   </data>
   <data name="Survey_Status_Title" xml:space="preserve">
     <value>Статус</value>
@@ -478,10 +478,10 @@
     <value>Название исследования</value>
   </data>
   <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
-    <value>Члены команды</value>
+    <value>Команды</value>
   </data>
   <data name="SurveysStatuses_Title" xml:space="preserve">
-    <value>Обследования и статусы</value>
+    <value>Исследования и статусы</value>
   </data>
   <data name="SurveysStatuses_Total" xml:space="preserve">
     <value>Итого</value>
@@ -490,7 +490,7 @@
     <value>Загрузить</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
-    <value>Папка, которая содержит веб-сайт имеет долгий путь. Просьба переместить сайт в выше.</value>
+    <value>Папка, которая содержит веб-сайт, имеет долгий путь. Пожалуйста переместите сайт выше.</value>
   </data>
   <data name="YesNoQuestion_No" xml:space="preserve">
     <value>Нет</value>

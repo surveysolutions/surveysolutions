@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Требуемый вопросник «{0}» имеет ошибки. Пожалуйста, проверьте вопросник по дизайнере.</value>
+    <value>Требуемый вопросник «{0}» имеет ошибки. Пожалуйста, проверьте вопросник на дизайнере.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>Время ожидания подключения к «Designer» веб-сайт истекло. Пожалуйста проверьте подключение к Интернету.</value>

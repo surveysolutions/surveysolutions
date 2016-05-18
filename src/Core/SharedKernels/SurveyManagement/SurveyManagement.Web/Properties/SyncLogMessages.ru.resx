@@ -130,7 +130,7 @@
     <value>Устройство может быть назначено интервьюеру</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;Необходима перепривязка&lt;/font&gt;</value>
+    <value>&lt;font color="orange"&gt;Необходима перепривязка планшета&lt;/font&gt;</value>
   </data>
   <data name="DeviceUpdateRequired" xml:space="preserve">
     <value>&lt;font color="red"&gt;Требуется обновление. Версия движка интервьюера - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
@@ -169,13 +169,13 @@
     <value>Загрузить вложения опросника: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>Интервьювер уже привязан к устройству</value>
+    <value>Интервьювер уже привязан к планшету</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
     <value>&lt;font color="green" '=""&gt;Интервью пакет &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
+    <value>&lt;font color="green" '=""&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработано&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Привязать интервьювера к планшету</value>
