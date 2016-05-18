@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApprovedByHQ" xml:space="preserve">
-    <value>Утверждена HQ</value>
+    <value>Утверждено хедквотером</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Утверждена руководителем</value>
+    <value>Утверждено супервизором</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Завершено</value>
@@ -130,13 +130,13 @@
     <value>Дата завершения</value>
   </data>
   <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>Накопительное интервью диаграммы</value>
+    <value>График</value>
   </data>
   <data name="DatesRange" xml:space="preserve">
-    <value>Диапазон дат</value>
+    <value>Период</value>
   </data>
   <data name="InterviewChart" xml:space="preserve">
-    <value>Интервью диаграммы</value>
+    <value>График интервью</value>
   </data>
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>Интервьюер назначен</value>
@@ -145,22 +145,22 @@
     <value>Вопросник</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
-    <value>Отвергнуто HQ</value>
+    <value>Отклонено хедквотером</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Отклонено руководителем</value>
+    <value>Отклонено супервизором</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Назначен руководитель</value>
+    <value>Супервизор назначен</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Руководители и обследования</value>
+    <value>Супервизоры и исследования</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
     <value>Название исследования</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Обследования и статусы</value>
+    <value>Исследования и статусы</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Команды и статусы</value>
