@@ -205,30 +205,30 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references a nonexistent question or variable..
+        ///   Looks up a localized string similar to Question or static text with title substitution references a nonexistent question or variable..
         /// </summary>
-        internal static string WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestionOrVariable {
+        internal static string WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable {
             get {
-                return ResourceManager.GetString("WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestionOrVariable", resourceCulture);
+                return ResourceManager.GetString("WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references a entity that is not supported in substitutions..
+        ///   Looks up a localized string similar to Question or static text with title substitution references an entity that is not supported in substitutions..
         /// </summary>
-        internal static string WB0018_QuestionWithTitleSubstitutionReferencesUnsupportedEntity {
+        internal static string WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity {
             get {
-                return ResourceManager.GetString("WB0018_QuestionWithTitleSubstitutionReferencesUnsupportedEntity", resourceCulture);
+                return ResourceManager.GetString("WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot reference items from a deeper roster level..
+        ///   Looks up a localized string similar to Question or static text with title substitution cannot reference items from a deeper roster level..
         /// </summary>
-        internal static string WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
+        internal static string WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
             get {
-                return ResourceManager.GetString("WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLe" +
-                        "vel", resourceCulture);
+                return ResourceManager.GetString("WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLeve" +
+                        "l", resourceCulture);
             }
         }
         
@@ -586,11 +586,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If question uses %rostertitle% in title it need to be placed inside roster..
+        ///   Looks up a localized string similar to If question or static text uses %rostertitle% in title it need to be placed inside roster..
         /// </summary>
-        internal static string WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster {
+        internal static string WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster {
             get {
-                return ResourceManager.GetString("WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster", resourceCulture);
+                return ResourceManager.GetString("WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster", resourceCulture);
             }
         }
         

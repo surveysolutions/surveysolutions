@@ -461,14 +461,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (parentQuestion == null)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var parentRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
-
-            if (parentRosters == null)
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
+            var parentRosters = GetAllRosterSizeQuestionsAsVector(parentQuestion, questionnaire);
 
             parentRosters = parentRosters.Reverse().ToArray();
 
-            var questionRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire).Reverse().ToArray();
+            var questionRosters = GetAllRosterSizeQuestionsAsVector(question, questionnaire).Reverse().ToArray();
 
             if (parentRosters.Length > questionRosters.Length || parentRosters.Where((parentGuid, i) => questionRosters[i] != parentGuid).Any())
             {
@@ -844,8 +841,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRosterGroup))
                 return true;
 
-            Guid[] rosterScopeForGroup = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(group, questionnaire);
-            Guid[] rosterScopeForTitleQuestion = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(rosterTitleQuestion, questionnaire);
+            Guid[] rosterScopeForGroup = GetAllRosterSizeQuestionsAsVector(group, questionnaire);
+            Guid[] rosterScopeForTitleQuestion = GetAllRosterSizeQuestionsAsVector(rosterTitleQuestion, questionnaire);
 
             if (!Enumerable.SequenceEqual(rosterScopeForGroup, rosterScopeForTitleQuestion))
                 return true;
@@ -1226,9 +1223,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (rosterSizeQuestion == null)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
-            if (rosterLevelForRoster == null)
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
+            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVector(roster, questionnaire);
 
             var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
             if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
@@ -1423,42 +1418,47 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsWithSubstitutions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
-            IEnumerable<IQuestion> questionsWithSubstitutions = questionnaire.Find<IQuestion>(question => substitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+            IEnumerable<IComposite> entitiesWithSubstitutions = questionnaire
+                .Find<IComposite>()
+                .Where(SupportsTitleSubstitution)
+                .Where(this.HasSubstitionVariablesInTitle)
+                .ToList();
 
-            var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationMessage>();
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
 
-            foreach (var questionWithSubstitution in questionsWithSubstitutions)
+            foreach (var entity in entitiesWithSubstitutions)
             {
-                if (IsPreFilledQuestion(questionWithSubstitution))
+                if (entity is IQuestion && IsPreFilledQuestion((IQuestion) entity))
                 {
-                    errorByAllQuestionsWithSubstitutions.Add(QuestionWithTitleSubstitutionCantBePrefilled(questionWithSubstitution));
+                    foundErrors.Add(QuestionWithTitleSubstitutionCantBePrefilled((IQuestion) entity));
                     continue;
                 }
 
-                string[] substitutionReferences = substitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
+                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity));
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
-                    GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
+                    GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
 
-                if (vectorOfRosterSizeQuestionsForQuestionWithSubstitution != null)
-                {
-                    var resultErrors = substitutionReferences
-                        .Select(identifier => GetVerificationErrorBySubstitutionReferenceOrNull(questionWithSubstitution, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
-                        .Where(errorOrNull => errorOrNull != null);
+                IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+                    .Select(identifier => GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
+                    .Where(errorOrNull => errorOrNull != null);
 
-                    foreach (var error in resultErrors)
-                    {
-                        var verificationError = error;
-                        if (!errorByAllQuestionsWithSubstitutions.Any(e => e.Code == verificationError.Code && e.References.SequenceEqual(verificationError.References)))
-                        {
-                            errorByAllQuestionsWithSubstitutions.Add(error);
-                        }
-                    }
-                }
+                foundErrors.AddRange(entityErrors);
             }
 
-            return errorByAllQuestionsWithSubstitutions;
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesComparer());
         }
+
+        private static bool SupportsTitleSubstitution(IComposite entity)
+            => entity is IQuestion
+            || entity is IStaticText;
+
+        private bool HasSubstitionVariablesInTitle(IComposite entity)
+            => this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity)).Any();
+
+        private static string GetTitle(IComposite entity)
+            => (entity as IQuestion)?.QuestionText
+            ?? (entity as IStaticText)?.Text;
 
         private static QuestionnaireVerificationReference CreateGroupReference(Guid groupId)
         {
@@ -1558,22 +1558,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return variable;
         }
 
-        private QuestionnaireVerificationMessage GetVerificationErrorBySubstitutionReferenceOrNull(
-            IQuestion questionWithSubstitution,
+        private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
+            IComposite entityWithSubstitution,
             string substitutionReference,
-            Guid[] vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
+            Guid[] vectorOfRosterQuestionsByEntityWithSubstitutions,
             ReadOnlyQuestionnaireDocument questionnaire)
         {
-            if (substitutionReference == questionWithSubstitution.StataExportCaption)
+            if (entityWithSubstitution is IQuestion && substitutionReference == ((IQuestion)entityWithSubstitution).StataExportCaption)
             {
-                return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
+                return QuestionWithTitleSubstitutionCantReferenceSelf((IQuestion)entityWithSubstitution);
             }
 
             if (substitutionReference == substitutionService.RosterTitleSubstitutionReference)
             {
-                if (vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions.Length == 0)
+                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
                 {
-                    return QuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster(questionWithSubstitution);
+                    return EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster(entityWithSubstitution);
                 }
                 return null;
             }
@@ -1581,97 +1581,73 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (entityToSubstitute == null)
             {
-                return QuestionWithSubstitutionReferencesNotExistingQuestionOrVariable(questionWithSubstitution);
+                return EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(entityWithSubstitution);
             }
 
             var isNotVariable = !(entityToSubstitute is IVariable);
             var isQuestionaOfUnsupportedType = (entityToSubstitute is IQuestion) && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
             if (isNotVariable && isQuestionaOfUnsupportedType)
             {
-                return QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(questionWithSubstitution, entityToSubstitute);
+                return EntityWithTitleSubstitutionReferencesEntityOfNotSupportedType(entityWithSubstitution, entityToSubstitute);
             }
 
             if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(entityToSubstitute,
-                vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions, questionnaire))
+                vectorOfRosterQuestionsByEntityWithSubstitutions, questionnaire))
             {
-                return
-                    QuestionWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(
-                        questionWithSubstitution,
-                        entityToSubstitute);
+                return EntityWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(entityWithSubstitution, entityToSubstitute);
             }
 
             return null;
         }
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0015",
+            => QuestionnaireVerificationMessage.Error("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
                 CreateReference(questionsWithSubstitution));
-        }
 
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(
-            IQuestion questionsWithSubstitution,
-            IComposite entityToSubstitute)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0019",
-                VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
-                CreateReference(questionsWithSubstitution),
+        private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(IComposite entityWithSubstitution, IComposite entityToSubstitute)
+            => QuestionnaireVerificationMessage.Error("WB0019",
+                VerificationMessages.WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
+                CreateReference(entityWithSubstitution),
                 CreateReference(entityToSubstitute));
-        }
 
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IComposite questionsWithSubstitution, IComposite entityToSubstitute)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0018",
-                VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesUnsupportedEntity,
-                CreateReference(questionsWithSubstitution),
+        private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionReferencesEntityOfNotSupportedType(IComposite entityWithSubstitution, IComposite entityToSubstitute)
+            => QuestionnaireVerificationMessage.Error("WB0018",
+                VerificationMessages.WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity,
+                CreateReference(entityWithSubstitution),
                 CreateReference(entityToSubstitute));
-        }
 
-        private static QuestionnaireVerificationMessage QuestionWithSubstitutionReferencesNotExistingQuestionOrVariable(IQuestion questionsWithSubstitution)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0017",
-                VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestionOrVariable,
-                CreateQuestionReference(questionsWithSubstitution.PublicKey));
-        }
+        private static QuestionnaireVerificationMessage EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(IComposite entityWithSubstitution)
+            => QuestionnaireVerificationMessage.Error("WB0017",
+                VerificationMessages.WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable,
+                CreateQuestionReference(entityWithSubstitution.PublicKey));
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0016",
+            => QuestionnaireVerificationMessage.Error("WB0016",
                 VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
                 CreateReference(questionsWithSubstitution));
-        }
 
-        private static QuestionnaireVerificationMessage QuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster(
-            IQuestion questionsWithSubstitution)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0059",
-                VerificationMessages.WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
-                CreateReference(questionsWithSubstitution));
-        }
+        private static QuestionnaireVerificationMessage EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster(IComposite entityWithSubstitution)
+            => QuestionnaireVerificationMessage.Error("WB0059",
+                VerificationMessages.WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
+                CreateReference(entityWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0011",
+            => QuestionnaireVerificationMessage.Error("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
                 CreateReference(linkedQuestion));
-        }
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesQuestionOfNotSupportedType(IQuestion linkedQuestion, IQuestion sourceQuestion)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0012",
+            => QuestionnaireVerificationMessage.Error("WB0012",
                 VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
-        }
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferenceQuestionNotUnderRosterGroup(IQuestion linkedQuestion, IQuestion sourceQuestion)
-        {
-            return QuestionnaireVerificationMessage.Error("WB0013",
+            => QuestionnaireVerificationMessage.Error("WB0013",
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
-        }
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
@@ -1766,19 +1742,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite item, ReadOnlyQuestionnaireDocument questionnaire)
+        private static Guid[] GetAllRosterSizeQuestionsAsVector(IComposite item, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            IGroup parent = (item is IQuestion) || (item is IVariable)
-                ? (IGroup)item.GetParent()
-                : (IGroup)item;
+            IGroup nearestGroup = item as IGroup ?? (IGroup)item.GetParent();
 
             Guid[] rosterSizeQuestions =
-                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)
+                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(nearestGroup, questionnaire)
                     .Where(IsRosterGroup)
-                    .Select(g => g.RosterSizeQuestionId.HasValue ? g.RosterSizeQuestionId.Value : g.PublicKey)
+                    .Select(g => g.RosterSizeQuestionId ?? g.PublicKey)
                     .ToArray();
 
-            return rosterSizeQuestions.ToArray();
+            return rosterSizeQuestions;
         }
 
         private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, ReadOnlyQuestionnaireDocument document)
@@ -1800,9 +1774,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ReadOnlyQuestionnaireDocument questionnaire)
         {
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
-                GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(entity, questionnaire);
+                GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
 
-            if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution == null) return false;
             if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length == 0) return false;
 
             if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length <= vectorOfRosterSizeQuestions.Length)
