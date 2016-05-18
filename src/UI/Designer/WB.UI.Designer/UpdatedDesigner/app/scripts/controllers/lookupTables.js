@@ -33,7 +33,7 @@
 
                 _.each($scope.questionnaire.lookupTables, function (lookupTableDto) {
                     var lookupTable = {};
-                    if (!_.any($scope.lookupTables, 'itemId', lookupTableDto.itemId))
+                    if (!_.any($scope.lookupTables, function(elem) { return elem.itemId === lookupTableDto.itemId; }))
                     {
                         dataBind(lookupTable, lookupTableDto);
                         $scope.lookupTables.push(lookupTable);

@@ -83,7 +83,7 @@
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
                     var attachment = {};
-                    if (!_.any($scope.attachments, 'attachmentId', attachmentDto.attachmentId)) {
+                    if (!_.any($scope.attachments, function(elem) { return elem.attachmentId === attachmentDto.attachmentId;})) {
                         dataBind(attachment, attachmentDto);
                         $scope.attachments.unshift(attachment);
                     }
