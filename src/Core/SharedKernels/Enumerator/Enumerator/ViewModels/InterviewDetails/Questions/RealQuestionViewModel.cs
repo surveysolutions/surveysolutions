@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswerRemoved>, 
         IDisposable
     {
+        const decimal jsonSerializerDecimalLimit = 9999999999999999m;
+        
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -128,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            decimal jsonSerializerDecimalLimit = 9999999999999999m;
+            
 
             if (this.Answer > jsonSerializerDecimalLimit || this.Answer < -jsonSerializerDecimalLimit)
             {
