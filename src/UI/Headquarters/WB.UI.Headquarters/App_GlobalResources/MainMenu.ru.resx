@@ -121,7 +121,7 @@
     <value>API пользователи</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Графики</value>
+    <value>График</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Экспорт данных</value>
@@ -163,10 +163,10 @@
     <value>Супервизоры</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Обследования и статусы</value>
+    <value>Исследования и статусы</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
-    <value>Группы и роли</value>
+    <value>Команды и роли</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Группы и роли</value>
