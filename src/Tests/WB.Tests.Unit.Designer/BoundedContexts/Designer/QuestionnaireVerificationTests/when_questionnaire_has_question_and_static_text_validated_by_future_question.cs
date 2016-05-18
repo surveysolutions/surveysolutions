@@ -37,35 +37,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Because of = () => errors = verifier.Verify(questionnaire);
 
-        It should_return_WB0250_warning = () => errors.ShouldContainWarning("WB0250");
+        It should_return_WB0250_warning = () => errors.ShouldContainWarning("WB0250", "Validation condition #1 refers to a future question. Consider reversing the order.");
 
-        It should_return_WB0250_message_with_appropriate_message = () =>
-            errors.ShouldContain(
-                x => x.Message == "Validation condition #1 refers to a future question. Consider reversing the order.");
+        It should_return_warning_for_static_text = () =>
+            FindWarningForEntityWithId(errors, "WB0250", staticextId).References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
 
-        It should_return_first_message_with_first_references_on_question_with_validation = () =>
-           errors.Skip(1).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
+        It should_return_warning_for_static_text_with_reference_on_future_question = () =>
+            FindWarningForEntityWithId(errors, "WB0250", staticextId).References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_with_first_references_on_question_id_with_validation = () =>
-            errors.Skip(1).First().References.First().Id.ShouldEqual(staticextId);
+        It should_return_warning_for_static_text_with_reference_on_future_question_id = () =>
+            FindWarningForEntityWithId(errors, "WB0250", staticextId).References.Last().Id.ShouldEqual(futureQuestionId);
 
-        It should_return_first_message_with_second_references_on_future_question = () =>
-            errors.Skip(1).First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_warning_for_question = () =>
+            FindWarningForEntityWithId(errors, "WB0250", questionId).References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_with_second_references_on_future_question_id = () =>
-            errors.Skip(1).First().References.Last().Id.ShouldEqual(futureQuestionId);
+        It should_return_warning_for_question_with_reference_on_future_question = () =>
+            FindWarningForEntityWithId(errors, "WB0250", questionId).References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_with_first_references_on_question_with_validation = () =>
-            errors.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_second_message_with_first_references_on_question_id_with_validation = () =>
-            errors.Last().References.First().Id.ShouldEqual(questionId);
-
-        It should_return_second_message_with_second_references_on_future_question = () =>
-            errors.Last().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_second_message_with_second_references_on_future_question_id = () =>
-            errors.Last().References.Last().Id.ShouldEqual(futureQuestionId);
+        It should_return_warning_for_question_with_reference_on_future_question_id = () =>
+            FindWarningForEntityWithId(errors, "WB0250", questionId).References.Last().Id.ShouldEqual(futureQuestionId);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
