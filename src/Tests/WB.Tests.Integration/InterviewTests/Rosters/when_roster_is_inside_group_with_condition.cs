@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         }
     }
 
-    [Ignore("KP-6853")]
+    //[Ignore("KP-6853")]
     internal class when_roster_is_inside_group_with_condition : InterviewTestsContext
     {
         Establish context = () =>
@@ -125,14 +125,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 {
                     interview.AnswerNumericIntegerQuestion(UserId, q1Id, RosterVector.Empty, DateTime.Now, 2);
 
-                    result.QuestionQ3BecomeValid = eventContext.AnyEvent<AnswersDeclaredValid>(x => x.Questions.Any(q => q.Id == q3Id));
+                    result.QuestionsQ2Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q2Id));
                 }
 
                 return result;
             });
 
         It should_declare_question_q3_as_valid = () =>
-            results.QuestionQ3BecomeValid.ShouldBeTrue();
+            results.QuestionsQ2Disabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -153,7 +153,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         [Serializable]
         internal class InvokeResults
         {
-            public bool QuestionQ3BecomeValid { get; set; }
+            public bool QuestionsQ2Disabled { get; set; }
         }
     }
 }

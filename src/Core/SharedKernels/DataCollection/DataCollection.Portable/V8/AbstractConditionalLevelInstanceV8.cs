@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             => this.CopyMembers(ConvertGetInstancesV7ToV8(getInstancesV7));
 
         private static Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> ConvertGetInstancesV7ToV8(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV7>> getInstancesV7)
-            => (x, y) => getInstancesV7(x, y).Cast<IExpressionExecutableV8>();
+            => (x, y) => getInstancesV7(x, y)?.Cast<IExpressionExecutableV8>();
 
         public abstract IExpressionExecutableV8 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> getInstances);
 
