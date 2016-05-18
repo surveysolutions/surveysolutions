@@ -1,10 +1,14 @@
+using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RealQuestionViewModelTests
@@ -13,7 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RealQuestionViewMode
     {
         Establish context = () =>
         {
-            SetUp();
+            questionnaireId = "Questionnaire Id";
+            interviewId = "Some interviewId";
+            questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
@@ -21,27 +27,38 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RealQuestionViewMode
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion();
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion(questionIdentity.Id);
+
+            validityModelMock = new Mock<ValidityViewModel>();
+            answeringViewModelMock = new Mock<AnsweringViewModel>();
 
             model = CreateViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository);
+                questionnaireRepository: questionnaireRepository,
+                validityViewModel: validityModelMock.Object,
+                answeringViewModel: answeringViewModelMock.Object);
 
-            model.Init(interviewId, questionIdentity, navigationState);
+            model.Init(interviewId, questionIdentity, Create.NavigationState());
         };
 
         Because of = () =>
         {
-            model.Answer = decimal.MaxValue;
+            model.Answer = 9999999999999999m + 1;
             model.ValueChangeCommand.Execute();
         };
 
         It should_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Entered value can not be parsed as decimal value"), Times.Once);
+            validityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Entered value can not be parsed as decimal value"), Times.Once);
 
         It should_not_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericRealQuestionCommand>()), Times.Never);
+            answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericRealQuestionCommand>()), Times.Never);
 
         private static RealQuestionViewModel model;
+        private static Identity questionIdentity;
+        private static string interviewId;
+        private static string questionnaireId;
+
+        private static Mock<ValidityViewModel> validityModelMock;
+        private static Mock<AnsweringViewModel> answeringViewModelMock;
     }
 }
