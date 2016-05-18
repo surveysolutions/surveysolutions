@@ -1620,7 +1620,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationMessage EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(IComposite entityWithSubstitution)
             => QuestionnaireVerificationMessage.Error("WB0017",
                 VerificationMessages.WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable,
-                CreateQuestionReference(entityWithSubstitution.PublicKey));
+                CreateReference(entityWithSubstitution));
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
             => QuestionnaireVerificationMessage.Error("WB0016",
