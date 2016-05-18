@@ -1,4 +1,8 @@
-﻿@all-not-font-faces: NotoSansRegular,NotoSansArmenianRegular,NotoSansAvestanRegular,NotoSansBalineseRegular,NotoSansBamumRegular,NotoSansBatakRegular,NotoSansBengaliRegular,NotoSansBrahmiRegular,NotoSansBugineseRegular,NotoSansBuhidRegular,NotoSansCanadianAboriginalRegular,NotoSansCarianRegular,NotoSansChamRegular,NotoSansCherokeeRegular,NotoSansCopticRegular,NotoSansCuneiformRegular,NotoSansCypriotRegular,NotoSansDeseretRegular,NotoSansDevanagariRegular,NotoSansEgyptianHieroglyphsRegular,NotoSansEthiopicRegular,NotoSansGeorgianRegular,NotoSansGlagoliticRegular,NotoSansGothicRegular,NotoSansGujaratiRegular,NotoSansGurmukhiRegular,NotoSansHanunooRegular,NotoSansHebrewRegular,NotoSansImperialAramaicRegular,NotoSansInscriptionalPahlaviRegular,NotoSansInscriptionalParthianRegular,NotoSansJavaneseRegular,NotoSansKaithiRegular,NotoSansKannadaRegular,NotoSansKayahLiRegular,NotoSansKharoshthiRegular,NotoSansKhmerRegular,NotoSansLaoRegular,NotoSansLepchaRegular,NotoSansLimbuRegular,NotoSansLinearBRegular,NotoSansLisuRegular,NotoSansLycianRegular,NotoSansLydianRegular,NotoSansMalayalamRegular,NotoSansMandaicRegular,NotoSansMeeteiMayekRegular,NotoSansMongolianRegular,NotoSansMyanmarRegular,NotoSansNewTaiLueRegular,NotoSansNKoRegular,NotoSansOghamRegular,NotoSansOlChikiRegular,NotoSansOldItalicRegular,NotoSansOldPersianRegular,NotoSansOldSouthArabianRegular,NotoSansOldTurkicRegular,NotoSansOriyaRegular,NotoSansOsmanyaRegular,NotoSansPhagsPaRegular,NotoSansPhoenicianRegular,NotoSansRejangRegular,NotoSansRunicRegular,NotoSansSamaritanRegular,NotoSansSaurashtraRegular,NotoSansShavianRegular,NotoSansSinhalaRegular,NotoSansSundaneseRegular,NotoSansSylotiNagriRegular,NotoSansSymbolsRegular,NotoSansSyriacEasternRegular,NotoSansSyriacEstrangelaRegular,NotoSansSyriacWesternRegular,NotoSansTagalogRegular,NotoSansTagbanwaRegular,NotoSansTaiLeRegular,NotoSansTaiThamRegular,NotoSansTaiVietRegular,NotoSansTamilRegular,NotoSansTeluguRegular,NotoSansThaanaRegular,NotoSansThaiRegular,NotoSansTibetanRegular,NotoSansTifinaghRegular,NotoSansUgariticRegular,NotoSansVaiRegular,NotoSansYiRegular;
+﻿@all-not-font-faces: NotoSansDevanagariRegular, NotoSansArmenianRegular,
+    NotoSansEthiopicRegular,NotoSansGeorgianRegular,NotoSansHebrewRegular,
+    NotoSansMyanmarRegular,NotoSansMongolianRegular,NotoSansThaiRegular,
+    NotoSansBengaliRegular,NotoNaskhArabicRegular,NotoSansRegular;
+
 @font-light: @all-not-font-faces, Arial, sans-serif;
 @font-medium: @all-not-font-faces, Arial, sans-serif;
 @font-medium-italic: @all-not-font-faces, Arial, sans-serif;
@@ -40,13 +44,12 @@ h3 {
     text-transform: uppercase;
     padding-top: 8px;
     margin: 0 5px 20px 0;
-    font-family: @font-medium;
 }
 
 h4 {
     text-transform: uppercase;
     margin-bottom: 17px;
-    font-family: @font-medium;
+    
 }
 
 section, article, header, footer, figure, figcaption {
@@ -68,7 +71,6 @@ body {
 
 b {
     font-weight: normal;
-    font-family: @font-medium;
 }
 
 pre {
@@ -176,7 +178,6 @@ article {
 
 .table_of_contents dl dd {
     margin-left: 15px;
-    font-family: @font-medium;
     width: 90%;
 }
 
@@ -258,7 +259,6 @@ article {
 }
 
 .question-title {
-    font-family: @font-medium;
     width: 87%;
     font-size: 18px;
     line-height: 21px;
@@ -314,7 +314,6 @@ article {
 
 .answer-editor input + label, .yes_no-option-text {
     display: inline-block;
-    font-family: @font-medium;
     font-size: 18px;
     line-height: 24px;
     min-height: 20px;
@@ -420,7 +419,6 @@ article {
     display: inline-block;
     font-size: 24px;
     line-height: 24px;
-    font-family: @font-medium;
 }
 
 .option .yes_no-option-text {
@@ -430,7 +428,6 @@ article {
 }
 
 input[type=date] {
-    font-family: @font-medium;
     line-height: 20px;
     outline: 0;
     padding: 5px 10px;
@@ -491,9 +488,6 @@ input[type=date] {
     top: -1px;
 }
 
-.instructions, .instructions span, .validation-message, .validation-message span {
-    font-family: @font-medium;
-}
 
 .roster, .group {
     padding: 40px 0 15px 1px;
@@ -511,7 +505,6 @@ input[type=date] {
 
 .roster_container, .static-text_container, .group_container, .variable_container {
     float: left;
-    font-family: @font-medium;
     font-size: 17.7px;
     line-height: 24px;
 }
@@ -586,7 +579,6 @@ input[type=date] {
     font-size: 12px;
     line-height: 12px;
     margin-top: 20px;
-    font-family: @font-medium;
 }
 
 .more > a {
@@ -598,7 +590,6 @@ input[type=date] {
 .condition .more, .instructions .more, .validation-expression .more, .validation-message .more {
     margin: 0;
     display: inline-block;
-    font-family: @font-medium;
 }
 
 figure {
@@ -655,7 +646,6 @@ figure img {
 }
 
 .appendix_detail {
-    font-family: @font-medium;
     width: 95%;
 }
 
@@ -735,8 +725,17 @@ figure img {
     top: 0;
     left: -30px;
 }
-
 /*End Appendix*/
+
+
+h3, h4, b, .table_of_contents dl dd, .question-title, .answer-editor input + label, 
+.yes_no-option-text, .yes_no_multiselect span, input[type=date],
+.instructions, .more, .instructions span, .validation-message, .validation-message span, 
+.roster_container, .static-text_container, .group_container, .variable_container,
+.condition .more, .instructions .more, .validation-expression .more, .validation-message .more, 
+.appendix_detail {
+    font-family: @font-medium;
+}
 
 @media print {
     header {
