@@ -147,24 +147,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                try
-                {
-                    connection.Open();
-                    var command = connection.CreateCommand();
-                    command.CommandText = "select reltuples::bigint from pg_class where relname='events'";
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "select reltuples::bigint from pg_class where relname='events'";
 
-                    var scalar = command.ExecuteScalar();
-                    return scalar is DBNull ? 0 : Convert.ToInt32(scalar);
-                }
-                catch (NpgsqlException npgsqlException)
+                var scalar = command.ExecuteScalar();
+                if (scalar == null)
                 {
-                    if (npgsqlException.Code == MissingTableErrorCode)
-                    {
-                        this.CreateRelations(connection);
-                        return this.CountOfAllEvents();
-                    }
-                    throw;
+                    this.CreateRelations(connection);
                 }
+
+                return scalar == null ? 0 : Convert.ToInt32(scalar);
             }
         }
 
