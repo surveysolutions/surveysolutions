@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BinaryData" xml:space="preserve">
-    <value>Двоичные данные</value>
+    <value>Бинарные данные</value>
   </data>
   <data name="ConfirmStop" xml:space="preserve">
-    <value>Вы уверены, что вы хотите, чтобы остановить</value>
+    <value>Вы уверены, что хотите остановить</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Выберите тип и формат данных для экспорта</value>
@@ -139,7 +139,7 @@
     <value>Формат</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
-    <value>Дата последнего обновления</value>
+    <value>Обновлено</value>
   </data>
   <data name="Metadata" xml:space="preserve">
     <value>Метаданные</value>
@@ -148,7 +148,7 @@
     <value>Имя</value>
   </data>
   <data name="ParaData" xml:space="preserve">
-    <value>Пункт данные</value>
+    <value>Para Data</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Прогресс</value>

@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Прежде чем войти пожалуйста убедитесь что «Дизайн» веб-сайт доступен, и это не в режиме обслуживания</value>
+    <value>Пожалуйста убедитесь что «Designer» веб-сайт доступен</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
-    <value>Дизайнер анкеты</value>
+    <value>Вопросники</value>
   </data>
   <data name="Import" xml:space="preserve">
     <value>Импорт</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
-    <value>Импорт с режимом переписи</value>
+    <value>Импорт census</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Не удалось подключиться к конструктору. Пожалуйста, проверьте, что дизайнер доступен и попробуйте &lt;a href='{0}'&gt;еще раз&lt;/a&gt;</value>
+    <value>Не удалось подключиться к Designer. Пожалуйста проверьте, что Designer доступен и попробуйте &lt;a href='{0}'&gt;еще раз&lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
-    <value>Пожалуйста, войдите конструктор</value>
+    <value>Пожалуйста, войдите в Designer</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Войдите в конструктор</value>
+    <value>Войдите в Designer</value>
   </data>
 </root>

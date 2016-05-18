@@ -136,7 +136,7 @@
     <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Временной промежуток между первым отвеченым вопросом и завершением интервью на планшете.</value>
+    <value>Временной промежуток между первым отвеченным вопросом и завершением интервью на планшете.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Среднее время обработки</value>
@@ -148,7 +148,7 @@
     <value>Среднее время обработки супервизором</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между завершением интервью и утверждением или отклонением супервизором.</value>
+    <value>Временной промежуток между завершением интервью и утверждением или отклонением супервизора.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
     <value>Вернуться к супервизорам</value>
@@ -214,7 +214,7 @@
     <value>Тип</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>версия</value>
+    <value>вер.</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Неделя</value>

@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Clone" xml:space="preserve">
-    <value>Клон</value>
+    <value>Дублировать</value>
   </data>
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
-    <value>Клон вопросник</value>
+    <value>Дублировать вопросник</value>
   </data>
   <data name="inCensusMode" xml:space="preserve">
-    <value>в режиме переписи</value>
+    <value>в census режиме</value>
   </data>
   <data name="inRegularMode" xml:space="preserve">
     <value>в обычном режиме</value>
   </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
-    <value>Клон вопросник</value>
+    <value>Дублировать вопросник</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Произошла непредвиденная ошибка. Извините за причиненные неудобства. Пожалуйста, свяжитесь support@mysurvey.solutions или повторите попытку позже.</value>
+    <value>Произошла непредвиденная ошибка. Извините за предоставленные неудобства. Пожалуйста, свяжитесь support@mysurvey.solutions или повторите попытку позже.</value>
   </data>
 </root>

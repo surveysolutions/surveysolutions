@@ -148,16 +148,16 @@
     <value>Журнал ошибок</value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Получить приложение интервьюер</value>
+    <value>Скачать Interviewer</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Интервью</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
-    <value>Последнее обновление:</value>
+    <value>Обновлено</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Юридические</value>
+    <value>Legal</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Загружается, пожалуйста подождите</value>
@@ -169,7 +169,7 @@
     <value>Результаты не найдены</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Предварительно заполненные вопросы</value>
+    <value>Предзаполненные вопросы</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Вопросники</value>
@@ -205,7 +205,7 @@
     <value>Шаблон</value>
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>Группа Всемирного банка</value>
+    <value>The World Bank Group</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Название</value>
@@ -214,9 +214,9 @@
     <value>Итого</value>
   </data>
   <data name="Unapprove" xml:space="preserve">
-    <value>Отклонить</value>
+    <value>Откатить</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
-    <value>Нas ошибки</value>
+    <value>С ошибками</value>
   </data>
 </root>
