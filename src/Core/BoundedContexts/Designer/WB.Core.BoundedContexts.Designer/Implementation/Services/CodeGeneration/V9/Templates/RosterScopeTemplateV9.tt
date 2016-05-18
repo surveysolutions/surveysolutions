@@ -176,6 +176,11 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	{			
 		this.@_parent = (<#= Model.ParentTypeName#>) parent;
 	}
+
+	protected override Guid[] GetRosterScopeIds(Guid rosterId)
+	{
+		return IdOf.parentScopeMap[rosterId];
+	}
 	
 	public void SetParent(IExpressionExecutableV9 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);

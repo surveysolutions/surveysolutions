@@ -266,37 +266,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(@"		
-	private readonly IList<Action> _conditionExpressions = new List<Action>();
-
-	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
-
-	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
-	{
-		this.Validate(out questionsToBeValid, out questionsToBeInvalid);
-	}
-
-	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
-
-	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
-
-	public void SetParent(IExpressionExecutableV9 parent) {}
-	public void SetParent(IExpressionExecutableV8 parent) {}
-	public void SetParent(IExpressionExecutableV7 parent) {}
-	public void SetParent(IExpressionExecutableV6 parent) {}
-	public void SetParent(IExpressionExecutableV5 parent) {}
-	public void SetParent(IExpressionExecutableV2 parent) {}
-	public void SetParent(IExpressionExecutable   parent) {}
-
-	IExpressionExecutableV9 IExpressionExecutableV9.GetParent() => null;
-	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => null;
-	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => null;
-	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => null;
-	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null;
-	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;
-	IExpressionExecutable   IExpressionExecutable  .GetParent() => null;
-}
-");
+            this.Write("\t\t\r\n\tprivate readonly IList<Action> _conditionExpressions = new List<Action>();\r\n" +
+                    "\r\n\tprotected override IEnumerable<Action> ConditionExpressions => _conditionExpr" +
+                    "essions;\r\n\r\n\tpublic void CalculateValidationChanges(out List<Identity> questions" +
+                    "ToBeValid, out List<Identity> questionsToBeInvalid)\r\n\t{\r\n\t\tthis.Validate(out que" +
+                    "stionsToBeValid, out questionsToBeInvalid);\r\n\t}\r\n\r\n\tpublic ValidityChanges Proce" +
+                    "ssValidationExpressions() => this.ExecuteValidations();\r\n\r\n\tpublic EnablementCha" +
+                    "nges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();\r\n\r" +
+                    "\n\tprotected override Guid[] GetRosterScopeIds(Guid rosterId)\r\n\t{\r\n\t\treturn IdOf." +
+                    "parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutableV9 " +
+                    "parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV8 parent) {}\r\n\tpublic v" +
+                    "oid SetParent(IExpressionExecutableV7 parent) {}\r\n\tpublic void SetParent(IExpres" +
+                    "sionExecutableV6 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV5 pare" +
+                    "nt) {}\r\n\tpublic void SetParent(IExpressionExecutableV2 parent) {}\r\n\tpublic void " +
+                    "SetParent(IExpressionExecutable   parent) {}\r\n\r\n\tIExpressionExecutableV9 IExpres" +
+                    "sionExecutableV9.GetParent() => null;\r\n\tIExpressionExecutableV8 IExpressionExecu" +
+                    "tableV8.GetParent() => null;\r\n\tIExpressionExecutableV7 IExpressionExecutableV7.G" +
+                    "etParent() => null;\r\n\tIExpressionExecutableV6 IExpressionExecutableV6.GetParent(" +
+                    ") => null;\r\n\tIExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null" +
+                    ";\r\n\tIExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;\r\n\tIExpr" +
+                    "essionExecutable   IExpressionExecutable  .GetParent() => null;\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
