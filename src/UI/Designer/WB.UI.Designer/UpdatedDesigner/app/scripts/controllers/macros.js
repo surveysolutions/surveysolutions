@@ -32,7 +32,7 @@
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
                     var macro = {};
-                    if (!_.any($scope.macros, 'itemId', macroDto.itemId)) {
+                    if (!_.any($scope.macros, function( elem ) {return elem.itemId === macroDto.itemId;})) {
                         dataBind(macro, macroDto);
                         $scope.macros.push(macro);
                     }

@@ -110,7 +110,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             foreach (var lookupTable in questionnaire.LookupTables)
             {
-                result.Add(lookupTable.Key, System.Text.Encoding.UTF8.GetString(this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
+                var lookupFile = this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key);
+                if (lookupFile != null)
+                    result.Add(lookupTable.Key, System.Text.Encoding.UTF8.GetString(lookupFile.Content));
             }
             return result;
         }
@@ -139,6 +141,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
             var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
+
+            if (lookupTableContent == null)
+                return null;
 
             var memoryStream = new MemoryStream();
             using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
