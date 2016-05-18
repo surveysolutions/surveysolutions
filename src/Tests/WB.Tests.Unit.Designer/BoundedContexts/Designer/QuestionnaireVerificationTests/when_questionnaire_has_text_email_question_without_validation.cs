@@ -23,11 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Because of = () => errors = verifier.Verify(questionnaire);
 
-        It should_return_WB0254_warning = () => errors.ShouldContainWarning("WB0254");
-
-        It should_return_WB0254_message_with_appropriate_message = () =>
-          errors.ShouldContain(
-              x => x.Message == "Use function IsValidEmail() to validate email address.");
+        It should_return_WB0254_warning = () => errors.ShouldContainWarning("WB0254", "Use function IsValidEmail() to validate email address.");
 
         It should_return_error_with_references_on_text_question = () =>
           errors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);

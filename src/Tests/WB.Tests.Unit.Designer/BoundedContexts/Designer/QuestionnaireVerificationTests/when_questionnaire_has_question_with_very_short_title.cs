@@ -22,11 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Because of = () => errors = verifier.Verify(questionnaire);
 
-        It should_return_WB0255_warning = () => errors.ShouldContainWarning("WB0255");
-
-        It should_return_WB0255_message_with_appropriate_message = () =>
-          errors.ShouldContain(
-              x => x.Message == "Question is too short. This might be an incomplete question.");
+        It should_return_WB0255_warning = () => errors.ShouldContainWarning("WB0255", "Question is too short. This might be an incomplete question.");
 
         It should_return_error_with_references_on_text_question = () =>
           errors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
