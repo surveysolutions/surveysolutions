@@ -117,100 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
+    <value>fichier « {0} » contient les suivants de colonnes qui ne peut pas être mappés sur la propriété de n’importe quel utilisateur existant : {1}</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
+    <value>nombre maximum de validation Erreurs {0} ont été atteints</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>Le dataset contient {0} enregistrements, mais max autorisée nombre record est {1}</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
+    <value>utilisateur préchargement de processus avec l’id « {0} » ne peut pas être fini parce que seulement {1} créé à partir de {2}</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
+    <value>Utilisateur de préchargement des processus « {0} » est en état « {1} », il n’est pas autorisé à supprimer les processus dans les États : {2}.</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
+    <value>préchargement de processus avec l’id '{0}"l’utilisateur ne peut pas créer plus d’utilisateurs puis {1}</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
+    <value>utilisateur de préchargement des processus avec id « {0} » a {1} erreur (s).</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
+    <value>utilisateur de préchargement de processus avec l’id « {0} » est manquant</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
+    <value>utilisateur de préchargement de processus avec l’id « {0} » est en état « {1} », mais doit être en état « {2} »</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
-  </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
-  </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
-  </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
-  </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
-  </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
+    <value>cours de validation en pourcentage ne peut être négatif, soit supérieur puis 100, mais la valeur est {0}</value>
   </data>
 </root>
