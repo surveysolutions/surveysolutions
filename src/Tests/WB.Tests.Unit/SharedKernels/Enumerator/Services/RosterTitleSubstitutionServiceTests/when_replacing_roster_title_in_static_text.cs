@@ -1,10 +1,7 @@
-﻿using System; 
-using System.Collections.Generic;
+﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -16,14 +13,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutionServiceTests
 {
-    internal class when_replacing_roster_title : RosterTitleSubstitutionServiceTestsContext
+    internal class when_replacing_roster_title_in_static_text : RosterTitleSubstitutionServiceTestsContext
     {
         Establish context = () =>
         {
-            questionid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            staticTextId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterTitle = "rosterValue";
 
-            var interview = Mock.Of<IStatefulInterview>(x => 
+            var interview = Mock.Of<IStatefulInterview>(x =>
                 x.QuestionnaireIdentity == questionnaireIdentity &&
                 x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == new InterviewRoster { Title = rosterTitle });
 
@@ -31,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                 Create.QuestionnaireDocumentWithOneChapter(
                     Create.Roster(rosterId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), children: new[]
                     {
-                        Create.NumericRealQuestion(id: questionid)
+                        Create.StaticText(publicKey: staticTextId)
                     })));
 
             var questionnaireStorageStub = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);
@@ -42,15 +39,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
             service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.SubstitutionService());
         };
 
-        Because of = () => substitutedValue = service.Substitute("something %rostertitle%", new Identity(questionid, new decimal[]{1}), "interviewId");
+        Because of = () => substitutedValue = service.Substitute("something %rostertitle%", new Identity(staticTextId, new decimal[] { 1 }), "interviewId");
 
         It should_replace_roster_title_with_value = () => substitutedValue.ShouldEqual($"something {rosterTitle}");
 
         static IRosterTitleSubstitutionService service;
         static string rosterTitle;
         static string substitutedValue;
-        static Guid questionid;
+        static Guid staticTextId;
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), 7);
     }
 }
-

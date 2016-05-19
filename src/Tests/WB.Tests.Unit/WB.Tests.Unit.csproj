@@ -456,6 +456,7 @@
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_use_formatting_numeric_integer_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
+    <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title_in_static_text.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_disabled_variable.cs" />
