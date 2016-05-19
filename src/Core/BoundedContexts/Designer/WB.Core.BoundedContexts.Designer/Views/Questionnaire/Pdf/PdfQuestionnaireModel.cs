@@ -375,7 +375,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char InstructionsAppendixIndex => IsValidationsAppendixEmpty ? ValidationsAppendixIndex : (char)(ValidationsAppendixIndex + 1);
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
-
-        public string SanitizeHtml(string text) => CommandUtils.SanitizeHtml(text, true);
     }
 }
