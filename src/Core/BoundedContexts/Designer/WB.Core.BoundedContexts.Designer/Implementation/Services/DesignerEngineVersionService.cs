@@ -51,8 +51,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Variables</summary>
         private readonly Version version_15 = new Version(15, 0, 0);
 
+        private readonly Version version_16 = new Version(16, 0, 0);
 
-        public Version GetLatestSupportedVersion() => this.version_15;
+
+        public Version GetLatestSupportedVersion() => this.version_16;
 
         public bool IsClientVersionSupported(Version clientVersion)
         { 

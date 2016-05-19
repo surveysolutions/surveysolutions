@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        public Version GetSupportedQuestionnaireVersion() => new Version(15, 0, 0);
+        public Version GetSupportedQuestionnaireVersion() => new Version(16, 0, 0);
     }
 }
