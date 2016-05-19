@@ -113,10 +113,6 @@ angular.module('designerApp')
                 }, 500);
             };
 
-            $scope.areErrorsAreActiveNow = function() {
-                return $scope.verificationStatus.typeOfMessageToBeShown === ERROR;
-            }
-
             $scope.showVerificationErrors = function () {
                 if ($scope.verificationStatus.errors.length === 0)
                     return;
