@@ -148,7 +148,7 @@
     <value>Количество</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Настройка обследований</value>
+    <value>Настройка исследований</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Количество синхронизированных, но пока необработанных интервью</value>

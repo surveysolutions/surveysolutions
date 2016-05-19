@@ -202,7 +202,7 @@
     <value>Файл не содержит необходимые столбцы вопросов для хедквотера:&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
-    <value>Готов к созданию пользователя</value>
+    <value>Готов к Созданию пользователя</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
     <value>Готов к проверке</value>
@@ -250,7 +250,7 @@
     <value>Процесс, загружающий пользователей, не найден</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>пользователей было создано. </value>
+    <value>пользователей было Создано. </value>
   </data>
   <data name="Validated" xml:space="preserve">
     <value>Проверено</value>
@@ -286,7 +286,7 @@
     <value>Формат файла не поддерживается, данные внутри него будут игнорироваться</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>В настоящее время происходит процесс создания интервью. Дождитесь выполнения операции.</value>
+    <value>В настоящее время происходит процесс Создания интервью. Дождитесь выполнения операции.</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Пример импорта</value>

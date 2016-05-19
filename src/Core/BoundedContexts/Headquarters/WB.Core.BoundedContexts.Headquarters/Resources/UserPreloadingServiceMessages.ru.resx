@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>файл «{0}» содержит следующие столбцы, которые не могут быть сопоставлены свойства любого существующего пользователя: {1}</value>
+    <value>файл «{0}» содержит следующие столбцы, которые не могут быть сопоставлены: {1}</value>
   </data>
   <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>Максимальное количество {0} ошибок проверки были достигнуты</value>
+    <value>Достигнуто максимальное количество {0} ошибок проверки</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>Набор данных содержит {0} записи, но Макс допустимое рекордное число {1}</value>
+    <value>Данные содержат {0} записей, но допустимое число {1}</value>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>пользователь был загружен процесс с идентификатором «{0}» не закончил, потому что только {1} создан из {2}</value>
+    <value>процесс загрузки пользователей с идентификатором «{0}» был закончен не полностью, потому что только {1} создано из {2}</value>
   </data>
   <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>Пользователь был загружен процесс «{0}» в состояние «{1}», не допускается удаление процессов в государствах: {2}.</value>
+    <value>процесс загрузки пользователей «{0}» в состоянии «{1}» не допускает удаление процессов в состоянии: {2}.</value>
   </data>
   <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>пользователь был загружен процесс с идентификатором «{0}» не может создать больше пользователей затем {1}</value>
+    <value>процесс загрузки пользователей с идентификатором «{0}» не может создать больше пользователей чем {1}</value>
   </data>
   <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>пользователь был загружен процесс с идентификатором «{0}» имеет {1} ошибки.</value>
+    <value>процесс загрузки пользователей с идентификатором «{0}» имеет {1} ошибки.</value>
   </data>
   <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>пользователь был загружен процесс с идентификатором «{0}» отсутствует</value>
+    <value>процесс загрузки пользователей с идентификатором «{0}» отсутствует</value>
   </data>
   <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>пользователь был загружен процесс с идентификатором «{0}» в состояние «{1}», но должны быть в состояние «{2}»</value>
+    <value>процесс загрузки пользователей с идентификатором «{0}» в состоянии «{1}», но должен быть в состоянии «{2}»</value>
   </data>
   <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>Проверка прогресс в процентах не может быть отрицательным или больше, то 100, но значение {0}</value>
+    <value>Прогресс проверка в процентах не может быть отрицательным или больше 100, текущее значение {0}</value>
   </data>
 </root>
