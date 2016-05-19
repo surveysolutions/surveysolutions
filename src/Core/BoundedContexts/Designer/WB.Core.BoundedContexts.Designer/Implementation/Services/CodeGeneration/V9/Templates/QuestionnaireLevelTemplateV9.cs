@@ -266,27 +266,37 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\t\t\r\n\tprivate readonly IList<Action> _conditionExpressions = new List<Action>();\r\n" +
-                    "\r\n\tprotected override IEnumerable<Action> ConditionExpressions => _conditionExpr" +
-                    "essions;\r\n\r\n\tpublic void CalculateValidationChanges(out List<Identity> questions" +
-                    "ToBeValid, out List<Identity> questionsToBeInvalid)\r\n\t{\r\n\t\tthis.Validate(out que" +
-                    "stionsToBeValid, out questionsToBeInvalid);\r\n\t}\r\n\r\n\tpublic ValidityChanges Proce" +
-                    "ssValidationExpressions() => this.ExecuteValidations();\r\n\r\n\tpublic EnablementCha" +
-                    "nges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();\r\n\r" +
-                    "\n\tprotected override Guid[] GetRosterScopeIds(Guid rosterId)\r\n\t{\r\n\t\treturn IdOf." +
-                    "parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tprotected override Guid GetQuestionnaireId()\r\n" +
-                    "\t{\r\n\t\treturn IdOf.@__questionnaire;\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExe" +
-                    "cutableV9 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV8 parent) {}\r" +
-                    "\n\tpublic void SetParent(IExpressionExecutableV7 parent) {}\r\n\tpublic void SetPare" +
-                    "nt(IExpressionExecutableV6 parent) {}\r\n\tpublic void SetParent(IExpressionExecuta" +
-                    "bleV5 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV2 parent) {}\r\n\tpu" +
-                    "blic void SetParent(IExpressionExecutable   parent) {}\r\n\r\n\tIExpressionExecutable" +
-                    "V9 IExpressionExecutableV9.GetParent() => null;\r\n\tIExpressionExecutableV8 IExpre" +
-                    "ssionExecutableV8.GetParent() => null;\r\n\tIExpressionExecutableV7 IExpressionExec" +
-                    "utableV7.GetParent() => null;\r\n\tIExpressionExecutableV6 IExpressionExecutableV6." +
-                    "GetParent() => null;\r\n\tIExpressionExecutableV5 IExpressionExecutableV5.GetParent" +
-                    "() => null;\r\n\tIExpressionExecutableV2 IExpressionExecutableV2.GetParent() => nul" +
-                    "l;\r\n\tIExpressionExecutable   IExpressionExecutable  .GetParent() => null;\r\n}\r\n");
+            this.Write(@"		
+	private readonly IList<Action> _conditionExpressions = new List<Action>();
+
+	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
+
+	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+	{
+		this.Validate(out questionsToBeValid, out questionsToBeInvalid);
+	}
+
+	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
+
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
+
+	public void SetParent(IExpressionExecutableV9 parent) {}
+	public void SetParent(IExpressionExecutableV8 parent) {}
+	public void SetParent(IExpressionExecutableV7 parent) {}
+	public void SetParent(IExpressionExecutableV6 parent) {}
+	public void SetParent(IExpressionExecutableV5 parent) {}
+	public void SetParent(IExpressionExecutableV2 parent) {}
+	public void SetParent(IExpressionExecutable   parent) {}
+
+	IExpressionExecutableV9 IExpressionExecutableV9.GetParent() => null;
+	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => null;
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => null;
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => null;
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null;
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;
+	IExpressionExecutable   IExpressionExecutable  .GetParent() => null;
+}
+");
             return this.GenerationEnvironment.ToString();
         }
         

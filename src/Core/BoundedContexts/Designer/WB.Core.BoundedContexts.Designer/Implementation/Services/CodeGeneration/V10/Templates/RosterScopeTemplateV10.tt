@@ -5,15 +5,15 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #> 
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
-<#@ include file="SharedTemplateV9.tt"#>
+<#@ include file="SharedTemplateV10.tt"#>
 
-internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<<#=this.Model.TypeName#>>, 
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10<<#=this.Model.TypeName#>>, 
 	IRosterLevel<<#=this.Model.TypeName#>>, 
-	IExpressionExecutableV9
+	IExpressionExecutableV10
 {	
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, Identity[] rosterKey, 
-		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
+		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
 		IInterviewProperties interviewProperties)
@@ -25,7 +25,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	private <#=Model.TypeName#>(   
 		decimal[] rosterVector,  
 		Identity[] rosterKey, 
-		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
+		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
 		IInterviewProperties interviewProperties)
@@ -101,7 +101,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	}
 #>
 
-	public override IExpressionExecutableV9 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances)
+	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
 		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
 		{
@@ -176,7 +176,18 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	{			
 		this.@_parent = (<#= Model.ParentTypeName#>) parent;
 	}
+
+	protected override Guid[] GetRosterScopeIds(Guid rosterId)
+	{
+		return IdOf.parentScopeMap[rosterId];
+	}
+
+	protected override Guid GetQuestionnaireId()
+	{
+		return IdOf.@__questionnaire;
+	}
 	
+	public void SetParent(IExpressionExecutableV10 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutableV9 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutableV7 parent) => this.SetParentImpl(parent);
@@ -185,6 +196,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	public void SetParent(IExpressionExecutableV2 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutable   parent) => this.SetParentImpl(parent);
 	
+	IExpressionExecutableV10 IExpressionExecutableV10.GetParent() => this.@_parent;
 	IExpressionExecutableV9 IExpressionExecutableV9.GetParent() => this.@_parent;
 	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.@_parent;
 	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => this.@_parent;
