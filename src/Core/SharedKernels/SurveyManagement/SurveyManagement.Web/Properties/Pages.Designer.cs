@@ -88,6 +88,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved by headquarters.
+        /// </summary>
+        public static string ApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("ApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by supervisor.
+        /// </summary>
+        public static string ApprovedByupervisor {
+            get {
+                return ResourceManager.GetString("ApprovedByupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve.
         /// </summary>
         public static string ApproveRejectPartialView_ApproveAction {
@@ -151,6 +169,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attention!.
+        /// </summary>
+        public static string Attention {
+            get {
+                return ResourceManager.GetString("Attention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index.
         /// </summary>
         public static string Backup_IndexTitle {
@@ -160,11 +187,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CloseLabel {
             get {
                 return ResourceManager.GetString("CloseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
             }
         }
         
@@ -588,6 +633,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string InterviewDetails_UnansweredButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_UnansweredButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned.
+        /// </summary>
+        public static string InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewerAssigned", resourceCulture);
             }
         }
         
@@ -1042,6 +1096,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejected by headquarters.
+        /// </summary>
+        public static string RejectedByHeadquarters {
+            get {
+                return ResourceManager.GetString("RejectedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by supervisor.
+        /// </summary>
+        public static string RejectedBySupervisor {
+            get {
+                return ResourceManager.GetString("RejectedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
@@ -1056,6 +1128,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string ShowFilter {
             get {
                 return ResourceManager.GetString("ShowFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor assigned.
+        /// </summary>
+        public static string SupervisorAssigned {
+            get {
+                return ResourceManager.GetString("SupervisorAssigned", resourceCulture);
             }
         }
         
@@ -1236,6 +1326,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string SurveysStatuses_Total {
             get {
                 return ResourceManager.GetString("SurveysStatuses_Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team member.
+        /// </summary>
+        public static string TeamMember {
+            get {
+                return ResourceManager.GetString("TeamMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team members and Statuses.
+        /// </summary>
+        public static string TeamMembersAndStatuses {
+            get {
+                return ResourceManager.GetString("TeamMembersAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template.
+        /// </summary>
+        public static string Template {
+            get {
+                return ResourceManager.GetString("Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string Total {
+            get {
+                return ResourceManager.GetString("Total", resourceCulture);
             }
         }
         

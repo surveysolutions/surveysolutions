@@ -219,4 +219,13 @@
   <data name="НasErrors" xml:space="preserve">
     <value>С ошибками</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Logoff" xml:space="preserve">
+    <value>Выход из системы</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
 </root>

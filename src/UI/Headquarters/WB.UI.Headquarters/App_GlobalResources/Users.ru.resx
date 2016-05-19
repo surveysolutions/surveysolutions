@@ -210,4 +210,7 @@
   <data name="UserName" xml:space="preserve">
     <value>Имя</value>
   </data>
+  <data name="AddObserver" xml:space="preserve">
+    <value>Добавить наблюдателя</value>
+  </data>
 </root>

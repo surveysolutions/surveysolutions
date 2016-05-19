@@ -836,6 +836,7 @@
     <Content Include="App_GlobalResources\BatchUpload.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.ru.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Dashboard.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>

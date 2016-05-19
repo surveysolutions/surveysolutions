@@ -117,100 +117,109 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="Average" xml:space="preserve">
+    <value>Moyenne</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>Durée moyenne de cession affaire</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+    <value>Une différence de temps entre le moment où un entretien est assigné à un intervieweur et le moment où la complète touche sur une tablette.</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>Délai moyen de traitement HQ</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>Une différence de temps entre le moment qu'un superviseur approuve un questionnaire et ce questionnaire soit approuvée ou refusée sur HQ.</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>Interview de moyenne durée</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>Une différence de temps entre le moment où la première réponse est enregistrée sur une tablette, et lorsque la touche complet.</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>Délai moyen de traitement global</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>Une différence de temps entre la première tâche et le moment où l’interview est approuvée par l’AC.</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>Temps de traitement moyen de superviseur</value>
   </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>Une différence de temps entre le bouton complet et le contrôleur accepte ou rejette ce questionnaire.</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value> Retour aux superviseurs</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="By" xml:space="preserve">
+    <value>Par</value>
   </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+  <data name="Day" xml:space="preserve">
+    <value>Journée</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+  <data name="From" xml:space="preserve">
+    <value>De</value>
   </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
+  <data name="InThe" xml:space="preserve">
+    <value>dans le</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="Month" xml:space="preserve">
+    <value>Mois</value>
   </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
+  <data name="NumberOfCompletedInterviews" xml:space="preserve">
+    <value>Nombre d’entrevues</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>Nombre d’achèvements entrevue par un {0}. Rejeté et compléta entrevues sont comptés en tant qu’événements distincts d’achèvement.</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>Nombre d’entrevues approuvée par l’AC</value>
   </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>Nombre d’interviews recueillies par un {0} qui ont été approuvées par l’AC.</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>Nombre d’opérations d’entretien par l’AC</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>Numéro d’agrément et les rejets effectués par un QG sur questionnaires recueillis par un {0}.</value>
   </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>Nombre de transactions d’entrevue superviseur</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+    <value>Numéro d’agrément et les rejets effectués par un superviseur sur questionnaires recueillis par un {0}.</value>
   </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
+  <data name="Period" xml:space="preserve">
+    <value>Période</value>
   </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
+  <data name="PeriodCount" xml:space="preserve">
+    <value>Nombre de période</value>
   </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
   </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
+  <data name="Team" xml:space="preserve">
+    <value>Équipe</value>
   </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Membre de l’équipe</value>
   </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>Temps moyen à l’issue de l’entrevue</value>
   </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type de</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>ver.</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Semaine</value>
   </data>
 </root>

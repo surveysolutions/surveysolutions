@@ -522,4 +522,46 @@
   <data name="Interviewers_NotConnected" xml:space="preserve">
     <value>Not connected</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Team member</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by supervisor</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>Approved by supervisor</value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejected by headquarters</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by headquarters</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Team members and Statuses</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>Attention!</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
