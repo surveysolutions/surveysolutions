@@ -16,16 +16,17 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             return new VerificationErrorsMapper();
         }
 
-        internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(Guid questionId, Guid groupId)
+        internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(Guid questionId, Guid groupId, Guid rosterId)
         {
             return new QuestionnaireVerificationMessage[4]
             {
                 Create.VerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
                 Create.VerificationError("bbb", "bbbb", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
-                Create.VerificationError("ccc", "cccc", new QuestionnaireVerificationReference[2]
+                Create.VerificationError("ccc", "cccc", new QuestionnaireVerificationReference[3]
                 {
                     new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId),
-                    new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId)
+                    new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId),
+                    new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Roster, rosterId)
                 }),
                 Create.VerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
             };
@@ -39,26 +40,6 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             };
         }
 
-        internal static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionId, Guid groupId, string groupTitle, string questionTitle)
-        {
-            return new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group(groupTitle)
-                    {
-                        PublicKey = groupId,
-                        Children = new List<IComposite>
-                        {
-                            new TextQuestion(questionTitle)
-                            {
-                                PublicKey = questionId
-                            }
-                        }
-                    }
-                }
-            };
-        }
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWith2TextQuestions(Guid questionId1, Guid questionId2, Guid groupId)
         {
             return new QuestionnaireDocument
