@@ -117,100 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Échoué de la synchronisation. Id de périphérique Android n’était pas prévue. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>Échoué de la synchronisation. Fichier avec la version la plus récente n’a pas été trouvée. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>Échoué de la synchronisation. Nombre de fichiers incorrects. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>Échoué de la synchronisation. Type de média incorrecte. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>Échoué de la synchronisation. Votre application n’est pas compatible avec le serveur. Mettre à jour votre application intervieweur</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>Échoué de la synchronisation. Votre application n’est pas compatible avec le serveur. Désinstaller votre application et télécharger la nouvelle version de l’app de l’intervieweur</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>Identificateur de périphérique non valide. Quelque chose s’est passé avec l’installation du client app, veuillez envoyer l’information de la tablette.</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>Échoué de la synchronisation. Identificateur de séquence non valide. Quelque chose s’est passé avec l’installation du client app, appuyez sur le bouton « Envoyez les informations tablette ».</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>Échoué de la synchronisation. L’utilisateur n’est pas autorisée. Veuillez vérifier votre login/mot de passe pour {0}.</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Votre compte n’a pas un rôle permettant cette opération.</value>
   </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Serveur est maintenant sur le mode de maintenance. Désolé pour la gêne occasionnée. S’il vous plaît, réessayez plus tard.</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>Échoué de la synchronisation. Réinstallez l’application. Identificateur de l’installation est manquant. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>Partiellement échouée de la synchronisation. Entrevues réalisées ont été envoyées au serveur, mais vous ne recevez aucune nouvelles affectations. Veuillez accédez à paramètres android-&gt; Apps-&gt; intervieweur et poussez le bouton Effacer les données. Puis synchroniser à partir de zéro.</value>
   </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+  <data name="ServerError" xml:space="preserve">
+    <value>Échoué de la synchronisation. Erreur de serveur interne s’est produite. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>Échoué de la synchronisation.  Paquet de synchronisation avec l’id « {0} » est introuvable sur le serveur. Veuillez communiquer avec les développeurs.</value>
   </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Échoué de la synchronisation. Id de périphérique android mal a été fournie. Veuillez communiquer avec les développeurs.</value>
   </data>
 </root>

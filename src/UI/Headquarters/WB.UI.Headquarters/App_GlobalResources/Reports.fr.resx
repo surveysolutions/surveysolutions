@@ -117,100 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Approuvée par l’AC</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Approuvés par superviseur</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="Completed" xml:space="preserve">
+    <value>Terminé</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Date d’achèvement</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Tableau cumulatif Interview</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Plage de dates</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Tableau d’entretien</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Intervieweur assigné</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Rejetée par la centrale</value>
   </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Rejetée par superviseur</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Superviseur assigné</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Superviseurs et sondages</value>
   </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Nom de l’enquête</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Enquêtes et statuts</value>
   </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Équipes et statuts</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="Variables" xml:space="preserve">
+    <value>Variables</value>
   </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
 </root>

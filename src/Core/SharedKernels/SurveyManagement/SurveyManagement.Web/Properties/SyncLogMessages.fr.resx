@@ -117,100 +117,82 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="CanSynchronize" xml:space="preserve">
+    <value>Démarrer la synchronisation</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="CensusQuestionnaire" xml:space="preserve">
+    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="DeleteInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Supprimer l’entrevue : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquet : {1}, index de tri : {2}&lt;/li&gt;</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+    <value>Appareil pouvant être assignée à l’intervieweur</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="DeviceRelinkRequired" xml:space="preserve">
+    <value>&lt;font color="orange"&gt;Liez à nouveau requis&lt;/font&gt;</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="DeviceUpdateRequired" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Mise à jour nécessaire. Version du moteur intervieweur - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="EmptyDevice" xml:space="preserve">
+    <value>&lt;b&gt;[VIDE PÉRIPHÉRIQUE]&lt;/b&gt;</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="GetAttachmentContent" xml:space="preserve">
+    <value>Télécharger le contenu des pièces jointes : {0}</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="GetCensusQuestionnaires" xml:space="preserve">
+    <value>Téléchargez la liste des questionnaires du recensement :&lt;br&gt;&lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
+  <data name="GetInterview" xml:space="preserve">
+    <value>Télécharger interview : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+  <data name="GetInterviewer" xml:space="preserve">
+    <value>Télécharger de l’information de l’intervieweur.&lt;br&gt;Superviseur : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
+  <data name="GetInterviewPackage" xml:space="preserve">
+    <value>Télécharger le paquet entrevue : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="GetInterviewPackages" xml:space="preserve">
+    <value>Télécharger la liste des paquets de l’entrevue.&lt;br&gt;&lt;ul&gt; {1} &lt;/ul&gt; Dernier package de synchronisation : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+  <data name="GetInterviews" xml:space="preserve">
+    <value>Télécharger la liste des entrevues.&lt;br&gt;&lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+  <data name="GetQuestionnaire" xml:space="preserve">
+    <value>Télécharger le questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
+  <data name="GetQuestionnaireAssembly" xml:space="preserve">
+    <value>Télécharger questionnaire assembly : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="GetQuestionnaireAttachments" xml:space="preserve">
+    <value>Télécharger des pièces jointes questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
+  <data name="InterviewerHasDevice" xml:space="preserve">
+    <value>L’intervieweur a dispositif déjà</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
+  <data name="InterviewPackageProcessed" xml:space="preserve">
+    <value>&lt;font color="green" '=""&gt;Interview de paquet &lt;b&gt;{0}&lt;/b&gt; traitées avec succès&lt;/font&gt;</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+  <data name="InterviewProcessed" xml:space="preserve">
+    <value>&lt;font color="green" '=""&gt;Interview de &lt;b&gt;{0}&lt;/b&gt; traitées avec succès&lt;/font&gt;</value>
   </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
+  <data name="LinkToDevice" xml:space="preserve">
+    <value>Intervieweur lien vers périphérique</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
+  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+    <value>Aucun nouveaux forfaits entretien pour télécharger</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+  <data name="PostPackage" xml:space="preserve">
+    <value>Télécharger entrevue : &lt;b&gt; &lt;a href="{0}" target="_blank"&gt;{1}&lt;/a&gt;&lt;/b&gt;</value>
   </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
+  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+    <value>&lt;font color="green" '=""&gt;Questionnaire Assemblée &lt;b&gt;{0}&lt;/b&gt; [{1}] traitées avec succès&lt;/font&gt;</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="QuestionnaireProcessed" xml:space="preserve">
+    <value>&lt;font color="green" '=""&gt;Questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}] traitées avec succès&lt;/font&gt;</value>
   </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="UpdateInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Entrevue de mise à jour : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquet : {1}, index de tri : {2}&lt;/li&gt;</value>
   </data>
 </root>

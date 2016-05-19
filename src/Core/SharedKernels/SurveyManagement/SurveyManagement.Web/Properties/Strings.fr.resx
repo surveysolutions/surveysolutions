@@ -117,100 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>Add API User</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>Add headquarters</value>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Erreur parse quelle question réponse</value>
   </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add supervisor</value>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>État défini par l’équipe de soutien de Solutions d’enquête</value>
   </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Mis à jour des informations de compte</value>
   </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>Create API User</value>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>Gestion de compte</value>
   </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Create Headquarters</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approuvé par l’administration centrale</value>
   </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>Create observer</value>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approuvés par superviseur</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>Create supervisor</value>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Terminé</value>
   </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Créé</value>
   </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Click to return to your account.</value>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Supprimé</value>
   </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Intervieweur assigné</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finish installation</value>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Prêt pour l’entrevue</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejetée par l’administration centrale</value>
   </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejetée par superviseur</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Redémarré</value>
   </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>This is the content that &lt;b&gt;{0}&lt;/b&gt; sees.</value>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restaurée</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>Envoyé à Capi</value>
   </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Superviseur assigné</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observateur n’est pas autorisé à effectuer cette action</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Gestion de compte</value>
   </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Create and try login</value>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Une erreur inattendue s’est produite</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>Edit: {0}</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Not linked to device</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total Interviewers</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Add observer</value>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Propriété non valide</value>
   </data>
 </root>
