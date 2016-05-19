@@ -706,8 +706,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
-                var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null,
-                    null, null, null,null);
+                var fixedRosterChanges = new InterviewChanges(
+                    null, null, null, fixedRosterCalculationData, null, null, null, null, null, null, null);
                 interviewChangeStructures.State.ApplyInterviewChanges(fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
@@ -761,7 +761,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
-                var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null, null, null,null);
+                var fixedRosterChanges = new InterviewChanges(
+                    null, null, null, fixedRosterCalculationData, null, null, null, null, null, null,null);
                 interviewChangeStructures.State.ApplyInterviewChanges(fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
@@ -1974,10 +1975,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (interviewChanges.ValidityChanges != null)
                 this.ApplyValidityChangesEvents(interviewChanges.ValidityChanges);
 
-            if (interviewChanges.ChangedQuestionTitles != null)
-            {
-                this.ApplySubstitutionChangesEvents(interviewChanges.ChangedQuestionTitles);
-            }
+            this.ApplySubstitutionChangesEvents(interviewChanges.ChangedQuestionTitles, interviewChanges.ChangedStaticTextTitles);
 
             if (interviewChanges.LinkedQuestionOptionsChanges != null)
             {
@@ -1985,11 +1983,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplySubstitutionChangesEvents(List<Identity> changedQuestionIds)
+        private void ApplySubstitutionChangesEvents(Identity[] changedQuestionIds, Identity[] changedStaticTextIds)
         {
-            if (changedQuestionIds.Count > 0)
+            if (changedQuestionIds?.Length > 0 || changedStaticTextIds?.Length > 0)
             {
-                this.ApplyEvent(new SubstitutionTitlesChanged(changedQuestionIds.ToArray()));
+                this.ApplyEvent(new SubstitutionTitlesChanged(
+                    changedQuestionIds ?? new Identity[] {},
+                    changedStaticTextIds ?? new Identity[] { }));
             }
         }
 
@@ -2623,7 +2623,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
 
             var changedLinkedOptions =
                CreateChangedLinkedOptions(expressionProcessorState, 
@@ -2639,14 +2640,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
 
-            return new InterviewChanges(interviewByAnswerChange,
+            return new InterviewChanges(
+                interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 AnswerUtils.AnswerToString(answer),
-                substitutionChanges,
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -2721,7 +2724,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
             };
 
-            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
 
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
@@ -2736,14 +2740,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
 
-            return new InterviewChanges(interviewByAnswerChange, 
+            return new InterviewChanges(
+                interviewByAnswerChange, 
                 enablementChanges, 
                 validationChanges,
                 rosterCalculationData,
                 linkedQuestionsAnswersToRemove, 
                 rosterInstancesWithAffectedTitles, 
                 answerFormattedAsRosterTitle,
-                substitutionChanges, 
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -2815,7 +2821,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.YesNo, userId, question.Id, question.RosterVector, answerTime, answer)
             };
 
-            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(question.Id, question.RosterVector, questionnaire, alteredState));
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(question.Id, question.RosterVector, questionnaire, alteredState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(question.Id, question.RosterVector, questionnaire, alteredState).ToList();
 
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
@@ -2838,7 +2845,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
-                substitutionChanges,
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -2905,7 +2913,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
             enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
 
-            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState));
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToList();
 
             var answerChanges = new List<AnswerChange>()
             {
@@ -2924,14 +2933,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
 
-            return new InterviewChanges(answerChanges, 
+            return new InterviewChanges(
+                answerChanges, 
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
                 linkedQuestionsAnswersToRemove, 
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
-                substitutionChanges,
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -3075,8 +3086,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
             };
 
-            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
-            
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
 
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
@@ -3091,14 +3102,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
 
-            var interviewChanges= new InterviewChanges(interviewByAnswerChange,
+            var interviewChanges= new InterviewChanges(
+                interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 null,
-                substitutionChanges,
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
 
@@ -3180,8 +3193,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            var substitutedQuestions = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState));
-
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToList();
 
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
@@ -3204,7 +3217,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
-                substitutedQuestions, 
+                questionSubstitutionChanges,
+                staticTextSubstitutionChanges,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -3398,6 +3412,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, 
                 substitutedQuestionIds, 
+                rosterVector, 
+                questionnaire);
+
+            return instances;
+        }
+
+        private IEnumerable<Identity> CalculateChangesInSubstitutedStaticTexts(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
+            IReadOnlyInterviewStateDependentOnAnswers state)
+        {
+            var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionId);
+
+            var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
+                substitutedStaticTextIds, 
                 rosterVector, 
                 questionnaire);
 
@@ -4587,6 +4614,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 enablementChanges,
                 validationChanges,
+                null,
                 null,
                 null,
                 null,
