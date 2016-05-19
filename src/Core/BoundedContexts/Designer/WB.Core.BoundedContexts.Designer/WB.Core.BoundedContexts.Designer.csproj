@@ -615,6 +615,7 @@
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfRenderExtensions.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfSettings.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\IQuestionnaireListViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
