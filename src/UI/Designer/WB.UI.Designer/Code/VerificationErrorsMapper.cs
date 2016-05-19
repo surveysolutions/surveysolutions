@@ -110,7 +110,8 @@ namespace WB.UI.Designer.Code
                     }
                 }
 
-                if (reference.Type == QuestionnaireVerificationReferenceType.Group)
+                if (reference.Type == QuestionnaireVerificationReferenceType.Group
+                    || reference.Type == QuestionnaireVerificationReferenceType.Roster)
                 {
                     var group = questionnaireDocument.Find<IGroup>(reference.Id);
 
