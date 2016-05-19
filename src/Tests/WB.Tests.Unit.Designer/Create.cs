@@ -842,6 +842,16 @@ namespace WB.Tests.Unit.Designer
             return ToPublishedEvent(new Main.Core.Events.Questionnaire.QuestionnaireDeleted(), eventSourceId: questionnaireId);
         }
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithSharedPersons(Guid? id = null, Guid? createdBy = null, List<Guid> sharedPersons = null)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                CreatedBy = createdBy,
+                SharedPersons = sharedPersons
+            };
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument
@@ -1363,6 +1373,17 @@ namespace WB.Tests.Unit.Designer
         public static ITopologicalSorter<T> TopologicalSorter<T>()
         {
             return new TopologicalSorter<T>();
+        }
+
+        public static SharedPerson SharedPerson(Guid? id = null, string email = null, bool isOwner = true, ShareType shareType = ShareType.Edit)
+        {
+            return new SharedPerson
+            {
+                Id = id ?? Guid.NewGuid(),
+                IsOwner = isOwner,
+                Email = email ?? "user@e.mail",
+                ShareType = shareType
+            };
         }
     }
 }
