@@ -1437,10 +1437,6 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_rejected_by_supervisor_is_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_rejected_and_completed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TestInMemoryWriter.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\TabularParaDataWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\when_InterviewHistoryView_is_getting_by_id.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\when_InterviewHistoryView_is_removing_by_id.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\when_InterviewHistoryView_is_storing_by_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />

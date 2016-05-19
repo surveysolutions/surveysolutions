@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             switch (dataType)
             {
                 case DataExportType.ParaData:
-                    path = this.paraDataAccessor.GetPathToParaDataByQuestionnaire(
+                    path = this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(
                         questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     break;
                 case DataExportType.Data:

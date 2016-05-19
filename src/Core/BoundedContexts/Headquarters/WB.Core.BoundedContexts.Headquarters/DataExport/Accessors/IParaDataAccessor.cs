@@ -4,11 +4,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
-    public interface IParaDataAccessor: IReadSideRepositoryWriter<InterviewHistoryView>
+    public interface IParaDataAccessor
     {
-        void ClearParaData();
-        void PersistParaDataExport();
-        void ArchiveParaDataExport();
-        string GetPathToParaDataByQuestionnaire(Guid questionnaireId, long version);
+        void ClearParaDataFolder();
+        void ArchiveParaDataFolder();
+        void StoreInterviewParadata(InterviewHistoryView view);
+        string GetPathToParaDataArchiveByQuestionnaire(Guid questionnaireId, long version);
     }
 }

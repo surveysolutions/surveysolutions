@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -28,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
         private readonly IDataExportProcessesService dataExportProcessesService;
@@ -35,10 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         private readonly string interviewParaDataEventHandlerName = typeof(InterviewParaDataEventHandler).Name;
 
-        private ITransactionManager TransactionManager
-        {
-            get { return this.transactionManagerProvider.GetTransactionManager(); }
-        }
+        private ITransactionManager TransactionManager => this.transactionManagerProvider.GetTransactionManager();
+        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
@@ -47,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
             IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -58,14 +59,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
         {
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
+            var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
+
             var interviewParaDataEventHandler =
-                new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
+                new InterviewParaDataEventHandler(interviewHistoryReader, this.interviewSummaryReader, this.userReader,
                     this.interviewDataExportSettings, this.questionnaireExportStructureStorage);
 
             var interviewDenormalizerProgress =
@@ -84,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             if (!eventPosition.HasValue)
             {
-                this.paraDataAccessor.ClearParaData();
+                this.paraDataAccessor.ClearParaDataFolder();
             }
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
@@ -103,33 +107,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.TransactionManager.ExecuteInQueryTransaction(
                     () =>
                     {
-                        foreach (var committedEvent in events)
+                        this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
                         {
-                            interviewParaDataEventHandler.Handle(committedEvent);
-                            countOfProcessedEvents++;
-                        }
+                            foreach (var committedEvent in events)
+                            {
+                                interviewParaDataEventHandler.Handle(committedEvent);
+                                countOfProcessedEvents++;
+                            }
+                        });
                     });
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
                 {
-                    this.PersistResults(dataExportProcessDetails.NaturalId, eventSlice.Position, eventCount, countOfProcessedEvents);
+                    var allInterviewEvents = interviewHistoryReader.Query(_ => _.ToArray());
+                    foreach (var interviewHistoryView in allInterviewEvents)
+                    {
+                        this.paraDataAccessor.StoreInterviewParadata(interviewHistoryView);
+                    }
+
+                    interviewHistoryReader.Clear();
+
+                    this.UpdateLastHandledEventPosition(eventSlice.Position);
+
+                    int progressInPercents = ((long) countOfProcessedEvents).PercentOf(eventCount);
+                    this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, progressInPercents);
                     persistCount++;
                 }
             }
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            this.paraDataAccessor.ArchiveParaDataExport();
+            this.paraDataAccessor.ArchiveParaDataFolder();
 
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
-        }
-
-        private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, long countOfProcessedEvents)
-        {
-            this.paraDataAccessor.PersistParaDataExport();
-            this.UpdateLastHandledEventPosition(eventPosition);
-            int progressInPercents = countOfProcessedEvents.PercentOf(totatEventCount);
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessId, progressInPercents);
         }
 
         private void UpdateLastHandledEventPosition(EventPosition eventPosition)
