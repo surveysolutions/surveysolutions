@@ -276,19 +276,25 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.ru.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
