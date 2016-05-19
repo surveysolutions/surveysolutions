@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.DataCollection.V9
 
         protected abstract Guid[] GetRosterScopeIds(Guid rosterId);
 
+        protected abstract Guid GetQuestionnaireId();
+
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> rosterGenerators;
 
         protected new virtual IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> RosterGenerators
@@ -173,7 +175,12 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 {
                     var rosterScope = GetRosterScopeIds(id);
 
-                    var rosterKey = new Identity[0];
+                    var isQuestionnaireLevel = this.RosterKey.Length == 1 && this.RosterKey[0].Id == this.GetQuestionnaireId();
+
+                    var rosterKey = isQuestionnaireLevel
+                        ? new Identity[0]
+                        : this.RosterKey;
+
                     var rosters = this.GetInstances(rosterKey, rosterScope.Last());
                     if (rosters != null)
                     {

@@ -274,18 +274,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "ssValidationExpressions() => this.ExecuteValidations();\r\n\r\n\tpublic EnablementCha" +
                     "nges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();\r\n\r" +
                     "\n\tprotected override Guid[] GetRosterScopeIds(Guid rosterId)\r\n\t{\r\n\t\treturn IdOf." +
-                    "parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutableV9 " +
-                    "parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV8 parent) {}\r\n\tpublic v" +
-                    "oid SetParent(IExpressionExecutableV7 parent) {}\r\n\tpublic void SetParent(IExpres" +
-                    "sionExecutableV6 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV5 pare" +
-                    "nt) {}\r\n\tpublic void SetParent(IExpressionExecutableV2 parent) {}\r\n\tpublic void " +
-                    "SetParent(IExpressionExecutable   parent) {}\r\n\r\n\tIExpressionExecutableV9 IExpres" +
-                    "sionExecutableV9.GetParent() => null;\r\n\tIExpressionExecutableV8 IExpressionExecu" +
-                    "tableV8.GetParent() => null;\r\n\tIExpressionExecutableV7 IExpressionExecutableV7.G" +
-                    "etParent() => null;\r\n\tIExpressionExecutableV6 IExpressionExecutableV6.GetParent(" +
-                    ") => null;\r\n\tIExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null" +
-                    ";\r\n\tIExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;\r\n\tIExpr" +
-                    "essionExecutable   IExpressionExecutable  .GetParent() => null;\r\n}\r\n");
+                    "parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tprotected override Guid GetQuestionnaireId()\r\n" +
+                    "\t{\r\n\t\treturn IdOf.@__questionnaire;\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExe" +
+                    "cutableV9 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV8 parent) {}\r" +
+                    "\n\tpublic void SetParent(IExpressionExecutableV7 parent) {}\r\n\tpublic void SetPare" +
+                    "nt(IExpressionExecutableV6 parent) {}\r\n\tpublic void SetParent(IExpressionExecuta" +
+                    "bleV5 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV2 parent) {}\r\n\tpu" +
+                    "blic void SetParent(IExpressionExecutable   parent) {}\r\n\r\n\tIExpressionExecutable" +
+                    "V9 IExpressionExecutableV9.GetParent() => null;\r\n\tIExpressionExecutableV8 IExpre" +
+                    "ssionExecutableV8.GetParent() => null;\r\n\tIExpressionExecutableV7 IExpressionExec" +
+                    "utableV7.GetParent() => null;\r\n\tIExpressionExecutableV6 IExpressionExecutableV6." +
+                    "GetParent() => null;\r\n\tIExpressionExecutableV5 IExpressionExecutableV5.GetParent" +
+                    "() => null;\r\n\tIExpressionExecutableV2 IExpressionExecutableV2.GetParent() => nul" +
+                    "l;\r\n\tIExpressionExecutable   IExpressionExecutable  .GetParent() => null;\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
