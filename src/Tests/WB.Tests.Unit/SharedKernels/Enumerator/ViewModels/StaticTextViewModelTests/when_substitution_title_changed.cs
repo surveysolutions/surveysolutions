@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
+            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.StaticText.ShouldEqual("Old title new value");
 

@@ -839,6 +839,12 @@ namespace WB.Tests.Unit
             {
                 return new ChangedVariable(variableIdentity, value);
             }
+
+            public static SubstitutionTitlesChanged SubstitutionTitlesChanged(
+                Identity[] questions = null, Identity[] staticTexts = null)
+                => new SubstitutionTitlesChanged(
+                    questions ?? new Identity[] {},
+                    staticTexts ?? new Identity[] {});
         }
     }
 }

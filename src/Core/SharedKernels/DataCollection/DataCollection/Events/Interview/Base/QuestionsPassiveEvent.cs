@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 
         protected QuestionsPassiveEvent(Identity[] questions)
         {
-            this.Questions = questions.ToArray();
+            this.Questions = questions?.ToArray() ?? new Identity[] {};
         }
     }
 }
