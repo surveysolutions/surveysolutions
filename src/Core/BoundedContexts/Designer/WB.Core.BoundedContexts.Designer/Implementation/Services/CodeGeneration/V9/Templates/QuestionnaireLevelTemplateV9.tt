@@ -111,6 +111,11 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 		return IdOf.parentScopeMap[rosterId];
 	}
 
+	protected override Guid GetQuestionnaireId()
+	{
+		return IdOf.@__questionnaire;
+	}
+
 	public void SetParent(IExpressionExecutableV9 parent) {}
 	public void SetParent(IExpressionExecutableV8 parent) {}
 	public void SetParent(IExpressionExecutableV7 parent) {}

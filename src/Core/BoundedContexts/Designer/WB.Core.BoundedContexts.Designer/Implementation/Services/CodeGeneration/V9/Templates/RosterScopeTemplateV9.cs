@@ -506,6 +506,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 	{
 		return IdOf.parentScopeMap[rosterId];
 	}
+
+	protected override Guid GetQuestionnaireId()
+	{
+		return IdOf.@__questionnaire;
+	}
 	
 	public void SetParent(IExpressionExecutableV9 parent) => this.SetParentImpl(parent);
 	public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);
