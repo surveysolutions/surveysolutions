@@ -7333,59 +7333,6 @@ input#edit-group-title {
   font-weight: normal;
   color: #2075bf;
 }
-#roster-editor .dropdown-with-breadcrumbs-and-icons .var-name-line,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .var-name-line {
-  color: #3da802;
-  font-weight: bold;
-}
-
-
-#roster-editor .dropdown-with-breadcrumbs-and-icons .selected-block,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .selected-block {
-  width:100%;
-  position:relative;
-}
-
-#roster-editor .dropdown-with-breadcrumbs-and-icons .var-block,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .var-block {
-  position:absolute; 
-  margin: auto; 
-  top: 0; 
-  bottom: 0; 
-  right: 0; 
-  display:table; 
-  background-color:#fff;
-}
-
-#roster-editor .dropdown-with-breadcrumbs-and-icons .var-block:before,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .var-block:before {
-  display: block;
-  position: absolute;
-  height: 100%;
-  content: '';
-  width: 75px;
-  top: 0px;
-  left: -75px;
-  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
-}
-
-#roster-editor .dropdown-with-breadcrumbs-and-icons .var-block:hover,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .var-block:hover {
-  background-color: #f1f2f3;     
-}
-
-#roster-editor .dropdown-with-breadcrumbs-and-icons .var-block .var-name,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .var-block .var-name
-{
-  color: #3da802;
-  vertical-align:middle;
-  display:table-cell;
-}
-
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group {
   width: 100%;
@@ -7420,9 +7367,54 @@ input#edit-group-title {
   letter-spacing: normal;
   font-weight: normal;
 }
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .var-name-line,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .var-name-line {
+  color: #3da802;
+  font-weight: bold;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
   top: 14px;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-block,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-block {
+  width: 100%;
+  position: relative;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: table;
+  background-color: #fff;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block .var-name,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block .var-name {
+  color: #3da802;
+  vertical-align: middle;
+  display: table-cell;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block:before,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 75px;
+  top: 0px;
+  left: -75px;
+  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block:hover,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block:hover {
+  background-color: #f1f2f3;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu {
@@ -7491,15 +7483,22 @@ input#edit-group-title {
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block {
-  background: #f1f2f3;
+  background-color: #f1f2f3;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block:before,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block:before{
-  background-image: -webkit-linear-gradient(left, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
-  background-image: -o-linear-gradient(left, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
-  background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 75px;
+  top: 0px;
+  left: -75px;
+  background-image: -webkit-linear-gradient(left, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
+  background-image: -o-linear-gradient(left, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
+  background-image: linear-gradient(to right, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f1f2f3', endColorstr='#fff1f2f3', GradientType=1);
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
@@ -9452,6 +9451,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   border-top-color: #2075bf;
 }
 #verification-modal.warning .modal-content .modal-header h3 span {
+  color: #2075bf;
+}
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item,
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item .title {
+  color: #4a4a4a;
+}
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item:hover,
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item:hover .title {
   color: #2075bf;
 }
 #verification-modal.ie9-backdrop {

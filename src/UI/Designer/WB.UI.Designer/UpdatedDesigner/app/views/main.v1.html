@@ -334,12 +334,12 @@
                                 <empty-tag ng-repeat="referencesWithErrors in error.errors">
                                     <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
                                         <a class="verification-item" href="javascript:void(0);">
-                                            <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
-                                            <span ng-if="reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
-                                            <span ng-if="reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
-                                            <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
-                                            <span ng-if="reference.type == 'Attachment'" class="icon icon-error icon-attachment"></span>
-                                            <span ng-if="reference.type == 'Variable'" class="icon icon-error icon-variable"></span>
+                                            <span ng-if="reference.type == 'Question'" class="icon {{reference.questionType}}" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
+                                            <span ng-if="reference.type == 'Macro'" class="icon icon-macro" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
+                                            <span ng-if="reference.type == 'LookupTable'" class="icon icon-lookup" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
+                                            <span ng-if="reference.type == 'StaticText'" class="icon icon-statictext" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
+                                            <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
+                                            <span ng-if="reference.type == 'Variable'" class="icon icon-variable" ng-class="{'icon-error': areErrorsAreActiveNow()}"></span>
                                             <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}{{referencesWithErrors.compilationErrorMessages != null ? ': ' + referencesWithErrors.compilationErrorMessages[0] : ''}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
