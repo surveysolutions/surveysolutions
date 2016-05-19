@@ -100,14 +100,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(VariablesChanged @event)
         {
             if (!this.substitutionViewModel.HasVariablesInText(
-                @event.ChangedVariables.Select(variable => variable.Identity))) return;
+                @event.ChangedVariables.Select(variable => variable.Identity)))
+                return;
 
             this.UpdateUITexts();
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
         {
-            this.UpdateUITexts();
+            if (@event.StaticTexts.Length > 0)
+            {
+                this.UpdateUITexts();
+            }
         }
 
         private void UpdateUITexts()

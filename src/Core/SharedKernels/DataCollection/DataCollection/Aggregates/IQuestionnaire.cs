@@ -171,6 +171,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
 
         /// <summary>
+        /// Gets list of static text ids that use question with provided <param name="questionId">questionId</param> as a substitution.
+        /// </summary>
+        IEnumerable<Guid> GetSubstitutedStaticTexts(Guid questionId);
+
+        /// <summary>
         /// Gets first level child questions of a group
         /// </summary>
         ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
