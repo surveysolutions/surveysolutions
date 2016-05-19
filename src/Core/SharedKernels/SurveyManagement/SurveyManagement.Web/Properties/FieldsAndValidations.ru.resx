@@ -208,7 +208,7 @@
     <value>Имя пользователя</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Название анкеты требуется</value>
+    <value>Имя вопросника является необходимым полем</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
     <value>Название</value>

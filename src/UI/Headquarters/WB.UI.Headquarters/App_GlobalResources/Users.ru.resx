@@ -124,7 +124,7 @@
     <value>Добавить хедквотера</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Добавление супервизора</value>
+    <value>Добавить супервизора</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Администратор</value>
@@ -157,7 +157,7 @@
     <value>Создать супервизора</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Дата создания</value>
+    <value>Создан</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редактировать</value>
@@ -187,7 +187,7 @@
     <value>Заблокирован</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Не связан с устройством</value>
+    <value>Не связан с планшетом</value>
   </data>
   <data name="Observer" xml:space="preserve">
     <value>Обозреватель</value>
@@ -211,6 +211,6 @@
     <value>Имя</value>
   </data>
   <data name="AddObserver" xml:space="preserve">
-    <value>Добавить наблюдателя</value>
+    <value>Добавить обозревателя</value>
   </data>
 </root>
