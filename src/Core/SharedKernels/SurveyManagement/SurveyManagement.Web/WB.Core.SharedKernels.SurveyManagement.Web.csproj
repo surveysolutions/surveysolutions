@@ -293,24 +293,34 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\FieldsAndValidations.fr.resx" />
     <EmbeddedResource Include="Properties\FieldsAndValidations.ru.resx" />
+    <EmbeddedResource Include="Properties\Pages.fr.resx" />
     <EmbeddedResource Include="Properties\Pages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Pages.ru.resx" />
+    <EmbeddedResource Include="Properties\Strings.fr.resx" />
     <EmbeddedResource Include="Properties\Strings.ru.resx" />
+    <EmbeddedResource Include="Properties\SyncLogMessages.fr.resx" />
     <EmbeddedResource Include="Properties\SyncLogMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\Archived.fr.resx" />
     <EmbeddedResource Include="Resources\Archived.ru.resx" />
+    <EmbeddedResource Include="Resources\EnumNames.fr.resx" />
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx" />
+    <EmbeddedResource Include="Resources\Interviews.fr.resx" />
     <EmbeddedResource Include="Resources\Interviews.ru.resx" />
+    <EmbeddedResource Include="Resources\LimitsIndicator.fr.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.ru.resx" />
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ru.resx" />
+    <EmbeddedResource Include="Resources\TabletSyncMessages.fr.resx" />
     <EmbeddedResource Include="Resources\TabletSyncMessages.ru.resx" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
