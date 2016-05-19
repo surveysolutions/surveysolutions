@@ -6,11 +6,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
     public interface ITabletInformationService
     {
-        void SaveTabletInformation(byte[] content, string androidId, string registrationId, UserView user);
+        void SaveTabletInformation(byte[] content, string androidId, UserView user);
 
         List<TabletInformationView> GetAllTabletInformationPackages();
-        List<TabletInformationView> GetAllTabletInformationPackages(int pageSize);
         string GetFullPathToContentFile(string packageName);
-        string GetPackageNameWithoutRegistrationId(string packageName);
+        string GetFileName(string fileName, string hostName);
     }
 }

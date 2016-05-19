@@ -55,7 +55,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             this.tabletInformationService.SaveTabletInformation(
                 content: fileContent,
                 androidId: deviceId,
-                registrationId: null,
                 user: user);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
