@@ -1,12 +1,16 @@
-﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+﻿using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SubstitutionTitlesChanged : QuestionsPassiveEvent
     {
-        public SubstitutionTitlesChanged(Identity[] questions)
+        public Identity[] StaticTexts { get; private set; }
+
+        public SubstitutionTitlesChanged(Identity[] questions, Identity[] staticTexts)
             : base(questions)
         {
+            this.StaticTexts = staticTexts?.ToArray() ?? new Identity[]{};
         }
     }
 }
