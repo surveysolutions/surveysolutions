@@ -160,7 +160,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.tabletInformationService.SaveTabletInformation(
                 content: Convert.FromBase64String(tabletInformationPackage.Content),
                 androidId: tabletInformationPackage.AndroidId,
-                registrationId: tabletInformationPackage.ClientRegistrationId.ToString(),
                 user: user);
 
             //log record

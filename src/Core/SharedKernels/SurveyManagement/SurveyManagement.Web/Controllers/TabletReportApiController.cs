@@ -33,10 +33,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public TabletInformationsView Packages(TabletInfoReportListViewModel input)
         {
-            var items = !string.IsNullOrEmpty(input.SearchBy) 
-                      ? this.tabletInformationService.GetAllTabletInformationPackages()
-                            .Where(x => x.UserName != null && x.UserName.ToLower().StartsWith(input.SearchBy.ToLower())).ToList()
-                      : this.tabletInformationService.GetAllTabletInformationPackages();
+            var items = this.tabletInformationService.GetAllTabletInformationPackages();
+
+            if (!string.IsNullOrEmpty(input.SearchBy))
+                items = items.Where(x => x.UserName != null && x.UserName.ToLower().StartsWith(input.SearchBy.ToLower())).ToList();
 
             var itemsSlice = items.Skip((input.PageIndex - 1) * input.PageSize).Take(input.PageSize);
                 return new TabletInformationsView()
