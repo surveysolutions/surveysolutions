@@ -127,10 +127,10 @@
     <value>Временной промежуток между назначением интервью и моментом, когда интервью завершается на планшете.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Среднее время обработки Хедквотером</value>
+    <value>Среднее время обработки хедквотером</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между моментом, когда Супервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен на Хедквотером.</value>
+    <value>Временной промежуток между моментом, когда Супервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен на хедквотером.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Средняя продолжительность интервью</value>
@@ -142,7 +142,7 @@
     <value>Среднее время обработки</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между первым назначением и интервью и моментом, когда интервью утверждено Хедкотером.</value>
+    <value>Временной промежуток между первым назначением и интервью и моментом, когда интервью утверждено хедкотером.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
     <value>Среднее время обработки супервизором</value>
@@ -199,7 +199,7 @@
     <value>Вопросник</value>
   </data>
   <data name="Team" xml:space="preserve">
-    <value>Команда</value>
+    <value>команда</value>
   </data>
   <data name="TeamMember" xml:space="preserve">
     <value>Член команды</value>

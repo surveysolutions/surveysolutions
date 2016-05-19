@@ -271,7 +271,7 @@
     <value>Скрыть группы</value>
   </data>
   <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
-    <value>Недопустимый</value>
+    <value>неправильные</value>
   </data>
   <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
     <value>Интервью имеет пакеты ожидающие синхронизацию</value>
@@ -286,7 +286,7 @@
     <value>Статус</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
-    <value>супервизор</value>
+    <value>супервизорские</value>
   </data>
   <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
     <value>неотвеченные</value>
@@ -295,7 +295,7 @@
     <value>Информация о {0} успешно обновлена</value>
   </data>
   <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
-    <value>Интервьюер был успешно создан</value>
+    <value>Интервьюер был успешно Создан</value>
   </data>
   <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
     <value>Не удалось обновить информацию пользователя, поскольку текущий пользователь не существует</value>
@@ -310,7 +310,7 @@
     <value>Создать</value>
   </data>
   <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
-    <value>Идентификатор устройства</value>
+    <value>Идентификатор планшета</value>
   </data>
   <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
     <value>Интервьюер еще не синхронизировался. Нет информации об устройствах.</value>
@@ -328,16 +328,16 @@
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>Интервью на планшете будут потеряны если они созданы в census режиме.</value>
+    <value>Интервью на планшете будут потеряны если они Созданы в census режиме.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
-    <value>Архивный статус</value>
+    <value>Статус</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Подключен к устройству</value>
+    <value>Подключен к планшету</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Дата создания</value>
+    <value>Создан</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Электронная почта</value>
@@ -403,7 +403,7 @@
     <value>Не найден</value>
   </data>
   <data name="PackagesInfo_DeviceId" xml:space="preserve">
-    <value>Идентификатор устройства</value>
+    <value>Идентификатор планшета</value>
   </data>
   <data name="PackagesInfo_Header" xml:space="preserve">
     <value>Информационные пакеты планшета</value>
@@ -430,13 +430,13 @@
     <value>Создано на клиенте</value>
   </data>
   <data name="Survey_HasErrorsTitle" xml:space="preserve">
-    <value>С ошибками</value>
+    <value>Ошибки</value>
   </data>
   <data name="Survey_Header" xml:space="preserve">
     <value>Интервью</value>
   </data>
   <data name="Survey_LastUpdateTitle" xml:space="preserve">
-    <value>Обновлено:</value>
+    <value>Обновлено</value>
   </data>
   <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
     <value>Получено интервьюером</value>
@@ -505,7 +505,7 @@
     <value>Архив</value>
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
-    <value>Архивированные пользователей</value>
+    <value>Архивные пользователи</value>
   </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Подключен</value>
@@ -523,10 +523,10 @@
     <value>Показать фильтр</value>
   </data>
   <data name="ApprovedByHeadquarters" xml:space="preserve">
-    <value>Одобрено штаб-квартиры</value>
+    <value>Утверждено хедквотером</value>
   </data>
   <data name="ApprovedByupervisor" xml:space="preserve">
-    <value>Утверждена руководителем</value>
+    <value>Утверждена супервизором</value>
   </data>
   <data name="Attention" xml:space="preserve">
     <value>Внимание!</value>
@@ -541,7 +541,7 @@
     <value>Интервьюер назначен</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
-    <value>Отвергнуто штаб-квартиры</value>
+    <value>Отклонено хедквотером</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
     <value>Отклонено руководителем</value>

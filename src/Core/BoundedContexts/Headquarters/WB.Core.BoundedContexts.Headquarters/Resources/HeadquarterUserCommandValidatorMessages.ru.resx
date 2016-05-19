@@ -121,12 +121,12 @@
     <value>Не удалось обновить информацию пользователя, поскольку текущий пользователь не существует</value>
   </data>
   <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
-    <value>Имя пользователя «{0}» берется архивные пользователями</value>
+    <value>Имя «{0}» используется архивным пользователем</value>
   </data>
   <data name="UserNameIsTakenFormat" xml:space="preserve">
-    <value>Берется имя пользователя «{0}»</value>
+    <value>Имя «{0}» уже используется</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>Интервьюер не может разархивировать, до тех пор, пока руководитель архивируется</value>
+    <value>Интервьюер не может быть разархивирован, до тех пор, пока супервизор заархивирован</value>
   </data>
 </root>

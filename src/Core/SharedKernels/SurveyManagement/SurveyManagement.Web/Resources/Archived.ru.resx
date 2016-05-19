@@ -130,7 +130,7 @@
     <value>Архив Супервизоров</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Дата создания</value>
+    <value>Создан</value>
   </data>
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>Вы хотите продолжить?</value>

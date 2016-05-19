@@ -121,7 +121,7 @@
     <value>Администратор</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
-    <value>Все права защищены</value>
+    <value>All Rights Reserved</value>
   </data>
   <data name="Any" xml:space="preserve">
     <value>Любой</value>
@@ -217,7 +217,7 @@
     <value>Откатить</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
-    <value>С ошибками</value>
+    <value>Ошибки</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
