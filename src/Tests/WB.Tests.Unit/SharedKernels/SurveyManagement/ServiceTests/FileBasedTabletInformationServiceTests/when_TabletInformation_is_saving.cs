@@ -24,18 +24,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             });
         };
 
-        Because of = () => fileBasedTabletInformationService.SaveTabletInformation(content, androidId, registrationId, null);
+        Because of = () => fileBasedTabletInformationService.SaveTabletInformation(content, androidId, null);
 
         It should_save_content_as_it_is = () => savedContent.ShouldEqual(content);
         It should_save_zip_file = () => savedFileName.ShouldEndWith(".zip");
         It should_saved_file_contain_android_id = () => savedFileName.ShouldContain(androidId);
-        It should_saved_file_contain_registration_id = () => savedFileName.ShouldContain(registrationId);
         
         private static FileBasedTabletInformationService fileBasedTabletInformationService;
         private static byte[] content;
         private static byte[] savedContent;
         private static string savedFileName;
         private static string androidId="aId";
-        private static string registrationId="rId";
     }
 }

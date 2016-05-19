@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
 
         It should_contain_1_element_in_list = () => returnedPackages.Count.ShouldEqual(1);
         It should_android_id_be_equal_provided_value = () => returnedPackages[0].AndroidId.ShouldEqual(androidId);
-        It should_registration_id_be_equal_5 = () => returnedPackages[0].RegistrationId.ShouldEqual("5");
         It should_username_be_as_provided = () => returnedPackages[0].UserName.ShouldEqual(userName);
         It should_userid_be_as_provided = () => returnedPackages[0].UserId.ShouldEqual(userId);
 
@@ -28,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
 
         private static List<TabletInformationView> returnedPackages;
 
-        private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        private static string userId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         private static string userName = "test";
         private static string androidId = "3dqda33";
         private static string[] presentFileNames = new[]
