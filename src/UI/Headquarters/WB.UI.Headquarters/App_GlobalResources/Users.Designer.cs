@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add observer.
+        /// </summary>
+        internal static string AddObserver {
+            get {
+                return ResourceManager.GetString("AddObserver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add supervisor.
         /// </summary>
         internal static string AddSupervisor {

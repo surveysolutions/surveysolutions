@@ -1,10 +1,11 @@
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 <div id="alerts">
     @if (TempData.ContainsKey(Alerts.ATTENTION))
     {
         <div class="alert alert-warning">
             <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <strong>Attention!</strong>
+            <strong>@Pages.Attention</strong>
             @Html.Raw(@TempData[Alerts.ATTENTION])
         </div>
     }

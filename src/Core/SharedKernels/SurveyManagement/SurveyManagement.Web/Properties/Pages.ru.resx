@@ -522,4 +522,46 @@
   <data name="ShowFilter" xml:space="preserve">
     <value>Показать фильтр</value>
   </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Одобрено штаб-квартиры</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>Утверждена руководителем</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>Внимание!</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>Отвергнуто штаб-квартиры</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено руководителем</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Назначен руководитель</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Член команды</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Члены команды и статусы</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Шаблон</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Итого</value>
+  </data>
 </root>
