@@ -16,7 +16,7 @@
                         var maxLength = _.max(_.map(options, function (o) { return o.title.length; })) + 3;
                         _.each(options, function (option) {
                             if (!_.isEmpty(option)) {
-                                stringifiedOptions += _.padRight(option.title || "", maxLength, '.') + (option.value === 0 ? "0" : (option.value || ""));
+                                stringifiedOptions += (option.title || "") + Array(maxLength + 1 - (option.title || "").length).join('.') + (option.value === 0 ? "0" : (option.value || ""));
                                 stringifiedOptions += "\n";
                             }
                         });
@@ -25,7 +25,7 @@
 
                     optionsService.parseOptions = function(stringifiedOptions) {
                         var optionsStringList = (stringifiedOptions || "").split("\n");
-                        _.remove(optionsStringList, _.isEmpty);
+                        _.filter(optionsStringList, _.isEmpty);
 
                         var options = _.map(optionsStringList, function(item) {
                             var matches = item.match(regex);

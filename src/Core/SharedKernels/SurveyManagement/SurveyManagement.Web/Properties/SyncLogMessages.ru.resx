@@ -127,7 +127,7 @@
     <value>&lt;li&gt;Удаление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, индекс сортировки: {2}&lt;/li&gt;</value>
   </data>
   <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>Устройство может быть назначено интервьюеру</value>
+    <value>Планшет может быть назначен интервьюеру</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
     <value>&lt;font color="orange"&gt;Необходима перепривязка планшета&lt;/font&gt;</value>
@@ -136,7 +136,7 @@
     <value>&lt;font color="red"&gt;Требуется обновление. Версия движка интервьюера - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[ПУСТОЕ УСТРОЙСТВО]&lt;/b&gt;</value>
+    <value>&lt;b&gt;[ПУСТОЕ ПЛАНШЕТ]&lt;/b&gt;</value>
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
     <value>Загрузить вложения: {0}</value>
