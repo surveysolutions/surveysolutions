@@ -5,14 +5,14 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
-<#@ include file="SharedTemplateV9.tt"#>
+<#@ include file="SharedTemplateV10.tt"#>
 
-internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<<#=this.Model.TypeName#>>, IExpressionExecutableV9
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10<<#=this.Model.TypeName#>>, IExpressionExecutableV10
 {
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, 
 		Identity[] rosterKey, 
-		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances, 
+		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies,
 		Dictionary<Guid, Guid[]> structureDependencies, 
 		IInterviewProperties interviewProperties)
@@ -35,7 +35,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 #>
 	}		 
 
-	public override IExpressionExecutableV9 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances)
+	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
 		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
 		{
@@ -106,6 +106,17 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 
 	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
 
+	protected override Guid[] GetRosterScopeIds(Guid rosterId)
+	{
+		return IdOf.parentScopeMap[rosterId];
+	}
+
+	protected override Guid GetQuestionnaireId()
+	{
+		return IdOf.@__questionnaire;
+	}
+
+	public void SetParent(IExpressionExecutableV10 parent) {}
 	public void SetParent(IExpressionExecutableV9 parent) {}
 	public void SetParent(IExpressionExecutableV8 parent) {}
 	public void SetParent(IExpressionExecutableV7 parent) {}
@@ -114,6 +125,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV9<
 	public void SetParent(IExpressionExecutableV2 parent) {}
 	public void SetParent(IExpressionExecutable   parent) {}
 
+	IExpressionExecutableV10 IExpressionExecutableV10.GetParent() => null;
 	IExpressionExecutableV9 IExpressionExecutableV9.GetParent() => null;
 	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => null;
 	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => null;

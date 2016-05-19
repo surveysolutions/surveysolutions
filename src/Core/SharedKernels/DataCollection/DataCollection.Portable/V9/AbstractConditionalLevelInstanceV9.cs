@@ -35,10 +35,6 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             this.Quest = properties;
         }
 
-        protected abstract Guid[] GetRosterScopeIds(Guid rosterId);
-
-        protected abstract Guid GetQuestionnaireId();
-
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> rosterGenerators;
 
         protected new virtual IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV9>> RosterGenerators
@@ -156,56 +152,6 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 enablementChanges.QuestionsToBeDisabled, enablementChanges.QuestionsToBeEnabled,
                 enablementChanges.StaticTextsToBeDisabled, enablementChanges.StaticTextsToBeEnabled,
                 variablesToBeDisabled, variablesToBeEnabled);
-        }
-
-        protected override void UpdateAllNestedItemsState(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
-        {
-            if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
-
-            var stack = new Queue<Guid>(structureDependencies[itemId]);
-            while (stack.Any())
-            {
-                var id = stack.Dequeue();
-
-                if (this.EnablementStates.ContainsKey(id))
-                {
-                    this.EnablementStates[id].State = state;
-                }
-                else
-                {
-                    var rosterScope = GetRosterScopeIds(id);
-
-                    var isQuestionnaireLevel = this.RosterKey.Length == 1 && this.RosterKey[0].Id == this.GetQuestionnaireId();
-
-                    var rosterKey = isQuestionnaireLevel
-                        ? new Identity[0]
-                        : this.RosterKey;
-
-                    var rosters = this.GetInstances(rosterKey, rosterScope.Last());
-                    if (rosters != null)
-                    {
-                        foreach (var roster in rosters)
-                        {
-                            if (state == State.Disabled)
-                            {
-                                roster.DisableGroup(id);
-                            }
-                            if (state == State.Enabled)
-                            {
-                                roster.EnableGroup(id);
-                            }
-                        }
-                    }
-                }
-
-                if (structureDependencies.ContainsKey(id) && structureDependencies[id].Any())
-                {
-                    foreach (var dependentQuestionId in structureDependencies[id])
-                    {
-                        stack.Enqueue(dependentQuestionId);
-                    }
-                }
-            }
         }
     }
 }
