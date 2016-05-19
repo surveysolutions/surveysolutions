@@ -281,7 +281,7 @@
                                                     <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
-                                                    <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
+                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span>Update</span>
                                                     </button>
                                                     <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
