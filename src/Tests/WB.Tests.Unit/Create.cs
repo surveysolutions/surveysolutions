@@ -2561,9 +2561,11 @@ namespace WB.Tests.Unit
             return new UnarchiveUserCommand(userId);
         }
 
-        public static UncommittedEvent UncommittedEvent(IEvent payload)
+        public static UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, 
+            IEvent payload = null,
+            int sequence = 1)
         {
-            return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, payload);
+            return new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, 1, DateTime.Now, payload);
         }
 
         public static User User(Guid? userId=null)
