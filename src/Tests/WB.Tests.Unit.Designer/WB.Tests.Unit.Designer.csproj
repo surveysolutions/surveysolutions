@@ -366,10 +366,14 @@
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_all_parameters_specified.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfFactoryTests\PdfFactoryTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfFactoryTests\when_load_and_shared_persons_contains_requested_user.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_cloning_questionnaire_with_variable.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_deleting_attachment.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_variable_is_changing.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_updating_attachment.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_shared_persons_contains_viewer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_itself.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_less_then_50_percent_questions_with_variable_labels.cs" />
