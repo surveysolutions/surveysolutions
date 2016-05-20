@@ -15,31 +15,28 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.TestFactories
 {
-    internal static partial class Create
+    internal class ControllerFactory
     {
-        internal static class Controller
-        {
-            public static QuestionnairesApiV1Controller InterviewerQuestionnaires(
+        public QuestionnairesApiV1Controller InterviewerQuestionnaires(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
             QuestionnaireDocument questionnaire=null,
             QuestionnaireBrowseItem questionnaireBrowseItem=null
             )
+        {
+            return new QuestionnairesApiV1Controller(
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                serializer ?? Mock.Of<ISerializer>(),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(_ => _.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem))
             {
-                return new QuestionnairesApiV1Controller(
-                    questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                    questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                    serializer ?? Mock.Of<ISerializer>(),
-                    Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire),
-                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(_ => _.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem))
-                {
-                    Request = new HttpRequestMessage(),
-                    Configuration = new HttpConfiguration()
-                };
-            }
+                Request = new HttpRequestMessage(),
+                Configuration = new HttpConfiguration()
+            };
         }
     }
 }
