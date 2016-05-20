@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
                         clm.Name("UserPreloadingProcessId");
                         clm.Index("UserPreloadingDataRecords_UserPreloadingProcesses");
                     });
+                    keyMap.ForeignKey("FK_UserPreloadingProcesses_UserPreloadingDataRecords");
                 });
                 listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },
@@ -58,7 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
 
             Set(x => x.VerificationErrors, set =>
             {
-                set.Key(key => key.Column("UserPreloadingProcessId"));
+                set.Key(key =>
+                {
+                    key.Column("UserPreloadingProcessId");
+                    key.ForeignKey("FK_UserPreloadingProcesses_UserPreloadingProcessId");
+                });
                 set.Lazy(CollectionLazy.NoLazy);
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },

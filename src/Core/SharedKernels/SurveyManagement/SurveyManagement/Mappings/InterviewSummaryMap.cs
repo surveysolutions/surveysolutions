@@ -60,7 +60,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             });
             ManyToOne(x => x.InterviewSummary, mtm => {
                 mtm.Column("InterviewSummaryId");
-                mtm.Index("InterviewSummaries_QuestionAnswers"); });
+                mtm.Index("InterviewSummaries_QuestionAnswers");
+                mtm.ForeignKey("FK_InterviewSummaries_AnswersToFeaturedQuestions");
+            });
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void ReCreateViewDatabase()
         {
-            using (NpgsqlConnection connection = new Npgsql.NpgsqlConnection(this.connectionSettings.ConnectionString))
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
                 var dbCommand = connection.CreateCommand();
