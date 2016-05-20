@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
             statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
 
-            viewModel = Create.ViewModels.ValidityViewModel(questionnaire: plainQuestionnaire,
+            viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
             viewModel.Init("interviewid", questionIdentity);
