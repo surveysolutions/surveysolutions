@@ -2562,9 +2562,10 @@ namespace WB.Tests.Unit.TestFactories
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, 
             IEvent payload = null,
-            int sequence = 1)
+            int sequence = 1,
+            int initialVersion = 1)
         {
-            return new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, 1, DateTime.Now, payload);
+            return new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
         }
 
         public User User(Guid? userId=null)
