@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -70,10 +72,13 @@ namespace WB.UI.Interviewer.Infrastructure
                 return new NLogLogger("UNKNOWN");
             });
 
+            var fileTarget = LogManager.Configuration.FindTargetByName<FileTarget>("logfile");
+            var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
+            string logFileName = fileTarget.FileName.Render(logEventInfo);
             this.Bind<IBackupRestoreService>()
                 .To<BackupRestoreService>()
                 .WithConstructorArgument("privateStorage", AndroidPathUtils.GetPathToLocalDirectory())
-                .WithConstructorArgument("logFilePath", AndroidPathUtils.GetPathToLogFile());
+                .WithConstructorArgument("logDirectoryPath", Path.GetDirectoryName(logFileName));
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
