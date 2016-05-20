@@ -10,7 +10,7 @@ namespace WB.Tests.Unit
     internal partial class Create
     {
         public static readonly CommandFactory Command = new CommandFactory();
-
         public static readonly EventFactory Event = new EventFactory();
+        public static readonly ViewModelFactory ViewModel = new ViewModelFactory();
     }
 }

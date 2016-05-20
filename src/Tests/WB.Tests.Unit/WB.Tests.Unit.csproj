@@ -340,7 +340,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.Clean.cs" />
-    <Compile Include="CreateViewModels.cs" />
+    <Compile Include="TestFactories\ViewModelFactory.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
