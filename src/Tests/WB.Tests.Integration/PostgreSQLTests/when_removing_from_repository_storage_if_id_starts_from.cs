@@ -37,18 +37,13 @@ namespace WB.Tests.Integration.PostgreSQLTests
             update.Execute(true, true);
             var sessionFactory = cfg.BuildSessionFactory();
             var session = sessionFactory.OpenSession();
-            
-            var persister = sessionFactory.GetClassMetadata(typeof(TestRemoveStartsFrom));
-            var entityIdentifierColumnName= persister.IdentifierPropertyName;
 
             var sessionProvider =
                 Mock.Of<ISessionProvider>(
                     x =>
-                        x.GetSession() == session &&
-                        x.GetEntityIdentifierColumnName(typeof (TestRemoveStartsFrom)) ==
-                        entityIdentifierColumnName);
+                        x.GetSession() == session);
 
-            storage = Create.PostgresReadSideRepository<TestRemoveStartsFrom>(sessionProvider: sessionProvider);
+            storage = Create.PostgresReadSideRepository<TestRemoveStartsFrom>(sessionProvider: sessionProvider, idColumnName: "EntityId");
 
             storage.Store(new TestRemoveStartsFrom { Value = "test1" }, $"{nastya}1");
             storage.Store(new TestRemoveStartsFrom { Value = "test2" }, $"{nastya}2");

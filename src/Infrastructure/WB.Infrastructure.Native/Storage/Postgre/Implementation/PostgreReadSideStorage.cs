@@ -19,11 +19,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly ISessionProvider sessionProvider;
         private readonly ILogger logger;
+        private readonly string entityIdentifierColumnName;
 
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
+        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger, string entityIdentifierColumnName)
         {
             this.sessionProvider = sessionProvider;
             this.logger = logger;
+            this.entityIdentifierColumnName = entityIdentifierColumnName;
         }
 
         public virtual int Count()
@@ -50,10 +52,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void RemoveIfStartsWith(string beginingOfId)
         {
-            var idColumnName = this.sessionProvider.GetEntityIdentifierColumnName(typeof(TEntity));
             var session = this.sessionProvider.GetSession();
 
-            string hql = $"DELETE {typeof(TEntity).Name} e WHERE e.{idColumnName} like :id";
+            string hql = $"DELETE {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
 
             session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
         }

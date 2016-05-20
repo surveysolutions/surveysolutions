@@ -813,12 +813,12 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null)
+            ISessionProvider sessionProvider = null, string idColumnName = "Id")
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(), idColumnName);
         }
 
         public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
