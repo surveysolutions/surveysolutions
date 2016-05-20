@@ -82,16 +82,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
-        public string GetEntityIdentifierColumnName(Type entityType)
-        {
-            var persister = this.sessionFactory.GetClassMetadata(entityType);
-
-            if (persister == null)
-                return null;
-
-            return persister.IdentifierPropertyName;
-        }
-
         public void RollbackQueryTransaction()
         {
             if (!this.triedToBeginQueryTransaction)

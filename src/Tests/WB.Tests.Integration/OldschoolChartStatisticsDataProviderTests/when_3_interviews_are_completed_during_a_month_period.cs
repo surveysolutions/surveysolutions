@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             pgSqlConnection.Open();
 
             cumulativeReportStatusChangeStorage =
-                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>());
+                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>(), "EntryId");
 
             var cumulativeReportStatusChangeBegin = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
             var cumulativeReportStatusChangeInBetween = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);

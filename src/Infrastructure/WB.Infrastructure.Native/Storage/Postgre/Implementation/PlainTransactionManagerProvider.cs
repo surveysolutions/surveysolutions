@@ -37,11 +37,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public ISession GetSession() => this.GetPostgresTransactionManager().GetSession();
 
-        public string GetEntityIdentifierColumnName(Type entityType)
-        {
-            return this.GetPostgresTransactionManager().GetEntityIdentifierColumnName(entityType);
-        }
-
         public void PinRebuildReadSideTransactionManager()
         {
             this.pinnedTransactionManager = this.rebuildReadSideTransactionManagerWithSessions;
