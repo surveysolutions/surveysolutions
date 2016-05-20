@@ -17,6 +17,7 @@ using Ninject;
 using Ninject.Activation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -109,9 +110,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-            this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();
 
             return cfg.BuildSessionFactory();
         }
@@ -141,7 +139,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             var mapper = new ModelMapper();
             var mappingTypes = this.mappingAssemblies.SelectMany(x => x.GetExportedTypes())
-                                                     .Where(x => x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+                                                     .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null && 
+                                                                 x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
