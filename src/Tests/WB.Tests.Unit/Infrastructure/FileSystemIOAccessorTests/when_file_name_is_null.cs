@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
     {
         Establish context = () =>
         {
-            fileSystemIOAccessor = Create.FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.Other.FileSystemIOAccessor();
         };
 
         Because of = () =>

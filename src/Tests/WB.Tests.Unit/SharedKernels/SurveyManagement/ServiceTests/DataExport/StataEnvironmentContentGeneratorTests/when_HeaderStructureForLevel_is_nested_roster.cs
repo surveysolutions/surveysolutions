@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
     {
         Establish context = () =>
         {
-            questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.Other.QuestionnaireExportStructure();
 
             var topHeaderStructureForLevel =
                 CreateHeaderStructureForLevel("top");

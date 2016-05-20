@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
-            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentService = Create.Other.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
             isAttachmentContentExists.ShouldBeTrue();
 
         private static AttachmentContentService attachmentContentService;
-        private static readonly AttachmentContent expectedContent = Create.AttachmentContent();
+        private static readonly AttachmentContent expectedContent = Create.Other.AttachmentContent();
         private static bool isAttachmentContentExists;
     }
 }

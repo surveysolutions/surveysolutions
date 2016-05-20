@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
             spssFormatExportHandler = CreateSpssFormatExportHandler(tabularFormatExportService: tabularFormatExportServiceMock.Object);
         };
 
-        Because of = () => spssFormatExportHandler.ExportData(Create.AllDataExportProcess());
+        Because of = () => spssFormatExportHandler.ExportData(Create.Other.AllDataExportProcess());
 
         It should_export_all_data =
             () =>

@@ -11,11 +11,11 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
     {
         Establish context = () =>
         {
-            document = Create.QuestionnaireDocumentWithOneChapter();
+            document = Create.Other.QuestionnaireDocumentWithOneChapter();
             document.Macros = new Dictionary<Guid, Macro>
             {
-                { Id.g1, Create.Macro("macro1", "content 1", "description 1") },
-                { Id.g2, Create.Macro("macro2", "content 2", "description 2") },
+                { Id.g1, Create.Other.Macro("macro1", "content 1", "description 1") },
+                { Id.g2, Create.Other.Macro("macro2", "content 2", "description 2") },
             };
         };
 

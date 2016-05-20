@@ -29,11 +29,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         {
             var eventStream = new CommittedEventStream(interviewId, new[]
             {
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("11111111111111111111111111111111"), eventSourceId: interviewId, eventSequence: 1),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("22222222222222222222222222222222"), eventSourceId: interviewId, eventSequence: 2),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("33333333333333333333333333333333"), eventSourceId: interviewId, eventSequence: 3),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("44444444444444444444444444444444"), eventSourceId: interviewId, eventSequence: 4),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("55555555555555555555555555555555"), eventSourceId: interviewId, eventSequence: 5),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("11111111111111111111111111111111"), eventSourceId: interviewId, eventSequence: 1),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("22222222222222222222222222222222"), eventSourceId: interviewId, eventSequence: 2),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("33333333333333333333333333333333"), eventSourceId: interviewId, eventSequence: 3),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("44444444444444444444444444444444"), eventSourceId: interviewId, eventSequence: 4),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("55555555555555555555555555555555"), eventSourceId: interviewId, eventSequence: 5),
             });
 
             var eventStore = Mock.Of<IEventStore>(store
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             fileSyncRepository.Setup(x => x.GetImagesByInterviews()).Returns(new List<InterviewBinaryDataDescriptor>());
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 httpMessageHandler: () => httpMessageHandlerMock.Object,
                 eventStore: eventStore,

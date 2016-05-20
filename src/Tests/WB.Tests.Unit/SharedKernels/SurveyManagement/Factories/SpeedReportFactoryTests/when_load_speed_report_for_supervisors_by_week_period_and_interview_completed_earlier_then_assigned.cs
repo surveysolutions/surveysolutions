@@ -18,15 +18,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         {
             input = CreateSpeedBetweenStatusesBySupervisorsReportInputModel(period: "w");
 
-            var user = Create.UserDocument(supervisorId: supervisorId);
+            var user = Create.Other.UserDocument(supervisorId: supervisorId);
 
             interviewStatusTimeSpans = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusTimeSpans.Store(
-                Create.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
+                Create.Other.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     timeSpans: new[]
                     {
-                        Create.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
+                        Create.Other.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");

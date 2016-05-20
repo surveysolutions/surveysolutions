@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             base.Setup();
         }
 
-        protected static readonly Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
+        protected static readonly Identity questionIdentity = Create.Other.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
 
         protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithListQuestion(bool isRosterSizeQuestion = false, int? maxAnswerCount = 5)
         {

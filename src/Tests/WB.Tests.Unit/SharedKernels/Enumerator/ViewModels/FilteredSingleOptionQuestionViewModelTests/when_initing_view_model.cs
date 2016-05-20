@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 interviewRepository: interviewRepository,
                 optionsRepository: optionsRepository);
 
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
         };
 
         Because of = () =>

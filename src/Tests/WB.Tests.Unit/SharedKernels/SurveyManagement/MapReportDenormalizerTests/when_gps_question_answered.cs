@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
             gpsVariableName = "gps";
 
             var interviews = new TestInMemoryWriter<InterviewReferences>();
-            interviews.Store(Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
+            interviews.Store(Create.Other.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
             var questionnaireQuestionsInfo = new QuestionnaireQuestionsInfo
@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 }
             };
 
-            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
-            gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
+            denormalizer = Create.Other.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
+            gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Other.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
         };
 
         Because of = () => denormalizer.Handle(gpsQuestionAnswered);

@@ -41,12 +41,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
-            CommittedEvent interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);
+            CommittedEvent interviewEvent = Create.Other.CommittedEvent(eventSourceId: interviewId, origin: null);
             var eventStore = Mock.Of<IEventStore>(store
                 => store.Read(interviewId, 0) == new CommittedEventStream(interviewId, interviewEvent));
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
-                => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
+                => writer.GetById(interviewId.FormatGuid()) == Create.Other.InterviewSummary());
 
             var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 && utils.Serialize(Moq.It.IsAny<SyncItem>()) == "sync item json"
                 && utils.Deserialize<bool>(negativeResponse) == false);
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

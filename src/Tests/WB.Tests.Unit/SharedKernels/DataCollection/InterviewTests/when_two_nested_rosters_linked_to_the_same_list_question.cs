@@ -27,16 +27,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
 
-            var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                Create.TextListQuestion(questionId: questionId, variable: "list"),
-                Create.Roster(rosterId: rosterAId,
+            var questionnaire = Create.Other.QuestionnaireDocument(questionnaireId,
+                Create.Other.TextListQuestion(questionId: questionId, variable: "list"),
+                Create.Other.Roster(rosterId: rosterAId,
                     variable: "ros",
                     rosterSizeQuestionId: questionId,
                     rosterSizeSourceType: RosterSizeSourceType.Question,
                     children:
                         new List<IComposite>()
                         {
-                            Create.Roster(rosterId: rosterBId,
+                            Create.Other.Roster(rosterId: rosterBId,
                                 variable: "nestedList",
                                 rosterSizeQuestionId: questionId,
                                 rosterSizeSourceType: RosterSizeSourceType.Question)

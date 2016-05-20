@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
-            var gpsQuestion = Create.GpsCoordinateQuestion(gpsQuestionId, "gps");
+            var gpsQuestion = Create.Other.GpsCoordinateQuestion(gpsQuestionId, "gps");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 "questionnaire.csv");
 
             var preloadedDataService =
-                Create.PreloadedDataService(questionnaire);
+                Create.Other.PreloadedDataService(questionnaire);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, new QuestionDataParser(), preloadedDataService);
         };

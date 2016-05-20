@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            userAr = Create.User(userId);
+            userAr = Create.Other.User(userId);
             userAr.Roles = new UserRoles[] { UserRoles.Operator };
             userAr.IsArchived = false;
             linkUserToDeviceCommand = Create.Command.LinkUserToDeviceCommand(userId, deviceId);

@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     }.ToList());
 
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(plainStorage: plainStorageMock.Object, logger: loggerMock.Object, commandService: commandServiceMock.Object);
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(plainStorage: plainStorageMock.Object, logger: loggerMock.Object, commandService: commandServiceMock.Object);
         };
 
         Because of = () =>

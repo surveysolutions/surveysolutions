@@ -15,15 +15,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
         {
             new List<UserDocument>()
             {
-                Create.UserDocument(Id.g1, userName: superBName, isLockedByHQ: true),
-                Create.UserDocument(Id.g2, userName: superAName),
-                Create.UserDocument(Id.g3, userName: superCName),
-                Create.UserDocument(Id.g4, userName: "inter1", supervisorId: Id.g2),
-                Create.UserDocument(Id.g5, userName: "inter2", supervisorId: Id.g2)
+                Create.Other.UserDocument(Id.g1, userName: superBName, isLockedByHQ: true),
+                Create.Other.UserDocument(Id.g2, userName: superAName),
+                Create.Other.UserDocument(Id.g3, userName: superCName),
+                Create.Other.UserDocument(Id.g4, userName: "inter1", supervisorId: Id.g2),
+                Create.Other.UserDocument(Id.g5, userName: "inter2", supervisorId: Id.g2)
             }.ForEach(x => usersStorage.Store(x, x.PublicKey.FormatGuid()));
 
 
-            teamFactory = Create.TeamViewFactory(usersReader: usersStorage);
+            teamFactory = Create.Other.TeamViewFactory(usersReader: usersStorage);
         };
 
         Because of = () =>

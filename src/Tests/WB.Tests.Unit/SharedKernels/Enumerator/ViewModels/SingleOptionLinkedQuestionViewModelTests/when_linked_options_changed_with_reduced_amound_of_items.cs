@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.RosterVector(1));
-            linkedQuestionId = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Other.RosterVector(1));
+            linkedQuestionId = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             eventData = new[]
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 new ChangedLinkedOptions(linkedQuestionId,
                     new[]
                     {
-                        Create.RosterVector(1)
+                        Create.Other.RosterVector(1)
                     }),
             };
 
@@ -35,30 +35,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>
                   {
-                      Create.TextAnswer("one",
+                      Create.Other.TextAnswer("one",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.RosterVector(1)),
-                       Create.TextAnswer("two",
+                        rosterVector: Create.Other.RosterVector(1)),
+                       Create.Other.TextAnswer("two",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.RosterVector(2))
+                        rosterVector: Create.Other.RosterVector(2))
                   });
 
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(1))
-                     .Returns(Create.TextAnswer("one"));
+            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Other.RosterVector(1))
+                     .Returns(Create.Other.TextAnswer("one"));
 
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
-            viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
-            viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
+            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             viewModel.Options.First().Selected = true;
 
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                  .Returns(new List<BaseInterviewAnswer>
                  {
-                      Create.TextAnswer("one",
+                      Create.Other.TextAnswer("one",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.RosterVector(1)),
+                        rosterVector: Create.Other.RosterVector(1)),
                  });
         };
 

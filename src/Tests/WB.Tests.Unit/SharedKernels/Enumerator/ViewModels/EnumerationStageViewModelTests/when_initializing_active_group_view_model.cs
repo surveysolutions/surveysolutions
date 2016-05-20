@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 f.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
             interviewRepositoryMock.Setup(x => x.Get(Moq.It.IsAny<string>())).Returns(Mock.Of<IStatefulInterview>());
-            enumerationStage = Create.EnumerationStageViewModel(
+            enumerationStage = Create.Other.EnumerationStageViewModel(
                 eventRegistry: eventRegistry.Object, 
                 interviewRepository: interviewRepositoryMock.Object,
                 interviewViewModelFactory: interviewViewModelFactory

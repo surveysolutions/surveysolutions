@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
 
         public static SingleOptionAnswer CreateSingleOptionAnswer(Guid id, decimal answer)
         {
-            var singleOptionAnswer = new SingleOptionAnswer(id, Create.RosterVector());
+            var singleOptionAnswer = new SingleOptionAnswer(id, Create.Other.RosterVector());
             singleOptionAnswer.SetAnswer(answer);
             return singleOptionAnswer;
         }

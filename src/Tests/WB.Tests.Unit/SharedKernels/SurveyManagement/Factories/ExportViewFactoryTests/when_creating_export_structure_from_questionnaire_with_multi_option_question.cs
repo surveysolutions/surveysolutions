@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             multiOptionQuestion = Guid.NewGuid();
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(Create.MultyOptionsQuestion(id: multiOptionQuestion, variable: "mul",
+                CreateQuestionnaireDocumentWithOneChapter(Create.Other.MultyOptionsQuestion(id: multiOptionQuestion, variable: "mul",
                     options:
                         new[]
                         {
-                            Create.Answer("-23", -23), Create.Answer("70.3", (decimal)70.3), Create.Answer("-44.4", (decimal) -44.4),
-                            Create.Answer("2", 2)
+                            Create.Other.Answer("-23", -23), Create.Other.Answer("70.3", (decimal)70.3), Create.Other.Answer("-44.4", (decimal) -44.4),
+                            Create.Other.Answer("2", 2)
                         }));
             exportViewFactory = CreateExportViewFactory();
         };

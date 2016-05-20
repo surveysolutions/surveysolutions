@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         {
             var liteEventBusMock = new Mock<ILiteEventBus>();
 
-            var statefulInterview = Create.StatefulInterview(userId: null, questionnaire: null);
+            var statefulInterview = Create.Other.StatefulInterview(userId: null, questionnaire: null);
             statefulInterview.Apply(Create.Event.LinkedOptionsChanged());
 
             var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
 
             IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
 
-            var statefulInterview = Create.StatefulInterview(userId: null, questionnaire: questionnaire);
+            var statefulInterview = Create.Other.StatefulInterview(userId: null, questionnaire: questionnaire);
 
             var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
                 liteEventBusMock.Object);
@@ -63,16 +63,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         {
             var aggregateRootId = Guid.Parse("11111111111111111111111111111111");
             AssemblyContext.SetupServiceLocator();
-            var snapshotStore = Create.SnapshotStore(aggregateRootId);
-            var eventStore = Create.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
-            var aggregateSnapshotter = Create.AggregateSnapshotter();
-            Setup.InstanceToMockedServiceLocator(Create.StatefulInterview(questionnaireId: Guid.NewGuid(),
+            var snapshotStore = Create.Other.SnapshotStore(aggregateRootId);
+            var eventStore = Create.Other.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
+            var aggregateSnapshotter = Create.Other.AggregateSnapshotter();
+            Setup.InstanceToMockedServiceLocator(Create.Other.StatefulInterview(questionnaireId: Guid.NewGuid(),
                 userId: Guid.NewGuid(), questionnaire: null));
-            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
-            var aggregateRootRepository = Create.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
+            var domaiRepository = Create.Other.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
+            var aggregateRootRepository = Create.Other.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
                 eventStore: eventStore, repository: domaiRepository);
 
-            var statefulInterviewRepository = Create.StatefulInterviewRepository(aggregateRootRepository);
+            var statefulInterviewRepository = Create.Other.StatefulInterviewRepository(aggregateRootRepository);
 
             var result = statefulInterviewRepository.Get(aggregateRootId.FormatGuid());
 

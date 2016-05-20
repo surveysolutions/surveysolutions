@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     {
         Establish context = () =>
         {
-            var storedInterview =  Create.InterviewData(
+            var storedInterview =  Create.Other.InterviewData(
                 status: InterviewStatus.RejectedBySupervisor,
                 interviewId: interviewId,
                 responsibleId: userId);

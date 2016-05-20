@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            viewModel = Create.InterviewSummary();
+            viewModel = Create.Other.InterviewSummary();
             viewModel.ReceivedByInterviewer = true;
             denormalizer = CreateDenormalizer();
         };

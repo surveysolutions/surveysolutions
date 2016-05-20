@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Because of = () =>
             viewModel =
                 denormalizer.Update(viewModel,
-                    Create.SynchronizationMetadataAppliedEvent(status: interviewStatus));
+                    Create.Other.SynchronizationMetadataAppliedEvent(status: interviewStatus));
 
         It should_teamLeadId_be_equal_to_specified_supervisorId = () =>
             viewModel.TeamLeadId.ShouldEqual(supervisorId);

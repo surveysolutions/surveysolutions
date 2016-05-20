@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             numericQuestionId = Guid.Parse("21111111111111111111111111111111");
-            var gpsQuestion = Create.NumericQuestion(questionId: numericQuestionId, variableName: "num");
+            var gpsQuestion = Create.Other.NumericQuestion(questionId: numericQuestionId, variableName: "num");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 "questionnaire.csv");
 
             var preloadedDataService =
-                Create.PreloadedDataService(questionnaire);
+                Create.Other.PreloadedDataService(questionnaire);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, new QuestionDataParser(), preloadedDataService);
         };

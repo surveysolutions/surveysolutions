@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         {
             eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
-            eventBus = Create.LiteEventBus();
+            eventBus = Create.Other.LiteEventBus();
         };
 
         Because of = () =>

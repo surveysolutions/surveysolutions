@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFe
             handler.SetupResponseFromResource("http://localhost/Headquarters/api/feeds/users/v1/archive/2",
                 "WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests.SimpleArchiveFeed.xml");
 
-            var settings = Create.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed")); 
-            feedReader = Create.UserChangedFeedReader(messageHandler: () => handler.Object,
+            var settings = Create.Other.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed")); 
+            feedReader = Create.Other.UserChangedFeedReader(messageHandler: () => handler.Object,
                 settings: settings);
         };
 

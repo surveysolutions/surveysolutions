@@ -20,15 +20,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusTimeSpansStorage.Store(
-                Create.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
+                Create.Other.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     timeSpans: new[]
                     {
-                        Create.TimeSpanBetweenStatuses(supervisorId: user,
+                        Create.Other.TimeSpanBetweenStatuses(supervisorId: user,
                             timestamp: input.From.Date.AddHours(1), endStatus:InterviewExportedAction.Completed),
-                        Create.TimeSpanBetweenStatuses(supervisorId: user,
+                        Create.Other.TimeSpanBetweenStatuses(supervisorId: user,
                             timestamp: input.From.Date.AddMonths(2), endStatus:InterviewExportedAction.Completed),
-                        Create.TimeSpanBetweenStatuses(supervisorId: user,
+                        Create.Other.TimeSpanBetweenStatuses(supervisorId: user,
                             timestamp: input.From.Date.AddMonths(-2), endStatus:InterviewExportedAction.Completed)
                     }), "2");
 

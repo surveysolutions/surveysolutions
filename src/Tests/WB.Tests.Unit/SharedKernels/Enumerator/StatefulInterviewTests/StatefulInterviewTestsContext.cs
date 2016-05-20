@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 {
                     new ChangedLinkedOptions(linkedQuestionIdentity, new[]
                     {
-                        Create.RosterVector(1m),
-                        Create.RosterVector(2m)
+                        Create.Other.RosterVector(1m),
+                        Create.Other.RosterVector(2m)
                     }),
                 }));
             }
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
-            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            return Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
         }
 
         protected static void FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(StatefulInterview interview, 
@@ -63,10 +63,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 new[] { 2m, 1m },
                 new[] { 2m, 2m }));
 
-            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.RosterVector(1m, 1m ), "1-1"));
-            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.RosterVector(1m, 2m ), "1-2"));
-            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.RosterVector(2m, 1m ), "2-1"));
-            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.RosterVector(2m, 2m ), "2-2"));
+            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.Other.RosterVector(1m, 1m ), "1-1"));
+            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.Other.RosterVector(1m, 2m ), "1-2"));
+            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.Other.RosterVector(2m, 1m ), "2-1"));
+            interview.Apply(Create.Event.TextQuestionAnswered(questionId, Create.Other.RosterVector(2m, 2m ), "2-2"));
 
             if (linkedToQuestionQuesionId != null)
             {
@@ -74,10 +74,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 {
                     new ChangedLinkedOptions(linkedToQuestionQuesionId, new[]
                     {
-                        Create.RosterVector(1m, 1m ),
-                        Create.RosterVector(1m, 2m ),
-                        Create.RosterVector(2m, 1m ),
-                        Create.RosterVector(2m, 2m )
+                        Create.Other.RosterVector(1m, 1m ),
+                        Create.Other.RosterVector(1m, 2m ),
+                        Create.Other.RosterVector(2m, 1m ),
+                        Create.Other.RosterVector(2m, 2m )
                     }), 
                 }));
             }

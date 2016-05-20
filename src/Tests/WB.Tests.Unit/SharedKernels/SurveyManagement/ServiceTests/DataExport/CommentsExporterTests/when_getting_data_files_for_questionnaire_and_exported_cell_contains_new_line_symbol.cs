@@ -25,14 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
             var interviewCommentaries = new TestInMemoryWriter<InterviewCommentaries>();
 
             interviewCommentaries.Store(
-                Create.InterviewCommentaries(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion,
-                    comments: new[] { Create.InterviewComment(comment: Environment.NewLine + comment) }),
+                Create.Other.InterviewCommentaries(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion,
+                    comments: new[] { Create.Other.InterviewComment(comment: Environment.NewLine + comment) }),
                 "id");
 
             csvWriterMock = new Mock<ICsvWriter>();
 
-            questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
-            var headerStructureForLevel = Create.HeaderStructureForLevel();
+            questionnaireExportStructure = Create.Other.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            var headerStructureForLevel = Create.Other.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
             readSideToTabularFormatExportService =

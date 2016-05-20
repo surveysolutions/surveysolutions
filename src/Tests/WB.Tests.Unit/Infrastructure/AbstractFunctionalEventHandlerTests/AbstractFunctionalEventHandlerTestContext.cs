@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 
         protected static IPublishableEvent CreatePublishableEvent(IEvent payload =null)
         {
-            return Create.PublishableEvent(payload: payload ?? new TestableFunctionalEvent()); 
+            return Create.Other.PublishableEvent(payload: payload ?? new TestableFunctionalEvent()); 
         }
     }
 }

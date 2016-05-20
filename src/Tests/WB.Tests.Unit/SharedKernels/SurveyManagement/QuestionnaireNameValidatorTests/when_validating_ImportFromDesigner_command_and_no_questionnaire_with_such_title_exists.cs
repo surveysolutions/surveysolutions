@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
                 .Setup(reader => reader.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>()))
                 .Returns<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>(query => query.Invoke(new[]
                 {
-                      Create.QuestionnaireBrowseItem(title: "different title", questionnaireId: differentQuestionnaireId),
+                      Create.Other.QuestionnaireBrowseItem(title: "different title", questionnaireId: differentQuestionnaireId),
                 }.AsQueryable()));
 
-            validator = Create.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
+            validator = Create.Other.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
         Because of = () =>

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             return new SingleOptionRosterLinkedQuestionViewModel(Substitute.For<IPrincipal>(),
                 questionnaireRepository ?? Substitute.For<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
-                Create.LiteEventRegistry(),
+                Create.Other.LiteEventRegistry(),
                 Stub.MvxMainThreadDispatcher(),
                 Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 Substitute.For<AnsweringViewModel>()

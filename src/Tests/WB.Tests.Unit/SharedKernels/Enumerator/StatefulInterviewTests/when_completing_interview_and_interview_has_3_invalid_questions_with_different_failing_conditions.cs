@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextQuestion(questionId: invalidQuestion1Identity.Id),
-                Create.TextQuestion(questionId: invalidQuestion2Identity.Id),
-                Create.TextQuestion(questionId: invalidQuestion3Identity.Id),
+                Create.Other.TextQuestion(questionId: invalidQuestion1Identity.Id),
+                Create.Other.TextQuestion(questionId: invalidQuestion2Identity.Id),
+                Create.Other.TextQuestion(questionId: invalidQuestion3Identity.Id),
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
@@ -30,24 +30,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 {
                     invalidQuestion1Identity, new List<FailedValidationCondition>
                     {
-                        Create.FailedValidationCondition(failedConditionIndex: 1),
+                        Create.Other.FailedValidationCondition(failedConditionIndex: 1),
                     }
                 },
                 {
                     invalidQuestion2Identity, new List<FailedValidationCondition>
                     {
-                        Create.FailedValidationCondition(failedConditionIndex: 2),
+                        Create.Other.FailedValidationCondition(failedConditionIndex: 2),
                     }
                 },
                 {
                     invalidQuestion3Identity, new List<FailedValidationCondition>
                     {
-                        Create.FailedValidationCondition(failedConditionIndex: 3),
+                        Create.Other.FailedValidationCondition(failedConditionIndex: 3),
                     }
                 },
             }));
 
-            eventContext = Create.EventContext();
+            eventContext = Create.Other.EventContext();
         };
 
         Because of = () =>
@@ -68,21 +68,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             eventContext.GetEvent<AnswersDeclaredInvalid>()
                 .FailedValidationConditions[invalidQuestion1Identity].ShouldContainOnly(new[]
                 {
-                    Create.FailedValidationCondition(failedConditionIndex: 1),
+                    Create.Other.FailedValidationCondition(failedConditionIndex: 1),
                 });
 
         It should_raise_AnswersDeclaredInvalid_event_with_second_condition_failing_for_second_question = () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>()
                 .FailedValidationConditions[invalidQuestion2Identity].ShouldContainOnly(new[]
                 {
-                    Create.FailedValidationCondition(failedConditionIndex: 2),
+                    Create.Other.FailedValidationCondition(failedConditionIndex: 2),
                 });
 
         It should_raise_AnswersDeclaredInvalid_event_with_third_condition_failing_for_third_question = () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>()
                 .FailedValidationConditions[invalidQuestion3Identity].ShouldContainOnly(new[]
                 {
-                    Create.FailedValidationCondition(failedConditionIndex: 3),
+                    Create.Other.FailedValidationCondition(failedConditionIndex: 3),
                 });
 
         It should_not_raise_AnswersDeclaredValid_event = () =>
@@ -96,8 +96,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         private static StatefulInterview interview;
         private static EventContext eventContext;
-        private static Identity invalidQuestion1Identity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBB1111111111111111"), RosterVector.Empty);
-        private static Identity invalidQuestion2Identity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBB2222222222222222"), RosterVector.Empty);
-        private static Identity invalidQuestion3Identity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBB3333333333333333"), RosterVector.Empty);
+        private static Identity invalidQuestion1Identity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBB1111111111111111"), RosterVector.Empty);
+        private static Identity invalidQuestion2Identity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBB2222222222222222"), RosterVector.Empty);
+        private static Identity invalidQuestion3Identity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBB3333333333333333"), RosterVector.Empty);
     }
 }

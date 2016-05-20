@@ -25,18 +25,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
         Establish context = () =>
         {
             var questionnaireExportStructure =
-                Create.QuestionnaireExportStructure(questionnaireId: questionnaireIdentity.QuestionnaireId,
+                Create.Other.QuestionnaireExportStructure(questionnaireId: questionnaireIdentity.QuestionnaireId,
                     version: questionnaireIdentity.Version);
-            var headerToLevelMap = Create.HeaderStructureForLevel();
+            var headerToLevelMap = Create.Other.HeaderStructureForLevel();
 
-            var multiMediaQuestion = Create.ExportedHeaderItem();
+            var multiMediaQuestion = Create.Other.ExportedHeaderItem();
             multiMediaQuestion.QuestionType = QuestionType.Multimedia;
             headerToLevelMap.HeaderItems.Add(multiMediaQuestion.PublicKey, multiMediaQuestion);
 
             questionnaireExportStructure.HeaderToLevelMap.Add(headerToLevelMap.LevelScopeVector, headerToLevelMap);
 
             var interviewSummary =
-                Create.InterviewSummary(interviewId: interviewId, questionnaireId: questionnaireIdentity.QuestionnaireId,
+                Create.Other.InterviewSummary(interviewId: interviewId, questionnaireId: questionnaireIdentity.QuestionnaireId,
                     questionnaireVersion: questionnaireIdentity.Version);
 
             var interviewDataStorage = new TestInMemoryWriter<InterviewData>();
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
             interviewSummarytorage.Store(interviewSummary, interviewId.FormatGuid());
             interviewDataStorage.Store(
-                Create.InterviewData(Create.InterviewQuestion(questionId: multiMediaQuestion.PublicKey,
+                Create.Other.InterviewData(Create.Other.InterviewQuestion(questionId: multiMediaQuestion.PublicKey,
                     answer: "var.jpg")), interviewId.FormatGuid());
 
             var questionnaireStorage = new Mock<IQuestionnaireExportStructureStorage>();
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
             plainInterviewFileStorageMock=new Mock<IPlainInterviewFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-                .Returns(new[] {Create.InterviewBinaryDataDescriptor()}.ToList());
+                .Returns(new[] {Create.Other.InterviewBinaryDataDescriptor()}.ToList());
 
             fileSystemAccessor=new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     fileSystemAccessor: fileSystemAccessor.Object);
         };
 
-        Because of = () => binaryFormatDataExportHandler.ExportData(Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity));
+        Because of = () => binaryFormatDataExportHandler.ExportData(Create.Other.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity));
 
         It should_request_binary_data_for_answered_multimedia_question =
             () => plainInterviewFileStorageMock.Verify(x=>x.GetInterviewBinaryData(interviewId, "var.jpg"), Times.Once);

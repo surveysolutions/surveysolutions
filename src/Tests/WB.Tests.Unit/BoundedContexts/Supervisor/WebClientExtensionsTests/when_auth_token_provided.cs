@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.WebClientExtensionsTests
     {
         Establish context = () =>
         {
-            headquartersSettings = Create.HeadquartersSettings(accessToken: "authToken");
+            headquartersSettings = Create.Other.HeadquartersSettings(accessToken: "authToken");
             client = new HttpClient();
         };
 

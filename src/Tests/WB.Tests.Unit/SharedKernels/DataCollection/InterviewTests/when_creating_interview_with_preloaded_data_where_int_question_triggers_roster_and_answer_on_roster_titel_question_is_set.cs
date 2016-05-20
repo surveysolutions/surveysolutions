@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.DoesQuestionSpecifyRosterTitle(rosterTitleQuestionId) == true
                    && _.GetRostersAffectedByRosterTitleQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId });
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };

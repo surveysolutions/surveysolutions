@@ -18,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
             };
 
             var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();

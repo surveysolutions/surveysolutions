@@ -32,16 +32,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
 
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: questionnaireId, 
+                Create.Other.InterviewStatuses(questionnaireId: questionnaireId, 
                     questionnaireVersion: questionnaireVersion,
-                    statuses: new[] {Create.InterviewCommentedStatus(
+                    statuses: new[] {Create.Other.InterviewCommentedStatus(
                             status: InterviewExportedAction.Completed)},
                     interviewid: intervieId),
                 intervieId.FormatGuid());
 
 
-            var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
-            var headerStructureForLevel = Create.HeaderStructureForLevel();
+            var questionnaireExportStructure = Create.Other.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            var headerStructureForLevel = Create.Other.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
             readSideToTabularFormatExportService = CreateExporter(csvWriter: csvWriterMock.Object,

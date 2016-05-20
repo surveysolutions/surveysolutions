@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.HQSyncControllerTests
             var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(provider
                 => provider.GetCurrentUser().Id == userId);
 
-            controller = Create.HQSyncController(synchronizer: synchronizerMock.Object, globalInfoProvider: globalInfoProvider);
+            controller = Create.Other.HQSyncController(synchronizer: synchronizerMock.Object, globalInfoProvider: globalInfoProvider);
         };
 
         Because of = () =>

@@ -33,12 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
-            var variable = Create.Variable(variableName: "va", type: VariableType.String);
+            var variable = Create.Other.Variable(variableName: "va", type: VariableType.String);
             //interviewVariables = new InterviewVariables();
 
-            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(0))] =
             //    "nastya0";
-            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(1))] =
             //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()

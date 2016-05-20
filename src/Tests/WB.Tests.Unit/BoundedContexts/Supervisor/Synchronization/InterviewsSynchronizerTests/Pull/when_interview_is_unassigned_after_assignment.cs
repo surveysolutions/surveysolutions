@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
 
             var interviewSynchronizationDto =
-                Create.InterviewSynchronizationDto(status: InterviewStatus.Deleted,
+                Create.Other.InterviewSynchronizationDto(status: InterviewStatus.Deleted,
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 2,
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             commandServiceMock = new Mock<ICommandService>();
 
-            synchronizer = Create.InterviewsSynchronizer(plainStorage: plainStorage,
+            synchronizer = Create.Other.InterviewsSynchronizer(plainStorage: plainStorage,
                 commandService: commandServiceMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object,
                 userDocumentStorage: userDocumentStorageMock.Object, interviewSummaryRepositoryReader: interviewSummaryStorage);
         };

@@ -35,11 +35,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Other.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
 
-                    Create.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
+                    Create.Other.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
@@ -51,13 +51,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 .Returns(
                     new VariableValueChanges(new Dictionary<Identity, object>()
                     {
-                        {Create.Identity(variableId, RosterVector.Empty), true}
+                        {Create.Other.Identity(variableId, RosterVector.Empty), true}
                     }));
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository,
+            interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         };
 

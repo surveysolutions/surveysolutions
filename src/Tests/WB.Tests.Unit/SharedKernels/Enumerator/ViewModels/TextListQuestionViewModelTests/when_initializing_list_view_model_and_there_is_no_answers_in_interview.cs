@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             listModel.IsAddNewItemVisible.ShouldBeTrue();
 
         private static TextListQuestionViewModel listModel;
-        private static NavigationState navigationState = Create.NavigationState();
+        private static NavigationState navigationState = Create.Other.NavigationState();
         private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock = new Mock<QuestionStateViewModel<TextListQuestionAnswered>>();
         private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock = new Mock<AnsweringViewModel>();
 

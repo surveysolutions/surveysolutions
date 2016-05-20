@@ -13,20 +13,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var rosterSizeId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.QuestionnaireDocument(
+            var questionnaire = Create.Other.QuestionnaireDocument(
                 children: new List<IComposite>
                 {
-                    Create.NumericIntegerQuestion(rosterSizeId),
-                    Create.Roster(rosterSizeQuestionId: rosterSizeId,
+                    Create.Other.NumericIntegerQuestion(rosterSizeId),
+                    Create.Other.Roster(rosterSizeQuestionId: rosterSizeId,
                         rosterTitleQuestionId: rosterTitleid,
                         children: new List<IComposite>
                         {
-                            Create.TextQuestion(questionId: rosterTitleid),
-                            Create.TextQuestion(questionId: substitutionTargetQuestionId, text: "with %rostertitle%")
+                            Create.Other.TextQuestion(questionId: rosterTitleid),
+                            Create.Other.TextQuestion(questionId: substitutionTargetQuestionId, text: "with %rostertitle%")
                         })
                 });
 
-            plainQuestionnaire = Create.PlainQuestionnaire(document: questionnaire);
+            plainQuestionnaire = Create.Other.PlainQuestionnaire(document: questionnaire);
         };  
 
         Because of = () => affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);

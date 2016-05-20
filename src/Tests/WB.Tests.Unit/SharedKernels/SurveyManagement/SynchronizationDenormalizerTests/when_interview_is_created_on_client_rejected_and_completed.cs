@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            InterviewData data = Create.InterviewData(createdOnClient: true, 
+            InterviewData data = Create.Other.InterviewData(createdOnClient: true, 
                 status: InterviewStatus.Completed,
                 interviewId: interviewId);
 
@@ -53,8 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         Because of = () =>
         {
-            synchronizationDenormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.RejectedBySupervisor, interviewId: interviewId));
-            synchronizationDenormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed, interviewId: interviewId));
+            synchronizationDenormalizer.Handle(Create.Other.InterviewStatusChangedEvent(InterviewStatus.RejectedBySupervisor, interviewId: interviewId));
+            synchronizationDenormalizer.Handle(Create.Other.InterviewStatusChangedEvent(InterviewStatus.Completed, interviewId: interviewId));
         };
 
         It should_create_deletion_synchronization_package = () =>

@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
             };
 
             var repository = Stub.ReadSideRepository<InterviewSummary>();

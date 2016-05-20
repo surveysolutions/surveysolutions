@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             eventStub = CreateDummyEvent();
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
-            var eventRegistry = Create.LiteEventRegistry();
-            eventBus = Create.LiteEventBus(eventRegistry);
+            var eventRegistry = Create.Other.LiteEventRegistry();
+            eventBus = Create.Other.LiteEventBus(eventRegistry);
 
             handlerOnFiredEventMock = new Mock<ILiteEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(handlerOnFiredEventMock.Object, eventSourceId.FormatGuid());
