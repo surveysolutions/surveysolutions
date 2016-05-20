@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
                  id: questionId)));
             service = CreateAnswerToStringService();
 
-            answer = Create.Answers.IntegerNumericAnswer(Create.Other.Identity(questionId, RosterVector.Empty), answer: 1234);
+            answer = Create.Answer.IntegerNumericAnswer(Create.Other.Identity(questionId, RosterVector.Empty), answer: 1234);
 
             statefulInterview = Create.Other.StatefulInterview(questionnaire: questionnaire);
         };
