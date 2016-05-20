@@ -167,8 +167,6 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
-        public static CommandFactory Command => new CommandFactory();
-
         public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewAnswersCommandValidator(interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
