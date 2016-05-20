@@ -100,7 +100,33 @@ namespace WB.Tests.Unit.Infrastructure
                     eventSourceId, Create.Event.StaticTextUpdated(), sequence: nextVersion) });
 
             var exception = Assert.Throws<InvalidOperationException>(() => sqliteEventStorage.Store(duplicateSequeceStream));
-            Assert.That(exception.Message, Does.Contain("Wrong version number"));
+            Assert.That(exception.Message, Does.Contain("Expected event stream with version"));
+        }
+
+        [Test]
+        public void should_not_recreate_already_existing_stream()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null,
+                new List<UncommittedEvent> { Create.Other.UncommittedEvent(
+                    eventSourceId, 
+                    Create.Event.StaticTextUpdated(), 
+                    sequence: 1,
+                    initialVersion:0) }));
+
+
+            var duplicateSequeceStream = new UncommittedEventStream(null,
+                new List<UncommittedEvent> {
+                    Create.Other.UncommittedEvent(
+                        eventSourceId, 
+                        Create.Event.StaticTextUpdated(), 
+                        sequence: 1,
+                        initialVersion: 0)
+                });
+
+            var exception = Assert.Throws<InvalidOperationException>(() => sqliteEventStorage.Store(duplicateSequeceStream));
+            Assert.That(exception.Message, Does.Contain("Expected to store new event stream, but it already exists"));
         }
 
         [Test]
@@ -124,6 +150,20 @@ namespace WB.Tests.Unit.Infrastructure
 
             Assert.That(committedEvents.Count(), Is.EqualTo(5));
             Assert.That((committedEvents.First().Payload as StaticTextUpdated).Text, Is.EqualTo("text 16"));
+        }
+
+        [Test]
+        public void should_be_able_to_remove_stream_by_id()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null,
+                new List<UncommittedEvent> { Create.Other.UncommittedEvent(
+                    eventSourceId, Create.Event.StaticTextUpdated()) }));
+
+            this.sqliteEventStorage.RemoveEventSourceById(eventSourceId);
+            var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
+            Assert.That(committedEvents.Count(), Is.EqualTo(0));
         }
 
         [TearDown]

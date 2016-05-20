@@ -118,8 +118,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var expectedVersion = eventStream.InitialVersion;
             if (expectedVersion == 0)
             {
-                var views = this.connection.Table<EventView>().Where(x => x.EventSourceId == eventStream.SourceId).ToList();
-                if (views.Count > 0)
+                var viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                if (viewExists)
                 {
                     var errorMessage = $"Wrong version number. Expected to store new event stream, but it already exists. EventStream Id: {eventStream.SourceId}";
                     this.logger.Error(errorMessage);
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             else
             {
-                var commandText = string.Format("SELECT MAX({0}) FROM {1} WHERE {2} = ?", nameof(EventView.EventSequence), nameof(EventView), nameof(EventView.EventSourceId));
+                var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
                 var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
                 int currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
 
