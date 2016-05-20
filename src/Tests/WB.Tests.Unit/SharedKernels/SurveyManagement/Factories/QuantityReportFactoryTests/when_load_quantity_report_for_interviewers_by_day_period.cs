@@ -22,24 +22,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             var interviewsInStaus = new List<InterviewCommentedStatus>();
 
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                    timestamp: input.From.Date.AddHours(1)));
             for (int i = 0; i < 20; i++)
             {
-                interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: Guid.NewGuid(), supervisorId: supervisorId,
+                interviewsInStaus.Add(Create.Other.InterviewCommentedStatus(interviewerId: Guid.NewGuid(), supervisorId: supervisorId,
                     timestamp: input.From.Date.AddHours(1)));
             }
-            interviewsInStaus.Add( Create.InterviewCommentedStatus(interviewerId: userFromOtherTeam, supervisorId: Guid.NewGuid(),
+            interviewsInStaus.Add( Create.Other.InterviewCommentedStatus(interviewerId: userFromOtherTeam, supervisorId: Guid.NewGuid(),
                            timestamp: input.From.Date.AddHours(1)));
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(2)));
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-2)));
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
 
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Other.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: interviewsInStaus.ToArray()), "2");
 

@@ -27,19 +27,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                 x.QuestionnaireIdentity == questionnaireIdentity &&
                 x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == new InterviewRoster { Title = rosterTitle });
 
-            var questionnaire = Create.PlainQuestionnaire(
-                Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(rosterId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), children: new[]
+            var questionnaire = Create.Other.PlainQuestionnaire(
+                Create.Other.QuestionnaireDocumentWithOneChapter(
+                    Create.Other.Roster(rosterId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), children: new[]
                     {
-                        Create.NumericRealQuestion(id: questionid)
+                        Create.Other.NumericRealQuestion(id: questionid)
                     })));
 
-            var questionnaireStorageStub = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);
+            var questionnaireStorageStub = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);
 
             var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);
 
-            service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.SubstitutionService());
+            service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.Other.SubstitutionService());
         };
 
         Because of = () => substitutedValue = service.Substitute("something %rostertitle%", new Identity(questionid, new decimal[]{1}), "interviewId");

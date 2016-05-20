@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextQuestion(questionId: disabledQuestion1Id),
-                Create.TextQuestion(questionId: disabledQuestion2Id),
-                Create.TextQuestion(questionId: disabledQuestion3Id),
-                Create.TextQuestion(questionId: enabledQuestion1Id),
-                Create.TextQuestion(questionId: enabledQuestion2Id),
+                Create.Other.TextQuestion(questionId: disabledQuestion1Id),
+                Create.Other.TextQuestion(questionId: disabledQuestion2Id),
+                Create.Other.TextQuestion(questionId: disabledQuestion3Id),
+                Create.Other.TextQuestion(questionId: enabledQuestion1Id),
+                Create.Other.TextQuestion(questionId: enabledQuestion2Id),
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
@@ -31,18 +31,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.QuestionsDisabled(new []
             {
-                Create.Identity(disabledQuestion1Id, RosterVector.Empty),
-                Create.Identity(disabledQuestion2Id, RosterVector.Empty),
-                Create.Identity(disabledQuestion3Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion1Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion2Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion3Id, RosterVector.Empty),
             }));
 
             interview.Apply(Create.Event.QuestionsEnabled(new []
             {
-                Create.Identity(enabledQuestion1Id, RosterVector.Empty),
-                Create.Identity(enabledQuestion2Id, RosterVector.Empty),
+                Create.Other.Identity(enabledQuestion1Id, RosterVector.Empty),
+                Create.Other.Identity(enabledQuestion2Id, RosterVector.Empty),
             }));
 
-            eventContext = Create.EventContext();
+            eventContext = Create.Other.EventContext();
         };
 
         Because of = () =>
@@ -54,9 +54,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_QuestionsDisabled_event_with_ids_of_disabled_questions_and_empty_roster_vectors = () =>
             eventContext.GetEvent<QuestionsDisabled>().Questions.ShouldContainOnly(new[]
             {
-                Create.Identity(disabledQuestion1Id, RosterVector.Empty),
-                Create.Identity(disabledQuestion2Id, RosterVector.Empty),
-                Create.Identity(disabledQuestion3Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion1Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion2Id, RosterVector.Empty),
+                Create.Other.Identity(disabledQuestion3Id, RosterVector.Empty),
             });
 
         It should_raise_QuestionsEnabled_event = () =>
@@ -65,8 +65,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_QuestionsEnabled_event_with_ids_of_enabled_questions_and_empty_roster_vectors = () =>
             eventContext.GetEvent<QuestionsEnabled>().Questions.ShouldContainOnly(new[]
             {
-                Create.Identity(enabledQuestion1Id, RosterVector.Empty),
-                Create.Identity(enabledQuestion2Id, RosterVector.Empty),
+                Create.Other.Identity(enabledQuestion1Id, RosterVector.Empty),
+                Create.Other.Identity(enabledQuestion2Id, RosterVector.Empty),
             });
 
         Cleanup stuff = () =>

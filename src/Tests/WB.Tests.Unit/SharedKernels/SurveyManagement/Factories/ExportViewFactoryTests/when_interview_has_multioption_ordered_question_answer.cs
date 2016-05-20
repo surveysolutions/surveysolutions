@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId, areAnswersOrdered:true, options: new List<Answer> { Create.Answer("foo", 28), Create.Answer("bar", 42) }));
+            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
+                Create.Other.MultyOptionsQuestion(id: questionId, areAnswersOrdered:true, options: new List<Answer> { Create.Other.Answer("foo", 28), Create.Other.Answer("bar", 42) }));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.InterviewData(Create.InterviewQuestion(questionId, new[] { 42m, 28m }));
+            interview = Create.Other.InterviewData(Create.Other.InterviewQuestion(questionId, new[] { 42m, 28m }));
         };
 
         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);

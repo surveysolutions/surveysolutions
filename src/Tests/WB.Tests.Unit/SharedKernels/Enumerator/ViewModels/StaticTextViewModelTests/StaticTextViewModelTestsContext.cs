@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                 new VariableToUIStringService(),
                 rosterTitleSubstitutionService);
 
-            var liteEventRegistry = registry ?? Create.LiteEventRegistry();
+            var liteEventRegistry = registry ?? Create.Other.LiteEventRegistry();
 
             return new StaticTextViewModel(
                 questionnaireRepository: plainQuestionnaireRepository,

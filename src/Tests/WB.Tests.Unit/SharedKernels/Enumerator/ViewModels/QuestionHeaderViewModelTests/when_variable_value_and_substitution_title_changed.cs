@@ -51,20 +51,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
            
-            ILiteEventRegistry registry = Create.LiteEventRegistry();
-            liteEventBus = Create.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Other.LiteEventRegistry();
+            liteEventBus = Create.Other.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
 
-            fakeInterview = Create.Interview();
+            fakeInterview = Create.Other.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
-            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
+            Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
+            Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
 

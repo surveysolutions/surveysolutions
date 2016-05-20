@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            var questionnaire = Create.DataCollectionQuestionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
+            var questionnaire = Create.Other.DataCollectionQuestionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1));
 
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire()
         {
-            return Create.DataCollectionQuestionnaire();
+            return Create.Other.DataCollectionQuestionnaire();
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

@@ -340,6 +340,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.Clean.cs" />
+    <Compile Include="EventExtensions.cs" />
     <Compile Include="TestFactories\ViewModelFactory.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
@@ -1024,7 +1025,7 @@
     <Compile Include="BoundedContexts\Supervisor\Users\HeadquartersLoginServiceTests\When_valid_credentials_provided.cs" />
     <Compile Include="BoundedContexts\Supervisor\WebClientExtensionsTests\when_auth_token_is_empty.cs" />
     <Compile Include="BoundedContexts\Supervisor\WebClientExtensionsTests\when_auth_token_provided.cs" />
-    <Compile Include="Create.cs" />
+    <Compile Include="TestFactories\OtherFactory.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />

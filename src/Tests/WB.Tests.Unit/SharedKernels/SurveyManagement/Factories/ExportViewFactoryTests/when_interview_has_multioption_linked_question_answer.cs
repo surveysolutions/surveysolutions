@@ -16,21 +16,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             linkedSourceQuestionId = Guid.NewGuid();
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), 
+            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
+                Create.Other.Roster(rosterId: Guid.NewGuid(), 
                               variable: "row", 
                               fixedTitles: new[] { "1", "2" },
                               children: new[] {
-                                  Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                                  Create.Other.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
                               }),
-                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.Other.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.InterviewData(Create.InterviewQuestion(multyOptionLinkedQuestionId, new[] { 2 }));
+            interview = Create.Other.InterviewData(Create.Other.InterviewQuestion(multyOptionLinkedQuestionId, new[] { 2 }));
         };
 
         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);

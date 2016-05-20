@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(Create.RosterInstancesTitleChanged(rosterGroupId, rosterTitle: rosterTitle)));
+                CreatePublishableEvent(Create.Other.RosterInstancesTitleChanged(rosterGroupId, rosterTitle: rosterTitle)));
 
 
         It should_roster_title_be_equal_to_rosterTitle = () =>

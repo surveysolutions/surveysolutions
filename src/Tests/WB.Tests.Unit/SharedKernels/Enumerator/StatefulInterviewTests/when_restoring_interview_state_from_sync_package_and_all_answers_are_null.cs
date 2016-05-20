@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetAnswerType(gpsQestionId) == AnswerType.GpsData
                 && _.GetAnswerType(multimediaQuestionId) == AnswerType.FileName);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             var answersDtos = new[]
             {
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 CreateAnsweredQuestionSynchronizationDto(multimediaQuestionId, rosterVector, null),
             };
 
-            synchronizationDto = Create.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
+            synchronizationDto = Create.Other.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
 
             eventContext = new EventContext();
         };

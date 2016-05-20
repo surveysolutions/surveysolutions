@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             {
                 TeamLeadId = Guid.NewGuid()
             });
-            commandValidator = Create.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
+            commandValidator = Create.Other.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
         };
 
         Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));
@@ -37,23 +37,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Interview interview = Create.Interview(interviewId);
+        private static readonly Interview interview = Create.Other.Interview(interviewId);
 
         private static readonly Action[] commandValidations =
         {
-            () => commandValidator.Validate(interview, Create.AnswerDateTimeQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerTextQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerTextListQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerNumericRealQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerNumericIntegerQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerSingleOptionQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerSingleOptionLinkedQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerQRBarcodeQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerMultipleOptionsQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerMultipleOptionsLinkedQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerPictureQuestionCommand(interviewId: interviewId, userId: responsibleId)),
-            () => commandValidator.Validate(interview, Create.AnswerYesNoQuestion(interviewId: interviewId, userId: responsibleId, answer: new List<AnsweredYesNoOption>())),
-            () => commandValidator.Validate(interview, Create.AnswerGeoLocationQuestionCommand(interviewId: interviewId, userId: responsibleId))
+            () => commandValidator.Validate(interview, Create.Other.AnswerDateTimeQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerTextQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerTextListQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerNumericRealQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerNumericIntegerQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerSingleOptionQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerSingleOptionLinkedQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerQRBarcodeQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerMultipleOptionsQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerMultipleOptionsLinkedQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerPictureQuestionCommand(interviewId: interviewId, userId: responsibleId)),
+            () => commandValidator.Validate(interview, Create.Other.AnswerYesNoQuestion(interviewId: interviewId, userId: responsibleId, answer: new List<AnsweredYesNoOption>())),
+            () => commandValidator.Validate(interview, Create.Other.AnswerGeoLocationQuestionCommand(interviewId: interviewId, userId: responsibleId))
         };
         private static readonly List<InterviewException> exceptions = new List<InterviewException>();
         private static InterviewAnswersCommandValidator commandValidator;

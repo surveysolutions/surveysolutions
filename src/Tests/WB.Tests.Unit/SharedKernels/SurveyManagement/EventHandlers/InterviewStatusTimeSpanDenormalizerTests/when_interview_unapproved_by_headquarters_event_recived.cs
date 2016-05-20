@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             
             interviewStatusTimeSpansStorage.Store(
-                Create.InterviewStatusTimeSpans(
+                Create.Other.InterviewStatusTimeSpans(
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
                     interviewId : interviewId.FormatGuid(),
                     timeSpans: new[]
                     {
-                        Create.TimeSpanBetweenStatuses(interviewerId: userId,
+                        Create.Other.TimeSpanBetweenStatuses(interviewerId: userId,
                             timestamp: DateTime.Now.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     })
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.UnapprovedByHeadquartersEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.Other.UnapprovedByHeadquartersEvent(interviewId: interviewId));
 
         It should_remove_ApprovedByHeadquarter_as_end_status =
             () =>

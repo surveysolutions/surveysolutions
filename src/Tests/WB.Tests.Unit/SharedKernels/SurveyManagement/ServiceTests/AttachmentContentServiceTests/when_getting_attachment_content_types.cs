@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, contentHash);
-            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentService = Create.Other.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>

@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.NumericQuestion(questionId: rosterSizeQuestionId, isInteger: true),
-                Create.Roster(rosterId: Guid.Parse("11111111111111111111111111111111"),
+                Create.Other.NumericQuestion(questionId: rosterSizeQuestionId, isInteger: true),
+                Create.Other.Roster(rosterId: Guid.Parse("11111111111111111111111111111111"),
                     rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

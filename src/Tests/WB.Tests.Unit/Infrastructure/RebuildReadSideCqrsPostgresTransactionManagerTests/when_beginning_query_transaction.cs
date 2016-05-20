@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.Infrastructure.RebuildReadSideCqrsPostgresTransactionMan
     {
         Establish context = () =>
         {
-            transactionManager = Create.RebuildReadSideCqrsPostgresTransactionManager();
+            transactionManager = Create.Other.RebuildReadSideCqrsPostgresTransactionManager();
         };
 
         Because of = () =>

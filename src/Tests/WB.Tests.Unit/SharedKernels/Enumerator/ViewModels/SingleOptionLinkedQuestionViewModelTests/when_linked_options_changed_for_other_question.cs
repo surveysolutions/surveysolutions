@@ -18,32 +18,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
-            linkedQuestionId = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
+            linkedQuestionId = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             eventData = new[]
             {
-                new ChangedLinkedOptions(Create.Identity(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), RosterVector.Empty),
+                new ChangedLinkedOptions(Create.Other.Identity(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), RosterVector.Empty),
                     new[]
                     {
-                        Create.RosterVector(1)
+                        Create.Other.RosterVector(1)
                     }),
             };
 
             linkedOptionTextInInterview = "answer in init";
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                     .Returns(new List<BaseInterviewAnswer> { Create.TextAnswer(linkedOptionTextInInterview) });
+                     .Returns(new List<BaseInterviewAnswer> { Create.Other.TextAnswer(linkedOptionTextInInterview) });
 
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(1))
-                     .Returns(Create.TextAnswer("answer in event"));
+            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Other.RosterVector(1))
+                     .Returns(Create.Other.TextAnswer("answer in event"));
 
             IQuestionnaire questionnaire = 
                 SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
             
-                viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
-            viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
+                viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
         };
 
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));

@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         private Establish context = () =>
         {
             var summaries = new TestInMemoryWriter<InterviewSummary>();
-            summaries.Store(Create.InterviewSummary(), "id1");
-            summaries.Store(Create.InterviewSummary(), "id2");
+            summaries.Store(Create.Other.InterviewSummary(), "id1");
+            summaries.Store(Create.Other.InterviewSummary(), "id2");
 
             surveyManagementInterviewCommandValidator =
                 CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.CreateInterviewCommand()));
+            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.Other.CreateInterviewCommand()));
 
         It should_raise_InterviewException = () =>
             exception.ShouldNotBeNull();

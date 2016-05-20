@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         Establish context = () =>
         {
             var multiOptionQuestion =
-                    Create.MultyOptionsQuestion(id: Guid.NewGuid(), variable: questionsVariableName,
-                        options: new[] { Create.Option("1", "one"), Create.Option("3", "three") });
+                    Create.Other.MultyOptionsQuestion(id: Guid.NewGuid(), variable: questionsVariableName,
+                        options: new[] { Create.Other.Option("1", "one"), Create.Other.Option("3", "three") });
             multiOptionQuestion.QuestionText = questionsTitle;
-            var questionnaire = Create.QuestionnaireDocument(children: new[]
+            var questionnaire = Create.Other.QuestionnaireDocument(children: new[]
             {
                 multiOptionQuestion
             });

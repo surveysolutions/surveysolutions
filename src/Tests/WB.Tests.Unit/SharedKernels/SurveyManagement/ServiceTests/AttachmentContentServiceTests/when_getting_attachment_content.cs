@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
-            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentService = Create.Other.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         private static AttachmentContentService attachmentContentService;
         private static AttachmentContent actualContent;
 
-        private static readonly AttachmentContent expectedContent = Create.AttachmentContent();
+        private static readonly AttachmentContent expectedContent = Create.Other.AttachmentContent();
     }
 }

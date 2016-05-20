@@ -21,17 +21,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.Other.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters),
                
-                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
             };
 
             var repository = Stub.ReadSideRepository<InterviewSummary>();

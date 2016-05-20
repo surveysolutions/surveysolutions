@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         {
             var interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Create.Identity(questionGuid, Empty.RosterVector);
+            questionId = Create.Other.Identity(questionGuid, Empty.RosterVector);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
             );
 
-            var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
+            var yesNoAnswer = Create.Other.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
             {
                 new AnsweredYesNoOption(5, true), // last option set to yes
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 userInteractionService: userInteractionServiceMock.Object,
                 answeringViewModel: answeringViewModelMock.Object);
 
-            viewModel.Init(interviewIdAsString, questionId, Create.NavigationState());
+            viewModel.Init(interviewIdAsString, questionId, Create.Other.NavigationState());
             viewModel.Options.Last().Selected = null;
         };
 

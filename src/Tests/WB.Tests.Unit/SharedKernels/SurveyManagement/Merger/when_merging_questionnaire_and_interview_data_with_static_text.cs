@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children =
                         new List<IComposite>()
                         {
-                            Create.StaticText(publicKey: staticTextId, text: staticText)
+                            Create.Other.StaticText(publicKey: staticTextId, text: staticText)
                         }
                 });
 

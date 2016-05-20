@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
-                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Other.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     status: InterviewStatus.RejectedBySupervisor,
                     userId: userId,
                     questionnaireId: questionnaireId,

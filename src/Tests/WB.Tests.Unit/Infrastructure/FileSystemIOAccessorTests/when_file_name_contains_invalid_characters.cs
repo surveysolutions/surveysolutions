@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
         Establish context = () =>
         {
             fileName = "nastya" + new string(Path.GetInvalidFileNameChars());
-            fileSystemIOAccessor = Create.FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.Other.FileSystemIOAccessor();
         };
 
         Because of = () =>

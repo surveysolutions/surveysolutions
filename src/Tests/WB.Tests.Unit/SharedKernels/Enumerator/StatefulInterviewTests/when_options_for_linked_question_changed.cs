@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkSourceId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            linkedQuestionIdentity = Create.Identity(linkedQuestionId, RosterVector.Empty);
+            linkedQuestionIdentity = Create.Other.Identity(linkedQuestionId, RosterVector.Empty);
             newOptionsEvent = new[] {
                 new ChangedLinkedOptions(linkedQuestionIdentity, 
                                          new []
                                          {
-                                             Create.RosterVector(1),
-                                             Create.RosterVector(2)
+                                             Create.Other.RosterVector(1),
+                                             Create.Other.RosterVector(2)
                                          })
             };
 
@@ -30,9 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
                 .Returns(linkSourceId);
 
-            interview = Create.StatefulInterview(questionnaire: questionnaire);
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.RosterVector(1), "one"));
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.RosterVector(2), "two"));
+            interview = Create.Other.StatefulInterview(questionnaire: questionnaire);
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(1), "one"));
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(2), "two"));
         };
 
         Because of = () => interview.Apply(Create.Event.LinkedOptionsChanged(newOptionsEvent));

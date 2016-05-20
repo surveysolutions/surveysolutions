@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 interviewRepository: interviewRepository,
                 optionsRepository: optionsRepository);
 
-            var navigationState = Create.NavigationState();
+            var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 

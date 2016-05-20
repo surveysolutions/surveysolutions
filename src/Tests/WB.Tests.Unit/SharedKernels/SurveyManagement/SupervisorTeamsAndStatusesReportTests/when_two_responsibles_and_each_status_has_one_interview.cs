@@ -21,17 +21,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
                                         
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
             };
 
             var repository = Stub.ReadSideRepository<InterviewSummary>();

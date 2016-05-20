@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = Create.User();
+            user = Create.Other.User();
             user.SetId(userId);
             user.IsArchived = true;
         };

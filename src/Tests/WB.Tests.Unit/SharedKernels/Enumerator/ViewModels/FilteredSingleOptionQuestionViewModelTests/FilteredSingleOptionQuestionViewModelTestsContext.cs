@@ -37,11 +37,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         {
             var options = new List<CategoricalQuestionOption>
             {
-                Create.CategoricalQuestionOption(1, "abc"),
-                Create.CategoricalQuestionOption(2, "bbc"),
-                Create.CategoricalQuestionOption(3, "bbc"),
-                Create.CategoricalQuestionOption(4, "bbaé"),
-                Create.CategoricalQuestionOption(5, "cccé"),
+                Create.Other.CategoricalQuestionOption(1, "abc"),
+                Create.Other.CategoricalQuestionOption(2, "bbc"),
+                Create.Other.CategoricalQuestionOption(3, "bbc"),
+                Create.Other.CategoricalQuestionOption(4, "bbaé"),
+                Create.Other.CategoricalQuestionOption(5, "cccé"),
             };
 
             Mock<IOptionsRepository> optionsRepository = new Mock<IOptionsRepository>();
@@ -53,8 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             return optionsRepository.Object;
         }
 
-        protected static readonly Identity questionIdentity = Create.Identity(Id.g6, Create.RosterVector());
+        protected static readonly Identity questionIdentity = Create.Other.Identity(Id.g6, Create.Other.RosterVector());
 
-        protected static readonly QuestionnaireIdentity questionnaireId = Create.QuestionnaireIdentity(Id.g9, 1);
+        protected static readonly QuestionnaireIdentity questionnaireId = Create.Other.QuestionnaireIdentity(Id.g9, 1);
     }
 }

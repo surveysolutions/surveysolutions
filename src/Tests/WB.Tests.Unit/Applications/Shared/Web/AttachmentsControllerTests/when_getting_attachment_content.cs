@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
         {
             mockOfAttachmentContentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
-            controller = Create.AttachmentsController(mockOfAttachmentContentService.Object);
+            controller = Create.Other.AttachmentsController(mockOfAttachmentContentService.Object);
             controller.Request = new HttpRequestMessage {Headers = {IfNoneMatch = {}}};
         };
 

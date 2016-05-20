@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.InterviewView();
+            dashboardItem = Create.Other.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
             dashboardItem.GpsLocation = new InterviewGpsLocationView
             {
               PrefilledQuestionId  = gpsQuestionId
             };
 
-            @event = Create.Event.GeoLocationQuestionAnswered(Create.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
+            @event = Create.Event.GeoLocationQuestionAnswered(Create.Other.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
 
             var storeAsyncTask = new Task(()=> {});
             storeAsyncTask.Start();
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
                 r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
 
             denormalizer.Handle(@event);
         };

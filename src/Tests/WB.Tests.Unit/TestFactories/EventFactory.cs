@@ -575,7 +575,7 @@ namespace WB.Tests.Unit.TestFactories
             public QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
                 => Create.Event.QuestionsDisabled(new[]
                 {
-                    Create.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
+                    Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
                 });
 
             public QuestionsEnabled QuestionsEnabled(Identity[] questions) => new QuestionsEnabled(questions);

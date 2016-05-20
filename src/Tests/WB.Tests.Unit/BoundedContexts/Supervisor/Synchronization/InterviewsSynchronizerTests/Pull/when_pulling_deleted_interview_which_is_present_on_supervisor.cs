@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                             EntryId = "1"
                         }, "1");
 
-            iInterviewSynchronizationDto = Create.InterviewSynchronizationDto(interviewId: interviewId,
+            iInterviewSynchronizationDto = Create.Other.InterviewSynchronizationDto(interviewId: interviewId,
                 status: InterviewStatus.Deleted,
                 userId: userId,
                 questionnaireId: questionnaireId,
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary());
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryReader: interviewSummaryStorageMock.Object,
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(interviewSummaryRepositoryReader: interviewSummaryStorageMock.Object,
                 commandService: commandServiceMock.Object, 
                 userDocumentStorage: userDocumentStorageMock.Object, 
                 plainStorage: plainStorageMock, 

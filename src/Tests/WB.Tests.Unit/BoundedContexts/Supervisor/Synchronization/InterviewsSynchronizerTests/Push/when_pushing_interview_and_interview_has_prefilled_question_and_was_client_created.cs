@@ -49,11 +49,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
-            interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);
+            interviewEvent = Create.Other.CommittedEvent(eventSourceId: interviewId, origin: null);
             var eventStore = Mock.Of<IEventStore>(store
                 => store.Read(interviewId, 0) == new CommittedEventStream(interviewId, interviewEvent));
 
-            InterviewSummary interviewSummary = Create.InterviewSummary();
+            InterviewSummary interviewSummary = Create.Other.InterviewSummary();
             interviewSummary.WasCreatedOnClient = true;
             interviewSummary.AnswersToFeaturedQuestions.Add(
                 new QuestionAnswer { Answer = questionAnswer, Questionid = questionId, Title = questionTitle }
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(syncItemJson)
                 .Callback<object>(entity => syncItem = (SyncItem)entity);
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

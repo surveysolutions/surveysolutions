@@ -16,17 +16,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Other.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.InterviewApprovedByHQEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.Other.InterviewApprovedByHQEvent(interviewId: interviewId));
 
         It should_record_ApprovedByHeadquarter_as_end_status =
             () =>

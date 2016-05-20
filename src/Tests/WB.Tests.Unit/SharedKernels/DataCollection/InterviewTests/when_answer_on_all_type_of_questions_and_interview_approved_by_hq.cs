@@ -19,13 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.TextListQuestion(questionId: questionId));
+                Create.Other.TextListQuestion(questionId: questionId));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(Create.InterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters).Payload);
+            interview.Apply(Create.Other.InterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters).Payload);
         };
 
         Because of = () =>

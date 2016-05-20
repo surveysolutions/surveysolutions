@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 interviewCommentaries ?? new TestInMemoryWriter<InterviewCommentaries>(),
-                Create.TransactionManagerProvider(),
+                Create.Other.TransactionManagerProvider(),
                 Mock.Of<ILogger>());
         }
     }

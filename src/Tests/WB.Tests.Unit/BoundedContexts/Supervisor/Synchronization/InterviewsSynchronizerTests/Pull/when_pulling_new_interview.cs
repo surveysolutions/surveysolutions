@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             iInterviewSynchronizationDto =
 
-                Create.InterviewSynchronizationDto(interviewId: interviewId, status: InterviewStatus.SupervisorAssigned,
+                Create.Other.InterviewSynchronizationDto(interviewId: interviewId, status: InterviewStatus.SupervisorAssigned,
                     userId: userId, questionnaireId: questionnaireId, questionnaireVersion: 2,
                     wasCompleted: true);
 
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(
                     Task.FromResult(iInterviewSynchronizationDto));
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
                 commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object,
                 plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };

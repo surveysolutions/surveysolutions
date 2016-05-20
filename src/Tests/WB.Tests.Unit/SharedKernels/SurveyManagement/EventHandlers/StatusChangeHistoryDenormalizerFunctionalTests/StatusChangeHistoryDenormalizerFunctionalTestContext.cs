@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
     {
         public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewStatuses> interviewStatuses = null)
         {
-            var defultUserDocument = Create.UserDocument(supervisorId: Guid.NewGuid());
+            var defultUserDocument = Create.Other.UserDocument(supervisorId: Guid.NewGuid());
             return
                 new StatusChangeHistoryDenormalizerFunctional(
                     interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),

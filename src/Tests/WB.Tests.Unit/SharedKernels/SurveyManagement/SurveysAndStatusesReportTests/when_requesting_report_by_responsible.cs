@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
+                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
             };
 
             var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();

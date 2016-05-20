@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId));
+            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId));
 
-            synchronizationDto = Create.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: new AnsweredQuestionSynchronizationDto[0]);
+            synchronizationDto = Create.Other.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: new AnsweredQuestionSynchronizationDto[0]);
         };
 
         Because of = () => exception = Catch.Exception(()=>interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto));

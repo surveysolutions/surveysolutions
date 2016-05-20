@@ -15,29 +15,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Other.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
+                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
 
             interviewStatusTimeSpansStorage.Store(
-                Create.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
+                Create.Other.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
                     timeSpans:
                         new[]
                         {
-                            Create.TimeSpanBetweenStatuses(interviewerId: interviewId,
+                            Create.Other.TimeSpanBetweenStatuses(interviewerId: interviewId,
                                 endStatus: InterviewExportedAction.Completed)
                         }), interviewId.FormatGuid());
 
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.InterviewCompletedEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.Other.InterviewCompletedEvent(interviewId: interviewId));
 
         It should_contain_only_one_complete_record =
             () =>

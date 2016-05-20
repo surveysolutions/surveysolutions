@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(children: new IComposite[]
+            QuestionnaireDocument questionnaireDocument = Create.Other.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Roster(variable: rosterVariableName),
+                Create.Other.Roster(variable: rosterVariableName),
             });
 
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(_
@@ -33,9 +33,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem());
+                    id: questionnaireIdentity.ToString(), entity: Create.Other.QuestionnaireBrowseItem());
 
-            questionnaire = Create.DataCollectionQuestionnaire(
+            questionnaire = Create.Other.DataCollectionQuestionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository,
                 fileSystemAccessor: fileSystemAccessor);
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Other.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string rosterVariableName = "roster_var_name";
     }
 }

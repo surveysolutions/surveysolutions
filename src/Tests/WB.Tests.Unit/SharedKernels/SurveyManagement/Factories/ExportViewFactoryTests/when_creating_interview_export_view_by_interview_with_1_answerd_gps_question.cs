@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             gpsQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             interviewData =
-                Create.InterviewData(Create.InterviewQuestion(questionId: gpsQuestionId,
-                    answer: Create.GeoPosition()));
+                Create.Other.InterviewData(Create.Other.InterviewQuestion(questionId: gpsQuestionId,
+                    answer: Create.Other.GeoPosition()));
 
             questionnaireDocument =
-                Create.QuestionnaireDocument(children: Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variable: "gps"));
+                Create.Other.QuestionnaireDocument(children: Create.Other.GpsCoordinateQuestion(questionId: gpsQuestionId, variable: "gps"));
 
             exportViewFactory = CreateExportViewFactory();
         };

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerT
             interviews.GetById(interviewDeletedEvent.EventSourceId.FormatGuid())
                 .Returns(new InterviewSummary() { TeamLeadId = supervisorId, WasCreatedOnClient = false });
 
-            denormalizer = Create.InterviewsFeedDenormalizer(writer, interviewSummaryRepository: interviews);
+            denormalizer = Create.Other.InterviewsFeedDenormalizer(writer, interviewSummaryRepository: interviews);
         };
 
         private Because of = () => denormalizer.Handle(interviewDeletedEvent);

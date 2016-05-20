@@ -25,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         Because of = () =>
         {
             viewModel = denormalizerFunctional.Update(viewModel,
-                Create.InterviewDeletedEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
+                Create.Other.InterviewDeletedEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
             viewModel = denormalizerFunctional.Update(viewModel,
-                Create.InterviewRestoredEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
+                Create.Other.InterviewRestoredEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
         };
 
         It should_not_add_sync_related_status_to_history = () => viewModel.InterviewCommentedStatuses.ShouldBeEmpty();

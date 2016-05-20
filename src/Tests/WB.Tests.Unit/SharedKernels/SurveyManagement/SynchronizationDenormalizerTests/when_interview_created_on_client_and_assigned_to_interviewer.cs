@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             denormalizer = CreateDenormalizer(interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object);
         };
 
-        Because of = () => denormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed));
+        Because of = () => denormalizer.Handle(Create.Other.InterviewStatusChangedEvent(InterviewStatus.Completed));
 
         It should_not_store_any_sync_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackageMeta>(), Moq.It.IsAny<string>()), Times.Never);

@@ -68,15 +68,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         protected static void SetUp()
         {
             
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
             EventRegistry = new Mock<ILiteEventRegistry>();
         }
 
-        protected static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
+        protected static Identity questionIdentity = Create.Other.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
 
-        protected static Identity parentIdentity = Create.Identity(Guid.Parse("22222222222222222222222222222222"), new decimal[] { 1 });
+        protected static Identity parentIdentity = Create.Other.Identity(Guid.Parse("22222222222222222222222222222222"), new decimal[] { 1 });
 
         protected static NavigationState navigationState;
 
@@ -88,12 +88,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static List<CategoricalQuestionOption> Options = new List<CategoricalQuestionOption>
         {
-            Create.CategoricalQuestionOption(1, "title abc 1", 1),
-            Create.CategoricalQuestionOption(2, "title def 2", 1),
-            Create.CategoricalQuestionOption(3, "title klo 3", 1),
-            Create.CategoricalQuestionOption(4, "title gha 4", 2),
-            Create.CategoricalQuestionOption(5, "title ccc 5", 2),
-            Create.CategoricalQuestionOption(6, "title bcw 6", 2)
+            Create.Other.CategoricalQuestionOption(1, "title abc 1", 1),
+            Create.Other.CategoricalQuestionOption(2, "title def 2", 1),
+            Create.Other.CategoricalQuestionOption(3, "title klo 3", 1),
+            Create.Other.CategoricalQuestionOption(4, "title gha 4", 2),
+            Create.Other.CategoricalQuestionOption(5, "title ccc 5", 2),
+            Create.Other.CategoricalQuestionOption(6, "title bcw 6", 2)
         };
 
         protected static readonly string interviewId = "Some interviewId";
@@ -103,6 +103,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
         protected static readonly QuestionnaireIdentity questionnaireId =
-            Create.QuestionnaireIdentity(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"), 1);
+            Create.Other.QuestionnaireIdentity(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"), 1);
     }
 }
