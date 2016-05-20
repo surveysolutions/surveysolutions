@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.TestFactories
 {
     internal class CommandFactory
     {

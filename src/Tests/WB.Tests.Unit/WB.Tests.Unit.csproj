@@ -339,7 +339,6 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="ChangeCurrentCulture.cs" />
-    <Compile Include="CommandFactory.cs" />
     <Compile Include="CreateViewModels.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
@@ -1497,6 +1496,7 @@
     <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
+    <Compile Include="TestFactories\CommandFactory.cs" />
     <Compile Include="TestPlainStorage.cs" />
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
