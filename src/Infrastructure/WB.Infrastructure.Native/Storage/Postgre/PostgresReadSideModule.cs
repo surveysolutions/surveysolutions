@@ -15,6 +15,7 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Planning.Targets;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -49,7 +50,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
-            this.Kernel.Bind(typeof(PostgreReadSideStorage<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
+                typeof(IReadSideRepositoryReader<>), typeof(INaviteReadSideStorage<>))
+                .ToSelf()
+                .InSingletonScope()
+                .WithConstructorArgument("entityIdentifierColumnName", GetEntityIdentifierColumnName);
+
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideStorageWrappedWithCache).InSingletonScope(); 
             
             this.Kernel.Bind<ISessionFactory>()
@@ -81,10 +87,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+        }
 
-            this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
-            this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
-            this.Kernel.Bind(typeof(INaviteReadSideStorage<>)).To(typeof(PostgreReadSideStorage<>));
+        private object GetEntityIdentifierColumnName(IContext context, ITarget target)
+        {
+            var entityType = context.GenericArguments[0];
+
+            var sessionFactory = context.Kernel.Get<ISessionFactory>(ReadSideSessionFactoryName);
+
+            var persister = sessionFactory.GetClassMetadata(entityType);
+
+            if (persister == null)
+                return null;
+
+            return persister.IdentifierPropertyName;
         }
 
         private ISessionFactory BuildSessionFactory()
