@@ -10,13 +10,11 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.TestFactories
 {
-    internal static partial class Create
-    {
-        internal static class ViewModels
+        internal class ViewModelFactory
         {
-            public static ValidityViewModel ValidityViewModel(ILiteEventRegistry eventRegistry = null,
+            public ValidityViewModel ValidityViewModel(ILiteEventRegistry eventRegistry = null,
                                                             IStatefulInterviewRepository interviewRepository = null,
                                                             IQuestionnaire questionnaire = null,
                                                             Identity entityIdentity = null)
@@ -29,24 +27,18 @@ namespace WB.Tests.Unit
                 return result;
             }
 
-            public static StaticTextStateViewModel StaticTextStateViewModel(IStatefulInterviewRepository interviewRepository = null,
+            public StaticTextStateViewModel StaticTextStateViewModel(IStatefulInterviewRepository interviewRepository = null,
                 ILiteEventRegistry eventRegistry = null)
             {
-                return new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry),
-                    Create.ViewModels.ValidityViewModel(interviewRepository: interviewRepository));
+                return new StaticTextStateViewModel(Create.ViewModel.EnablementViewModel(interviewRepository, eventRegistry),
+                    Create.ViewModel.ValidityViewModel(interviewRepository: interviewRepository));
             }
 
-            private static EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null, 
+            private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null, 
                 ILiteEventRegistry eventRegistry = null)
             {
                 return new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                     eventRegistry ?? Create.LiteEventRegistry());
             }
         }
-
-        public static SynchronizationViewModel SynchronizationViewModel()
-        {
-            return new SynchronizationViewModel();
-        }
-    }
 }
