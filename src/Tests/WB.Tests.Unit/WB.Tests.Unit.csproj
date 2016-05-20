@@ -1518,7 +1518,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Compile Include="Create.Controller.cs" />
+    <Compile Include="TestFactories\ControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
