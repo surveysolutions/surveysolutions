@@ -17,13 +17,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         Establish context = () =>
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
-            var user = Create.UserDocument(isArchived: true, userName: userName, userId:userId);
+            var user = Create.Other.UserDocument(isArchived: true, userName: userName, userId:userId);
 
             headquarterUserCommandValidatorser = CreateHeadquarterUserCommandValidatorWithUsers(user);
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.Other.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();

@@ -20,13 +20,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
                 status: newStatus);
 
             var lastStatusesStorage = Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(_ =>
-                _.GetById(interviewStringId) == Create.LastInterviewStatus(lastStatus));
+                _.GetById(interviewStringId) == Create.Other.LastInterviewStatus(lastStatus));
 
-            var interviewReferences = Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            var interviewReferences = Create.Other.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
             var interviewReferencesStorage = Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(_ =>
                 _.GetById(interviewStringId) == interviewReferences);
 
-            denormalizer = Create.CumulativeChartDenormalizer(
+            denormalizer = Create.Other.CumulativeChartDenormalizer(
                 lastStatusesStorage: lastStatusesStorage,
                 cumulativeReportStatusChangeStorage: cumulativeReportStatusChangeStorageMock.Object,
                 interviewReferencesStorage: interviewReferencesStorage);

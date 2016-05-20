@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 CreateHeaderStructureForLevel(dataFileName);
             oneQuestionHeaderStructureForLevel.LevelLabels = new[] { CreateLabelItem("1", "t1"), CreateLabelItem("2", "t2") };
 
-            questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.Other.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
 

@@ -17,9 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem());
+                    id: questionnaireIdentity.ToString(), entity: Create.Other.QuestionnaireBrowseItem());
 
-            questionnaire = Create.DataCollectionQuestionnaire(
+            questionnaire = Create.Other.DataCollectionQuestionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Other.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string longTitle;
     }
 }

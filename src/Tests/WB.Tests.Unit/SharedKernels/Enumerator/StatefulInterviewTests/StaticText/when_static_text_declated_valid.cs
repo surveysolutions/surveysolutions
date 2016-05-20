@@ -9,11 +9,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
     {
         Establish context = () =>
         {
-            staticTextIdentity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            staticTextIdentity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(
                 Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-            statefulInterview = Create.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
+            statefulInterview = Create.Other.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
             statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));
             statefulInterview.Apply(Create.Event.StaticTextsDeclaredValid(staticTextIdentity));
         };

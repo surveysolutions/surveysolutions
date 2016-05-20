@@ -10,16 +10,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextId),
-                Create.Group(children: new[]
+                Create.Other.StaticText(publicKey: staticTextId),
+                Create.Other.Group(children: new[]
                 {
-                    Create.StaticText(publicKey: staticTextInSubgroupId)
+                    Create.Other.StaticText(publicKey: staticTextInSubgroupId)
                 }),
-                Create.Roster(children: new[]
+                Create.Other.Roster(children: new[]
                 {
-                    Create.StaticText(publicKey: staticTextInRosterId)
+                    Create.Other.StaticText(publicKey: staticTextInRosterId)
                 })
             });
         };

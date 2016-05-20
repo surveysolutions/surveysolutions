@@ -30,16 +30,16 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             var eventStream = new CommittedEventStream(interviewId, new []
             {
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("11111111111111111111111111111111"), eventSourceId: interviewId, eventSequence: 1),
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("22222222222222222222222222222222"), eventSourceId: interviewId, eventSequence: 2),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("33333333333333333333333333333333"), payload: new InterviewSentToHeadquarters(), eventSourceId: interviewId, eventSequence: 3),
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("44444444444444444444444444444444"), eventSourceId: interviewId, eventSequence: 4),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("55555555555555555555555555555555"), eventSourceId: interviewId, eventSequence: 5),
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("66666666666666666666666666666666"), payload: new InterviewSentToHeadquarters(), eventSourceId: interviewId, eventSequence: 6),
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("77777777777777777777777777777777"), eventSourceId: interviewId, eventSequence: 7),
-                Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("88888888888888888888888888888888"), eventSourceId: interviewId, eventSequence: 8),
-                Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("99999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 9),
-                Create.CommittedEvent(origin: "capi-sync", eventIdentifier: Guid.Parse("19999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 10)
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("11111111111111111111111111111111"), eventSourceId: interviewId, eventSequence: 1),
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("22222222222222222222222222222222"), eventSourceId: interviewId, eventSequence: 2),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("33333333333333333333333333333333"), payload: new InterviewSentToHeadquarters(), eventSourceId: interviewId, eventSequence: 3),
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("44444444444444444444444444444444"), eventSourceId: interviewId, eventSequence: 4),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("55555555555555555555555555555555"), eventSourceId: interviewId, eventSequence: 5),
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("66666666666666666666666666666666"), payload: new InterviewSentToHeadquarters(), eventSourceId: interviewId, eventSequence: 6),
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("77777777777777777777777777777777"), eventSourceId: interviewId, eventSequence: 7),
+                Create.Other.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("88888888888888888888888888888888"), eventSourceId: interviewId, eventSequence: 8),
+                Create.Other.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("99999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 9),
+                Create.Other.CommittedEvent(origin: "capi-sync", eventIdentifier: Guid.Parse("19999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 10)
             });
 
             eventsBeforeLastPush = new[]
@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 => store.Read(interviewId, 0) == eventStream);
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
-                => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
+                => writer.GetById(interviewId.FormatGuid()) == Create.Other.InterviewSummary());
 
             var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns("events json")
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

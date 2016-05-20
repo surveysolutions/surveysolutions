@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
             viewState = CreateViewWithSequenceOfInterviewData();
 
-            var identity = Create.Identity(staticTextId, new decimal[0]);
+            var identity = Create.Other.Identity(staticTextId, new decimal[0]);
             var failedValidationConditions = new List<FailedValidationCondition>()
             {
-                Create.FailedValidationCondition(1)
+                Create.Other.FailedValidationCondition(1)
             };
             var listOfFailedValidationConditions = new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>()
             {

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
                     Content = new StringContent("exception")
                 }));
 
-            service = Create.HeadquartersLoginService(messageHandler: () => handler.Object,
+            service = Create.Other.HeadquartersLoginService(messageHandler: () => handler.Object,
                 logger: logger.Object, commandService: commandService.Object);
         };
 

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName, exportedHeaderItems: new[] { CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("1", "t1`\r"), CreateLabelItem("2", "t2\r'"))});
 
-            questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.Other.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
 

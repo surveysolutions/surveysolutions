@@ -10,13 +10,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         {
             var parentQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             cascadingQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            questionnaire = Create.PlainQuestionnaire(Create.QuestionnaireDocumentWithOneChapter(
+            questionnaire = Create.Other.PlainQuestionnaire(Create.Other.QuestionnaireDocumentWithOneChapter(
                 children: new[]
                 {
-                    Create.SingleOptionQuestion(
+                    Create.Other.SingleOptionQuestion(
                         questionId: parentQuestionId,
                         hideIfDisabled: true),
-                    Create.SingleOptionQuestion(
+                    Create.Other.SingleOptionQuestion(
                         questionId: cascadingQuestionId,
                         cascadeFromQuestionId: parentQuestionId)
                 }));

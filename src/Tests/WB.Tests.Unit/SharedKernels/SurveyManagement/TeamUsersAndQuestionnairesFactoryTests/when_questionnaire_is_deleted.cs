@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamUsersAndQuestionnaire
         Establish context = () =>
         {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = new TestPlainStorage<QuestionnaireBrowseItem>();
-            var questionnaireBrowseItem = Create.QuestionnaireBrowseItem();
+            var questionnaireBrowseItem = Create.Other.QuestionnaireBrowseItem();
             questionnaireBrowseItem.IsDeleted = true;
             questionnaires.Store(questionnaireBrowseItem, "id");
             viewFactory = CreateViewFactory(questionnaires);

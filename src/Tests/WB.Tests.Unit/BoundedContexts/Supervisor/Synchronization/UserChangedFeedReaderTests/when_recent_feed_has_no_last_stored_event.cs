@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFe
         Establish context = () =>
         {
             var handler = new Mock<HttpMessageHandler>();
-            var settings = Create.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed"));
+            var settings = Create.Other.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed"));
 
             handler.SetupResponseFromResource("http://localhost/feed",
                 "WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests.Simplefeed.xml");
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFe
       ""EntryId"": ""preLastArchiveEntry""
       }");
 
-            feedReader = Create.UserChangedFeedReader(messageHandler: () => handler.Object,
+            feedReader = Create.Other.UserChangedFeedReader(messageHandler: () => handler.Object,
                 settings: settings);
         };
 

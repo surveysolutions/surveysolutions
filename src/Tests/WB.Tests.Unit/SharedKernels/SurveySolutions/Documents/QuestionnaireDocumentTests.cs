@@ -237,17 +237,17 @@ namespace Main.Core.Tests.Documents
             var singleOptionAnswerCodes = new decimal[] {1, 2, 3};
             var multipleOptionsAnswerCodes = new decimal[] { 4, 5, 6};
             var cascadingQuestionCodes = new decimal[] { 7, 8, 9};
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]
                 {
-                    Create.SingleOptionQuestion(questionId: singleOptionQuestionId, answerCodes: singleOptionAnswerCodes),
-                    Create.SingleOptionQuestion(questionId: cascadingQuestionId, 
+                    Create.Other.SingleOptionQuestion(questionId: singleOptionQuestionId, answerCodes: singleOptionAnswerCodes),
+                    Create.Other.SingleOptionQuestion(questionId: cascadingQuestionId, 
                         cascadeFromQuestionId: singleOptionQuestionId,
                         answerCodes: cascadingQuestionCodes,
                         parentCodes: singleOptionAnswerCodes
                         ),
-                    Create.MultipleOptionsQuestion(questionId: multipleOptionsQuestionId, answers: multipleOptionsAnswerCodes),
-                    Create.TextQuestion(questionId: textQuestionId)
+                    Create.Other.MultipleOptionsQuestion(questionId: multipleOptionsQuestionId, answers: multipleOptionsAnswerCodes),
+                    Create.Other.TextQuestion(questionId: textQuestionId)
                 });
 
             questionnaire.ParseCategoricalQuestionOptions();

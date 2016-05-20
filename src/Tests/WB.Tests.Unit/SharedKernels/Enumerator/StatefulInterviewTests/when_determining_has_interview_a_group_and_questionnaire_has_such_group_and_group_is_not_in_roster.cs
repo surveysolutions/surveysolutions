@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 => _.HasGroup(@group.Id) == true
                 && _.GetRostersFromTopToSpecifiedGroup(@group.Id) == new Guid[] { });
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

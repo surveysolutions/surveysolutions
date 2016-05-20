@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire =
-                Create.QuestionnaireDocumentWithOneChapter(children:
+                Create.Other.QuestionnaireDocumentWithOneChapter(children:
                     new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "roster_size", linkedToRosterId: rosterId),
-                        Create.Roster(rosterId: rosterId, variable: "ros", 
+                        Create.Other.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "roster_size", linkedToRosterId: rosterId),
+                        Create.Other.Roster(rosterId: rosterId, variable: "ros", 
                             children: new[]
                             {
-                                Create.TextListQuestion(questionId: rosterTitleQuestionId, variable: "roster_title")
+                                Create.Other.TextListQuestion(questionId: rosterTitleQuestionId, variable: "roster_title")
                             },
                             rosterSizeSourceType: RosterSizeSourceType.Question, 
                             rosterSizeQuestionId: rosterSizeQuestionId,
@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, Create.InterviewQuestion(rosterSizeQuestionId, 2));
+            interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, Create.Other.InterviewQuestion(rosterSizeQuestionId, 2));
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.RosterVector(0).ToArray());
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.RosterVector(1).ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Other.RosterVector(0).ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Other.RosterVector(1).ToArray());
 
             user = Mock.Of<UserDocument>();
             merger = CreateMerger(questionnaire);

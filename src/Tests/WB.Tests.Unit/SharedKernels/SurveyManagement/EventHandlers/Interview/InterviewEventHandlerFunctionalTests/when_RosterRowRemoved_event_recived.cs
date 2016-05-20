@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(Create.RosterInstancesRemoved(rosterGroupId)));
+                CreatePublishableEvent(Create.Other.RosterInstancesRemoved(rosterGroupId)));
 
         It should_interview_levels_count_be_equal_to_1 = () =>
             viewState.Levels.Keys.Count.ShouldEqual(1);

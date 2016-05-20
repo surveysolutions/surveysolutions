@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         Establish context = () =>
         {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId, 
+            questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
+                Create.Other.MultyOptionsQuestion(id: questionId, 
                 variable:"mult",
                 options: new List<Answer> {
-                    Create.Answer("foo", 28), Create.Answer("bar", 42)
+                    Create.Other.Answer("foo", 28), Create.Other.Answer("bar", 42)
                 }));
 
             exportViewFactory = CreateExportViewFactory();

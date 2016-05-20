@@ -10,12 +10,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            QuestionnaireDocument questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextId),
+                Create.Other.StaticText(publicKey: staticTextId),
             });
 
-            plainQuestionnaire = Create.PlainQuestionnaire(document: questionnaireDocument);
+            plainQuestionnaire = Create.Other.PlainQuestionnaire(document: questionnaireDocument);
         };
 
         Because of = () =>

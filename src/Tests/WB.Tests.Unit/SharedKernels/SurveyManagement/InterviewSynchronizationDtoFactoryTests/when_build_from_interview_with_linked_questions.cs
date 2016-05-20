@@ -29,12 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             AddInterviewLevel(interviewData, new ValueVector<Guid>(new[] { rosterId }), new decimal[] { 3 },
               new Dictionary<Guid, object>());
 
-            questionnaireDocument = Create.QuestionnaireDocument(children: new IComposite[]
+            questionnaireDocument = Create.Other.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Roster(rosterId: rosterId, variable: "fix",
-                    children: new[] {Create.TextQuestion(questionId: txtQuestionId, variable: "txt")}),
-                Create.SingleQuestion(id:linkOnRosterQuestionId , variable: "link_on_roster", linkedToRosterId: rosterId),
-                Create.SingleQuestion(id: singleLinkQuestionId, variable: "link_on_question", linkedToQuestionId: txtQuestionId),
+                Create.Other.Roster(rosterId: rosterId, variable: "fix",
+                    children: new[] {Create.Other.TextQuestion(questionId: txtQuestionId, variable: "txt")}),
+                Create.Other.SingleQuestion(id:linkOnRosterQuestionId , variable: "link_on_roster", linkedToRosterId: rosterId),
+                Create.Other.SingleQuestion(id: singleLinkQuestionId, variable: "link_on_question", linkedToQuestionId: txtQuestionId),
             });
 
             interviewSynchronizationDtoFactory = CreateInterviewSynchronizationDtoFactory(questionnaireDocument);

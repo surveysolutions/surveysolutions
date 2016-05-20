@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             denormalizer = CreateDenormalizer();
         };
 
-        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.InterviewStatusChangedEvent(InterviewStatus.InterviewerAssigned));
+        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.Other.InterviewStatusChangedEvent(InterviewStatus.InterviewerAssigned));
 
         It should_change_interview_status = () => updatedModel.Status.ShouldEqual(InterviewStatus.InterviewerAssigned);
 

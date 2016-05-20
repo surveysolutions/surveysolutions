@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.TestFactories
                                                             IQuestionnaire questionnaire = null,
                                                             Identity entityIdentity = null)
             {
-                var result = new ValidityViewModel(eventRegistry ?? Create.LiteEventRegistry(),
+                var result = new ValidityViewModel(eventRegistry ?? Create.Other.LiteEventRegistry(),
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                     Stub.MvxMainThreadDispatcher());
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.TestFactories
                 ILiteEventRegistry eventRegistry = null)
             {
                 return new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
-                    eventRegistry ?? Create.LiteEventRegistry());
+                    eventRegistry ?? Create.Other.LiteEventRegistry());
             }
         }
 }

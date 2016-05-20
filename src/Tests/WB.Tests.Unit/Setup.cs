@@ -84,14 +84,14 @@ namespace WB.Tests.Unit
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
-            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            return Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity,
-                Create.PlainQuestionnaire(questionnaireDocument));
+                Create.Other.PlainQuestionnaire(questionnaireDocument));
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
@@ -158,12 +158,12 @@ namespace WB.Tests.Unit
             Guid questionnaireId = Guid.NewGuid();
             long questionnaireVersion = 777;
 
-            IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
+            IPlainQuestionnaireRepository questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
                 questionnaire: questionnaire);
 
-            Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            Interview interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.InterviewCreated(
                 questionnaireId: questionnaireId,
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit
 
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
+            return Setup.InterviewForQuestionnaire(Create.Other.PlainQuestionnaire(document: questionnaireDocument));
         }
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
@@ -189,11 +189,11 @@ namespace WB.Tests.Unit
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireIdentity = Create.QuestionnaireIdentity();
+            var questionnaireIdentity = Create.Other.QuestionnaireIdentity();
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
-            return Create.StatefulInterview(
+            return Create.Other.StatefulInterview(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
                 questionnaireRepository: questionnaireRepository);
@@ -201,13 +201,13 @@ namespace WB.Tests.Unit
 
         public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
         {
-            var staticText = Create.StaticText(entityId, text, attachmentName);
+            var staticText = Create.Other.StaticText(entityId, text, attachmentName);
             var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             if (!entityId.HasValue)
             {
                 questionnaireEntityFactoryMock
                    .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
+                   .Returns((Guid id, string t, string a) => Create.Other.StaticText(id, t, a));
             }
             else if (string.IsNullOrWhiteSpace(attachmentName))
             {

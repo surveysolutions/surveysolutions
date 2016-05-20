@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
     {
         Establish context = () =>
         {
-            section1Identity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
-            section2Identity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
+            section1Identity = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
+            section2Identity = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
 
             interview = Substitute.For<IStatefulInterview>();
             interview.HasGroup(section1Identity)
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             interview.IsEnabled(section2Identity)
                      .Returns(true);
 
-            navigationState = Create.NavigationState(Setup.StatefulInterviewRepository(interview));
+            navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
             navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(section1Identity)).WaitAndUnwrapException();
             navigationState.NavigateToAsync(NavigationIdentity.CreateForCompleteScreen()).WaitAndUnwrapException();
             navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(section2Identity)).WaitAndUnwrapException();

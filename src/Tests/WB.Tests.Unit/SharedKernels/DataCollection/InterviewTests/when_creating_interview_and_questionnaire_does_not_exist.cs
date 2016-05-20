@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var repositoryWithoutQuestionnaire = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == null as IQuestionnaire);
 
-            interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
+            interview = Create.Other.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
         };
 
         Because of = () =>

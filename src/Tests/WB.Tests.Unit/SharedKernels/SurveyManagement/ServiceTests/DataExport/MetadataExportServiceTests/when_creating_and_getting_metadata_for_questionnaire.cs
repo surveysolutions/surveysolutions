@@ -24,12 +24,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             var singleOptionQuestionId = Guid.NewGuid();
             var gpsQuestionId = Guid.NewGuid();
 
-            var questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
+            var questionnaire = Create.Other.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.TextQuestion(questionId: textQuestionId, text: "text question", label: "a", instruction: "ttt"),
-                Create.NumericQuestion(questionId: numericQuestionId, title: "numeric question"),
-                Create.SingleOptionQuestion(questionId: singleOptionQuestionId, title: "single option question"),
-                Create.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
+                Create.Other.TextQuestion(questionId: textQuestionId, text: "text question", label: "a", instruction: "ttt"),
+                Create.Other.NumericQuestion(questionId: numericQuestionId, title: "numeric question"),
+                Create.Other.SingleOptionQuestion(questionId: singleOptionQuestionId, title: "single option question"),
+                Create.Other.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
             });
 
             questionnaire.Title = "main level";
@@ -38,19 +38,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 x => x.CreateLabelsForQuestionnaire(Moq.It.IsAny<QuestionnaireExportStructure>()))
                 .Returns(new[]
                 {
-                    Create.QuestionnaireLevelLabels("main level",
-                        Create.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
-                        Create.LabeledVariable(variableName: "num", questionId: numericQuestionId),
-                        Create.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
+                    Create.Other.QuestionnaireLevelLabels("main level",
+                        Create.Other.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
+                        Create.Other.LabeledVariable(variableName: "num", questionId: numericQuestionId),
+                        Create.Other.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
                             variableValueLabels:
                                 new[]
                                 {
-                                    Create.VariableValueLabel(value: "1", label: "t1"),
-                                    Create.VariableValueLabel(value: "2", label: "t2")
+                                    Create.Other.VariableValueLabel(value: "1", label: "t1"),
+                                    Create.Other.VariableValueLabel(value: "2", label: "t2")
                                 }),
-                        Create.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
-                    Create.QuestionnaireLevelLabels("nested roster level",
-                        Create.LabeledVariable(variableName: "r1"), Create.LabeledVariable(variableName: "r2"))
+                        Create.Other.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
+                    Create.Other.QuestionnaireLevelLabels("nested roster level",
+                        Create.Other.LabeledVariable(variableName: "r1"), Create.Other.LabeledVariable(variableName: "r2"))
                 });
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();

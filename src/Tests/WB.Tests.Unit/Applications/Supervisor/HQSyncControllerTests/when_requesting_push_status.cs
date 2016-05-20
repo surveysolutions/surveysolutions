@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.HQSyncControllerTests
                 && _.GetErrors() == errors
             );
 
-            controller = Create.HQSyncController(headquartersPushContext: headquartersPushContext);
+            controller = Create.Other.HQSyncController(headquartersPushContext: headquartersPushContext);
         };
 
         Because of = () =>

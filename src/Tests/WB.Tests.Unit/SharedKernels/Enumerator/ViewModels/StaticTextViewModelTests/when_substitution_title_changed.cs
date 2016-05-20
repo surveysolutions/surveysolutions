@@ -31,17 +31,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
-            var questionnaireMock = Create.PlainQuestionnaire(Create.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireMock = Create.Other.PlainQuestionnaire(Create.Other.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextWithSubstitutionId, text: "Old title %substitute%"),
-                Create.NumericRealQuestion(variable: "substitute", id: substitedQuestionId)
+                Create.Other.StaticText(publicKey: staticTextWithSubstitutionId, text: "Old title %substitute%"),
+                Create.Other.NumericRealQuestion(variable: "substitute", id: substitedQuestionId)
             }));
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
 
-            ILiteEventRegistry registry = Create.LiteEventRegistry();
-            liteEventBus = Create.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Other.LiteEventRegistry();
+            liteEventBus = Create.Other.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
@@ -53,11 +53,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                 {
                     new Identity(staticTextWithSubstitutionId, Empty.RosterVector)
                 };
-            fakeInterview = Create.Interview();
+            fakeInterview = Create.Other.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
+            Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.StaticText.ShouldEqual("Old title new value");
 

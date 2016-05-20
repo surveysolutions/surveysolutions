@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         protected static void SetUp()
         {
             ValidityModelMock = new Mock<ValidityViewModel>();
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<NumericIntegerQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
             EventRegistry = new Mock<ILiteEventRegistry>();
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
         }
 
-        protected static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
+        protected static Identity questionIdentity = Create.Other.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
 
         protected static NavigationState navigationState;
 

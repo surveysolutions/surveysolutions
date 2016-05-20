@@ -19,20 +19,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.InterviewView(prefilledGpsQuestionId);
+            dashboardItem = Create.Other.InterviewView(prefilledGpsQuestionId);
 
             @event = Create.Event
                 .InterviewSynchronized(
-                    Create.InterviewSynchronizationDto(
+                    Create.Other.InterviewSynchronizationDto(
                         questionnaireId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                         questionnaireVersion: 33,
-                        answers: new[] { Create.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
+                        answers: new[] { Create.Other.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
             var questionnaire = 
-                    Create.QuestionnaireDocumentWithOneChapter(
-                        Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+                    Create.Other.QuestionnaireDocumentWithOneChapter(
+                        Create.Other.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
+            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 

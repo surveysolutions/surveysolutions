@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                     eventSourceId: interviewId);
 
             var questionnaire = 
-                    Create.QuestionnaireDocumentWithOneChapter(
-                        Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+                    Create.Other.QuestionnaireDocumentWithOneChapter(
+                        Create.Other.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
+            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 

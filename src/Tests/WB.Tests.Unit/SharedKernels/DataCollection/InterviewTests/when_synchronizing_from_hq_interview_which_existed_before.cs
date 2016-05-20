@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
-        Because of = () => exception = Catch.Only<InterviewException>(() => interview.SynchronizeInterviewFromHeadquarters(interview.EventSourceId, Guid.NewGuid(), Guid.NewGuid(), Create.InterviewSynchronizationDto(), DateTime.Now));
+        Because of = () => exception = Catch.Only<InterviewException>(() => interview.SynchronizeInterviewFromHeadquarters(interview.EventSourceId, Guid.NewGuid(), Guid.NewGuid(), Create.Other.InterviewSynchronizationDto(), DateTime.Now));
 
         It should_throw_InterviewException = () => exception.ShouldNotBeNull();
 

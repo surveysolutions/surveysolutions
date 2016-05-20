@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.QuestionnaireFeedDenormaliz
 
             writer = Substitute.For<IReadSideRepositoryWriter<QuestionnaireFeedEntry>>();
 
-            denormalizer = Create.QuestionnaireFeedDenormalizer(writer);
+            denormalizer = Create.Other.QuestionnaireFeedDenormalizer(writer);
         };
 
         Because of = () => denormalizer.Handle(templateImportedEvent);

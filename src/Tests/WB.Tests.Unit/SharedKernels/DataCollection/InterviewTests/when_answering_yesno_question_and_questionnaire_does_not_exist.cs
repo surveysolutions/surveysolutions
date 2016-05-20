@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var repositoryWithoutQuestionnaire = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == null as IQuestionnaire);
 
-            interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
+            interview = Create.Other.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 
             interview.Apply(Create.Event.InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion));
         };

@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     }.ToList());
 
             iInterviewSynchronizationDto =
-                Create.InterviewSynchronizationDto(status: InterviewStatus.RejectedByHeadquarters,
+                Create.Other.InterviewSynchronizationDto(status: InterviewStatus.RejectedByHeadquarters,
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 2,
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryStorageMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
             interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary() { IsDeleted = true });
             
-            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryReader: interviewSummaryStorageMock.Object,
+            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(interviewSummaryRepositoryReader: interviewSummaryStorageMock.Object,
                 commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object, plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };
 

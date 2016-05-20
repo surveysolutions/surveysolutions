@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
             viewState = CreateViewWithSequenceOfInterviewData();
 
-            var identity = Create.Identity(staticTextId, new decimal[0]);
+            var identity = Create.Other.Identity(staticTextId, new decimal[0]);
 
             publishedEvent = CreatePublishableEvent(new StaticTextsEnabled(new[] {identity}));
         };

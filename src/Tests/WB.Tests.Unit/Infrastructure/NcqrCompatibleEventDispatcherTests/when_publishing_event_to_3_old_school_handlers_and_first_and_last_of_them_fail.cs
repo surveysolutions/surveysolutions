@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         Establish context = () =>
         {
-            publishableEvent = Create.PublishableEvent();
+            publishableEvent = Create.Other.PublishableEvent();
 
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
 
-            eventDispatcher = Create.NcqrCompatibleEventDispatcher();
+            eventDispatcher = Create.Other.NcqrCompatibleEventDispatcher();
             eventDispatcher.Register(Setup.FailingOldSchoolEventHandlerHavingUniqueType<int>());
             eventDispatcher.Register(secondEventHandlerMock.Object);
             eventDispatcher.Register(Setup.FailingOldSchoolEventHandlerHavingUniqueType<bool>());

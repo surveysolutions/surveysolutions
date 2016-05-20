@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         {
             downloadedQuestionnaire = new Questionnaire
             {
-                Document = Create.QuestionnaireDocumentWithAttachments(attachments: new[]
+                Document = Create.Other.QuestionnaireDocumentWithAttachments(attachments: new[]
                 {
-                    Create.Attachment("1"),
-                    Create.Attachment("5"),
-                    Create.Attachment("2"),
+                    Create.Other.Attachment("1"),
+                    Create.Other.Attachment("5"),
+                    Create.Other.Attachment("2"),
                 }),
                 Assembly = "assembly"
             };
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 .Returns(Task.FromResult(downloadedQuestionnaire));
             mockOfDesignerApiService
                 .Setup(_ => _.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(Create.Enumerator_AttachmentContent("1")));
+                .Returns(Task.FromResult(Create.Other.Enumerator_AttachmentContent("1")));
             mockOfDesignerApiService
                 .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(Create.Enumerator_AttachmentContent("2")));
+                .Returns(Task.FromResult(Create.Other.Enumerator_AttachmentContent("2")));
 
 
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,

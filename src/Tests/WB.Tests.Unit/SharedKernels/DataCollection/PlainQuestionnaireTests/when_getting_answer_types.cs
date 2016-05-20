@@ -14,23 +14,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.SingleQuestion(id: singleOptionQuestionId),
-                Create.SingleQuestion(id: singleOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
-                Create.SingleQuestion(id: singleOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
-                Create.MultyOptionsQuestion(id: multiOptionQuestionId),
-                Create.YesNoQuestion(questionId:multiOptionYesNoQuestionId),
-                Create.MultyOptionsQuestion(id: multiOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
-                Create.MultyOptionsQuestion(id: multiOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
-                Create.NumericIntegerQuestion(id: numericIntQuestionId),
-                Create.NumericRealQuestion(id: numericQuestionId),
-                Create.DateTimeQuestion(questionId: dateTitleQuestionId),
-                Create.GpsCoordinateQuestion(questionId: gpsQuestionId),
-                Create.TextQuestion(questionId: textQuestionId),
-                Create.TextListQuestion(questionId: textListQuestionId),
-                Create.QRBarcodeQuestion(questionId: qrQuestionId),
-                Create.MultimediaQuestion(questionId: multimediaQuestionId)
+                Create.Other.SingleQuestion(id: singleOptionQuestionId),
+                Create.Other.SingleQuestion(id: singleOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
+                Create.Other.SingleQuestion(id: singleOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
+                Create.Other.MultyOptionsQuestion(id: multiOptionQuestionId),
+                Create.Other.YesNoQuestion(questionId:multiOptionYesNoQuestionId),
+                Create.Other.MultyOptionsQuestion(id: multiOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
+                Create.Other.MultyOptionsQuestion(id: multiOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
+                Create.Other.NumericIntegerQuestion(id: numericIntQuestionId),
+                Create.Other.NumericRealQuestion(id: numericQuestionId),
+                Create.Other.DateTimeQuestion(questionId: dateTitleQuestionId),
+                Create.Other.GpsCoordinateQuestion(questionId: gpsQuestionId),
+                Create.Other.TextQuestion(questionId: textQuestionId),
+                Create.Other.TextListQuestion(questionId: textListQuestionId),
+                Create.Other.QRBarcodeQuestion(questionId: qrQuestionId),
+                Create.Other.MultimediaQuestion(questionId: multimediaQuestionId)
             });
         };
 

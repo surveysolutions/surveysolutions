@@ -17,19 +17,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.InterviewView(prefilledGpsQuestionId);
+            dashboardItem = Create.Other.InterviewView(prefilledGpsQuestionId);
 
             @event = Create.Event
                 .InterviewSynchronized(
-                    Create.InterviewSynchronizationDto(
+                    Create.Other.InterviewSynchronizationDto(
                         questionnaireId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                         questionnaireVersion: 33,
-                        answers: new[] { Create.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: stringGpsAnswer) }))
+                        answers: new[] { Create.Other.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: stringGpsAnswer) }))
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+            var questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(Create.Other.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
                 Mock.Of<IPlainQuestionnaireRepository>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaireDocument);
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
+            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 

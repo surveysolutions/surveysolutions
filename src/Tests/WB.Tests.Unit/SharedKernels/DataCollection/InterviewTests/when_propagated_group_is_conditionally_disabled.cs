@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true);
 
-            var enablementChanges = Create.EnablementChanges(
-                groupsToBeDisabled: new List<Identity> { Create.Identity(propagatedGroupId, Empty.RosterVector) });
+            var enablementChanges = Create.Other.EnablementChanges(
+                groupsToBeDisabled: new List<Identity> { Create.Other.Identity(propagatedGroupId, Empty.RosterVector) });
 
             Setup.SelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(questionnaireId, _
                 => _.ProcessEnablementConditions() == enablementChanges);

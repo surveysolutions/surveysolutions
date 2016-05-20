@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
     {
         Establish context = () =>
         {
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
         };
 
         Because of = () =>

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 StataExportCaption = questionVarName,
                 Answers = new List<Answer>
                 {
-                    Create.Answer("foo", 3m)
+                    Create.Other.Answer("foo", 3m)
                 }
             };
         };

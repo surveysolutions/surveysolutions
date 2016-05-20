@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Infrastructure
             var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
-                new List<UncommittedEvent> { Create.UncommittedEvent(
+                new List<UncommittedEvent> { Create.Other.UncommittedEvent(
                     eventSourceId, Create.Event.StaticTextUpdated()) }));
 
 
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.Infrastructure
 
             for (int i = 1; i <= 301; i++)
             {
-                uncommittedEvents.Add(Create.UncommittedEvent(eventSourceId,
+                uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
                     Create.Event.StaticTextUpdated(text: "text " + i),
                     sequence: i));
             }
@@ -91,12 +91,12 @@ namespace WB.Tests.Unit.Infrastructure
             var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
-                new List<UncommittedEvent> { Create.UncommittedEvent(
+                new List<UncommittedEvent> { Create.Other.UncommittedEvent(
                     eventSourceId, Create.Event.StaticTextUpdated(), sequence: 1) }));
 
 
             var duplicateSequeceStream = new UncommittedEventStream(null,
-                new List<UncommittedEvent> { Create.UncommittedEvent(
+                new List<UncommittedEvent> { Create.Other.UncommittedEvent(
                     eventSourceId, Create.Event.StaticTextUpdated(), sequence: nextVersion) });
 
             var exception = Assert.Throws<InvalidOperationException>(() => sqliteEventStorage.Store(duplicateSequeceStream));
@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.Infrastructure
 
             for (int i = 1; i <= 20; i++)
             {
-                uncommittedEvents.Add(Create.UncommittedEvent(eventSourceId,
+                uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
                     Create.Event.StaticTextUpdated(text: "text " + i),
                     sequence: i));
             }

@@ -37,14 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 }.AsEnumerable()
                 && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
-            viemModel = Create.EnumerationStageViewModel(
+            viemModel = Create.Other.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
                 interviewViewModelFactory: interviewViewModelFactory,
                 interviewRepository: interviewRepository,
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
             var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
-            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
+            viemModel.Init(interviewId, Create.Other.NavigationState(), groupId, null);
         };
 
         Because of = () =>
@@ -64,9 +64,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 .ShouldContain(disabledAndNotHideIfDisabledQuestion);
 
         private static EnumerationStageViewModel viemModel;
-        private static Identity enabledQuestion = Create.Identity("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", RosterVector.Empty);
-        private static Identity disabledAndHideIfDisabledQuestion = Create.Identity("DDDDDDDDDDDDDDDDD111111111111111", RosterVector.Empty);
-        private static Identity disabledAndNotHideIfDisabledQuestion = Create.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
+        private static Identity enabledQuestion = Create.Other.Identity("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", RosterVector.Empty);
+        private static Identity disabledAndHideIfDisabledQuestion = Create.Other.Identity("DDDDDDDDDDDDDDDDD111111111111111", RosterVector.Empty);
+        private static Identity disabledAndNotHideIfDisabledQuestion = Create.Other.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 99);
         private static string interviewId = "11111111111111111111111111111111";
     }

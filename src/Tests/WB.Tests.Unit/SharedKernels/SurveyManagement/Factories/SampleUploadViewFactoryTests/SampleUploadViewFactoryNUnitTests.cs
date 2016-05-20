@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var questionnaireId = Guid.NewGuid();
 
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
-            questionnaireStorage.Store(Create.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
+            questionnaireStorage.Store(Create.Other.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
 
             var sampleUploadViewFactory =
                 this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage);
@@ -69,8 +69,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
             var questionnaireExportStructureStorage = new InMemoryPlainStorageAccessor<QuestionnaireExportStructure>();
 
-            questionnaireStorage.Store(Create.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
-            (questionnaireExportStructureStorage).Store(Create.QuestionnaireExportStructure(), new QuestionnaireIdentity(questionnaireId, 1));
+            questionnaireStorage.Store(Create.Other.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
+            (questionnaireExportStructureStorage).Store(Create.Other.QuestionnaireExportStructure(), new QuestionnaireIdentity(questionnaireId, 1));
 
             var sampleUploadViewFactory =
                 this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage);
@@ -89,18 +89,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
 
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
 
-            var prefilledTxtQuestion = Create.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
+            var prefilledTxtQuestion = Create.Other.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
 
             questionnaireStorage
-                .Store(Create.QuestionnaireBrowseItem(
-                    Create.QuestionnaireDocument(children:
-                    new IComposite[] { prefilledTxtQuestion, Create.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1).ToString());
+                .Store(Create.Other.QuestionnaireBrowseItem(
+                    Create.Other.QuestionnaireDocument(children:
+                    new IComposite[] { prefilledTxtQuestion, Create.Other.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1).ToString());
 
-            var exportStructure = Create.QuestionnaireExportStructure();
-            var headerStructure = Create.HeaderStructureForLevel();
+            var exportStructure = Create.Other.QuestionnaireExportStructure();
+            var headerStructure = Create.Other.HeaderStructureForLevel();
             exportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructure);
             headerStructure.HeaderItems.Add(prefilledTxtQuestion.PublicKey,
-                Create.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
+                Create.Other.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
                     variableName: prefiledQuestionVarName));
 
             var sampleUploadViewFactory =
