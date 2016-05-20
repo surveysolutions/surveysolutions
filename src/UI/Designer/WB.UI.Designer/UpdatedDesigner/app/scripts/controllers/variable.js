@@ -76,6 +76,13 @@
                     });
             };
 
+            $scope.$on('verifing', function (scope, params) {
+                if ($scope.variableForm.$dirty)
+                    $scope.saveVariable(function () {
+                        $scope.variableForm.$setPristine();
+                    });
+            });
+
             loadVariable();
         }
     );
