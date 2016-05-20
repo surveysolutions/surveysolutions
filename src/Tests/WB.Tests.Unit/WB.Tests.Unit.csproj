@@ -339,6 +339,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="ChangeCurrentCulture.cs" />
+    <Compile Include="Create.Clean.cs" />
     <Compile Include="CreateViewModels.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
@@ -380,7 +381,7 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_remotly_and_user_exist_and_password_were_entered.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
-    <Compile Include="Create.Event.cs" />
+    <Compile Include="TestFactories\EventFactory.cs" />
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="GenericSubdomains\Utils\ProgressAggregator\when_reporting_progress_from_two_progresses.cs" />
     <Compile Include="Infrastructure\SqliteEventStoreTests.cs" />
@@ -1497,6 +1498,8 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
     <Compile Include="TestFactories\CommandFactory.cs" />
+    <Compile Include="TestFactories\DesignerEventFactory.cs" />
+    <Compile Include="TestFactories\PublishedEventFactory.cs" />
     <Compile Include="TestPlainStorage.cs" />
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>

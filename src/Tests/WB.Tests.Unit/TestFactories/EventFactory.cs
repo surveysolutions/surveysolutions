@@ -35,20 +35,20 @@ using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.TestFactories
 {
-    internal static partial class Create
+    internal class EventFactory
     {
-        internal static class Event
-        {
-            public static ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
+        public readonly PublishedEventFactory Published = new PublishedEventFactory();
+        public readonly DesignerEventFactory Designer = new DesignerEventFactory();
+
+            public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
             {
                 return new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
             }
 
-            public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
+            public NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
             {
                 return new NewGroupAdded
                 {
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
+            public NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
             {
                 return NewQuestionAdded(
                     publicKey: questionId,
@@ -83,7 +83,7 @@ namespace WB.Tests.Unit
                     isInteger: null);
             }
 
-            public static NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
+            public NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
              bool? isInteger = null,
              string stataExportCaption = null,
              string questionText = null,
@@ -114,47 +114,47 @@ namespace WB.Tests.Unit
                     questionType:QuestionType.Numeric);
             }
 
-            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
+            public AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
                 => Create.Event.AnswersDeclaredInvalid(questions: new[]
                 {
                     new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
                 });
 
-            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+            public AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
                 => new AnswersDeclaredInvalid(questions);
 
-            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
+            public AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
                 => new AnswersDeclaredInvalid(failedConditions);
 
-            public static AnswersDeclaredValid AnswersDeclaredValid(Identity[] questions)
+            public AnswersDeclaredValid AnswersDeclaredValid(Identity[] questions)
                 => new AnswersDeclaredValid(questions);
 
-            public static AnswersDeclaredValid AnswersDeclaredValid()
+            public AnswersDeclaredValid AnswersDeclaredValid()
                 => new AnswersDeclaredValid(new Identity[]{});
 
-            public static AnswersRemoved AnswersRemoved(params Identity[] questions)
+            public AnswersRemoved AnswersRemoved(params Identity[] questions)
                 => new AnswersRemoved(questions);
 
-            public static AnswerRemoved AnswerRemoved(Identity question)
+            public AnswerRemoved AnswerRemoved(Identity question)
                 => new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
 
-            public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
+            public ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
                 => new ExpressionsMigratedToCSharp();
 
-            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+            public GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
             {
                 return new GeoLocationQuestionAnswered(
                     Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
             }
 
-            public static GroupBecameARoster GroupBecameRoster(Guid rosterId)
+            public GroupBecameARoster GroupBecameRoster(Guid rosterId)
             {
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static GroupsDisabled GroupsDisabled(Identity[] groups) => new GroupsDisabled(groups);
+            public GroupsDisabled GroupsDisabled(Identity[] groups) => new GroupsDisabled(groups);
 
-            public static GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
+            public GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
                 {
@@ -163,9 +163,9 @@ namespace WB.Tests.Unit
                 return new GroupsDisabled(identities);
             }
 
-            public static GroupsEnabled GroupsEnabled(Identity[] groups) => new GroupsEnabled(groups);
+            public GroupsEnabled GroupsEnabled(Identity[] groups) => new GroupsEnabled(groups);
 
-            public static GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
+            public GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
                 {
@@ -174,37 +174,37 @@ namespace WB.Tests.Unit
                 return new GroupsEnabled(identities);
             }
 
-            public static InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
                 => new InterviewCreated(
                     userId: Guid.NewGuid(),
                     questionnaireId: questionnaireId ?? Guid.NewGuid(),
                     questionnaireVersion: questionnaireVersion ?? 7);
 
-            public static InterviewDeleted InterviewDeleted()
+            public InterviewDeleted InterviewDeleted()
                 => new InterviewDeleted(userId: Guid.NewGuid());
 
-            public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
+            public IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
             {
                 return new InterviewerAssigned(userId, interviewerId, DateTime.Now)
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
 
-            public static InterviewCompleted InteviewCompleted()
+            public InterviewCompleted InteviewCompleted()
                 => new InterviewCompleted(
                     Guid.NewGuid(),
                     DateTime.UtcNow,
                     "comment");
 
-            public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
                 => new InterviewFromPreloadedDataCreated(
                     Guid.NewGuid(),
                     questionnaireId ?? Guid.NewGuid(),
                     questionnaireVersion ?? 1);
 
-            public static InterviewHardDeleted InterviewHardDeleted()
+            public InterviewHardDeleted InterviewHardDeleted()
                 => new InterviewHardDeleted(userId: Guid.NewGuid());
 
-            public static InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             {
                 return new InterviewOnClientCreated(
                     Guid.NewGuid(),
@@ -212,30 +212,30 @@ namespace WB.Tests.Unit
                     questionnaireVersion ?? 1);
             }
 
-            public static InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
+            public InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
                 => new InterviewReceivedByInterviewer();
 
-            public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
+            public InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
                 => new InterviewReceivedBySupervisor();
 
-            public static InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
+            public InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
                 => new InterviewStatusChanged(status, comment);
 
-            public static VariablesDisabled VariablesDisabled(params Identity[] identites)
+            public VariablesDisabled VariablesDisabled(params Identity[] identites)
                 => new VariablesDisabled(identites);
 
-            public static VariablesEnabled VariablesEnabled(params Identity[] identites)
+            public VariablesEnabled VariablesEnabled(params Identity[] identites)
              => new VariablesEnabled(identites);
 
-            public static VariablesChanged VariablesChanged(params ChangedVariable[] changedVariables)
+            public VariablesChanged VariablesChanged(params ChangedVariable[] changedVariables)
              => new VariablesChanged(changedVariables);
 
-            public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
+            public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
                 return new InterviewSynchronized(synchronizationDto);
             }
 
-            public static IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
+            public IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
             {
                 return new LookupTableAdded
                 {
@@ -243,7 +243,7 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
+            public IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
             {
                 return new LookupTableDeleted
                 {
@@ -251,7 +251,7 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
+            public IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
             {
                 return new LookupTableUpdated
                 {
@@ -261,19 +261,19 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static IPublishedEvent<MacroAdded> MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
+            public IPublishedEvent<MacroAdded> MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
             {
                 return new MacroAdded(entityId, responsibleId ?? Guid.NewGuid())
                     .ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static IPublishedEvent<MacroDeleted> MacroDeleted(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
+            public IPublishedEvent<MacroDeleted> MacroDeleted(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
             {
                 return new MacroDeleted(entityId, responsibleId ?? Guid.NewGuid())
                     .ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static IPublishedEvent<MacroUpdated> MacroUpdated(Guid questionnaireId, Guid entityId, 
+            public IPublishedEvent<MacroUpdated> MacroUpdated(Guid questionnaireId, Guid entityId, 
                 string name, string content, string description,
                 Guid? responsibleId = null)
             {
@@ -281,7 +281,7 @@ namespace WB.Tests.Unit
                     .ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
-            public static MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(Guid? questionId = null,
+            public MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(Guid? questionId = null,
                 decimal[] rosterVector = null,
                 decimal[][] selectedRosterVectors = null)
             {
@@ -292,7 +292,7 @@ namespace WB.Tests.Unit
                     selectedRosterVectors ?? new decimal[][]{});
             }
 
-            public static NewQuestionAdded NewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            public NewQuestionAdded NewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
@@ -329,7 +329,7 @@ namespace WB.Tests.Unit
                     validationConditions: new List<ValidationCondition>());
             }
 
-            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
+            public IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
                 string name, 
                 string password, 
                 string email,
@@ -348,7 +348,7 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static NumericQuestionChanged NumericQuestionChanged(
+            public NumericQuestionChanged NumericQuestionChanged(
                 Guid publicKey,
                 bool? isInteger = null,
                 string stataExportCaption = null,
@@ -383,7 +383,7 @@ namespace WB.Tests.Unit
                     validationConditions: new List<ValidationCondition>());
             }
 
-            public static NumericQuestionCloned NumericQuestionCloned(Guid publicKey,
+            public NumericQuestionCloned NumericQuestionCloned(Guid publicKey,
                 Guid sourceQuestionId,
                 Guid groupPublicKey,
                 bool? isInteger = null,
@@ -426,7 +426,7 @@ namespace WB.Tests.Unit
                     validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
-            public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
+            public QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
             {
                 return QuestionChanged(
                     publicKey : questionId,
@@ -435,7 +435,7 @@ namespace WB.Tests.Unit
                 );
             }
 
-            public static QuestionChanged QuestionChanged(Guid publicKey, Guid targetGroupKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            public QuestionChanged QuestionChanged(Guid publicKey, Guid targetGroupKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
@@ -475,7 +475,7 @@ namespace WB.Tests.Unit
                 linkedFilterExpression: null);
             }
 
-            public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            public QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
@@ -515,7 +515,7 @@ namespace WB.Tests.Unit
             }
 
 
-            public static QuestionCloned QuestionCloned(Guid publicKey, Guid sourceQuestionId, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            public QuestionCloned QuestionCloned(Guid publicKey, Guid sourceQuestionId, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, string variableLabel = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
@@ -560,7 +560,7 @@ namespace WB.Tests.Unit
                 linkedFilterExpression: null);
             }
 
-            public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
+            public IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
             {
                 var questionnaireDeleted = new QuestionnaireDeleted
                 {
@@ -570,23 +570,23 @@ namespace WB.Tests.Unit
                 return questionnaireDeleted;
             }
 
-            public static QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
+            public QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
 
-            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
+            public QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
                 => Create.Event.QuestionsDisabled(new[]
                 {
                     Create.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
                 });
 
-            public static QuestionsEnabled QuestionsEnabled(Identity[] questions) => new QuestionsEnabled(questions);
+            public QuestionsEnabled QuestionsEnabled(Identity[] questions) => new QuestionsEnabled(questions);
 
-            public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
+            public QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
                 => Create.Event.QuestionsEnabled(new[]
                 {
                     new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
                 });
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
+            public RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {
                 return new RosterChanged(Guid.NewGuid(), rosterId)
                 {
@@ -597,7 +597,7 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
+            public RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
             {
                 AddedRosterInstance[] instances =
                     fullRosterVectors
@@ -611,7 +611,7 @@ namespace WB.Tests.Unit
                 return new RosterInstancesAdded(instances);
             }
 
-            public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params RosterVector[] fullRosterVectors)
+            public RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params RosterVector[] fullRosterVectors)
             {
                 AddedRosterInstance[] instances =
                     fullRosterVectors
@@ -625,7 +625,7 @@ namespace WB.Tests.Unit
                 return new RosterInstancesAdded(instances);
             }
 
-            public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
+            public RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
                 decimal[] rosterVector = null,
                 decimal? rosterInstanceId = null,
                 int? sortIndex = null)
@@ -636,7 +636,7 @@ namespace WB.Tests.Unit
                 });
             }
 
-            public static RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+            public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
             {
                 return new RosterInstancesRemoved(new[]
                 {
@@ -644,7 +644,7 @@ namespace WB.Tests.Unit
                 });
             }
 
-            public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
+            public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
                 decimal[] rosterVector = null,
                 string rosterTitle = null)
             {
@@ -659,12 +659,12 @@ namespace WB.Tests.Unit
                 });
             }
 
-            public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
+            public SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
             {
                 return new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
             }
 
-            public static StaticTextAdded StaticTextAdded(Guid? parentId = null, string text = null, Guid? responsibleId = null, Guid? publicKey = null)
+            public StaticTextAdded StaticTextAdded(Guid? parentId = null, string text = null, Guid? responsibleId = null, Guid? publicKey = null)
             {
                 return new StaticTextAdded(
                     publicKey.GetValueOrDefault(Guid.NewGuid()),
@@ -676,7 +676,7 @@ namespace WB.Tests.Unit
                     null);
             }
 
-            public static StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null, 
+            public StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null, 
                 Guid? responsibleId = null, Guid? publicKey = null, string enablementCondition = null, bool hideIfDisabled = false, 
                 IList<ValidationCondition> validationConditions = null)
             {
@@ -691,7 +691,7 @@ namespace WB.Tests.Unit
             }
 
 
-            public static StaticTextCloned StaticTextCloned(Guid? parentId = null, string text = null, string attachment = null,
+            public StaticTextCloned StaticTextCloned(Guid? parentId = null, string text = null, string attachment = null,
                 Guid? responsibleId = null, Guid? publicKey = null, Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null,
                 string enablementCondition = null, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null, int targetIndex = 0)
             {
@@ -709,7 +709,7 @@ namespace WB.Tests.Unit
                     validationConditions);
             }
 
-            public static TextQuestionAnswered TextQuestionAnswered(
+            public TextQuestionAnswered TextQuestionAnswered(
                 Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
                 => new TextQuestionAnswered(
                     Guid.NewGuid(),
@@ -718,7 +718,7 @@ namespace WB.Tests.Unit
                     DateTime.Now,
                     answer ?? "answer");
 
-            public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
+            public NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
                 return NumericQuestionChanged
                 (
@@ -730,7 +730,7 @@ namespace WB.Tests.Unit
                 );
             }
 
-            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email, Guid? eventId = null)
+            public IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email, Guid? eventId = null)
             {
                 return new UserChanged
                 {
@@ -739,7 +739,7 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLinkedToDevice> UserLinkedToDevice(Guid userId, string deviceId, DateTime eventTimeStamp)
+            public IPublishedEvent<UserLinkedToDevice> UserLinkedToDevice(Guid userId, string deviceId, DateTime eventTimeStamp)
             {
                 return new UserLinkedToDevice
                 {
@@ -747,35 +747,35 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
             }
 
-            public static IPublishedEvent<UserLocked> UserLocked(Guid userId, Guid? eventId = null)
+            public IPublishedEvent<UserLocked> UserLocked(Guid userId, Guid? eventId = null)
             {
                 return new UserLocked
                 {
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId, Guid? eventId = null)
+            public IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserLockedBySupervisor
                 {
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId, Guid? eventId = null)
+            public IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlocked
                 {
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId, Guid? eventId = null)
+            public IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlockedBySupervisor
                 {
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static YesNoQuestionAnswered YesNoQuestionAnswered(Guid? questionId = null, AnsweredYesNoOption[] answeredOptions = null)
+            public YesNoQuestionAnswered YesNoQuestionAnswered(Guid? questionId = null, AnsweredYesNoOption[] answeredOptions = null)
             {
                 return new YesNoQuestionAnswered(
                     userId: Guid.NewGuid(),
@@ -785,44 +785,22 @@ namespace WB.Tests.Unit
                     answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
             }
 
-            public static class Published
-            {
-                public static IPublishedEvent<InterviewDeleted> InterviewDeleted(Guid? interviewId = null)
-                    => Create.Event.InterviewDeleted().ToPublishedEvent(eventSourceId: interviewId);
-
-                public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid? interviewId = null)
-                    => Create.Event.InterviewHardDeleted().ToPublishedEvent(eventSourceId: interviewId);
-
-
-                public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
-                    Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
-                    => Create.Event.InterviewStatusChanged(status, comment).ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
-            }
-
-            internal static class Designer
-            {
-                public static TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
-                {
-                    return new TemplateImported { Source = questionnaireDocument };
-                }
-            }
-
-            public static LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] options = null)
+            public LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] options = null)
             {
                 return new LinkedOptionsChanged(options ?? new ChangedLinkedOptions[] {});
             }
 
-            public static StaticTextsEnabled StaticTextsEnabled(params Identity[] ids)
+            public StaticTextsEnabled StaticTextsEnabled(params Identity[] ids)
             {
                 return new StaticTextsEnabled(ids);
             }
 
-            public static StaticTextsDisabled StaticTextsDisabled(params Identity[] ids)
+            public StaticTextsDisabled StaticTextsDisabled(params Identity[] ids)
             {
                 return new StaticTextsDisabled(ids);
             }
 
-            public static StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTextIdentity)
+            public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTextIdentity)
             {
                 List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedConditions = staticTextIdentity.Select(x => 
                     new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
@@ -830,21 +808,20 @@ namespace WB.Tests.Unit
                 return new StaticTextsDeclaredInvalid(failedConditions);
             }
 
-            public static StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTextIdentity)
+            public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTextIdentity)
             {
                 return new StaticTextsDeclaredValid(staticTextIdentity);
             }
 
-            public static ChangedVariable ChangedVariable(Identity variableIdentity, object value)
+            public ChangedVariable ChangedVariable(Identity variableIdentity, object value)
             {
                 return new ChangedVariable(variableIdentity, value);
             }
 
-            public static SubstitutionTitlesChanged SubstitutionTitlesChanged(
+            public SubstitutionTitlesChanged SubstitutionTitlesChanged(
                 Identity[] questions = null, Identity[] staticTexts = null)
                 => new SubstitutionTitlesChanged(
                     questions ?? new Identity[] {},
                     staticTexts ?? new Identity[] {});
         }
-    }
 }
