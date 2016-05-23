@@ -831,5 +831,30 @@ namespace WB.Tests.Integration
         {
             return new ChangedVariable(Create.Identity(variableId ?? Guid.NewGuid(), vector?? new RosterVector(new decimal[0])), value);
         }
+
+        public static InterviewSummary InterviewSummary(
+         Guid? interviewId = null,
+         Guid? questionnaireId = null,
+         long? questionnaireVersion = null,
+         InterviewStatus? status = null,
+         Guid? responsibleId = null,
+         Guid? teamLeadId = null,
+         string responsibleName = null,
+         string teamLeadName = null,
+         UserRoles role = UserRoles.Operator)
+        {
+            return new InterviewSummary()
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Status = status.GetValueOrDefault(),
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
+                TeamLeadId = teamLeadId.GetValueOrDefault(),
+                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                ResponsibleRole = role
+            };
+        }
     }
 }

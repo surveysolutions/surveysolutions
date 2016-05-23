@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatusesReportTests
+namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
 {
     internal class when_two_responsibles_and_each_status_has_one_interview : SupervisorTeamsAndStatusesReportContext
     {
@@ -21,26 +22,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.Other.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
                                         
-                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
             };
 
-            var repository = Stub.ReadSideRepository<InterviewSummary>();
-            interviews.ForEach(x => repository.Store(x, Guid.NewGuid().FormatGuid()));
+            var repository = CreateInterviewSummaryRepository();
+            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
             reportFactory = CreateTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel() {Order = "CompletedCount ASC" }));
 
         It should_return_row_per_responsible = () => report.TotalCount.ShouldEqual(2);
 
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
             firstLine.RejectedByHeadquartersCount.ShouldEqual(1);
         };
 
-        It should_count_3_interviews_for_second_responsible = () => report.Items.Second().CompletedCount.ShouldEqual(3);
+        It should_count_3_interviews_for_second_responsible = () => report.Items.ToArray()[1].CompletedCount.ShouldEqual(3);
 
         static SupervisorTeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;

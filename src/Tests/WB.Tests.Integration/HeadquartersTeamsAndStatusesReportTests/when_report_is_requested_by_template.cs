@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
+namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 {
     internal class when_report_is_requested_by_template_with_version : HeadquartersTeamsAndStatusesReportContext
     {
@@ -21,23 +22,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.Other.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: 2, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: 2, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version, status: InterviewStatus.Completed),
             };
 
-            var repository = Stub.ReadSideRepository<InterviewSummary>();
-            interviews.ForEach(x => repository.Store(x, Guid.NewGuid().FormatGuid()));
+            var repository = CreateInterviewSummaryRepository();
+            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
             reportFactory = CreateTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.Load(new TeamsAndStatusesInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
-        });
+        }));
 
         It should_count_statuses_by_questionnaire = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
