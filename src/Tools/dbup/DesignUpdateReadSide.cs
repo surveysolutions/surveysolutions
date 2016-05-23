@@ -27,9 +27,6 @@ namespace dbup
             cfg.AddDeserializedMapping(MappingsCollector.GetReadSideForDesigner(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
-            SchemaExport export = new SchemaExport(cfg);
-            export.SetOutputFile("designer-init");
-            export.Execute(false, false, false);
 
             await DbMarker.MarkAsZeroMigrationDone(this.ConnectionString);
         }
