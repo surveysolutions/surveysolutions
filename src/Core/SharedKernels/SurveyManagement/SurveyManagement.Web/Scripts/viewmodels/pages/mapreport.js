@@ -235,7 +235,7 @@
                     for (var j = 0; j < mapPointAnswers.length; j++) {
                         var points = mapPointAnswers[j].split(';');
                         var marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
+                            position: new google.maps.LatLng(parseFloat(points[0].replace(',', '.')) * 1, parseFloat(points[1].replace(',', '.')) * 1)
                         });
                         marker.interviewId = mapPoint.Id;
                         
