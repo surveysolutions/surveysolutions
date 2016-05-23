@@ -387,10 +387,6 @@
       <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
-      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
-      <Name>WB.Core.BoundedContexts.Supervisor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
       <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
       <Name>WB.Core.BoundedContexts.Tester</Name>

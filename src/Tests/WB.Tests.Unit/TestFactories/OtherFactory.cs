@@ -19,7 +19,6 @@ using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NSubstitute;
-using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -36,8 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Supervisor;
-using WB.Core.BoundedContexts.Supervisor.Synchronization;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -80,18 +78,17 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Models;
-using WB.UI.Supervisor.Controllers;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
-using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
@@ -154,7 +151,17 @@ namespace WB.Tests.Unit.TestFactories
 
         public AnswerNotifier AnswerNotifier()
         {
-            return new AnswerNotifier(Create.Service.LiteEventRegistry());
+            return new AnswerNotifier(Create.Other.LiteEventRegistry());
+        }
+
+        public IAnswerToStringService AnswerToStringService()
+        {
+            return new AnswerToStringService();
+        }
+
+        public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
+        {
+            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
         }
 
         public AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
@@ -560,51 +567,11 @@ namespace WB.Tests.Unit.TestFactories
             return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
         }
 
-        public HeadquartersPullContext HeadquartersPullContext()
+        public HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
         {
-            return new HeadquartersPullContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
-        }
-
-        public HeadquartersPushContext HeadquartersPushContext()
-        {
-            return new HeadquartersPushContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
-        }
-
-        public IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
-            Uri usersChangedFeedUri = null,
-            Uri interviewsFeedUri = null,
-            string questionnaireDetailsEndpoint = "",
-            string questionnaireAssemblyEndpoint = "",
-            string accessToken = "",
-            Uri interviewsPushUrl = null)
-        {
-            var headquartersSettingsMock = new Mock<IHeadquartersSettings>();
-            headquartersSettingsMock.SetupGet(x => x.BaseHqUrl).Returns(loginServiceUri ?? new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.UserChangedFeedUrl).Returns(usersChangedFeedUri ?? new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.InterviewsFeedUrl).Returns(interviewsFeedUri ?? new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.QuestionnaireDetailsEndpoint).Returns(questionnaireDetailsEndpoint);
-            headquartersSettingsMock.SetupGet(x => x.QuestionnaireAssemblyEndpoint).Returns(questionnaireAssemblyEndpoint);
-            headquartersSettingsMock.SetupGet(x => x.AccessToken).Returns(accessToken);
-            headquartersSettingsMock.SetupGet(x => x.InterviewsPushUrl).Returns(interviewsPushUrl ?? new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.FilePushUrl).Returns(new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.QuestionnaireChangedFeedUrl).Returns(new Uri("http://localhost/"));
-            headquartersSettingsMock.SetupGet(x => x.LoginServiceEndpointUrl).Returns(new Uri("http://localhost/"));
-            return headquartersSettingsMock.Object;
-        }
-
-        public HQSyncController HQSyncController(
-            ISynchronizer synchronizer = null,
-            IGlobalInfoProvider globalInfoProvider = null,
-            HeadquartersPushContext headquartersPushContext = null)
-        {
-            return new HQSyncController(
-                Mock.Of<ICommandService>(),
-                Mock.Of<ILogger>(),
-                HeadquartersPullContext(),
-                headquartersPushContext ?? HeadquartersPushContext(),
-                Mock.Of<IScheduler>(),
-                synchronizer ?? Mock.Of<ISynchronizer>(),
-                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>());
+            return new HybridEventBus(
+                liteEventBus ?? Mock.Of<ILiteEventBus>(),
+                cqrsEventBus ?? Mock.Of<IEventBus>());
         }
 
         public Identity Identity(string id, RosterVector rosterVector)
@@ -802,6 +769,12 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
 
+        public InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
+        {
+            return new InterviewReferencesDenormalizer(
+                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+        }
+
         public IPublishedEvent<InterviewRejectedByHQ> InterviewRejectedByHQEvent(Guid? interviewId = null, string userId = null, string comment = null)
         {
             return ToPublishedEvent(new InterviewRejectedByHQ(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
@@ -821,6 +794,13 @@ namespace WB.Tests.Unit.TestFactories
             string origin = null)
         {
             return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)), origin: origin, eventSourceId: interviewId);
+        }
+
+        public InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
+            IReadSideKeyValueStorage<InterviewData> interviewsRepository = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepository = null)
+        {
+            return new InterviewsFeedDenormalizer(feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
+                interviewsRepository ?? Substitute.For<IReadSideKeyValueStorage<InterviewData>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         public InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null, Guid? interviewerId=null)
@@ -1398,8 +1378,8 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.Service.SubstitutionService(),
-                Create.Service.KeywordsProvider(),
+                Create.Other.SubstitutionService(),
+                Create.Other.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>());
         }
