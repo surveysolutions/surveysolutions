@@ -377,7 +377,7 @@ angular.module('designerApp')
                 $rootScope.$on('variablesChanged', function() {
                     $scope.aceEditorUpdateMode(editor);
                 });
-
+                
             };
 
             $scope.getVariables = function () {
@@ -388,6 +388,19 @@ angular.module('designerApp')
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
+
+                    var variablesCompletor =
+                    {
+                        getCompletions: function (editor, session, pos, prefix, callback) {
+                            var i = 0;
+                            callback(null, $scope.getVariables().sort().reverse().map(function (variable) {
+                                    return { name: variable, value: variable, score: i++, meta: "variable" }
+                                }));
+                        }
+                    };
+
+                    var lang_tool = ace.require("ace/ext/language_tools");
+                    lang_tool.setCompleters([variablesCompletor]);
                 }
             }
            
