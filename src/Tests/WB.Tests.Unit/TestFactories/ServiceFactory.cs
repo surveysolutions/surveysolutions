@@ -13,15 +13,6 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Supervisor;
-using WB.Core.BoundedContexts.Supervisor.Interviews;
-using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
-using WB.Core.BoundedContexts.Supervisor.Synchronization;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.BoundedContexts.Supervisor.Users;
-using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -70,11 +61,6 @@ namespace WB.Tests.Unit.TestFactories
         public IAnswerToStringService AnswerToStringService()
             => new AnswerToStringService();
 
-        public AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
-            => new AtomFeedReader(
-                messageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
-                settings ?? Mock.Of<IHeadquartersSettings>());
-
         public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
             => new AttachmentContentService(
                 attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
@@ -107,20 +93,6 @@ namespace WB.Tests.Unit.TestFactories
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
 
-        public HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null,
-            Func<HttpMessageHandler> messageHandler = null,
-            ILogger logger = null,
-            ICommandService commandService = null,
-            IHeadquartersSettings headquartersSettings = null,
-            IPasswordHasher passwordHasher = null)
-            => new HeadquartersLoginService(
-                logger ?? Substitute.For<ILogger>(),
-                commandService ?? Substitute.For<ICommandService>(),
-                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
-                headquartersSettings ?? Create.Other.HeadquartersSettings(),
-                headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>(),
-                passwordHasher: passwordHasher ?? Substitute.For<IPasswordHasher>());
-
         public HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
             => new HybridEventBus(
                 liteEventBus ?? Mock.Of<ILiteEventBus>(),
@@ -142,45 +114,6 @@ namespace WB.Tests.Unit.TestFactories
             => new InterviewsFeedDenormalizer(
                 feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
                 interviewsRepository ?? Substitute.For<IReadSideKeyValueStorage<InterviewData>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
-
-        public InterviewsSynchronizer InterviewsSynchronizer(
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader = null,
-            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader = null,
-            Func<HttpMessageHandler> httpMessageHandler = null,
-            IEventStore eventStore = null,
-            ILogger logger = null,
-            ISerializer serializer = null,
-            ICommandService commandService = null,
-            HeadquartersPushContext headquartersPushContext = null,
-            IPlainStorageAccessor<UserDocument> userDocumentStorage = null, IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
-            IHeadquartersInterviewReader headquartersInterviewReader = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
-            IArchiveUtils archiver = null)
-            => new InterviewsSynchronizer(
-                Mock.Of<IAtomFeedReader>(),
-                Create.Other.HeadquartersSettings(),
-                logger ?? Mock.Of<ILogger>(),
-                commandService ?? Mock.Of<ICommandService>(),
-                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
-                userDocumentStorage ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
-                plainQuestionnaireRepository ??
-                Mock.Of<IPlainQuestionnaireRepository>(
-                    _ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == new QuestionnaireDocument()),
-                headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
-                Create.Other.HeadquartersPullContext(),
-                headquartersPushContext ?? Create.Other.HeadquartersPushContext(),
-                eventStore ?? Mock.Of<IEventStore>(),
-                serializer ?? Mock.Of<ISerializer>(),
-                interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryReader ?? Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>(),
-                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
-                interviewSynchronizationFileStorage ??
-                Mock.Of<IInterviewSynchronizationFileStorage>(
-                    _ => _.GetImagesByInterviews() == new List<InterviewBinaryDataDescriptor>()),
-                archiver ?? Mock.Of<IArchiveUtils>(),
-                Mock.Of<IPlainTransactionManager>(),
-                Mock.Of<ITransactionManager>());
 
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
@@ -246,18 +179,6 @@ namespace WB.Tests.Unit.TestFactories
         public ISubstitutionService SubstitutionService()
             => new SubstitutionService();
 
-        public Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
-            => new Synchronizer(
-                Mock.Of<ILocalFeedStorage>(),
-                Mock.Of<IUserChangedFeedReader>(),
-                Mock.Of<ILocalUserFeedProcessor>(),
-                interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
-                Mock.Of<IQuestionnaireSynchronizer>(),
-                Mock.Of<IPlainTransactionManager>(),
-                Create.Other.HeadquartersPullContext(),
-                Create.Other.HeadquartersPushContext(),
-                Mock.Of<ILogger>());
-
         public TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
             IPlainStorageAccessor<UserDocument> usersReader = null)
@@ -277,12 +198,5 @@ namespace WB.Tests.Unit.TestFactories
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 Create.Other.ReadSideCacheSettings());
-
-        public UserChangedFeedReader UserChangedFeedReader(IHeadquartersSettings settings = null,
-            Func<HttpMessageHandler> messageHandler = null)
-            => new UserChangedFeedReader(
-                settings ?? Create.Other.HeadquartersSettings(),
-                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
-                Create.Other.HeadquartersPullContext());
     }
 }
