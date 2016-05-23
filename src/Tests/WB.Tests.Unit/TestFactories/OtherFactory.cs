@@ -22,8 +22,6 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NSubstitute;
 using Quartz;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -34,7 +32,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -72,8 +69,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -86,7 +81,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -115,7 +109,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -135,13 +128,11 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -150,12 +141,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Tests.Unit.TestFactories;
-using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
@@ -218,11 +204,6 @@ namespace WB.Tests.Unit.TestFactories
         public IAnswerToStringService AnswerToStringService()
         {
             return new AnswerToStringService();
-        }
-
-        public ArchiveUserCommad ArchiveUserCommad(Guid userId)
-        {
-            return new ArchiveUserCommad(userId);
         }
 
         public AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
@@ -343,168 +324,6 @@ namespace WB.Tests.Unit.TestFactories
                 payload ?? Mock.Of<IEvent>());
         }
 
-        public CreateInterviewCommand CreateInterviewCommand()
-        {
-            return new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now,
-                Guid.NewGuid(), 1);
-        }
-
-        public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, Guid userId, string answer = "")
-        {
-            return new AnswerTextQuestionCommand(
-                interviewId: interviewId, 
-                userId: userId, 
-                questionId: Guid.NewGuid(), 
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answer: answer);
-        }
-
-        public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
-        {
-            return new AnswerNumericIntegerQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answer: answer);
-        }
-
-        public AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
-        {
-            return new AnswerNumericRealQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answer: answer);
-        }
-
-        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
-        {
-            return new AnswerSingleOptionQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                selectedValue: answer);
-        }
-
-        public AnswerSingleOptionLinkedQuestionCommand AnswerSingleOptionLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
-        {
-            return new AnswerSingleOptionLinkedQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                selectedRosterVector: answer);
-        }
-
-        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
-        {
-            return new AnswerMultipleOptionsQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                selectedValues: answer);
-        }
-
-        public AnswerMultipleOptionsLinkedQuestionCommand AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[][] answer = null)
-        {
-            return new AnswerMultipleOptionsLinkedQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                selectedRosterVectors: answer);
-        }
-
-        public AnswerYesNoQuestion AnswerYesNoQuestion(Guid interviewId, Guid userId, IEnumerable<AnsweredYesNoOption> answer = default(IEnumerable<AnsweredYesNoOption>))
-        {
-            return new AnswerYesNoQuestion(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answeredOptions: answer);
-        }
-        
-        public AnswerDateTimeQuestionCommand AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, DateTime answer = default(DateTime))
-        {
-            return new AnswerDateTimeQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answer: answer);
-        }
-
-        public AnswerGeoLocationQuestionCommand AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, double latitude = 0, 
-            double longitude = 0, double accuracy = 0, double altitude = 0, DateTimeOffset timestamp = default(DateTimeOffset))
-        {
-            return new AnswerGeoLocationQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                longitude: longitude,
-                latitude: latitude,
-                accuracy: accuracy,
-                altitude: altitude,
-                timestamp: timestamp);
-        }
-
-        public AnswerPictureQuestionCommand AnswerPictureQuestionCommand(Guid interviewId, Guid userId, string answer = "")
-        {
-            return new AnswerPictureQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                pictureFileName: answer);
-        }
-
-        public AnswerQRBarcodeQuestionCommand AnswerQRBarcodeQuestionCommand(Guid interviewId, Guid userId, string answer = "")
-        {
-            return new AnswerQRBarcodeQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answer: answer);
-        }
-
-        public AnswerTextListQuestionCommand AnswerTextListQuestionCommand(Guid interviewId, Guid userId, Tuple<decimal, string>[] answer = null)
-        {
-            return new AnswerTextListQuestionCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: Guid.NewGuid(),
-                rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
-                answers: answer);
-        }
-
-        public CreateInterviewControllerCommand CreateInterviewControllerCommand()
-        {
-            return new CreateInterviewControllerCommand()
-            {
-                AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
-            };
-        }
-
         private QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId,
             string questionnaireTitle,
             string chapter1Id,
@@ -567,12 +386,6 @@ namespace WB.Tests.Unit.TestFactories
                     }
                 }
             };
-        }
-
-
-        public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId=null)
-        {
-            return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.Other.UserLight(supervisorId), "", ""); 
         }
 
         public CumulativeChartDenormalizer CumulativeChartDenormalizer(
@@ -2375,12 +2188,6 @@ namespace WB.Tests.Unit.TestFactories
                     createdOnClient: createdOnClient, comments: null, rejectedDateTime: null, interviewerAssignedDateTime: null));
         }
 
-        public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
-        {
-            return new SynchronizeInterviewEventsCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1,
-                new IEvent[0], InterviewStatus.Completed, true);
-        }
-
         public Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
         {
             return new Synchronizer(
@@ -2553,11 +2360,6 @@ namespace WB.Tests.Unit.TestFactories
         public IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquartersEvent(Guid? interviewId = null, string userId = null, string comment = null)
         {
             return ToPublishedEvent(new UnapprovedByHeadquarters(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
-        }
-
-        public UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
-        {
-            return new UnarchiveUserCommand(userId);
         }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, 

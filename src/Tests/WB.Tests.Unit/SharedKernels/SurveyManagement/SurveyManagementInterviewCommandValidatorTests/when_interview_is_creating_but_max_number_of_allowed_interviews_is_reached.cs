@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.Other.CreateInterviewCommand()));
+            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.Command.CreateInterviewCommand()));
 
         It should_raise_InterviewException = () =>
             exception.ShouldNotBeNull();
