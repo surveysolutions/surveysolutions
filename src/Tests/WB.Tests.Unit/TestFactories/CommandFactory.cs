@@ -20,12 +20,6 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class CommandFactory
     {
-        public AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            => new AddLookupTable(questionnaireId, lookupTableName, null, lookupTableId, responsibleId);
-
-        public AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            => new AddMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-
         public AnswerDateTimeQuestionCommand AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, DateTime answer = default(DateTime))
             => new AnswerDateTimeQuestionCommand(
                 interviewId: interviewId,
@@ -181,12 +175,6 @@ namespace WB.Tests.Unit.TestFactories
         public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId = null)
             => new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.Other.UserLight(supervisorId), "", "");
 
-        public DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
-            => new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
-
-        public DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            => new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
             long questionnaireContentVersion = 1)
@@ -210,15 +198,5 @@ namespace WB.Tests.Unit.TestFactories
 
         public UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
             => new UnarchiveUserCommand(userId);
-
-        public UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            => new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file");
-
-        public UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
-            => new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
-
-        public UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-            string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
-            => new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
     }
 }
