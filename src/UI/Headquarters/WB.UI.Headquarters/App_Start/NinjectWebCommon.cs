@@ -51,6 +51,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
@@ -164,7 +165,11 @@ namespace WB.UI.Headquarters
                 new SurveyManagementWebModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
+                new PostgresReadSideModule(
+                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    typeof(M001_InitDb).Assembly,
+                    cacheSettings, 
+                    mappingAssemblies)
             );
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();

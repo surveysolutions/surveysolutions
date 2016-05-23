@@ -20,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -30,12 +31,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
+        private readonly Assembly migrationsAssembly;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings, IEnumerable<Assembly> mappingAssemblies)
+        public PostgresReadSideModule(string connectionString, 
+            Assembly migrationsAssembly,
+            ReadSideCacheSettings cacheSettings,
+            IEnumerable<Assembly> mappingAssemblies)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
+            this.migrationsAssembly = migrationsAssembly;
             this.mappingAssemblies = mappingAssemblies;
         }
 
@@ -86,6 +92,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
             this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
             this.Kernel.Bind(typeof(INaviteReadSideStorage<>)).To(typeof(PostgreReadSideStorage<>));
+
+            DbMigrationsRunner.MigrateToLatest(this.connectionString, 
+                this.migrationsAssembly);
         }
 
         private ISessionFactory BuildSessionFactory()

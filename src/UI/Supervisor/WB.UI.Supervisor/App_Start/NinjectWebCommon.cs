@@ -145,7 +145,7 @@ namespace WB.UI.Supervisor.App_Start
                 new QuestionnaireUpgraderModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, readSideMaps),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, null, cacheSettings, readSideMaps),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
                 new SupervisorCoreRegistry(),

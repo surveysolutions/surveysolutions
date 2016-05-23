@@ -123,7 +123,11 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
+                new PostgresReadSideModule(
+                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
+                    null, // TODO: Implement
+                    cacheSettings, 
+                    mappingAssemblies),
                 new DesignerRegistry(pdfSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
