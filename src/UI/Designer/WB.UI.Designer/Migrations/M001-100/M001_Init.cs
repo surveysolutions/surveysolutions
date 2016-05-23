@@ -33,43 +33,43 @@ namespace WB.UI.Designer.Migrations
 
             Create.Table("simpleroles")
                 .WithColumn("accountid").AsString(255)
-                .WithColumn("simpleroleid").AsInt32();
+                .WithColumn("simpleroleid").AsInt32().Nullable();
 
             Create.Table("questionnairechangerecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("questionnaireid").AsString().Nullable()
                 .WithColumn("userid").AsGuid().Nullable()
-                .WithColumn("username").AsString()
-                .WithColumn("timestamp").AsDateTime()
-                .WithColumn("sequence").AsInt32()
-                .WithColumn("actiontype").AsInt32()
-                .WithColumn("targetitemtype").AsInt32()
-                .WithColumn("targetitemid").AsGuid()
-                .WithColumn("targetitemtitle").AsString();
+                .WithColumn("username").AsString().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("sequence").AsInt32().Nullable()
+                .WithColumn("actiontype").AsInt32().Nullable()
+                .WithColumn("targetitemtype").AsInt32().Nullable()
+                .WithColumn("targetitemid").AsGuid().Nullable()
+                .WithColumn("targetitemtitle").AsString().Nullable();
 
             Create.Table("questionnairelistviewitems")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("creationdate").AsDateTime()
-                .WithColumn("publicid").AsGuid()
-                .WithColumn("lastentrydate").AsDateTime()
-                .WithColumn("title").AsString()
-                .WithColumn("createdby").AsGuid()
-                .WithColumn("creatorname").AsString()
-                .WithColumn("isdeleted").AsBoolean()
-                .WithColumn("ispublic").AsBoolean()
-                .WithColumn("owner").AsString();
+                .WithColumn("creationdate").AsDateTime().Nullable()
+                .WithColumn("publicid").AsGuid().Nullable()
+                .WithColumn("lastentrydate").AsDateTime().Nullable()
+                .WithColumn("title").AsString().Nullable()
+                .WithColumn("createdby").AsGuid().Nullable()
+                .WithColumn("creatorname").AsString().Nullable()
+                .WithColumn("isdeleted").AsBoolean().Nullable()
+                .WithColumn("ispublic").AsBoolean().Nullable()
+                .WithColumn("owner").AsString().Nullable();
 
             Create.Table("sharedpersons")
                 .WithColumn("questionnaireid").AsString(255)
-                .WithColumn("sharedpersonid").AsGuid();
+                .WithColumn("sharedpersonid").AsGuid().Nullable();
 
             Create.Table("questionnairechangereferences")
                 .WithColumn("id").AsInt32().PrimaryKey()
-                .WithColumn("referencetype").AsInt32()
-                .WithColumn("referenceid").AsGuid()
-                .WithColumn("referencetitle").AsString()
-                .WithColumn("questionnairechangerecord").AsString(255)
-                .WithColumn("questionnairechangerecordid").AsString(255);
+                .WithColumn("referencetype").AsInt32().Nullable()
+                .WithColumn("referenceid").AsGuid().Nullable()
+                .WithColumn("referencetitle").AsString().Nullable()
+                .WithColumn("questionnairechangerecord").AsString(255).Nullable()
+                .WithColumn("questionnairechangerecordid").AsString(255).Nullable();
 
             Create.ForeignKey()
                 .FromTable("simpleroles").ForeignColumn("accountid")
