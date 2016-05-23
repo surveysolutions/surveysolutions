@@ -10,35 +10,35 @@ namespace WB.UI.Designer.Migrations
         {
             Create.Table("accountdocuments")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("applicationname").AsString()
-                .WithColumn("comment").AsString()
-                .WithColumn("confirmationtoken").AsString()
-                .WithColumn("createdat").AsDateTime()
-                .WithColumn("email").AsString()
-                .WithColumn("isconfirmed").AsBoolean()
-                .WithColumn("islockedout").AsBoolean()
-                .WithColumn("isonline").AsBoolean()
-                .WithColumn("lastactivityat").AsDateTime()
-                .WithColumn("lastlockedoutat").AsDateTime()
-                .WithColumn("lastloginat").AsDateTime()
-                .WithColumn("lastpasswordchangeat").AsDateTime()
-                .WithColumn("password").AsString()
-                .WithColumn("passwordanswer").AsString()
-                .WithColumn("passwordquestion").AsString()
-                .WithColumn("passwordresetexpirationdate").AsDateTime()
-                .WithColumn("passwordresettoken").AsString()
-                .WithColumn("passwordsalt").AsString()
-                .WithColumn("provideruserkey").AsGuid()
-                .WithColumn("username").AsString();
+                .WithColumn("applicationname").AsString().Nullable()
+                .WithColumn("comment").AsString().Nullable()
+                .WithColumn("confirmationtoken").AsString().Nullable()
+                .WithColumn("createdat").AsDateTime().Nullable()
+                .WithColumn("email").AsString().Nullable()
+                .WithColumn("isconfirmed").AsBoolean().Nullable()
+                .WithColumn("islockedout").AsBoolean().Nullable()
+                .WithColumn("isonline").AsBoolean().Nullable()
+                .WithColumn("lastactivityat").AsDateTime().Nullable()
+                .WithColumn("lastlockedoutat").AsDateTime().Nullable()
+                .WithColumn("lastloginat").AsDateTime().Nullable()
+                .WithColumn("lastpasswordchangeat").AsDateTime().Nullable()
+                .WithColumn("password").AsString().Nullable()
+                .WithColumn("passwordanswer").AsString().Nullable()
+                .WithColumn("passwordquestion").AsString().Nullable()
+                .WithColumn("passwordresetexpirationdate").AsDateTime().Nullable()
+                .WithColumn("passwordresettoken").AsString().Nullable()
+                .WithColumn("passwordsalt").AsString().Nullable()
+                .WithColumn("provideruserkey").AsGuid().Nullable()
+                .WithColumn("username").AsString().Nullable();
 
             Create.Table("simpleroles")
-                .WithColumn("accountid").AsString(255).NotNullable()
+                .WithColumn("accountid").AsString(255)
                 .WithColumn("simpleroleid").AsInt32();
 
             Create.Table("questionnairechangerecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsString()
-                .WithColumn("userid").AsGuid()
+                .WithColumn("questionnaireid").AsString().Nullable()
+                .WithColumn("userid").AsGuid().Nullable()
                 .WithColumn("username").AsString()
                 .WithColumn("timestamp").AsDateTime()
                 .WithColumn("sequence").AsInt32()
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Migrations
                 .WithColumn("owner").AsString();
 
             Create.Table("sharedpersons")
-                .WithColumn("questionnaireid").AsString(255).NotNullable()
+                .WithColumn("questionnaireid").AsString(255)
                 .WithColumn("sharedpersonid").AsGuid();
 
             Create.Table("questionnairechangereferences")
@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Migrations
                 .OnTable("questionnairechangerecords").OnColumn("userid");
 
             Create.Index("questionnairechangerecord_username")
-                .OnTable("questionnairechangerecords").OnColumn("questionnairechangerecord_username");
+                .OnTable("questionnairechangerecords").OnColumn("username");
 
             Create.Index("questionnairelistviewitem_sharedpersons")
                 .OnTable("sharedpersons").OnColumn("questionnaireid");
