@@ -9,7 +9,6 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
-using Ninject.Activation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,7 +25,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
             this.settings = settings;
         }
 
@@ -83,9 +82,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
 
             cfg.AddDeserializedMapping(this.GetMappings(), "Plain");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-
             return cfg.BuildSessionFactory();
         }
 

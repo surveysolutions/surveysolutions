@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             {
                 mto.Index("InterviewStatusTimeSpans_TimeSpansBetweenStatuses");
                 mto.Cascade(Cascade.None);
+                mto.ForeignKey("FK_InterviewStatusTimeSpans_TimeSpanBetweenStatuses");
             });
         }
     }

@@ -8,17 +8,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     internal class PostgresReadSideBootstraper : IPostgresReadSideBootstraper
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private readonly SchemaUpdate schemaUpdate;
 
-        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, SchemaUpdate schemaUpdate)
+        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings)
         {
             this.connectionSettings = connectionSettings;
-            this.schemaUpdate = schemaUpdate;
         }
 
         public void ReCreateViewDatabase()
         {
-            using (NpgsqlConnection connection = new Npgsql.NpgsqlConnection(this.connectionSettings.ConnectionString))
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
                 var dbCommand = connection.CreateCommand();
@@ -26,8 +24,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 dbCommand.CommandText = "drop schema public cascade;create schema public;";
                 dbCommand.ExecuteNonQuery();
             }
-
-            this.schemaUpdate.Execute(true, true);
         }
 
         public void CreateIndexesAfterRebuildReadSide()
