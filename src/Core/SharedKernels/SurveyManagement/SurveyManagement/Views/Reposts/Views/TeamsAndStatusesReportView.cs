@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
     {
         public int TotalCount { get; set; }
         public IEnumerable<TeamsAndStatusesReportLine> Items { get; set; }
+        public TeamsAndStatusesReportLine TotalRow { get; set; }
     }
 }

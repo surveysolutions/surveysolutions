@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -13,69 +14,15 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    internal class SupervisorTeamsAndStatusesReport : ISupervisorTeamsAndStatusesReport
+    internal class SupervisorTeamsAndStatusesReport : AbstractTeamsAndStatusesReport, ISupervisorTeamsAndStatusesReport
     {
-        private readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
-
         public SupervisorTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader)
+            : base(interviewsReader)
         {
-            this.interviewsReader = interviewsReader;
-        }
-        public TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
-        {
-            var rowCount = this.interviewsReader.QueryOver(_ => ApplyFilter(input, _)
-                        .Select(Projections.Count(Projections.Distinct(Projections.Property<InterviewSummary>(x => x.ResponsibleId)))))
-                        .SingleOrDefault<int>();
-
-            var statistics =
-                this.interviewsReader.QueryOver(
-                    _ => ApplyFilter(input, _).Select(
-                        Projections.ProjectionList()
-                            .Add(Projections.Group<InterviewSummary>(c => c.ResponsibleId), "ResponsibleId")
-                            .Add(Projections.Min(Projections.Property<InterviewSummary>(i => i.ResponsibleName)), "Responsible")
-                            .Add(AddCountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
-                            .Add(AddCountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                            .Add(AddCountByStatus(InterviewStatus.Completed), "CompletedCount")
-                            .Add(AddCountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
-                            .Add(AddCountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
-                            .Add(AddCountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
-                            .Add(AddCountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
-                            .Add(Projections.RowCount(), "TotalCount")
-                        ));
-
-            var sorting = QueryableExtensions.ParseSortExpression(input.Order);
-            if (sorting != null)
-            {
-                foreach (var orderRequestItem in sorting)
-                {
-                    statistics.UnderlyingCriteria.AddOrder(new Order(orderRequestItem.Field,
-                        orderRequestItem.Direction == OrderDirection.Asc));
-                }
-            }
-
-            var currentPage =
-                statistics.TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
-                    .Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize).List<TeamsAndStatusesReportLine>();
-
-            return new TeamsAndStatusesReportView
-            {
-                TotalCount = rowCount,
-                Items = currentPage
-            };
         }
 
-        private AggregateProjection AddCountByStatus(InterviewStatus status)
-        {
-            return Projections.Sum(
-                Projections.Conditional(
-                    Restrictions.Where<InterviewSummary>(
-                        i => i.Status == status),
-                    Projections.Constant(1),
-                    Projections.Constant(0)));
-        }
-
-        private static IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryOver<InterviewSummary, InterviewSummary> interviews)
+        protected override IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input,
+            IQueryOver<InterviewSummary, InterviewSummary> interviews)
         {
             var filteredInterviews = interviews.Where(x => !x.IsDeleted);
 
@@ -95,6 +42,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
 
             return filteredInterviews;
+        }
+
+        protected override Expression<Func<InterviewSummary, object>> ResponsibleIdSelector
+        {
+            get { return (interivew) => interivew.ResponsibleId; }
+        }
+
+        protected override Expression<Func<InterviewSummary, object>> ResponsibleNameSelector
+        {
+            get { return (interivew) => interivew.ResponsibleName; }
         }
     }
 }

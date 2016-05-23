@@ -69,6 +69,21 @@
             </tr>
         </thead>
         <tbody>
+            <!-- ko if: TotalRow -->
+            <tr style="color: green; font-weight: bold;">
+                <td>
+                    <b>@Common.Total</b>
+                </td>
+                <td><span data-bind="text: TotalRow().SupervisorAssignedCount"></span></td>
+                <td><span data-bind="text: TotalRow().InterviewerAssignedCount"></span></td>
+                <td><span data-bind="text: TotalRow().CompletedCount"></span></td>
+                <td><span data-bind="text: TotalRow().RejectedBySupervisorCount"></span></td>
+                <td><span data-bind="text: TotalRow().ApprovedBySupervisorCount"></span></td>
+                <td><span data-bind="text: TotalRow().RejectedByHeadquartersCount"></span></td>
+                <td><span data-bind="text: TotalRow().ApprovedByHeadquartersCount"></span></td>
+                <td><span data-bind="text: TotalRow().TotalCount"></span></td>
+            </tr>
+            <!-- /ko -->
             <!-- ko foreach:Items -->
             <tr>
                 <td>
@@ -80,7 +95,7 @@
                 <td data-bind="template: { name: 'RejectedBySupervisorCountTemplate' }"></td>
                 <td data-bind="template: { name: 'ApprovedBySupervisorCountTemplate' }"></td>
                 <td data-bind="template: { name: 'RejectedByHeadquartersCountTemplate' }"></td>
-                <td data-bind="template: { name: 'ApprovedByHeadquartersCountTemplate' }"></td>                
+                <td data-bind="template: { name: 'ApprovedByHeadquartersCountTemplate' }"></td>
                 <td>
                     <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() + '&responsible=' + Responsible() }, text: TotalCount"></a>
                 </td>
