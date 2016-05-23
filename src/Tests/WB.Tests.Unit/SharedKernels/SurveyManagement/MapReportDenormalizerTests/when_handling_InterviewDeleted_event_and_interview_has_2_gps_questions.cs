@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
     {
         Establish context = () =>
         {
-            @event = Create.Event.Published.InterviewDeleted(interviewId: interviewId);
+            @event = Create.PublishedEvent.InterviewDeleted(interviewId: interviewId);
 
             var questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
