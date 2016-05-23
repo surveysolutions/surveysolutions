@@ -8,15 +8,11 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -38,7 +34,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -61,16 +56,11 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using Ncqrs.Domain.Storage;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Implementation;
-using WB.UI.Shared.Web.Membership;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
 
 namespace WB.Tests.Unit.TestFactories
@@ -89,34 +79,6 @@ namespace WB.Tests.Unit.TestFactories
             => new AttachmentContentService(
                 attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
 
-        public CodeGenerator CodeGenerator(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-            => new CodeGenerator(
-                macrosSubstitutionService ?? Create.Other.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICompilerSettings>());
-
-        public CommandPostprocessor CommandPostprocessor(
-            IMembershipUserService membershipUserService,
-            IRecipientNotifier recipientNotifier,
-            IAccountRepository accountRepository,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
-            ILogger logger,
-            IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null)
-            => new CommandPostprocessor(
-                membershipUserService,
-                recipientNotifier,
-                accountRepository,
-                documentStorage,
-                logger,
-                attachmentService ?? Mock.Of<IAttachmentService>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
-
         public CumulativeChartDenormalizer CumulativeChartDenormalizer(
             IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage = null,
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
@@ -132,9 +94,6 @@ namespace WB.Tests.Unit.TestFactories
             => new InterviewEventHandler(
                 interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
-
-        public IDesignerEngineVersionService DesignerEngineVersionService()
-            => new DesignerEngineVersionService();
 
         public IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -234,16 +193,6 @@ namespace WB.Tests.Unit.TestFactories
         public ILiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
-        public LookupTableService LookupTableService(
-            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
-            => new LookupTableService(
-                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
-
-        public MacrosSubstitutionService MacrosSubstitutionService()
-            => new MacrosSubstitutionService();
-
         public MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
@@ -274,23 +223,8 @@ namespace WB.Tests.Unit.TestFactories
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));
 
-        public QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-            => new QuestionnaireExpressionStateModelFactory(
-                macrosSubstitutionService ?? Create.Other.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
-
         public QuestionnaireFeedDenormalizer QuestionnaireFeedDenormalizer(IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeedWriter)
             => new QuestionnaireFeedDenormalizer(questionnaireFeedWriter);
-
-        public QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
-            => new QuestionnaireImportService(
-                Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IOptionsRepository>());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -303,9 +237,6 @@ namespace WB.Tests.Unit.TestFactories
 
         public RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions RebuildReadSideCqrsPostgresTransactionManager()
             => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
-
-        public RoslynExpressionProcessor RoslynExpressionProcessor()
-            => new RoslynExpressionProcessor();
 
         public IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
             => new StatefulInterviewRepository(
