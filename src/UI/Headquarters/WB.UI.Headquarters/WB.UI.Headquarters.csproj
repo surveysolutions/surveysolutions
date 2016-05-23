@@ -765,6 +765,7 @@
     <Compile Include="Controllers\ApiUserController.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M002_AddMissingIndexes.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />

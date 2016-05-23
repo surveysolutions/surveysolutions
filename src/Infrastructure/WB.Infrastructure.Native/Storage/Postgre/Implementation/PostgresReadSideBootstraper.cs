@@ -1,17 +1,20 @@
 ﻿using System;
-using NHibernate.Tool.hbm2ddl;
+using System.Reflection;
 using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideBootstraper : IPostgresReadSideBootstraper
     {
         private readonly PostgreConnectionSettings connectionSettings;
+        private readonly Assembly migrationsAssembly;
 
-        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings)
+        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, Assembly migrationsAssembly)
         {
             this.connectionSettings = connectionSettings;
+            this.migrationsAssembly = migrationsAssembly;
         }
 
         public void ReCreateViewDatabase()
@@ -24,25 +27,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 dbCommand.CommandText = "drop schema public cascade;create schema public;";
                 dbCommand.ExecuteNonQuery();
             }
-        }
 
-        public void CreateIndexesAfterRebuildReadSide()
-        {
-            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                NpgsqlCommand dbCommand = connection.CreateCommand();
-                dbCommand.AllResultTypesAreUnknown = true;
-
-                dbCommand.CommandText = "SELECT to_regclass('public.userdocuments')";
-                var tableExists = dbCommand.ExecuteScalar();
-
-                if (tableExists != DBNull.Value)
-                {
-                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));CREATE INDEX answerstofeaturedquestions_answervalue ON answerstofeaturedquestions (answervalue text_pattern_ops);CREATE INDEX InterviewDataExportRecords_Id_text_pattern_ops_idx ON InterviewDataExportRecords(Id text_pattern_ops); ";
-                    dbCommand.ExecuteNonQuery();
-                }
-            }
+            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.migrationsAssembly);
         }
 
         public bool CheckDatabaseConnection()

@@ -25,13 +25,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
             var migrationContext = new RunnerContext(announcer);
 
-            var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
+            var options = new MigrationOptions
+            {
+                PreviewOnly = false
+            };
             var factory = new FluentMigrator.Runner.Processors.Postgres.PostgresProcessorFactory();
 
             using (var processor = factory.Create(connectionString, announcer, options))
             {
                 var runner = new MigrationRunner(migrationsAssembly, migrationContext, processor);
-                runner.MigrateUp(true);
+                runner.MigrateUp();
             }
         }
     }
