@@ -1,9 +1,10 @@
 ﻿using Machine.Specifications;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
+namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 {
     internal class when_empty_data_base : HeadquartersTeamsAndStatusesReportContext
     {
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
             reportFactory = CreateTeamsAndStatusesReport();
         };
 
-        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel()));
 
         It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
 

@@ -61,7 +61,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                                                             .WithConstructorArgument("migrationsAssembly", this.migrationsAssembly);
 
             this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
-                typeof(IReadSideRepositoryReader<>), typeof(INaviteReadSideStorage<>))
+                typeof(IReadSideRepositoryReader<>), typeof(INativeReadSideStorage<>))
                 .ToSelf()
                 .InSingletonScope()
                 .WithConstructorArgument("entityIdentifierColumnName", GetEntityIdentifierColumnName);
