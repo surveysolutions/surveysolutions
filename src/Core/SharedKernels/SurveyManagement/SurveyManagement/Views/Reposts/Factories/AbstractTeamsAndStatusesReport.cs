@@ -25,15 +25,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
             var rowCount = this.interviewsReader.QueryOver(_ => ApplyFilter(input, _)
                 .Select(
-                    Projections.Count(Projections.Distinct(Projections.Property<InterviewSummary>( ResponsibleIdSelector)))))
+                    Projections.Count(Projections.Distinct(Projections.Property(ResponsibleIdSelector)))))
                 .SingleOrDefault<int>();
 
             var statistics =
                 this.interviewsReader.QueryOver(
                     _ => ApplyFilter(input, _).Select(
                         AddCountsByStuses(Projections.ProjectionList()
-                            .Add(Projections.Group<InterviewSummary>(ResponsibleIdSelector), "ResponsibleId")
-                            .Add(Projections.Min(Projections.Property<InterviewSummary>(ResponsibleNameSelector)),
+                            .Add(Projections.Group(ResponsibleIdSelector), "ResponsibleId")
+                            .Add(Projections.Min(Projections.Property(ResponsibleNameSelector)),
                                 "Responsible"))
                         ));
 
@@ -68,28 +68,47 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         private ProjectionList AddCountsByStuses(ProjectionList projectionList)
         {
-            return projectionList.Add(AddCountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
-                .Add(AddCountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                .Add(AddCountByStatus(InterviewStatus.Completed), "CompletedCount")
-                .Add(AddCountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
-                .Add(AddCountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
-                .Add(AddCountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
-                .Add(AddCountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
+            return projectionList
+                .Add(this.CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
+                .Add(this.CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
+                .Add(this.CountByStatus(InterviewStatus.Completed), "CompletedCount")
+                .Add(this.CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
+                .Add(this.CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
+                .Add(this.CountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
+                .Add(this.CountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
                 .Add(Projections.RowCount(), "TotalCount");
         }
 
-        private AggregateProjection AddCountByStatus(InterviewStatus status)
+        private AggregateProjection CountByStatus(InterviewStatus status)
         {
-            return Projections.Sum(
-                Projections.Conditional(
-                    Restrictions.Where<InterviewSummary>(
-                        i => i.Status == status),
+            return Projections.Sum(Projections.Conditional(
+                    Restrictions.Where<InterviewSummary>(i => i.Status == status),
                     Projections.Constant(1),
                     Projections.Constant(0)));
         }
 
-        protected abstract IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input,
-            IQueryOver<InterviewSummary, InterviewSummary> interviews);
+        protected virtual IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input,
+            IQueryOver<InterviewSummary, InterviewSummary> interviews)
+        {
+            var filteredInterviews = interviews.Where(x => !x.IsDeleted);
+
+            if (input.TemplateId.HasValue)
+            {
+                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireId == input.TemplateId);
+            }
+
+            if (input.TemplateVersion.HasValue)
+            {
+                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
+            }
+
+            if (input.ViewerId.HasValue)
+            {
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadId == input.ViewerId);
+            }
+
+            return filteredInterviews;
+        }
 
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
