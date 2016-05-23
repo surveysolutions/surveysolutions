@@ -49,7 +49,7 @@ namespace dbup
                 await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
-                command.CommandText = @"CREATE TABLE ""VersionInfo""
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS ""VersionInfo""
 (
   ""Version"" bigint NOT NULL,
   ""AppliedOn"" timestamp without time zone,
@@ -61,6 +61,7 @@ namespace dbup
                 insertCommand.Parameters.AddWithValue("version", 1);
                 insertCommand.Parameters.AddWithValue("timeStamp", DateTime.UtcNow);
                 insertCommand.Parameters.AddWithValue("desc", "marked as 0 state for db");
+                await insertCommand.ExecuteNonQueryAsync();
             }
         }
 
