@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
 
             Create.Table("interviewcommentedstatuses")
-                .WithColumn("interviewid").AsString(255).PrimaryKey()
+                .WithColumn("interviewid").AsString(255)
                 .WithColumn("id").AsGuid().Nullable()
                 .WithColumn("interviewername").AsString().Nullable()
                 .WithColumn("interviewerid").AsGuid().Nullable()
@@ -125,6 +125,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Create.Table("interviewsyncpackagemetas")
                 .WithColumn("packageid").AsString(255).PrimaryKey()
                 .WithColumn("sortindex").AsInt64().Nullable()
+                .WithColumn("userid").AsGuid().Nullable()
                 .WithColumn("interviewid").AsGuid().Nullable()
                 .WithColumn("itemtype").AsString().Nullable()
                 .WithColumn("serializedpackagesize").AsInt32().Nullable();
