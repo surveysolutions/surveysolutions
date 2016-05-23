@@ -52,9 +52,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load();
 
-            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = this.connectionString });
+            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
+            {
+                ConnectionString = this.connectionString
+            });
 
-            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
+            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
+                                                            .WithConstructorArgument("migrationsAssembly", this.migrationsAssembly);
 
             this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
                 typeof(IReadSideRepositoryReader<>), typeof(INaviteReadSideStorage<>))
