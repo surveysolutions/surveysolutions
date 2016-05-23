@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 }
             };
 
-            denormalizer = Create.Other.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
+            denormalizer = Create.Service.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
             gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Other.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
         };
 

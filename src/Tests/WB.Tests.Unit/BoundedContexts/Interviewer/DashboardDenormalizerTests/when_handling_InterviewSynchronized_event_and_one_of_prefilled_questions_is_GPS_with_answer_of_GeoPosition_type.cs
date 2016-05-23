@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 

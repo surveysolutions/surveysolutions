@@ -57,8 +57,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
            
-            ILiteEventRegistry registry = Create.Other.LiteEventRegistry();
-            liteEventBus = Create.Other.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 

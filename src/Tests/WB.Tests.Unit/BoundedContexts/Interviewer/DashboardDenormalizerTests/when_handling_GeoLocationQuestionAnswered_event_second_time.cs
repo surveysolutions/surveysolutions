@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
                 r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
 
-            denormalizer = Create.Other.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
 
             denormalizer.Handle(@event);
         };

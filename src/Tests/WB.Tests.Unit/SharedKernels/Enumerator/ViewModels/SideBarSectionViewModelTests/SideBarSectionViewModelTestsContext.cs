@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
 
             return new SideBarSectionViewModel(interviewRepository.Object, 
                 questionnaireRepository.Object, 
-                Create.Other.SubstitutionService(), 
-                Create.Other.LiteEventRegistry(), 
+                Create.Service.SubstitutionService(), 
+                Create.Service.LiteEventRegistry(), 
                 Stub.SideBarSectionViewModelsFactory(),
                 Mock.Of<IMvxMessenger>());
         }

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
             }.ForEach(x => usersStorage.Store(x, x.PublicKey.FormatGuid()));
 
 
-            teamFactory = Create.Other.TeamViewFactory(usersReader: usersStorage);
+            teamFactory = Create.Service.TeamViewFactory(usersReader: usersStorage);
         };
 
         Because of = () =>

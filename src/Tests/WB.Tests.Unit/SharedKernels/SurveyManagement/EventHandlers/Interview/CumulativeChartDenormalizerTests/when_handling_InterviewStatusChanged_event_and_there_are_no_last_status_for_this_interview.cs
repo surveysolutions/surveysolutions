@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
             var interviewReferencesStorage = Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(_ =>
                 _.GetById(interviewStringId) == interviewReferences);
 
-            denormalizer = Create.Other.CumulativeChartDenormalizer(
+            denormalizer = Create.Service.CumulativeChartDenormalizer(
                 lastStatusesStorage: lastStatusesStorage,
                 cumulativeReportStatusChangeStorage: cumulativeReportStatusChangeStorageMock.Object,
                 interviewReferencesStorage: interviewReferencesStorage);

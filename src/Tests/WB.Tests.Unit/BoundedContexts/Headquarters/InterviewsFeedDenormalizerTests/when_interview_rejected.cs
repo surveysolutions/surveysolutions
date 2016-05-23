@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerT
                 .Returns(new InterviewData{SupervisorId = supervisorId });
 
 
-            denormalizer = Create.Other.InterviewsFeedDenormalizer(writer, interviews);
+            denormalizer = Create.Service.InterviewsFeedDenormalizer(writer, interviews);
         };
 
         private Because of = () => denormalizer.Handle(interviewRejectedEvent);

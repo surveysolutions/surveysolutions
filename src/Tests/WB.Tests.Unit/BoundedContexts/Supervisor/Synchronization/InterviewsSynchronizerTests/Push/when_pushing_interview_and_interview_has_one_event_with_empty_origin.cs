@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(syncItemJson)
                 .Callback<object>(entity => syncItem = (SyncItem) entity);
 
-            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Service.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

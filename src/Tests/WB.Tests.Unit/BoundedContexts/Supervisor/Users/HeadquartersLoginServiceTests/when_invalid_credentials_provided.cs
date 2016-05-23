@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
                     }))
                 }));
 
-            service = Create.Other.HeadquartersLoginService(messageHandler: () => handler.Object,
+            service = Create.Service.HeadquartersLoginService(messageHandler: () => handler.Object,
                 commandService: commandService.Object);
         };
 

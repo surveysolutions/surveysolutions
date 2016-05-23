@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             return new InterviewActionsExporter(new InterviewDataExportSettings(), 
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
-                Create.Other.TransactionManagerProvider(),
+                Create.Service.TransactionManagerProvider(),
                 interviewStatuses ?? new TestInMemoryWriter<InterviewStatuses>(),
                 Mock.Of<ILogger>());
         }

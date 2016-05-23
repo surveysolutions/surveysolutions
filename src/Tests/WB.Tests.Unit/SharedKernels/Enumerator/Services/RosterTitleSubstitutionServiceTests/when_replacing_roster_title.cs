@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
             var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);
 
-            service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.Other.SubstitutionService());
+            service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.Service.SubstitutionService());
         };
 
         Because of = () => substitutedValue = service.Substitute("something %rostertitle%", new Identity(questionid, new decimal[]{1}), "interviewId");

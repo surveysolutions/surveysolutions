@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             publishableEvent = Create.Other.QuestionClonedEvent();
 
-            eventDispatcher = Create.Other.NcqrCompatibleEventDispatcher();
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
 
             eventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(_=>_.GetTransactionManager()== transactionManagerMock.Object);
 
