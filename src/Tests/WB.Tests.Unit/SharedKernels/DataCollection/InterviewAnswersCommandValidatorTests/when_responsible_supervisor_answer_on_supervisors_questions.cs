@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             });
             
             interview.Apply(Create.Other.SupervisorAssignedEvent(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);
-            commandValidator = Create.Other.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
+            commandValidator = Create.Service.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
         };
 
         Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));

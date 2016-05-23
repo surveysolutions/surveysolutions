@@ -12,8 +12,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
     {
         Establish context = () =>
         {
-            liteEventRegistry = Create.Other.LiteEventRegistry();
-            eventBus = Create.Other.LiteEventBus(liteEventRegistry);
+            liteEventRegistry = Create.Service.LiteEventRegistry();
+            eventBus = Create.Service.LiteEventBus(liteEventRegistry);
             eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
             handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();

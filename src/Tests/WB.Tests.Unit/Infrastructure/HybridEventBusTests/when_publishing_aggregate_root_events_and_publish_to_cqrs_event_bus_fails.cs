@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
                 .Setup(bus => bus.PublishCommittedEvents(committedEventStream))
                 .Throws<Exception>();
 
-            hybridEventBus = Create.Other.HybridEventBus(liteEventBus: liteEventBusMock.Object, cqrsEventBus: cqrsEventBus);
+            hybridEventBus = Create.Service.HybridEventBus(liteEventBus: liteEventBusMock.Object, cqrsEventBus: cqrsEventBus);
         };
 
         Because of = () =>

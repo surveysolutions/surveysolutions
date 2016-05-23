@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
             };
 
-            optimizer = Create.Other.InterviewEventStreamOptimizer();
+            optimizer = Create.Service.InterviewEventStreamOptimizer();
         };
 
         Because of = () =>

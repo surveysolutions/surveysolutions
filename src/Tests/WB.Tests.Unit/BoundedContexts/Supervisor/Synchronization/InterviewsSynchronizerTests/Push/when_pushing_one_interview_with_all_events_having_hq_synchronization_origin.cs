@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             fileSyncRepository.Setup(x => x.GetImagesByInterviews()).Returns(new List<InterviewBinaryDataDescriptor>());
 
-            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Service.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 httpMessageHandler: () => httpMessageHandlerMock.Object,
                 eventStore: eventStore,

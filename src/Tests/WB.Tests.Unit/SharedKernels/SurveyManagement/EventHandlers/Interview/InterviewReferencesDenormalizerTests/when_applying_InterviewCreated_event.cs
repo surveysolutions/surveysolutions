@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 .InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion)
                 .ToPublishedEvent(eventSourceId: eventSourceId);
 
-            denormalizer = Create.Other.InterviewReferencesDenormalizer();
+            denormalizer = Create.Service.InterviewReferencesDenormalizer();
         };
 
         Because of = () =>

@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns("events json")
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
-            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Service.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

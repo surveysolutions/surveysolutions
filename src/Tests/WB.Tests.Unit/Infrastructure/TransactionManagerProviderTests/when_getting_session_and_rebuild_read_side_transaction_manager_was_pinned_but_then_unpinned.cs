@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Infrastructure.TransactionManagerProviderTests
     {
         Establish context = () =>
         {
-            transactionManagerProvider = Create.Other.TransactionManagerProvider(transactionManagerFactory: () => transactionManagerFromFactory);
+            transactionManagerProvider = Create.Service.TransactionManagerProvider(transactionManagerFactory: () => transactionManagerFromFactory);
             transactionManagerProvider.PinRebuildReadSideTransactionManager();
             transactionManagerProvider.UnpinTransactionManager();
         };

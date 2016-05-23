@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
             userReader.Setup(x => x.GetUserByUri(new Uri(UserDetailsUri)))
                 .ReturnsAsync(HeadquartersUser);
 
-            service = Create.Other.HeadquartersLoginService(headquartersUserReader: userReader.Object, messageHandler: () => handler.Object,
+            service = Create.Service.HeadquartersLoginService(headquartersUserReader: userReader.Object, messageHandler: () => handler.Object,
                 commandService: commandService.Object);
         };
 

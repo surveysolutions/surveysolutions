@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             commandServiceMock = new Mock<ICommandService>();
 
-            synchronizer = Create.Other.InterviewsSynchronizer(plainStorage: plainStorage,
+            synchronizer = Create.Service.InterviewsSynchronizer(plainStorage: plainStorage,
                 commandService: commandServiceMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object,
                 userDocumentStorage: userDocumentStorageMock.Object, interviewSummaryRepositoryReader: interviewSummaryStorage);
         };

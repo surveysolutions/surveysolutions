@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFe
                 "WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests.SimpleArchiveFeed.xml");
 
             var settings = Create.Other.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed")); 
-            feedReader = Create.Other.UserChangedFeedReader(messageHandler: () => handler.Object,
+            feedReader = Create.Service.UserChangedFeedReader(messageHandler: () => handler.Object,
                 settings: settings);
         };
 

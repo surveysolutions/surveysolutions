@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.QuestionnaireFeedDenormaliz
 
             writer = Substitute.For<IReadSideRepositoryWriter<QuestionnaireFeedEntry>>();
 
-            denormalizer = Create.Other.QuestionnaireFeedDenormalizer(writer);
+            denormalizer = Create.Service.QuestionnaireFeedDenormalizer(writer);
         };
 
         private Because of = () => denormalizer.Handle(questionnaireDeleted);

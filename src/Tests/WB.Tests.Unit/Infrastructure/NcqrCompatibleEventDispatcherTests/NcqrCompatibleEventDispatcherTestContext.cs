@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null)
         {
-            return Create.Other.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings);
+            return Create.Service.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null)

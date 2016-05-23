@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.SynchronizerT
     {
         Establish context = () =>
         {
-            synchronizer = Create.Other.Synchronizer(interviewsSynchronizerMock.Object);
+            synchronizer = Create.Service.Synchronizer(interviewsSynchronizerMock.Object);
         };
 
         Because of = () =>

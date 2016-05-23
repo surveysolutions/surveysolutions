@@ -14,6 +14,7 @@ namespace WB.Tests.Unit
         public static readonly ViewModelFactory ViewModel = new ViewModelFactory();
         public static readonly ControllerFactory Controller = new ControllerFactory();
         public static readonly AnswerFactory Answer = new AnswerFactory();
+        public static readonly ServiceFactory Service = new ServiceFactory();
 
         public static readonly OtherFactory Other = new OtherFactory();
     }
