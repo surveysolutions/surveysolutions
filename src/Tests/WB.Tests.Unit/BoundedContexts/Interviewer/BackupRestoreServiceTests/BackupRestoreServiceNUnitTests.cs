@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
             var archiveUtilsMock=new Mock<IArchiveUtils>();
             var asynchronousFileSystemAccessorMock = new Mock<IAsynchronousFileSystemAccessor>();
 
-            asynchronousFileSystemAccessorMock.Setup(x => x.IsFileExistsAsync(Moq.It.IsAny<string>()))
+            asynchronousFileSystemAccessorMock.Setup(x => x.IsDirectoryExistsAsync(Moq.It.IsAny<string>()))
                 .Returns(Task.FromResult(true));
 
             var backupRestoreService = CreateBackupRestoreService(archiveUtilsMock.Object,
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
 
             await backupRestoreService.BackupAsync();
 
-            asynchronousFileSystemAccessorMock.Verify(x => x.CopyFileAsync("crush", "private"), Times.Once);
+            asynchronousFileSystemAccessorMock.Verify(x => x.CopyDirectoryAsync("crush", "private"), Times.Once);
 
             archiveUtilsMock.Verify(x => x.ZipDirectoryToFileAsync("private", It.IsAny<string>(), null, @"\.log$;\.dll$;\.sqlite3$;"), Times.Once);
         }
