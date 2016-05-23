@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
     {
         Establish context = () =>
         {
-            @event = Create.Event.Published.InterviewStatusChanged(
+            @event = Create.PublishedEvent.InterviewStatusChanged(
                 interviewId: Guid.Parse(interviewStringId),
                 status: newStatus);
 
