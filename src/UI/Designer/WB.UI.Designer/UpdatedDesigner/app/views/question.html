@@ -69,7 +69,7 @@
                 <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
 
                 <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
-                <label for="cb-hide-instructions"><span></span>Hide instruction</label>
+                <label for="cb-hide-instructions"><span></span>Hide instruction</label><help key="hideInstructions" />
 
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
@@ -85,7 +85,7 @@
             <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
 
             <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label><help key="hideIfDisabled" />
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
