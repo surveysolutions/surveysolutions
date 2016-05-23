@@ -972,6 +972,7 @@
     <Content Include="App_GlobalResources\MapReport.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MapReport.ru.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
