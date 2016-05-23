@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                             cm.Name("InterviewId");
                             cm.Index("InterviewStatusTimeSpans_InterviewId");
                         });
+                        key.ForeignKey("FK_InterviewStatusTimeSpans_TimeSpansBetweenStatuses");
                     });
                     set.Lazy(CollectionLazy.NoLazy);
                     set.Cascade(Cascade.All | Cascade.DeleteOrphans);

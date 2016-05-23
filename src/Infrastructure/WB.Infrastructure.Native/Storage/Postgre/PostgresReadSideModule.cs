@@ -18,8 +18,10 @@ using Ninject.Activation;
 using Ninject.Planning.Targets;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -30,12 +32,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
+        private readonly Assembly migrationsAssembly;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings, IEnumerable<Assembly> mappingAssemblies)
+        public PostgresReadSideModule(string connectionString, 
+            Assembly migrationsAssembly,
+            ReadSideCacheSettings cacheSettings,
+            IEnumerable<Assembly> mappingAssemblies)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
+            this.migrationsAssembly = migrationsAssembly;
             this.mappingAssemblies = mappingAssemblies;
         }
 
@@ -87,6 +94,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+            
+             DbMigrationsRunner.MigrateToLatest(this.connectionString, 
+                this.migrationsAssembly);
         }
 
         private object GetEntityIdentifierColumnName(IContext context, ITarget target)
@@ -125,9 +135,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-            this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();
 
             return cfg.BuildSessionFactory();
         }
@@ -157,7 +164,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             var mapper = new ModelMapper();
             var mappingTypes = this.mappingAssemblies.SelectMany(x => x.GetExportedTypes())
-                                                     .Where(x => x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+                                                     .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null && 
+                                                                 x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {

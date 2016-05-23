@@ -37,7 +37,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                         clm.Name("QuestionnaireId");
                         clm.Index("QuestionnaireBrowseItems_FeaturedQuestions");
                     });
+                    keyMap.ForeignKey("FK_QuestionnaireBrowseItems_FeaturedQuestions");
                 });
+
                 listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },
             rel =>

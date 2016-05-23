@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                         clm.Name("InterviewId");
                         clm.Index("InterviewCommentaries_Comment");
                     });
+                    keyMap.ForeignKey("FK_Commentaries_Interviews");
                 });
                 listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },
