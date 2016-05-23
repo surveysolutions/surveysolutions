@@ -95,8 +95,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             
-             DbMigrationsRunner.MigrateToLatest(this.connectionString, 
-                this.migrationsAssembly);
+             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.migrationsAssembly);
         }
 
         private object GetEntityIdentifierColumnName(IContext context, ITarget target)
@@ -107,10 +106,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             var persister = sessionFactory.GetClassMetadata(entityType);
 
-            if (persister == null)
-                return null;
-
-            return persister.IdentifierPropertyName;
+            return persister?.IdentifierPropertyName;
         }
 
         private ISessionFactory BuildSessionFactory()
