@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
 
-            eventDispatcher = Create.Other.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
                 {
                     EventHandlerTypesWithIgnoredExceptions = new[]

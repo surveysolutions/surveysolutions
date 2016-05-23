@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 }
             };
 
-            denormalizer = Create.Other.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
+            denormalizer = Create.Service.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
             answersRemoved = Create.Event.AnswersRemoved(Create.Other.Identity(questionId, Empty.RosterVector)).ToPublishedEvent(eventSourceId: interviewId);
         };
 

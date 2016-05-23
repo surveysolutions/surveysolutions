@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using System.Net.Http;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -14,7 +13,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using Ncqrs;
@@ -24,7 +22,6 @@ using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
@@ -34,38 +31,20 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
-using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
-using WB.Core.BoundedContexts.Supervisor.Interviews;
-using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.BoundedContexts.Supervisor.Users;
-using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -90,31 +69,20 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Designer.Models;
 using WB.UI.Supervisor.Controllers;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -124,7 +92,6 @@ using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questio
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
@@ -133,19 +100,13 @@ using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGen
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Implementation;
-using WB.UI.Shared.Web.Membership;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
 using AttachmentsController = WB.Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController;
 
@@ -153,11 +114,6 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class OtherFactory
     {
-        public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
-        {
-            return new InterviewAnswersCommandValidator(interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
-        }
-
         public AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };
@@ -198,24 +154,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public AnswerNotifier AnswerNotifier()
         {
-            return new AnswerNotifier(Create.Other.LiteEventRegistry());
-        }
-
-        public IAnswerToStringService AnswerToStringService()
-        {
-            return new AnswerToStringService();
-        }
-
-        public AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
-        {
-            return new AtomFeedReader(
-                messageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
-                settings ?? Mock.Of<IHeadquartersSettings>());
-        }
-
-        public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
-        {
-            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+            return new AnswerNotifier(Create.Service.LiteEventRegistry());
         }
 
         public AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
@@ -297,19 +236,6 @@ namespace WB.Tests.Unit.TestFactories
                 expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText());
         }
 
-        public CodeGenerator CodeGenerator(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-        {
-            return new CodeGenerator(
-                macrosSubstitutionService ?? Create.Other.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICompilerSettings>());
-        }
-
         public CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1, Guid? commitId = null)
         {
@@ -388,26 +314,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public CumulativeChartDenormalizer CumulativeChartDenormalizer(
-            IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage = null,
-            IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null)
-        {
-            return new CumulativeChartDenormalizer(
-                lastStatusesStorage ?? Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(),
-                cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
-                interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
-        }
-
-        public InterviewEventHandler DashboardDenormalizer(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
-        {
-            return new InterviewEventHandler(
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
-        }
-
         public Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
@@ -453,11 +359,6 @@ namespace WB.Tests.Unit.TestFactories
                 });
 
             return macrosSubstitutionServiceMock.Object;
-        }
-
-        public IDesignerEngineVersionService DesignerEngineVersionService()
-        {
-            return new DesignerEngineVersionService();
         }
 
         public DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
@@ -524,9 +425,6 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public FileSystemIOAccessor FileSystemIOAccessor()
-            => new FileSystemIOAccessor();
-
         public FixedRosterTitle FixedRosterTitle(decimal value, string title)
         {
             return new FixedRosterTitle(value, title);
@@ -542,29 +440,17 @@ namespace WB.Tests.Unit.TestFactories
             return new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984,4,18)));
         }
 
-        private Guid GetGuidIdByStringId(string stringId)
+        private static Guid GetGuidIdByStringId(string stringId)
         {
             return string.IsNullOrEmpty(stringId) ? Guid.NewGuid() : Guid.Parse(stringId);
         }
 
-        private InProcessEventBus GetInProcessEventBus(EventBusSettings eventBusSettings, ILogger logger,
-            EventHandlerExceptionDelegate eventHandlerExceptionDelegate, IEventStore eventStore)
-        {
-            var inProcessEventBus = new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>());
-            if (eventHandlerExceptionDelegate != null)
-            {
-                inProcessEventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
-            }
-
-            return inProcessEventBus;
-        }
-
-        private Guid GetQuestionnaireItemId(string questionnaireItemId)
+        private static Guid GetQuestionnaireItemId(string questionnaireItemId)
         {
             return string.IsNullOrEmpty(questionnaireItemId) ? Guid.NewGuid() : Guid.Parse(questionnaireItemId);
         }
 
-        private Guid? GetQuestionnaireItemParentId(string questionnaireItemParentId)
+        private static Guid? GetQuestionnaireItemParentId(string questionnaireItemParentId)
         {
             return string.IsNullOrEmpty(questionnaireItemParentId)
                 ? (Guid?)null
@@ -674,21 +560,6 @@ namespace WB.Tests.Unit.TestFactories
             return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
         }
 
-        public HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null,
-            Func<HttpMessageHandler> messageHandler = null,
-            ILogger logger = null,
-            ICommandService commandService = null,
-            IHeadquartersSettings headquartersSettings = null,
-            IPasswordHasher passwordHasher = null)
-        {
-            return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(),
-                commandService ?? Substitute.For<ICommandService>(),
-                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
-                headquartersSettings ?? HeadquartersSettings(),
-                headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>(),
-                passwordHasher: passwordHasher ?? Substitute.For<IPasswordHasher>());
-        }
-
         public HeadquartersPullContext HeadquartersPullContext()
         {
             return new HeadquartersPullContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
@@ -734,13 +605,6 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IScheduler>(),
                 synchronizer ?? Mock.Of<ISynchronizer>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>());
-        }
-
-        public HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
-        {
-            return new HybridEventBus(
-                liteEventBus ?? Mock.Of<ILiteEventBus>(),
-                cqrsEventBus ?? Mock.Of<IEventBus>());
         }
 
         public Identity Identity(string id, RosterVector rosterVector)
@@ -938,12 +802,6 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
 
-        public InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
-        {
-            return new InterviewReferencesDenormalizer(
-                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
-        }
-
         public IPublishedEvent<InterviewRejectedByHQ> InterviewRejectedByHQEvent(Guid? interviewId = null, string userId = null, string comment = null)
         {
             return ToPublishedEvent(new InterviewRejectedByHQ(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
@@ -963,54 +821,6 @@ namespace WB.Tests.Unit.TestFactories
             string origin = null)
         {
             return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)), origin: origin, eventSourceId: interviewId);
-        }
-
-        public InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
-            IReadSideKeyValueStorage<InterviewData> interviewsRepository = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepository = null)
-        {
-            return new InterviewsFeedDenormalizer(feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
-                interviewsRepository ?? Substitute.For<IReadSideKeyValueStorage<InterviewData>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
-        }
-
-        public InterviewsSynchronizer InterviewsSynchronizer(
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader = null,
-            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader = null,
-            Func<HttpMessageHandler> httpMessageHandler = null,
-            IEventStore eventStore = null,
-            ILogger logger = null,
-            ISerializer serializer = null,
-            ICommandService commandService = null,
-            HeadquartersPushContext headquartersPushContext = null,
-            IPlainStorageAccessor<UserDocument> userDocumentStorage = null, IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
-            IHeadquartersInterviewReader headquartersInterviewReader = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
-            IArchiveUtils archiver = null)
-        {
-            return new InterviewsSynchronizer(
-                Mock.Of<IAtomFeedReader>(),
-                HeadquartersSettings(),
-                logger ?? Mock.Of<ILogger>(),
-                commandService ?? Mock.Of<ICommandService>(),
-                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
-                userDocumentStorage ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
-                plainQuestionnaireRepository ??
-                    Mock.Of<IPlainQuestionnaireRepository>(
-                        _ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == new QuestionnaireDocument()),
-                headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
-                HeadquartersPullContext(),
-                headquartersPushContext ?? HeadquartersPushContext(),
-                eventStore ?? Mock.Of<IEventStore>(),
-                serializer ?? Mock.Of<ISerializer>(),
-                interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryReader ?? Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>(),
-                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
-                interviewSynchronizationFileStorage ??
-                    Mock.Of<IInterviewSynchronizationFileStorage>(
-                        _ => _.GetImagesByInterviews() == new List<InterviewBinaryDataDescriptor>()),
-                archiver ?? Mock.Of<IArchiveUtils>(),
-                Mock.Of<IPlainTransactionManager>(),
-                Mock.Of<ITransactionManager>());
         }
 
         public InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null, Guid? interviewerId=null)
@@ -1139,11 +949,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public KeywordsProvider KeywordsProvider()
-        {
-            return new KeywordsProvider(Create.Other.SubstitutionService());
-        }
-
         public LabeledVariable LabeledVariable(string variableName="var", string label="lbl", Guid? questionId=null, params VariableValueLabel[] variableValueLabels)
         {
             return new LabeledVariable(variableName, label, questionId, variableValueLabels);
@@ -1151,14 +956,6 @@ namespace WB.Tests.Unit.TestFactories
 
         public LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
             => new LastInterviewStatus("entry-id", status);
-
-        public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
-            => new LiteEventBus(
-                liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>());
-
-        public ILiteEventRegistry LiteEventRegistry()
-            => new LiteEventRegistry();
 
         public LookupTable LookupTable(string tableName, string fileName = null)
         {
@@ -1187,15 +984,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public LookupTableService LookupTableService(
-            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
-        {
-            return new LookupTableService(
-                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
-        }
-
         public Macro Macro(string name, string content = null, string description = null)
         {
             return new Macro
@@ -1205,20 +993,6 @@ namespace WB.Tests.Unit.TestFactories
                 Description = description
             };
         }
-
-        public MacrosSubstitutionService MacrosSubstitutionService()
-            => new MacrosSubstitutionService();
-
-        public MapReportDenormalizer MapReportDenormalizer(
-            IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
-            QuestionnaireQuestionsInfo questionnaireQuestionsInfo=null,
-            QuestionnaireDocument questionnaireDocument=null)
-            => new MapReportDenormalizer(
-                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireQuestionsInfo));
 
         public MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
@@ -1301,20 +1075,6 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IUserInteractionService>(),
                 Mock.Of<IUserInterfaceStateService>());
             return result;
-        }
-
-        public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
-        {
-            eventBusSettings = eventBusSettings ?? new EventBusSettings
-            {
-                EventHandlerTypesWithIgnoredExceptions = new Type[0],
-                DisabledEventHandlerTypes = new Type[0]
-            };
-
-            var ncqrCompatibleEventDispatcher =
-                new NcqrCompatibleEventDispatcher(eventStore: Mock.Of<IEventStore>(), eventBusSettings: eventBusSettings, logger: logger ?? Mock.Of<ILogger>());
-              ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
-            return ncqrCompatibleEventDispatcher;
         }
 
         public IPublishedEvent<NewGroupAdded> NewGroupAddedEvent(string groupId, string parentGroupId = null,
@@ -1486,17 +1246,6 @@ namespace WB.Tests.Unit.TestFactories
                 version: version);
         }
 
-        public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
-        {
-            return new PreloadedDataService(
-                    new ExportViewFactory(
-                        new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
-                        .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
-                    new QuestionDataParser(),
-                    new UserViewFactory(new TestPlainStorage<UserDocument>()));
-
-        }
-
         public IPublishableEvent PublishableEvent(Guid? eventSourceId = null, IEvent payload = null)
         {
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<IEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
@@ -1649,8 +1398,8 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.Other.SubstitutionService(),
-                Create.Other.KeywordsProvider(),
+                Create.Service.SubstitutionService(),
+                Create.Service.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>());
         }
@@ -1786,17 +1535,6 @@ namespace WB.Tests.Unit.TestFactories
             return result;
         }
 
-        public QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-        {
-            return new QuestionnaireExpressionStateModelFactory(
-                macrosSubstitutionService ?? Create.Other.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
-        }
-
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
         {
             return new QuestionnaireExportStructure
@@ -1806,21 +1544,9 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public QuestionnaireFeedDenormalizer QuestionnaireFeedDenormalizer(IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeedWriter)
-        {
-            return new QuestionnaireFeedDenormalizer(questionnaireFeedWriter);
-        }
-
         public QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
         {
             return new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
-        }
-
-        public QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
-        {
-            return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IOptionsRepository>());
         }
 
         public IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
@@ -1834,22 +1560,9 @@ namespace WB.Tests.Unit.TestFactories
             }, Guid.Parse(questionnaireId??Guid.NewGuid().ToString()));
         }
 
-        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
-        {
-            return new QuestionnaireKeyValueStorage(
-                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
-        }
-
         public QuestionnaireLevelLabels QuestionnaireLevelLabels(string levelName="level", params LabeledVariable[] variableLabels)
         {
             return new QuestionnaireLevelLabels(levelName, variableLabels);
-        }
-
-        public QuestionnaireNameValidator QuestionnaireNameValidator(
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-        {
-            return new QuestionnaireNameValidator(
-                questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -1891,11 +1604,6 @@ namespace WB.Tests.Unit.TestFactories
 
         public ReadSideSettings ReadSideSettings()
             => new ReadSideSettings(readSideVersion: 0);
-
-        public RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions RebuildReadSideCqrsPostgresTransactionManager()
-            => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
-
-        public RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
         public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
             => Create.Other.Roster(
@@ -2006,7 +1714,7 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
                 Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
-                Create.Other.AnswerToStringService(),
+                Create.Service.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
@@ -2104,13 +1812,6 @@ namespace WB.Tests.Unit.TestFactories
             return statefulInterview;
         }
 
-        public IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
-        {
-            return new StatefulInterviewRepository(
-                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                eventBus: liteEventBus ?? Mock.Of<ILiteEventBus>());
-        }
-
         public StaticText StaticText(
             Guid? publicKey = null,
             string text = "Static Text X",
@@ -2160,11 +1861,6 @@ namespace WB.Tests.Unit.TestFactories
                 text));
         }
 
-        public ISubstitutionService SubstitutionService()
-        {
-            return new SubstitutionService();
-        }
-
         public IPublishedEvent<SupervisorAssigned> SupervisorAssignedEvent(Guid? interviewId = null, string userId = null,
             string supervisorId = null)
         {
@@ -2186,20 +1882,6 @@ namespace WB.Tests.Unit.TestFactories
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: 1, featuredQuestionsMeta: featuredQuestionsMeta,
                     createdOnClient: createdOnClient, comments: null, rejectedDateTime: null, interviewerAssignedDateTime: null));
-        }
-
-        public Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
-        {
-            return new Synchronizer(
-                Mock.Of<ILocalFeedStorage>(),
-                Mock.Of<IUserChangedFeedReader>(),
-                Mock.Of<ILocalUserFeedProcessor>(),
-                interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
-                Mock.Of<IQuestionnaireSynchronizer>(),
-                Mock.Of<IPlainTransactionManager>(),
-                HeadquartersPullContext(),
-                HeadquartersPushContext(),
-                Mock.Of<ILogger>());
         }
 
         public IPublishedEvent<TemplateImported> TemplateImportedEvent(
@@ -2344,19 +2026,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public TransactionManagerProvider TransactionManagerProvider(
-            Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
-            Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory = null,
-            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
-        {
-            return new TransactionManagerProvider(
-                transactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
-                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
-                Create.Other.ReadSideCacheSettings());
-        }
-
         public IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquartersEvent(Guid? interviewId = null, string userId = null, string comment = null)
         {
             return ToPublishedEvent(new UnapprovedByHeadquarters(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
@@ -2380,13 +2049,6 @@ namespace WB.Tests.Unit.TestFactories
         public UserArchived UserArchived()
         {
            return new UserArchived();
-        }
-
-        public UserChangedFeedReader UserChangedFeedReader(IHeadquartersSettings settings = null,
-            Func<HttpMessageHandler> messageHandler = null)
-        {
-            return new UserChangedFeedReader(settings ?? HeadquartersSettings(),
-                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(), HeadquartersPullContext());
         }
 
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name", bool isLockedByHQ = false)
@@ -2524,13 +2186,6 @@ namespace WB.Tests.Unit.TestFactories
             }
         }
 
-        public TeamViewFactory TeamViewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
-            IPlainStorageAccessor<UserDocument> usersReader = null)
-        {
-            return new TeamViewFactory(interviewSummaryReader, usersReader);
-        }
-
         public CommentedStatusHistroyView CommentedStatusHistroyView(InterviewStatus status=InterviewStatus.InterviewerAssigned, string comment=null, DateTime? timestamp=null)
         {
             return new CommentedStatusHistroyView()
@@ -2556,28 +2211,6 @@ namespace WB.Tests.Unit.TestFactories
         {
             return new ValidationCondition(expression, message);
         }
-
-        public CommandPostprocessor CommandPostprocessor(
-            IMembershipUserService membershipUserService, 
-            IRecipientNotifier recipientNotifier, 
-            IAccountRepository accountRepository, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage, 
-            ILogger logger,
-            IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null)
-        {
-             return new CommandPostprocessor(
-                membershipUserService,
-                recipientNotifier,
-                accountRepository,
-                documentStorage,
-                logger,
-                attachmentService ?? Mock.Of<IAttachmentService>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
-        }
-
-        public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
-            => new InterviewEventStreamOptimizer();
 
         public InterviewLinkedQuestionOptions InterviewLinkedQuestionOptions(params ChangedLinkedOptions[] options)
         {
@@ -2633,11 +2266,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public IEventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
-        {
-            return new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
-        }
-
         public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
         {
             return Mock.Of<ISnapshotStore>(_ => _.GetSnapshot(aggregateRootId, Moq.It.IsAny<int>()) == snapshot);
@@ -2647,13 +2275,6 @@ namespace WB.Tests.Unit.TestFactories
         {
             return Mock.Of<IEventStore>(_ =>
                 _.Read(eventSourceId, Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
-        }
-
-        public IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
-        {
-            return new DomainRepository(
-                aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
-                serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public IAggregateSnapshotter AggregateSnapshotter(EventSourcedAggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
@@ -2678,9 +2299,10 @@ namespace WB.Tests.Unit.TestFactories
             return result;
         }
 
-        public ITopologicalSorter<int> TopologicalSorter()
+        public EventBusSettings EventBusSettings() => new EventBusSettings
         {
-            return new TopologicalSorter<int>();
-        }
+            EventHandlerTypesWithIgnoredExceptions = new Type[] {},
+            DisabledEventHandlerTypes = new Type[] {},
+        };
     }
 }

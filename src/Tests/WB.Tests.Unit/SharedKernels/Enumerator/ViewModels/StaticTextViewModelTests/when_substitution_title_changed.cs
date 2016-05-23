@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
 
-            ILiteEventRegistry registry = Create.Other.LiteEventRegistry();
-            liteEventBus = Create.Other.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 

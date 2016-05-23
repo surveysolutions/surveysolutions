@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 && utils.Serialize(Moq.It.IsAny<SyncItem>()) == "sync item json"
                 && utils.Deserialize<bool>(negativeResponse) == false);
 
-            interviewsSynchronizer = Create.Other.InterviewsSynchronizer(
+            interviewsSynchronizer = Create.Service.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,

@@ -68,11 +68,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var aggregateSnapshotter = Create.Other.AggregateSnapshotter();
             Setup.InstanceToMockedServiceLocator(Create.Other.StatefulInterview(questionnaireId: Guid.NewGuid(),
                 userId: Guid.NewGuid(), questionnaire: null));
-            var domaiRepository = Create.Other.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
-            var aggregateRootRepository = Create.Other.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
+            var domaiRepository = Create.Service.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
+            var aggregateRootRepository = Create.Service.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
                 eventStore: eventStore, repository: domaiRepository);
 
-            var statefulInterviewRepository = Create.Other.StatefulInterviewRepository(aggregateRootRepository);
+            var statefulInterviewRepository = Create.Service.StatefulInterviewRepository(aggregateRootRepository);
 
             var result = statefulInterviewRepository.Get(aggregateRootId.FormatGuid());
 

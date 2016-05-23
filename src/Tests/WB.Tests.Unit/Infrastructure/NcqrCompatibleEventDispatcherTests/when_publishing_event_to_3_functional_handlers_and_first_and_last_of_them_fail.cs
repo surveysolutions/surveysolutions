@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondFunctionalEventHandlerMock = secondEventHandlerMock.As<IFunctionalEventHandler>();
 
-            eventDispatcher = Create.Other.NcqrCompatibleEventDispatcher();
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
             eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<int>());
             eventDispatcher.Register(secondEventHandlerMock.Object);
             eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<bool>());

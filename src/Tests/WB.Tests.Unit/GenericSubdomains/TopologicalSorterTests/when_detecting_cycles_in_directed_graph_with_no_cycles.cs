@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
                 {1, new[] {2}},
                 {2, new[] {3}}
             };
-            sorter = Create.Other.TopologicalSorter();
+            sorter = Create.Service.TopologicalSorter<int>();
         };
 
         Because of = () =>

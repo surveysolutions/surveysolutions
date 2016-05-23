@@ -42,8 +42,8 @@ namespace WB.Tests.Unit
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
             var sideBarSectionViewModel = new SideBarSectionViewModel(Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Create.Other.SubstitutionService(),
-                Create.Other.LiteEventRegistry(),
+                Create.Service.SubstitutionService(),
+                Create.Service.LiteEventRegistry(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
                 Mock.Of<IMvxMessenger>());
             sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();

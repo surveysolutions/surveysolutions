@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             publishableEvent = Create.Other.PublishableEvent();
 
-            eventDispatcher = Create.Other.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
                 {
                     EventHandlerTypesWithIgnoredExceptions = new[]

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 "questionnaire.csv");
 
             var preloadedDataService =
-                Create.Other.PreloadedDataService(questionnaire);
+                Create.Service.PreloadedDataService(questionnaire);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, new QuestionDataParser(), preloadedDataService);
         };

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.AtomFeedReaderTests
             handler.SetupResponseFromResource("http://localhost/feed", "WB.Tests.Unit.BoundedContexts.Supervisor.AtomFeedReaderTests.SimpleStringFeed.xml");
             handler.SetupResponseFromResource("http://localhost/feed/archive", "WB.Tests.Unit.BoundedContexts.Supervisor.AtomFeedReaderTests.SimpleStringArchiveFeed.xml");
 
-            reader = Create.Other.AtomFeedReader(messageHandler: () => handler);
+            reader = Create.Service.AtomFeedReader(messageHandler: () => handler);
         };
 
         Because of = () =>

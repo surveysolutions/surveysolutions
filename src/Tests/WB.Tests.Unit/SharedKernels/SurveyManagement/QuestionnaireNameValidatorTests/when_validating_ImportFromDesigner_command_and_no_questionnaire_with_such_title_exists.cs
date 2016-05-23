@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
                       Create.Other.QuestionnaireBrowseItem(title: "different title", questionnaireId: differentQuestionnaireId),
                 }.AsQueryable()));
 
-            validator = Create.Other.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
+            validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
         Because of = () =>
