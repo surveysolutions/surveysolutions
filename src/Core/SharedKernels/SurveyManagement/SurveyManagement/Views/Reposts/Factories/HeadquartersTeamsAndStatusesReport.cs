@@ -21,29 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
         }
 
-        protected override IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input,
-            IQueryOver<InterviewSummary, InterviewSummary> interviews)
-        {
-            var filteredInterviews = interviews.Where(x => !x.IsDeleted);
-
-            if (input.TemplateId.HasValue)
-            {
-                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireId == input.TemplateId);
-            }
-
-            if (input.TemplateVersion.HasValue)
-            {
-                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
-            }
-
-            if (input.ViewerId.HasValue)
-            {
-                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadId == input.ViewerId);
-            }
-
-            return filteredInterviews;
-        }
-
         protected override Expression<Func<InterviewSummary, object>> ResponsibleIdSelector
         {
             get { return (interivew) => interivew.TeamLeadId; }
