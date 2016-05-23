@@ -1,40 +1,20 @@
-﻿extern alias designer;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Events.User;
-using Moq;
-using MvvmCross.Plugins.Messenger;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using NHibernate.Bytecode;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Events.User;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -180,12 +160,6 @@ namespace WB.Tests.Unit.TestFactories
             public InterviewDeleted InterviewDeleted()
                 => new InterviewDeleted(userId: Guid.NewGuid());
 
-            public IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
-            {
-                return new InterviewerAssigned(userId, interviewerId, DateTime.Now)
-                        .ToPublishedEvent(eventSourceId: interviewId);
-            }
-
             public InterviewCompleted InteviewCompleted()
                 => new InterviewCompleted(
                     Guid.NewGuid(),
@@ -230,52 +204,6 @@ namespace WB.Tests.Unit.TestFactories
             public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
                 return new InterviewSynchronized(synchronizationDto);
-            }
-
-            public IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
-            {
-                return new LookupTableAdded
-                {
-                    LookupTableId = entityId
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
-            {
-                return new LookupTableDeleted
-                {
-                    LookupTableId = entityId
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
-            {
-                return new LookupTableUpdated
-                {
-                    LookupTableId = entityId,
-                    LookupTableName = name,
-                    LookupTableFileName = fileName
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public IPublishedEvent<MacroAdded> MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
-            {
-                return new MacroAdded(entityId, responsibleId ?? Guid.NewGuid())
-                    .ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public IPublishedEvent<MacroDeleted> MacroDeleted(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
-            {
-                return new MacroDeleted(entityId, responsibleId ?? Guid.NewGuid())
-                    .ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public IPublishedEvent<MacroUpdated> MacroUpdated(Guid questionnaireId, Guid entityId, 
-                string name, string content, string description,
-                Guid? responsibleId = null)
-            {
-                return new MacroUpdated(entityId, name, content, description, responsibleId ?? Guid.NewGuid())
-                    .ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
             public MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(Guid? questionId = null,
@@ -324,25 +252,6 @@ namespace WB.Tests.Unit.TestFactories
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     validationConditions: new List<ValidationCondition>());
-            }
-
-            public IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
-                string name, 
-                string password, 
-                string email,
-                bool islockedBySupervisor, 
-                bool isLocked,
-                Guid? eventId = null)
-            {
-                return new NewUserCreated
-                {
-                    Name = name,
-                    Password = password,
-                    Email = email,
-                    IsLockedBySupervisor = islockedBySupervisor,
-                    IsLocked = isLocked,
-                    Roles = new[] { UserRoles.Operator }
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
             public NumericQuestionChanged NumericQuestionChanged(
@@ -557,16 +466,6 @@ namespace WB.Tests.Unit.TestFactories
                 linkedFilterExpression: null);
             }
 
-            public IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
-            {
-                var questionnaireDeleted = new QuestionnaireDeleted
-                {
-
-                    QuestionnaireVersion = version ?? 1
-                }.ToPublishedEvent(questionnaireId ?? Guid.NewGuid());
-                return questionnaireDeleted;
-            }
-
             public QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
 
             public QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
@@ -725,51 +624,6 @@ namespace WB.Tests.Unit.TestFactories
                     conditionExpression : enablementCondition,
                     validationExpression : validationExpression
                 );
-            }
-
-            public IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email, Guid? eventId = null)
-            {
-                return new UserChanged
-                {
-                    PasswordHash = password,
-                    Email = email
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
-            }
-
-            public IPublishedEvent<UserLinkedToDevice> UserLinkedToDevice(Guid userId, string deviceId, DateTime eventTimeStamp)
-            {
-                return new UserLinkedToDevice
-                {
-                    DeviceId = deviceId
-                }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
-            }
-
-            public IPublishedEvent<UserLocked> UserLocked(Guid userId, Guid? eventId = null)
-            {
-                return new UserLocked
-                {
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
-            }
-
-            public IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId, Guid? eventId = null)
-            {
-                return new UserLockedBySupervisor
-                {
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
-            }
-
-            public IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId, Guid? eventId = null)
-            {
-                return new UserUnlocked
-                {
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
-            }
-
-            public IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId, Guid? eventId = null)
-            {
-                return new UserUnlockedBySupervisor
-                {
-                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
             public YesNoQuestionAnswered YesNoQuestionAnswered(Guid? questionId = null, AnsweredYesNoOption[] answeredOptions = null)

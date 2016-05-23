@@ -13,7 +13,6 @@ namespace WB.Tests.Unit.TestFactories
         public IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid? interviewId = null)
             => Create.Event.InterviewHardDeleted().ToPublishedEvent(eventSourceId: interviewId);
 
-
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
             Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
             => Create.Event.InterviewStatusChanged(status, comment).ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
