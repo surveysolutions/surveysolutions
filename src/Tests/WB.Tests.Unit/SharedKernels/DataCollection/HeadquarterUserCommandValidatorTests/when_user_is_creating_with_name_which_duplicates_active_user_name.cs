@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.Other.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.Command.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();
