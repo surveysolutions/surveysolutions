@@ -392,6 +392,7 @@
     <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewFactory.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewInputModel.cs" />
+    <Compile Include="Views\Reposts\Factories\AbstractTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\IMapReport.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
