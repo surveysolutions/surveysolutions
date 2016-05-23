@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
