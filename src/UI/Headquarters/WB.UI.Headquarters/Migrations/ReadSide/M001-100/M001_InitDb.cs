@@ -10,162 +10,164 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             Create.Table("cumulativereportstatuschanges")
                 .WithColumn("entryid").AsString(255).NotNullable().PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32()
-                .WithColumn("date").AsDateTime()
-                .WithColumn("status").AsInt32()
-                .WithColumn("changevalue").AsInt32();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable()
+                .WithColumn("date").AsDateTime().Nullable()
+                .WithColumn("status").AsInt32().Nullable()
+                .WithColumn("changevalue").AsInt32().Nullable();
 
             Create.Table("interviewcommentaries")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("isdeleted").AsBoolean()
-                .WithColumn("isapprovedbyhq").AsBoolean()
-                .WithColumn("questionnaireid").AsString()
-                .WithColumn("questionnaireversion").AsInt32();
+                .WithColumn("isdeleted").AsBoolean().Nullable()
+                .WithColumn("isapprovedbyhq").AsBoolean().Nullable()
+                .WithColumn("questionnaireid").AsString().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable();
 
             Create.Table("commentaries")
                 .WithColumn("interviewid").AsString(255).PrimaryKey()
-                .WithColumn("commentsequence").AsInt32()
-                .WithColumn("originatorname").AsString()
-                .WithColumn("originatoruserid").AsGuid()
-                .WithColumn("originatorrole").AsInt32()
-                .WithColumn("timestamp").AsDateTime()
-                .WithColumn("variable").AsString()
-                .WithColumn("roster").AsString()
-                .WithColumn("rostervector").AsCustom("numeric[]")
-                .WithColumn("comment").AsString()
+                .WithColumn("commentsequence").AsInt32().Nullable()
+                .WithColumn("originatorname").AsString().Nullable()
+                .WithColumn("originatoruserid").AsGuid().Nullable()
+                .WithColumn("originatorrole").AsInt32().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("variable").AsString().Nullable()
+                .WithColumn("roster").AsString().Nullable()
+                .WithColumn("rostervector").AsCustom("numeric[]").Nullable()
+                .WithColumn("comment").AsString().Nullable()
                 .WithColumn("position").AsInt32().NotNullable();
 
             Create.Table("interviewdataexportrecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("recordid").AsString()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("levelname").AsString()
-                .WithColumn("parentrecordids").AsCustom("text[]")
-                .WithColumn("referencevalues").AsCustom("text[]")
-                .WithColumn("systemvariablevalues").AsCustom("text[]")
-                .WithColumn("answers").AsCustom("text[]");
+                .WithColumn("recordid").AsString().Nullable()
+                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("levelname").AsString().Nullable()
+                .WithColumn("parentrecordids").AsCustom("text[]").Nullable()
+                .WithColumn("referencevalues").AsCustom("text[]").Nullable()
+                .WithColumn("systemvariablevalues").AsCustom("text[]").Nullable()
+                .WithColumn("answers").AsCustom("text[]").Nullable();
 
             Create.Table("mapreportpoints")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32()
-                .WithColumn("variable").AsString()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("latitude").AsFloat()
-                .WithColumn("longitude").AsFloat();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable()
+                .WithColumn("variable").AsString().Nullable()
+                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("latitude").AsDouble().Nullable()
+                .WithColumn("longitude").AsDouble().Nullable();
 
             Create.Table("interviewfeedentries")
                 .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("supervisorid").AsString()
-                .WithColumn("entrytype").AsInt32()
-                .WithColumn("timestamp").AsDateTime()
-                .WithColumn("interviewid").AsString()
-                .WithColumn("userid").AsString()
-                .WithColumn("interviewerid").AsString();
+                .WithColumn("supervisorid").AsString().Nullable()
+                .WithColumn("entrytype").AsInt32().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("interviewid").AsString().Nullable()
+                .WithColumn("userid").AsString().Nullable()
+                .WithColumn("interviewerid").AsString().Nullable();
 
             Create.Table("interviewresponsibles")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("userid").AsGuid();
+                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("userid").AsGuid().Nullable();
 
             Create.Table("interviewstatuses")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable();
 
 
             Create.Table("interviewcommentedstatuses")
                 .WithColumn("interviewid").AsString(255).PrimaryKey()
-                .WithColumn("id").AsGuid()
-                .WithColumn("supervisorid").AsGuid()
-                .WithColumn("supervisorname").AsString()
-                .WithColumn("statuschangeoriginatorid").AsGuid()
-                .WithColumn("statuschangeoriginatorname").AsString()
-                .WithColumn("statuschangeoriginatorrole").AsInt32()
-                .WithColumn("status").AsInt32()
-                .WithColumn("timestamp").AsDateTime()
-                .WithColumn("timespanwithpreviousstatus").AsInt32()
-                .WithColumn("comment").AsString()
+                .WithColumn("id").AsGuid().Nullable()
+                .WithColumn("interviewername").AsString().Nullable()
+                .WithColumn("interviewerid").AsGuid().Nullable()
+                .WithColumn("supervisorid").AsGuid().Nullable()
+                .WithColumn("supervisorname").AsString().Nullable()
+                .WithColumn("statuschangeoriginatorid").AsGuid().Nullable()
+                .WithColumn("statuschangeoriginatorname").AsString().Nullable()
+                .WithColumn("statuschangeoriginatorrole").AsInt32().Nullable()
+                .WithColumn("status").AsInt32().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("timespanwithpreviousstatus").AsInt64().Nullable()
+                .WithColumn("comment").AsString().Nullable()
                 .WithColumn("position").AsInt32().NotNullable();
 
             Create.Table("interviewstatustimespans")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable();
 
             Create.Table("interviewsummaries")
                 .WithColumn("summaryid").AsString(255).PrimaryKey()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("questionnairetitle").AsString()
-                .WithColumn("responsiblename").AsString()
-                .WithColumn("teamleadid").AsGuid()
-                .WithColumn("teamleadname").AsString()
-                .WithColumn("responsiblerole").AsInt32()
-                .WithColumn("updatedate").AsDateTime()
-                .WithColumn("wasrejectedbysupervisor").AsBoolean()
-                .WithColumn("wascreatedonclient").AsBoolean()
+                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("questionnairetitle").AsString().Nullable()
+                .WithColumn("responsiblename").AsString().Nullable()
+                .WithColumn("teamleadid").AsGuid().Nullable()
+                .WithColumn("teamleadname").AsString().Nullable()
+                .WithColumn("responsiblerole").AsInt32().Nullable()
+                .WithColumn("updatedate").AsDateTime().Nullable()
+                .WithColumn("wasrejectedbysupervisor").AsBoolean().Nullable()
+                .WithColumn("wascreatedonclient").AsBoolean().Nullable()
                 .WithColumn("receivedbyinterviewer").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32()
-                .WithColumn("responsibleid").AsGuid()
-                .WithColumn("status").AsInt32()
-                .WithColumn("isdeleted").AsBoolean()
-                .WithColumn("haserrors").AsBoolean();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable()
+                .WithColumn("responsibleid").AsGuid().Nullable()
+                .WithColumn("status").AsInt32().Nullable()
+                .WithColumn("isdeleted").AsBoolean().Nullable()
+                .WithColumn("haserrors").AsBoolean().Nullable();
 
             Create.Table("answerstofeaturedquestions")
                 .WithColumn("id").AsInt32().PrimaryKey()
-                .WithColumn("questionid").AsGuid()
-                .WithColumn("answertitle").AsString()
-                .WithColumn("answervalue").AsString()
-                .WithColumn("interviewsummaryid").AsString(255);
+                .WithColumn("questionid").AsGuid().Nullable()
+                .WithColumn("answertitle").AsString().Nullable()
+                .WithColumn("answervalue").AsString().Nullable()
+                .WithColumn("interviewsummaryid").AsString(255).Nullable();
 
             Create.Table("interviewsyncpackagemetas")
                 .WithColumn("packageid").AsString(255).PrimaryKey()
-                .WithColumn("sortindex").AsInt64()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("itemtype").AsString()
-                .WithColumn("serializedpackagesize").AsInt32();
+                .WithColumn("sortindex").AsInt64().Nullable()
+                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("itemtype").AsString().Nullable()
+                .WithColumn("serializedpackagesize").AsInt32().Nullable();
 
             Create.Table("questionnairefeedentries")
                 .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid()
-                .WithColumn("questionnaireversion").AsInt32()
-                .WithColumn("entrytype").AsInt32()
-                .WithColumn("timestamp").AsDateTime();
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable()
+                .WithColumn("entrytype").AsInt32().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable();
 
             Create.Table("tabletdocuments")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("deviceid").AsGuid()
-                .WithColumn("androidid").AsString()
-                .WithColumn("registrationdate").AsDateTime();
+                .WithColumn("deviceid").AsGuid().Nullable()
+                .WithColumn("androidid").AsString().Nullable()
+                .WithColumn("registrationdate").AsDateTime().Nullable();
 
             Create.Table("timespanbetweenstatuses")
                 .WithColumn("id").AsInt32().PrimaryKey()
-                .WithColumn("supervisorid").AsGuid()
-                .WithColumn("supervisorname").AsString()
-                .WithColumn("interviewerid").AsGuid()
-                .WithColumn("interviewername").AsString()
-                .WithColumn("beginstatus").AsInt32()
-                .WithColumn("endstatus").AsInt32()
-                .WithColumn("endstatustimestamp").AsDateTime()
-                .WithColumn("timespan").AsInt32()
-                .WithColumn("interviewstatustimespans").AsString(255)
-                .WithColumn("interviewid").AsString(255);
+                .WithColumn("supervisorid").AsGuid().Nullable()
+                .WithColumn("supervisorname").AsString().Nullable()
+                .WithColumn("interviewerid").AsGuid().Nullable()
+                .WithColumn("interviewername").AsString().Nullable()
+                .WithColumn("beginstatus").AsInt32().Nullable()
+                .WithColumn("endstatus").AsInt32().Nullable()
+                .WithColumn("endstatustimestamp").AsDateTime().Nullable()
+                .WithColumn("timespan").AsInt64().Nullable()
+                .WithColumn("interviewstatustimespans").AsString(255).Nullable()
+                .WithColumn("interviewid").AsString(255).Nullable();
 
             Create.Table("userchangedfeedentries")
                 .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("changeduserid").AsString()
-                .WithColumn("timestamp").AsDateTime()
-                .WithColumn("supervisorid").AsString()
-                .WithColumn("entrytype").AsInt32();
+                .WithColumn("changeduserid").AsString().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("supervisorid").AsString().Nullable()
+                .WithColumn("entrytype").AsInt32().Nullable();
 
             Create.Table("lastpublishedeventpositionforhandlers")
                 .WithColumn("id").AsString(255).PrimaryKey()
-                .WithColumn("eventsourceidoflastsuccessfullyhandledevent").AsGuid()
-                .WithColumn("eventsequenceoflastsuccessfullyhandledevent").AsInt32()
-                .WithColumn("commitposition").AsInt32()
-                .WithColumn("prepareposition").AsInt32();
+                .WithColumn("eventsourceidoflastsuccessfullyhandledevent").AsGuid().Nullable()
+                .WithColumn("eventsequenceoflastsuccessfullyhandledevent").AsInt32().Nullable()
+                .WithColumn("commitposition").AsInt64().Nullable()
+                .WithColumn("prepareposition").AsInt64().Nullable();
 
             Create.Index("cumulativereportstatuschanges_questionnaire")
                 .OnTable("cumulativereportstatuschanges")
