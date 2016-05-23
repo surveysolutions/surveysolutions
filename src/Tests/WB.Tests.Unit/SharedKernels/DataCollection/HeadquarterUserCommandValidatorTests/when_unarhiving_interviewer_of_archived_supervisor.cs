@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(user, Create.Other.UnarchiveUserCommand(user.Id)));
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(user, Create.Command.UnarchiveUserCommand(user.Id)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();
