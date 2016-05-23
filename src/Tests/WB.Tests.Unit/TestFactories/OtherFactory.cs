@@ -97,13 +97,20 @@ using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGen
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
 using AttachmentsController = WB.Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController;
 
@@ -151,7 +158,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public AnswerNotifier AnswerNotifier()
         {
-            return new AnswerNotifier(Create.Other.LiteEventRegistry());
+            return new AnswerNotifier(Create.Service.LiteEventRegistry());
         }
 
         public IAnswerToStringService AnswerToStringService()
@@ -1378,8 +1385,8 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.Other.SubstitutionService(),
-                Create.Other.KeywordsProvider(),
+                Create.Service.SubstitutionService(),
+                Create.Service.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>());
         }
