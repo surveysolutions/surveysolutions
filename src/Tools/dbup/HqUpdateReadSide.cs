@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,11 +12,13 @@ using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
+using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace dbup
 {
@@ -26,7 +29,7 @@ namespace dbup
         [Argument(Name = "cs")]
         public string ConnectionString { get; set; }
 
-        public Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
+        public async Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
@@ -40,11 +43,25 @@ namespace dbup
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
 
-            SchemaExport export = new SchemaExport(cfg);
-            export.SetOutputFile("init-read.sql");
-            export.Create(false, false);
 
-            return Task.FromResult(true);
+            using (var connection = new NpgsqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                var command = connection.CreateCommand();
+                command.CommandText = @"CREATE TABLE ""VersionInfo""
+(
+  ""Version"" bigint NOT NULL,
+  ""AppliedOn"" timestamp without time zone,
+  ""Description"" character varying(1024)
+)";
+                await command.ExecuteNonQueryAsync();
+                var insertCommand = connection.CreateCommand();
+                insertCommand.CommandText = @"INSERT INTO ""VersionInfo"" VALUES(:version, :timeStamp, :desc);";
+                insertCommand.Parameters.AddWithValue("version", 1);
+                insertCommand.Parameters.AddWithValue("timeStamp", DateTime.UtcNow);
+                insertCommand.Parameters.AddWithValue("desc", "marked as 0 state for db");
+            }
         }
 
         private HbmMapping GetMappings()
