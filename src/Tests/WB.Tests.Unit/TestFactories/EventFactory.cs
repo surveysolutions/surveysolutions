@@ -40,9 +40,6 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class EventFactory
     {
-        public readonly PublishedEventFactory Published = new PublishedEventFactory();
-        public readonly DesignerEventFactory Designer = new DesignerEventFactory();
-
             public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
             {
                 return new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
