@@ -13,9 +13,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class OldschoolChartStatisticsDataProvider : IOldschoolChartStatisticsDataProvider
     {
-        private readonly INaviteReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
 
-        public OldschoolChartStatisticsDataProvider(INaviteReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
+        public OldschoolChartStatisticsDataProvider(INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
         {
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
         }

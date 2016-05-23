@@ -1,122 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Transform;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
     internal class SupervisorTeamsAndStatusesReport : ISupervisorTeamsAndStatusesReport
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
+        private readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
 
-        public SupervisorTeamsAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
+        public SupervisorTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader)
         {
             this.interviewsReader = interviewsReader;
         }
-
         public TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
         {
-            var items = this.interviewsReader.Query(_ =>
+            var rowCount = this.interviewsReader.QueryOver(_ => ApplyFilter(input, _)
+                        .Select(Projections.Count(Projections.Distinct(Projections.Property<InterviewSummary>(x => x.ResponsibleId)))))
+                        .SingleOrDefault<int>();
+
+            var statistics =
+                this.interviewsReader.QueryOver(
+                    _ => ApplyFilter(input, _).Select(
+                        Projections.ProjectionList()
+                            .Add(Projections.Group<InterviewSummary>(c => c.ResponsibleId), "ResponsibleId")
+                            .Add(Projections.Min(Projections.Property<InterviewSummary>(i => i.ResponsibleName)), "Responsible")
+                            .Add(AddCountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
+                            .Add(AddCountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
+                            .Add(AddCountByStatus(InterviewStatus.Completed), "CompletedCount")
+                            .Add(AddCountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
+                            .Add(AddCountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
+                            .Add(AddCountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
+                            .Add(AddCountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
+                            .Add(Projections.RowCount(), "TotalCount")
+                        ));
+
+            var sorting = QueryableExtensions.ParseSortExpression(input.Order);
+            if (sorting != null)
             {
-                var filteredInterviews = ApplyFilter(input, _);
-
-                var responsibles = GetUsersToCountOn(input, filteredInterviews);
-
-                var groupedResults = (from i in filteredInterviews
-                                      where responsibles.Contains(i.ResponsibleId)
-                                      group i by new { i.ResponsibleId, i.ResponsibleName, i.Status }
-                                          into g
-                                          select new CounterObject
-                                          {
-                                              ResponsibleId = g.Key.ResponsibleId,
-                                              ResponsibleName = g.Key.ResponsibleName,
-                                              Status = g.Key.Status,
-                                              InterviewsCount = g.Count()
-                                          }).ToList();
-
-                var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
-                foreach (var responsibleId in responsibles)
+                foreach (var orderRequestItem in sorting)
                 {
-                    statistics.Add(new StatisticsLineGroupedByUserAndTemplate
-                    {
-                        ResponsibleId = responsibleId,
-                        ResponsibleName = groupedResults.FirstOrDefault(x => x.ResponsibleId == responsibleId).ResponsibleName,
-                        SupervisorAssignedCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.SupervisorAssigned),
-                        InterviewerAssignedCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.InterviewerAssigned),
-                        CompletedCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.Completed),
-                        ApprovedBySupervisorCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedBySupervisor),
-                        RejectedBySupervisorCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedBySupervisor),
-                        ApprovedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedByHeadquarters),
-                        RejectedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedByHeadquarters),
-                        TotalCount = groupedResults.Where(x => x.ResponsibleId == responsibleId).Sum(x => x.InterviewsCount),
-                        QuestionnaireId = input.TemplateId,
-                        QuestionnaireVersion = input.TemplateVersion
-                    });
+                    statistics.UnderlyingCriteria.AddOrder(new Order(orderRequestItem.Field,
+                        orderRequestItem.Direction == OrderDirection.Asc));
                 }
-
-
-                return statistics;
-            });
-
-            var rowCount = this.interviewsReader.Query(_ => ApplyFilter(input, _).Select(x => x.ResponsibleId).Distinct().Count());
-
-            List<TeamsAndStatusesReportLine> currentPage = items.Select(doc => new TeamsAndStatusesReportLine {
-                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
-                    InterviewerAssignedCount = doc.InterviewerAssignedCount,
-
-                    CompletedCount = doc.CompletedCount,
-
-                    ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
-                    RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
-
-                    ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
-                    RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
-
-                    TotalCount = doc.TotalCount,
-
-                    QuestionnaireId = doc.QuestionnaireId,
-                    QuestionnaireVersion = doc.QuestionnaireVersion,
-                    ResponsibleId = doc.ResponsibleId,
-                    Responsible = doc.ResponsibleName
-                }).ToList();
-
-            return new TeamsAndStatusesReportView {
-                    TotalCount = rowCount,
-                    Items = currentPage
-                };
-        }
-
-        private static int GetCountInStatus(List<CounterObject> groupedResults, Guid responsibleId, InterviewStatus status)
-        {
-            var resultsByTeamLeadAndStatus = groupedResults.SingleOrDefault(x => x.ResponsibleId == responsibleId && x.Status == status);
-            if (resultsByTeamLeadAndStatus != null)
-            {
-                return resultsByTeamLeadAndStatus.InterviewsCount;
             }
 
-            return 0;
+            var currentPage =
+                statistics.TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
+                    .Skip((input.Page - 1) * input.PageSize)
+                    .Take(input.PageSize).List<TeamsAndStatusesReportLine>();
+
+            return new TeamsAndStatusesReportView
+            {
+                TotalCount = rowCount,
+                Items = currentPage
+            };
         }
 
-        private static List<Guid> GetUsersToCountOn(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> filteredInterviews)
+        private AggregateProjection AddCountByStatus(InterviewStatus status)
         {
-            var usersToCountOn = filteredInterviews.OrderUsingSortExpression(input.Order)
-               .Select(x => new { x.ResponsibleName, x.ResponsibleId })
-               .Distinct()
-               .Skip((input.Page - 1) * input.PageSize)
-               .Take(input.PageSize)
-               .ToList()
-               .Select(x => x.ResponsibleId)
-               .ToList();
-
-            return usersToCountOn;
+            return Projections.Sum(
+                Projections.Conditional(
+                    Restrictions.Where<InterviewSummary>(
+                        i => i.Status == status),
+                    Projections.Constant(1),
+                    Projections.Constant(0)));
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> interviews)
+        private static IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryOver<InterviewSummary, InterviewSummary> interviews)
         {
             var filteredInterviews = interviews.Where(x => !x.IsDeleted);
 
@@ -136,18 +95,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
 
             return filteredInterviews;
-        }
-
-
-        private class CounterObject
-        {
-            public int InterviewsCount { get; set; }
-
-            public string ResponsibleName { get; set; }
-
-            public Guid ResponsibleId { get; set; }
-
-            public InterviewStatus Status { get; set; }
         }
     }
 }

@@ -906,11 +906,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_with_dependent_interview_which_throws_an_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_the_same_questionnaire_simultaneously.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_not_existing_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\SupervisorTeamsAndStatusesReportContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_empty_data_base.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\SurveysAndStatusesReportTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
@@ -926,11 +921,6 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedBySupervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Restored.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_SupervisorAssigned.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\HeadquartersTeamsAndStatusesReportContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_empty_data_base.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_PushSyncItem_called_and_NullReferenceException_were_thrown.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_QueueLength_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
