@@ -28,7 +28,7 @@ namespace dbup
         [Argument(Name = "cs")]
         public string ConnectionString { get; set; }
 
-        public Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
+        public async Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
@@ -42,7 +42,7 @@ namespace dbup
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
 
-            return Task.FromResult(true);
+            await DbMarker.MarkAsZeroMigrationDone(this.ConnectionString);
         }
 
         private HbmMapping GetMappings()
