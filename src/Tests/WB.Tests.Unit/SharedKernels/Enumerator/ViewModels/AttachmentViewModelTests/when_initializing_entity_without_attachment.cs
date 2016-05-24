@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
 
-            viewModel = Create.Other.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
+            viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));

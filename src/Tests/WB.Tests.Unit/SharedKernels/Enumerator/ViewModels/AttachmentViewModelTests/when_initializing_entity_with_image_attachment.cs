@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
                 s.GetMetadata(attachmentContentId) == attachmentContentMetadata
                 && s.GetContent(attachmentContentId) == attachmentContentData.Content);
 
-            viewModel = Create.Other.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
+            viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));

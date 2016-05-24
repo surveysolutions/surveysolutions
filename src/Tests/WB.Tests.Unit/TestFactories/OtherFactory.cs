@@ -9,8 +9,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 using System.Globalization;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NSubstitute;
@@ -21,9 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
@@ -48,11 +44,8 @@ using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -193,24 +186,6 @@ namespace WB.Tests.Unit.TestFactories
                 new List<Identity>(),
                 new List<Identity>());
         }
-
-        public EnumerationStageViewModel EnumerationStageViewModel(
-            IInterviewViewModelFactory interviewViewModelFactory = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null,
-            ISubstitutionService substitutionService = null,
-            ILiteEventRegistry eventRegistry = null,
-            IMvxMessenger messenger = null,
-            IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
-            => new EnumerationStageViewModel(
-                interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                substitutionService ?? Mock.Of<ISubstitutionService>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
 
         public EventContext EventContext()
         {
@@ -912,28 +887,6 @@ namespace WB.Tests.Unit.TestFactories
             return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
         }
 
-        public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
-            IQuestionnaire questionnaire = null,
-            IStatefulInterview interview = null,
-            ILiteEventRegistry eventRegistry = null,
-            QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
-        {
-            var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
-            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
-            interview = interview ?? Mock.Of<IStatefulInterview>();
-
-            return new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
-                Create.Service.AnswerToStringService(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
-                questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                answering ?? Mock.Of<AnsweringViewModel>());
-        }
-
         public SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null,
             Guid? cascadeFromQuestionId = null, 
@@ -1270,17 +1223,6 @@ namespace WB.Tests.Unit.TestFactories
             {
                 Content = content,
             };
-        }
-
-        public AttachmentViewModel AttachmentViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
-        {
-            return new AttachmentViewModel(
-                questionnaireRepository: questionnaireRepository,
-                interviewRepository: interviewRepository,
-                attachmentContentStorage: attachmentContentStorage);
         }
 
         public WB.Core.SharedKernels.Enumerator.Views.AttachmentContent Enumerator_AttachmentContent(string id)
