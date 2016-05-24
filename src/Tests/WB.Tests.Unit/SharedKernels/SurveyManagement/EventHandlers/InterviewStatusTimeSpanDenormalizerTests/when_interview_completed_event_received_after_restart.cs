@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.Other.InterviewCompletedEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewCompletedEvent(interviewId: interviewId));
 
         It should_contain_only_one_complete_record =
             () =>

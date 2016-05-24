@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 serializer: serializer);
         };
 
-        Because of = () => synchronizationDenormalizer.Handle(Create.Other.InterviewerAssignedEvent());
+        Because of = () => synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewerAssignedEvent());
 
         It should_store_meta_information_of_package = () =>
             interviewPackageStorageWriterMock.Verify(x => 
