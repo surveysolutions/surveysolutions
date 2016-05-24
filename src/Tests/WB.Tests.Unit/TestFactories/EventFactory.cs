@@ -124,8 +124,8 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1);
 
-        public InterviewHardDeleted InterviewHardDeleted()
-            => new InterviewHardDeleted(userId: Guid.NewGuid());
+        public InterviewHardDeleted InterviewHardDeleted(Guid? userId = null)
+            => new InterviewHardDeleted(userId: userId ?? Guid.NewGuid());
 
         public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new InterviewOnClientCreated(
