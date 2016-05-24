@@ -62,6 +62,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/jquery.validate.js",
                 "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"
                 ));
+
             bundles.Add(new ScriptBundle("~/js/list").Include(
                 "~/Scripts/ko.pager.js",
                 "~/Scripts/viewmodels/listview.js",
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/spin.js",
                 "~/Scripts/knockout/ko.spin.js"
                 ));
+
             bundles.Add(new ScriptBundle("~/js/interview-general").Include(
                 "~/Scripts/knockout.validation.js",
                 "~/Scripts/bootstrap-datepicker.js",
