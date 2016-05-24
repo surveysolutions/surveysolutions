@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
 
             var interviewExportedCommentariesDenormalizer = CreateInterviewExportedCommentariesDenormalizer(interviewCommentariesStorage: interviewCommentariesStorage);
 
-            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQEvent(interviewId: interviewId));
+            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId));
 
             Assert.That(interviewCommentaries.IsApprovedByHQ, Is.True);
             Assert.That(interviewCommentaries.Commentaries.Count, Is.EqualTo(0));
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
 
             var interviewExportedCommentariesDenormalizer = CreateInterviewExportedCommentariesDenormalizer(interviewCommentariesStorage: interviewCommentariesStorage);
 
-            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQEvent(interviewId: interviewId, comment:comment));
+            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId, comment:comment));
 
             Assert.That(interviewCommentaries.IsApprovedByHQ, Is.True);
             Assert.That(interviewCommentaries.Commentaries[0].Comment, Is.EqualTo(comment));

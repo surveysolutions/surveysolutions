@@ -53,8 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         Because of = () =>
         {
-            synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.RejectedBySupervisor, interviewId: interviewId));
-            synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.Completed, interviewId: interviewId));
+            synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, interviewId: interviewId));
+            synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Completed, interviewId: interviewId));
         };
 
         It should_create_deletion_synchronization_package = () =>

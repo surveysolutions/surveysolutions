@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             statusEventsToPublish = new List<IPublishableEvent>();
 
-            statusEventsToPublish.Add(Create.PublishedEvent.InterviewOnClientCreatedEvent(interviewId: Guid.NewGuid()));
-            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreatedEvent(interviewId: Guid.NewGuid()));
-            statusEventsToPublish.Add(Create.PublishedEvent.InterviewFromPreloadedDataCreatedEvent(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewOnClientCreated(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewFromPreloadedDataCreated(interviewId: Guid.NewGuid()));
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };

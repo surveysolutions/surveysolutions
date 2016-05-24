@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewHardDeletedEvent(userId: responsibleId));
+            updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewHardDeleted(userId: responsibleId));
 
         It should_updatedModel_be_marked_as_deleted = () =>
             updatedModel.IsDeleted.ShouldEqual(true);
