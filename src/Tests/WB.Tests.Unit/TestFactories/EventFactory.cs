@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -121,271 +118,137 @@ namespace WB.Tests.Unit.TestFactories
                 DateTime.Now, 
                 selectedRosterVectors ?? new decimal[][]{});
 
-        public NewQuestionAdded NewQuestionAdded(
-            Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-            string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
-            QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false,
-            QuestionProperties properties = null)
-            => new NewQuestionAdded(
-                publicKey: publicKey,
-                groupPublicKey: groupPublicKey,
-                questionText: questionText,
-                stataExportCaption: stataExportCaption,
-                variableLabel: variableLabel,
-                featured: featured,
-                questionScope: questionScope,
-                conditionExpression: conditionExpression,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
-                instructions: instructions,
-                properties: properties ?? new QuestionProperties(false, false),
-                responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
-                capital: capital,
-                isInteger: isInteger,
-                questionType: questionType,
-                answerOrder: answerOrder,
-                answers: answers,
-                linkedToQuestionId: linkedToQuestionId,
-                areAnswersOrdered: areAnswersOrdered,
-                yesNoView: yesNoView,
-                maxAllowedAnswers: maxAllowedAnswers,
-                mask: mask,
-                isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: cascadeFromQuestionId,
-                validationConditions: new List<ValidationCondition>());
-
-        public NumericQuestionChanged NumericQuestionChanged(
-                Guid publicKey,
-                bool? isInteger = null,
-                string stataExportCaption = null,
-                string questionText = null,
-                string variableLabel = null,
-                bool featured = false,
-                string conditionExpression = null,
-                string validationExpression = null,
-                string validationMessage = null,
-                string instructions = null,
-                Guid? responsibleId = null,
-                bool hideIfDisabled = false,
-            QuestionProperties properties = null)
-            {
-                return new NumericQuestionChanged(
-                    publicKey: publicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: conditionExpression,
-                    hideIfDisabled: hideIfDisabled,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    properties: properties ?? new QuestionProperties(false, false),
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: false,
-                    isInteger: isInteger,
-                    countOfDecimalPlaces: null,
-                    validationConditions: new List<ValidationCondition>());
-            }
-
-        public QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-                string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
-                QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            QuestionProperties properties = null)
-            {
-                return new QuestionChanged(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: null,
-                    featured: featured,
-                    questionScope: questionScope,
-                    conditionExpression: conditionExpression,
-                    hideIfDisabled: false,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    properties: properties ?? new QuestionProperties(false, false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
-                    capital: capital,
-                    isInteger: isInteger,
-                    questionType: questionType,
-                    answerOrder: answerOrder,
-                    answers: answers,
-                    linkedToQuestionId: null,
-                    linkedToRosterId: null,
-                    areAnswersOrdered: null,
-                    yesNoView: null,
-                    maxAllowedAnswers: null,
-                    mask: null,
-                    isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: Guid.NewGuid(),
-                    validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null);
-            }
-
-        public QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
+        public QuestionsDisabled QuestionsDisabled(Identity[] questions)
+            => new QuestionsDisabled(questions);
 
         public QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
-                => Create.Event.QuestionsDisabled(new[]
-                {
-                    Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
-                });
+            => Create.Event.QuestionsDisabled(new[]
+            {
+                Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
+            });
 
-        public QuestionsEnabled QuestionsEnabled(Identity[] questions) => new QuestionsEnabled(questions);
+        public QuestionsEnabled QuestionsEnabled(Identity[] questions)
+            => new QuestionsEnabled(questions);
 
         public QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
-                => Create.Event.QuestionsEnabled(new[]
-                {
-                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
-                });
+            => Create.Event.QuestionsEnabled(new[]
+            {
+                Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
+            });
 
         public RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
-            {
-                AddedRosterInstance[] instances =
-                    fullRosterVectors
-                        .Select(fullRosterVector => new AddedRosterInstance(
-                            rosterId,
-                            outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
-                            rosterInstanceId: fullRosterVector.Last(),
-                            sortIndex: null))
-                        .ToArray();
-
-                return new RosterInstancesAdded(instances);
-            }
+            => new RosterInstancesAdded(
+                fullRosterVectors
+                    .Select(fullRosterVector => new AddedRosterInstance(
+                        rosterId,
+                        outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                        rosterInstanceId: fullRosterVector.Last(),
+                        sortIndex: null))
+                    .ToArray());
 
         public RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params RosterVector[] fullRosterVectors)
-            {
-                AddedRosterInstance[] instances =
-                    fullRosterVectors
-                        .Select(fullRosterVector => new AddedRosterInstance(
-                            rosterId,
-                            outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
-                            rosterInstanceId: fullRosterVector.Last(),
-                            sortIndex: null))
-                        .ToArray();
+            => new RosterInstancesAdded(
+                fullRosterVectors
+                    .Select(fullRosterVector => new AddedRosterInstance(
+                        rosterId,
+                        outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                        rosterInstanceId: fullRosterVector.Last(),
+                        sortIndex: null))
+                    .ToArray());
 
-                return new RosterInstancesAdded(instances);
-            }
-
-        public RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
-                decimal[] rosterVector = null,
-                decimal? rosterInstanceId = null,
-                int? sortIndex = null)
+        public RosterInstancesAdded RosterInstancesAdded(
+            Guid? rosterGroupId = null,
+            decimal[] rosterVector = null,
+            decimal? rosterInstanceId = null,
+            int? sortIndex = null)
+            => new RosterInstancesAdded(new[]
             {
-                return new RosterInstancesAdded(new[]
-                {
-                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? new decimal[0], rosterInstanceId ?? 0.0m, sortIndex)
-                });
-            }
+                new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty, rosterInstanceId ?? 0.0m, sortIndex)
+            });
 
-        public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
-                decimal[] rosterVector = null,
-                string rosterTitle = null,
-                decimal[] outerRosterVector = null,
-                decimal? instanceId = null)
+        public RosterInstancesTitleChanged RosterInstancesTitleChanged(
+            Guid? rosterId = null,
+            decimal[] rosterVector = null,
+            string rosterTitle = null,
+            decimal[] outerRosterVector = null,
+            decimal? instanceId = null)
+            => new RosterInstancesTitleChanged(new[]
             {
-                return new RosterInstancesTitleChanged(
-                    new[]
-                {
-                    new ChangedRosterInstanceTitleDto(
-                        new RosterInstance(
-                            rosterId ?? Guid.NewGuid(),
-                            outerRosterVector ?? rosterVector?.WithoutLast().ToArray() ?? new decimal[0],
-                            instanceId ?? rosterVector?.Last() ?? 0.0m), 
-                        rosterTitle ?? "title")
-                });
-            }
+                new ChangedRosterInstanceTitleDto(
+                    new RosterInstance(
+                        rosterId ?? Guid.NewGuid(),
+                        outerRosterVector ?? rosterVector?.WithoutLast().ToArray() ?? RosterVector.Empty,
+                        instanceId ?? rosterVector?.Last() ?? 0.0m),
+                    rosterTitle ?? "title")
+            });
 
         public SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
-            {
-                return new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
-            }
+            => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
 
-        public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTextIdentity)
-            {
-                List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedConditions = staticTextIdentity.Select(x => 
-                    new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
-                        x, new ReadOnlyCollection<FailedValidationCondition>(new List<FailedValidationCondition> {new FailedValidationCondition(0)}))).ToList();
-                return new StaticTextsDeclaredInvalid(failedConditions);
-            }
+        public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTexts)
+            => new StaticTextsDeclaredInvalid(
+                staticTexts
+                    .Select(identity => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
+                        identity,
+                        Create.Other.FailedValidationCondition(failedConditionIndex: 0).ToEnumerable().ToReadOnlyCollection()))
+                    .ToList());
 
-        public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTextIdentity)
-            {
-                return new StaticTextsDeclaredValid(staticTextIdentity);
-            }
+        public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTexts)
+            => new StaticTextsDeclaredValid(staticTexts);
 
-        public StaticTextsDisabled StaticTextsDisabled(params Identity[] ids)
-            {
-                return new StaticTextsDisabled(ids);
-            }
+        public StaticTextsDisabled StaticTextsDisabled(params Identity[] staticTexts)
+            => new StaticTextsDisabled(staticTexts);
 
-        public StaticTextsEnabled StaticTextsEnabled(params Identity[] ids)
-            {
-                return new StaticTextsEnabled(ids);
-            }
+        public StaticTextsEnabled StaticTextsEnabled(params Identity[] staticTexts)
+            => new StaticTextsEnabled(staticTexts);
 
-        public StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null, 
-                Guid? responsibleId = null, Guid? publicKey = null, string enablementCondition = null, bool hideIfDisabled = false, 
-                IList<ValidationCondition> validationConditions = null)
-            {
-                return new StaticTextUpdated(
-                    publicKey.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    text,
-                    attachment,
-                    hideIfDisabled,
-                    enablementCondition,
-                    validationConditions);
-            }
+        public StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null,
+            Guid? responsibleId = null, Guid? publicKey = null, string enablementCondition = null,
+            bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
+            => new StaticTextUpdated(
+                publicKey.GetValueOrDefault(Guid.NewGuid()),
+                responsibleId ?? Guid.NewGuid(),
+                text,
+                attachment,
+                hideIfDisabled,
+                enablementCondition,
+                validationConditions);
 
-        public SubstitutionTitlesChanged SubstitutionTitlesChanged(
-                Identity[] questions = null, Identity[] staticTexts = null)
-                => new SubstitutionTitlesChanged(
-                    questions ?? new Identity[] {},
-                    staticTexts ?? new Identity[] {});
+        public SubstitutionTitlesChanged SubstitutionTitlesChanged(Identity[] questions = null, Identity[] staticTexts = null)
+            => new SubstitutionTitlesChanged(
+                questions ?? new Identity[] {},
+                staticTexts ?? new Identity[] {});
 
         public TextQuestionAnswered TextQuestionAnswered(
-                Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
-                => new TextQuestionAnswered(
-                    Guid.NewGuid(),
-                    questionId ?? Guid.NewGuid(),
-                    rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
-                    DateTime.Now,
-                    answer ?? "answer");
+            Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
+            => new TextQuestionAnswered(
+                Guid.NewGuid(),
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                DateTime.Now,
+                answer ?? "answer");
 
         public VariablesChanged VariablesChanged(params ChangedVariable[] changedVariables)
              => new VariablesChanged(changedVariables);
 
         public VariablesDisabled VariablesDisabled(params Identity[] identites)
-                => new VariablesDisabled(identites);
+            => new VariablesDisabled(identites);
 
         public VariablesEnabled VariablesEnabled(params Identity[] identites)
              => new VariablesEnabled(identites);
 
         public YesNoQuestionAnswered YesNoQuestionAnswered(Guid? questionId = null, AnsweredYesNoOption[] answeredOptions = null)
-            {
-                return new YesNoQuestionAnswered(
-                    userId: Guid.NewGuid(),
-                    questionId: questionId ?? Guid.NewGuid(),
-                    rosterVector: Core.SharedKernels.DataCollection.RosterVector.Empty,
-                    answerTimeUtc: DateTime.UtcNow,
-                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
-            }
+            => new YesNoQuestionAnswered(
+                userId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
+                rosterVector: Core.SharedKernels.DataCollection.RosterVector.Empty,
+                answerTimeUtc: DateTime.UtcNow,
+                answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
 
         public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
-        {
-            return new RosterInstancesRemoved(new[]
-                {
-                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
-                });
-        }
+            => new RosterInstancesRemoved(new[]
+            {
+                new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m),
+            });
     }
 }
