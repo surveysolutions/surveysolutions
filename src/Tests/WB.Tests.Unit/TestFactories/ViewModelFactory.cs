@@ -21,35 +21,11 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class ViewModelFactory
     {
-        public ValidityViewModel ValidityViewModel(ILiteEventRegistry eventRegistry = null,
-            IStatefulInterviewRepository interviewRepository = null,
-            IQuestionnaire questionnaire = null,
-            Identity entityIdentity = null)
-        {
-            var result = new ValidityViewModel(eventRegistry ?? Create.Service.LiteEventRegistry(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IPlainQuestionnaireRepository>(
-                    x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Stub.MvxMainThreadDispatcher());
-
-            return result;
-        }
-
-        public StaticTextStateViewModel StaticTextStateViewModel(
-            IStatefulInterviewRepository interviewRepository = null,
-            ILiteEventRegistry eventRegistry = null)
-        {
-            return new StaticTextStateViewModel(
-                Create.ViewModel.EnablementViewModel(interviewRepository, eventRegistry),
-                Create.ViewModel.ValidityViewModel(interviewRepository: interviewRepository));
-        }
-
-        public EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null,
-            ILiteEventRegistry eventRegistry = null)
-        {
-            return new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                eventRegistry ?? Create.Service.LiteEventRegistry());
-        }
+        public AttachmentViewModel AttachmentViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            IAttachmentContentStorage attachmentContentStorage)
+            => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
 
         public EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
@@ -75,31 +51,26 @@ namespace WB.Tests.Unit.TestFactories
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
-        {
-            var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
-            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
-            interview = interview ?? Mock.Of<IStatefulInterview>();
-
-            return new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
+            => new SingleOptionLinkedQuestionViewModel(
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
                 Create.Service.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>());
-        }
 
-        public AttachmentViewModel AttachmentViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
-        {
-            return new AttachmentViewModel(
-                questionnaireRepository: questionnaireRepository,
-                interviewRepository: interviewRepository,
-                attachmentContentStorage: attachmentContentStorage);
-        }
+        public ValidityViewModel ValidityViewModel(
+            ILiteEventRegistry eventRegistry = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IQuestionnaire questionnaire = null,
+            Identity entityIdentity = null)
+            => new ValidityViewModel(
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IPlainQuestionnaireRepository>(
+                    x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Stub.MvxMainThreadDispatcher());
     }
 }

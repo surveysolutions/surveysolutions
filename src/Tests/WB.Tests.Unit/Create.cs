@@ -6,7 +6,7 @@ namespace WB.Tests.Unit
     {
         public static readonly ServiceFactory Service = new ServiceFactory(); // cleaned by TLK (remove this comment after KP-7207 is done)
         public static readonly ControllerFactory Controller = new ControllerFactory(); // cleaned by TLK (remove this comment after KP-7207 is done)
-        public static readonly ViewModelFactory ViewModel = new ViewModelFactory();
+        public static readonly ViewModelFactory ViewModel = new ViewModelFactory(); // cleaned by TLK (remove this comment after KP-7207 is done)
 
         public static readonly CommandFactory Command = new CommandFactory(); // cleaned by TLK (remove this comment after KP-7207 is done)
         public static readonly EventFactory Event = new EventFactory(); // cleaned by TLK (remove this comment after KP-7207 is done)
