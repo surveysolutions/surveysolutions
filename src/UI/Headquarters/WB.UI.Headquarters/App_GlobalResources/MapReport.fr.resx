@@ -127,7 +127,7 @@
     <value>Pas tous les marqueurs ont été chargés pour le niveau de zoom actuel. Veuillez effectuer un zoom avant et recharger les marqueurs.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Recharger les marqueurs sur la carte</value>
+    <value>Recharger les marqueurs</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Voir interview contenu</value>
