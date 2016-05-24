@@ -70,9 +70,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
-using AttachmentsController = WB.Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController;
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -109,11 +107,6 @@ namespace WB.Tests.Unit.TestFactories
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
         {
             return new AnsweredYesNoOption(value, answer);
-        }
-
-        public AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
-        {
-            return new AttachmentsController(attachmentContentService);
         }
 
         public AttachmentContent AttachmentContent(string contentHash = null, string contentType = null, byte[] content = null)
