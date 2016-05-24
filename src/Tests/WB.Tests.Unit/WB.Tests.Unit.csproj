@@ -341,7 +341,6 @@
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
-    <Compile Include="TestFactories\AnswerFactory.cs" />
     <Compile Include="TestFactories\ServiceFactory.cs" />
     <Compile Include="TestFactories\ViewModelFactory.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />

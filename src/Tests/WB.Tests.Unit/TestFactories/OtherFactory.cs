@@ -1265,5 +1265,23 @@ namespace WB.Tests.Unit.TestFactories
             EventHandlerTypesWithIgnoredExceptions = new Type[] {},
             DisabledEventHandlerTypes = new Type[] {},
         };
+
+        public IntegerNumericAnswer IntegerNumericAnswer(Identity answerIdentity = null, int answer = 42)
+        {
+            answerIdentity = answerIdentity ?? Create.Other.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
+            var model = new IntegerNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+            model.SetAnswer(answer);
+            return model;
+        }
+
+        public RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, decimal answer = 42.42m)
+        {
+            answerIdentity = answerIdentity ?? Create.Other.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
+            var model = new RealNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+            model.SetAnswer(answer);
+            return model;
+        }
     }
 }
