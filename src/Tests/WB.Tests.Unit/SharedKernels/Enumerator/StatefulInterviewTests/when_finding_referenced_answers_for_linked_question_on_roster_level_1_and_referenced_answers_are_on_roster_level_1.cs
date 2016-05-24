@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionRosterVector = new[] { 1m };
             var linkedQuestionRosters = new[] { referencedRoster1 };
-            linkedQuestionIdentity = Create.Other.Identity(linkedQuestionId, linkedQuestionRosterVector);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
             var referencedQuestionRosters = new[] { referencedRoster1 };
 
             IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _

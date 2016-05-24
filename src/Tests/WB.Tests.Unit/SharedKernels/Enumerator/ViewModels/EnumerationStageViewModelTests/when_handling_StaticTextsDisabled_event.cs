@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             updateItemCollection.WaitOne(TimeSpan.FromMilliseconds(100)).ShouldBeTrue();
 
         private static EnumerationStageViewModel viemModel;
-        private static Identity disabledAndNotHideIfDisabledStaticText = Create.Other.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
+        private static Identity disabledAndNotHideIfDisabledStaticText = Create.Entity.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 99);
         private static string interviewId = "11111111111111111111111111111111";
         private static readonly ManualResetEvent updateItemCollection = new ManualResetEvent(false);

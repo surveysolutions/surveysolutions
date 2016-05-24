@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
-            linkedQuestionId = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
+            linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             eventData = new[]
@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 new ChangedLinkedOptions(linkedQuestionId, 
                     new[]
                     {
-                        Create.Other.RosterVector(1),
-                        Create.Other.RosterVector(2)
+                        Create.Entity.RosterVector(1),
+                        Create.Entity.RosterVector(2)
                     }),
             };
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                    .Returns(new List<BaseInterviewAnswer> { Create.Other.TextAnswer(linkedOptionTextInInterview) });
+                    .Returns(new List<BaseInterviewAnswer> { Create.Entity.TextAnswer(linkedOptionTextInInterview) });
 
             IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id)
@@ -47,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>
                   {
-                      Create.Other.TextAnswer("one"),
-                      Create.Other.TextAnswer("two")
+                      Create.Entity.TextAnswer("one"),
+                      Create.Entity.TextAnswer("two")
                   });
         };
 

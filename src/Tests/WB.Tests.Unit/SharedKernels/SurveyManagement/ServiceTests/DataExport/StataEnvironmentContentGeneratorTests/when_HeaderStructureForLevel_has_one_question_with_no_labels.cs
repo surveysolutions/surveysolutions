@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         {
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName, exportedHeaderItems: new [] { CreateExportedHeaderItem(questionsVariableName, questionsTitle)});
-            questionnaireExportStructure = Create.Other.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
             stataEnvironmentContentService =

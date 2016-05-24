@@ -19,20 +19,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.Other.InterviewView(prefilledGpsQuestionId);
+            dashboardItem = Create.Entity.InterviewView(prefilledGpsQuestionId);
 
             @event = Create.Event
                 .InterviewSynchronized(
-                    Create.Other.InterviewSynchronizationDto(
+                    Create.Entity.InterviewSynchronizationDto(
                         questionnaireId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                         questionnaireVersion: 33,
-                        answers: new[] { Create.Other.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
+                        answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
             var questionnaire = 
-                    Create.Other.QuestionnaireDocumentWithOneChapter(
-                        Create.Other.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+                    Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
             IPlainQuestionnaireRepository plainQuestionnaireRepository =

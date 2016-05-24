@@ -18,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.Other.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
             };
 
             var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();

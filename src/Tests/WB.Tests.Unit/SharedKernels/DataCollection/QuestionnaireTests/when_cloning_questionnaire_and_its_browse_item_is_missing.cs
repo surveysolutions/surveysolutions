@@ -39,6 +39,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.Other.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
     }
 }

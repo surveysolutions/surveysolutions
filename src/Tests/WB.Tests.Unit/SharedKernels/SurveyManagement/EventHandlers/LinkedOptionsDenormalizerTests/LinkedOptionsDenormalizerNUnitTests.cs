@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.LinkedOptio
         {
             LinkedOptionsDenormalizer linkedOptionsDenormalizer = CreateLinkedOptionsDenormalizer();
             var linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var linkedQuestionIdentity = Create.Other.Identity(linkedQuestionId, RosterVector.Empty);
+            var linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
             var changedLinkedOptions = new ChangedLinkedOptions(linkedQuestionIdentity,
                 new[]
                 {
-                    Create.Other.RosterVector(1),
-                    Create.Other.RosterVector(2)
+                    Create.Entity.RosterVector(1),
+                    Create.Entity.RosterVector(2)
                 });
             var updatedInterviewLinkedQuestionOptions = linkedOptionsDenormalizer.Update(new InterviewLinkedQuestionOptions(),
                 Create.Event.LinkedOptionsChanged(new[]{changedLinkedOptions}).ToPublishedEvent());

@@ -11,11 +11,11 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
     {
         Establish context = () =>
         {
-            document = Create.Other.QuestionnaireDocumentWithOneChapter();
+            document = Create.Entity.QuestionnaireDocumentWithOneChapter();
             document.LookupTables = new Dictionary<Guid, LookupTable>
             {
-                { Id.g1, Create.Other.LookupTable("table 1", "file 1") },
-                { Id.g2, Create.Other.LookupTable("table 2", "file 2") },
+                { Id.g1, Create.Entity.LookupTable("table 1", "file 1") },
+                { Id.g2, Create.Entity.LookupTable("table 2", "file 2") },
             };
         };
 

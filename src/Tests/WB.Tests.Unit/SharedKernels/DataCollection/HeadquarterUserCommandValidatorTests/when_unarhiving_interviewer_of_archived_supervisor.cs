@@ -20,13 +20,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         {
             Setup.InstanceToMockedServiceLocator(userDocumentStorage);
 
-            var supervisor = Create.Other.UserDocument(isArchived: true);
+            var supervisor = Create.Entity.UserDocument(isArchived: true);
             userDocumentStorage.Store(supervisor, supervisor.PublicKey.FormatGuid());
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidator(userDocumentStorage);
 
-            user = Create.Other.User();
-            var userDocument = Create.Other.UserDocument(userId: Guid.NewGuid(), isArchived: true, supervisorId: supervisor.PublicKey);
+            user = Create.Entity.User();
+            var userDocument = Create.Entity.UserDocument(userId: Guid.NewGuid(), isArchived: true, supervisorId: supervisor.PublicKey);
             userDocument.Roles.Add(UserRoles.Operator);
             userDocumentStorage.Store(userDocument, userDocument.PublicKey.FormatGuid());
             user.SetId(userDocument.PublicKey);

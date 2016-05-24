@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             interview = new Mock<IStatefulInterview>();
             interview.Setup(x => x.FindReferencedRostersForLinkedQuestion(rosterId.Id, Moq.It.IsAny<Identity>()))
-                 .Returns(new [] { Create.Other.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title") });
+                 .Returns(new [] { Create.Entity.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title") });
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview.Object);
             viewModel.Init("interview", questionId, Create.Other.NavigationState());

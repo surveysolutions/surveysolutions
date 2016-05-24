@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
                 .Setup(reader => reader.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>()))
                 .Returns<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>(query => query.Invoke(new[]
                 {
-                    Create.Other.QuestionnaireBrowseItem(title: title, questionnaireId: importedQuestionnaireId),
+                    Create.Entity.QuestionnaireBrowseItem(title: title, questionnaireId: importedQuestionnaireId),
                 }.AsQueryable()));
 
             validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);

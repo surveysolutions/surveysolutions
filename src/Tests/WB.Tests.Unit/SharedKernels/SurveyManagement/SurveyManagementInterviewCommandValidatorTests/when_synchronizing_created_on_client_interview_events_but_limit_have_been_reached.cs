@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         Establish context = () =>
         {
             var summaries = new TestInMemoryWriter<InterviewSummary>();
-            summaries.Store(Create.Other.InterviewSummary(), "id1");
-            summaries.Store(Create.Other.InterviewSummary(), "id2");
+            summaries.Store(Create.Entity.InterviewSummary(), "id1");
+            summaries.Store(Create.Entity.InterviewSummary(), "id2");
 
             surveyManagementInterviewCommandValidator =
               CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,

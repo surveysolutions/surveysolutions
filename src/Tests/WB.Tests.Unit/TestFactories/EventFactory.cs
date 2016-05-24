@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
             => Create.Event.QuestionsDisabled(new[]
             {
-                Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
+                Create.Entity.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
             });
 
         public QuestionsEnabled QuestionsEnabled(Identity[] questions)
@@ -133,7 +133,7 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
             => Create.Event.QuestionsEnabled(new[]
             {
-                Create.Other.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
+                Create.Entity.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
             });
 
         public RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
@@ -190,7 +190,7 @@ namespace WB.Tests.Unit.TestFactories
                 staticTexts
                     .Select(identity => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
                         identity,
-                        Create.Other.FailedValidationCondition(failedConditionIndex: 0).ToEnumerable().ToReadOnlyCollection()))
+                        Create.Entity.FailedValidationCondition(failedConditionIndex: 0).ToEnumerable().ToReadOnlyCollection()))
                     .ToList());
 
         public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTexts)

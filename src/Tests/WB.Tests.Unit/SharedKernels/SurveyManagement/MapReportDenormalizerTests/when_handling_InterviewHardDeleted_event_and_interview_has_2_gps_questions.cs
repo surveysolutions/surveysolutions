@@ -19,14 +19,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
         {
             @event = Create.PublishedEvent.InterviewHardDeleted(interviewId: interviewId);
 
-            var questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                Create.Other.GpsCoordinateQuestion(variable: gpsVariable1),
-                Create.Other.GpsCoordinateQuestion(variable: gpsVariable2),
+                Create.Entity.GpsCoordinateQuestion(variable: gpsVariable1),
+                Create.Entity.GpsCoordinateQuestion(variable: gpsVariable2),
             });
             
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(
-                Create.Other.InterviewReferences());
+                Create.Entity.InterviewReferences());
 
             denormalizer = Create.Service.MapReportDenormalizer(
                 mapReportPointStorage: mapReportPointStorageMock.Object,

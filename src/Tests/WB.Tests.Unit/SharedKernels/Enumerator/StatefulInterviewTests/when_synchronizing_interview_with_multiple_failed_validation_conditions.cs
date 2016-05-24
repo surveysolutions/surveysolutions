@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
-            RosterVector rosterVector = Create.Other.RosterVector(1m, 0m);
+            RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
 
             IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetAnswerType(integerQuestionId) == AnswerType.Integer);
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 }
             };
 
-            synchronizationDto = Create.Other.InterviewSynchronizationDto(questionnaireId: questionnaireId, 
+            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, 
                 answers: answersDtos,
                 failedValidationConditions: failedValidationConditions);
         };

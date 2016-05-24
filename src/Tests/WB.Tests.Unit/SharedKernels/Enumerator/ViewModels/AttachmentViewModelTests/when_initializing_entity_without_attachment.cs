@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaireIdentity = Create.Other.QuestionnaireIdentity(Guid.NewGuid());
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ => true);
 

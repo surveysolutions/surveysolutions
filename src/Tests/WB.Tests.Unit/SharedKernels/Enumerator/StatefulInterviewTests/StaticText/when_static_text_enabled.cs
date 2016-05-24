@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
                 Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
             statefulInterview = Create.Other.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
 
-            staticTextIdentity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
         };
 
         Because of = () => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));

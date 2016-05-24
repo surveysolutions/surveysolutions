@@ -341,6 +341,7 @@
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
+    <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_formatting.cs" />

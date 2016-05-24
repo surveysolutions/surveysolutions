@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Other.RosterVector(1));
-            linkedQuestionId = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(1));
+            linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             eventData = new[]
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 new ChangedLinkedOptions(linkedQuestionId,
                     new[]
                     {
-                        Create.Other.RosterVector(1)
+                        Create.Entity.RosterVector(1)
                     }),
             };
 
@@ -35,16 +35,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>
                   {
-                      Create.Other.TextAnswer("one",
+                      Create.Entity.TextAnswer("one",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(1)),
-                       Create.Other.TextAnswer("two",
+                        rosterVector: Create.Entity.RosterVector(1)),
+                       Create.Entity.TextAnswer("two",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(2))
+                        rosterVector: Create.Entity.RosterVector(2))
                   });
 
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Other.RosterVector(1))
-                     .Returns(Create.Other.TextAnswer("one"));
+            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Entity.RosterVector(1))
+                     .Returns(Create.Entity.TextAnswer("one"));
 
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
@@ -56,9 +56,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                  .Returns(new List<BaseInterviewAnswer>
                  {
-                      Create.Other.TextAnswer("one",
+                      Create.Entity.TextAnswer("one",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(1)),
+                        rosterVector: Create.Entity.RosterVector(1)),
                  });
         };
 

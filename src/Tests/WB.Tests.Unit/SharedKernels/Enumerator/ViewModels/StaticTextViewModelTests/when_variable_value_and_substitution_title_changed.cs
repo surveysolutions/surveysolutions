@@ -41,11 +41,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
 
-            var questionnaireMock = Create.Other.PlainQuestionnaire(Create.Other.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireMock = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Other.StaticText(publicKey: staticTextWithSubstitutionId, text: $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"),
-                Create.Other.NumericRealQuestion(variable: substitutedVariable1Name, id: substitutedQuestionId),
-                Create.Other.Variable(variableName: substitutedVariable2Name, id: substitutedVariableIdentity.Id)
+                Create.Entity.StaticText(publicKey: staticTextWithSubstitutionId, text: $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"),
+                Create.Entity.NumericRealQuestion(variable: substitutedVariable1Name, id: substitutedQuestionId),
+                Create.Entity.Variable(variableName: substitutedVariable2Name, id: substitutedVariableIdentity.Id)
             }));
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();

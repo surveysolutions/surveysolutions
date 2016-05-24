@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         Establish context = () =>
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
-            var user = Create.Other.UserDocument(isArchived: true, userName: userName, userId:userId);
+            var user = Create.Entity.UserDocument(isArchived: true, userName: userName, userId:userId);
 
             headquarterUserCommandValidatorser = CreateHeadquarterUserCommandValidatorWithUsers(user);
         };

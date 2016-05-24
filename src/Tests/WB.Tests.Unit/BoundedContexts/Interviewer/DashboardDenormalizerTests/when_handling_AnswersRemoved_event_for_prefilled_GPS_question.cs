@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.Other.InterviewView();
+            dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
             dashboardItem.GpsLocation = new InterviewGpsLocationView
             {
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
               }
             };
 
-            @event = Create.Event.AnswersRemoved(Create.Other.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
+            @event = Create.Event.AnswersRemoved(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
 
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();
