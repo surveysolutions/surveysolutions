@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            var questionnaireIdentity = Create.Other.QuestionnaireIdentity();
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllSections() == listOfSections);
             var interview = Mock.Of<IStatefulInterview>(_ 

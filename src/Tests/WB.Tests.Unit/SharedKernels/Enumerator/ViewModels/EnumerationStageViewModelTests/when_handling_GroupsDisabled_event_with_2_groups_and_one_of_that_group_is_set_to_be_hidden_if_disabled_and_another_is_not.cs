@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(f => 
                 f.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
-            viemModel = Create.Other.EnumerationStageViewModel(
+            viemModel = Create.ViewModel.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
                 interviewRepository: interviewRepository,
                 interviewViewModelFactory: interviewViewModelFactory,
@@ -66,9 +66,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 .ShouldContain(enabledGroup);
 
         private static EnumerationStageViewModel viemModel;
-        private static Identity disabledAndHideIfDisabledGroup = Create.Other.Identity("DDDDDDDDDDDDDDDDD111111111111111", RosterVector.Empty);
-        private static Identity disabledAndNotHideIfDisabledGroup = Create.Other.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
-        private static Identity enabledGroup = Create.Other.Identity("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", RosterVector.Empty);
+        private static Identity disabledAndHideIfDisabledGroup = Create.Entity.Identity("DDDDDDDDDDDDDDDDD111111111111111", RosterVector.Empty);
+        private static Identity disabledAndNotHideIfDisabledGroup = Create.Entity.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
+        private static Identity enabledGroup = Create.Entity.Identity("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", RosterVector.Empty);
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 99);
         private static string interviewId = "11111111111111111111111111111111";
     }

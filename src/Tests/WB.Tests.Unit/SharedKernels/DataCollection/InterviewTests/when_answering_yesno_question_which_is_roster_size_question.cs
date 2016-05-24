@@ -16,17 +16,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             command = Create.Command.AnswerYesNoQuestion(
                 answeredOptions: new[]
                 {
-                    Create.Other.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
-                    Create.Other.AnsweredYesNoOption(value: option_Deselected_FromNothing_ToNo_____, answer: false),
-                    Create.Other.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: false),
-                    Create.Other.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
-                    Create.Other.AnsweredYesNoOption(value: option__Selected__FromNothing_ToYes____, answer: true),
-                    Create.Other.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromNothing_ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNothing_ToYes____, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: true),
                 });
 
-            var questionnaireDocument = Create.Other.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Other.YesNoQuestion(questionId: command.QuestionId, answers: new[]
+                Create.Entity.YesNoQuestion(questionId: command.QuestionId, answers: new[]
                 {
                     option_NotChanged_FromNothing_ToNothing,
                     option_NotChanged_FromNo______ToNo_____,
@@ -38,24 +38,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     option_Deselected_FromYes_____ToNo_____,
                     option_Deselected_FromYes_____ToNothing,
                 }),
-                Create.Other.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: command.QuestionId),
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: command.QuestionId),
             });
 
             interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
             interview.Apply(Create.Event.YesNoQuestionAnswered(questionId: command.QuestionId, answeredOptions: new []
             {
-                Create.Other.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
-                Create.Other.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: false),
-                Create.Other.AnsweredYesNoOption(value: option_Deselected_FromNo______ToNothing, answer: false),
-                Create.Other.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
-                Create.Other.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: true),
-                Create.Other.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNothing, answer: true),
+                Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
+                Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: false),
+                Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromNo______ToNothing, answer: false),
+                Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
+                Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: true),
+                Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNothing, answer: true),
             }));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId: rosterId, fullRosterVectors: new decimal[][]
             {
-                Create.Other.RosterVector(option_NotChanged_FromYes_____ToYes____),
-                Create.Other.RosterVector(option_Deselected_FromYes_____ToNo_____),
-                Create.Other.RosterVector(option_Deselected_FromYes_____ToNothing),
+                Create.Entity.RosterVector(option_NotChanged_FromYes_____ToYes____),
+                Create.Entity.RosterVector(option_Deselected_FromYes_____ToNo_____),
+                Create.Entity.RosterVector(option_Deselected_FromYes_____ToNothing),
             }));
         };
 

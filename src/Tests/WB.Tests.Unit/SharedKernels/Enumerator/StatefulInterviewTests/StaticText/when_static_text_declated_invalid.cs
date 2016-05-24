@@ -11,13 +11,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
     {
         Establish context = () =>
         {
-            staticTextIdentity = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.Other.PlainQuestionnaire(Create.Other.QuestionnaireDocument(questionnaireId,
-                Create.Other.Group(children: new List<IComposite>()
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
+                Create.Entity.Group(children: new List<IComposite>()
                 {
-                    Create.Other.StaticText(staticTextIdentity.Id)
+                    Create.Entity.StaticText(staticTextIdentity.Id)
                 })));
 
             var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);

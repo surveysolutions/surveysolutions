@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         Establish context = () =>
         {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Create.Other.Identity(questionGuid, Empty.RosterVector);
+            questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
             );
 
-            var multiOptionAnswer = Create.Other.MultiOptionAnswer(questionGuid, Empty.RosterVector);
+            var multiOptionAnswer = Create.Entity.MultiOptionAnswer(questionGuid, Empty.RosterVector);
             multiOptionAnswer.SetAnswers(new[] { 1m });
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionAnswer(questionId) == multiOptionAnswer);

@@ -17,11 +17,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         Establish context = () =>
         {
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatuses = Create.Other.InterviewStatuses(statuses:Create.Other.InterviewCommentedStatus(interviewId,status:InterviewExportedAction.InterviewerAssigned));
+            interviewStatuses = Create.Entity.InterviewStatuses(statuses:Create.Entity.InterviewCommentedStatus(interviewId,status:InterviewExportedAction.InterviewerAssigned));
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };
 
-        Because of = () => result = denormalizer.Update(interviewStatuses, Create.PublishedEvent.TextQuestionAnsweredEvent(interviewId: Guid.NewGuid()));
+        Because of = () => result = denormalizer.Update(interviewStatuses, Create.PublishedEvent.TextQuestionAnswered(interviewId: Guid.NewGuid()));
 
         It should_record_first_answer_status =
             () => result.InterviewCommentedStatuses.Last().Status.ShouldEqual(InterviewExportedAction.FirstAnswerSet);

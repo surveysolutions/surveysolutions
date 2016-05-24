@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire =
-                Create.Other.QuestionnaireDocument(children:
+                Create.Entity.QuestionnaireDocument(children:
                     new []
                     {
-                        Create.Other.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                        Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                             fixedTitles: new[] {"1", "2", "3"})
                     });
 

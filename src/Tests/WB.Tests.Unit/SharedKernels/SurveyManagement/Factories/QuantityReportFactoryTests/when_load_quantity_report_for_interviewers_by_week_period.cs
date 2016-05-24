@@ -19,15 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
-                Create.Other.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddHours(1)),
-                        Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(15)),
-                        Create.Other.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-15))
                     }), "2");
 

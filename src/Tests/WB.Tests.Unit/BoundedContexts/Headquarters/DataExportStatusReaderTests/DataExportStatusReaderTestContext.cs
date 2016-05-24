@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireExportStructureStorage questionnaireReader =null)
         {
-            var questionnaireExportStructure = Create.Other.QuestionnaireExportStructure();
+            var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
             return new DataExportStatusReader(dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
                 paraDataAccessor ?? Mock.Of<IParaDataAccessor>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.Other.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
+                    id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
 
             plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IPlainQuestionnaireRepository>(_
                 => _.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaireDocumentFromRepository));
@@ -52,9 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.Other.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string newQuestionnaireTitle = "New Questionnaire Title";
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
-        private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.Other.QuestionnaireDocument();
+        private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
     }
 }

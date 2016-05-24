@@ -13,13 +13,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Other.TextQuestion(questionId: invalidQuestion1Id),
-                Create.Other.TextQuestion(questionId: invalidQuestion2Id),
-                Create.Other.TextQuestion(questionId: invalidQuestion3Id),
-                Create.Other.TextQuestion(questionId: validQuestion1Id),
-                Create.Other.TextQuestion(questionId: validQuestion2Id),
+                Create.Entity.TextQuestion(questionId: invalidQuestion1Id),
+                Create.Entity.TextQuestion(questionId: invalidQuestion2Id),
+                Create.Entity.TextQuestion(questionId: invalidQuestion3Id),
+                Create.Entity.TextQuestion(questionId: validQuestion1Id),
+                Create.Entity.TextQuestion(questionId: validQuestion2Id),
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
@@ -28,15 +28,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.AnswersDeclaredInvalid(questions: new []
             {
-                Create.Other.Identity(invalidQuestion1Id, RosterVector.Empty),
-                Create.Other.Identity(invalidQuestion2Id, RosterVector.Empty),
-                Create.Other.Identity(invalidQuestion3Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion1Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion2Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion3Id, RosterVector.Empty),
             }));
 
             interview.Apply(Create.Event.AnswersDeclaredValid(questions: new []
             {
-                Create.Other.Identity(validQuestion1Id, RosterVector.Empty),
-                Create.Other.Identity(validQuestion2Id, RosterVector.Empty),
+                Create.Entity.Identity(validQuestion1Id, RosterVector.Empty),
+                Create.Entity.Identity(validQuestion2Id, RosterVector.Empty),
             }));
 
             eventContext = Create.Other.EventContext();
@@ -51,9 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_AnswersDeclaredInvalid_event_with_ids_of_invalid_questions_and_empty_roster_vectors = () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>().Questions.ShouldContainOnly(new[]
             {
-                Create.Other.Identity(invalidQuestion1Id, RosterVector.Empty),
-                Create.Other.Identity(invalidQuestion2Id, RosterVector.Empty),
-                Create.Other.Identity(invalidQuestion3Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion1Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion2Id, RosterVector.Empty),
+                Create.Entity.Identity(invalidQuestion3Id, RosterVector.Empty),
             });
 
         It should_raise_AnswersDeclaredValid_event = () =>
@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_AnswersDeclaredValid_event_with_ids_of_valid_questions_and_empty_roster_vectors = () =>
             eventContext.GetEvent<AnswersDeclaredValid>().Questions.ShouldContainOnly(new[]
             {
-                Create.Other.Identity(validQuestion1Id, RosterVector.Empty),
-                Create.Other.Identity(validQuestion2Id, RosterVector.Empty),
+                Create.Entity.Identity(validQuestion1Id, RosterVector.Empty),
+                Create.Entity.Identity(validQuestion2Id, RosterVector.Empty),
             });
 
         Cleanup stuff = () =>

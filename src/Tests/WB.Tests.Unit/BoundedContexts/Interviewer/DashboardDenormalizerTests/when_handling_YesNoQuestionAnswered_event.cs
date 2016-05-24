@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var questionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.Other.InterviewView();
+            dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
 
             @event = Create.Event.YesNoQuestionAnswered(questionId, new AnsweredYesNoOption[0]).ToPublishedEvent();

@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
             IPlainQuestionnaireRepository questionnaireRepository =
-                Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Other.QuestionnaireIdentity(questionnaireId, 1),
-                    Create.Other.QuestionnaireDocument(id: questionnaireId, children: new[]
+                Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
+                    Create.Entity.QuestionnaireDocument(id: questionnaireId, children: new[]
                     {
-                        Create.Other.StaticText(publicKey: staticTextId)
+                        Create.Entity.StaticText(publicKey: staticTextId)
                     }));
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
@@ -43,11 +43,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
-                Create.Other.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
-                    disabledStaticTexts: new List<Identity>() {Create.Other.Identity(staticTextId, RosterVector.Empty)}
+                    disabledStaticTexts: new List<Identity>() {Create.Entity.Identity(staticTextId, RosterVector.Empty)}
                     );
 
             eventContext = new EventContext();
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 x =>
                     x.DisableStaticTexts(
                         Moq.It.Is<IEnumerable<Identity>>(
-                            s => s.Count() == 1 && s.First() == Create.Other.Identity(staticTextId, RosterVector.Empty))),
+                            s => s.Count() == 1 && s.First() == Create.Entity.Identity(staticTextId, RosterVector.Empty))),
                 Times.Once);
 
 

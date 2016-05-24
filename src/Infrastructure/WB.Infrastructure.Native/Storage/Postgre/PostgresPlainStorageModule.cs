@@ -7,7 +7,6 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -69,6 +68,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<IPlainTransactionManagerProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+
+            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.DbUpgradeSettings);
         }
 
         private ISessionFactory BuildSessionFactory()

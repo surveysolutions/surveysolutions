@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             cultureChange = new ChangeCurrentCulture(cultureInfo);
            
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionnaire = Create.Other.PlainQuestionnaire(
-                Create.Other.QuestionnaireDocumentWithOneChapter(Create.Other.NumericIntegerQuestion(useFormatting: true,
+            questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.NumericIntegerQuestion(useFormatting: true,
                  id: questionId)));
             service = CreateAnswerToStringService();
 
-            answer = Create.Answer.IntegerNumericAnswer(Create.Other.Identity(questionId, RosterVector.Empty), answer: 1234);
+            answer = Create.Entity.IntegerNumericAnswer(Create.Entity.Identity(questionId, RosterVector.Empty), answer: 1234);
 
             statefulInterview = Create.Other.StatefulInterview(questionnaire: questionnaire);
         };

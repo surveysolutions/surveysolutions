@@ -25,11 +25,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.Other.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Other.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num"),
-                    Create.Other.Roster(rosterId: rosterId, variable: "ros",
+                    Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num"),
+                    Create.Entity.Roster(rosterId: rosterId, variable: "ros",
                         rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
                         rosterSizeSourceType: RosterSizeSourceType.Question)
                 });

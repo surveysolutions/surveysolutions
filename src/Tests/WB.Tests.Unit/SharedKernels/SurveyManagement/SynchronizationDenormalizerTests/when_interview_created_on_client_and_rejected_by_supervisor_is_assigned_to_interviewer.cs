@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            InterviewData data = Create.Other.InterviewData(createdOnClient: true, 
+            InterviewData data = Create.Entity.InterviewData(createdOnClient: true, 
                 status: InterviewStatus.RejectedBySupervisor,
                 interviewId: interviewId);
 
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 serializer: serializer);
         };
 
-        Because of = () => synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewerAssignedEvent());
+        Because of = () => synchronizationDenormalizer.Handle(Create.PublishedEvent.InterviewerAssigned());
 
         It should_store_meta_information_of_package = () =>
             interviewPackageStorageWriterMock.Verify(x => 

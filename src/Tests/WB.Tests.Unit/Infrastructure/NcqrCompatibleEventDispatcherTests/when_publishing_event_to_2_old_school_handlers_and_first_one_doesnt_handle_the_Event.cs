@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         Establish context = () =>
         {
-            publishableEvent = Create.PublishedEvent.QuestionClonedEvent();
+            publishableEvent = Create.PublishedEvent.QuestionCloned();
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
 
