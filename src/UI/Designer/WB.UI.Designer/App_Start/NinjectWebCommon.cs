@@ -125,8 +125,8 @@ namespace WB.UI.Designer.App_Start
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
-                    typeof(M001_Init).Assembly,
+                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                     cacheSettings, 
                     mappingAssemblies),
                 new DesignerRegistry(pdfSettings),

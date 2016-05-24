@@ -68,6 +68,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<IPlainTransactionManagerProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+
+            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.DbUpgradeSettings);
         }
 
         private ISessionFactory BuildSessionFactory()
