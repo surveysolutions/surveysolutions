@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id)
                          .Returns(linkSourceQuestionId.Id);
 
-            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)

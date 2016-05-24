@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                     }
                 && _.Answers == new Dictionary<string, BaseInterviewAnswer>());
 
-            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(
                 eventRegistry: eventRegistryMock.Object,
                 questionState: questionStateMock.Object,
                 questionnaire: questionnaire,

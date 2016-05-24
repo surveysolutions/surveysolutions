@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 }.AsEnumerable()
                 && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
-            viemModel = Create.Other.EnumerationStageViewModel(
+            viemModel = Create.ViewModel.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
                 interviewViewModelFactory: interviewViewModelFactory,
                 interviewRepository: interviewRepository,
