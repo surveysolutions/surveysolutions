@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_clear_GPS_location = () =>
             dashboardItem.GpsLocation.Coordinates.ShouldBeNull();
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<AnswersRemoved> @event;
         private static InterviewView dashboardItem;
     }
