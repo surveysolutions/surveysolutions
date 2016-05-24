@@ -341,6 +341,17 @@
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_formatting.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_formatting_and_use_group_formatting_is_false.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_max_digits_after_decimal_separator.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_max_digits_before_decimal_separator.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer_with_max_digits_before_decimal.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer_with_errors.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal.cs" />
+    <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_errors.cs" />
     <Compile Include="TestFactories\ServiceFactory.cs" />
     <Compile Include="TestFactories\ViewModelFactory.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
