@@ -31,17 +31,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
-        private readonly Assembly migrationsAssembly;
+        private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgresReadSideModule(string connectionString, 
-            Assembly migrationsAssembly,
+        public PostgresReadSideModule(string connectionString,
+            DbUpgradeSettings dbUpgradeSettings,
             ReadSideCacheSettings cacheSettings,
             IEnumerable<Assembly> mappingAssemblies)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
-            this.migrationsAssembly = migrationsAssembly;
+            this.dbUpgradeSettings = dbUpgradeSettings;
             this.mappingAssemblies = mappingAssemblies;
         }
 
@@ -58,7 +58,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
-                                                            .WithConstructorArgument("migrationsAssembly", this.migrationsAssembly);
+                                                            .WithConstructorArgument("dbUpgradeSettings", this.dbUpgradeSettings);
 
             this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
                 typeof(IReadSideRepositoryReader<>), typeof(INativeReadSideStorage<>))
@@ -98,7 +98,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             
-             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.migrationsAssembly);
+             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.dbUpgradeSettings);
         }
 
         private object GetEntityIdentifierColumnName(IContext context, ITarget target)

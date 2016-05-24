@@ -193,6 +193,7 @@
     <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Storage\Postgre\DbMigrations\DbMigrationsRunner.cs" />
+    <Compile Include="Storage\Postgre\DbUpgradeSettings.cs" />
     <Compile Include="Storage\Postgre\Implementation\IPlainPostgresTransactionManager.cs" />
     <Compile Include="Storage\Postgre\Implementation\NoTransactionPlainPostgresTransactionManager.cs" />
     <Compile Include="Storage\Postgre\Implementation\PlainTransactionManagerProvider.cs" />
