@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     fileSystemAccessor: fileSystemAccessor.Object);
         };
 
-        Because of = () => binaryFormatDataExportHandler.ExportData(Create.Entity.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity));
+        Because of = () => binaryFormatDataExportHandler.ExportData(Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity));
 
         It should_request_binary_data_for_answered_multimedia_question =
             () => plainInterviewFileStorageMock.Verify(x=>x.GetInterviewBinaryData(interviewId, "var.jpg"), Times.Once);

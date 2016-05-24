@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
             isAttachmentContentExists.ShouldBeTrue();
 
         private static AttachmentContentService attachmentContentService;
-        private static readonly AttachmentContent expectedContent = Create.Entity.AttachmentContent();
+        private static readonly AttachmentContent expectedContent = Create.Entity.AttachmentContent_SurveyManagement();
         private static bool isAttachmentContentExists;
     }
 }
