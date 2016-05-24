@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             textQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             interviewData =
-                Create.Other.InterviewData(Create.Other.InterviewQuestion(questionId: textQuestionId,
+                Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId: textQuestionId,
                     answer: text));
 
             questionnaireDocument =
-                Create.Other.QuestionnaireDocument(children: Create.Other.DateTimeQuestion(questionId: textQuestionId, variable: "txt"));
+                Create.Entity.QuestionnaireDocument(children: Create.Entity.DateTimeQuestion(questionId: textQuestionId, variable: "txt"));
 
             exportViewFactory = CreateExportViewFactory();
         };

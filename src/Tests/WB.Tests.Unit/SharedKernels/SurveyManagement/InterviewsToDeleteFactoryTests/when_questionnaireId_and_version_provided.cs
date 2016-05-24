@@ -16,10 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewsToDeleteFactory
             var interviews = new List<InterviewSummary>();
             questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireVersion = 1;
-            expectedSummary = Create.Other.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
-            interviews.Add(Create.Other.InterviewSummary(questionnaireId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), questionnaireVersion: questionnaireVersion));
+            expectedSummary = Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            interviews.Add(Create.Entity.InterviewSummary(questionnaireId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), questionnaireVersion: questionnaireVersion));
             interviews.Add(expectedSummary);
-            interviews.Add(Create.Other.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 2));
+            interviews.Add(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 2));
 
             TestInMemoryWriter<InterviewSummary> writer = Stub.ReadSideRepository<InterviewSummary>();
             interviews.ForEach(x => writer.Store(x, Guid.NewGuid().FormatGuid()));

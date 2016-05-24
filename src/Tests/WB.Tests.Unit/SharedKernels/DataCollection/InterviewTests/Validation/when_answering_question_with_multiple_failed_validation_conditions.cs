@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
         Establish context = () =>
         {
             var questionId = Guid.NewGuid();
-            questionIdentity = Create.Other.Identity(questionId, RosterVector.Empty);
+            questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
 
             var interviewExpressionStateV7 = Substitute.For<ILatestInterviewExpressionState>();
             IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidatoinConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             interviewExpressionStateV7.ProcessValidationExpressions()
                                       .Returns(new ValidityChanges(new List<Identity>(), answersDeclaredInvalid, failedValidatoinConditions));
             interviewExpressionStateV7.ProcessEnablementConditions()
-                                      .ReturnsForAnyArgs(Create.Other.EnablementChanges());
+                                      .ReturnsForAnyArgs(Create.Entity.EnablementChanges());
 
             interviewExpressionStateV7.Clone().Returns(interviewExpressionStateV7);
 
@@ -43,14 +43,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             expressionProcessorProvider.GetExpressionState(new Guid(), 1)
                                        .ReturnsForAnyArgs(interviewExpressionStateV7);
 
-            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Other.Question(questionId: questionId,
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionId,
                 questionType: QuestionType.Text,
                 validationConditions: new List<ValidationCondition> {
                     new ValidationCondition("validation1", "message1"),
                     new ValidationCondition("validation2", "message2")
                 }));
 
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey, Create.Other.PlainQuestionnaire(questionnaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey, Create.Entity.PlainQuestionnaire(questionnaire));
             interview = CreateInterview(expressionProcessorStatePrototypeProvider: expressionProcessorProvider,
                 questionnaireId: questionnaire.PublicKey,
                 questionnaireRepository: questionnaireRepository);

@@ -15,25 +15,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             variableName = "yesno";
-            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
-                Create.Other.MultyOptionsQuestion(id: questionId,
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(id: questionId,
                     variable: variableName,
                     options: new List<Answer> {
-                        Create.Other.Answer("foo", 28),
-                        Create.Other.Answer("bar", 42),
-                        Create.Other.Answer("blah", 21),
-                        Create.Other.Answer("bar_null", 15)
+                        Create.Entity.Answer("foo", 28),
+                        Create.Entity.Answer("bar", 42),
+                        Create.Entity.Answer("blah", 21),
+                        Create.Entity.Answer("bar_null", 15)
                     }, areAnswersOrdered:true,
                     yesNoView: true));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.Other.InterviewData(Create.Other.InterviewQuestion(questionId, new[]
+            interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new[]
             {
-                Create.Other.AnsweredYesNoOption(21m, true),
-                Create.Other.AnsweredYesNoOption(42m, false),
-                Create.Other.AnsweredYesNoOption(28m, true),
+                Create.Entity.AnsweredYesNoOption(21m, true),
+                Create.Entity.AnsweredYesNoOption(42m, false),
+                Create.Entity.AnsweredYesNoOption(28m, true),
             }));
         };
 

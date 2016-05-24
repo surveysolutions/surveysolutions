@@ -19,11 +19,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage=new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.Other.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);

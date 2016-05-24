@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             numericQuestionId = Guid.Parse("21111111111111111111111111111111");
-            var gpsQuestion = Create.Other.NumericIntegerQuestion(numericQuestionId, "num");
+            var gpsQuestion = Create.Entity.NumericIntegerQuestion(numericQuestionId, "num");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";

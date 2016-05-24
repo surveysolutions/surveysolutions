@@ -22,10 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         {
             interviewData = CreateInterviewData();
 
-            questionnaireDocument = Create.Other.QuestionnaireDocument(children: new IComposite[]
+            questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Other.Roster(rosterId: rosterId, variable: "fix",
-                    children: new[] {Create.Other.Variable(id: variableId, variableName: "txt")})
+                Create.Entity.Roster(rosterId: rosterId, variable: "fix",
+                    children: new[] {Create.Entity.Variable(id: variableId, variableName: "txt")})
             });
 
             var fixedRosterScope = new ValueVector<Guid>(new[] {rosterId});

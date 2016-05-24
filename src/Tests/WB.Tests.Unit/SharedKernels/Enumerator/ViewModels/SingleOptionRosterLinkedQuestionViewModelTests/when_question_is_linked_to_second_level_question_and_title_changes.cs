@@ -19,15 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var linkToRosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             parentRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionIdentity = Create.Other.Identity(questionId, RosterVector.Empty);
+            var questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
 
-            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
-                Create.Other.FixedRoster(
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
+                Create.Entity.FixedRoster(
                     rosterId: parentRosterId,
                     children: new IComposite[] {
-                        Create.Other.FixedRoster(rosterId: linkToRosterId)
+                        Create.Entity.FixedRoster(rosterId: linkToRosterId)
                 }),
-                Create.Other.SingleOptionQuestion(
+                Create.Entity.SingleOptionQuestion(
                     questionId: questionId,
                     linkedToRosterId: linkToRosterId)
             });
@@ -35,19 +35,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
 
             var questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey,
-                Create.Other.PlainQuestionnaire(questionnaire));
+                Create.Entity.PlainQuestionnaire(questionnaire));
             var interviewRepository = Create.Other.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
             viewModel.Init("interview", questionIdentity, Create.Other.NavigationState(interviewRepository));
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
-                .Returns(new List<InterviewRoster> { Create.Other.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});
+                .Returns(new List<InterviewRoster> { Create.Entity.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});
             interview.GetParentRosterTitlesWithoutLastForRoster(linkToRosterId, RosterVector.Empty)
                 .ReturnsForAnyArgs(new List<string>() {"item"});
         };
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(parentRosterId, Create.Other.RosterVector(1, 2)));
+        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(parentRosterId, Create.Entity.RosterVector(1, 2)));
 
         It should_refresh_roster_titles_in_options = () => viewModel.Options.FirstOrDefault().Title.ShouldEqual("item: title1");
 

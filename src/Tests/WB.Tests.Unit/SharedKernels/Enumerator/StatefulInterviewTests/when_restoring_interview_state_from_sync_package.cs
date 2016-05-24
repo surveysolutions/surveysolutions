@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 CreateAnsweredQuestionSynchronizationDto(multimediaQuestionId, rosterVector, multimediaAnswer),
             };
 
-            synchronizationDto = Create.Other.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
+            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
 
             eventContext = new EventContext();
         };

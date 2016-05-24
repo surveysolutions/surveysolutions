@@ -140,7 +140,7 @@ namespace WB.Tests.Unit.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
-                eventBusSettings: eventBusSettings ?? Create.Other.EventBusSettings(),
+                eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>())
             {
                 TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>())
@@ -197,6 +197,6 @@ namespace WB.Tests.Unit.TestFactories
                 noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
-                Create.Other.ReadSideCacheSettings());
+                Create.Entity.ReadSideCacheSettings());
     }
 }

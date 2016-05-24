@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            InterviewData data = Create.Other.InterviewData(createdOnClient: true, 
+            InterviewData data = Create.Entity.InterviewData(createdOnClient: true, 
                 status: InterviewStatus.Completed,
                 interviewId: interviewId);
 

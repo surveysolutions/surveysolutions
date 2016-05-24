@@ -15,22 +15,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.Other.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
-                        Create.Other.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
 
             interviewStatusTimeSpansStorage.Store(
-                Create.Other.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
+                Create.Entity.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
                     timeSpans:
                         new[]
                         {
-                            Create.Other.TimeSpanBetweenStatuses(interviewerId: interviewId,
+                            Create.Entity.TimeSpanBetweenStatuses(interviewerId: interviewId,
                                 endStatus: InterviewExportedAction.Completed)
                         }), interviewId.FormatGuid());
 
