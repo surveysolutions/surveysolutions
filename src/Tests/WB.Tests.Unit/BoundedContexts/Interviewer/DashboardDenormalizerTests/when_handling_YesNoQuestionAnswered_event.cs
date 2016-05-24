@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_interview_be_strated = () =>
             dashboardItem.StartedDateTime.ShouldNotBeNull();
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<YesNoQuestionAnswered> @event;
         private static InterviewView dashboardItem;
     }

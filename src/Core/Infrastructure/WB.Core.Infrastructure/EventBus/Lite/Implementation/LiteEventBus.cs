@@ -39,7 +39,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 {
                     try
                     {
-                        handler.Invoke(uncommittedChange.Payload);
+                        handler.Invoke(uncommittedChange);
                     }
                     catch (Exception exception)
                     {

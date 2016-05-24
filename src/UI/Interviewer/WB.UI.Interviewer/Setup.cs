@@ -147,49 +147,13 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
-            var liteEventBus = kernel.Get<ILiteEventBus>();
-            kernel.Unbind<ILiteEventBus>();
-
-            var cqrsEventBus = new InProcessEventBus(kernel.Get<IEventStore>(), new EventBusSettings(),
-                kernel.Get<ILogger>());
-
-            var hybridEventBus = new HybridEventBus(liteEventBus, cqrsEventBus);
-
-            kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
-            kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
-
             kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
             kernel.Bind<AttachmentsCleanupService>().ToSelf();
 
-            this.InitDashboard(kernel, cqrsEventBus);
+            kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
+            kernel.Get<InterviewerDashboardEventHandler>();
+
             return kernel;
-        }
-         
-        private void InitDashboard(IKernel kernel, InProcessEventBus bus)
-        {
-            var dashboardeventHandler = new InterviewEventHandler(
-                kernel.Get<IAsyncPlainStorage<InterviewView>>(),
-                kernel.Get<IPlainQuestionnaireRepository>());
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewHardDeleted));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(NumericRealQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(YesNoQuestionAnswered));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies
