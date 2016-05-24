@@ -971,15 +971,6 @@
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_FormatValue_called_for_text__ab___and_mask_with_any_char_and_dashes.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_approved_by_hq.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_deleted_on_hq.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_hard_deleted_on_hq.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_rejected.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_capi_client.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_hq.cs" />
-    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_questionnaire_deleted.cs" />
-    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_template_imported.cs" />
-    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_template_imported_with_not_empty_version.cs" />
     <Compile Include="TestFactories\OtherFactory.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EnumerableExtensions.cs" />

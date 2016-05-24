@@ -1,5 +1,4 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
@@ -11,20 +10,16 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -55,10 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             if (!supervisorFunctionsEnabled)
             {
                 this.Bind<IVersionedQuestionnaireReader>().To<VersionedQustionnaireDocumentViewFactory>();
-                this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
                 this.Kernel.RegisterDenormalizer<VersionedQustionnaireDocumentDenormalizer>();
-                this.Kernel.RegisterDenormalizer<UsersFeedDenormalizer>();
-                this.Kernel.RegisterDenormalizer<QuestionnaireFeedDenormalizer>();
             }
 
             CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());

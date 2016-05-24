@@ -187,16 +187,13 @@
     <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
-    <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewStatusesMap.cs" />
     <Compile Include="Mappings\InterviewStatusTimeSpansMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
-    <Compile Include="Mappings\QuestionnaireFeedEntryMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
-    <Compile Include="Mappings\UserChangedFeedEntryMap.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
     <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
@@ -267,9 +264,7 @@
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
-    <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
-    <Compile Include="Synchronization\Questionnaire\QuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
     <Compile Include="Synchronization\Schedulers\SynchorizationContext.cs" />
@@ -277,7 +272,6 @@
     <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
     <Compile Include="ValueObjects\Export\ExportFileSettings.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
-    <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
@@ -359,7 +353,6 @@
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
-    <Compile Include="Synchronization\Interview\InterviewFeedEntry.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />
     <Compile Include="Views\Interview\InterviewLevel.cs" />
     <Compile Include="Views\Interview\InterviewLinkedQuestionView.cs" />
@@ -547,7 +540,9 @@
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Synchronization\Interview\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
