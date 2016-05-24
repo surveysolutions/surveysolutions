@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, exportViewFactoryMock.Object, exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.Other.InterviewStatusChangedEvent(InterviewStatus.Completed,
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.Completed,
                 interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
                     x.CreateInterviewDataExportView(Moq.It.IsAny<QuestionnaireExportStructure>(),
                         Moq.It.IsAny<InterviewData>())).Returns(newInterviewDataExportView);
 
-            interviewsExportDenormalizer.Handle(Create.Other.InterviewStatusChangedEvent(InterviewStatus.Completed,
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.Completed,
                interviewId: interviewId));
 
             countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.Other.InterviewDeletedEvent(interviewId: interviewId));
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewDeletedEvent(interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
 
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.Other.InterviewHardDeletedEvent(interviewId: interviewId));
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewHardDeletedEvent(interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
 

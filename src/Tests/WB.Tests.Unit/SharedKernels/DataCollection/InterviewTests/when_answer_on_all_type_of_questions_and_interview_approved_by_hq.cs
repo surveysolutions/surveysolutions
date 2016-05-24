@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(Create.Other.InterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters).Payload);
+            interview.Apply(Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters).Payload);
         };
 
         Because of = () =>
