@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
                 Create.Other.QuestionnaireDocumentWithOneChapter(Create.Other.NumericRealQuestion(id: questionId, useFomatting: true)));
             service = CreateAnswerToStringService();
 
-            answer = Create.Answer.RealNumericAnswer(Create.Other.Identity(questionId, RosterVector.Empty), answer: 1234.42256m);
+            answer = Create.Other.RealNumericAnswer(Create.Other.Identity(questionId, RosterVector.Empty), answer: 1234.42256m);
 
             statefulInterview = Create.Other.StatefulInterview(questionnaire: questionnaire);
         };
