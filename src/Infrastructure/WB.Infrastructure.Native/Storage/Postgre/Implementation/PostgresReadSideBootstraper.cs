@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Npgsql;
+﻿using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 
@@ -9,12 +7,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     internal class PostgresReadSideBootstraper : IPostgresReadSideBootstraper
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private readonly Assembly migrationsAssembly;
+        private readonly DbUpgradeSettings dbUpgradeSettings;
 
-        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, Assembly migrationsAssembly)
+        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, DbUpgradeSettings dbUpgradeSettings)
         {
             this.connectionSettings = connectionSettings;
-            this.migrationsAssembly = migrationsAssembly;
+            this.dbUpgradeSettings = dbUpgradeSettings;
         }
 
         public void ReCreateViewDatabase()
@@ -23,12 +21,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var dbCommand = connection.CreateCommand();
-
-                dbCommand.CommandText = "drop schema public cascade;create schema public;";
+                var schemaName = connection.GetSchema().Namespace;
+                dbCommand.CommandText = $"drop schema {schemaName} cascade;create schema {schemaName};";
                 dbCommand.ExecuteNonQuery();
             }
 
-            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.migrationsAssembly);
+            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.dbUpgradeSettings);
         }
 
         public bool CheckDatabaseConnection()
