@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.PublishedEvent.UnapprovedByHeadquartersEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.UnapprovedByHeadquarters(interviewId: interviewId));
 
         It should_remove_ApprovedByHeadquarter_as_end_status =
             () =>

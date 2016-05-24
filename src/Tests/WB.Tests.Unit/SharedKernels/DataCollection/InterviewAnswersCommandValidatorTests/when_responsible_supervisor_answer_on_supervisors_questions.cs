@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
                 TeamLeadId = responsibleId
             });
             
-            interview.Apply(Create.PublishedEvent.SupervisorAssignedEvent(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);
+            interview.Apply(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);
             commandValidator = Create.Service.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
         };
 
