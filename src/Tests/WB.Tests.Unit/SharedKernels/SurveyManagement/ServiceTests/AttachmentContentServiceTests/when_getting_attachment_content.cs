@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         private static AttachmentContentService attachmentContentService;
         private static AttachmentContent actualContent;
 
-        private static readonly AttachmentContent expectedContent = Create.Other.AttachmentContent();
+        private static readonly AttachmentContent expectedContent = Create.Entity.AttachmentContent();
     }
 }

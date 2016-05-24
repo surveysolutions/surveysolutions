@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Other.TextListQuestion(questionId: questionId));
+                Create.Entity.TextListQuestion(questionId: questionId));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));

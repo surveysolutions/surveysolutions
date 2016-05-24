@@ -62,9 +62,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         private static readonly List<Attachment> questionnaireAttachments =
             new List<Attachment>(new[]
             {
-                Create.Other.Attachment("Content 1"),
-                Create.Other.Attachment("Content 2"),
-                Create.Other.Attachment("Content 3")
+                Create.Entity.Attachment("Content 1"),
+                Create.Entity.Attachment("Content 2"),
+                Create.Entity.Attachment("Content 3")
             });
     }
 }

@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
     {
         Establish context = () =>
         {
-            rosterIdentity = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new[] {0m});
+            rosterIdentity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new[] {0m});
             interview = Substitute.For<IStatefulInterview>();
             interview.HasGroup(rosterIdentity)
                      .Returns(true);

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         {
             interviewId = "interview";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Create.Other.Identity(questionGuid, Empty.RosterVector);
+            questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
             navigationState = Create.Other.NavigationState();
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
             );
 
-            var yesNoAnswer = Create.Other.YesNoAnswer(questionGuid, Empty.RosterVector);
+            var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
             {
                 new AnsweredYesNoOption(5, true),

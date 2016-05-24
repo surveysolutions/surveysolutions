@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Other.DateTimeQuestion(questionId: questionId));
+                Create.Entity.DateTimeQuestion(questionId: questionId));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));

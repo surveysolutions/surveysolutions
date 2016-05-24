@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
             decimal[] allCodes = new decimal[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             decimal[] selectedYes = new decimal[] { 1 };
             decimal[] selectedNo = new decimal[] { 10 };
-            var answers = Create.Other.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
+            var answers = Create.Entity.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
 
             var result = answers.Missing;
 

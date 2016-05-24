@@ -16,24 +16,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         {
             input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "m");
 
-            var user = Create.Other.UserDocument(supervisorId: supervisorId);
+            var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
-                Create.Other.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Other.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
                             timestamp: input.From.Date.AddHours(1),
                             status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Other.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
                             status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddDays(1)),
-                        Create.Other.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
                             status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddMonths(-2))

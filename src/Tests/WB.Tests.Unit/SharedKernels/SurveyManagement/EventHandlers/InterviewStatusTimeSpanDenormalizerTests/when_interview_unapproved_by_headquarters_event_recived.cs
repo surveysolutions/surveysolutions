@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             
             interviewStatusTimeSpansStorage.Store(
-                Create.Other.InterviewStatusTimeSpans(
+                Create.Entity.InterviewStatusTimeSpans(
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
                     interviewId : interviewId.FormatGuid(),
                     timeSpans: new[]
                     {
-                        Create.Other.TimeSpanBetweenStatuses(interviewerId: userId,
+                        Create.Entity.TimeSpanBetweenStatuses(interviewerId: userId,
                             timestamp: DateTime.Now.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     })

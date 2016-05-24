@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         {
             dataExportProcessesService.Setup(x => x.GetRunningExportProcesses())
                 .Returns(new IDataExportProcessDetails[]
-                {Create.Other.ParaDataExportProcess(), Create.Other.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.Other.AllDataExportProcess()});
+                {Create.Entity.ParaDataExportProcess(), Create.Entity.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.Entity.AllDataExportProcess()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";
 

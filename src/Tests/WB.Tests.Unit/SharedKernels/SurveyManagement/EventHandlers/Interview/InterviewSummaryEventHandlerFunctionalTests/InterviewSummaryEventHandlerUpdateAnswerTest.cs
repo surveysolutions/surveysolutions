@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var interviewSummaryEventHandler =
                 CreateInterviewSummaryEventHandlerFunctional(
-                    Create.Other.QuestionnaireDocument(children:
-                        Create.Other.Question(questionId: questionId, answers: Create.Other.Answer(answerText, 1))));
+                    Create.Entity.QuestionnaireDocument(children:
+                        Create.Entity.Question(questionId: questionId, answers: Create.Entity.Answer(answerText, 1))));
 
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
@@ -67,8 +67,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Questionid = questionId,
                     });
 
-            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.Other.QuestionnaireDocument(children:
-                        Create.Other.Question(questionId: questionId, answers: new[] { Create.Other.Answer("1", 1), Create.Other.Answer("3", 3), Create.Other.Answer("8", 8) })));
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.Entity.QuestionnaireDocument(children:
+                        Create.Entity.Question(questionId: questionId, answers: new[] { Create.Entity.Answer("1", 1), Create.Entity.Answer("3", 3), Create.Entity.Answer("8", 8) })));
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,

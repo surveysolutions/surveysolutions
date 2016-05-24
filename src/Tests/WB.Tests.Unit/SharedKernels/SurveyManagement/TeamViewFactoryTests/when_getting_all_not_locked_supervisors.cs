@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
         {
             new List<UserDocument>()
             {
-                Create.Other.UserDocument(Id.g1, userName: "b_locked_super", isLockedByHQ: true),
-                Create.Other.UserDocument(Id.g2, userName: superAName),
-                Create.Other.UserDocument(Id.g3, userName: superCName),
-                Create.Other.UserDocument(Id.g4, userName: "inter1", supervisorId: Id.g2),
-                Create.Other.UserDocument(Id.g5, userName: "inter2", supervisorId: Id.g2)
+                Create.Entity.UserDocument(Id.g1, userName: "b_locked_super", isLockedByHQ: true),
+                Create.Entity.UserDocument(Id.g2, userName: superAName),
+                Create.Entity.UserDocument(Id.g3, userName: superCName),
+                Create.Entity.UserDocument(Id.g4, userName: "inter1", supervisorId: Id.g2),
+                Create.Entity.UserDocument(Id.g5, userName: "inter2", supervisorId: Id.g2)
             }.ForEach(x => usersStorage.Store(x, x.PublicKey.FormatGuid()));
             
 

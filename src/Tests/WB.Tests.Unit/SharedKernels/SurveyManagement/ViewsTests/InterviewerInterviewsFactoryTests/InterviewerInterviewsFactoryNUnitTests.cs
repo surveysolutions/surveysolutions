@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             var interviewerInterviewsFactory =
                 this.CreateInterviewerInterviewsFactory(
                     synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
-                    statusHistory: new[] {Create.Other.CommentedStatusHistroyView()});
+                    statusHistory: new[] {Create.Entity.CommentedStatusHistroyView()});
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
 
@@ -48,9 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.Other.CommentedStatusHistroyView(status: InterviewStatus.SupervisorAssigned,
+                            Create.Entity.CommentedStatusHistroyView(status: InterviewStatus.SupervisorAssigned,
                                 timestamp: new DateTime(1984, 4, 18)),
-                            Create.Other.CommentedStatusHistroyView(status: InterviewStatus.InterviewerAssigned,
+                            Create.Entity.CommentedStatusHistroyView(status: InterviewStatus.InterviewerAssigned,
                                 timestamp: new DateTime(1984, 4, 17))
                         });
 
@@ -75,9 +75,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.Other.CommentedStatusHistroyView(),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment")
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment")
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -102,10 +102,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.Other.CommentedStatusHistroyView(),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
-                            Create.Other.CommentedStatusHistroyView()
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
+                            Create.Entity.CommentedStatusHistroyView()
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -131,10 +131,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Created),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.SupervisorAssigned),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.InterviewerAssigned),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Created),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.SupervisorAssigned),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.InterviewerAssigned),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
                         });
 
             var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -155,11 +155,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.Other.CommentedStatusHistroyView(),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.Other.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor)
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor)
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             params CommentedStatusHistroyView[] statusHistory)
         {
-            interviewData = interviewData ?? Create.Other.InterviewData();
+            interviewData = interviewData ?? Create.Entity.InterviewData();
             var changeStatusView = new ChangeStatusView() {StatusHistory = statusHistory.ToList()};
             return
                 new InterviewerInterviewsFactory(

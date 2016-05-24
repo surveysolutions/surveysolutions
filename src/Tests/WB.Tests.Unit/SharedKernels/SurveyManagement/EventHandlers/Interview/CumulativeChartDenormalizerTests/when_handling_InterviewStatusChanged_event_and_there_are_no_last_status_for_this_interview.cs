@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
             var lastStatusesStorage = Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(_ =>
                 _.GetById(interviewStringId) == null as LastInterviewStatus);
 
-            var interviewReferences = Create.Other.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            var interviewReferences = Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
             var interviewReferencesStorage = Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(_ =>
                 _.GetById(interviewStringId) == interviewReferences);
 

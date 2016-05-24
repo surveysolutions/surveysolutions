@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            attachmentContent = Create.Other.AttachmentContent(
+            attachmentContent = Create.Entity.AttachmentContent(
                 contentHash: attachmentContentId,
                 contentType: "image/png",
                 content: new byte[]{ 1,2,3 }

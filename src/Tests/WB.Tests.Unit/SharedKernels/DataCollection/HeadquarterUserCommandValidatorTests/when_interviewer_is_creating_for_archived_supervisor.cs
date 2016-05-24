@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
     {
         Establish context = () =>
         {
-            supervisor = Create.Other.UserDocument(isArchived: true);
+            supervisor = Create.Entity.UserDocument(isArchived: true);
 
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidatorWithUsers(supervisor);
