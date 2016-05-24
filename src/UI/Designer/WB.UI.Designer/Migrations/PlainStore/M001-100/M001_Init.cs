@@ -7,12 +7,34 @@ namespace WB.UI.Designer.Migrations.PlainStore
     {
         public override void Up()
         {
-            throw new System.NotImplementedException();
+            Create.Table("attachmentcontents")
+                .WithColumn("id").AsString(255).PrimaryKey()
+                .WithColumn("content").AsBinary().Nullable()
+                .WithColumn("size").AsInt64().Nullable()
+                .WithColumn("attachmentheight").AsInt32().Nullable()
+                .WithColumn("attachmentwidth").AsInt32().Nullable()
+                .WithColumn("contenttype").AsString().Nullable();
+
+            Create.Table("attachmentmetas")
+                .WithColumn("id").AsGuid().PrimaryKey()
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("contentid").AsString().Nullable()
+                .WithColumn("filename").AsString().Nullable()
+                .WithColumn("lastupdatedate").AsDateTime().Nullable();
+
+            Create.Table("productversionhistory")
+                .WithColumn("updatetimeutc").AsDateTime().PrimaryKey()
+                .WithColumn("productversion").AsString().Nullable();
+
+            Create.Index("attachmentmeta_questionnaireid").OnTable("attachmentmetas").OnColumn("questionnaireid");
+            Create.Index("attachmentmeta_contentid").OnTable("attachmentmetas").OnColumn("contentid");
         }
 
         public override void Down()
         {
-            throw new System.NotImplementedException();
+            Delete.Table("AttachmentContents");
+            Delete.Table("AttachmentMetas");
+            Delete.Table("ProductVersionHistory");
         }
     }
 }
