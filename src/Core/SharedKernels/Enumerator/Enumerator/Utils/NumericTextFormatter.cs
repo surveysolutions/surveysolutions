@@ -25,19 +25,19 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             }
         }
 
-        public string FilterFormatted(string sourceText, string addedText, int insertToIndex)
+        public string FilterFormatted(string addedText, string sourceText, int insertToIndex)
         {
-            var hasNonLocalizedAndroidDecimalSeparator = sourceText == nonLocalizedAndroidDecimalSeparator && this.settings.DecimalSeparator != nonLocalizedAndroidDecimalSeparator;
-            var hasDecimalSeperatorInInteger = (sourceText == this.settings.DecimalSeparator || hasNonLocalizedAndroidDecimalSeparator) && !this.settings.IsDecimal;
+            var hasNonLocalizedAndroidDecimalSeparator = addedText == nonLocalizedAndroidDecimalSeparator && this.settings.DecimalSeparator != nonLocalizedAndroidDecimalSeparator;
+            var hasDecimalSeperatorInInteger = (addedText == this.settings.DecimalSeparator || hasNonLocalizedAndroidDecimalSeparator) && !this.settings.IsDecimal;
 
-            if (hasDecimalSeperatorInInteger || !sourceText.ToCharArray().All(x => this.allowedSymbols.ToCharArray().Contains(x)))
+            if (hasDecimalSeperatorInInteger || !addedText.ToCharArray().All(x => this.allowedSymbols.ToCharArray().Contains(x)))
             {
                 return "";
             }
 
-            if (hasNonLocalizedAndroidDecimalSeparator) sourceText = this.settings.DecimalSeparator;
+            if (hasNonLocalizedAndroidDecimalSeparator) addedText = this.settings.DecimalSeparator;
 
-            var enteredText = addedText.Insert(insertToIndex, sourceText);
+            var enteredText = sourceText.Insert(insertToIndex, addedText);
 
             var hasTextNegativeSign = enteredText.StartsWith(this.settings.NegativeSign);
             string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
