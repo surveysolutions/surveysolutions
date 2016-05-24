@@ -25,8 +25,12 @@ namespace dbup
             });
             cfg.SetProperty(Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(MappingsCollector.GetPlainMappingsForDesigner(), "Main");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
+            //var update = new SchemaUpdate(cfg);
+            //update.Execute(true, true);
+
+            SchemaExport export = new SchemaExport(cfg);
+            export.SetOutputFile("d-plain.sql");
+            export.Execute(false, false, false);
 
             await DbMarker.MarkAsZeroMigrationDone(this.ConnectionString);
         }
