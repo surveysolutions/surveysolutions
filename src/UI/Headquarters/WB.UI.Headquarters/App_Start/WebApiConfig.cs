@@ -72,7 +72,6 @@ namespace WB.UI.Headquarters
 
 
             config.Filters.Add(new UnhandledExceptionFilter());
-            config.Formatters.Add(new SyndicationFeedFormatter());
             config.MessageHandlers.Add(new DecompressionHandler());
 
             config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });

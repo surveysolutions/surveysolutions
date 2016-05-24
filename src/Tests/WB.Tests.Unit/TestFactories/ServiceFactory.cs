@@ -1,26 +1,19 @@
 using System;
-using System.Net.Http;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
-using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,15 +21,12 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -109,12 +99,6 @@ namespace WB.Tests.Unit.TestFactories
             => new InterviewReferencesDenormalizer(
                 Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 
-        public InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
-            IReadSideKeyValueStorage<InterviewData> interviewsRepository = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepository = null)
-            => new InterviewsFeedDenormalizer(
-                feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
-                interviewsRepository ?? Substitute.For<IReadSideKeyValueStorage<InterviewData>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
-
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
@@ -155,9 +139,6 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaire,
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));
-
-        public QuestionnaireFeedDenormalizer QuestionnaireFeedDenormalizer(IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeedWriter)
-            => new QuestionnaireFeedDenormalizer(questionnaireFeedWriter);
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
