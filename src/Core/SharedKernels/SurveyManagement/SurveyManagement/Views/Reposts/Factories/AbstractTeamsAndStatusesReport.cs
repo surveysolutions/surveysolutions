@@ -31,17 +31,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             var statistics =
                 this.interviewsReader.QueryOver(
                     _ => ApplyFilter(input, _).Select(
-                        AddCountsByStuses(Projections.ProjectionList()
-                            .Add(Projections.Group(ResponsibleIdSelector), "ResponsibleId")
-                            .Add(Projections.Min(Projections.Property(ResponsibleNameSelector)),
-                                "Responsible"))
-                        ));
-
-            var totalStatistics =
-                this.interviewsReader.QueryOver(
-                    _ => ApplyFilter(input, _).Select(AddCountsByStuses(Projections.ProjectionList())))
-                    .TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
-                    .SingleOrDefault<TeamsAndStatusesReportLine>();
+                         AddCountsByStuses(Projections.ProjectionList())
+                        .Add(Projections.Group(ResponsibleIdSelector), "ResponsibleId")
+                        .Add(Projections.Min(Projections.Property(ResponsibleNameSelector)), "Responsible")));
 
             var sorting = QueryableExtensions.ParseSortExpression(input.Order);
             if (sorting != null)
@@ -58,6 +50,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .Skip((input.Page - 1)*input.PageSize)
                     .Take(input.PageSize).List<TeamsAndStatusesReportLine>();
 
+
+            var totalStatistics =
+                this.interviewsReader.QueryOver(
+                    _ => ApplyFilter(input, _)
+                    .Select(AddCountsByStuses(Projections.ProjectionList())))
+                    .TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
+                    .SingleOrDefault<TeamsAndStatusesReportLine>();
+
             return new TeamsAndStatusesReportView
             {
                 TotalCount = rowCount,
@@ -69,13 +69,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         private ProjectionList AddCountsByStuses(ProjectionList projectionList)
         {
             return projectionList
-                .Add(this.CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.Completed), "CompletedCount")
-                .Add(this.CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
-                .Add(this.CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
-                .Add(this.CountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
-                .Add(this.CountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
+                .Add(CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
+                .Add(CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
+                .Add(CountByStatus(InterviewStatus.Completed), "CompletedCount")
+                .Add(CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
+                .Add(CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
+                .Add(CountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
+                .Add(CountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
                 .Add(Projections.RowCount(), "TotalCount");
         }
 
