@@ -108,11 +108,6 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class OtherFactory
     {
-        public AccountDocument AccountDocument(string userName="")
-        {
-            return new AccountDocument() { UserName = userName };
-        }
-
         public DataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new DataExportProcessDetails(
@@ -146,21 +141,6 @@ namespace WB.Tests.Unit.TestFactories
             return new AnsweredYesNoOption(value, answer);
         }
 
-        public AnswerNotifier AnswerNotifier()
-        {
-            return new AnswerNotifier(Create.Service.LiteEventRegistry());
-        }
-
-        public IAnswerToStringService AnswerToStringService()
-        {
-            return new AnswerToStringService();
-        }
-
-        public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
-        {
-            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
-        }
-
         public AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
         {
             return new AttachmentsController(attachmentContentService);
@@ -186,58 +166,6 @@ namespace WB.Tests.Unit.TestFactories
                        Title = title,
                        ParentValue = parentValue
                    };
-        }
-
-        public Group Chapter(string title = "Chapter X",Guid? chapterId=null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
-        {
-            return Create.Other.Group(
-                title: title,
-                groupId: chapterId,
-                hideIfDisabled: hideIfDisabled,
-                children: children);
-        }
-
-        public Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
-            => Create.Other.Group(
-                title: title,
-                groupId: sectionId,
-                children: children);
-
-        public CodeGenerationSettings CodeGenerationSettings()
-        {
-            return new CodeGenerationSettings(
-                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                },
-                isLookupTablesFeatureSupported: true,
-                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
-        }
-
-        public CodeGenerationSettings CodeGenerationSettingsV6()
-        {
-            return new CodeGenerationSettings(
-                additionInterfaces: new[] { "IInterviewExpressionStateV6" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5"
-                },
-                isLookupTablesFeatureSupported: true,
-                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText());
         }
 
         public CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
@@ -288,28 +216,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public IMacrosSubstitutionService DefaultMacrosSubstitutionService()
-        {
-            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
-            macrosSubstitutionServiceMock.Setup(
-                x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
-                .Returns((string e, IEnumerable<Macro> macros) =>
-                {
-                    return e;
-                });
-
-            return macrosSubstitutionServiceMock.Object;
-        }
-
-        public DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
-        {
-            return new DownloadQuestionnaireRequest()
-            {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                SupportedVersion = questionnaireVersion ?? new QuestionnaireVersion()
-            };
-        }
-
         public EnablementChanges EnablementChanges(
             List<Identity> groupsToBeDisabled = null, 
             List<Identity> groupsToBeEnabled = null,
@@ -357,11 +263,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public ExportedQuestion ExportedQuestion()
-        {
-            return new ExportedQuestion() {Answers = new string[0]};
-        }
-
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
@@ -370,19 +271,9 @@ namespace WB.Tests.Unit.TestFactories
             return new FixedRosterTitle(value, title);
         }
 
-        public GenerationResult GenerationResult(bool success=false)
-        {
-            return new GenerationResult() {Success = success};
-        }
-
         public GeoPosition GeoPosition()
         {
             return new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984,4,18)));
-        }
-
-        private static Guid GetQuestionnaireItemId(string questionnaireItemId)
-        {
-            return string.IsNullOrEmpty(questionnaireItemId) ? Guid.NewGuid() : Guid.Parse(questionnaireItemId);
         }
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled=false, string title = null,
@@ -428,13 +319,6 @@ namespace WB.Tests.Unit.TestFactories
         public HeaderStructureForLevel HeaderStructureForLevel()
         {
             return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
-        }
-
-        public HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
-        {
-            return new HybridEventBus(
-                liteEventBus ?? Mock.Of<ILiteEventBus>(),
-                cqrsEventBus ?? Mock.Of<IEventBus>());
         }
 
         public Identity Identity(string id, RosterVector rosterVector)
@@ -546,11 +430,6 @@ namespace WB.Tests.Unit.TestFactories
             return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
         }
 
-        public InterviewExportedDataRecord InterviewExportedDataRecord()
-        {
-            return new InterviewExportedDataRecord();
-        }
-
         public InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
         {
             return new InterviewItemId(id, rosterVector);
@@ -574,30 +453,6 @@ namespace WB.Tests.Unit.TestFactories
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
-
-        public InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
-        {
-            return new InterviewReferencesDenormalizer(
-                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
-        }
-
-        public InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
-            IReadSideKeyValueStorage<InterviewData> interviewsRepository = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepository = null)
-        {
-            return new InterviewsFeedDenormalizer(feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
-                interviewsRepository ?? Substitute.For<IReadSideKeyValueStorage<InterviewData>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
-        }
-
-        public InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null, Guid? interviewerId=null)
-        {
-            return new InterviewState(Guid.NewGuid(), 1, status ?? InterviewStatus.SupervisorAssigned, new Dictionary<string, object>(),
-                new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>(), new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>(),
-                new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
-                answerComments ?? new List<AnswerComment>(),
-                new HashSet<string>(),
-                new HashSet<string>(), new Dictionary<string, ConcurrentHashSet<decimal>>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
-        }
 
         public InterviewStatuses InterviewStatuses(Guid? interviewid=null, Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
         {
@@ -724,24 +579,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
-        {
-            return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
-        }
-
-        public LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
-        {
-            return new LookupTableRow
-            {
-                RowCode = rowcode,
-                Variables = values
-            };
-        }
-
         public Macro Macro(string name, string content = null, string description = null)
         {
             return new Macro
@@ -824,11 +661,6 @@ namespace WB.Tests.Unit.TestFactories
             return result;
         }
 
-        public NewUserCreated NewUserCreated(UserRoles role = UserRoles.Operator, Guid? supervisorId=null)
-        {
-            return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.Other.UserLight(supervisorId) };
-        }
-
         public NumericQuestion NumericIntegerQuestion(Guid? id = null, 
             string variable = "numeric_question", 
             string enablementCondition = null, 
@@ -891,20 +723,6 @@ namespace WB.Tests.Unit.TestFactories
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression
             };
-        }
-
-        public Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
-        {
-            Group group = Create.Other.Group(
-                groupId: rosterId,
-                title: "Roster X",
-                variable: variable,
-                children: children);
-
-            group.IsRoster = true;
-            group.RosterSizeSource = RosterSizeSourceType.Question;
-            group.RosterSizeQuestionId = rosterSizeQuestionId;
-            return group;
         }
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -977,19 +795,6 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
-        {
-            return new Questionnaire(
-                new QuestionnaireEntityFactory(),
-                Mock.Of<ILogger>(),
-                Mock.Of<IClock>(),
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.Service.SubstitutionService(),
-                Create.Service.KeywordsProvider(),
-                Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
-        }
-
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
             string title = "Questionnaire Browse Item X", bool disabled = false)
@@ -1004,34 +809,6 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
             return new QuestionnaireBrowseItem(questionnaire, 1, false,1);
-        }
-
-        public QuestionnaireChangeRecord QuestionnaireChangeRecord(
-            string questionnaireId = null,
-            QuestionnaireActionType? action = null, 
-            Guid? targetId = null, 
-            QuestionnaireItemType? targetType = null,
-            params QuestionnaireChangeReference[] reference)
-        {
-            return new QuestionnaireChangeRecord()
-            {
-                QuestionnaireId = questionnaireId,
-                ActionType = action ?? QuestionnaireActionType.Add,
-                TargetItemId = targetId ?? Guid.NewGuid(),
-                TargetItemType = targetType ?? QuestionnaireItemType.Group,
-                References = reference.ToHashSet()
-            };
-        }
-
-        public QuestionnaireChangeReference QuestionnaireChangeReference(
-            Guid? referenceId = null,
-            QuestionnaireItemType? referenceType = null)
-        {
-            return new QuestionnaireChangeReference()
-            {
-                ReferenceId = referenceId ?? Guid.NewGuid(),
-                ReferenceType = referenceType ?? QuestionnaireItemType.Group
-            };
         }
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -1115,22 +892,6 @@ namespace WB.Tests.Unit.TestFactories
                 && repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
         }
 
-        public QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
-        {
-            return  new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
-        }
-
-        public QuestionnaireStateTracker QuestionnaireStateTacker()
-        {
-            return new QuestionnaireStateTracker();
-        }
-
-        public QuestionnaireView QuestionnaireView(Guid? createdBy)
-            => Create.Other.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid( )});
-
-        public QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-            => new QuestionnaireView(questionnaireDocument);
-
         public ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
             => new ReadSideCacheSettings(true, "folder", cacheSizeInEntities, storeOperationBulkSize);
 
@@ -1181,14 +942,6 @@ namespace WB.Tests.Unit.TestFactories
             group.RosterTitleQuestionId = rosterTitleQuestionId;
 
             return group;
-        }
-
-        public RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null)
-        {
-            return new RosterInstancesAdded(new[]
-                {
-                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m, null)
-                });
         }
 
         public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
@@ -1338,11 +1091,6 @@ namespace WB.Tests.Unit.TestFactories
             return new StaticText(publicKey ?? Guid.NewGuid(), text, null, false, validationConditions ?? new List<ValidationCondition>(), attachmentName);
         }
 
-        public IAsyncExecutor SyncAsyncExecutor()
-        {
-            return new SyncAsyncExecutorStub();
-        }
-
         public TextAnswer TextAnswer(string answer)
         {
             return Create.Other.TextAnswer(answer, null, null);
@@ -1435,11 +1183,6 @@ namespace WB.Tests.Unit.TestFactories
             return user;
         }
 
-        public UserArchived UserArchived()
-        {
-           return new UserArchived();
-        }
-
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name", bool isLockedByHQ = false)
         {
             var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
@@ -1508,47 +1251,6 @@ namespace WB.Tests.Unit.TestFactories
             return new VariableValueLabel(value, label);
         }
 
-        public QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
-        {
-            return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
-        }
-
-        public QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
-        {
-            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireVerificationReferences);
-        }
-
-        public VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
-        {
-            return new VerificationMessage
-            {
-                Code = code,
-                Message = message,
-                Errors = new List<VerificationMessageError>()
-                { 
-                    new VerificationMessageError()
-                    {
-                        References = references.ToList()
-                    }
-                }
-            };
-        }
-
-        public QuestionnaireVerificationReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
-        {
-            return new QuestionnaireVerificationReference(type, id ?? Guid.NewGuid());
-        }
-
-        public VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
-        {
-            return new VerificationReferenceEnriched
-            {
-                Type = type,
-                ItemId = id.FormatGuid(),
-                Title = title
-            };
-        }
-
         public YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
         {
             return new YesNoAnswer(questionId, rosterVector);
@@ -1565,14 +1267,6 @@ namespace WB.Tests.Unit.TestFactories
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] {});
-        }
-
-        private class SyncAsyncExecutorStub : IAsyncExecutor
-        {
-            public void ExecuteAsync(Action action)
-            {
-                action.Invoke();
-            }
         }
 
         public CommentedStatusHistroyView CommentedStatusHistroyView(InterviewStatus status=InterviewStatus.InterviewerAssigned, string comment=null, DateTime? timestamp=null)
@@ -1678,13 +1372,6 @@ namespace WB.Tests.Unit.TestFactories
         {
             var result = Substitute.For<IStatefulInterviewRepository>();
             result.Get(null).ReturnsForAnyArgs(interview);
-            return result;
-        }
-
-        public IPlainQuestionnaireRepository PlainQuestionnaireRepositoryWith(IQuestionnaire questionnaire)
-        {
-            var result = Substitute.For<IPlainQuestionnaireRepository>();
-            result.GetQuestionnaire(null).ReturnsForAnyArgs(questionnaire);
             return result;
         }
 
