@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
         };
 
-        Because of = () => viewModel.Handle(Create.Other.RosterInstancesTitleChanged(rosterId: topRosterId));
+        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
         It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
 

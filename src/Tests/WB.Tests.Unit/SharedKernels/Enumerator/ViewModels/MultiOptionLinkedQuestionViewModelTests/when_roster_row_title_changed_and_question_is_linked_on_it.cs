@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         Because of = () =>
         {
           
-            viewModel.Handle(Create.Other.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title",
+            viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title",
                 outerRosterVector: new decimal[0], instanceId: 1));
         };
 
