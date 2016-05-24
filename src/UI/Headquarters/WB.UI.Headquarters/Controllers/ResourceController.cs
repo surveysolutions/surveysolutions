@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return
                     this.File(
                         Assembly.GetExecutingAssembly()
-                            .GetManifestResourceStream("WB.Core.SharedKernels.SurveyManagement.Web.Content.img.no_image_found.jpg"),
+                            .GetManifestResourceStream("WB.UI.Headquarters.Content.img.no_image_found.jpg"),
                         "image/jpeg", "no_image_found.jpg");
             return this.File(file, "image/jpeg", fileName);
         }
