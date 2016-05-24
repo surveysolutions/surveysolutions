@@ -1,0 +1,567 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessDenied_Title" xml:space="preserve">
+    <value>Accès refusé</value>
+  </data>
+  <data name="AccountManage_SaveChanges" xml:space="preserve">
+    <value>Enregistrer les modifications</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>N’importe quel</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approuvé par l’administration centrale</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>Approuvés par superviseur</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+    <value>Approuver les</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+    <value>Approuver l’entrevue</value>
+  </data>
+  <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+    <value>Rejeter</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+    <value>Interview de rejeter</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+    <value>Désapprouver</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+    <value>Interview de désapprouver</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>Attention!</value>
+  </data>
+  <data name="Backup_IndexTitle" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="CloseLabel" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+    <value>Ecrire un commentaire...</value>
+  </data>
+  <data name="EditQuestion_Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Error_Description" xml:space="preserve">
+    <value>Une erreur s’est produite lors du traitement de votre demande.</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="ErrorIndex_Title" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="Forbidden_Title" xml:space="preserve">
+    <value>Interdit</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de que vouloir supprimer le questionnaire ? Toutes les entrevues réalisées par questionnaire actuelle seront perdus.</value>
+  </data>
+  <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+    <value>Vous n’êtes pas autorisé pour cette action.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+    <value>Votre demande antérieure n’est pas complète. Veuillez patienter pour qu’il soit fini et répéter votre opération.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+    <value>Veuillez patienter</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+    <value>Pour ce zoom niveau nombre de points a été atteint. Veuillez augmenter le niveau et mettre à jour les points.</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+    <value>Pas tous les points ont été chargés</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+    <value>Il n’y aucune information sur les points de géolocalisation.</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+    <value>Aucun marqueur ont été ajoutés</value>
+  </data>
+  <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+    <value>Une erreur inattendue s’est produite. Nous sommes désolés pour la gêne occasionnée.</value>
+  </data>
+  <data name="GPS_accuracy" xml:space="preserve">
+    <value>précision</value>
+  </data>
+  <data name="GPS_altitude" xml:space="preserve">
+    <value>altitude</value>
+  </data>
+  <data name="GPS_latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="GPS_longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="HealthCheck_Header" xml:space="preserve">
+    <value>Moniteur de contrôle d’intégrité</value>
+  </data>
+  <data name="HealthCheck_IndexTitle" xml:space="preserve">
+    <value>Bilan de santé Page</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Masquer le filtre</value>
+  </data>
+  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <value>par</value>
+  </data>
+  <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+    <value>avec commentaire</value>
+  </data>
+  <data name="HistoryOfStatuses_On" xml:space="preserve">
+    <value>sur</value>
+  </data>
+  <data name="HistoryOfStatuses_State" xml:space="preserve">
+    <value>État</value>
+  </data>
+  <data name="HistoryOfStatuses_Title" xml:space="preserve">
+    <value>Entretien changement historique du statut</value>
+  </data>
+  <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+    <value>Voulez-vous continuer?</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+    <value>État défini par l’équipe de soutien de Solutions d’enquête</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+    <value>Répétition du dernier État a échoué.</value>
+  </data>
+  <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+    <value>Revalidation a échoué.</value>
+  </data>
+  <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+    <value>tous les</value>
+  </data>
+  <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+    <value>a répondu</value>
+  </data>
+  <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+    <value>a commenté</value>
+  </data>
+  <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+    <value>activé</value>
+  </data>
+  <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+    <value>battant pavillon</value>
+  </data>
+  <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+    <value>Groupes</value>
+  </data>
+  <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+    <value>caché</value>
+  </data>
+  <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+    <value>Masquer des groupes</value>
+  </data>
+  <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+    <value>Non valide</value>
+  </data>
+  <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+    <value>Entrevue a paquets de synchronisation en attente dans la file d’attente</value>
+  </data>
+  <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+    <value>Afficher les groupes</value>
+  </data>
+  <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+    <value>maître d’oeuvre</value>
+  </data>
+  <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+    <value>sans réponse</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Intervieweur assigné</value>
+  </data>
+  <data name="InterviewerController_EditSuccess" xml:space="preserve">
+    <value>Informations sur {0}  mis à jour</value>
+  </data>
+  <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+    <value>L’intervieweur a été créé avec succès</value>
+  </data>
+  <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+    <value>Pourrait pas mettre à jour les informations utilisateur parce que l’utilisateur actuel n’existe pas</value>
+  </data>
+  <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+    <value>Créer l’intervieweur dans</value>
+  </data>
+  <data name="InterviewerCreate_Team" xml:space="preserve">
+    <value>équipe</value>
+  </data>
+  <data name="InterviewerCreate_Title" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+    <value>Id de périphérique</value>
+  </data>
+  <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+    <value>L’intervieweur a fait synchroniser pas encore. Il n’y a aucune information sur les dispositifs en cours d’utilisation.</value>
+  </data>
+  <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+    <value>Commencer à utiliser la date de</value>
+  </data>
+  <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+    <value>Intervieweur : {0}</value>
+  </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>Utilisateurs actifs</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>Archives</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>Utilisateurs archivés</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+    <value>interviewers seront archivés.</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+    <value>Voulez-vous continuer?</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+    <value>Si l’intervieweur a effectué des entrevues en mode de recensement sur sa tablette ensuite les données seront perdues.</value>
+  </data>
+  <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>Statut de l’archive</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>Relié</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Connecté au périphérique</value>
+  </data>
+  <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+    <value>Date de création</value>
+  </data>
+  <data name="Interviewers_EmailTitle" xml:space="preserve">
+    <value>Messagerie</value>
+  </data>
+  <data name="Interviewers_Header" xml:space="preserve">
+    <value>Intervieweurs</value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>Pas connecté</value>
+  </data>
+  <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+    <value>Superviseur</value>
+  </data>
+  <data name="Interviewers_Title" xml:space="preserve">
+    <value>Intervieweurs</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>Désarchiver</value>
+  </data>
+  <data name="Interviewers_UserNameTitle" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="InterviewHistory_Header" xml:space="preserve">
+    <value>Histoire de l’entrevue</value>
+  </data>
+  <data name="Layout_Filter" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="Layout_Legal" xml:space="preserve">
+    <value>Juridiques</value>
+  </data>
+  <data name="Layout_RightsReserved" xml:space="preserve">
+    <value>Tous droits réservés.</value>
+  </data>
+  <data name="Layout_WorldBank" xml:space="preserve">
+    <value>Le groupe de la Banque mondiale</value>
+  </data>
+  <data name="LogOn_Legend" xml:space="preserve">
+    <value>Veuillez vous connecter</value>
+  </data>
+  <data name="LogOn_LogIn" xml:space="preserve">
+    <value>Ouvrir une session</value>
+  </data>
+  <data name="LogOn_Title" xml:space="preserve">
+    <value>Ouvrir une session</value>
+  </data>
+  <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+    <value>Ouverture de session a échoué. S’il vous plaît corriger les erreurs et essayez à nouveau.</value>
+  </data>
+  <data name="Maintenance_Description" xml:space="preserve">
+    <value>L’application est actuellement mis à niveau vers la nouvelle version. Cette une opération manuelle et peut nécessiter une quantité notable de temps. Désolé pour la gêne occasionnée. Après que le processus est terminé vous serez automatiquement redirigé à la page demandée.</value>
+  </data>
+  <data name="Maintenance_RebuildDescription" xml:space="preserve">
+    <value>L’application est maintenant redémarrer et cela peut prendre jusqu'à 10 minutes ou plus. Désolé pour la gêne occasionnée. Après que le processus est terminé vous serez automatiquement redirigé à la page demandée.</value>
+  </data>
+  <data name="Maintenance_Title" xml:space="preserve">
+    <value>Entretien</value>
+  </data>
+  <data name="MaintenanceReadSide_Header" xml:space="preserve">
+    <value>Cours de maintenance...</value>
+  </data>
+  <data name="MaintenanceRebuild_Header" xml:space="preserve">
+    <value>Remise à zéro...</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Pas trouvé</value>
+  </data>
+  <data name="PackagesInfo_DeviceId" xml:space="preserve">
+    <value>Id de périphérique</value>
+  </data>
+  <data name="PackagesInfo_Header" xml:space="preserve">
+    <value>Trousses d’information Tablet</value>
+  </data>
+  <data name="PackagesInfo_Size" xml:space="preserve">
+    <value>Size(bytes)</value>
+  </data>
+  <data name="PackagesInfo_Title" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="PackagesInfo_UploadDate" xml:space="preserve">
+    <value>Télécharger date</value>
+  </data>
+  <data name="PackagesInfo_UserId" xml:space="preserve">
+    <value>Id de l’utilisateur</value>
+  </data>
+  <data name="PackagesInfo_UserName" xml:space="preserve">
+    <value>Nom d’utilisateur</value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejetée par l’administration centrale</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Rejetée par superviseur</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Afficher filtre</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Superviseur assigné</value>
+  </data>
+  <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+    <value>Créé sur le Client</value>
+  </data>
+  <data name="Survey_HasErrorsTitle" xml:space="preserve">
+    <value>Erreurs Нas</value>
+  </data>
+  <data name="Survey_Header" xml:space="preserve">
+    <value>Entrevues</value>
+  </data>
+  <data name="Survey_LastUpdateTitle" xml:space="preserve">
+    <value>Dernière mise à jour</value>
+  </data>
+  <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+    <value>Reçue par l’intervieweur</value>
+  </data>
+  <data name="Survey_ResponsibleTitle" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="Survey_Status_Header" xml:space="preserve">
+    <value>Enquêtes et sondages</value>
+  </data>
+  <data name="Survey_Status_Title" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="Survey_StatusTitle" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+    <value>Approuvée par l’AC</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approuvés par superviseur</value>
+  </data>
+  <data name="SurveysStatuses_Completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+    <value>Intervieweur assigné</value>
+  </data>
+  <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+    <value>Rejetée par la centrale</value>
+  </data>
+  <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejetée par superviseur</value>
+  </data>
+  <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+    <value>Superviseur assigné</value>
+  </data>
+  <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+    <value>Nom de l’enquête</value>
+  </data>
+  <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+    <value>Membres de l’équipe</value>
+  </data>
+  <data name="SurveysStatuses_Title" xml:space="preserve">
+    <value>Enquêtes et statuts</value>
+  </data>
+  <data name="SurveysStatuses_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Membre de l’équipe</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Membres de l’équipe et statuts</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Modèle</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Upload_Upload" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+    <value>Dossier qui contient le site Web possède un chemin de répertoire long. S’il vous plaît déplacer un site Web aux dossiers supérieurs.</value>
+  </data>
+  <data name="YesNoQuestion_No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="YesNoQuestion_Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+</root>

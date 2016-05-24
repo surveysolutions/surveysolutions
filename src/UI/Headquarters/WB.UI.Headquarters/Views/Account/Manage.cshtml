@@ -1,0 +1,39 @@
+﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+
+@{
+    ViewBag.Title = WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.HQ_Views_Manage_Title;
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+    <script type="text/javascript">
+        $('#umbrella').hide();
+    </script>
+}
+@Html.Partial("_alerts")
+
+<div class="page-header">
+    <h2>
+        @ViewBag.Title
+    </h2>
+</div>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <fieldset class="form-horizontal">
+        <div class="col-md-6">
+            @{this.Html.RenderPartial("UserEditFormWithoutLock");}
+
+            <div class="form-group">
+                <div class="col-sm-offset-3">
+                    <button type="submit" class="btn btn-primaryt">@Pages.AccountManage_SaveChanges</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}

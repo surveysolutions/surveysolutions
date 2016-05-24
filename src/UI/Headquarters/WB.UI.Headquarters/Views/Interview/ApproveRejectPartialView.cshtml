@@ -1,0 +1,66 @@
+﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model InterviewStatus
+
+
+@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
+    || ((Model == InterviewStatus.ApprovedBySupervisor || Model == InterviewStatus.ApprovedByHeadquarters) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+{
+    <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="approveModalLabel">@Pages.ApproveRejectPartialView_ApproveLabel</h4>
+                </div>
+                <div class="modal-body">
+                    <label>@Pages.ApproveRejectPartialView_CommentLabel :</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
+                    <button class="btn btn-success" data-bind="click: @(GlobalInfo.IsSupervisor ? "approveInterview" : "hQApproveInterview")">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="rejectModalLabel">@Pages.ApproveRejectPartialView_RejectLAbel</h4>
+                </div>
+                <div class="modal-body">
+                    <label>@Pages.ApproveRejectPartialView_CommentLabel :</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
+                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">@Pages.ApproveRejectPartialView_RejectAction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="unapproveByHeadquarterModal" tabindex="-1" role="dialog" aria-labelledby="unapproveInterviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="unapproveInterviewModalLabel">@Pages.ApproveRejectPartialView_UnapproveLabel</h4>
+                </div>
+                <div class="modal-body">
+                    <label>@Pages.ApproveRejectPartialView_CommentLabel :</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
+                    <button class="btn btn-success" data-bind="click: unapproveByHeadquarter">@Pages.ApproveRejectPartialView_UnapproveAction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

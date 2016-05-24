@@ -1,0 +1,21 @@
+﻿@model string
+
+@{
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Repeat Last Interview Status";
+}
+
+<h3>Repeat Last Interview Status</h3>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label for="InterviewId">Interview ID:</label>
+        <input type="text" name="InterviewId" value="" />
+    </div>
+    <div>
+        <input type="submit" value="Submit" class="submit" />
+    </div>
+}
+
+@this.Model

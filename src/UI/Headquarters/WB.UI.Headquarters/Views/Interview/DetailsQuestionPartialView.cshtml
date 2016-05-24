@@ -1,0 +1,92 @@
+﻿@using System.Globalization
+@using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
+
+<tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
+    <td class="answer-status">
+        <div class="btn btn-xs @css("btn-info", Model.IsFlagged) @css("btn-default", !Model.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+            <i class="glyphicon glyphicon-flag"></i>
+        </div>
+    </td>
+    <td style="width: 50%">
+        <div class="@css("featured", Model.IsFeatured)">
+            <span class="icon-star"></span>
+            <span>@Html.Raw(Model.Title)</span>
+        </div>
+    </td>
+    <td class="question-answer">
+        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && Model.IsEnabled)
+        {
+            @Html.Partial("EditableSupervisorsQuestionPartialView", Model)
+        }
+        else
+        {
+            @Html.Partial("ReadOnlyQuestionPartialView", Model)
+        }
+
+
+        @if (!Model.IsValid)
+        {
+            <dl>
+                @foreach (var validationCondition in Model.FailedValidationMessages)
+                {
+                    <dt>
+                    <small class="text-error">@validationCondition.Expression</small>
+                    </dt>
+                    <dd>
+                        <small class="text-error">@validationCondition.Message</small>
+                    </dd>
+                }
+            </dl>
+        }
+    </td>
+
+    <td class="comments col-sm-3">
+        <dl id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
+            @if (Model.Comments != null && Model.Comments.Count > 0)
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <dt>@comment.CommenterName <span class="text-normal">@comment.Text</span></dt>
+                    <dd>
+                        <small class="comment-date" date="@comment.Date.ToString("u")"></small>
+                    </dd>
+                }
+            }
+        </dl>
+
+        <div class="form-horizontal">
+            <div class="has-feedback">
+                <div>
+                    <input type="text" class="form-control" placeholder="@Pages.DetailsQuestionPartialView_WriteCommentPlaceholder" data-bind="enterKey: addComment.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+                    <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>
+
+<script type="text/html" id="comment-template">
+    <dt><span data-bind="text: userName"></span>&nbsp;<span class="text-normal" data-bind="text: comment"></span></dt>
+    <dd><small class="comment-date" data-bind="attr: { 'data': date }, text: moment(date).fromNow()"></small></dd>
+</script>
+
+@helper css(string style, bool shouldBeAdded = true)
+{
+    @(shouldBeAdded ? style : string.Empty)
+}
+@functions
+    {
+
+    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
+    {
+        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
+    }
+
+    public string Stringify(decimal[] array)
+    {
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+    }
+}

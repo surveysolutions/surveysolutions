@@ -1,0 +1,55 @@
+﻿@using System.Diagnostics
+@using System.Web.Optimization
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
+@using WB.UI.Shared.Web.Extensions
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @RenderSection("favico", false)
+    @Styles.Render("~/css/main-not-loggedin")
+</head>
+<body>
+<div class="container" id="container">
+    <div id="content">
+        @RenderSection("body")
+    </div>
+</div>
+<div id="footer">
+    <hr>
+    <footer>
+        <p class="text-muted">
+            <div class="text-center">
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+            </div>
+            <div class="text-center">
+                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+
+                @if (AppSettings.IsDebugBuilded)
+                {
+                    <span id="build-config">[.NET Debug]</span>
+                }
+
+                @if (HttpContext.Current.IsDebuggingEnabled)
+                {
+                    <span id="compile-config" style="color: red">Web Debug</span>
+                }
+
+                @RenderSection("interviewerlink", false)
+            </div>
+        </p>
+
+    </footer>
+    </div>
+
+    @Html.Partial("Clickjacking")
+    @Scripts.Render("~/js/main")
+    @RenderSection("scripts", false)
+
+
+</body>
+</html>
