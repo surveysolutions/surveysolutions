@@ -1,7 +1,7 @@
-  5.10
+5.10
 - Compatible with EventStore 3.6.2
 - When upgading any previous version before 5.10 dbup tool needs to be executed. Following parameters should be used:
--- when upgrading HQ app:
+- when upgrading HQ app:
   dbup hq-up-plain /cs:"ConnectionString" 
   dbup hq-up-rs /cs:"ConnectionString"
 Both commands a needed to update plain storage and read side.
