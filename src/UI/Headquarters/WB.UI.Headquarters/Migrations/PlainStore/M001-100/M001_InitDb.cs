@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("interviewerid").AsGuid().Nullable()
                 .WithColumn("interviewername").AsString().Nullable()
                 .WithColumn("deviceid").AsString().Nullable()
-                .WithColumn("deviceid").AsDateTime().Nullable()
+                .WithColumn("logdate").AsDateTime().Nullable()
                 .WithColumn("type").AsInt32().Nullable()
                 .WithColumn("log").AsString().Nullable();
 
@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("creationdate").AsDateTime().Nullable()
                 .WithColumn("questionnaireid").AsGuid().Nullable()
-                .WithColumn("questionnaireversion").AsInt64().Nullable()
+                .WithColumn("version").AsInt64().Nullable()
                 .WithColumn("lastentrydate").AsDateTime().Nullable()
                 .WithColumn("title").AsString().Nullable()
                 .WithColumn("ispublic").AsBoolean().Nullable()
@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("supervisorid").AsGuid().Nullable()
                 .WithColumn("supervisorname").AsString().Nullable()
                 .WithColumn("username").AsString().Nullable()
-                .WithColumn("lastchangedate").AsString().Nullable()
+                .WithColumn("lastchangedate").AsDateTime().Nullable()
                 .WithColumn("deviceid").AsString().Nullable()
                 .WithColumn("personname").AsString().Nullable()
                 .WithColumn("phonenumber").AsString().Nullable();
@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
 
             Create.Table("deviceinfos")
                 .WithColumn("id").AsInt32().PrimaryKey()
-                .WithColumn("user").AsString(255).Nullable()
+                .WithColumn("User").AsString(255).Nullable()
                 .WithColumn("date").AsDateTime().Nullable()
                 .WithColumn("deviceid").AsString().Nullable()
                 .WithColumn("userid").AsString(255).Nullable();
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
             Create.Index("user_deviceid").OnTable("userdocuments").OnColumn("deviceid");
             Create.Index("user_personname").OnTable("userdocuments").OnColumn("personname");
             Create.Index("users_roles_fk").OnTable("roles").OnColumn("userid");
-            Create.Index("userdocuments_deviceinfos").OnTable("deviceinfos").OnColumn("user");
+            Create.Index("userdocuments_deviceinfos").OnTable("deviceinfos").OnColumn("User");
 
             Create.Index("userpreloadingverificationerrors_userpreloadingprocesses")
                 .OnTable("userpreloadingverificationerrors")
