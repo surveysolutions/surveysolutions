@@ -161,10 +161,9 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
+                new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
-                new SurveyManagementWebModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
