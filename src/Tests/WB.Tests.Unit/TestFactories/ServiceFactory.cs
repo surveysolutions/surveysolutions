@@ -74,12 +74,14 @@ namespace WB.Tests.Unit.TestFactories
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 
-        public InterviewEventHandler DashboardDenormalizer(
+        public InterviewerDashboardEventHandler DashboardDenormalizer(
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
-            => new InterviewEventHandler(
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            ILiteEventRegistry liteEventRegistry = null)
+            => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
         public IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
             => new DomainRepository(

@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_store_prefilled_GPS_question_ID_to_result_dashboard_item = () =>
             dashboardItem.GpsLocation.PrefilledQuestionId.ShouldEqual(prefilledGpsQuestionId);
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<InterviewOnClientCreated> @event;
         private static InterviewView dashboardItem;
         private static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");

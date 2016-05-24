@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_set_GPS_location_longitude_to_answered_value = () =>
             dashboardItem.GpsLocation.Coordinates.Longitude.ShouldEqual(answerLongitude);
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;
         private static InterviewView dashboardItem;
         private static double answerLatitude = 10;

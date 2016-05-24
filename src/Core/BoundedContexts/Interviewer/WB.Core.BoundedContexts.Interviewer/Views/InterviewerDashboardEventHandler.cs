@@ -10,6 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -20,35 +21,38 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class InterviewEventHandler : BaseDenormalizer,
-                                         IEventHandler<SynchronizationMetadataApplied>,
-                                         IEventHandler<InterviewSynchronized>,
-                                         IEventHandler<InterviewStatusChanged>, 
-                                         IEventHandler<InterviewHardDeleted>,
+    public class InterviewerDashboardEventHandler : BaseDenormalizer,
+                                         ILitePublishedEventHandler<SynchronizationMetadataApplied>,
+                                         ILitePublishedEventHandler<InterviewSynchronized>,
+                                         ILitePublishedEventHandler<InterviewStatusChanged>,
+                                         ILitePublishedEventHandler<InterviewHardDeleted>,
 
-                                         IEventHandler<TextQuestionAnswered>,
-                                         IEventHandler<MultipleOptionsQuestionAnswered>,
-                                         IEventHandler<SingleOptionQuestionAnswered>,
-                                         IEventHandler<NumericRealQuestionAnswered>,
-                                         IEventHandler<NumericIntegerQuestionAnswered>,
-                                         IEventHandler<DateTimeQuestionAnswered>,
-                                         IEventHandler<GeoLocationQuestionAnswered>,
-                                         IEventHandler<QRBarcodeQuestionAnswered>,
-                                         IEventHandler<YesNoQuestionAnswered>,
+                                         ILitePublishedEventHandler<TextQuestionAnswered>,
+                                         ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
+                                         ILitePublishedEventHandler<SingleOptionQuestionAnswered>,
+                                         ILitePublishedEventHandler<NumericRealQuestionAnswered>,
+                                         ILitePublishedEventHandler<NumericIntegerQuestionAnswered>,
+                                         ILitePublishedEventHandler<DateTimeQuestionAnswered>,
+                                         ILitePublishedEventHandler<GeoLocationQuestionAnswered>,
+                                         ILitePublishedEventHandler<QRBarcodeQuestionAnswered>,
+                                         ILitePublishedEventHandler<YesNoQuestionAnswered>,
 
-                                         IEventHandler<AnswersRemoved>,
+                                         ILitePublishedEventHandler<AnswersRemoved>,
 
-                                         IEventHandler<InterviewOnClientCreated>,
-                                         IEventHandler<AnswerRemoved>
+                                         ILitePublishedEventHandler<InterviewOnClientCreated>,
+                                         ILitePublishedEventHandler<AnswerRemoved>
     {
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
-        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, 
-            IPlainQuestionnaireRepository questionnaireRepository)
+        public InterviewerDashboardEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainQuestionnaireRepository questionnaireRepository,
+            ILiteEventRegistry liteEventRegistry)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireRepository = questionnaireRepository;
+
+            liteEventRegistry.Subscribe(this);
         }
 
         public override object[] Writers => new object[] { this.interviewViewRepository };
