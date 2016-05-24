@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             navigatedTo.ShouldBeNull();
 
         private static NavigationState navigationState;
-        private static Identity disabledGroup = Create.Other.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
+        private static Identity disabledGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
         private static Identity navigatedTo;
     }
 }

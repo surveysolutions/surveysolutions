@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            questionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
+            questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var interview = Mock.Of<IStatefulInterview>(x =>
                 x.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[] 
                 {
-                    Create.Other.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
-                    Create.Other.TextAnswer("answer2", linkedToQuestionId, new []{2m})
+                    Create.Entity.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
+                    Create.Entity.TextAnswer("answer2", linkedToQuestionId, new []{2m})
                 } &&
                 x.Answers == new Dictionary<string, BaseInterviewAnswer>()
                 );

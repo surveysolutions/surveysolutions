@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.SynchronizeInterview(userId,
-                Create.Other.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     status: InterviewStatus.RejectedBySupervisor,
                     userId: userId,
                     questionnaireId: questionnaireId,

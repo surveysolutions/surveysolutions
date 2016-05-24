@@ -17,15 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             linkedSourceQuestionId = Guid.NewGuid();
 
-            questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(
-                Create.Other.Roster(rosterId: Guid.NewGuid(), 
+            questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.Roster(rosterId: Guid.NewGuid(), 
                     variable: "row", 
                     fixedTitles: new[] {"1", "2"},
                     children: new[]
                     {
-                        Create.Other.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                        Create.Entity.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
                     }),
-                Create.Other.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.Entity.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 

@@ -17,19 +17,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.Other.InterviewView(prefilledGpsQuestionId);
+            dashboardItem = Create.Entity.InterviewView(prefilledGpsQuestionId);
 
             @event = Create.Event
                 .InterviewSynchronized(
-                    Create.Other.InterviewSynchronizationDto(
+                    Create.Entity.InterviewSynchronizationDto(
                         questionnaireId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                         questionnaireVersion: 33,
-                        answers: new[] { Create.Other.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: stringGpsAnswer) }))
+                        answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: stringGpsAnswer) }))
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
-            var questionnaireDocument = Create.Other.QuestionnaireDocumentWithOneChapter(Create.Other.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
                 Mock.Of<IPlainQuestionnaireRepository>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaireDocument);

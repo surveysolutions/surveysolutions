@@ -91,7 +91,7 @@ namespace WB.Tests.Unit
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity,
-                Create.Other.PlainQuestionnaire(questionnaireDocument));
+                Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit
 
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            return Setup.InterviewForQuestionnaire(Create.Other.PlainQuestionnaire(document: questionnaireDocument));
+            return Setup.InterviewForQuestionnaire(Create.Entity.PlainQuestionnaire(document: questionnaireDocument));
         }
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
@@ -189,7 +189,7 @@ namespace WB.Tests.Unit
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireIdentity = Create.Other.QuestionnaireIdentity();
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
@@ -201,13 +201,13 @@ namespace WB.Tests.Unit
 
         public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
         {
-            var staticText = Create.Other.StaticText(entityId, text, attachmentName);
+            var staticText = Create.Entity.StaticText(entityId, text, attachmentName);
             var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             if (!entityId.HasValue)
             {
                 questionnaireEntityFactoryMock
                    .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns((Guid id, string t, string a) => Create.Other.StaticText(id, t, a));
+                   .Returns((Guid id, string t, string a) => Create.Entity.StaticText(id, t, a));
             }
             else if (string.IsNullOrWhiteSpace(attachmentName))
             {

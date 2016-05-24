@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var linkedAnswerRosterVector = new decimal[]{1, 1};
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(secondRosterTitlQuestionId, Arg.Any<Identity>())
                 .Returns(new List<BaseInterviewAnswer> {
-                    Create.Other.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
-                    Create.Other.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
-                    Create.Other.TextAnswer("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
-                    Create.Other.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
+                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
+                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
+                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
+                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
                 });
 
             interview.GetParentRosterTitlesWithoutLast(secondRosterTitlQuestionId, linkedAnswerRosterVector)

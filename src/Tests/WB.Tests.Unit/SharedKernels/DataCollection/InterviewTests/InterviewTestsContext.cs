@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             HashSet<InterviewItemId> validAnsweredQuestions = null, HashSet<InterviewItemId> invalidAnsweredQuestions = null,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null, bool? wasCompleted = false)
         {
-            return Create.Other.InterviewSynchronizationDto(
+            return Create.Entity.InterviewSynchronizationDto(
                 interviewId: interviewId ?? new Guid("A1A1A1A1B1B1B1B1A1A1A1A1B1B1B1B1"),
                 status: status ?? InterviewStatus.RejectedBySupervisor,
                 userId: userId ?? new Guid("F111F111F111F111F111F111F111F111"),

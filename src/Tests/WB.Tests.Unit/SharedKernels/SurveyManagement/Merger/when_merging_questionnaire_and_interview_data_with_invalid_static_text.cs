@@ -28,11 +28,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children =
                         new List<IComposite>()
                         {
-                            Create.Other.StaticText(publicKey: staticTextId, text: staticText, 
+                            Create.Entity.StaticText(publicKey: staticTextId, text: staticText, 
                             validationConditions: new List<ValidationCondition>()
                             {
-                                Create.Other.ValidationCondition("n1 != 1"),
-                                Create.Other.ValidationCondition("n1 != 2"),
+                                Create.Entity.ValidationCondition("n1 != 1"),
+                                Create.Entity.ValidationCondition("n1 != 2"),
                             })
                         }
                 });
@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 IsInvalid = true,
                 FailedValidationConditions = new List<FailedValidationCondition>()
                 {
-                    Create.Other.FailedValidationCondition(0),
-                    Create.Other.FailedValidationCondition(1),
+                    Create.Entity.FailedValidationCondition(0),
+                    Create.Entity.FailedValidationCondition(1),
                 }
             });
 

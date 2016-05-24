@@ -24,15 +24,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         private Establish context = () =>
         {
             var questionnaireDocument=
-                Create.Other.QuestionnaireDocumentWithOneChapter(
-                    Create.Other.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
-                    Create.Other.NumericQuestion(questionId: Guid.Parse("44444444444444444444444444444444"), variableName: "MapRefNo", prefilled: true, isInteger: true),
-                    Create.Other.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
-                    Create.Other.TextQuestion(questionId: Guid.Parse("66666666666666666666666666666666"), variable: "Prov", preFilled: true),
-                    Create.Other.TextQuestion(questionId: Guid.Parse("77777777777777777777777777777777"), variable: "LocalMunic", preFilled: true),
-                    Create.Other.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
-                    Create.Other.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
-                    Create.Other.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
+                    Create.Entity.NumericQuestion(questionId: Guid.Parse("44444444444444444444444444444444"), variableName: "MapRefNo", prefilled: true, isInteger: true),
+                    Create.Entity.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
+                    Create.Entity.TextQuestion(questionId: Guid.Parse("66666666666666666666666666666666"), variable: "Prov", preFilled: true),
+                    Create.Entity.TextQuestion(questionId: Guid.Parse("77777777777777777777777777777777"), variable: "LocalMunic", preFilled: true),
+                    Create.Entity.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
+                    Create.Entity.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
+                    Create.Entity.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
             
             var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);

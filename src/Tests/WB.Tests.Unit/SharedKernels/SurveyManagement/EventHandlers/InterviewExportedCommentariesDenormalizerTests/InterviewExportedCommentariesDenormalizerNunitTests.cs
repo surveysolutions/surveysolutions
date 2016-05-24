@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
         public void Handle_When_InterviewApprovedByHQ_event_arrived_with_empty_comment_Then_interview_should_be_marked_as_approved()
         {
             var interviewId = Guid.NewGuid();
-            var interviewCommentaries = Create.Other.InterviewCommentaries();
+            var interviewCommentaries = Create.Entity.InterviewCommentaries();
             var interviewCommentariesStorage = new TestInMemoryWriter<InterviewCommentaries>();
             interviewCommentariesStorage.Store(interviewCommentaries, interviewId);
 
             var interviewExportedCommentariesDenormalizer = CreateInterviewExportedCommentariesDenormalizer(interviewCommentariesStorage: interviewCommentariesStorage);
 
-            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQEvent(interviewId: interviewId));
+            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId));
 
             Assert.That(interviewCommentaries.IsApprovedByHQ, Is.True);
             Assert.That(interviewCommentaries.Commentaries.Count, Is.EqualTo(0));
@@ -46,13 +46,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
         {
             var interviewId = Guid.NewGuid();
             var comment = "comment";
-            var interviewCommentaries = Create.Other.InterviewCommentaries();
+            var interviewCommentaries = Create.Entity.InterviewCommentaries();
             var interviewCommentariesStorage = new TestInMemoryWriter<InterviewCommentaries>();
             interviewCommentariesStorage.Store(interviewCommentaries, interviewId);
 
             var interviewExportedCommentariesDenormalizer = CreateInterviewExportedCommentariesDenormalizer(interviewCommentariesStorage: interviewCommentariesStorage);
 
-            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQEvent(interviewId: interviewId, comment:comment));
+            interviewExportedCommentariesDenormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId, comment:comment));
 
             Assert.That(interviewCommentaries.IsApprovedByHQ, Is.True);
             Assert.That(interviewCommentaries.Commentaries[0].Comment, Is.EqualTo(comment));

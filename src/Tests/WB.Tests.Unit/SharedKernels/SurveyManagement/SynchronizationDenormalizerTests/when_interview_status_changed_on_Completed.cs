@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     {
         Establish context = () =>
         {
-            var storedInterview = Create.Other.InterviewSummary();
+            var storedInterview = Create.Entity.InterviewSummary();
 
             var interviews = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == storedInterview);
 

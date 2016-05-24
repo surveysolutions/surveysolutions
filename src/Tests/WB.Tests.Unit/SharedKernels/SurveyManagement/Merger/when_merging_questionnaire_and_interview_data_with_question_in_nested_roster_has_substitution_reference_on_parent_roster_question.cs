@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
-            var variable = Create.Other.Variable(variableName: "va", type: VariableType.String);
+            var variable = Create.Entity.Variable(variableName: "va", type: VariableType.String);
             //interviewVariables = new InterviewVariables();
 
             //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(0))] =
