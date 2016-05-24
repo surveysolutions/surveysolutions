@@ -288,15 +288,18 @@ namespace WB.Tests.Unit.TestFactories
 
         public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
                 decimal[] rosterVector = null,
-                string rosterTitle = null)
+                string rosterTitle = null,
+                decimal[] outerRosterVector = null,
+                decimal? instanceId = null)
             {
                 return new RosterInstancesTitleChanged(
                     new[]
                 {
                     new ChangedRosterInstanceTitleDto(
-                        new RosterInstance(rosterId ?? Guid.NewGuid(), 
-                            rosterVector != null ? rosterVector.WithoutLast().ToArray() : new decimal[0], 
-                            rosterVector != null ? rosterVector.Last() : 0.0m), 
+                        new RosterInstance(
+                            rosterId ?? Guid.NewGuid(),
+                            outerRosterVector ?? rosterVector?.WithoutLast().ToArray() ?? new decimal[0],
+                            instanceId ?? rosterVector?.Last() ?? 0.0m), 
                         rosterTitle ?? "title")
                 });
             }
@@ -382,18 +385,6 @@ namespace WB.Tests.Unit.TestFactories
             return new RosterInstancesRemoved(new[]
                 {
                     new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
-                });
-        }
-
-        public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null,
-            string rosterTitle = null,
-            decimal[] outerRosterVector = null,
-            decimal? instanceId = null)
-        {
-            return new RosterInstancesTitleChanged(
-                new[]
-                {
-                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), outerRosterVector ?? new decimal[0], instanceId ?? 0.0m), rosterTitle ?? "title")
                 });
         }
     }
