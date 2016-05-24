@@ -38,6 +38,7 @@ using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Migrations;
+using WB.UI.Designer.Migrations.ReadSide;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
@@ -107,6 +108,7 @@ namespace WB.UI.Designer.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                DbUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
                     typeof(DesignerBoundedContextModule).Assembly,
