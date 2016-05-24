@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
                 .Returns(new [] { Create.Other.TextAnswer("subtitle", linkToQuestionId, Create.Other.RosterVector(1, 1))});
 
-            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(Create.Other.PlainQuestionnaire(questionnaire), interview);
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(Create.Other.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
         };
 

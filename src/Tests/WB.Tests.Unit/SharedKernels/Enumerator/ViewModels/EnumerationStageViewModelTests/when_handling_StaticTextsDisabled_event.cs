@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             var mvxMainThreadDispatcher = Stub.MvxMainThreadDispatcher();
             Setup.InstanceToMockedServiceLocator<IMvxMainThreadDispatcher>(mvxMainThreadDispatcher);
 
-            viemModel = Create.Other.EnumerationStageViewModel(
+            viemModel = Create.ViewModel.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
                 interviewViewModelFactory: interviewViewModelFactory,
                 interviewRepository: interviewRepository,

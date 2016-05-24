@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
-            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             viewModel.Options.First().Selected = true;
