@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -377,5 +376,25 @@ namespace WB.Tests.Unit.TestFactories
                     answerTimeUtc: DateTime.UtcNow,
                     answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
             }
+
+        public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+        {
+            return new RosterInstancesRemoved(new[]
+                {
+                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
+                });
+        }
+
+        public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null,
+            string rosterTitle = null,
+            decimal[] outerRosterVector = null,
+            decimal? instanceId = null)
+        {
+            return new RosterInstancesTitleChanged(
+                new[]
+                {
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), outerRosterVector ?? new decimal[0], instanceId ?? 0.0m), rosterTitle ?? "title")
+                });
+        }
     }
 }

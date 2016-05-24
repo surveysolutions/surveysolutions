@@ -914,26 +914,6 @@ namespace WB.Tests.Unit.TestFactories
             return group;
         }
 
-        public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
-        {
-            return new RosterInstancesRemoved(new[]
-                {
-                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
-                });
-        }
-
-        public RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
-            string rosterTitle = null,
-            decimal[] outerRosterVector = null,
-            decimal? instanceId= null)
-        {
-            return new RosterInstancesTitleChanged(
-                new[]
-                {
-                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), outerRosterVector ?? new decimal[0], instanceId ?? 0.0m), rosterTitle ?? "title")
-                });
-        }
-
         public RosterVector RosterVector(params decimal[] coordinates)
         {
             return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
