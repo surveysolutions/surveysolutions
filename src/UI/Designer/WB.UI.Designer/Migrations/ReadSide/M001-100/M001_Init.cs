@@ -1,14 +1,13 @@
-﻿using System.Web.WebPages;
-using FluentMigrator;
+﻿using FluentMigrator;
 
-namespace WB.UI.Designer.Migrations
+namespace WB.UI.Designer.Migrations.ReadSide
 {
     [Migration(1)]
     public class M001_Init : Migration
     {
         public override void Up()
         {
-            Create.Table("accountdocuments")
+            this.Create.Table("accountdocuments")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("applicationname").AsString().Nullable()
                 .WithColumn("comment").AsString().Nullable()
@@ -31,11 +30,11 @@ namespace WB.UI.Designer.Migrations
                 .WithColumn("provideruserkey").AsGuid().Nullable()
                 .WithColumn("username").AsString().Nullable();
 
-            Create.Table("simpleroles")
+            this.Create.Table("simpleroles")
                 .WithColumn("accountid").AsString(255)
                 .WithColumn("simpleroleid").AsInt32().Nullable();
 
-            Create.Table("questionnairechangerecords")
+            this.Create.Table("questionnairechangerecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("questionnaireid").AsString().Nullable()
                 .WithColumn("userid").AsGuid().Nullable()
@@ -47,7 +46,7 @@ namespace WB.UI.Designer.Migrations
                 .WithColumn("targetitemid").AsGuid().Nullable()
                 .WithColumn("targetitemtitle").AsString().Nullable();
 
-            Create.Table("questionnairelistviewitems")
+            this.Create.Table("questionnairelistviewitems")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("creationdate").AsDateTime().Nullable()
                 .WithColumn("publicid").AsGuid().Nullable()
@@ -59,11 +58,11 @@ namespace WB.UI.Designer.Migrations
                 .WithColumn("ispublic").AsBoolean().Nullable()
                 .WithColumn("owner").AsString().Nullable();
 
-            Create.Table("sharedpersons")
+            this.Create.Table("sharedpersons")
                 .WithColumn("questionnaireid").AsString(255)
                 .WithColumn("sharedpersonid").AsGuid().Nullable();
 
-            Create.Table("questionnairechangereferences")
+            this.Create.Table("questionnairechangereferences")
                 .WithColumn("id").AsInt32().PrimaryKey()
                 .WithColumn("referencetype").AsInt32().Nullable()
                 .WithColumn("referenceid").AsGuid().Nullable()
@@ -71,45 +70,45 @@ namespace WB.UI.Designer.Migrations
                 .WithColumn("questionnairechangerecord").AsString(255).Nullable()
                 .WithColumn("questionnairechangerecordid").AsString(255).Nullable();
 
-            Create.ForeignKey()
+            this.Create.ForeignKey()
                 .FromTable("simpleroles").ForeignColumn("accountid")
                 .ToTable("accountdocuments").PrimaryColumn("id");
 
-            Create.Index("questionnairechangerecord_userid")
+            this.Create.Index("questionnairechangerecord_userid")
                 .OnTable("questionnairechangerecords").OnColumn("userid");
 
-            Create.Index("questionnairechangerecord_username")
+            this.Create.Index("questionnairechangerecord_username")
                 .OnTable("questionnairechangerecords").OnColumn("username");
 
-            Create.Index("questionnairelistviewitem_sharedpersons")
+            this.Create.Index("questionnairelistviewitem_sharedpersons")
                 .OnTable("sharedpersons").OnColumn("questionnaireid");
 
-            Create.ForeignKey()
+            this.Create.ForeignKey()
                 .FromTable("sharedpersons").ForeignColumn("questionnaireid")
                 .ToTable("questionnairelistviewitems").PrimaryColumn("id");
 
-            Create.Index("questionnairechangerecords_questionnairechangereferences")
+            this.Create.Index("questionnairechangerecords_questionnairechangereferences")
                 .OnTable("questionnairechangereferences").OnColumn("questionnairechangerecord");
 
-            Create.ForeignKey()
+            this.Create.ForeignKey()
                 .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecord")
                 .ToTable("questionnairechangerecords").PrimaryColumn("id");
 
-            Create.ForeignKey()
+            this.Create.ForeignKey()
                 .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecordid")
                 .ToTable("questionnairechangerecords").PrimaryColumn("id");
         }
 
         public override void Down()
         {
-            Delete.Table("AccountDocuments");
-            Delete.Table("SimpleRoles");
-            Delete.Table("SimpleRoles");
-            Delete.Table("QuestionnaireChangeRecords");
-            Delete.Table("QuestionnaireListViewItems");
-            Delete.Table("SharedPersons");
-            Delete.Table("QuestionnaireChangeReferences");
-            Delete.Table("hibernate_unique_key");
+            this.Delete.Table("AccountDocuments");
+            this.Delete.Table("SimpleRoles");
+            this.Delete.Table("SimpleRoles");
+            this.Delete.Table("QuestionnaireChangeRecords");
+            this.Delete.Table("QuestionnaireListViewItems");
+            this.Delete.Table("SharedPersons");
+            this.Delete.Table("QuestionnaireChangeReferences");
+            this.Delete.Table("hibernate_unique_key");
         }
     }
 }
