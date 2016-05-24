@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_supervisor_is_present_in_the_dataset_Then_one_supervisor_should_be_created()
         {
             var supervisorName = "super";
-            var userPreloadingProcess = Create.Other.UserPreloadingProcess(dataRecords:
-                Create.Other.UserPreloadingDataRecord(login: supervisorName));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
+                Create.Entity.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
@@ -63,12 +63,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_supervisor_is_present_in_the_dataset_and_the_user_in_present_in_the_system_as_archived_Then_one_supervisor_should_be_unarchived_and_updated()
         {
             var supervisorName = "super";
-            var userPreloadingProcess = Create.Other.UserPreloadingProcess(dataRecords:
-                Create.Other.UserPreloadingDataRecord(login: supervisorName));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
+                Create.Entity.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
             var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Other.UserDocument(userName: supervisorName, isArchived: true), "id");
+            userStorage.Store(Create.Entity.UserDocument(userName: supervisorName, isArchived: true), "id");
 
             var userBatchCreator =
                 CreateUserBatchCreator(userPreloadingServiceMock.Object, commandService: commantService.Object, userStorage: userStorage);
@@ -84,8 +84,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_interviewer_is_present_in_the_dataset_Then_one_interviewer_should_be_created()
         {
             var interviewerName = "inter";
-            var userPreloadingProcess = Create.Other.UserPreloadingProcess(dataRecords:
-                Create.Other.UserPreloadingDataRecord(login: interviewerName, supervisor:"tttt"));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
+                Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor:"tttt"));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
 
@@ -105,12 +105,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_interviewer_is_present_in_the_dataset_and_the_user_in_present_in_the_system_as_archived_Then_one_interviewer_should_be_unarchived_and_updated()
         {
             var interviewerName = "inter";
-            var userPreloadingProcess = Create.Other.UserPreloadingProcess(dataRecords:
-                Create.Other.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
+                Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
             var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Other.UserDocument(userName: interviewerName, isArchived: true, supervisorId:Guid.NewGuid()), "id");
+            userStorage.Store(Create.Entity.UserDocument(userName: interviewerName, isArchived: true, supervisorId:Guid.NewGuid()), "id");
 
             var userBatchCreator =
                 CreateUserBatchCreator(userPreloadingServiceMock.Object, commandService: commantService.Object, userStorage: userStorage);
@@ -127,8 +127,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_supervisor_is_present_in_the_dataset_but_command_execution_throws_an_exception_Then_process_should_be_finished_with_error()
         {
             var supervisorName = "super";
-            var userPreloadingProcess = Create.Other.UserPreloadingProcess(dataRecords:
-                Create.Other.UserPreloadingDataRecord(login: supervisorName));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
+                Create.Entity.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
             commantService.Setup(x => x.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
                 .Throws<NullReferenceException>();

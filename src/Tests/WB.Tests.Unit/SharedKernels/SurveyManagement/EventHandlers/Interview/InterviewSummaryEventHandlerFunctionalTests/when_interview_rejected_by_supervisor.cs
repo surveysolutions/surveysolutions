@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             denormalizer = CreateDenormalizer();
         };
 
-        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChangedEvent(InterviewStatus.RejectedBySupervisor));
+        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
 
         It should_mark_summary_rejected_by_supervisor = () => updatedModel.WasRejectedBySupervisor.ShouldBeTrue();
 

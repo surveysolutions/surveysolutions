@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
     {
         Establish context = () =>
         {
-            questionIdentity = Create.Other.Identity(Guid.NewGuid(), RosterVector.Empty);
-            QuestionnaireDocument questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(Create.Other.Question(questionId: questionIdentity.Id,
+            questionIdentity = Create.Entity.Identity(Guid.NewGuid(), RosterVector.Empty);
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionIdentity.Id,
                 validationConditions: new List<ValidationCondition>
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 new FailedValidationCondition(0)
             };
 
-            var plainQuestionnaire = Create.Other.PlainQuestionnaire(questionnaire);
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var interview = Substitute.For<IStatefulInterview>();
             interview.GetFailedValidationConditions(questionIdentity)

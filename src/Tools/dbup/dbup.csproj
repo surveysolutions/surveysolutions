@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbMarker.cs" />
+    <Compile Include="DesignUpdatePlain.cs" />
     <Compile Include="DesignUpdateReadSide.cs" />
     <Compile Include="HqUpdateReadSide.cs" />
     <Compile Include="MappingsCollector.cs" />

@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
     {
         Establish context = () =>
         {
-            document = Create.Other.QuestionnaireDocumentWithOneChapter();
+            document = Create.Entity.QuestionnaireDocumentWithOneChapter();
             document.SharedPersons = new List<Guid>{ Id.g1, Id.g2 };
         };
 

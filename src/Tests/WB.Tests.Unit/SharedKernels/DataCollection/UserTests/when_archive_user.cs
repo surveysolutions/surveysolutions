@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = Create.Other.User();
+            user = Create.Entity.User();
             user.SetId(userId);
             user.Roles=new UserRoles[] { UserRoles.Supervisor};
         };

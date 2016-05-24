@@ -16,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             numericQuestionId = Guid.Parse("21111111111111111111111111111111");
-            var numericQuestion = Create.Other.NumericIntegerQuestion(numericQuestionId, "num");
+            var numericQuestion = Create.Entity.NumericIntegerQuestion(numericQuestionId, "num");
 
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(chapterChildren:
                     new IComposite[]
                     {
                         numericQuestion,
-                        Create.Other.Roster(rosterSizeQuestionId: numericQuestionId,
+                        Create.Entity.Roster(rosterSizeQuestionId: numericQuestionId,
                             rosterSizeSourceType: RosterSizeSourceType.Question)
                     });
 

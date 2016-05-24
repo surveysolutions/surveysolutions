@@ -13,16 +13,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.Other.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
-                Create.Other.Roster(
+                Create.Entity.Roster(
                     rosterId: rosterId,
                     fixedRosterTitles: new[]
                     {
-                        Create.Other.FixedRosterTitle(1, "FirstEnabled"),
-                        Create.Other.FixedRosterTitle(2, "SecondEnabled"),
-                        Create.Other.FixedRosterTitle(-3, "ThirdDisabled"),
-                        Create.Other.FixedRosterTitle(-4, "FourthDisabled"),
+                        Create.Entity.FixedRosterTitle(1, "FirstEnabled"),
+                        Create.Entity.FixedRosterTitle(2, "SecondEnabled"),
+                        Create.Entity.FixedRosterTitle(-3, "ThirdDisabled"),
+                        Create.Entity.FixedRosterTitle(-4, "FourthDisabled"),
                     }),
             });
 
@@ -32,22 +32,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new []
             {
-                Create.Other.RosterVector(1),
-                Create.Other.RosterVector(2),
-                Create.Other.RosterVector(-3),
-                Create.Other.RosterVector(-4),
+                Create.Entity.RosterVector(1),
+                Create.Entity.RosterVector(2),
+                Create.Entity.RosterVector(-3),
+                Create.Entity.RosterVector(-4),
             }));
 
             interview.Apply(Create.Event.GroupsDisabled(new []
             {
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(-3)),
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(-4)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-3)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-4)),
             }));
 
             interview.Apply(Create.Event.GroupsEnabled(new []
             {
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(1)),
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(2)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2)),
             }));
 
             eventContext = Create.Other.EventContext();
@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_GroupsDisabled_event_with_disabled_roster_vectors_of_fixed_roster = () =>
             eventContext.GetEvent<GroupsDisabled>().Groups.ShouldContainOnly(new[]
             {
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(-3)),
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(-4)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-3)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-4)),
             });
 
         It should_raise_GroupsEnabled_event = () =>
@@ -72,8 +72,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_GroupsEnabled_event_with_enabled_roster_vectors_of_fixed_roster = () =>
             eventContext.GetEvent<GroupsEnabled>().Groups.ShouldContainOnly(new[]
             {
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(1)),
-                Create.Other.Identity(rosterId, Create.Other.RosterVector(2)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
+                Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2)),
             });
 
         It should_not_raise_QuestionsDisabled_event = () =>

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionRosterVector = new decimal[] { };
             var linkedQuestionRosters = new Guid[] { };
-            linkedQuestionIdentity = Create.Other.Identity(linkedQuestionId, linkedQuestionRosterVector);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
 
             var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2 };
 

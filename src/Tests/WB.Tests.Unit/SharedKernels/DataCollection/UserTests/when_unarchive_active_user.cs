@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
         Establish context = () =>
         {
             var userId = Guid.NewGuid();
-            user = Create.Other.User(userId);
+            user = Create.Entity.User(userId);
             user.Roles = new UserRoles[] { UserRoles.Supervisor };
             user.IsArchived = false;
         };

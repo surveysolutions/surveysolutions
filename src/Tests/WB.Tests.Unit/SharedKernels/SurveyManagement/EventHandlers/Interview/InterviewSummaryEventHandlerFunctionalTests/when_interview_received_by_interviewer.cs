@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            viewModel = Create.Other.InterviewSummary();
+            viewModel = Create.Entity.InterviewSummary();
             denormalizer = CreateDenormalizer();
         };
 

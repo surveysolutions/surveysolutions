@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 interviewSummarys: interviewSummaryWriterMock.Object);
         };
 
-        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewerAssignedEvent());
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewerAssigned());
 
         It should_not_store_any_sync_package = () =>
             interviewPackageStorageWriterMock.Verify(

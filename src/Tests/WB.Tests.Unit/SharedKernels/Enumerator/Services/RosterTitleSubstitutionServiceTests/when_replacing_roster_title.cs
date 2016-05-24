@@ -27,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                 x.QuestionnaireIdentity == questionnaireIdentity &&
                 x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == new InterviewRoster { Title = rosterTitle });
 
-            var questionnaire = Create.Other.PlainQuestionnaire(
-                Create.Other.QuestionnaireDocumentWithOneChapter(
-                    Create.Other.Roster(rosterId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), children: new[]
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Roster(rosterId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), children: new[]
                     {
-                        Create.Other.NumericRealQuestion(id: questionid)
+                        Create.Entity.NumericRealQuestion(id: questionid)
                     })));
 
             var questionnaireStorageStub = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);

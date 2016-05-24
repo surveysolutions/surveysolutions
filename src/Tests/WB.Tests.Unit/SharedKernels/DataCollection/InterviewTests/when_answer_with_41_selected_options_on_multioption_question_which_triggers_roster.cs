@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             }
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Other.MultipleOptionsQuestion(questionId: rosterSizeQuestionId, answers: answers),
-                Create.Other.Roster(rosterId: Guid.Parse("11111111111111111111111111111111"),
+                Create.Entity.MultipleOptionsQuestion(questionId: rosterSizeQuestionId, answers: answers),
+                Create.Entity.Roster(rosterId: Guid.Parse("11111111111111111111111111111111"),
                     rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

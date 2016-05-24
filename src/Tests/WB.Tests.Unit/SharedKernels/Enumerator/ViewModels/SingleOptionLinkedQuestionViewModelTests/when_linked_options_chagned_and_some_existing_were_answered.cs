@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Other.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Other.RosterVector(1));
-            linkedQuestionId = Create.Other.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(1));
+            linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             eventData = new[]
@@ -27,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 new ChangedLinkedOptions(linkedQuestionId, 
                     new[]
                     {
-                        Create.Other.RosterVector(1),
-                        Create.Other.RosterVector(2),
-                        Create.Other.RosterVector(3)
+                        Create.Entity.RosterVector(1),
+                        Create.Entity.RosterVector(2),
+                        Create.Entity.RosterVector(3)
                     }),
             };
 
@@ -37,14 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>
                   {
-                      Create.Other.TextAnswer("two", 
+                      Create.Entity.TextAnswer("two", 
                         questionId: linkSourceQuestionId.Id, 
-                        rosterVector: Create.Other.RosterVector(2))
+                        rosterVector: Create.Entity.RosterVector(2))
                   });
 
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
-            viewModel = Create.Other.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             viewModel.Options.First().Selected = true;
@@ -52,15 +52,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                  .Returns(new List<BaseInterviewAnswer>
                  {
-                      Create.Other.TextAnswer("one",
+                      Create.Entity.TextAnswer("one",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(1)),
-                      Create.Other.TextAnswer("two",
+                        rosterVector: Create.Entity.RosterVector(1)),
+                      Create.Entity.TextAnswer("two",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(2)),
-                        Create.Other.TextAnswer("three",
+                        rosterVector: Create.Entity.RosterVector(2)),
+                        Create.Entity.TextAnswer("three",
                         questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Other.RosterVector(3))
+                        rosterVector: Create.Entity.RosterVector(3))
                  });
         };
 

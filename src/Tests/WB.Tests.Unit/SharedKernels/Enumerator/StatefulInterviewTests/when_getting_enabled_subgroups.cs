@@ -17,16 +17,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.Other.QuestionnaireDocument(
+            var questionnaire = Create.Entity.QuestionnaireDocument(
                 id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Other.Group(
+                    Create.Entity.Group(
                         groupId: selectedGroupIdentity.Id,
                         children: new IComposite[]
                         {
-                            Create.Other.Roster(rosterId: rosterId),
-                            Create.Other.Group(groupId: groupId)
+                            Create.Entity.Roster(rosterId: rosterId),
+                            Create.Entity.Group(groupId: groupId)
                         })
                 });
 

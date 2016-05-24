@@ -51,6 +51,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web;
@@ -135,6 +136,7 @@ namespace WB.UI.Headquarters
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
                     typeof(SurveyManagementSharedKernelModule).Assembly,
@@ -167,7 +169,7 @@ namespace WB.UI.Headquarters
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
                     WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
-                    typeof(M001_InitDb).Assembly,
+                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace), 
                     cacheSettings, 
                     mappingAssemblies)
             );

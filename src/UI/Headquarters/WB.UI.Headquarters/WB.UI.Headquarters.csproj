@@ -764,6 +764,8 @@
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M002_AddMissingIndexes.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
@@ -831,7 +833,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Migrations\PlainStore\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>

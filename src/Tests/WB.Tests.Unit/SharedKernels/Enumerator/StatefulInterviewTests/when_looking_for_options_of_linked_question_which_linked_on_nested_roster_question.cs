@@ -17,15 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkSourceId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            linkedQuestionIdentity = Create.Other.Identity(linkedQuestionId, RosterVector.Empty);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
             newOptionsEvent = new[] {
                 new ChangedLinkedOptions(linkedQuestionIdentity,
                                          new []
                                          {
-                                             Create.Other.RosterVector(1,1),
-                                             Create.Other.RosterVector(2,1),
-                                             Create.Other.RosterVector(1,2),
-                                             Create.Other.RosterVector(2,2)
+                                             Create.Entity.RosterVector(1,1),
+                                             Create.Entity.RosterVector(2,1),
+                                             Create.Entity.RosterVector(1,2),
+                                             Create.Entity.RosterVector(2,2)
                                          })
             };
             var rosterId = Guid.NewGuid();
@@ -46,10 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 1, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 2, null));
 
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(1,1), "a"));
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(1,2), "b"));
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(2, 1), "a"));
-            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Other.RosterVector(2, 2), "b"));
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(1,1), "a"));
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(1,2), "b"));
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(2, 1), "a"));
+            interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(2, 2), "b"));
             interview.Apply(Create.Event.LinkedOptionsChanged(newOptionsEvent));
         };
 
