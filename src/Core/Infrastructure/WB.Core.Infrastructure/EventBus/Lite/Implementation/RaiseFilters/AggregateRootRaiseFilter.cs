@@ -10,9 +10,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation.RaiseFilters
 
         public AggregateRootRaiseFilter(string aggregateRootId)
         {
-            if (aggregateRootId.IsNullOrEmpty())
-                throw new ArgumentNullException(nameof(aggregateRootId));
-
             this.aggregateRootId = aggregateRootId; 
         }
 
