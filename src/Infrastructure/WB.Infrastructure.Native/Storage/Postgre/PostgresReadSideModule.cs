@@ -52,6 +52,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load();
 
+            try
+            {
+                DatabaseManagement.CreateDatabase(this.connectionString);
+            }
+            catch (Exception exc)
+            {
+                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                throw;
+            }
+
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
             {
                 ConnectionString = this.connectionString
@@ -115,16 +125,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private ISessionFactory BuildSessionFactory()
         {
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
-            try
-            {
-                DatabaseManagement.CreateDatabase(this.connectionString);
-            }
-            catch (Exception exc)
-            {
-                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
-                throw;
-            }
-            
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
