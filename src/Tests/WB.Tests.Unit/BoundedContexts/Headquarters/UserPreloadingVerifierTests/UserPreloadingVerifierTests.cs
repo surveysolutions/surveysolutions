@@ -124,12 +124,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0005", 1, "Login", userName));
         }
 
-        [Test]
+        [TestCase("")]//empty
+        [TestCase("Q11w")]//less 10 
+        [TestCase("QqQqQqQqQqQqQq")]//regexp
+        [TestCase("A1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890")]//more 100
         public void
-            VerifyProcessFromReadyToBeVerifiedQueue_When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006()
+            VerifyProcessFromReadyToBeVerifiedQueue_When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password)
         {
-            var emptyPassword = "";
-            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(password: emptyPassword));
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(password: password));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
             var userPreloadingVerifier =
@@ -137,7 +139,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
-            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0006", 1, "Password", emptyPassword));
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0006", 1, "Password", password));
+        }
+
+        [Test]
+        public void
+            VerifyProcessFromReadyToBeVerifiedQueue_When_users_password_is_short_Then_record_verification_error_with_code_PLU0006()
+        {
+            var shortPassword = "Q11w";
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(password: shortPassword));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0006", 1, "Password", shortPassword));
         }
 
         [Test]

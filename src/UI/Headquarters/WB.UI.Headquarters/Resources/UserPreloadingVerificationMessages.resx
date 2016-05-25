@@ -133,7 +133,7 @@
     <value> Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
-    <value> Password must contain at least one number, one upper case character and one lower case character</value>
+    <value> Password must contain at least one number, one upper case character and one lower case character. Length should be between 10 and 100 characters.</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
     <value> Email is invalid</value>
