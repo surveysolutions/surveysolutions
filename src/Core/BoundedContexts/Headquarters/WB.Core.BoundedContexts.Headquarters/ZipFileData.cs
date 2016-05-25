@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Events;
 
-namespace WB.Core.Synchronization
+namespace WB.Core.BoundedContexts.Headquarters
 {
     public class ZipFileData
     {

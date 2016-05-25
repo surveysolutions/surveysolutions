@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using NHibernate;
 using Npgsql;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views;

@@ -1,11 +1,11 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Events.Sync;
 
-namespace WB.Core.Synchronization.EventHandler
+namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class TabletDenormalizer : AbstractFunctionalEventHandler<TabletDocument, IReadSideRepositoryWriter<TabletDocument>>,
          IUpdateHandler<TabletDocument, TabletRegistered>

@@ -2,13 +2,13 @@ using System;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
 {
