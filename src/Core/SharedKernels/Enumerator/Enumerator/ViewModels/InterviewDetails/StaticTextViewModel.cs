@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this, this.interviewId);
+            this.registry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }
 

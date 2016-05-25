@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        public void Unsubscribe(ILiteEventHandler handler, string aggregateRootId = null)
+        public void Unsubscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        public bool IsSubscribed(ILiteEventHandler handler, string aggregateRootId = null)
+        public bool IsSubscribed(ILiteEventHandler handler)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             return handlers.Values.Any(x => x.Any(handlerRef =>

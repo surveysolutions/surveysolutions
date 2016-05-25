@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this, interviewId);
+            this.registry.Unsubscribe(this);
         }
     }
 }

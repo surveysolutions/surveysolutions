@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
         }
     }
 }
