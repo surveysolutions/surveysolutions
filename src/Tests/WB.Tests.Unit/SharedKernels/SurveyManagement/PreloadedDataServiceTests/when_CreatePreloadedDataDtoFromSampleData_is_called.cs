@@ -19,16 +19,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { StataExportCaption = "nq1", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() },
-                    new TextQuestion() { StataExportCaption = "tq1", QuestionType = QuestionType.Text, PublicKey = Guid.NewGuid() },
-                    new Group("Roster Group")
+                    new NumericQuestion()
                     {
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        PublicKey = rosterGroupId,
-                        RosterFixedTitles = new[] { "a" },
-                        Children = new List<IComposite> { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() } }
-                    });
+                        StataExportCaption = "nq1",
+                        QuestionType = QuestionType.Numeric,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    new TextQuestion()
+                    {
+                        StataExportCaption = "tq1",
+                        QuestionType = QuestionType.Text,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] {"a"},
+                        children: new IComposite[]
+                        {
+                            new NumericQuestion()
+                            {
+                                StataExportCaption = "nq2",
+                                QuestionType = QuestionType.Numeric,
+                                PublicKey = Guid.NewGuid()
+                            }
+                        }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

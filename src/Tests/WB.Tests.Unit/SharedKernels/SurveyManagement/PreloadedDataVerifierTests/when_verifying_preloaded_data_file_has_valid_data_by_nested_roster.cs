@@ -27,23 +27,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var nestedRosterId = Guid.NewGuid();
 
             questionnaire =
-                CreateQuestionnaireDocumentWithOneChapter(new Group(rosterTitle)
-                {
-                    IsRoster = true,
-                    PublicKey = rosterId,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a" },
-                    Children = new List<IComposite>
-                    {
-                        new Group(nestedRosterTitle)
+                CreateQuestionnaireDocumentWithOneChapter(
+                    Create.Entity.FixedRoster(rosterId: rosterId,
+                        fixedTitles: new[] {"a"}, title: rosterTitle, children: new IComposite[]
                         {
-                            IsRoster = true,
-                            PublicKey = nestedRosterId,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a" }
-                        }
-                    }
-                });
+                            Create.Entity.FixedRoster(rosterId: nestedRosterId,
+                                fixedTitles: new[] {"a"}, title: nestedRosterTitle)
+                        }));
 
             questionnaire.Title = questionnaireTitle;
 

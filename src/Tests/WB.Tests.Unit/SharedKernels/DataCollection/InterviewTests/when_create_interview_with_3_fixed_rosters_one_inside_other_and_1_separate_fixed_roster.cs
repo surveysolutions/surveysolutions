@@ -24,40 +24,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group("top level fixed group")
-                {
-                    PublicKey = Guid.Parse("11111111111111111111111111111111"),
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    Children = new List<IComposite>
+
+                Create.Entity.FixedRoster(rosterId: Guid.Parse("11111111111111111111111111111111"),
+                    title: "top level fixed group", fixedTitles: new[] {"1", "2"}, children: new[]
                     {
-                        new Group("nested fixed group")
-                        {
-                            PublicKey = Guid.Parse("21111111111111111111111111111111"),
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" },
-                            Children = new List<IComposite>
+                        Create.Entity.FixedRoster(rosterId: Guid.Parse("21111111111111111111111111111111"),
+                            title: "nested fixed group", fixedTitles: new[] {"a", "b"}, children: new[]
                             {
-                                new Group("nested fixed subgroup")
-                                {
-                                    PublicKey = Guid.Parse("31111111111111111111111111111111"),
-                                    IsRoster = true,
-                                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                    RosterFixedTitles = new[] { "x", "y" },
-                                }
-                            }
-                        }
-                    }
-                },
-                new Group("separate fixed group")
-                {
-                    PublicKey = Guid.Parse("22222222222222222222222222222222"),
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "I", "II" }
-                });
+                                Create.Entity.FixedRoster(rosterId: Guid.Parse("31111111111111111111111111111111"),
+                                    title: "nested fixed subgroup", fixedTitles: new[] {"x", "y"})
+                            })
+                    }),
+                Create.Entity.FixedRoster(rosterId: Guid.Parse("22222222222222222222222222222222"),
+                    title: "separate fixed group", fixedTitles: new[] {"I", "II"}));
 
             questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));

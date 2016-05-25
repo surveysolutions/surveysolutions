@@ -44,25 +44,6 @@ namespace Main.Core.Entities.SubEntities
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        [Obsolete("Compatibility with clients version lower 4.2")]
-        //survived after clean due to the old clients that should work with designer
-        //could be removed after all clients have version higher or equal 4.2.0
-        public string[] RosterFixedTitles 
-        {
-            set
-            {
-                if (value != null && value.Any())
-                {
-                    FixedRosterTitles = value.Select((t, i) => new FixedRosterTitle(i, t)).ToArray();
-                }
-                else
-                {
-                    FixedRosterTitles = new FixedRosterTitle[0];
-                }
-            }
-            get { return FixedRosterTitles.Select(x => x.Title).ToArray(); }
-        } 
-
         public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }

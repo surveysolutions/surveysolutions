@@ -20,13 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Children = new List<IComposite>()
                 {
-                    new Group()
-                    {
-                        IsRoster = true,
-                        VariableName = "varRoster",
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = new [] {"fixed title", "fixed title 2"},
-                        Children = new List<IComposite>()
+                    Create.FixedRoster(variable: "varRoster",
+                        fixedTitles: new[] {"fixed title", "fixed title 2"},
+                        children: new IComposite[]
                         {
                             new TextQuestion()
                             {
@@ -34,8 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = "var2",
                                 QuestionType = QuestionType.Text
                             }
-                        }
-                    },
+                        }),
 
                     new SingleQuestion()
                     {

@@ -22,18 +22,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             referencedQuestionId = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group("roster group")
-                {
-                    PublicKey = rosterGroupId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new string[] { "1", "2" },
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                    title: "roster group", fixedTitles: new[] {"1", "2"}, children: new IComposite[]
                     {
-                        new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric },
-                        new MultyOptionsQuestion() { LinkedToQuestionId = referencedQuestionId, PublicKey = linkedQuestionId, QuestionType = QuestionType.MultyOption }
-                    }
-                });
+                        new NumericQuestion() {PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric},
+                        new MultyOptionsQuestion()
+                        {
+                            LinkedToQuestionId = referencedQuestionId,
+                            PublicKey = linkedQuestionId,
+                            QuestionType = QuestionType.MultyOption
+                        }
+                    }));
             exportViewFactory = CreateExportViewFactory();
         };
 

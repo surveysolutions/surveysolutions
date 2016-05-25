@@ -23,20 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = independantRosterId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1", "2", "3" }
-                },
-                new Group()
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a", "b", "" },
-                    Children = new List<IComposite>()
+                Create.Entity.FixedRoster(rosterId: independantRosterId,
+                    fixedTitles: new[] {"1", "2", "3"}),
+                Create.Entity.FixedRoster(rosterId: rosterId,
+                    fixedTitles: new[] {"a", "b", ""},
+                    children: new IComposite[]
                     {
                         new Group()
                         {
@@ -52,8 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                 }
                             }
                         }
-                    }
-                });
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

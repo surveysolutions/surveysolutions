@@ -17,13 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Establish context = () =>
         {
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(new Group("Roster Group")
-                {
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1" },
-                    PublicKey = rosterGroupId
-                });
+                CreateQuestionnaireDocumentWithOneChapter(
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] {"1"}, title: "Roster Group"));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };
