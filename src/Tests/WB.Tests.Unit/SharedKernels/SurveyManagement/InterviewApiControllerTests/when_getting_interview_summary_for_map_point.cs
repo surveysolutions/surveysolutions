@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;

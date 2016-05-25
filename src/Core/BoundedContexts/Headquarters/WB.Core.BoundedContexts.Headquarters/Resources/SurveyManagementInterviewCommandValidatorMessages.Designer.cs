@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SurveyManagementInterviewCommandValidatorMessages {
+    public class SurveyManagementInterviewCommandValidatorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Headquarters.Resources.SurveyManagementInterviewCommandVa" +
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Limit of interviews that are allowed to be created is reached. Establised limit for this survey is {0}. Contact Survey Solutions team in case you need to create more interviews..
         /// </summary>
-        internal static string LimitIsReachedErrorMessageFormat {
+        public static string LimitIsReachedErrorMessageFormat {
             get {
                 return ResourceManager.GetString("LimitIsReachedErrorMessageFormat", resourceCulture);
             }

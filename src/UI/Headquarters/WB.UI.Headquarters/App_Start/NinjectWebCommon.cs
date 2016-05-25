@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -33,9 +34,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Web;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
@@ -44,17 +42,14 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Services;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -132,14 +127,13 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly };
+            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
-                    typeof(SurveyManagementSharedKernelModule).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly,
                     typeof(SynchronizationModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
@@ -212,13 +206,15 @@ namespace WB.UI.Headquarters
 
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(basePath, 
+                new HeadquartersBoundedContextModule(basePath, 
                     interviewDetailsDataLoaderSettings,
                     readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
-                    interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, exportSettings,
-                    interviewDataExportSettings, sampleImportSettings));
+                    userPreloadingSettings, 
+                    exportSettings,
+                    interviewDataExportSettings, 
+                    sampleImportSettings,
+                    interviewCountLimit));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -273,7 +269,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-            foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
+            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
+            foreach (object handler in enumerable)
             {
                 bus.Register((IEventHandler)handler);
             }
