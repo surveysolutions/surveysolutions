@@ -9,9 +9,9 @@ namespace WB.Core.Infrastructure.EventBus.Lite
     {
         void Subscribe(ILiteEventHandler handler, string aggregateRootId = null);
 
-        void Unsubscribe(ILiteEventHandler handler, string aggregateRootId = null);
+        void Unsubscribe(ILiteEventHandler handler);
 
-        bool IsSubscribed(ILiteEventHandler handler, string aggregateRootId = null);
+        bool IsSubscribed(ILiteEventHandler handler);
 
         IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event);
     }

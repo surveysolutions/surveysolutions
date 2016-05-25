@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 
             handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
             liteEventRegistry.Subscribe(handlerMock.Object, "id");
-            liteEventRegistry.Unsubscribe(handlerMock.Object, "id");
+            liteEventRegistry.Unsubscribe(handlerMock.Object);
         };
 
         Because of = () =>

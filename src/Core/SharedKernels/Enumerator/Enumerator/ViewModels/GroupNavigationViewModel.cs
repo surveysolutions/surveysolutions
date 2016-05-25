@@ -235,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, this.interviewId);
+            this.eventRegistry.Unsubscribe(this);
 
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
             this.answerNotifier.Dispose();
