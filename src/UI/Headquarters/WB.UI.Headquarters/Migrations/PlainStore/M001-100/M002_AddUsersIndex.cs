@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
 
         public override void Up()
         {
-            Execute.Sql($"create index {usersIndexName} on userdocuments(lower(username), password);");
+            Execute.Sql($"create unique index {usersIndexName} on userdocuments(lower(username), password);");
         }
 
         public override void Down()
