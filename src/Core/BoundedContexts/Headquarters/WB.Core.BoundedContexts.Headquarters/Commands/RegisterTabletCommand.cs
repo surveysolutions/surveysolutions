@@ -1,7 +1,7 @@
 using System;
 using Ncqrs.Commanding;
 
-namespace WB.Core.Synchronization.Commands
+namespace WB.Core.BoundedContexts.Headquarters.Commands
 {
     public class RegisterTabletCommand  : CommandBase
     {
@@ -15,10 +15,10 @@ namespace WB.Core.Synchronization.Commands
     
         public RegisterTabletCommand(Guid deviceId, Guid userId, string appVersion, string androidId)
         {
-            DeviceId = deviceId;
-            UserId = userId;
-            AppVersion = appVersion;
-            AndroidId = androidId;
+            this.DeviceId = deviceId;
+            this.UserId = userId;
+            this.AppVersion = appVersion;
+            this.AndroidId = androidId;
         }
     }
 }

@@ -1,9 +1,9 @@
 using Main.Core.Events.Sync;
 using Ncqrs.Domain;
-using WB.Core.Synchronization.Commands;
+using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Synchronization.Events.Sync;
 
-namespace WB.Core.Synchronization.Aggregates
+namespace WB.Core.BoundedContexts.Headquarters.Aggregates
 {
     public class Tablet : AggregateRootMappedByConvention
     {

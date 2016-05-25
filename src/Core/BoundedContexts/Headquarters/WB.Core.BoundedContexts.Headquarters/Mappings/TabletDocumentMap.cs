@@ -1,6 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.Synchronization.Documents;
+using WB.Core.BoundedContexts.Headquarters.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {

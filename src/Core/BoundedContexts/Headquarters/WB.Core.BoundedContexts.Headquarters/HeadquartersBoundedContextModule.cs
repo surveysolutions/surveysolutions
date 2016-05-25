@@ -53,7 +53,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.Synchronization.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -70,7 +69,9 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.Synchronization.Implementation.ImportManager;
+using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -87,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly SampleImportSettings sampleImportSettings;
-
+        private readonly SyncSettings syncSettings;
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
@@ -97,6 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             ExportSettings exportSettings,
             InterviewDataExportSettings interviewDataExportSettings,
             SampleImportSettings sampleImportSettings,
+            SyncSettings syncSettings,
             int? interviewLimitCount = null,
             string syncDirectoryName = "SYNC",
             string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
@@ -110,13 +112,20 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.readSideSettings = readSideSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
-
+            this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
             this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
         }
 
         public override void Load()
         {
+            this.Bind<IBackupManager>().To<DefaultBackupManager>();
+            this.Bind<SyncSettings>().ToConstant(this.syncSettings);
+            this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
+
+            CommandRegistry.Setup<Tablet>()
+                .InitializesWith<RegisterTabletCommand>(command => command.DeviceId, (command, aggregate) => aggregate.CreateClientDevice(command));
+
             this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
             this.Bind<Questionnaire>().ToSelf();
@@ -255,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             if (this.isSupervisorFunctionsEnabled)
             {
                 this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-                this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+                //this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
             
             this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();

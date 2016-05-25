@@ -2,6 +2,8 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -11,8 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization.Commands;
-using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
