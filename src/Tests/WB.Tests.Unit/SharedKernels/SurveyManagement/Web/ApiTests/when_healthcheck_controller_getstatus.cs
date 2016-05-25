@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using It = Machine.Specifications.It;
 

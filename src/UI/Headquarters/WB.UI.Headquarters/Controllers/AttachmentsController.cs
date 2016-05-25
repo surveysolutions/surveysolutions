@@ -7,8 +7,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Web.Http;
 using ImageResizer;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {

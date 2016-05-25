@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
 

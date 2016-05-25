@@ -6,11 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {

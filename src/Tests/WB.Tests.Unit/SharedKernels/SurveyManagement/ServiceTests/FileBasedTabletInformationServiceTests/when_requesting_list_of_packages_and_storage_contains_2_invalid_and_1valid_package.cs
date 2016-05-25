@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
-using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
+using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTabletInformationServiceTests
 {

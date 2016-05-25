@@ -1,6 +1,6 @@
 using System.Web.Http;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
