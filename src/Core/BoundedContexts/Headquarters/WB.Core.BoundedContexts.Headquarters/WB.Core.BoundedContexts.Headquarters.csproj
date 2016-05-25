@@ -193,10 +193,8 @@
     <Compile Include="DataExport\Ddi\IDdiMetadataAccessor.cs" />
     <Compile Include="Implementation\ExportSettings.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
-    <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
-    <Compile Include="Questionnaires\Denormalizers\QuestionnaireFeedDenormalizer.cs" />
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
@@ -234,7 +232,6 @@
     <Compile Include="UserPreloading\Tasks\UserPreloadingCleanerTask.cs" />
     <Compile Include="UserPreloading\UserPreloadingSettings.cs" />
     <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
-    <Compile Include="Users\Denormalizers\UsersFeedDenormalizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -271,8 +268,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Denormalizers\" />
-    <Folder Include="Interviews\Views\" />
+    <Folder Include="Interviews\Denormalizers\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>

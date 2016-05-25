@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Value = x.Value,
                     Title = x.Title
                 })
+                .OrderBy(x => x.Title)
                 .ToList()
                 .ToReadOnlyCollection();
 

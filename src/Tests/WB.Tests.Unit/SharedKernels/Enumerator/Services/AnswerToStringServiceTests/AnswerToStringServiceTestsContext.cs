@@ -33,5 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             model.SetAnswer(answer);
             return model;
         }
+
+        public static InterviewRoster CreateInterviewRoster(string title=null, decimal[] rosterVector=null)
+        {
+            var result = new InterviewRoster();
+            result.Title = title;
+            result.RosterVector = rosterVector?? new decimal[0];
+            return result;
+        }
     }
 }
