@@ -17,10 +17,7 @@
                   android:adjustViewBounds="true"
                   local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; 
                                  Visible QuestionState.IsAnswered"/>
-                <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                             local:MvxBind="HideKeyboardOnClick .; 
-                                            Visible QuestionState.IsAnswered;
-                                            Click RemoveAnswerCommand;" />
+                 <include layout="@layout/interview_question__remove_button" />
             </TableRow>
             <TableRow>
               <FrameLayout android:layout_height="wrap_content" 
