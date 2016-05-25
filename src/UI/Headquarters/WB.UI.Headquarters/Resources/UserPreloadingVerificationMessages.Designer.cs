@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Password must contain at least one number, one upper case character and one lower case character.
+        ///   Looks up a localized string similar to  Password must contain at least one number, one upper case character and one lower case character. Length should be between 10 and 100 characters..
         /// </summary>
         public static string PLU0006 {
             get {
