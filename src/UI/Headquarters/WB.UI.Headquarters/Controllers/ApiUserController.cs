@@ -76,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(new UserEditModel
             {
+                UserName = user.UserName,
                 Id = user.PublicKey,
                 Email = user.Email,
                 IsLocked = user.IsLockedByHQ
