@@ -165,7 +165,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .ToTable("userdocuments").PrimaryColumn("id");
 
             Create.ForeignKey()
-                .FromTable("deviceinfos").ForeignColumn("user")
+                .FromTable("deviceinfos").ForeignColumn("User")
                 .ToTable("userdocuments").PrimaryColumn("id");
 
             Create.ForeignKey()
