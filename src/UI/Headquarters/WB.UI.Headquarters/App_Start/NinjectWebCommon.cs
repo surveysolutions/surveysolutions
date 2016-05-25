@@ -66,19 +66,10 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
-    /// <summary>
-    ///     The ninject web common.
-    /// </summary>
     public static class NinjectWebCommon
     {
-        /// <summary>
-        ///     The bootstrapper.
-        /// </summary>
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
-        /// <summary>
-        ///     Starts the application
-        /// </summary>
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
@@ -86,18 +77,11 @@ namespace WB.UI.Headquarters
             Bootstrapper.Initialize(CreateKernel);
         }
 
-        /// <summary>
-        ///     Stops the application.
-        /// </summary>
         public static void Stop()
         {
             Bootstrapper.ShutDown();
         }
 
-        /// <summary>
-        ///     Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
@@ -135,7 +119,6 @@ namespace WB.UI.Headquarters
                 MappingAssemblies = new List<Assembly>
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(SynchronizationModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
                 }
             };
@@ -157,7 +140,6 @@ namespace WB.UI.Headquarters
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
                 new HeadquartersRegistry(),
-                new SynchronizationModule(synchronizationSettings),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
@@ -214,6 +196,7 @@ namespace WB.UI.Headquarters
                     exportSettings,
                     interviewDataExportSettings, 
                     sampleImportSettings,
+                    synchronizationSettings,
                     interviewCountLimit));
 
 
@@ -269,8 +252,9 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
-            foreach (object handler in enumerable)
+
+            //Kernel.RegisterDenormalizer<>() - should be used instead
+            foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {
                 bus.Register((IEventHandler)handler);
             }

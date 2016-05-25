@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.Synchronization
+namespace WB.Core.BoundedContexts.Headquarters
 {
     public class SyncSettings
     {

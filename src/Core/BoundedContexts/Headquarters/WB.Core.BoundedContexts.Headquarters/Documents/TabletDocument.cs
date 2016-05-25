@@ -1,7 +1,7 @@
 using System;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.Synchronization.Documents
+namespace WB.Core.BoundedContexts.Headquarters.Documents
 {
     public class TabletDocument : IView
     {
