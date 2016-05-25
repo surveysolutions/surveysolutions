@@ -97,6 +97,11 @@ namespace WB.UI.Designer.Migrations.ReadSide
             this.Create.ForeignKey()
                 .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecordid")
                 .ToTable("questionnairechangerecords").PrimaryColumn("id");
+
+            Create.Table("hibernate_unique_key")
+              .WithColumn("next_hi").AsInt32();
+
+            Insert.IntoTable("hibernate_unique_key").Row(new { next_hi = 1 });
         }
 
         public override void Down()
