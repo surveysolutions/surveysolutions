@@ -482,7 +482,9 @@ namespace WB.Tests.Integration
             {
                 if (fixedRosterTitles == null)
                 {
-                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                    group.FixedRosterTitles =
+                        (fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
+                            (x, i) => Create.FixedRosterTitle(i, x)).ToArray();
                 }
                 else
                 {

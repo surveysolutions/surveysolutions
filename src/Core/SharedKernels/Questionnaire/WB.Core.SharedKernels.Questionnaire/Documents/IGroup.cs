@@ -18,9 +18,6 @@ namespace Main.Core.Entities.SubEntities
 
         RosterSizeSourceType RosterSizeSource { get; }
 
-        [Obsolete]
-        string[] RosterFixedTitles { set; }
-
         FixedRosterTitle[] FixedRosterTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }

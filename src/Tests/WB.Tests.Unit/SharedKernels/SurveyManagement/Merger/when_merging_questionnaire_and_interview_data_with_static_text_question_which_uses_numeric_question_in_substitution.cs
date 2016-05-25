@@ -30,24 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = groupId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a", "b", "c" },
-                    Children = new List<IComposite>()
+                Create.Entity.FixedRoster(rosterId: groupId,
+                    fixedTitles: new[] {"a", "b", "c"},
+                    children: new IComposite[]
                     {
                         new StaticText(staticTextWithSubstitutionId, "test %q1%", null, false, null),
                         new NumericQuestion()
                         {
                             PublicKey = numericQuestionId,
-                            StataExportCaption  = "q1",
+                            StataExportCaption = "q1",
                             QuestionType = QuestionType.Numeric,
                             IsInteger = true
                         }
-                    }
-                });
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

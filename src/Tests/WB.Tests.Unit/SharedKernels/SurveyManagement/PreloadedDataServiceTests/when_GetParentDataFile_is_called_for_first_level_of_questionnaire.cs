@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
@@ -16,14 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Establish context = () =>
         {
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(new Group("Roster Group")
-                {
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1" },
-                    VariableName = "roster",
-                    PublicKey = rosterGroupId
-                });
+                CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster",
+                        fixedTitles: new[] { "1" }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

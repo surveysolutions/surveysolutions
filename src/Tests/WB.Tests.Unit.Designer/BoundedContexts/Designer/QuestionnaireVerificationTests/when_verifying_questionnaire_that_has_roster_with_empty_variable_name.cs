@@ -17,14 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new Group
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var" } }
-                }
+                Create.FixedRoster(rosterId: rosterId, variable:null,
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var"}})
             });
 
             verifier = CreateQuestionnaireVerifier();

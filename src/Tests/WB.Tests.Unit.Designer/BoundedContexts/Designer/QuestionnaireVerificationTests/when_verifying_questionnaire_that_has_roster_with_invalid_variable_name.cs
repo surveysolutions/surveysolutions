@@ -17,33 +17,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new Group
-                {
-                    PublicKey = rosterWithVariableNameLongerThen32SymbolsId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "a12345678901234567890123456789012",
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var1" } }
-                },
-                new Group
-                {
-                    PublicKey = rosterWithVariableNameStartingFromNumberId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "1number",
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var2" } }
-                },
-                new Group
-                {
-                    PublicKey = rosterWithVariableNameWithInvalidSymbolsId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "numberЫ",
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var3" } }
-                }
+                Create.FixedRoster(rosterId: rosterWithVariableNameLongerThen32SymbolsId,
+                    fixedTitles: new[] {"1", "2"},
+                    variable: "a12345678901234567890123456789012",
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var1"}}),
+
+                Create.FixedRoster(rosterId: rosterWithVariableNameStartingFromNumberId,
+                    fixedTitles: new[] {"1", "2"},
+                    variable: "1number",
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var2"}}),
+
+                Create.FixedRoster(rosterId: rosterWithVariableNameWithInvalidSymbolsId,
+                    fixedTitles: new[] {"1", "2"},
+                    variable: "numberЫ",
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var3"}})
             });
 
             verifier = CreateQuestionnaireVerifier();
