@@ -387,7 +387,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }
 
