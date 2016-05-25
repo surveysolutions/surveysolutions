@@ -178,7 +178,7 @@ namespace WB.Tests.Unit.TestFactories
             => new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984, 4, 18)));
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
-            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false)
+            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null)
             => new GpsCoordinateQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -189,6 +189,7 @@ namespace WB.Tests.Unit.TestFactories
                 ValidationExpression = validationExpression,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
+                VariableLabel = label
             };
 
         public Group Group(

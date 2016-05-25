@@ -517,12 +517,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
             gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
 
+            var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
+                ? question.QuestionText
+                : question.VariableLabel;
             for (int i = 0; i < gpsColumns.Length; i++)
             {
                 gpsQuestionExportHeader.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption,
                     gpsColumns[i]);
 
-                gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);
+                gpsQuestionExportHeader.Titles[i] += $"{questionLabel}: {gpsColumns[i]}";
             }
 
             headerItems.Add(question.PublicKey, gpsQuestionExportHeader);

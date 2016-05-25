@@ -11,6 +11,8 @@ using Ninject.Extensions.Conventions;
 using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -27,8 +29,12 @@ using WB.UI.Shared.Web.Filters;
 using WB.Infrastructure.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Headquarters.Models.User;
+using WB.UI.Shared.Web.Attributes;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -209,6 +215,8 @@ namespace WB.UI.Headquarters.Injections
 
             this.RegisterViewFactories();
 
+           // this.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
+
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
@@ -223,6 +231,22 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
+
+            this.BindFilter<TransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+
+            this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+
+            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+
+            //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
+            this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
+            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
+
         }
     }
 }
