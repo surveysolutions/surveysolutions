@@ -340,6 +340,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please try again later.
+        /// </summary>
+        internal static string TryLater {
+            get {
+                return ResourceManager.GetString("TryLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string UserName {
