@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.Synchronization;
 using It = Machine.Specifications.It;

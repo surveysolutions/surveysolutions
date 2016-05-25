@@ -2,7 +2,7 @@
 @using Main.Core.Entities.SubEntities
 @using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
+@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
 
 <tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">

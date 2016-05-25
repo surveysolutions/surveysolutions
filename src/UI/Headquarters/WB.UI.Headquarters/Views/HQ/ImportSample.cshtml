@@ -1,11 +1,9 @@
 ﻿@using System.Activities.Expressions
 @using System.ServiceModel.Channels
+@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Utils
-@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
-@using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
-@using WB.Core.SharedKernels.SurveyManagement.Views.User
-@model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedMetaDataView
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedMetaDataView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = BatchUpload.ImportSample;

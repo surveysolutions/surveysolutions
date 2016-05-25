@@ -1,4 +1,4 @@
-using WB.Core.SharedKernels.SurveyManagement.Views.Template;
+using WB.Core.BoundedContexts.Headquarters.Views.Template;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

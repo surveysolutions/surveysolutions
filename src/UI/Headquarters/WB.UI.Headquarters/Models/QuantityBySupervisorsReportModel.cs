@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

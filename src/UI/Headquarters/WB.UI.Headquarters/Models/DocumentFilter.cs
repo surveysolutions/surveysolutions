@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
