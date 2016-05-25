@@ -41,11 +41,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             var count =
                 this.accounts.Query(_ => this.FilterAccounts(_, input).Count());
 
+            var sortOrder = input.Order.IsNullOrEmpty() ? "CreatedAt  Desc" : input.Order;
+
             var result =
                 this.accounts.Query(
                     _ =>
                         this.FilterAccounts(_, input)
-                            .OrderUsingSortExpression(input.Order)
+                            .OrderUsingSortExpression(sortOrder)
                             .Skip((input.Page - 1)*input.PageSize)
                             .Take(input.PageSize)
                             .Select(x => new AccountListItem()
