@@ -39,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("EventStoreToPlainStorageMigrator")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]

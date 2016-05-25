@@ -184,7 +184,6 @@ namespace WB.UI.Headquarters.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(QuestionnaireItemInputModel).Assembly,
                 typeof(HeadquartersBoundedContextModule).Assembly

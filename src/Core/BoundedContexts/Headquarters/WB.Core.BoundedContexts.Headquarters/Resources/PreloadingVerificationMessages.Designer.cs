@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.Core.SharedKernels.SurveyManagement.Properties {
+namespace WB.Core.BoundedContexts.Headquarters.Resources {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PreloadingVerificationMessages {
+    public class PreloadingVerificationMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.SurveyManagement.Properties.PreloadingVerificationMessages", typeof(PreloadingVerificationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages", typeof(PreloadingVerificationMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [PL0001] Questionnaire template is missing..
         /// </summary>
-        internal static string PL0001_NoQuestionnaire {
+        public static string PL0001_NoQuestionnaire {
             get {
                 return ResourceManager.GetString("PL0001_NoQuestionnaire", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [PL0002] N/A.
         /// </summary>
-        internal static string PL0002_MoreThenOneLevel {
+        public static string PL0002_MoreThenOneLevel {
             get {
                 return ResourceManager.GetString("PL0002_MoreThenOneLevel", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Column cannot be mapped to any question in the questionnaire..
         /// </summary>
-        internal static string PL0003_ColumnWasntMappedOnQuestion {
+        public static string PL0003_ColumnWasntMappedOnQuestion {
             get {
                 return ResourceManager.GetString("PL0003_ColumnWasntMappedOnQuestion", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File cannot be mapped to any roster in the questionnaire..
         /// </summary>
-        internal static string PL0004_FileWasntMappedRoster {
+        public static string PL0004_FileWasntMappedRoster {
             get {
                 return ResourceManager.GetString("PL0004_FileWasntMappedRoster", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [PL0005] N/A.
         /// </summary>
-        internal static string PL0005_QuestionDataTypeMismatch {
+        public static string PL0005_QuestionDataTypeMismatch {
             get {
                 return ResourceManager.GetString("PL0005_QuestionDataTypeMismatch", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Duplicate Id values found..
         /// </summary>
-        internal static string PL0006_IdDublication {
+        public static string PL0006_IdDublication {
             get {
                 return ResourceManager.GetString("PL0006_IdDublication", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to One ore more parent Id columns are missing..
         /// </summary>
-        internal static string PL0007_ServiceColumnIsAbsent {
+        public static string PL0007_ServiceColumnIsAbsent {
             get {
                 return ResourceManager.GetString("PL0007_ServiceColumnIsAbsent", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Roster record does not have a parent..
         /// </summary>
-        internal static string PL0008_OrphanRosterRecord {
+        public static string PL0008_OrphanRosterRecord {
             get {
                 return ResourceManager.GetString("PL0008_OrphanRosterRecord", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Roster Id is inconsistant with roster size..
         /// </summary>
-        internal static string PL0009_RosterIdIsInconsistantWithRosterSizeQuestion {
+        public static string PL0009_RosterIdIsInconsistantWithRosterSizeQuestion {
             get {
                 return ResourceManager.GetString("PL0009_RosterIdIsInconsistantWithRosterSizeQuestion", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Linked question is not supported in data preloading..
         /// </summary>
-        internal static string PL0010_UnsupportedLinkedQuestion {
+        public static string PL0010_UnsupportedLinkedQuestion {
             get {
                 return ResourceManager.GetString("PL0010_UnsupportedLinkedQuestion", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to General error occured..
         /// </summary>
-        internal static string PL0011_GeneralError {
+        public static string PL0011_GeneralError {
             get {
                 return ResourceManager.GetString("PL0011_GeneralError", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Question was not found..
         /// </summary>
-        internal static string PL0012_QuestionWasNotFound {
+        public static string PL0012_QuestionWasNotFound {
             get {
                 return ResourceManager.GetString("PL0012_QuestionWasNotFound", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Provided value is null or empty.
         /// </summary>
-        internal static string PL0013_ValueIsNullOrEmpty {
+        public static string PL0013_ValueIsNullOrEmpty {
             get {
                 return ResourceManager.GetString("PL0013_ValueIsNullOrEmpty", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [PL0014] Provided question value not allowed..
         /// </summary>
-        internal static string PL0014_ParsedValueIsNotAllowed {
+        public static string PL0014_ParsedValueIsNotAllowed {
             get {
                 return ResourceManager.GetString("PL0014_ParsedValueIsNotAllowed", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [PL0015] Type of question is not correct..
         /// </summary>
-        internal static string PL0015_QuestionTypeIsIncorrect {
+        public static string PL0015_QuestionTypeIsIncorrect {
             get {
                 return ResourceManager.GetString("PL0015_QuestionTypeIsIncorrect", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Date or Time value..
         /// </summary>
-        internal static string PL0016_ExpectedDateTimeNotParsed {
+        public static string PL0016_ExpectedDateTimeNotParsed {
             get {
                 return ResourceManager.GetString("PL0016_ExpectedDateTimeNotParsed", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Invalid GPS value..
         /// </summary>
-        internal static string PL0017_ExpectedGpsNotParsed {
+        public static string PL0017_ExpectedGpsNotParsed {
             get {
                 return ResourceManager.GetString("PL0017_ExpectedGpsNotParsed", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Only integer values are allowed..
         /// </summary>
-        internal static string PL0018_ExpectedIntNotParsed {
+        public static string PL0018_ExpectedIntNotParsed {
             get {
                 return ResourceManager.GetString("PL0018_ExpectedIntNotParsed", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Only real values are allowed..
         /// </summary>
-        internal static string PL0019_ExpectedDecimalNotParsed {
+        public static string PL0019_ExpectedDecimalNotParsed {
             get {
                 return ResourceManager.GetString("PL0019_ExpectedDecimalNotParsed", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Roster size question cannot have negative values..
         /// </summary>
-        internal static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {
+        public static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {
             get {
                 return ResourceManager.GetString("PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Picture question is not supported in data preloading..
         /// </summary>
-        internal static string PL0023_UnsupportedMultimediaQuestion {
+        public static string PL0023_UnsupportedMultimediaQuestion {
             get {
                 return ResourceManager.GetString("PL0023_UnsupportedMultimediaQuestion", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Preloading data was not found.
         /// </summary>
-        internal static string PL0024_DataWasNotFound {
+        public static string PL0024_DataWasNotFound {
             get {
                 return ResourceManager.GetString("PL0024_DataWasNotFound", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The name of Responsible was not provided.
         /// </summary>
-        internal static string PL0025_ResponsibleNameIsEmpty {
+        public static string PL0025_ResponsibleNameIsEmpty {
             get {
                 return ResourceManager.GetString("PL0025_ResponsibleNameIsEmpty", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Provided Responsible was not found.
         /// </summary>
-        internal static string PL0026_ResponsibleWasNotFound {
+        public static string PL0026_ResponsibleWasNotFound {
             get {
                 return ResourceManager.GetString("PL0026_ResponsibleWasNotFound", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Responsible is locked.
         /// </summary>
-        internal static string PL0027_ResponsibleIsLocked {
+        public static string PL0027_ResponsibleIsLocked {
             get {
                 return ResourceManager.GetString("PL0027_ResponsibleIsLocked", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Provided User is not Supervisor or Interviewer.
         /// </summary>
-        internal static string PL0028_UserIsNotSupervisorOrInterviewer {
+        public static string PL0028_UserIsNotSupervisorOrInterviewer {
             get {
                 return ResourceManager.GetString("PL0028_UserIsNotSupervisorOrInterviewer", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Answer on roster size question cannot be greater than 40..
         /// </summary>
-        internal static string PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40 {
+        public static string PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40 {
             get {
                 return ResourceManager.GetString("PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Prefilled gps question requires Latitude and Longitude to be set..
         /// </summary>
-        internal static string PL0030_GpsMandatoryFilds {
+        public static string PL0030_GpsMandatoryFilds {
             get {
                 return ResourceManager.GetString("PL0030_GpsMandatoryFilds", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Column name duplicates found..
         /// </summary>
-        internal static string PL0031_ColumnNameDuplicatesFound {
+        public static string PL0031_ColumnNameDuplicatesFound {
             get {
                 return ResourceManager.GetString("PL0031_ColumnNameDuplicatesFound", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Latitude must be greater  then -90° and less then 90°..
         /// </summary>
-        internal static string PL0032_LatitudeMustBeGeaterThenN90AndLessThen90 {
+        public static string PL0032_LatitudeMustBeGeaterThenN90AndLessThen90 {
             get {
                 return ResourceManager.GetString("PL0032_LatitudeMustBeGeaterThenN90AndLessThen90", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Longitude must be greater than -180° and less than 180°..
         /// </summary>
-        internal static string PL0033_LongitudeMustBeGeaterThenN180AndLessThen180 {
+        public static string PL0033_LongitudeMustBeGeaterThenN180AndLessThen180 {
             get {
                 return ResourceManager.GetString("PL0033_LongitudeMustBeGeaterThenN180AndLessThen180", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &quot;,&quot; symbol is not allowed in numeric answers. Please use &quot;.&quot; as decimal separator..
         /// </summary>
-        internal static string PL0034_CommaSymbolIsNotAllowedInNumericAnswer {
+        public static string PL0034_CommaSymbolIsNotAllowedInNumericAnswer {
             get {
                 return ResourceManager.GetString("PL0034_CommaSymbolIsNotAllowedInNumericAnswer", resourceCulture);
             }

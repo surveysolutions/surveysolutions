@@ -305,7 +305,6 @@
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
     <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
     <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
@@ -366,7 +365,7 @@
     <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
-    <Compile Include="SurveyManagementSharedKernelModule.cs" />
+    <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
@@ -641,10 +640,6 @@
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
-      <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
-      <Name>WB.Core.SharedKernels.SurveyManagement</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -676,12 +671,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
