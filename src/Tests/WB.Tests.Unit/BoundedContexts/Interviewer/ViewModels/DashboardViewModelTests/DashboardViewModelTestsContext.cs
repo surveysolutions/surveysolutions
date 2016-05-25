@@ -2,6 +2,7 @@
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using MvvmCross.Test.Core;
+using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.DashboardViewMode
             return new DashboardViewModel(viewModelNavigationService : viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                  dashboardFactory : dashboardFactory ?? Mock.Of<IInterviewerDashboardFactory>(),
                  principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
-                 synchronization: synchronization,
+                 synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
                  messenger : messenger ?? Mock.Of<IMvxMessenger>(),
                  commandService: commandService ?? Mock.Of<ICommandService>());
         }
