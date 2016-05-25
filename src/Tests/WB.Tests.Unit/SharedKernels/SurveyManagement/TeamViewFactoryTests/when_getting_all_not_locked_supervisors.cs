@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
 {

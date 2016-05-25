@@ -24,14 +24,15 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -51,11 +52,11 @@ namespace WB.Tests.Unit.TestFactories
                 payload ?? Mock.Of<IEvent>());
         }
 
-        public Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
+        public Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null)
-            => new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
+            => new Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(),

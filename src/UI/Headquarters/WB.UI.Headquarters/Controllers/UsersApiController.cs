@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
+using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
-using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 

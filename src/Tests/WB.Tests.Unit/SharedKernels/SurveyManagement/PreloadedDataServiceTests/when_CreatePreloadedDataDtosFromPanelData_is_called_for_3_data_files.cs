@@ -8,8 +8,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {

@@ -17,6 +17,8 @@ using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -24,8 +26,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 

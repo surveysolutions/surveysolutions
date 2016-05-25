@@ -3,8 +3,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServiceTests
 {

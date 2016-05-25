@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {

@@ -4,13 +4,13 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
 {

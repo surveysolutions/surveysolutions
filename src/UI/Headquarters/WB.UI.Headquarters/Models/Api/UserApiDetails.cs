@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {

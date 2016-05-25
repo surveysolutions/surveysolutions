@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 
 namespace WB.Tests.Integration.Versions
 {
