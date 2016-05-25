@@ -41,13 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(1))] =
             //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = parentRosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: parentRosterId,
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
                         variable,
                         new NumericQuestion()
@@ -56,13 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "var_source"
                         },
-                        new Group()
-                        {
-                            PublicKey = nestedRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" },
-                            Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId,
+                            fixedTitles: new[] {"a", "b"},
+                            children: new IComposite[]
                             {
                                 new NumericQuestion()
                                 {
@@ -71,10 +63,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                     QuestionText = "test %var_source% %va%",
                                     StataExportCaption = "var"
                                 }
-                            }
-                        }
-                    }
-                });
+                            })
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

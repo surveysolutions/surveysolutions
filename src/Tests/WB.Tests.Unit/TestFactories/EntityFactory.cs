@@ -165,10 +165,12 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
+                title: title,
+                variable: variable,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -733,7 +735,9 @@ namespace WB.Tests.Unit.TestFactories
             {
                 if (fixedRosterTitles == null)
                 {
-                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                    group.FixedRosterTitles =
+                        (fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" }).Select(
+                            (x, i) => Create.Entity.FixedRosterTitle(i, x)).ToArray();
                 }
                 else
                 {

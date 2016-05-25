@@ -33,21 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     QuestionType = QuestionType.SingleOption,
                     LinkedToQuestionId = linkedQuestionSourceId
                 },
-                new Group()
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new string[] { "t1", "t2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {"t1", "t2"},
+                    children: new IComposite[]
                     {
-                        new Group()
-                        {
-                            PublicKey = nestedRosterId,
-                            IsRoster = true,
-                            RosterFixedTitles = new string[] { "n1", "n2" },
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            Children = new List<IComposite>
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId, fixedTitles: new[] {"n1", "n2"},
+                            children: new IComposite[]
                             {
                                 new NumericQuestion()
                                 {
@@ -55,10 +45,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                                     QuestionType = QuestionType.Numeric,
                                     StataExportCaption = "q1"
                                 }
-                            }
-                        }
-                    }
-                });
+                            })
+                    }));
 
             interview = CreateInterviewData();
 

@@ -127,13 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         PublicKey = groupId,
                         IsRoster = false
                     },
-                    new Group(fixedRosterTitle)
-                    {
-                        PublicKey = fixedRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = rosterFixedTitles
-                    }
+                    Create.Entity.FixedRoster(rosterId: fixedRosterId, fixedTitles: rosterFixedTitles, title:fixedRosterTitle)
                 }
             };
         }

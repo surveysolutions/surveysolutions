@@ -20,33 +20,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("11111111111111111111111111111111");
             nestedRosterId = Guid.Parse("13333333333333333333333333333333");
-            
-            questionnarie = CreateQuestionnaireDocumentWithOneChapter(new Group()
-            {
-                PublicKey = rosterId,
-                IsRoster = true,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new[] { "t1", "t2" },
-                Children = new List<IComposite>
-                {
-                    new Group()
+
+            questionnarie = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {"t1", "t2"},
+                    children: new IComposite[]
                     {
-                        PublicKey = nestedRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = new []{"t1","t2"},
-                        Children = new List<IComposite>
-                        {
-                            new NumericQuestion()
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId, fixedTitles: new[] {"t1", "t2"},
+                            children: new IComposite[]
                             {
-                                PublicKey = questionInsideRosterGroupId,
-                                QuestionType = QuestionType.Numeric,
-                                StataExportCaption = "q1"
-                            }
-                        }
-                    }
-                }
-            });
+                                new NumericQuestion()
+                                {
+                                    PublicKey = questionInsideRosterGroupId,
+                                    QuestionType = QuestionType.Numeric,
+                                    StataExportCaption = "q1"
+                                }
+                            })
+                    }));
             exportViewFactory = CreateExportViewFactory();
         };
 

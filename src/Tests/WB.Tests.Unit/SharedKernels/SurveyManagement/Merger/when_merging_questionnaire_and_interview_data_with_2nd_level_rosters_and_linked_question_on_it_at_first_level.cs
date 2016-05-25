@@ -34,33 +34,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
-            {
-                PublicKey = firstLevelRosterId,
-                IsRoster = true,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new[] { "roster1", "roster2" },
-                Children = new List<IComposite>()
-                {
-                    new Group()
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(rosterId: firstLevelRosterId, fixedTitles: new[] {"roster1", "roster2"},
+                    children: new IComposite[]
                     {
-                        PublicKey = secondLevelRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = new[] { "t1", "t2" },
-                        Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, fixedTitles: new[] {"t1", "t2"},
+                            children: new IComposite[]
+                            {
+                                new NumericQuestion()
+                                {
+                                    PublicKey = sourceForLinkedQuestionId,
+                                    QuestionType = QuestionType.Numeric,
+                                    StataExportCaption = "sourceForLinkedQuestionId"
+                                }
+                            }),
+                        new SingleQuestion()
                         {
-                            new NumericQuestion() { PublicKey = sourceForLinkedQuestionId, QuestionType = QuestionType.Numeric,  StataExportCaption = "sourceForLinkedQuestionId" }
+                            PublicKey = linkedQuestionId,
+                            LinkedToQuestionId = sourceForLinkedQuestionId,
+                            StataExportCaption = "linkedQuestionId"
                         }
-                    },
-                    new SingleQuestion()
-                    {
-                        PublicKey = linkedQuestionId,
-                        LinkedToQuestionId = sourceForLinkedQuestionId,  
-                        StataExportCaption = "linkedQuestionId"
-                    }
-                }
-            });
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

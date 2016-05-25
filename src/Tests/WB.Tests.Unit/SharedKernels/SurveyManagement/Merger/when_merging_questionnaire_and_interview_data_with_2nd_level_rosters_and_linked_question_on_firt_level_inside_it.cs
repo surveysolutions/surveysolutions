@@ -48,13 +48,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new Group()
-                        {
-                            PublicKey = secondLevelRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "t1", "t2" },
-                            Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, fixedTitles: new [] {"t1", "t2"},
+                            children: new IComposite[]
                             {
                                 new SingleQuestion()
                                 {
@@ -62,9 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                     LinkedToQuestionId = sourceForLinkedQuestionId,
                                     StataExportCaption = "linkedQuestionId"
                                 }
-
-                            }
-                        },
+                            }),
                         new NumericQuestion()
                         {
                             PublicKey = sourceForLinkedQuestionId,

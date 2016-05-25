@@ -19,16 +19,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { StataExportCaption = "nq1", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() },
-                    new TextQuestion() { StataExportCaption = "tq1", QuestionType = QuestionType.Text, PublicKey = Guid.NewGuid() },
-                    new Group("Roster Group")
+                    new NumericQuestion()
                     {
-                        IsRoster = true,
-                        VariableName = "Roster Group",
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        PublicKey = rosterGroupId,
-                        RosterFixedTitles = new[] { "a", "b" },
-                        Children = new List<IComposite>
+                        StataExportCaption = "nq1",
+                        QuestionType = QuestionType.Numeric,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    new TextQuestion()
+                    {
+                        StataExportCaption = "tq1",
+                        QuestionType = QuestionType.Text,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] {"a", "b"}, title: "Roster Group", variable: "Roster Group",
+                        children: new IComposite[]
                         {
                             new NumericQuestion()
                             {
@@ -36,14 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                 QuestionType = QuestionType.Numeric,
                                 PublicKey = Guid.NewGuid()
                             },
-                            new Group("nestedRoster")
-                            {
-                                IsRoster = true,
-                                PublicKey = nestedRosterId,
-                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                RosterFixedTitles = new[] { "1", "2" },
-                                VariableName = "nestedRoster",
-                                Children = new List<IComposite>
+                            Create.Entity.FixedRoster(rosterId: nestedRosterId, title: "nestedRoster",
+                                variable:"nestedRoster",
+                                fixedTitles: new[] {"1", "2"},
+                                children: new IComposite[]
                                 {
                                     new NumericQuestion()
                                     {
@@ -51,10 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                         QuestionType = QuestionType.Numeric,
                                         PublicKey = Guid.NewGuid()
                                     }
-                                }
-                            }
-                        }
-                    });
+                                })
+                        }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

@@ -23,14 +23,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 StataExportCaption = "var",
                 IsInteger = true
             });
-            questionnaire.Children.Add(new Group()
+            questionnaire.Children.Add(
+                        new Group()
             {
                 PublicKey = rosterGroupId,
                 IsRoster = true,
                 VariableName = "a",
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterFixedTitles = new [] { "fixed title 1", "fixed title 2" }
+                FixedRosterTitles = new[] {Create.FixedRosterTitle(1,"fixed title 1") , Create.FixedRosterTitle(2,"fixed title 2") }
             });
             verifier = CreateQuestionnaireVerifier();
         };
