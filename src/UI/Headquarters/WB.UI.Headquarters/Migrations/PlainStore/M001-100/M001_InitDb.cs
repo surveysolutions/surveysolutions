@@ -183,6 +183,11 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
             Create.ForeignKey("fk_userpreloadingprocesses_userpreloadingprocessid")
                 .FromTable("userpreloadingverificationerrors").ForeignColumn("userpreloadingprocessid")
                 .ToTable("userpreloadingprocesses").PrimaryColumn("id");
+
+            Create.Table("hibernate_unique_key")
+              .WithColumn("next_hi").AsInt32();
+
+            Insert.IntoTable("hibernate_unique_key").Row(new { next_hi = 1 });
         }
 
         public override void Down()
