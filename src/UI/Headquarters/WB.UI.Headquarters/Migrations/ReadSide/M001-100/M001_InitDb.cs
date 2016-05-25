@@ -55,15 +55,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("latitude").AsDouble().Nullable()
                 .WithColumn("longitude").AsDouble().Nullable();
 
-            Create.Table("interviewfeedentries")
-                .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("supervisorid").AsString().Nullable()
-                .WithColumn("entrytype").AsInt32().Nullable()
-                .WithColumn("timestamp").AsDateTime().Nullable()
-                .WithColumn("interviewid").AsString().Nullable()
-                .WithColumn("userid").AsString().Nullable()
-                .WithColumn("interviewerid").AsString().Nullable();
-
             Create.Table("interviewresponsibles")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("interviewid").AsGuid().Nullable()
@@ -73,7 +64,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("questionnaireid").AsGuid().Nullable()
                 .WithColumn("questionnaireversion").AsInt64().Nullable();
-
 
             Create.Table("interviewcommentedstatuses")
                 .WithColumn("interviewid").AsString(255)
@@ -130,13 +120,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("itemtype").AsString().Nullable()
                 .WithColumn("serializedpackagesize").AsInt32().Nullable();
 
-            Create.Table("questionnairefeedentries")
-                .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("questionnaireid").AsGuid().Nullable()
-                .WithColumn("questionnaireversion").AsInt64().Nullable()
-                .WithColumn("entrytype").AsInt32().Nullable()
-                .WithColumn("timestamp").AsDateTime().Nullable();
-
+           
             Create.Table("tabletdocuments")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("deviceid").AsGuid().Nullable()
@@ -156,19 +140,36 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("interviewstatustimespans").AsString(255).Nullable()
                 .WithColumn("interviewid").AsString(255).Nullable();
 
-            Create.Table("userchangedfeedentries")
-                .WithColumn("entryid").AsString(255).PrimaryKey()
-                .WithColumn("changeduserid").AsString().Nullable()
-                .WithColumn("timestamp").AsDateTime().Nullable()
-                .WithColumn("supervisorid").AsString().Nullable()
-                .WithColumn("entrytype").AsInt32().Nullable();
-
             Create.Table("lastpublishedeventpositionforhandlers")
                 .WithColumn("id").AsString(255).PrimaryKey()
                 .WithColumn("eventsourceidoflastsuccessfullyhandledevent").AsGuid().Nullable()
                 .WithColumn("eventsequenceoflastsuccessfullyhandledevent").AsInt32().Nullable()
                 .WithColumn("commitposition").AsInt64().Nullable()
                 .WithColumn("prepareposition").AsInt64().Nullable();
+
+            /* to be removed ? */
+            Create.Table("interviewfeedentries")
+                .WithColumn("entryid").AsString(255).PrimaryKey()
+                .WithColumn("supervisorid").AsString().Nullable()
+                .WithColumn("entrytype").AsInt32().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("interviewid").AsString().Nullable()
+                .WithColumn("userid").AsString().Nullable()
+                .WithColumn("interviewerid").AsString().Nullable();
+
+            Create.Table("questionnairefeedentries")
+               .WithColumn("entryid").AsString(255).PrimaryKey()
+               .WithColumn("questionnaireid").AsGuid().Nullable()
+               .WithColumn("questionnaireversion").AsInt64().Nullable()
+               .WithColumn("entrytype").AsInt32().Nullable()
+               .WithColumn("timestamp").AsDateTime().Nullable();
+
+            Create.Table("userchangedfeedentries")
+                .WithColumn("entryid").AsString(255).PrimaryKey()
+                .WithColumn("changeduserid").AsString().Nullable()
+                .WithColumn("timestamp").AsDateTime().Nullable()
+                .WithColumn("supervisorid").AsString().Nullable()
+                .WithColumn("entrytype").AsInt32().Nullable();
 
             Create.Index("cumulativereportstatuschanges_questionnaire")
                 .OnTable("cumulativereportstatuschanges")
@@ -246,10 +247,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             Delete.Table("hibernate_unique_key");
             Delete.Table("lastpublishedeventpositionforhandlers");
-            Delete.Table("userchangedfeedentries");
             Delete.Table("timespanbetweenstatuses");
             Delete.Table("tabletdocuments");
-            Delete.Table("questionnairefeedentries");
             Delete.Table("interviewsyncpackagemetas");
             Delete.Table("answerstofeaturedquestions");
             Delete.Table("interviewdataexportrecords");
@@ -260,6 +259,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Delete.Table("interviewresponsibles");
             Delete.Table("mapreportpoints");
             Delete.Table("commentaries");
+
+            Delete.Table("questionnairefeedentries");
+            Delete.Table("userchangedfeedentries");
             Delete.Table("interviewfeedentries");
         }
     }

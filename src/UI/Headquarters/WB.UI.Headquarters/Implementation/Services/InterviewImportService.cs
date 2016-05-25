@@ -179,8 +179,6 @@ namespace WB.UI.Headquarters.Implementation.Services
             csvReader.Configuration.TrimFields = true;
             csvReader.Configuration.TrimHeaders = true;
             csvReader.Configuration.WillThrowOnMissingField = false;
-            csvReader.Configuration.PrefixReferenceHeaders = true;
-            csvReader.Configuration.UseNewObjectForNullReferenceProperties = false;
         }
         public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
     }

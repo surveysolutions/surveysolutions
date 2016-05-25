@@ -1,5 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.UI.Headquarters.Resources
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -63,7 +63,7 @@
             </i> @MainMenu.Questionnaires
         </a>
     </li>
-@if (!(User.Identity.IsObserver()))
+@if (!(WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.User.Identity.IsObserver()))
 {
     <li class="@(page == MenuItem.DataExport ? "active" : "")">
         <a href="@Url.Action("Index", "DataExport", new {area = ""})">
@@ -83,7 +83,7 @@
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
+            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
