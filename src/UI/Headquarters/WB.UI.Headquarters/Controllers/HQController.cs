@@ -132,8 +132,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
         {
             if (!this.ModelState.IsValid)
-                return this.View(model);
+            {
+                if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                    this.Attention(Users.TryLater);
 
+                return this.View(model);
+            }
             try
             {
                 this.CommandService.Execute(new CloneQuestionnaire(

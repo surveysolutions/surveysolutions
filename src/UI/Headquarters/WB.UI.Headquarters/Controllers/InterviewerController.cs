@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -63,7 +64,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
                 return this.Back();
             }
-            
+
+            if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                this.Attention(Users.TryLater);
             return this.View(model);
         }
 

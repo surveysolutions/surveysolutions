@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -60,6 +61,8 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Index");
             }
 
+            if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                this.Attention(Users.TryLater);
             return this.View(model);
         }
 

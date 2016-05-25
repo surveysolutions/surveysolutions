@@ -213,4 +213,7 @@
   <data name="AddObserver" xml:space="preserve">
     <value>Add observer</value>
   </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Please try again later</value>
+  </data>
 </root>
