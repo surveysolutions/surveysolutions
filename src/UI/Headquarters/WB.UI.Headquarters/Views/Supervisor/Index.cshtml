@@ -111,7 +111,7 @@
                 }
             </td>
             <td>
-                @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
+                @if ((User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
                 {
                     <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="Impersonate as this user in read only mode">
                         <i class="glyphicon glyphicon-eye-open"></i>

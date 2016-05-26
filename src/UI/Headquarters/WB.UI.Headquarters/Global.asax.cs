@@ -54,7 +54,6 @@ namespace WB.UI.Headquarters
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
-            //filters.Add(new SupervisorFunctionsEnabledAttribute());
             filters.Add(new InstallationAttribute(), 100);
         }
 
@@ -66,7 +65,6 @@ namespace WB.UI.Headquarters
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
             filters.Add(new ReplacePrincipalWebApi());
-            filters.Add(new SupervisorFunctionsEnabledAttribute());
             filters.Add(new ApiMaintenanceFilter());
         }
 
