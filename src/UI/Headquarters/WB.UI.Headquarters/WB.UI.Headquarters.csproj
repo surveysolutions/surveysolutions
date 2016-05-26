@@ -1027,6 +1027,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M002_AddMissingIndexes.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M003_RemoveFeedTables.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
