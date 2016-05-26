@@ -1108,7 +1108,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(group.VariableName))
                 return false;
 
-            var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(questionnaire.Title);
+            var questionnaireVariableName = this.fileSystemAccessor.MakeStataCompatibleFileName(questionnaire.Title);
 
             return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
         }

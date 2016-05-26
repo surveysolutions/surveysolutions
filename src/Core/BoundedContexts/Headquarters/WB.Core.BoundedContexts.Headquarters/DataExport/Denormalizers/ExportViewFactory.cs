@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 throw new InvalidOperationException("level is absent in template");
 
             var firstRootGroup = rootGroups.First();
-            var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
+            var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeStataCompatibleFileName(firstRootGroup.Title);
 
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire,
                 maxValuesForRosterSizeQuestions, levelVector);

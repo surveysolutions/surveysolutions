@@ -103,11 +103,16 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
         }
 
+        public string MakeStataCompatibleFileName(string name)
+        {
+            return this.RemoveNonAscii(MakeValidFileName(name));
+        }
+
         public string MakeValidFileName(string name)
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return this.RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));
+            return Regex.Replace(name, invalidReStr, "_");
         }
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)
