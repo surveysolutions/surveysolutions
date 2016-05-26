@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             if (!group.IsRoster)
                 return false;
 
-            var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(title);
+            var questionnaireVariableName = this.fileSystemAccessor.MakeStataCompatibleFileName(title);
 
             return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
         }

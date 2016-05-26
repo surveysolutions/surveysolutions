@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
         };
 
         Because of = () =>
-            newFileName=fileSystemIOAccessor.MakeValidFileName(fileName);
+            newFileName=fileSystemIOAccessor.MakeStataCompatibleFileName(fileName);
 
         It should_from_file_name_be_cut_all_invalid_characters = () =>
             newFileName.ShouldEqual("nastya_");

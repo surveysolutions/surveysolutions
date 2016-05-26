@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -24,6 +23,7 @@ namespace WB.Core.Infrastructure.FileSystem
         Stream ReadFile(string pathToFile);
         void DeleteFile(string pathToFile);
 
+        string MakeStataCompatibleFileName(string name);
         string MakeValidFileName(string name);
 
         string[] GetDirectoriesInDirectory(string pathToDirectory);

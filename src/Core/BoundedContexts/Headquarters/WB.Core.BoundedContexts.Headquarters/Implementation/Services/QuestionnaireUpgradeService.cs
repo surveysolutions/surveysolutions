@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public Dictionary<string, IGroup> GetMissingVariableNames(QuestionnaireDocument originalDocument)
         {
             var result = new Dictionary<string, IGroup>();
-            var documentVariableName = this.fileSystemAccessor.MakeValidFileName(originalDocument.Title);
+            var documentVariableName = this.fileSystemAccessor.MakeStataCompatibleFileName(originalDocument.Title);
             var rosters = originalDocument.Find<Group>(g => g.IsRoster);
             var rostersVariableNames = new HashSet<string> { documentVariableName };
 

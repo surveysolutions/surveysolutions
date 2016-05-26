@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var generatedClass in generatedClasses)
             {
-                string fileName = this.fileSystemAccessor.MakeValidFileName($"{generatedClass.Key}.cs");
+                string fileName = this.fileSystemAccessor.MakeStataCompatibleFileName($"{generatedClass.Key}.cs");
                 string filePath = this.fileSystemAccessor.CombinePath(this.settings.DumpFolder, fileName);
 
                 this.fileSystemAccessor.WriteAllText(filePath, generatedClass.Value);
