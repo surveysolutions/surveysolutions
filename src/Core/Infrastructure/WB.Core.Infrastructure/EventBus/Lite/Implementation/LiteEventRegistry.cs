@@ -70,18 +70,21 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
 
                 return actualHandlers
-                    .Where(entity =>
-                    {
-                        if (entity.Filter == null)
-                        {
-                            return true;
-                        }
-                        return entity.Filter.IsNeedRaise(@event);
-                    })
-                    .Select(entity => entity.EventHandler)
+                    .Where(entity => entity.Filter == null || entity.Filter.IsNeedRaise(@event))
+                    .Select(GetEventHandler)
+                    .Where(handler => handler != null)
                     .Select(GetActionHandler)
                     .ToList();
             }
+        }
+
+        private ILiteEventHandler GetEventHandler(LiteEventRegistryEntity liteEventRegistryEntity)
+        {
+            ILiteEventHandler handler;
+            if (liteEventRegistryEntity.EventHandler.TryGetTarget(out handler))
+                return handler;
+
+            return null;
         }
 
         private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, ILiteEventRaiseFilter raiseFilter)
@@ -156,11 +159,8 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return handlersForEventType.Any(h => h.EventHandler.TryGetTarget(out handlerFromWeakReference) && handlerFromWeakReference == handler);
         }
 
-        private static Action<object> GetActionHandler(WeakReference<ILiteEventHandler> weekHandler)
+        private static Action<object> GetActionHandler(ILiteEventHandler handler)
         {
-            ILiteEventHandler handler;
-            weekHandler.TryGetTarget(out handler);
-
             return @event =>
             {
                 var payload = ((CommittedEvent)@event).Payload;
