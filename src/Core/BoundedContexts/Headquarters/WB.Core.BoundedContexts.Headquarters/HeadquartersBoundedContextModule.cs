@@ -64,14 +64,10 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.Synchronization.Implementation.ImportManager;
-using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -79,7 +75,6 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         private readonly string currentFolderPath;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
-        private readonly bool isSupervisorFunctionsEnabled;
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
@@ -93,7 +88,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         public HeadquartersBoundedContextModule(string currentFolderPath,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
             ReadSideSettings readSideSettings,
-            bool isSupervisorFunctionsEnabled,
             UserPreloadingSettings userPreloadingSettings,
             ExportSettings exportSettings,
             InterviewDataExportSettings interviewDataExportSettings,
@@ -110,7 +104,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.currentFolderPath = currentFolderPath;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.readSideSettings = readSideSettings;
-            this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
@@ -261,11 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Kernel.Load(new QuartzNinjectModule());
 
-            if (this.isSupervisorFunctionsEnabled)
-            {
-                this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-                //this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
-            }
+            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
             
             this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
 
@@ -305,14 +294,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-            //this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
-
-            if (!isSupervisorFunctionsEnabled)
-            {
-                this.Bind<IVersionedQuestionnaireReader>().To<VersionedQustionnaireDocumentViewFactory>();
-                this.Kernel.RegisterDenormalizer<VersionedQustionnaireDocumentDenormalizer>();
-            }
 
             CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
             CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());

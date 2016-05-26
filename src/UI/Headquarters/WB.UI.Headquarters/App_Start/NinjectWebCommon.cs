@@ -191,7 +191,6 @@ namespace WB.UI.Headquarters
                 new HeadquartersBoundedContextModule(basePath, 
                     interviewDetailsDataLoaderSettings,
                     readSideSettings,
-                    LegacyOptions.SupervisorFunctionsEnabled,
                     userPreloadingSettings, 
                     exportSettings,
                     interviewDataExportSettings, 

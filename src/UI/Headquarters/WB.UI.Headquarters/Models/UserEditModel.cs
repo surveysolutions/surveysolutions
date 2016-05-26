@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.DataAnnotations;
