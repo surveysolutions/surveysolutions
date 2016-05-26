@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
+                if (Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
                 {
                     var userRoles = Roles.GetRolesForUser(model.UserName);
 
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
                     bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
                     bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
 
-                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin || isObserver)
+                    if (isHeadquarter || isSupervisor || isAdmin || isObserver)
                     {
                         this.authentication.SignIn(model.UserName, false);
                         

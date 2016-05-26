@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.Filters
 {
@@ -17,9 +13,6 @@ namespace WB.UI.Headquarters.API.Filters
         public Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken,
             Func<Task<HttpResponseMessage>> continuation)
         {
-            if (!LegacyOptions.SupervisorFunctionsEnabled)
-                return continuation();
-
             actionContext.Response = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.BadRequest,

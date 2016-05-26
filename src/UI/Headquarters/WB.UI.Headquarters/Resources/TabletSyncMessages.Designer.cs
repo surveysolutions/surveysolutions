@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TabletSyncMessages {
+    public class TabletSyncMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.TabletSyncMessages", typeof(TabletSyncMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Android device id was not provided. Please contact developers..
         /// </summary>
-        internal static string AndroidDeviceIdWasNotProvided {
+        public static string AndroidDeviceIdWasNotProvided {
             get {
                 return ResourceManager.GetString("AndroidDeviceIdWasNotProvided", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. File with latest version was not found. Please contact developers..
         /// </summary>
-        internal static string FileWasNotFound {
+        public static string FileWasNotFound {
             get {
                 return ResourceManager.GetString("FileWasNotFound", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Incorrect files count. Please contact developers..
         /// </summary>
-        internal static string IncorrectFilesCount {
+        public static string IncorrectFilesCount {
             get {
                 return ResourceManager.GetString("IncorrectFilesCount", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Incorrect media type. Please contact developers..
         /// </summary>
-        internal static string IncorrectMediaType {
+        public static string IncorrectMediaType {
             get {
                 return ResourceManager.GetString("IncorrectMediaType", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Update your Interviewer app.
         /// </summary>
-        internal static string InterviewerApplicationShouldBeUpdated {
+        public static string InterviewerApplicationShouldBeUpdated {
             get {
                 return ResourceManager.GetString("InterviewerApplicationShouldBeUpdated", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app.
         /// </summary>
-        internal static string InterviewerIsNotCompatibleWithThisVersion {
+        public static string InterviewerIsNotCompatibleWithThisVersion {
             get {
                 return ResourceManager.GetString("InterviewerIsNotCompatibleWithThisVersion", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, please send tablet information..
         /// </summary>
-        internal static string InvalidDeviceIdentifier {
+        public static string InvalidDeviceIdentifier {
             get {
                 return ResourceManager.GetString("InvalidDeviceIdentifier", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Invalid sequence identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
         /// </summary>
-        internal static string InvalidSequenceIdentifier {
+        public static string InvalidSequenceIdentifier {
             get {
                 return ResourceManager.GetString("InvalidSequenceIdentifier", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. User is not authorized. Please check your login/password for {0}..
         /// </summary>
-        internal static string InvalidUserFormat {
+        public static string InvalidUserFormat {
             get {
                 return ResourceManager.GetString("InvalidUserFormat", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your account does not have a role permitting this operation..
         /// </summary>
-        internal static string InvalidUserRole {
+        public static string InvalidUserRole {
             get {
                 return ResourceManager.GetString("InvalidUserRole", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
         /// </summary>
-        internal static string Maintenance {
+        public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Please reinstall application. Installation identifier is missing. Please contact developers..
         /// </summary>
-        internal static string NoClientIdentifier {
+        public static string NoClientIdentifier {
             get {
                 return ResourceManager.GetString("NoClientIdentifier", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization partially failed. Completed interviews were sent to server, but you won&apos;t receive new assignments. Please navigate to android settings -&gt; Apps -&gt; Interviewer and push Clear Data button. Then synchronize from scratch..
         /// </summary>
-        internal static string OldInterviewerNeedsCleanup {
+        public static string OldInterviewerNeedsCleanup {
             get {
                 return ResourceManager.GetString("OldInterviewerNeedsCleanup", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Internal server error occurred. Please contact developers..
         /// </summary>
-        internal static string ServerError {
+        public static string ServerError {
             get {
                 return ResourceManager.GetString("ServerError", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed.  Sync package with id &apos;{0}&apos; was not found on server. Please contact developers..
         /// </summary>
-        internal static string Sync_package_with_id__0__was_not_found_on_serverFormat {
+        public static string Sync_package_with_id__0__was_not_found_on_serverFormat {
             get {
                 return ResourceManager.GetString("Sync_package_with_id__0__was_not_found_on_serverFormat", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Wrong android device id was provided. Please contact developers..
         /// </summary>
-        internal static string WrongAndroidDeviceIdWasProvided {
+        public static string WrongAndroidDeviceIdWasProvided {
             get {
                 return ResourceManager.GetString("WrongAndroidDeviceIdWasProvided", resourceCulture);
             }
