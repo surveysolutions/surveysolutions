@@ -67,23 +67,23 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                     return new List<Action<object>>();
                 }
 
-                var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
-
-                return actualHandlers
+                return handlersForEventType
+                    .ToReadOnlyCollection()
                     .Where(entity => entity.Filter == null || entity.Filter.IsNeedRaise(@event))
-                    .Select(GetEventHandler)
+                    .Select(entity => GetEventHandler(eventKey, entity))
                     .Where(handler => handler != null)
                     .Select(GetActionHandler)
                     .ToList();
             }
         }
 
-        private ILiteEventHandler GetEventHandler(LiteEventRegistryEntity liteEventRegistryEntity)
+        private ILiteEventHandler GetEventHandler(string eventKey, LiteEventRegistryEntity liteEventRegistryEntity)
         {
             ILiteEventHandler handler;
             if (liteEventRegistryEntity.EventHandler.TryGetTarget(out handler))
                 return handler;
 
+            this.handlers[eventKey].Remove(liteEventRegistryEntity);
             return null;
         }
 
@@ -131,25 +131,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             var handlerNoLongerExists = !handlerWeakReference.EventHandler.TryGetTarget(out handlerFromWeakReference);
 
             return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
-        }
-
-        private IEnumerable<LiteEventRegistryEntity> GetExistingHandlers(string eventKey, ICollection<LiteEventRegistryEntity> handlersForEventType)
-        {
-            var registeredHandlers = handlersForEventType.ToList();
-
-            foreach (var weakReference in registeredHandlers)
-            {
-                ILiteEventHandler handlerFromWeakReference;
-
-                if (weakReference.EventHandler.TryGetTarget(out handlerFromWeakReference))
-                {
-                    yield return weakReference;
-                }
-                else
-                { 
-                    this.handlers[eventKey].Remove(weakReference);
-                }
-            }
         }
 
         private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, IEnumerable<LiteEventRegistryEntity> handlersForEventType)
