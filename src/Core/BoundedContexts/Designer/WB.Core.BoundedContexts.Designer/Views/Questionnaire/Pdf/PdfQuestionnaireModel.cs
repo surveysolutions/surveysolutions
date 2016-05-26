@@ -284,6 +284,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
+        public string GetFormattedVariableType(IVariable variable)
+        {
+            switch (variable.Type)
+            {
+                case VariableType.String:
+                    return "string";
+                case VariableType.Boolean:
+                    return "boolean";
+                case VariableType.DateTime:
+                    return "datetime";
+                case VariableType.Double:
+                    return "double";
+                case VariableType.LongInteger:
+                    return "long";
+                default:
+                    return string.Empty;
+            }
+        }
+
         private string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
         {
             var maxValue = values.Select(x => Math.Floor(Math.Log10(Math.Abs(x)) + 1)).Max();
