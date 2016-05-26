@@ -159,15 +159,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
         }
 
-        [Obsolete("Remove when all clients are upgraded to 5.5")]
-        public void MigrateOldEvents(IEnumerable<EventView> eventViews)
-        {
-            foreach (var eventView in eventViews)
-            {
-                this.connection.Insert(eventView);
-            }
-        }
-
         private static CommittedEvent ToCommitedEvent(EventView storedEvent)
         {
             return new CommittedEvent(
