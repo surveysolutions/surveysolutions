@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_roster_is_inside_group_with_condition_on_nested_level : InterviewTestsContext
+    internal class when_answering_question_that_disables_group_with_nested_roster_inside_it : InterviewTestsContext
     {
         Establish context = () =>
         {

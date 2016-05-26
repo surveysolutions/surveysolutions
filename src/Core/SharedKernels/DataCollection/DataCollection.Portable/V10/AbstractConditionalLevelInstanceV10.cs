@@ -62,7 +62,32 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        protected override void UpdateAllNestedItemsState(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
+        private State GetConditionExpressionState(Func<bool> expression)
+        {
+            try
+            {
+                return expression() ? State.Enabled : State.Disabled;
+            }
+            catch
+            {
+                return State.Disabled;
+            }
+        }
+
+        protected new Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
+        {
+            return () =>
+            {
+                if (questionState.State == State.Disabled)
+                    return;
+
+                questionState.State = this.GetConditionExpressionState(isEnabled);
+
+                this.UpdateAllNestedItemsStateAndPropagateStateOnRosters(itemId, this.StructuralDependencies, questionState.State);
+            };
+        }
+
+        protected void UpdateAllNestedItemsStateAndPropagateStateOnRosters(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
         {
             if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
 
