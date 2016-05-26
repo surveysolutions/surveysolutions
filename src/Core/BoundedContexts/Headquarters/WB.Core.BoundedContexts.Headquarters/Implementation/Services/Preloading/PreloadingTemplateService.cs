@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.path,
-                this.fileSystemAccessor.MakeValidFileName(string.Format("template_{0}_v{1}", questionnaireId.FormatGuid(), version)));
+                this.fileSystemAccessor.MakeStataCompatibleFileName(string.Format("template_{0}_v{1}", questionnaireId.FormatGuid(), version)));
         }
     }
 }

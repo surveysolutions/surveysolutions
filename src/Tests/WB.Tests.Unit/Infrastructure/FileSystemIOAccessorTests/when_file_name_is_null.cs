@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
         };
 
         Because of = () =>
-            newFileName = fileSystemIOAccessor.MakeValidFileName(null);
+            newFileName = fileSystemIOAccessor.MakeStataCompatibleFileName(null);
 
         It should_return_empty_string = () =>
             newFileName.ShouldEqual("");
