@@ -8,6 +8,7 @@
 
 @section scripts
 {
+    @Scripts.Render("~/validate")
     <script type="text/javascript">
         $(function () {
             $('.prefilled-file-upload').bind('change', function() {
@@ -64,10 +65,10 @@
                     @Html.HiddenFor(x => x.QuestionnaireId)
                     @Html.HiddenFor(x => x.QuestionnaireVersion)
                     <br />
-                    <div class="control-group">
+                    <div class="control-group form-group">
                         <div class="controls">
                             @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "prefilled-file-upload" })
-                            @Html.ValidationMessageFor(x => x.File)
+                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                         </div>
                     </div>
                     <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload"/>
@@ -89,10 +90,10 @@
             @Html.HiddenFor(x => x.QuestionnaireId)
             @Html.HiddenFor(x => x.QuestionnaireVersion)
             <br />
-            <div class="control-group">
+            <div class="control-group form-group">
                 <div class="controls">
                     @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip" })
-                    @Html.ValidationMessageFor(x => x.File)
+                    @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                 </div>
             </div>
                 <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload" />
