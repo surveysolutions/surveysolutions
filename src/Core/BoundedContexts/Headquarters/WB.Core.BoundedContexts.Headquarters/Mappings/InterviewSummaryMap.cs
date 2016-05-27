@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
     {
         public InterviewSummaryMap()
         {
-            this.Table("InterviewSummaries");
+            this.Table("InterviewSummaries_sa");
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
             Property(x => x.QuestionnaireTitle);
