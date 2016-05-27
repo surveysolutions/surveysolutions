@@ -31,51 +31,11 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Headquarters.Models.User;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Headquarters.Injections
 {
-    public class RegisterFirstInstanceOfInterface : IBindingGenerator
-    {
-        public RegisterFirstInstanceOfInterface(IEnumerable<Assembly> assemblyes)
-        {
-            this._assemblyes = assemblyes;
-        }
-
-        private readonly IEnumerable<Assembly> _assemblyes;
-
-        public IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> CreateBindings(
-            Type type, IBindingRoot bindingRoot)
-        {
-            IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> y =
-                Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
-
-            if (!type.IsInterface)
-            {
-                return y;
-            }
-
-
-            if (type.IsGenericType)
-            {
-                return y;
-            }
-
-            Type matchedType = this._assemblyes
-                .SelectMany(a => a.GetTypes().Where(t => t.IsVisible))
-                .FirstOrDefault(
-                    x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
-            if (matchedType == null)
-            {
-                return y;
-            }
-
-            return new[] { bindingRoot.Bind(new[] { type }).To(matchedType) };
-        }
-    }
-
     public abstract class CoreRegistry : NinjectModule
     {
         protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()
@@ -106,11 +66,8 @@ namespace WB.UI.Headquarters.Injections
                 x =>
                 x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().BindWith(
                     new RegisterFirstInstanceOfInterface(this.GetAssembliesForRegistration())));
-
-            foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
-            {
-                this.Kernel.Bind(customBindType.Key).To(customBindType.Value);
-            }
+            
+            this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
         }
 
         protected virtual void RegisterViewFactories()
@@ -177,6 +134,46 @@ namespace WB.UI.Headquarters.Injections
                     || (!type.IsGenericType && !interfaceType.IsGenericType && type == interfaceType));
         }
     }
+
+    public class RegisterFirstInstanceOfInterface : IBindingGenerator
+    {
+        public RegisterFirstInstanceOfInterface(IEnumerable<Assembly> assemblyes)
+        {
+            this._assemblyes = assemblyes;
+        }
+
+        private readonly IEnumerable<Assembly> _assemblyes;
+
+        public IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> CreateBindings(
+            Type type, IBindingRoot bindingRoot)
+        {
+            IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> y =
+                Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
+
+            if (!type.IsInterface)
+            {
+                return y;
+            }
+
+
+            if (type.IsGenericType)
+            {
+                return y;
+            }
+
+            Type matchedType = this._assemblyes
+                .SelectMany(a => a.GetTypes().Where(t => t.IsVisible))
+                .FirstOrDefault(
+                    x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
+            if (matchedType == null)
+            {
+                return y;
+            }
+
+            return new[] { bindingRoot.Bind(new[] { type }).To(matchedType) };
+        }
+    }
+
     public class HeadquartersRegistry : CoreRegistry
     {
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
@@ -244,7 +241,6 @@ namespace WB.UI.Headquarters.Injections
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
-
         }
     }
 }

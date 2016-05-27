@@ -378,14 +378,9 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
-    <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
-    <Compile Include="Synchronization\Schedulers\SynchorizationContext.cs" />
-    <Compile Include="Synchronization\Schedulers\SynchronizationStatus.cs" />
-    <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
-    <Compile Include="Synchronization\Users\UserFeedEntryType.cs" />
     <Compile Include="SyncProvider\ISyncEventHandler.cs" />
     <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncSettings.cs" />
@@ -664,6 +659,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interviews\Denormalizers\" />
+    <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.resx">
