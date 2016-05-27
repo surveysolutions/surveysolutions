@@ -585,6 +585,6 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
     <value>Removing {0} questionnaire out of {1}</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Headquarters website</value>
+    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website</value>
   </data>
 </root>
