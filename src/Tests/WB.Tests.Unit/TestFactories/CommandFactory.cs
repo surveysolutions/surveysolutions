@@ -198,5 +198,15 @@ namespace WB.Tests.Unit.TestFactories
 
         public UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
             => new UnarchiveUserCommand(userId);
+
+        public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
+        {
+            return new DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
+        }
+
+        public DisableQuestionnaire DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
+        {
+            return new DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
+        }
     }
 }
