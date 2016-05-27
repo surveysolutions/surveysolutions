@@ -3,12 +3,16 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 {
-    public class AllUsersAndQuestionnairesFactory : IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
+    public interface IAllUsersAndQuestionnairesFactory
+    {
+        AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input);
+    }
+
+    public class AllUsersAndQuestionnairesFactory : IAllUsersAndQuestionnairesFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader;

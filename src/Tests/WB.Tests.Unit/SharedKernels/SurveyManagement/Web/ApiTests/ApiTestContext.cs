@@ -55,17 +55,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null)
+            IAllInterviewsFactory allInterviewsViewFactory = null)
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>());
+                allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>());
         }
 
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
+            IAllInterviewsFactory allInterviewsViewViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfoProvider = null,
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
+                allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),

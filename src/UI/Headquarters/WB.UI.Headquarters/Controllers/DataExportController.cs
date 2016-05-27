@@ -18,11 +18,11 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportController: BaseController
     {
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public DataExportController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
+            IAllUsersAndQuestionnairesFactory
                 allUsersAndQuestionnairesFactory, InterviewDataExportSettings interviewDataExportSettings)
             : base(commandService, globalInfo, logger)
         {

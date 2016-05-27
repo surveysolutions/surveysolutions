@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         {
             return new PeriodicStatusReportController(Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(), Mock.Of<ILogger>(),
-                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(
+                Mock.Of<IAllUsersAndQuestionnairesFactory>(
                     _ =>
                         _.Load(Moq.It.IsAny<AllUsersAndQuestionnairesInputModel>()) ==
                         new AllUsersAndQuestionnairesView() {Questionnaires = new TemplateViewItem[0]}), Mock.Of<IUserViewFactory>());

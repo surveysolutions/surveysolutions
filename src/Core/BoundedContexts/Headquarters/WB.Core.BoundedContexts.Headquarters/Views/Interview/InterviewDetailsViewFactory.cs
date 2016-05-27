@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
+        private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAttachmentContentService attachmentContentService;
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
+            IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,

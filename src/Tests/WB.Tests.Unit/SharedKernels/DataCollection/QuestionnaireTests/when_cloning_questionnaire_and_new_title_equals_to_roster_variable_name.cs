@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
             Mock.Get(fileSystemAccessor)
-                .Setup(_ => _.MakeValidFileName(Moq.It.IsAny<string>()))
+                .Setup(_ => _.MakeStataCompatibleFileName(Moq.It.IsAny<string>()))
                 .Returns<string>(filename => filename);
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage

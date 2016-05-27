@@ -3,13 +3,17 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 {
-    public class SampleUploadViewFactory : IViewFactory<SampleUploadViewInputModel, SampleUploadView>
+    public interface ISampleUploadViewFactory
+    {
+        SampleUploadView Load(SampleUploadViewInputModel input);
+    }
+
+    public class SampleUploadViewFactory : ISampleUploadViewFactory
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
