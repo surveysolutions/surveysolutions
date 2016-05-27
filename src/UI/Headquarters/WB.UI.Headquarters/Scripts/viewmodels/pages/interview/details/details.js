@@ -303,7 +303,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             var selectedOptionId = filteredComboboxElement.val();
             if (selectedOptionId) {
                 filteredCombobox.selectedValue().id(selectedOptionId);
-                filteredCombobox.selectedValue().value(_.find(filteredCombobox.options, function (option) { return option.value == selectedOptionId; }).label);
+                filteredCombobox.selectedValue().value(_.find(filteredCombobox.options, function (option) { return parseFloat(option.value) == selectedOptionId; }).label);
             }
             ko.bindingHandlers.typeahead.init(filteredComboboxElement, function () {
                 return filteredCombobox.options;

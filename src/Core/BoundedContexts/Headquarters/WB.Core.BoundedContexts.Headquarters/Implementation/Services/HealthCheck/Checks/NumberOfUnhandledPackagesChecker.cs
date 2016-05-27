@@ -1,23 +1,28 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks
 {
     class NumberOfUnhandledPackagesChecker : IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>
     {
         private readonly IInterviewPackagesService interviewPackagesService;
+        private readonly IPlainTransactionManager transactionManager;
 
-        public NumberOfUnhandledPackagesChecker(IInterviewPackagesService interviewPackagesService)
+        public NumberOfUnhandledPackagesChecker(IInterviewPackagesService interviewPackagesService, IPlainTransactionManager transactionManager)
         {
             this.interviewPackagesService = interviewPackagesService;
+            this.transactionManager = transactionManager;
         }
 
         public NumberOfUnhandledPackagesHealthCheckResult Check()
         {
             try
             {
-                int count = this.interviewPackagesService.InvalidPackagesCount;
+                int count = this.transactionManager.ExecuteInPlainTransaction(
+                    () => this.interviewPackagesService.InvalidPackagesCount);
 
                 if (count == 0)
                     return NumberOfUnhandledPackagesHealthCheckResult.Happy(count);

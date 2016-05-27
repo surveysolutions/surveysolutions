@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewDeclaredInvalid>,
-        IEventHandler<QuestionnaireAssemblyImported>,
         IEventHandler<TabletRegistered>,
         IEventHandler<SubstitutionTitlesChanged>,
         IEventHandler<TemplateImported>, 
@@ -73,7 +72,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<InterviewRestarted> evnt) { }
         public void Handle(IPublishedEvent<InterviewRejected> evnt) { }
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt) { }
-        public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt){}
         public void Handle(IPublishedEvent<TabletRegistered> evnt){}
         public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt){}
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt) { }

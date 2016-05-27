@@ -430,7 +430,6 @@
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
-    <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
