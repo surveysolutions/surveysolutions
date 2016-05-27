@@ -72,7 +72,7 @@ pre {
 }
 /*Start header*/
 header {
-  margin: 30px 75px 38px 124px;
+  margin: 30px 75px 38px 84px;
   display: block;
   overflow: hidden;
   font-size: 10px;
@@ -118,6 +118,7 @@ header {
 /*Page-Break*/
 article {
   page-break-after: always;
+  margin-left: -40px;
 }
 /*Start  Questionnaire information and content*/
 .questionnaire_info {
@@ -224,20 +225,20 @@ article {
 .question {
   vertical-align: top;
   width: 47.5%;
-  padding: 13px 0 10px 0;
+  padding: 13px 0 5px 0;
   display: table-cell;
 }
 .question-title {
   width: 87%;
-  font-size: 18px;
-  line-height: 21px;
+  font-size: 16px;
+  line-height: 18px;
   margin-bottom: 15px;
 }
 .answer {
   display: table-cell;
   width: 49%;
   border-left: 1px solid #000;
-  padding: 15px 0 20px 15px;
+  padding: 15px 0 9px 15px;
 }
 .question-meta {
   overflow: hidden;
@@ -278,24 +279,24 @@ article {
 .answer-editor input + label,
 .yes_no-option-text {
   display: inline-block;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 18px;
   min-height: 20px;
 }
 .answer-editor input + label {
   cursor: pointer;
   position: relative;
   padding-left: 28px;
-  display: flex;
+  
 }
 .answer-editor input + label::before {
   content: "";
   display: block;
   position: absolute;
-  top: 3px;
+  top: 2px;
   left: 0;
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   border-radius: 100%;
   border: 2px solid #000;
 }
@@ -321,34 +322,34 @@ article {
 }
 .option b {
   font-size: 11px;
-  line-height: 24px;
+  line-height: 22px;
   margin-right: 10px;
-  vertical-align: top;
+  vertical-align: middle;
   text-align: right;
   float: left;
 }
 .option > span {
   display: inline-block;
   margin-left: 18px;
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .points {
   width: 95%;
   border: none;
-  border-bottom: 1px dotted #000;
+  border-bottom: 2px dotted #000;
 }
 .section_header {
   border-bottom: 3px solid #000;
   margin-bottom: 3px;
   padding-bottom: 22px;
 }
-.multi-option input + label:before {
+.multi-option  input + label:before {
   border-radius: 0;
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
-.multi-option input + label:after {
+.multi-option  input + label:after {
   content: '\2713';
   font-weight: bold;
   background-color: transparent;
@@ -367,18 +368,23 @@ article {
 }
 .yes_no_multiselect span {
   display: inline-block;
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 20px;
+  line-height: 20px;
 }
 .option .yes_no-option-text {
   margin-left: 9px;
-  line-height: 24px;
-  width: 64%;
+  line-height: 20px;
+  width: 75%;
+}
+.option .option-text {
+  margin-left: 0px;
+  line-height: 20px;
+  width: 75%;
 }
 input[type=date] {
   outline: 0;
   padding: 5px 10px;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
 }
@@ -395,7 +401,7 @@ input[type=date] {
   text-decoration: none;
 }
 .common-info {
-  padding: 8px 20px 8px 0;
+  padding: 8px 20px 4px 0;
   position: relative;
   word-break: break-all;
   text-transform: none;
@@ -437,11 +443,12 @@ input[type=date] {
 }
 .roster,
 .group {
-  padding: 40px 0 15px 1px;
+  padding: 40px 0 7px 1px;
+  margin-bottom: 1px;
 }
 .static-text,
 .variable {
-  padding: 15px 0 15px 1px;
+  padding: 15px 0 7px 1px;
 }
 .roster:after,
 .static-text:after,
@@ -460,12 +467,12 @@ input[type=date] {
   line-height: 24px;
 }
 .generated_by ul {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .generated_by ul li {
-  margin-top: 17px;
-  font-size: 18px;
-  line-height: 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .generated_by ul li span {
   font-size: 12px;
@@ -477,8 +484,8 @@ input[type=date] {
 }
 .static_text,
 .variable-title {
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .breacrumbs {
   text-transform: uppercase;
@@ -501,7 +508,6 @@ input[type=date] {
   line-height: 14px;
 }
 .roster .variable_name {
-  margin-top: 21px;
   text-align: right;
 }
 .gps .points {
@@ -549,7 +555,7 @@ figure img {
 }
 /*Start Appendix*/
 .appendix_section {
-  margin: 47px 65px 0 124px;
+  margin: 47px 65px 0 84px;
 }
 .appendix_section h2 {
   font-style: italic;
@@ -691,6 +697,7 @@ input[type=date],
   }
   article + article {
     page-break-before: always;
+    margin-left: -40px;
   }
   ul,
   img,

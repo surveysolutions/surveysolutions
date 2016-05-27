@@ -74,9 +74,12 @@
                     {
                         <div class="option">
                             <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
-                            <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                        </div>
+
+                            <span class="option-text">
+                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </span>
+</div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
@@ -103,10 +106,13 @@
                             }
                             else
                             {
-                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                                <span class="option-text">
+                                    <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                    <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                                </span>
+
                             }
-                        </div>
+</div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
