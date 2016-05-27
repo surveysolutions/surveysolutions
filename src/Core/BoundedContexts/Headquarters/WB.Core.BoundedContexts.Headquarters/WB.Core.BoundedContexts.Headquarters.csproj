@@ -227,7 +227,6 @@
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
     <Compile Include="EventHandler\LinkedOptionsDenormalizer.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
@@ -305,7 +304,6 @@
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
     <Compile Include="Mappings\InterviewPackageMap.cs" />
-    <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewStatusesMap.cs" />
     <Compile Include="Mappings\InterviewStatusTimeSpansMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
@@ -391,7 +389,6 @@
     <Compile Include="SyncProvider\ISyncEventHandler.cs" />
     <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\InterviewResponsible.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
@@ -412,7 +409,6 @@
     <Compile Include="UserPreloading\Services\UserPreloadingVerifier.cs" />
     <Compile Include="UserPreloading\Tasks\UserPreloadingCleanerTask.cs" />
     <Compile Include="UserPreloading\UserPreloadingSettings.cs" />
-    <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
     <Compile Include="ValueObjects\Export\ExportFileSettings.cs" />
     <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />

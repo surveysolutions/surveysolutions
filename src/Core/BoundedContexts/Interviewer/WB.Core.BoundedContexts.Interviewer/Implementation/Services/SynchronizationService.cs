@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Plugins.Network.Rest;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -22,12 +19,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class SynchronizationService : ISynchronizationService
     {
-        private const string interviewerApiUrl = "api/interviewer/v2";
-        private readonly string devicesController = string.Concat(interviewerApiUrl, "/devices");
-        private readonly string usersController = string.Concat(interviewerApiUrl, "/users");
-        private readonly string interviewsController = string.Concat(interviewerApiUrl, "/interviews");
-        private readonly string questionnairesController = string.Concat(interviewerApiUrl, "/questionnaires");
-        private readonly string attachmentContentController = string.Concat(interviewerApiUrl, "/attachments");
+        private const string apiVersion = "v2";
+        private const string interviewerApiUrl = "api/interviewer/";
+        private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
+        private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
+        private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
+        private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
+        private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -76,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
-                url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
+                url: string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
@@ -375,6 +373,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                                 exceptionMessage = InterviewerUIResources.ServiceUnavailable;
                                 exceptionType = SynchronizationExceptionType.ServiceUnavailable;
                             }
+                            break;
+                        case HttpStatusCode.NotAcceptable:
+                            exceptionMessage = InterviewerUIResources.NotSupportedServerSyncProtocolVersion;
+                            exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
                             break;
                         case HttpStatusCode.UpgradeRequired:
                             exceptionMessage = InterviewerUIResources.UpgradeRequired;
