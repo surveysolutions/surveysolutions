@@ -1,13 +1,17 @@
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 {
-    public class TeamInterviewsFactory : IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>
+    public interface ITeamInterviewsFactory
+    {
+        TeamInterviewsView Load(TeamInterviewsInputModel input);
+    }
+
+    public class TeamInterviewsFactory : ITeamInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestionAnswersReader;

@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IInterviewPackagesService interviewPackagesService;
 
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IInterviewPackagesService interviewPackagesService)
         {
             this.readSideAdministrationService = readSideAdministrationService;

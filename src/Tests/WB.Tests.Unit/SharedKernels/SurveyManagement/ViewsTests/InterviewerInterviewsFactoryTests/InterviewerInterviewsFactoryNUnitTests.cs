@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>(),
                     Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == interviewData),
-                    Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(
+                    Mock.Of<IChangeStatusFactory>(
                         _ => _.Load(Moq.It.IsAny<ChangeStatusInputModel>()) == changeStatusView),
                     incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>());
         }

@@ -22,8 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory;
+        private readonly IChangeStatusFactory changeStatusFactory;
+        private readonly IInterviewTroubleshootFactory troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
@@ -32,8 +32,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ICommandService commandService, 
             IGlobalInfoProvider provider, 
             ILogger logger,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewTroubleshootFactory troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)

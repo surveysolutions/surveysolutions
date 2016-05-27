@@ -8,11 +8,9 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
@@ -28,7 +26,7 @@ namespace WB.UI.Designer.Api
 
         private readonly IMembershipUserService userHelper;
 
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private const int MaxCountOfOptionForFileredCombobox = 200;
@@ -36,7 +34,7 @@ namespace WB.UI.Designer.Api
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,

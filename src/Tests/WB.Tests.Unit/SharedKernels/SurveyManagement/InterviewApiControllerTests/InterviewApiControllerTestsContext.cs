@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -16,18 +15,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
     {
         protected static InterviewApiController CreateController(ICommandService commandService = null,
             IGlobalInfoProvider globalInfoProvider = null, ILogger logger = null,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null,
-            IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory = null,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
+            IAllInterviewsFactory allInterviewsViewFactory = null,
+            ITeamInterviewsFactory teamInterviewViewFactory = null,
+            IChangeStatusFactory changeStatusFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewApiController(
                 commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(), 
                 logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewFactory ?? Stub<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>.WithNotEmptyValues,
-                teamInterviewViewFactory ?? Stub<IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>>.WithNotEmptyValues,
-                changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
+                allInterviewsViewFactory ?? Stub<IAllInterviewsFactory>.WithNotEmptyValues,
+                teamInterviewViewFactory ?? Stub<ITeamInterviewsFactory>.WithNotEmptyValues,
+                changeStatusFactory ?? Stub<IChangeStatusFactory>.WithNotEmptyValues,
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues);
         }
     }

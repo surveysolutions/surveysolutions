@@ -70,11 +70,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
         }
 
-        protected virtual void RegisterViewFactories()
-        {
-            BindInterface(this.GetAssembliesForRegistration(), typeof(IViewFactory<,>), (c) => Guid.NewGuid());
-        }
-
         protected virtual void RegisterEventHandlers()
         {
             BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler<>), (c) => this.Kernel);
@@ -104,20 +99,7 @@ namespace WB.UI.Headquarters.Injections
              assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
-                if (interfaceType != typeof(IViewFactory<,>))
-                {
-                    this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
-                }
-                if (interfaceType.IsGenericType)
-                {
-                    var interfaceImplementations =
-                        implementation.GetInterfaces().Where(i => IsInterfaceInterface(i, interfaceType));
-                    foreach (Type interfaceImplementation in interfaceImplementations)
-                    {
-                        this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
-                            To(implementation).InScope(scope);
-                    }
-                }
+                this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
             }
         }
 
@@ -207,10 +189,6 @@ namespace WB.UI.Headquarters.Injections
         public override void Load()
         {
             base.Load();
-
-            this.RegisterViewFactories();
-
-           // this.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
 
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
 

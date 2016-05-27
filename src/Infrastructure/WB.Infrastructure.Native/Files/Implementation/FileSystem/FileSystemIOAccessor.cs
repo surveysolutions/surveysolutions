@@ -174,7 +174,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public string MakeStataCompatibleFileName(string name)
         {
-            var result = this.RemoveNonAscii(name).Trim();
+            var result = this.RemoveNonAscii(MakeValidFileName(name)).Trim();
             return result.Length < 128 ? result : result.Substring(0, 128);
         }
 

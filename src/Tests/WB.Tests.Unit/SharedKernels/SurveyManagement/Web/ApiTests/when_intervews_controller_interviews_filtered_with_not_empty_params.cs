@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            allInterviewsViewFactory = new Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>();
+            allInterviewsViewFactory = new Mock<IAllInterviewsFactory>();
             controller = CreateInterviewsController(allInterviewsViewViewFactory : allInterviewsViewFactory.Object);
         };
 
@@ -34,6 +34,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 1;
 
-        private static Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>> allInterviewsViewFactory;
+        private static Mock<IAllInterviewsFactory> allInterviewsViewFactory;
     }
 }

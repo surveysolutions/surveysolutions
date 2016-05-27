@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServi
         protected static QuestionnaireUpgradeService CreateQuestionnaireUpgradeService()
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
             return new QuestionnaireUpgradeService(fileSystemAccessorMock.Object);
         }
 

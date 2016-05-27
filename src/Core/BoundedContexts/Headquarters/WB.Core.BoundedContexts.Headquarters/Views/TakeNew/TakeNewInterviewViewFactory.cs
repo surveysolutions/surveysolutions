@@ -1,9 +1,13 @@
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 {
-    public class TakeNewInterviewViewFactory : IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> 
+    public interface ITakeNewInterviewViewFactory
+    {
+        TakeNewInterviewView Load(TakeNewInterviewInputModel input);
+    }
+
+    public class TakeNewInterviewViewFactory : ITakeNewInterviewViewFactory
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 

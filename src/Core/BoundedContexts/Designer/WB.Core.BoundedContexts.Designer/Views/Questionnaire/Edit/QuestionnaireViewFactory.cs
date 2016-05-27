@@ -1,11 +1,15 @@
 ﻿using System;
 using Main.Core.Documents;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>
+    public interface IQuestionnaireViewFactory
+    {
+        QuestionnaireView Load(QuestionnaireViewInputModel input);
+    }
+
+    public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
@@ -14,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        QuestionnaireView IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>.Load(QuestionnaireViewInputModel input)
+        public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
             return doc == null ? null : new QuestionnaireView(doc);

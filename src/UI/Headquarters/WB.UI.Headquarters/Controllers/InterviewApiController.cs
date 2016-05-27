@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -16,15 +15,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize]
     public class InterviewApiController : BaseApiController
     {
-        private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
-        private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
+        private readonly IAllInterviewsFactory allInterviewsViewFactory;
+        private readonly ITeamInterviewsFactory teamInterviewViewFactory;
+        private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
-            IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
+            IAllInterviewsFactory allInterviewsViewFactory,
+            ITeamInterviewsFactory teamInterviewViewFactory,
+            IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory)
             : base(commandService, globalInfo, logger)
         {

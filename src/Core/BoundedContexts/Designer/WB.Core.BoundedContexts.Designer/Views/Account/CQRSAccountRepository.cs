@@ -11,10 +11,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
     public class CQRSAccountRepository : IAccountRepository
     {
         private readonly ICommandService commandService;
-        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
-        private readonly IViewFactory<AccountViewInputModel, AccountView> accountViewFactory;
+        private readonly IAccountListViewFactory accountListViewFactory;
+        private readonly IAccountViewFactory accountViewFactory;
 
-        public CQRSAccountRepository(ICommandService commandService, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, IViewFactory<AccountViewInputModel, AccountView> accountViewFactory)
+        public CQRSAccountRepository(ICommandService commandService, IAccountListViewFactory accountListViewFactory, IAccountViewFactory accountViewFactory)
         {
             this.commandService = commandService;
             this.accountListViewFactory = accountListViewFactory;

@@ -51,8 +51,15 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
+
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
+            this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
+            this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
+            this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
+            this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
+            this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
+            this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
 
             this.Bind<IAsyncExecutor>().To<AsyncExecutor>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
@@ -76,15 +83,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
-
-            this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireViewFactory>();
-            this.Kernel.RegisterFactory<ChapterInfoViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireInfoViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireSharedPersonsFactory>();
-            this.Kernel.RegisterFactory<AccountListViewFactory>();
-            this.Kernel.RegisterFactory<AccountViewFactory>();
-
+            
             CommandRegistry
                 .Setup<AccountAR>()
                 .InitializesWith<RegisterAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.RegisterAccount(command.ApplicationName, command.UserName, command.Email, command.AccountId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))

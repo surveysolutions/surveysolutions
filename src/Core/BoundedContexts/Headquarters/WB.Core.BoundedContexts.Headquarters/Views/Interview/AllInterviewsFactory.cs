@@ -1,12 +1,16 @@
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
+    public interface IAllInterviewsFactory
+    {
+        AllInterviewsView Load(AllInterviewsInputModel input);
+    }
+
+    public class AllInterviewsFactory : IAllInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions;
