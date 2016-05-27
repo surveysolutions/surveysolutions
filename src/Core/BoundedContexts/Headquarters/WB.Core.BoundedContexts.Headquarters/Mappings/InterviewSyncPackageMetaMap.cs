@@ -5,7 +5,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [Obsolete]
+    [Obsolete ("v.5.3")]
     public class InterviewSyncPackageMetaMap : ClassMapping<InterviewSyncPackageMeta>
     {
         public InterviewSyncPackageMetaMap()

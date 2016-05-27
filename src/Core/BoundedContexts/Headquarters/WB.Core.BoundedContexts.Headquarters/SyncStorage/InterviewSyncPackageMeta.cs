@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    [Obsolete]
+    [Obsolete ("v5.3")]
     public class InterviewSyncPackageMeta : IView
     {
         public virtual string PackageId { get; set; }

@@ -4,7 +4,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
-    [Obsolete]
+    [Obsolete ("Sinse v5.3")]
     public class InterviewPackagesApiView
     {
         public List<SynchronizationChunkMeta> Packages { get; set; }

@@ -4,7 +4,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
-    [Obsolete]
+    [Obsolete("v5.7")]
     public class QuestionnaireDeleted : IEvent
     {
         public long QuestionnaireVersion { get; set; }
