@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public class QuestionnaireStatistics : GroupStatistics
         {
             public int SectionsCount { get; set; } = 0;
-            public int QuestionsWithConditionsCount { get; set; } = 0;
+            public int QuestionsWithEnablingConditionsCount { get; set; } = 0;
+            public int QuestionsWithValidationConditionsCount { get; set; } = 0;
         }
 
         public class EntityWithLongCondition
