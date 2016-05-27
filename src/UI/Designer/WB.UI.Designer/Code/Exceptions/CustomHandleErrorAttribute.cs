@@ -1,37 +1,18 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace WB.UI.Designer.Exceptions
 {
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Routing;
-
-    /// <summary>
-    /// The custom handle error attribute.
-    /// </summary>
     public class CustomHandleErrorAttribute : FilterAttribute, IExceptionFilter
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomHandleErrorAttribute"/> class.
-        /// </summary>
         public CustomHandleErrorAttribute()
         {
             this.Order = 1;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The on exception.
-        /// </summary>
-        /// <param name="filterContext">
-        /// The filter context.
-        /// </param>
         public void OnException(ExceptionContext filterContext)
         {
             if (filterContext.ExceptionHandled || !filterContext.HttpContext.IsCustomErrorEnabled)
@@ -75,7 +56,5 @@ namespace WB.UI.Designer.Exceptions
 
             filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
         }
-
-        #endregion
     }
 }

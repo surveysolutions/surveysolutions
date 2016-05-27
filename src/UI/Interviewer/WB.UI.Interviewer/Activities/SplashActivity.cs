@@ -29,12 +29,12 @@ namespace WB.UI.Interviewer.Activities
             var settings = settingsStorage.FirstOrDefault();
             if (settings != null)
             {
-                if (!settings.ReadSideVersion.HasValue)
-                {
-                    await MoveCategoricalOptionsToPlainStorage();
-                    settings.ReadSideVersion = readSideVersion;
-                    await settingsStorage.StoreAsync(settings);
-                }
+                if (settings.ReadSideVersion.HasValue)
+                    return;
+
+                await this.MoveCategoricalOptionsToPlainStorage();
+                settings.ReadSideVersion = readSideVersion;
+                await settingsStorage.StoreAsync(settings);
                 return;
             }
 

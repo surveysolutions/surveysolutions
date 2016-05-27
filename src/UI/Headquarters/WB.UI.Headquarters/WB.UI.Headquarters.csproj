@@ -15,7 +15,7 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -733,11 +733,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\BaseApiServiceController.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
     <Compile Include="API\DataExportApiController.cs" />
-    <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
     <Compile Include="API\ExportSettingsApiController.cs" />
     <Compile Include="API\HealthCheckApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
@@ -762,7 +760,6 @@
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
-    <Compile Include="API\Resources\AssembliesResourceController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -982,9 +979,6 @@
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="API\Formatters\JsonNetFormatter.cs" />
-    <Compile Include="API\Resources\InterviewsResourceController.cs" />
-    <Compile Include="API\Resources\QuestionnairesResourceController.cs" />
-    <Compile Include="API\Resources\UsersResourceController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
@@ -1074,7 +1068,6 @@
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
-    <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Global.asax.cs">
@@ -1237,6 +1230,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="API\Attributes\" />
+    <Folder Include="API\Resources\" />
     <Folder Include="App_Data\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
@@ -1568,7 +1563,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Headquarters</IISUrl>
+          <IISUrl>http://localhost:8794</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
