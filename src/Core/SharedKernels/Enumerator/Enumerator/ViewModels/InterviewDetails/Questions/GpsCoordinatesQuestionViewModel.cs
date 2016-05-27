@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IEnumeratorSettings settings;
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IGpsLocationService locationService;
-        private readonly IUserInteractionService userInteractionService;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -99,19 +99,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
+            IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
             ILiteEventRegistry liteEventRegistry,
-            IUserInteractionService userInteractionService, ILogger logger)
+            ILogger logger)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.settings = settings;
             this.locationService = locationService;
+            this.userInterfaceStateService = userInterfaceStateService;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
-            this.userInteractionService = userInteractionService;
             this.logger = logger;
         }
 
@@ -145,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task SaveAnswerAsync()
         {
             this.IsInProgress = true;
-
+            this.userInterfaceStateService.NotifyRefreshStarted();
             try
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -164,6 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             finally
             {
+                this.userInterfaceStateService.NotifyRefreshFinished();
                 this.IsInProgress = false;
             }
         }
