@@ -246,6 +246,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
 
+            //this.Kernel.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            //this.Kernel.RegisterDenormalizer<DummyEventHandler>();
+            //this.Kernel.RegisterDenormalizer<InterviewReferencesDenormalizer>();
+            //this.Kernel.RegisterDenormalizer<InterviewSummaryDenormalizer>();
+            //this.Kernel.RegisterDenormalizer<MapReportDenormalizer>();
+            //this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+            //this.Kernel.RegisterDenormalizer<InterviewsExportDenormalizer>();
+
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();

@@ -18,7 +18,9 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -217,9 +219,6 @@ namespace WB.UI.Headquarters
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
-            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(FilterScope.Controller)
-               .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
-
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
@@ -253,7 +252,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 
             //Kernel.RegisterDenormalizer<>() - should be used instead
-            foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
+            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
+            foreach (object handler in enumerable)
             {
                 bus.Register((IEventHandler)handler);
             }
