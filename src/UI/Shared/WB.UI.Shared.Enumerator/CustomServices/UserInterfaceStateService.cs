@@ -15,7 +15,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void NotifyRefreshFinished()
         {
-            Interlocked.Decrement(ref count);
+            if (count > 0)
+            {
+                Interlocked.Decrement(ref count);
+            }
         }
 
         public Task WaitWhileUserInterfaceIsRefreshingAsync()
