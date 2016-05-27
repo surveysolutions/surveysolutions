@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
@@ -23,17 +24,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
         {
-            var rowCount = this.interviewsReader.QueryOver(_ => this.ApplyFilter(input, _)
-                .Select(
-                    Projections.Count(Projections.Distinct(Projections.Property(this.ResponsibleIdSelector)))))
-                .SingleOrDefault<int>();
+            var filter = CreateFilterExpression(input);
+
+            var rowCount = this.interviewsReader.Count(_ => _.Where(filter)
+                .Select(Projections.Distinct(Projections.Property(this.ResponsibleIdSelector))));
 
             var statistics =
                 this.interviewsReader.QueryOver(
-                    _ => this.ApplyFilter(input, _).Select(
-                         this.AddCountsByStuses(Projections.ProjectionList())
-                        .Add(Projections.Group(this.ResponsibleIdSelector), "ResponsibleId")
-                        .Add(Projections.Min(Projections.Property(this.ResponsibleNameSelector)), "Responsible")));
+                    _ => _.Where(filter).Select(
+                        this.AddCountsByStuses(Projections.ProjectionList())
+                            .Add(Projections.Group(this.ResponsibleIdSelector), "ResponsibleId")
+                            .Add(Projections.Min(Projections.Property(this.ResponsibleNameSelector)), "Responsible")));
 
             var sorting = QueryableExtensions.ParseSortExpression(input.Order);
             if (sorting != null)
@@ -53,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var totalStatistics =
                 this.interviewsReader.QueryOver(
-                    _ => this.ApplyFilter(input, _)
+                    _ => _.Where(filter)
                     .Select(this.AddCountsByStuses(Projections.ProjectionList())))
                     .TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
                     .SingleOrDefault<TeamsAndStatusesReportLine>();
@@ -87,29 +88,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Projections.Constant(0)));
         }
 
-        protected virtual IQueryOver<InterviewSummary, InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input,
-            IQueryOver<InterviewSummary, InterviewSummary> interviews)
+        protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
         {
-            var filteredInterviews = interviews.Where(x => !x.IsDeleted);
+            Expression<Func<InterviewSummary, bool>> result = (interview) => !interview.IsDeleted;
 
             if (input.TemplateId.HasValue)
             {
-                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireId == input.TemplateId);
+                result = result.AndCondition(x => x.QuestionnaireId == input.TemplateId);
             }
 
             if (input.TemplateVersion.HasValue)
             {
-                filteredInterviews = filteredInterviews.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
+                result = result.AndCondition(x => x.QuestionnaireVersion == input.TemplateVersion);
             }
 
             if (input.ViewerId.HasValue)
             {
-                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadId == input.ViewerId);
+                result = result.AndCondition(x => x.TeamLeadId == input.ViewerId);
             }
-
-            return filteredInterviews;
+            return result;
         }
-
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
     }
