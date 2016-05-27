@@ -13,6 +13,7 @@ using WB.Core.SharedKernel.Structures.TabletInformation;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
+    [Obsolete(@"Since v 5.10")]
     public class InterviewerApiV2Controller : InterviewerControllerBase
     {
         public InterviewerApiV2Controller(

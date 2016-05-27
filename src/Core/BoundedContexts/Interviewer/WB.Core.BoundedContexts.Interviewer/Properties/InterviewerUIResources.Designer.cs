@@ -749,6 +749,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Headquarters website.
+        /// </summary>
+        public static string NotSupportedServerSyncProtocolVersion {
+            get {
+                return ResourceManager.GetString("NotSupportedServerSyncProtocolVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About application.
         /// </summary>
         public static string Prefs_AboutApplication {

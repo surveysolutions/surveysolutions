@@ -12,6 +12,7 @@ using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
+    [Obsolete(@"Since v 5.10")]
     public class InterviewerControllerBase : ApiController
     {
         private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";

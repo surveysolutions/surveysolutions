@@ -7,11 +7,13 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
+using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
@@ -70,6 +72,12 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image", c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/attachments/{id}", c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
 
+
+            config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
+            config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
+            config.TypedRoute(@"api/interviewer/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
+            config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
+                c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 
             config.Filters.Add(new UnhandledExceptionFilter());
             config.MessageHandlers.Add(new DecompressionHandler());
