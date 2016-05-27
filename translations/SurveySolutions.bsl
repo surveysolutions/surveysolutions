@@ -53,7 +53,7 @@
         <it rn="Resources\FileBasedDataExportRepositoryWriterMessages.resx" nm="Supervisor" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="FileBasedDataExportRepositoryWriterMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Супервизор" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Superviseur" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -116,7 +116,7 @@
         <it rn="Resources\UserPreloadingServiceMessages.resx" nm="TheDatasetMaxRecordNumberReachedFormat" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="UserPreloadingServiceMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The dataset contains {0} records, but max allowed record number is {1}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Данные содержат {0} записей, но допустимое число {1}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Файл содержит {0} записей, но допустимое число {1}" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Le dataset contient {0} enregistrements, mais max autorisée nombre record est {1}" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -203,7 +203,7 @@
         <it rn="Properties\FieldsAndValidations.resx" nm="CloneQuestionnaireModel_NewTitle_Error_Required" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire title is required" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя вопросника является необходимым полем" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Необходимо ввести имя вопросника" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Titre du questionnaire est nécessaire" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -280,8 +280,8 @@
         <it rn="Properties\FieldsAndValidations.resx" nm="PasswordErrorMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Password must contain at least one number, one upper case character and one lower case character" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один символ в нижнем регистре" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Mot de passe doit contenir au moins un chiffre, une majuscule et une minuscule personnage" ts="Translated" qs="AutoTranslated" />
+            <li lc="ru" tx="Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один символ в нижнем регистре" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="fr" tx="Mot de passe doit contenir au moins un chiffre, une majuscule et une minuscule personnage" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\FieldsAndValidations.resx" nm="PasswordFieldName" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -343,7 +343,7 @@
         <it rn="Properties\FieldsAndValidations.resx" nm="RequiredSupervisorErrorMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor is required" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Укажите Супервизора" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Укажите супервизора" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Superviseur est requis" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -357,7 +357,7 @@
         <it rn="Properties\FieldsAndValidations.resx" nm="SupervisorFieldName" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Супервизор" er="" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Superviseur" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -693,7 +693,7 @@
         <it rn="Properties\Pages.resx" nm="HistoryOfStatuses_Comment" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="with comment" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="с комментарием" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="комментарий" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="avec commentaire" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -860,7 +860,7 @@
         </it>
         <it rn="Properties\Pages.resx" nm="InterviewerController_EditSuccess" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Information about  {0}  successfully updated" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Information about {0} successfully updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Информация о {0} успешно обновлена" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Informations sur {0}  mis à jour" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
@@ -868,7 +868,7 @@
         <it rn="Properties\Pages.resx" nm="InterviewerController_InterviewerCreationSuccess" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer was successfully created" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервьюер был успешно Создан" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Интервьюер был успешно создан" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="L’intervieweur a été créé avec succès" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -910,7 +910,7 @@
         <it rn="Properties\Pages.resx" nm="InterviewerEdit_NoDeviceHistory" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer did not synchronize yet. There is no information about devices in use." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервьюер еще не синхронизировался. Нет информации об устройствах." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Интервьюер еще не синхронизировался. Информации об устройствах отсутствует." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="L’intervieweur a fait synchroniser pas encore. Il n’y a aucune information sur les dispositifs en cours d’utilisation." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -938,7 +938,7 @@
         <it rn="Properties\Pages.resx" nm="Interviewers_Archive" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archive" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Архив" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Архивировать" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Archives" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -952,7 +952,7 @@
         <it rn="Properties\Pages.resx" nm="Interviewers_ArchiveInterviewers" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="interviewer(s) will be archived." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="пользователи будут архивированы." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="пользователь(ей) будут архивированы" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="fr" tx="interviewers seront archivés." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -966,7 +966,7 @@
         <it rn="Properties\Pages.resx" nm="Interviewers_ArchiveInterviewersConfirmMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="If the interviewer has completed interviews in census mode on his tablet then the data will be lost." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервью на планшете будут потеряны если они Созданы в census режиме." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Интервью на планшете будут потеряны если они созданы в census режиме." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Si l’intervieweur a effectué des entrevues en mode de recensement sur sa tablette ensuite les données seront perdues." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1022,7 +1022,7 @@
         <it rn="Properties\Pages.resx" nm="Interviewers_SupervisorTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизоры" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Супервизор" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Superviseur" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1071,21 +1071,21 @@
         <it rn="Properties\Pages.resx" nm="Layout_RightsReserved" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="All Rights Reserved." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="All Rights Reserved." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Все права защищены" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="fr" tx="Tous droits réservés." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\Pages.resx" nm="Layout_WorldBank" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The World Bank Group" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="The World Bank Group" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Группа Всемирного Банка" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Le groupe de la Banque mondiale" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\Pages.resx" nm="LogOn_Legend" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please log in" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пожалуйста, войдите" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пожалуйста войдите" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Veuillez vous connecter" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1274,7 +1274,7 @@
         <it rn="Properties\Pages.resx" nm="Survey_LastUpdateTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Properties" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last Update" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Обновлено" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обновлено" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Dernière mise à jour" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1806,7 +1806,7 @@
         <it rn="Resources\Archived.resx" nm="ArchivedSupervisors" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Archived" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archived supervisors" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Архив Супервизоров" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Архивные супервизоры" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Superviseurs archivés" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1855,14 +1855,14 @@
         <it rn="Resources\Archived.resx" nm="UnarchiveInterviewerWarning" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Archived" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="interviewer(s) will be unarchived." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервьюверы будут восстановлены." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="интервьювер(ы) будут восстановлены." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="interviewers sera non archivées." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Resources\Archived.resx" nm="UnarchiveSupervisorWarning" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Archived" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="supervisor will be unarchived." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор(ы) будут восстановлены." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="cупервизор будeт восстановлен." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="superviseur sera non archivée." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -1896,16 +1896,16 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="ApproveConfirmMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignConfirmMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другой интервьюер)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue pour réaffecter.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez affecter des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (seulement sur un autre intervieweur)&lt;/i&gt; et &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другой интервьюер)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue pour réaffecter.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez affecter des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (seulement sur un autre intervieweur)&lt;/i&gt; et &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignReceivedConfirm" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1924,9 +1924,9 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\LimitsIndicator.resx" nm="InterviewsLeftFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="LimitsIndicator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1981,7 +1981,7 @@
         <it rn="Resources\PeriodicStatusReport.resx" nm="AverageHQProcessingTimeDescription" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Временной промежуток между моментом, когда Супервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен на хедквотером." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Временной промежуток между моментом, когда cупервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен хедквотером." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Une différence de temps entre le moment qu'un superviseur approuve un questionnaire et ce questionnaire soit approuvée ou refusée sur HQ." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2009,7 +2009,7 @@
         <it rn="Resources\PeriodicStatusReport.resx" nm="AverageOverallCaseProcessingTimeDescription" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="A time difference between the first assignment and the moment when the interview is approved by HQ." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Временной промежуток между первым назначением и интервью и моментом, когда интервью утверждено хедкотером." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Временной промежуток между первым назначением интервью и моментом, когда интервью утверждено хедквотером." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Une différence de temps entre la première tâche et le moment où l’interview est approuvée par l’AC." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2029,15 +2029,15 @@
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="BackToSupervisors" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Back to supervisors" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вернуться к супервизорам" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Back to supervisors" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="К супервизорам" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Retour aux superviseurs" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="By" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="By" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="По" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Кем" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Par" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2058,7 +2058,7 @@
         <it rn="Resources\PeriodicStatusReport.resx" nm="InThe" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="in the" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="В" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="в" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="dans le" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2295,8 +2295,8 @@
         </it>
         <it rn="Resources\TabletSyncMessages.resx" nm="Sync_package_with_id__0__was_not_found_on_serverFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.SurveyManagement.Web.Resources" cln="TabletSyncMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Synchronization failed.  Sync package with id '{0}' was not found on server. Please contact developers." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Сбой синхронизации.  Синхронизационный пакет с идентификатором «{0}» не найден на сервере. Пожалуйста, свяжитесь с разработчиками." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Synchronization failed. Sync package with id '{0}' was not found on server. Please contact developers." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Сбой синхронизации. Синхронизационный пакет с идентификатором «{0}» не найден на сервере. Пожалуйста, свяжитесь с разработчиками." er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Échoué de la synchronisation.  Paquet de synchronisation avec l’id « {0} » est introuvable sur le serveur. Veuillez communiquer avec les développeurs." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -2320,7 +2320,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AdvancedMode" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Advanced data upload mode" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Режим передачи данных" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загрузить панельные данные" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Mode de téléchargement de données avancées" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2355,7 +2355,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BrowseTeams" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Browse teams" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Просмотр групп" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Просмотреть пользователей" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Parcourir les équipes" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2376,7 +2376,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreateSample" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create sample from this data" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создание образца из данных" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Создание интервью" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Créer des échantillons de ces données" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2397,14 +2397,14 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DataIsValid" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Data is valid" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Данные действительны" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Данные валидны" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Les données sont valides" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DataValid" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Data is valid" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Данные действительны" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Данные валидны" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Les données sont valides" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2502,7 +2502,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInProgress" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Import of interviews is in progress. Wait until running operation is finished." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="В настоящее время происходит процесс Создания интервью. Дождитесь выполнения операции." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="В настоящее время происходит процесс создания интервью. Дождитесь выполнения операции." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Importation d’entretiens est en cours. Attendre le déroulement opération terminée." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2551,14 +2551,14 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="IsInvalid" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="is invalid. Please fix error(s) below and upload again." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="невалидные данные. Исправьте ошибки и загрузите снова." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="содержит невалидные данные. Исправьте ошибки и загрузите снова." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="n’est pas valide. Corrigez les erreurs ci-dessous et télécharger à nouveau." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="LastUpdateDate" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last update date" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Дата последнего обновления" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Обновлено" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Date de dernière mise à jour" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2586,7 +2586,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="PleaseWait" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please wait, the file" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пожалуйста, подождите, файл" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пожалуйста подождите, файл" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Veuillez patienter, le fichier" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2607,7 +2607,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ReadyForUserCreation" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Ready for user creation" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Готов к Созданию пользователя" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Готов к созданию пользователя" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Prêt pour la création de l’utilisateur" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2670,7 +2670,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SampleSuccess" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sample import is successfuly completed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Созданиезавершено успешно" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Создание успешно завершено" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Importation d’échantillons est effectuée avec succès" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2768,14 +2768,14 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UsersHaveBeenCreated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="user(s) have been created" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="пользователей было Создано. " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ru" tx="пользователей было создано." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="fr" tx="utilisateur (s) ont été créés" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Validated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validated" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверено" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Проверено" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="fr" tx="Validé" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2789,7 +2789,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ValidationFinishedWithError" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validated" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверено" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ошибки" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Validé" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -2908,7 +2908,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="LastUpdate" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last Update" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Обновлено" er="" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Обновлено" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Dernière mise à jour" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3041,7 +3041,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="TheWorldBankGroup" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The World Bank Group" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="The World Bank Group" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="The World Bank Group" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="fr" tx="Le groupe de la Banque mondiale" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3167,7 +3167,7 @@
         <it rn="App_GlobalResources\Dashboard.resx" nm="ImportTemplate" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Import template" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Импорт шаблонов" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Импорт вопросника" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Importer un modèle" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3258,7 +3258,7 @@
         <it rn="App_GlobalResources\DataExport.resx" nm="LastUpdateDate" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last update date" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Обновлено" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Обновлено" er="" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Date de dernière mise à jour" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3307,7 +3307,7 @@
         <it rn="App_GlobalResources\HQ.resx" nm="InterviewWasCreated" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview was successfully created." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Был успешно Создан, интервью." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="пользователей было создано." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Entrevue a été créé avec succès." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3321,7 +3321,7 @@
         <it rn="App_GlobalResources\HQ.resx" nm="ObserverCreated" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Observer user was successfully created." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Обозреватель был успешно Создан." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обозреватель был успешно создан." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Utilisateur de l’observateur a été créé avec succès." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3349,7 +3349,7 @@
         <it rn="App_GlobalResources\HQ.resx" nm="SuccessfullyCreated" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor was successfully created." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Руководитель был успешно Создан." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Супервизор был успешно создан." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Surveillant a été créé avec succès." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3363,21 +3363,21 @@
         <it rn="App_GlobalResources\HQ.resx" nm="UserWasCreated" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headquarters user was successfully created." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Штаб-квартира пользователь был успешно Создан." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Хедквотер пользователь был успешно создан." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Utilisateur de siège a été créé avec succès." ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="UserWasUpdatedFormat" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Information about &lt;b&gt;{0}&lt;/b&gt; successfully updated" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлен" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлена" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Informations sur &lt;b&gt;{0}&lt;/b&gt; mis à jour" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Import.resx" nm="CreateSample" rc="" dnt="false" nms="Resources" cln="Import" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create sample from this data" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создание образца из данных" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Создание образца из данных" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Créer des échantillons de ces données" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3411,9 +3411,9 @@
         </it>
         <it rn="App_GlobalResources\Interviews.resx" nm="ApproveConfirmMessage" rc="" dnt="false" nms="Resources" cln="Interviews" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Interviews.resx" nm="ContinueConfirmMessage" rc="" dnt="false" nms="Resources" cln="Interviews" bac="Content" hgt="0" wdt="0">
@@ -3425,23 +3425,23 @@
         </it>
         <it rn="App_GlobalResources\Interviews.resx" nm="DeleteConfirmMessage" rc="" dnt="false" nms="Resources" cln="Interviews" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can delete interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue est supprimés.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez supprimer des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can delete interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue est supprimés.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez supprimer des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Interviews.resx" nm="RejectConfirmMessage" rc="" dnt="false" nms="Resources" cln="Interviews" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут откачены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Interviews.resx" nm="UnapproveConfirmMessage" rc="" dnt="false" nms="Resources" cln="Interviews" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете откатить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera non approuvées.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez désapprouver entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="AutoTranslated" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью присвоятся предшествующие статусы.&lt;/h3&gt; &lt;b&gt;Внимание!&lt;/b&gt; Вы можете вернуть статус интервью имеющим следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera non approuvées.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez désapprouver entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="ApiUsers" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -3622,14 +3622,14 @@
         <it rn="App_GlobalResources\MapReport.resx" nm="ReloadMarkers" rc="" dnt="false" nms="Resources" cln="MapReport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Reload markers on map" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Перезагрузка маркеров на карте" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Recharger les marqueurs sur la carte" ts="Translated" qs="AutoTranslated" />
+            <li lc="ru" tx="Обновить маркеры" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Recharger les marqueurs" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MapReport.resx" nm="ViewInterviewContent" rc="" dnt="false" nms="Resources" cln="MapReport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="View interview content" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Перейти к интервью" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Просмотреть интервью" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Voir interview contenu" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3895,7 +3895,7 @@
         <it rn="App_GlobalResources\Users.resx" nm="AddAPIUser" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Add API User" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Добавить  API пользователя" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Добавить API пользователя" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Ajouter un utilisateur de l’API" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -3937,7 +3937,7 @@
         <it rn="App_GlobalResources\Users.resx" nm="ArchivedSupervisors" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archived supervisors" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Архивные супервизоры" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Архивные супервизоры" er="" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Superviseurs archivés" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -4035,7 +4035,7 @@
         <it rn="App_GlobalResources\Users.resx" nm="ImpersonateAsUser" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Impersonate as this user in read only mode" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Просмотр от лица этого пользователя" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Просмотр от имени этого пользователя" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Emprunter l’identité de cet utilisateur en mode lecture seule" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -4091,7 +4091,7 @@
         <it rn="App_GlobalResources\Users.resx" nm="Supervisor" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Супервизор" er="" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Superviseur" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -4146,8 +4146,8 @@
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="ServiceUnavailable" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Server is unavailable.  Please make sure that the 'Designer' website is available and it's not in the maintenance mode" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Сервер недоступен.  Пожалуйста, убедитесь, что веб-сайт «Designer» доступен и он не находится в режиме обслуживания" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Server is unavailable. Please make sure that the 'Designer' website is available and it's not in the maintenance mode" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Сервер недоступен. Пожалуйста, убедитесь, что веб-сайт «Designer» доступен и он не находится в режиме обслуживания" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Le serveur est indisponible.  Veuillez vous assurer que le site « Designer » est disponible et il n’est pas en mode maintenance" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -4167,78 +4167,78 @@
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0001" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" The User with such Login already exists" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Пользователь с таким логином уже существует" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="The User with such Login already exists" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пользователь с таким именем уже существует" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" L’utilisateur avec ce Login existe déjà" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0002" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" There are duplicate values of Login in the file" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Имеются повторяющиеся значения логинов в файле" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="There are duplicate values of Login in the file" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имеются повторяющиеся значения имени пользователя в файле" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Il existe des doublons de connexion dans le fichier" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0003" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Login of an archived user cannot be re-used because it belongs to another team" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Логин архивного пользователя не может быть повторно использован потому что он принадлежит к другой команде" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Login of an archived user cannot be re-used because it belongs to another team" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя архивного пользователя не может быть повторно использовано потому, что он принадлежит к другой команде" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Connexion d’un utilisateur archivée ne peuvent pas être réutilisée car elle appartient à une autre équipe" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0004" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Login of an archived user cannot be re-used because it exists in another role" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Логин архивного пользователя не может быть повторно использован потому что он существует в другой роли" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Login of an archived user cannot be re-used because it exists in another role" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя архивного пользователя не может быть повторно использовано, потому что он существует в другой роли" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Connexion d’un utilisateur archivée ne peuvent pas être réutilisée car elle existe dans un autre rôle" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0005" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Логин должен быть от 3 до 15 символов и содержать только буквы, цифры и символ подчеркивания" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя пользователя должно быть от 3 до 15 символов и содержать только буквы, цифры и символ подчеркивания" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Login doit être entre 3 et 15 caractères et contenir uniquement des lettres, des chiffres et des symboles du trait de soulignement" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0006" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Password must contain at least one number, one upper case character and one lower case character" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один – в нижнем" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Password must contain at least one number, one upper case character and one lower case character" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один – в нижнем" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx=" Mot de passe doit contenir au moins un chiffre, une majuscule et une minuscule personnage" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0007" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Email is invalid" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Недопустимое значение электронной почты" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Email is invalid" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Недопустимое формат электронной почты" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Email est invalide" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0008" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Phone number is invalid" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Неверный телефонный номер" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Phone number is invalid" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Неправильный формат номера телефона" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Numéro de téléphone n’est pas valide" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0009" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Role is invalid. Only &quot;Supervisor&quot; or &quot;Interviewer&quot; values are allowed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Недопустимая роль. Допускаются только значения «Supervisor» или «Interviewer»" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Role is invalid. Only &quot;Supervisor&quot; or &quot;Interviewer&quot; values are allowed" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Недопустимая роль. Допускаются только значения «Supervisor» или «Interviewer»" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Rôle n’est pas valide. Seules les valeurs « Superviseur » ou « Intervieweur » sont autorisés" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0010" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Supervisor must be an active user in the system or present in the file" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Supervisor должен быть активным пользователем в системе или существовать в файле" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Supervisor must be an active user in the system or present in the file" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Supervisor должен быть активным пользователем в системе или существовать в файле" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Superviseur doit être un utilisateur actif dans le système ou présents dans le fichier" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0011" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx=" Supervisor column must be empty for user in &quot;Supervisor&quot; role" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx=" Колонка Supervisor должна быть пустой для пользователя с ролью «Supervisor»" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Supervisor column must be empty for user in &quot;Supervisor&quot; role" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Колонка Supervisor должна быть пустой для пользователя с ролью «Supervisor»" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx=" Colonne de superviseur doit être vide pour l’utilisateur dans le rôle de « Surveillant »" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>

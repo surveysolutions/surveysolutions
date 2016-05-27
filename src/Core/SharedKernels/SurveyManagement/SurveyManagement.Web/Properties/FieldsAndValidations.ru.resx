@@ -181,7 +181,7 @@
     <value>Укажите пароль</value>
   </data>
   <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Укажите Супервизора</value>
+    <value>Укажите супервизора</value>
   </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Укажите имя пользователя</value>
@@ -208,7 +208,7 @@
     <value>Имя пользователя</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Имя вопросника является необходимым полем</value>
+    <value>Необходимо ввести имя вопросника</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
     <value>Название</value>
