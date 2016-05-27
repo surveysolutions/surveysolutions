@@ -103,7 +103,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             pdfView.FillStatistics(allItems, pdfView.Statistics);
             pdfView.Statistics.SectionsCount = questionnaire.Children.Count;
             pdfView.Statistics.GroupsCount -= pdfView.Statistics.SectionsCount;
-            pdfView.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
+            pdfView.Statistics.QuestionsWithEnablingConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression)).Count();
+            pdfView.Statistics.QuestionsWithValidationConditionsCount = Find<IQuestion>(allItems, x => x.ValidationConditions.Any()).Count();
+            
             return pdfView;
         }
 
