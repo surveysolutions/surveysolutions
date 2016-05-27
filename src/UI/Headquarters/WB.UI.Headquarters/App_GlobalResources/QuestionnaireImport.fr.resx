@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Avant la connexion, veuillez vous assurer que le site Web « Designer » est disponible et il n’est pas en mode maintenance</value>
+    <value>Avant de se connecter, veuillez vous assurer que le site Web « Designer » est disponible et qu'il n’est pas en mode maintenance</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
-    <value>Questionnaires de concepteur</value>
+    <value>Questionnaires du site Designer</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importation</value>
+    <value>Importer</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
-    <value>Importer avec le mode de recensement</value>
+    <value>Importer en lmode recensement</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Pas pu se connecter au concepteur. S’il vous plaît vérifier que ce designer est disponible et essayez &lt;a href='{0}'&gt;à nouveau&lt;/a&gt;</value>
+    <value>Imposible de se connecter à Designer. Veuillez vérifier que Designer est disponible et essayez &lt;a href='{0}'&gt;à nouveau&lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
-    <value>S’il vous plaît connectez-vous au concepteur</value>
+    <value>Veuillez se connecter au site Designer</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Connectez-vous au concepteur</value>
+    <value>Se connecter à Designer</value>
   </data>
 </root>

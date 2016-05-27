@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretiens seront approuvés.&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue pour réaffecter.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez affecter des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (seulement sur un autre intervieweur)&lt;/i&gt; et &lt;i&gt;{3}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretients à réaffecter.&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez affecter des entrevues qu'avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (seulement à un autre enquêteur de la même équipe)&lt;/i&gt; et &lt;i&gt;{3}&lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Appliquer sur {0} entrevue Interviewer déjà reçu</value>
+    <value>Faire appliquer sur {0} entretiens déjà reçus par l'enquêteur</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretiens seront rejetés.&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez refuser les entretiens avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
 </root>

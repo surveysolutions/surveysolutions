@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approuvé par l’administration centrale</value>
+    <value>Approuvé par quartier général</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvés par superviseur</value>
+    <value>Approuvé par superviseur</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Terminé</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Intervieweur assigné</value>
+    <value>Affecté à l'enquêteur</value>
   </data>
 </root>

@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateSample" xml:space="preserve">
-    <value>Créer des échantillons de ces données</value>
+    <value>Créer l'échantillons à partir de ces données</value>
   </data>
   <data name="ParsingCompleted" xml:space="preserve">
-    <value>L’analyse est terminée</value>
+    <value>Décryptage terminé</value>
   </data>
   <data name="ParsingError" xml:space="preserve">
-    <value>Erreur d’analyse</value>
+    <value>Erreur de décryptage</value>
   </data>
   <data name="ParsingInProgress" xml:space="preserve">
-    <value>L’analyse est en cours...</value>
+    <value>Décryptage en cours...</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
-    <value>Sélectionnez responsable</value>
+    <value>Sélectionnez le membre responsable</value>
   </data>
 </root>
