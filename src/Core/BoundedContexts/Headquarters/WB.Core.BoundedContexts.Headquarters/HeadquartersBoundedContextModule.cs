@@ -254,8 +254,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Kernel.Load(new QuartzNinjectModule());
 
-            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-            
             this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
