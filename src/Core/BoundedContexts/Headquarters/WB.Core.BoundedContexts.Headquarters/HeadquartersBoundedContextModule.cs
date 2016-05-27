@@ -68,6 +68,13 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.Synchronization.Implementation.ImportManager;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -209,16 +216,45 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
-            //commented because auto registered somewhere 
-            //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
-            this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
+
+            //commented because auto registered somewhere 
+            //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
+            this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
+            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
+            this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
+            this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
+            this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
+            this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
+            this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
+            this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
+            this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
+            this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
+            this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
+            this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
+            this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
+            this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
+            this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
+            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+
+            this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
+            this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
+            this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
+            this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
+            this.Bind<IQuestionnaireQuestionInfoFactory>().To<QuestionnaireQuestionInfoFactory>();
+            this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
+            this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
+            this.Bind<ITakeNewInterviewViewFactory>().To<TakeNewInterviewViewFactory>();
+            this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
+            this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
+            this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
+
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 
             this.Bind<IOldschoolChartStatisticsDataProvider>().To<OldschoolChartStatisticsDataProvider>();
@@ -239,12 +275,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
-            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
-            this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
-            this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
 
             //this.Kernel.RegisterDenormalizer<CumulativeChartDenormalizer>();
             //this.Kernel.RegisterDenormalizer<DummyEventHandler>();
@@ -268,27 +301,18 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
             this.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-
-            this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
-            this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
+         
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
             this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
-            this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
-
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IAtomicHealthCheck<ReadSideHealthCheckResult>>().To<ReadSideHealthChecker>();
 
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
-
-            this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
-            this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
-            
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
-            this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath);
@@ -319,19 +343,17 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
 
             this.Bind<IDdiMetadataAccessor>().To<DdiMetadataAccessor>();
-            this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
-            this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
+         
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
             this.Bind<InterviewExportredDataRowReader>().ToSelf();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
-            this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
-            this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
+          
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
-            this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
+       
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
             this.Bind<TabularFormatDataExportHandler>().ToSelf();
@@ -343,7 +365,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
             this.Bind<ICsvWriter>().To<CsvWriter>();
-            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
         }
     }

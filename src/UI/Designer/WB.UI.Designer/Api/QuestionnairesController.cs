@@ -22,8 +22,8 @@ namespace WB.UI.Designer.Api
     public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -31,8 +31,8 @@ namespace WB.UI.Designer.Api
         private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
+            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 

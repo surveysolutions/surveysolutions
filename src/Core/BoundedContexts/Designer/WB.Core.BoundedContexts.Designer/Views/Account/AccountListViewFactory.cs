@@ -1,40 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    /// <summary>
-    /// The account view factory.
-    /// </summary>
-    public class AccountListViewFactory : IViewFactory<AccountListViewInputModel, AccountListView>
+    public interface IAccountListViewFactory
     {
-        #region Fields
+        AccountListView Load(AccountListViewInputModel input);
+    }
 
-        /// <summary>
-        /// The users.
-        /// </summary>
+    public class AccountListViewFactory : IAccountListViewFactory
+    {
         private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccountListViewFactory"/> class.
-        /// </summary>
-        /// <param name="accounts">
-        /// The users.
-        /// </param>
         public AccountListViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }
-
-        #endregion
 
         public AccountListView Load(AccountListViewInputModel input)
         {
