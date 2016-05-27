@@ -293,7 +293,7 @@ article {
   content: "";
   display: block;
   position: absolute;
-  top: 2px;
+  top: 1px;
   left: 0;
   height: 12px;
   width: 12px;
@@ -315,25 +315,28 @@ article {
   display: block;
 }
 .option {
-  margin-top: 12px;
+  margin-top: 8px;
+    vertical-align: middle;
 }
 .option:first-of-type {
   margin-top: 0;
 }
-.option b {
-  font-size: 11px;
-  line-height: 22px;
-  margin-right: 10px;
-  vertical-align: middle;
-  text-align: right;
-  float: left;
-}
+
 .option > span {
-  display: inline-block;
-  margin-left: 18px;
   font-size: 16px;
   line-height: 18px;
 }
+
+.option .option-value {    
+    margin-left: 0;    
+    font-size: 10px;
+    vertical-align: middle;
+    line-height: 18px;
+    /*display: inline-block;*/
+    /*margin-top: 5px;*/
+    /*float:left;*/
+}
+
 .points {
   width: 95%;
   border: none;
@@ -368,18 +371,18 @@ article {
 }
 .yes_no_multiselect span {
   display: inline-block;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .option .yes_no-option-text {
   margin-left: 9px;
-  line-height: 20px;
-  width: 75%;
+  width: 65%;
+  vertical-align: middle;
 }
 .option .option-text {
-  margin-left: 0px;
-  line-height: 20px;
-  width: 75%;
+  width: 65%;
+  display: inline-block;
+  margin-left: 10px;
 }
 input[type=date] {
   outline: 0;
@@ -465,6 +468,7 @@ input[type=date] {
   float: left;
   font-size: 17.7px;
   line-height: 24px;
+  width: 100%;
 }
 .generated_by ul {
   margin-bottom: 5px;
