@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate;
+using NHibernate.Engine;
+using NHibernate.Hql.Ast.ANTLR;
+using NHibernate.Impl;
 using NHibernate.Linq;
+using NHibernate.Loader.Criteria;
+using NHibernate.Persister.Entity;
 using Ninject;
+using Npgsql;
+using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -49,7 +57,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             session.Delete(entity);
         }
-
+        
         public void RemoveIfStartsWith(string beginingOfId)
         {
             var session = this.sessionProvider.GetSession();
@@ -94,6 +102,37 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             string entityName = typeof(TEntity).Name;
 
             session.Delete(string.Format("from {0} e", entityName));
+        }
+
+        public int Count<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult,TResult>> query)
+        {
+            var queryable= query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
+
+            var countQuery = this.GenerateCountRowsQuery(queryable.UnderlyingCriteria);
+
+            var result = countQuery.UniqueResult<long>();
+
+            return (int)result;
+        }
+
+        public IQuery GenerateCountRowsQuery(ICriteria criteria)
+        {
+            ISession session = this.sessionProvider.GetSession();
+            var criteriaImpl = (CriteriaImpl)criteria;
+            var sessionImpl = (SessionImpl)criteriaImpl.Session;
+            var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
+            var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
+            var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
+            var result =session.CreateSQLQuery($"select count(*) from ({loader.SqlString}) as t");
+
+            int position = 0;
+            foreach (var collectedParameter in loader.Translator.CollectedParameters)
+            {
+                result.SetParameter(position, collectedParameter.Value, collectedParameter.Type);
+                position++;
+            }
+
+            return result;
         }
 
         public virtual TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query)
