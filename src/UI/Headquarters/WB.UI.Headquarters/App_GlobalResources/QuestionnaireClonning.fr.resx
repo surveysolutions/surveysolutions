@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Cloner</value>
   </data>
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire de clone</value>
+    <value>Cloner questionnaire</value>
   </data>
   <data name="inCensusMode" xml:space="preserve">
-    <value>en mode de recensement</value>
+    <value>en mode recensement</value>
   </data>
   <data name="inRegularMode" xml:space="preserve">
     <value>en mode normal</value>
   </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
-    <value>Questionnaire de clone</value>
+    <value>Cloner questionnaire</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
     <value>Une erreur inattendue s’est produite. Désolé pour la gêne occasionnée. Veuillez contacter support@mysurvey.solutions ou réessayez plus tard.</value>

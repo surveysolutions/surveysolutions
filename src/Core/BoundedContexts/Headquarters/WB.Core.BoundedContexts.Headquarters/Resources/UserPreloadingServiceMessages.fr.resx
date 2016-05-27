@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>fichier « {0} » contient les suivants de colonnes qui ne peut pas être mappés sur la propriété de n’importe quel utilisateur existant : {1}</value>
+    <value>Fichier « {0} » contient les colonnes suivantes qui ne peuvent pas être reliées aux propriétés d'utilisateur existant : {1}</value>
   </data>
   <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>nombre maximum de validation Erreurs {0} ont été atteints</value>
+    <value>Nombre maximum de d'erreurs de validation erreurs atteint: {0}</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>Le dataset contient {0} enregistrements, mais max autorisée nombre record est {1}</value>
+    <value>Base de données contient {0} entrée(s), mais le maximum autorisé est {1}</value>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>utilisateur préchargement de processus avec l’id « {0} » ne peut pas être fini parce que seulement {1} créé à partir de {2}</value>
+    <value>Chargement des utilisateurs interrompu.  Le processus avec l'identifiant « {0} » n'a pas abouti parce que uniquement {1} comptes d'utilisateur sur {2} ont pu été crées</value>
   </data>
   <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>Utilisateur de préchargement des processus « {0} » est en état « {1} », il n’est pas autorisé à supprimer les processus dans les États : {2}.</value>
+    <value>Processus de chargement des utilisateurs « {0} » a le statut « {1} ». Impossible de supprimer un processus ayant le statut : {2}.</value>
   </data>
   <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>préchargement de processus avec l’id '{0}"l’utilisateur ne peut pas créer plus d’utilisateurs puis {1}</value>
+    <value>Processus de chargement des utiliateurs avec l’id '{0}" ne peut créer plus d'utilisateurs que {1}</value>
   </data>
   <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>utilisateur de préchargement des processus avec id « {0} » a {1} erreur (s).</value>
+    <value>Processus de chargement des utilisateurs avec l'identifiant « {0} » a {1} erreur(s).</value>
   </data>
   <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>utilisateur de préchargement de processus avec l’id « {0} » est manquant</value>
+    <value>Processus de chargemen des utilisateurs avec l'identifiant « {0} » est manquant</value>
   </data>
   <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>utilisateur de préchargement de processus avec l’id « {0} » est en état « {1} », mais doit être en état « {2} »</value>
+    <value>Processus de chargement des utilisateurs « {0} » a le statut « {1} », mais devrait avoir le statut : {2}.</value>
   </data>
   <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>cours de validation en pourcentage ne peut être négatif, soit supérieur puis 100, mais la valeur est {0}</value>
+    <value>Progrès de validation, en pourcentage, ne peut être ni négatif ni supérieur à 100, mais sa valeur est de {0}</value>
   </data>
 </root>
