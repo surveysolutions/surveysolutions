@@ -14,6 +14,7 @@
         <locale>pt-PT</locale>
         <locale>ar</locale>
         <locale>zh-CN</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Properties\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -33,17 +34,17 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptyQuestionnairesList" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="No questionnaires yet&#xD;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="No questionnaires yet&#xD;&#xA;&#xD;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Опросники не обнаружены&#xD;&#xA;&#xD;&#xA;Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Todavía no hay cuestionarios&#xD;&#xA;&#xD;&#xA;Puede crear o editar sus cuestionarios en Survey Solutions Designer&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Chưa có bộ câu hỏi nào&#xD;&#xA;Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Chưa có bộ câu hỏi nào&#xD;&#xA;Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="Yet&#xD;&#xA;&#xD;&#xA;You الاستبيانات لا يمكن إنشاء أو تحرير الاستبيانات الخاصة بك في &quot;مصمم حلول المسح&quot;" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
-            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1201,8 +1202,8 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracySubTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="{0:N0} meters" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="{0:N0} метров" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Number of meters to set accuracy" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Значение в метрах для задания точности." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracyTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">

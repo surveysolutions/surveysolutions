@@ -15,6 +15,7 @@
         <locale>pt-PT</locale>
         <locale>ar</locale>
         <locale>zh-CN</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Properties\TesterUIResources.resx" nm="Dashboard_HaveNotBeenUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
