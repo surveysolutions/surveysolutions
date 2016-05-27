@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretien(s) approuvé(s).&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez approuver les entretiens avec le statut suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="DeleteConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue est supprimés.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez supprimer des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretien(s) supprimé(s).&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez supprimer des entretiens avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera rejetée.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez refuser les entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretien(s) rejeté(s).&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez rejeter les entretiens avec le statut suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="UnapproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera non approuvées.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez désapprouver entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretien(s) déapprouvé(s).&lt;/h3&gt;
+&lt;b&gt;Attention!&lt;/b&gt; Vous pouvez désapprouver les entretiens avec le statut suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
 </root>

@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="UserDoesNotExist" xml:space="preserve">
-    <value>Pourrait pas mettre à jour les informations utilisateur parce que l’utilisateur actuel n’existe pas</value>
+    <value>Ne peut pas mettre à jour les informations de l'utilisateur parce que l’utilisateur n’existe pas</value>
   </data>
   <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
-    <value>Nom d’utilisateur « {0} » est prise par les utilisateurs archivés</value>
+    <value>Nom d’utilisateur « {0} » est déjà prise par un utilisateur archivé</value>
   </data>
   <data name="UserNameIsTakenFormat" xml:space="preserve">
-    <value>Nom de l’utilisateur « {0} » est prise</value>
+    <value>Nom de l’utilisateur « {0} » est déjà prise</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>Vous ne pouvez pas désarchiver intervieweur jusqu'à ce que le surveillant est archivée</value>
+    <value>Impossible de désarchiver l'enquêteur avant de désarchiver son superviseur</value>
   </data>
 </root>
