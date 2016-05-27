@@ -152,6 +152,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token, this.settings.GpsDesiredAccuracy);
+
+                this.userInterfaceStateService.NotifyRefreshFinished();
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
             catch (OperationCanceledException)
