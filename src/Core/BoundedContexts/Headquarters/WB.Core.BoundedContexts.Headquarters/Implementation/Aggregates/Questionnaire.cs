@@ -150,6 +150,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 browseItem.IsDeleted = true;
                 this.questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
+
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            questionnaireDocument.IsDeleted = true;
+            this.plainQuestionnaireRepository.StoreQuestionnaire(command.QuestionnaireId, command.QuestionnaireVersion, questionnaireDocument);
         }
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
