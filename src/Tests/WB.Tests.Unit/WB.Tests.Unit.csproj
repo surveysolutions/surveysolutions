@@ -340,6 +340,7 @@
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_latitude_longitude_in_gps_question.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator.cs" />
