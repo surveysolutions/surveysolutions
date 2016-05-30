@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
             this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
-            //this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
+            this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
             this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
