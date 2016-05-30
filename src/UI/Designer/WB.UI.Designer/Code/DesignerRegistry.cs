@@ -58,7 +58,6 @@ namespace WB.UI.Designer.Code
             this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
             this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
-            this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
             this.Bind<PdfSettings>().ToConstant(pdfSettings);
             this.Bind<IPdfFactory>().To<PdfFactory>();
         }
