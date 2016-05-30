@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdvancedMode" xml:space="preserve">
-    <value>Режим передачи данных</value>
+    <value>Загрузить панельные данные</value>
   </data>
   <data name="AdvancedModeDescription" xml:space="preserve">
     <value>Для того, чтобы предварительно загрузить данные в несколько секций и переменных, вы можете подготовить набор .tab файлов, которые соответствуют структуре вашего вопросника и поместить их в .zip архив. Пожалуйста, используйте шаблон с архива ниже. Вы можете заполнить только те файлы и столбцы, которые вы хотите загрузить. Любые пустые столбцы или имеющие неправильные названиям будут игнорироваться.</value>
@@ -133,7 +133,7 @@
     <value>Загрузка данных</value>
   </data>
   <data name="BrowseTeams" xml:space="preserve">
-    <value>Просмотр групп</value>
+    <value>Просмотреть пользователей</value>
   </data>
   <data name="Code" xml:space="preserve">
     <value>Код</value>
@@ -145,7 +145,7 @@
     <value>Создание пользователей</value>
   </data>
   <data name="DataIsValid" xml:space="preserve">
-    <value>Данные действительны</value>
+    <value>Данные валидны</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -184,10 +184,10 @@
     <value>в процессе проверки, проверено</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>невалидные данные. Исправьте ошибки и загрузите снова.</value>
+    <value>содержит невалидные данные. Исправьте ошибки и загрузите снова.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
-    <value>Дата последнего обновления</value>
+    <value>Обновлено</value>
   </data>
   <data name="Message" xml:space="preserve">
     <value>Сообщение</value>
@@ -196,13 +196,13 @@
     <value>из</value>
   </data>
   <data name="PleaseWait" xml:space="preserve">
-    <value>Пожалуйста, подождите, файл</value>
+    <value>Пожалуйста подождите, файл</value>
   </data>
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
     <value>Файл не содержит необходимые столбцы вопросов для хедквотера:&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
-    <value>Готов к Созданию пользователя</value>
+    <value>Готов к созданию пользователя</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
     <value>Готов к проверке</value>
@@ -250,7 +250,7 @@
     <value>Процесс, загружающий пользователей, не найден</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>пользователей было Создано. </value>
+    <value>пользователей было создано.</value>
   </data>
   <data name="Validated" xml:space="preserve">
     <value>Проверено</value>
@@ -259,7 +259,7 @@
     <value>Проверка</value>
   </data>
   <data name="ValidationFinishedWithError" xml:space="preserve">
-    <value>Проверено</value>
+    <value>Ошибки</value>
   </data>
   <data name="Verify" xml:space="preserve">
     <value>Проверить</value>
@@ -268,7 +268,7 @@
     <value>Колонка</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
-    <value>Создание образца из данных</value>
+    <value>Создание интервью</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>Загрузка поврежденных интервью</value>
@@ -286,7 +286,7 @@
     <value>Формат файла не поддерживается, данные внутри него будут игнорироваться</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>В настоящее время происходит процесс Создания интервью. Дождитесь выполнения операции.</value>
+    <value>В настоящее время происходит процесс создания интервью. Дождитесь выполнения операции.</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Пример импорта</value>
@@ -313,7 +313,7 @@
     <value>Создание завершено с ошибками</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Созданиезавершено успешно</value>
+    <value>Создание успешно завершено</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
     <value>Загрузить новые данные</value>
@@ -322,7 +322,7 @@
     <value>Проверка образца данных</value>
   </data>
   <data name="DataValid" xml:space="preserve">
-    <value>Данные действительны</value>
+    <value>Данные валидны</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
     <value>Ответственный супервизор будет присвоен автоматически</value>

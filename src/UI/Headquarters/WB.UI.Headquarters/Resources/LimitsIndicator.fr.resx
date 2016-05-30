@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewsLeftFormat" xml:space="preserve">
-    <value>Vous pouvez créer {0} nouvelle entrevue</value>
+    <value>Vous pouvez créer {0} nouveaux entretiens</value>
   </data>
   <data name="YouAreInTestingMode" xml:space="preserve">
-    <value>Vous êtes en MODE test</value>
+    <value>Vous êtes en MODE DE TEST</value>
   </data>
   <data name="YouHaveExceededYourLimitFormat" xml:space="preserve">
-    <value>Vous avez dépassé votre limite {0} entrevue. Vous ne pouvez pas créer de nouvelles interviews plus...</value>
+    <value>Vous avez dépassé votre limite de {0} entretiens. Vous ne pouvez plus créer de nouveaux entretiens...</value>
   </data>
 </root>

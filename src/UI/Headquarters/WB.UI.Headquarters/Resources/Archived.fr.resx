@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActiveInterviewers" xml:space="preserve">
-    <value>Intervieweurs actives</value>
+    <value>Enquêteurs actifs</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
     <value>Superviseurs actifs</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
-    <value>intervieweurs archivés</value>
+    <value>Enquêteurs archivés</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>Superviseurs archivés</value>
@@ -136,10 +136,10 @@
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Messagerie</value>
+    <value>Courriel</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>Intervieweurs</value>
+    <value>Enquêteurs</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
@@ -148,9 +148,9 @@
     <value>Désarchiver</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>interviewers sera non archivées.</value>
+    <value>Enquêteurs seront désarchivé.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>superviseur sera non archivée.</value>
+    <value>Superviseur sera déarchivée.</value>
   </data>
 </root>

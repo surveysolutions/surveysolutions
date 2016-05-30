@@ -127,7 +127,7 @@
     <value>details</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Reload markers on map</value>
+    <value>Reload markers</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
     <value>Map Report</value>

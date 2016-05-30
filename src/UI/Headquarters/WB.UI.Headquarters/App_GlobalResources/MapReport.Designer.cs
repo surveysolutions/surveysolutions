@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload markers on map.
+        ///   Looks up a localized string similar to Reload markers.
         /// </summary>
         internal static string ReloadMarkers {
             get {

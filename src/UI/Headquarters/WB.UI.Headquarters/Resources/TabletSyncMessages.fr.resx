@@ -118,51 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
-    <value>Échoué de la synchronisation. Id de périphérique Android n’était pas prévue. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Identifiant de l'appareil Android n’était pas capté. Veuillez contacter les développeurs.</value>
   </data>
   <data name="FileWasNotFound" xml:space="preserve">
-    <value>Échoué de la synchronisation. Fichier avec la version la plus récente n’a pas été trouvée. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Fichier avec la version la plus récente n’a pas été trouvé. Veuillez contacter les développeurs.</value>
   </data>
   <data name="IncorrectFilesCount" xml:space="preserve">
-    <value>Échoué de la synchronisation. Nombre de fichiers incorrects. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Nombre de fichiers incorrects. Veuillez contacter les développeurs.</value>
   </data>
   <data name="IncorrectMediaType" xml:space="preserve">
-    <value>Échoué de la synchronisation. Type de média incorrecte. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Type de média incorrecte. Veuillez contacter développeurs.</value>
   </data>
   <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
-    <value>Échoué de la synchronisation. Votre application n’est pas compatible avec le serveur. Mettre à jour votre application intervieweur</value>
+    <value>Synchronisation a échoué. Votre application n’est pas compatible avec le serveur. Mettre à jour votre application Intervieweur</value>
   </data>
   <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
-    <value>Échoué de la synchronisation. Votre application n’est pas compatible avec le serveur. Désinstaller votre application et télécharger la nouvelle version de l’app de l’intervieweur</value>
+    <value>Synchronisation a échoué. Votre application n’est pas compatible avec le serveur. Désinstaller votre application et télécharger la nouvelle version de l’appli l’Intervieweur</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Identificateur de périphérique non valide. Quelque chose s’est passé avec l’installation du client app, veuillez envoyer l’information de la tablette.</value>
+    <value>Identifiant d'appareil invalide. Quelque chose s’est passé avec l’installation du appli Interviewer. Veuillez envoyer l’information de la tablette.</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Échoué de la synchronisation. Identificateur de séquence non valide. Quelque chose s’est passé avec l’installation du client app, appuyez sur le bouton « Envoyez les informations tablette ».</value>
+    <value>Synchronisation a échoué. Identifiant de séquence invalide. Quelque chose s’est passé avec l’installation de l'appli Interviewer. Appuyez sur le bouton « Envoyez les informations tablette ».</value>
   </data>
   <data name="InvalidUserFormat" xml:space="preserve">
-    <value>Échoué de la synchronisation. L’utilisateur n’est pas autorisée. Veuillez vérifier votre login/mot de passe pour {0}.</value>
+    <value>Synchronisation a échoué. L’utilisateur n’est pas autorisé. Veuillez vérifier votre login/mot de passe pour {0}.</value>
   </data>
   <data name="InvalidUserRole" xml:space="preserve">
-    <value>Votre compte n’a pas un rôle permettant cette opération.</value>
+    <value>Votre compte d'utilisateur n’a pas un rôle permettant cette opération.</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Serveur est maintenant sur le mode de maintenance. Désolé pour la gêne occasionnée. S’il vous plaît, réessayez plus tard.</value>
+    <value>Serveur en cours de maintenance. Désolé pour la gêne occasionnée. S’il vous plaît, réessayez plus tard.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
-    <value>Échoué de la synchronisation. Réinstallez l’application. Identificateur de l’installation est manquant. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Réinstallez l’application. Identificateur de l’installation est manquant. Veuillez contacter les développeurs.</value>
   </data>
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
-    <value>Partiellement échouée de la synchronisation. Entrevues réalisées ont été envoyées au serveur, mais vous ne recevez aucune nouvelles affectations. Veuillez accédez à paramètres android-&gt; Apps-&gt; intervieweur et poussez le bouton Effacer les données. Puis synchroniser à partir de zéro.</value>
+    <value>Synchronisation a échoué partiellement. Entretiens réalisés ont été envoyés au serveur, mais vous ne recevrez aucunes nouvelles affectations. Veuillez accédez aux paramètres Android-&gt; Apps-&gt; Intervieweur et appuyer sur le bouton Effacer les données. Puis synchroniser alors que l'application est vièrge.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Échoué de la synchronisation. Erreur de serveur interne s’est produite. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Erreur interne du serveur s’est produite. Veuillez contacter les développeurs.</value>
   </data>
   <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
-    <value>Échoué de la synchronisation.  Paquet de synchronisation avec l’id « {0} » est introuvable sur le serveur. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué.  Paquet de synchronisation avec l’identifiant « {0} » est introuvable sur le serveur. Veuillez contacter les développeurs.</value>
   </data>
   <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
-    <value>Échoué de la synchronisation. Id de périphérique android mal a été fournie. Veuillez communiquer avec les développeurs.</value>
+    <value>Synchronisation a échoué. Identifiant de l'appareil Android mal fourni. Veuillez contacter les développeurs.</value>
   </data>
 </root>

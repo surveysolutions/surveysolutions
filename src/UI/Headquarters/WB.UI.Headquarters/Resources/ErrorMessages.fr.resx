@@ -121,21 +121,21 @@
     <value>Le nom d’utilisateur ou mot de passe fourni est incorrect.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Questionnaire demandé « {0} » comporte des erreurs. S’il vous plaît vérifier le questionnaire sur le concepteur.</value>
+    <value>Questionnaire demandé « {0} » contient des erreurs. Veuillez corriger le questionnaire dans Designer.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Délai d’attente lors de la connexion au site « Designer ». S’il vous plaît, vérifiez votre connexion internet.</value>
+    <value>Dépassement du temps prévu pour se connecter au site « Designer ». Veuillez vérifiez votre connexion internet.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Erreur de serveur interne s’est produite. Communiquez avec le soutien à la clientèle des Solutions d’enquête.</value>
+    <value>Erreur de serveur interne s’est produite. Contacter l'équipe d'appui de Survey Solutions.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Le serveur est indisponible.  Veuillez vous assurer que le site « Designer » est disponible et il n’est pas en mode maintenance</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>Vous n’avez aucun accès à ce site. Contactez votre administrateur.</value>
+    <value>Vous n’avez pas permisson d'accéder à ce site. Veuillez contactez votre administrateur.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Questionnaire demandé « {0} » est introuvable. Veuillez actualiser la liste des questionnaires.</value>
+    <value>Impossible de trouver questionnaire « {0} ». Veuillez actualiser la liste des questionnaires.</value>
   </data>
 </root>
