@@ -446,15 +446,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 if (!latitude.HasValue || !longitude.HasValue)
                 {
-                    var columnsIdsWithNotEmptyValuesInRow =
-                        gpsAnswersColumnIndexes.Where(i => !string.IsNullOrEmpty(levelData.Content[rowIndex][i]))
+                    var columnIndexesOfEmptyGPSProperties =
+                        gpsAnswersColumnIndexes.Where(i => string.IsNullOrEmpty(levelData.Content[rowIndex][i]))
                             .ToArray();
 
-                    foreach (var notEmptyColumnIndex in columnsIdsWithNotEmptyValuesInRow)
+                    foreach (var emptyGPSPropertyColumnIndex in columnIndexesOfEmptyGPSProperties)
                     {
                         yield return new PreloadedDataVerificationError("PL0030",
                             PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
-                            this.CreateReference(notEmptyColumnIndex, rowIndex, levelData));
+                            this.CreateReference(emptyGPSPropertyColumnIndex, rowIndex, levelData));
                     }
                 }
 
