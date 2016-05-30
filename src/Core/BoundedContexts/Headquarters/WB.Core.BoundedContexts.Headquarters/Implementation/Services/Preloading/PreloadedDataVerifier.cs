@@ -428,8 +428,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
-            var gpsAnswersColumnIndexes = this.GetColumnIndexesWhichContainsAnswersOnQuestion(gpsExportedQuestion, levelData, preloadedDataService);
-
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
                 var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
