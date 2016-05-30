@@ -118,16 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
-&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
 &lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;
-&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другой интервьюер)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другой интервьюер)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Применить на {0} интервью, который интервьюер уже получил</value>
@@ -143,8 +141,7 @@
 &lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;
-&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут откачены.&lt;/h3&gt;

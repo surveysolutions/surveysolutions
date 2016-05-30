@@ -121,13 +121,13 @@
     <value>Ajouter un utilisateur de l’API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
-    <value>Ajouter siège</value>
+    <value>Ajouter un utilisateur de quartier général</value>
   </data>
   <data name="AddObserver" xml:space="preserve">
-    <value>Ajouter observateur</value>
+    <value>Ajouter un utilisateur Observer</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Ajouter superviseur</value>
+    <value>Ajouter un utilisateur superviseur</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
@@ -142,7 +142,7 @@
     <value>Cliquer ici pour revenir à votre compte.</value>
   </data>
   <data name="CreateAdmin" xml:space="preserve">
-    <value>Pour terminer l’installation, s’il vous plaît, créez un nouvel utilisateur de l’administrateur</value>
+    <value>Pour terminer l’installation, veuillez créer un nouvel utilisateur Admin</value>
   </data>
   <data name="CreateAndTryLogin" xml:space="preserve">
     <value>Créer et essayer de se connecter</value>
@@ -151,46 +151,46 @@
     <value>Créer l’utilisateur de l’API</value>
   </data>
   <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Créer le siège</value>
+    <value>Créer Quartier général</value>
   </data>
   <data name="CreateObserver" xml:space="preserve">
-    <value>Créer l’observateur</value>
+    <value>Créer Observateur</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Créer le superviseur</value>
+    <value>Créer Superviseur</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Date de création</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editer</value>
   </data>
   <data name="EditFormat" xml:space="preserve">
-    <value>Edit : {0}</value>
+    <value>Editer : {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Messagerie</value>
+    <value>Courriel</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Terminer l’installation</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Siège social</value>
+    <value>Quartier général</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Emprunter l’identité de cet utilisateur en mode lecture seule</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
-    <value>Intervieweur</value>
+    <value>Enquêteur</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>Intervieweurs</value>
+    <value>Enquêteurs</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>Verrouillé</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Pas lié au dispositif</value>
+    <value>Pas encore relié à un appareil</value>
   </data>
   <data name="Observer" xml:space="preserve">
     <value>Observateur</value>
@@ -208,7 +208,7 @@
     <value>Superviseurs</value>
   </data>
   <data name="TotalInterviewers" xml:space="preserve">
-    <value>Intervieweurs totales</value>
+    <value>Nombre total d'entretien</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nom</value>

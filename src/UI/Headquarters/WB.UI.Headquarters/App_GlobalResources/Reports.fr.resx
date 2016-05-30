@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApprovedByHQ" xml:space="preserve">
-    <value>Approuvée par l’AC</value>
+    <value>Approuvé par le quartier général</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvés par superviseur</value>
+    <value>Approuvé par superviseur</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Terminé</value>
@@ -130,7 +130,7 @@
     <value>Date d’achèvement</value>
   </data>
   <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>Tableau cumulatif Interview</value>
+    <value>Tableau du progrès cumulatif de collecte</value>
   </data>
   <data name="DatesRange" xml:space="preserve">
     <value>Plage de dates</value>
@@ -139,22 +139,22 @@
     <value>Tableau d’entretien</value>
   </data>
   <data name="InterviewerAssigned" xml:space="preserve">
-    <value>Intervieweur assigné</value>
+    <value>Affecté à l'enquêteur</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
-    <value>Rejetée par la centrale</value>
+    <value>Rejeté par quartier général</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Rejetée par superviseur</value>
+    <value>Rejeté par superviseur</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Superviseur assigné</value>
+    <value>Affecté au superviseur</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Superviseurs et sondages</value>
+    <value>Superviseurs et enquêtes</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
     <value>Nom de l’enquête</value>
