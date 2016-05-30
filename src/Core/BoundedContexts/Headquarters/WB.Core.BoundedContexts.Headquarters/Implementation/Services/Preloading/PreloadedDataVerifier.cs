@@ -432,30 +432,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
-                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__latitude", gpsExportedQuestion.VariableName));
-                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__longitude", gpsExportedQuestion.VariableName));
+                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                    $"{gpsExportedQuestion.VariableName}__latitude");
 
-                var latitude = latitudeColumnIndex < 0
-                    ? null
-                    : this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
+                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                    $"{gpsExportedQuestion.VariableName}__longitude");
+
+                if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
+                {
+                    yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsMandatoryFilds, this.CreateReference(rowIndex, levelData));
+                    yield break;
+                }
+
+                var latitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
                         latitudeColumnIndex, level, preloadedDataService);
-                var longitude = longitudeColumnIndex < 0
-                    ? null
-                    : this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
+
+                if (!latitude.HasValue)
+                {
+                    yield return new PreloadedDataVerificationError("PL0030",
+                        PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
+                        this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
+                }
+
+                var longitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
                         longitudeColumnIndex, level, preloadedDataService);
 
-                if (!latitude.HasValue || !longitude.HasValue)
+                if (!longitude.HasValue)
                 {
-                    var columnIndexesOfEmptyGPSProperties =
-                        gpsAnswersColumnIndexes.Where(i => string.IsNullOrEmpty(levelData.Content[rowIndex][i]))
-                            .ToArray();
-
-                    foreach (var emptyGPSPropertyColumnIndex in columnIndexesOfEmptyGPSProperties)
-                    {
-                        yield return new PreloadedDataVerificationError("PL0030",
-                            PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
-                            this.CreateReference(emptyGPSPropertyColumnIndex, rowIndex, levelData));
-                    }
+                    yield return new PreloadedDataVerificationError("PL0030",
+                        PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
+                        this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
                 }
 
                 if (latitude.HasValue && (latitude.Value < -90 || latitude.Value > 90))
