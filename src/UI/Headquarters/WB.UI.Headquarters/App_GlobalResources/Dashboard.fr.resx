@@ -139,31 +139,31 @@
     <value>Données approuvées Stata</value>
   </data>
   <data name="BatchUpload" xml:space="preserve">
-    <value>Téléchargement par lots</value>
+    <value>Importation par lots</value>
   </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Données binaires</value>
   </data>
   <data name="Census" xml:space="preserve">
-    <value>Recensement de</value>
+    <value>Mode recensement</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>Questionnaire de clone</value>
+    <value>Cloner questionnaire</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Date de création</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>Histoire</value>
+    <value>Historique</value>
   </data>
   <data name="ImportTemplate" xml:space="preserve">
-    <value>Importer un modèle</value>
+    <value>Importer un masque</value>
   </data>
   <data name="LastEntryDate" xml:space="preserve">
-    <value>Dernière Date de l’entrée</value>
+    <value>Dernière date d’entrée</value>
   </data>
   <data name="NewInterview" xml:space="preserve">
-    <value>Nouvelle interview</value>
+    <value>Nouveau entretien</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>

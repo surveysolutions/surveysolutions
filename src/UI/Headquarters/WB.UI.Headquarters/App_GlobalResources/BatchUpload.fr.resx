@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdvancedMode" xml:space="preserve">
-    <value>Mode de téléchargement de données avancées</value>
+    <value>Mode avancé d'importation de données</value>
   </data>
   <data name="AdvancedModeDescription" xml:space="preserve">
-    <value>Pour précharger les données à plus de sections et de variables, vous pouvez préparer un ensemble de fichiers .tab qui correspondent à la structure de votre questionnaire et le mettre dans une archive .zip. S’il vous plaît utiliser l’archive de modèle ci-dessous. Vous pouvez mettre uniquement les fichiers et les colonnes que vous souhaitez télécharger. Toutes les colonnes à gauche manquantes ou avec des titres ne correspondant ne pas à une variable existante dans le questionnaire sera ignoré.</value>
+    <value>Afin de charger les contenu de variables dans plusieurs sections, préparer un ensemble de fichiers .tab qui correspondent à la structure de votre questionnaire, et mettre ces fichiers une archive .zip. Veuillez utiliser les modèles contenus dans l'archive ci-dessous. Vous pouvez y mettre uniquement les fichiers et les colonnes que vous souhaitez charger. Sera ignoré toutes les colonnes au contenu manquant ou au titre ne correspondant ne pas à une variable existante dans le questionnaire.</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Tous les</value>
+    <value>Tous</value>
   </data>
   <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Êtes-vous sûr de que vouloir supprimer le fichier</value>
+    <value>Êtes-vous sûr de vouloir supprimer le fichier</value>
   </data>
   <data name="BatchUpload_Title" xml:space="preserve">
-    <value>Téléchargement par lots</value>
+    <value>Importation par lots</value>
   </data>
   <data name="BrowseTeams" xml:space="preserve">
     <value>Parcourir les équipes</value>
@@ -142,13 +142,13 @@
     <value>Colonne</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
-    <value>Créer des échantillons de ces données</value>
+    <value>Créer l'échantillons à partir de ces données</value>
   </data>
   <data name="CreateUsers" xml:space="preserve">
     <value>Créer des utilisateurs</value>
   </data>
   <data name="CreatingUsers" xml:space="preserve">
-    <value>Création d’utilisateurs</value>
+    <value>Création d’utilisateurs en cours</value>
   </data>
   <data name="DataIsValid" xml:space="preserve">
     <value>Les données sont valides</value>
@@ -163,10 +163,10 @@
     <value>Détails</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Télécharger entrevues non valides</value>
+    <value>Télécharger les entretiens invalides</value>
   </data>
   <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>Téléchargez archive modèle</value>
+    <value>Télécharger l'archive modèle</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Durée estimée</value>
@@ -175,7 +175,7 @@
     <value>Nom de fichier</value>
   </data>
   <data name="FileNotParsed" xml:space="preserve">
-    <value>Fichier n’a pas été analysé. Seulement les fichier délimité par des tabulations peuvent être téléchargée.</value>
+    <value>Fichier n’a pas été décrypté. Seuls les fichiers délimités par des tab peuvent être importés</value>
   </data>
   <data name="FileSize" xml:space="preserve">
     <value>Taille du fichier</value>
@@ -184,40 +184,40 @@
     <value>La taille du fichier ne peut pas dépasser 300MB.</value>
   </data>
   <data name="Finished" xml:space="preserve">
-    <value>Fini</value>
+    <value>Terminé</value>
   </data>
   <data name="FinishedWithError" xml:space="preserve">
     <value>Terminé avec l’erreur</value>
   </data>
   <data name="FinishedWithErrorMessage" xml:space="preserve">
-    <value>Terminé avec l’erreur, raison:</value>
+    <value>Terminé avec l’erreur. Raison:</value>
   </data>
   <data name="FormatNotSupported" xml:space="preserve">
-    <value>Format de fichier n’est pas pris en charge, les données à l’intérieur il seront ignorées</value>
+    <value>Format de fichier n’est pas pris en charge. Les données à l’intérieur seront ignorées</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Importation d’entretiens est en cours. Attendre le déroulement opération terminée.</value>
+    <value>Importation d’entretiens est en cours. Attendre l'achèvement de l'opération en cours.</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+    <value>Vous devez choisir un fichier à importer</value>
   </data>
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
-    <value>Sélectionnez</value>
+    <value>Sélectionner</value>
   </data>
   <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>Sélectionnez le superviseur</value>
+    <value>Sélectionner le superviseur</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
-    <value>Exemple d’importation</value>
+    <value>Importer l'échantillon</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
-    <value>État de l’importation</value>
+    <value>Status de l’importation</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>est en cours de vérification, vérifié</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>n’est pas valide. Corrigez les erreurs ci-dessous et télécharger à nouveau.</value>
+    <value>est invalide. Corrigez les erreurs ci-dessous et importer à nouveau.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Date de dernière mise à jour</value>
@@ -226,7 +226,7 @@
     <value>Message</value>
   </data>
   <data name="NumberInterviewCreated" xml:space="preserve">
-    <value>Entrevue créé</value>
+    <value>Entretien créé</value>
   </data>
   <data name="OutOf" xml:space="preserve">
     <value>sur</value>
@@ -235,88 +235,88 @@
     <value>Veuillez patienter, le fichier</value>
   </data>
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>Fichier ne contient pas de colonnes requis par questions préremplies :&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Fichier ne contient pas les colonne(s) corréspondant à certaines questions préremplies :&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>Traitement...</value>
+    <value>En cours de traitement…</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
-    <value>Prêt pour la création de l’utilisateur</value>
+    <value>Prêt pour la création de comptes d’utilisateur</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
     <value>Prêt pour la validation</value>
   </data>
   <data name="RecordsCount" xml:space="preserve">
-    <value>Nombre d’enregistrements</value>
+    <value>Nombre d’entrées</value>
   </data>
   <data name="RefreshActionOnUserUpload" xml:space="preserve">
-    <value>Actualisation</value>
+    <value>Actualiser</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Superviseur responsable sera automatiquement assigné</value>
+    <value>Superviseur responsable sera assigné automatiquement </value>
   </data>
   <data name="Row" xml:space="preserve">
     <value>Ligne</value>
   </data>
   <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>Création de l’échantillon a été succefully terminé.</value>
+    <value>Création de l’échantillon terminé avec succès.</value>
   </data>
   <data name="SampleCreationResult" xml:space="preserve">
-    <value>Exemple création résultat</value>
+    <value>Résultat de la création d'échantillon</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Importation de l’échantillon est terminée avec des erreurs</value>
+    <value>Importation de l’échantillon effectuée avec des erreurs</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Importation d’échantillons est effectuée avec succès</value>
+    <value>Importation d’échantillons effectuée avec succès</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Statut</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Télécharger</value>
+    <value>Importer</value>
   </data>
   <data name="UploadDate" xml:space="preserve">
-    <value>Télécharger date</value>
+    <value>Date d'importation</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
-    <value>Téléchargées</value>
+    <value>Importé</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
-    <value>Télécharger les nouvelles données</value>
+    <value>Importer de nouvelles données</value>
   </data>
   <data name="UploadNewFile" xml:space="preserve">
-    <value>Télécharger un nouveau fichier</value>
+    <value>Importer un nouveau fichier</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
-    <value>Télécharger sample</value>
+    <value>Importer l'échantillon</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Pour télécharger l’échantillon pour l’entrevue, veuillez préparer un fichier (taille maximum de 300MB) pré-remplie avec des valeurs séparées par des tabulations (fichier .tab) correspondant au modèle ci-dessous, contenant les valeurs de ces variables de votre questionnaire marqués comme.</value>
+    <value>Afin d'importer l’échantillon à enquêteur, veuillez préparer un fichier (de taille maximum de 300MB) avec comme délimiteurs des tabs (fichier avec l'extension .tab ou .txt) et dont le contenu corréspond aux valeurs des des variables de votre questionnaire marqués comme préremplies.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Batch Upload utilisateur</value>
+    <value>Importation par lots de comptes d'utilisateur</value>
   </data>
   <data name="UploadUsers_Title" xml:space="preserve">
-    <value>Liste des fichiers avec des utilisateurs préchargées</value>
+    <value>Liste des fichiers avec des comptes d'utilisateur préchargés</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Préparer un dossier avec des valeurs séparées par des tabulations (fichier .tab) correspondant à un modèle ci-dessous. Les colonnes marquées avec (*) sont requis. Seules les valeurs « Contrôleur » ou « Interviewer » sont autorisées dans la colonne « role ».</value>
+    <value>Préparer un dossier avec des valeurs séparées par des tabs (fichier .tab) correspondant au modèle ci-dessous. Les colonnes marquées avec un astérix (*) sont requis. Seules les valeurs « Supervisor » ou « Interviewer » sont autorisées dans la colonne marquée « role ».</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
-    <value>Batch Upload utilisateur</value>
+    <value>Importation par lots de comptes d'utilisateur</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
-    <value>Préchargement des processus de l’utilisateur est manquant</value>
+    <value>Processus de préchargement de l’utilisateur est absent</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>utilisateur (s) ont été créés</value>
+    <value>compte(s) d'utilisateur ont été créé(s)</value>
   </data>
   <data name="Validated" xml:space="preserve">
     <value>Validé</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validation de</value>
+    <value>En cours de validation</value>
   </data>
   <data name="ValidationFinishedWithError" xml:space="preserve">
     <value>Validé</value>
