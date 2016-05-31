@@ -22,7 +22,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
