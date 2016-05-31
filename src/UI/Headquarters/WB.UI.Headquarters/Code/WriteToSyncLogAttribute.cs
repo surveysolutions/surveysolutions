@@ -98,9 +98,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     case SynchronizationLogType.QuestionnaireAssemblyProcessed:
                         logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context);
                         break;
-                    case SynchronizationLogType.GetInterviewPackages:
-                        logItem.Log = this.GetInterviewPackagesLogMessage(context);
-                        break;
                     case SynchronizationLogType.GetInterviewPackage:
                         logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgument<string>("id"));
                         break;
@@ -158,19 +155,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             return new UrlHelper(context.Request).Link("Default",
                 new { controller = "Interview", action = "Details", id = interviewId });
-        }
-
-        private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)
-        {
-            var interviewPackagesApiView = this.GetResponseObject<InterviewPackagesApiView>(context);
-            var lastSynchronizationPackageId = context.GetActionArgument<string>("lastPackageId");
-
-            var messagesByInterviewPackages = interviewPackagesApiView.Packages.Select(x=>this.GetMessageByInterviewPackageType(context, x)).ToList();
-
-            return SyncLogMessages.GetInterviewPackages.FormatString(string.IsNullOrEmpty(lastSynchronizationPackageId) ? SyncLogMessages.EmptyDevice : lastSynchronizationPackageId,
-                !messagesByInterviewPackages.Any()
-                    ? SyncLogMessages.NoNewInterviewPackagesToDownload
-                    : string.Join("<br>", messagesByInterviewPackages));
         }
 
         private string GetMessageByInterviewPackageType(HttpActionExecutedContext context, SynchronizationChunkMeta synchronizationChunkMeta)
