@@ -72,12 +72,15 @@
                 <div class="answer-editor">
                     @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
                     {
-                        <div class="option">                            
-                            <span class="option-value">@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span>
-                            <span class="option-text">
+                        <div class="option">
+                            <div class="option-value"><span >
+    @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
+</span>
+                                </div>
+                            <div class="option-text">
                                 <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                                 <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                            </span>
+                            </div>
 </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
@@ -91,7 +94,9 @@
                     @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
                     {
                         <div class="option">
-                            <span class="option-value">@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span>
+                            <div class="option-value">
+                                @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
+                            </div>
                             @if (questionnaire.IsYesNoMultiQuestion(question))
                             {
                                 <div class="yes_no_multiselect">
@@ -101,14 +106,14 @@
                                     <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-no" name="@question.StataExportCaption-@option.AnswerValue">
                                     <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
                                 </div>
-                                <span class="yes_no-option-text">@option.AnswerText</span>
+                                <div class="yes_no-option-text">@option.AnswerText</div>
                             }
                             else
                             {
-                                <span class="option-text">
+                                <div class="option-text">
                                     <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                                     <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                                </span>
+                                </div>
 
                             }
 </div>
