@@ -51,8 +51,6 @@
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="GlobalStopwatcher.cs" />
     <Compile Include="GuidExtensions.cs" />
-    <Compile Include="IAsyncExecutor.cs" />
-    <Compile Include="Implementation\AsyncExecutor.cs" />
     <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />
     <Compile Include="Implementation\Crypto\Converters.cs" />
     <Compile Include="Implementation\Crypto\Hash.cs" />
