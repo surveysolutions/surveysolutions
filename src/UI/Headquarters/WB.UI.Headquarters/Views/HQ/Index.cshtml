@@ -3,6 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    ViewBag.Title = Dashboard.Questionnaires;
 }
 
 @section scripts
@@ -15,6 +16,7 @@
     var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
     var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
     var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
+    var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
     var $importTemplateUrl = '@Url.Action("Import", "Template")';
     $(function () {
         var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
@@ -58,23 +60,28 @@
             <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
             <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
             <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
-            <th>Actions</th>
+            <th>@Dashboard.Actions</th>
         </tr>
         </thead>
         <tbody>
         <!-- ko foreach:Items -->
             <tr data-bind="css: {'text-muted':Disabled }">
-                <td>
+                <td style="vertical-align: middle">
                     <!-- ko if:AllowCensusMode -->
                     <span class="glyphicon glyphicon-ok pull-right margin-right-5"></span>
                     <!-- /ko -->
                 </td>
-                <td data-bind="text: Title, css: {'text-italic':Disabled }"></td>
-                <td data-bind="text: Version"></td>
-                <td data-bind="date: CreationDate"></td>
-                <td data-bind="date: LastEntryDate"></td>
+                <td style="vertical-align: middle" data-bind="text: Title, css: {'text-italic':Disabled }"></td>
+                <td style="vertical-align: middle" data-bind="text: Version"></td>
+                <td style="vertical-align: middle" data-bind="date: CreationDate"></td>
+                <td style="vertical-align: middle" data-bind="date: LastEntryDate"></td>
                 <td>
                     <!-- ko ifnot:Disabled -->
+                    <div class="btn-group">
+                        <a class="btn btn-default" data-bind="attr: { href: $cloneQuestionnaireUrl + '/' + QuestionnaireId() + '?version=' + Version() }" data-toggle="tooltip" title="@Dashboard.CloneQuestionnaire">
+                            <i class="glyphicon glyphicon-duplicate"></i>
+                        </a>
+                    </div>
                     <!-- ko ifnot:AllowCensusMode -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -98,7 +105,8 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-                    
+
+
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">

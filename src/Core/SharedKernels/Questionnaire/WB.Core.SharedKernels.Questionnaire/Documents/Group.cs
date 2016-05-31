@@ -156,6 +156,7 @@ namespace Main.Core.Entities.SubEntities
                 Title = this.Title,
                 VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
+                HideIfDisabled = this.HideIfDisabled,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,

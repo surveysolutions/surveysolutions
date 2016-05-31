@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
     internal class BackupRestoreServiceNUnitTests
     {
         [Test]
-        public async void GetSystemBackupAsync_When_crush_file_exists_in_external_storage_Then_crush_file_should_be_included_in_backup()
+        public async Task GetSystemBackupAsync_When_crush_file_exists_in_external_storage_Then_crush_file_should_be_included_in_backup()
         {
             var archiveUtilsMock=new Mock<IArchiveUtils>();
             var asynchronousFileSystemAccessorMock = new Mock<IAsynchronousFileSystemAccessor>();
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
         }
 
         [Test]
-        public async void RestoreAsync_When_restore_file_present_Then_private_storage_data_should_be_replaced_with_unzipped_backup_content()
+        public async Task RestoreAsync_When_restore_file_present_Then_private_storage_data_should_be_replaced_with_unzipped_backup_content()
         {
             var archiveUtilsMock = new Mock<IArchiveUtils>();
             var asynchronousFileSystemAccessorMock = new Mock<IAsynchronousFileSystemAccessor>();
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
         }
 
         [Test]
-        public async void BackupAsync_When_backup_folder_is_absent_Then_backup_folder_should_be_created_and_backup_stored_in_it()
+        public async Task BackupAsync_When_backup_folder_is_absent_Then_backup_folder_should_be_created_and_backup_stored_in_it()
         {
             var archiveUtilsMock = new Mock<IArchiveUtils>();
             var asynchronousFileSystemAccessorMock = new Mock<IAsynchronousFileSystemAccessor>();

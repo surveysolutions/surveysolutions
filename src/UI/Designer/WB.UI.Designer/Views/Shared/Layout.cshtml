@@ -52,12 +52,22 @@
             </ul>
             <nav>
                 <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
-                @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
                 @if (userHelper.WebUser.IsAdmin)
                 {
                     <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">Restore questionnaire</a>
                 }
-                @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
+                <div class="btn-group">
+                    <a class="btn btn-default">Hi, @userHelper.WebUser.UserName</a>
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>@Html.ActionLink("Change password", "Manage", "Account")</li>
+                        <li>@Html.ActionLink("Log out", "LogOff", "Account")</li>
+                    </ul>
+                </div>
+                
             </nav>
         </header>
     </div>

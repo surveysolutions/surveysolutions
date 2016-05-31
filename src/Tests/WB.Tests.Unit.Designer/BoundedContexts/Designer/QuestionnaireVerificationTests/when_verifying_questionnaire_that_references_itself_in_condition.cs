@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         new TextQuestion
                         {
                             PublicKey = questionId,
-                            ConditionExpression = "[s546i]==1",
+                            ConditionExpression = "s546i==1",
                             StataExportCaption = "s546i"
                         }
                     }
@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
             expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("[s546i]==1"))
-                .Returns(new[] { questionId.ToString() });
+                .Setup(x => x.GetIdentifiersUsedInExpression("s546i==1"))
+                .Returns(new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
@@ -48,11 +48,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         It should_return_message_with_code__WB0056 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0056");
+            verificationMessages.ShouldContainError("WB0056");
 
         It should_return_message_with_one_references = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);

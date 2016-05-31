@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { questionWithFilterId.ToString() });
+                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
         };

@@ -384,8 +384,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
-                        var eventsToPublish = this.eventStore.ReadFrom(eventSourceId, 0, int.MaxValue);
-                        this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count(), handlers: handlers);
+                        var eventsToPublish = this.eventStore.Read(eventSourceId, 0).ToList();
+                        this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count, handlers: handlers);
                     }
                 }
                 finally

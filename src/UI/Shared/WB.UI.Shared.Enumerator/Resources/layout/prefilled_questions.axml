@@ -15,15 +15,12 @@
             style="@style/PrefilledQuestionsToolbarTitle"
             local:MvxBind="Text QuestionnaireTitle" />
     </android.support.v7.widget.Toolbar>
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true">
 
-      <MvxRecyclerView
-        style="@style/PrefilledQuestions_List"
-        android:id="@+id/questionnaireEntitiesList"
-        local:MvxBind="ItemsSource PrefilledQuestions" />
+  <MvxRecyclerView
+    style="@style/PrefilledQuestions_List"
+    android:id="@+id/questionnaireEntitiesList"
+    local:MvxItemTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
+    local:MvxBind="ItemsSource PrefilledQuestions" />
 
-    </ScrollView>
+
 </LinearLayout>

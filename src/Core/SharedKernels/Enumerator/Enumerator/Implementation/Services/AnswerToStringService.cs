@@ -111,6 +111,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         return this.AnswerToUIString(questionIdReferencedByLinkedQuestion, referencedAnswer, interview, questionnaire);
                     }
                 }
+                if (questionnaire.IsQuestionLinkedToRoster(questionId))
+                {
+                    var referencedRosterIdentity = new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector);
+
+                    var rosterIdReferencedByLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(singleOptionLinkedAnswer.Id);
+
+                    var referencedRoster = interview.FindReferencedRostersForLinkedQuestion(rosterIdReferencedByLinkedQuestion, referencedRosterIdentity)
+                        .FirstOrDefault(a => a.RosterVector.SequenceEqual(singleOptionLinkedAnswer.Answer));
+
+                    if (referencedRoster != null)
+                    {
+                        return referencedRoster.Title;
+                    }
+                }
+                return string.Empty;
             }
         
             return answer.ToString();

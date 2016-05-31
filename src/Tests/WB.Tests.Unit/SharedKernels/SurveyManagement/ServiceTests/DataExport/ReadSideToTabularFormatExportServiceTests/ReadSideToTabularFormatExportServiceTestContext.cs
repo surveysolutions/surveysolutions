@@ -41,9 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 new TestInMemoryWriter<InterviewSummary>(),
                 new InterviewDataExportSettings(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
+                Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
-                        _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure));
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

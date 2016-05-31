@@ -5,6 +5,7 @@
         General = 0,
         Condition = 1,
         Validation = 2,
-        Filter = 4
+        Filter = 4,
+        Expression = 5,
     }
 }

@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -34,6 +35,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextDeleted>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableUpdated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, VariableDeleted>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewGroupAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupDeleted>
@@ -444,16 +449,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     ValidationConditions = staticText.ValidationConditions
                 }).ToList();
 
+            var variables = questionnaire.GetEntitiesByType<IVariable>().Select(variable => new VariableView()
+            {
+                Id = variable.PublicKey,
+                ParentGroupId = variable.GetParent().PublicKey,
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression)
+            }).ToList();
+
             var questionCollection = new QuestionsAndGroupsCollectionView
             {
                 Questions = questions,
                 Groups = groups,
-                StaticTexts = staticTexts
+                StaticTexts = staticTexts,
+                Variables = variables
             };
 
             groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
             staticTexts.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
+            variables.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
 
             return questionCollection;
         }
@@ -572,6 +586,76 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
             currentState.StaticTexts.Add(staticTextDetailsView);
             return currentState;
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableAdded> @event)
+        {
+            IVariable variable = this.questionnaireEntityFactory.CreateVariable(@event.Payload);
+            return this.UpdateStateWithAddedVariable(state, variable, @event.Payload.ParentId);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableUpdated> @event)
+        {
+            if (state == null)
+            {
+                return null;
+            }
+
+            var oldstaticTextDetailsView = state.Variables.FirstOrDefault(x => x.Id == @event.Payload.EntityId);
+            if (oldstaticTextDetailsView == null)
+            {
+                return state;
+            }
+
+            state.Variables.Remove(oldstaticTextDetailsView);
+
+            var staticTextDetailsView = new VariableView()
+            {
+                Id = @event.Payload.EntityId,
+                ItemId = @event.Payload.EntityId.FormatGuid(),
+                ParentGroupId = oldstaticTextDetailsView.ParentGroupId,
+                VariableData = @event.Payload.VariableData
+            };
+            UpdateBreadcrumbs(state, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
+            state.Variables.Add(staticTextDetailsView);
+            return state;
+
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableCloned> @event)
+        {
+            IVariable variable = this.questionnaireEntityFactory.CreateVariable(@event.Payload);
+            return this.UpdateStateWithAddedVariable(state, variable, @event.Payload.ParentId);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<VariableDeleted> @event)
+        {
+            var staticText = state.Variables.FirstOrDefault(x => x.ItemId == @event.Payload.EntityId.ToString());
+            if (staticText != null)
+            {
+                state.Variables.Remove(staticText);
+            }
+            return state;
+        }
+
+        private QuestionsAndGroupsCollectionView UpdateStateWithAddedVariable(QuestionsAndGroupsCollectionView state, IVariable variable, Guid parentId)
+        {
+            if (state == null)
+            {
+                return null;
+            }
+
+            var variableView = new VariableView()
+            {
+                Id = variable.PublicKey,
+                ItemId = variable.PublicKey.FormatGuid(),
+                ParentGroupId = parentId,
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression)
+            };
+
+            state.Variables.Add(variableView);
+            UpdateBreadcrumbs(state, variableView, variableView.ParentGroupId);
+            return state;
         }
     }
 }

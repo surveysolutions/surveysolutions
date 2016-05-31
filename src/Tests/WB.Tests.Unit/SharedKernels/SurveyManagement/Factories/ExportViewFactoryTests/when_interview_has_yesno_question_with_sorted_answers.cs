@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                         Create.Answer("bar", 42),
                         Create.Answer("blah", 21),
                         Create.Answer("bar_null", 15)
-                    },
+                    }, areAnswersOrdered:true,
                     yesNoView: true));
 
             exportViewFactory = CreateExportViewFactory();

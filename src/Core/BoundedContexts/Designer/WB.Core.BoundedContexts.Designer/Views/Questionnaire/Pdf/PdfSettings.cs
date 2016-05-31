@@ -8,7 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             int optionsExcerptCount, 
             int minAmountOfDigitsInCodes, 
             int attachmentSize,
-            int pdfGenerationTimeoutInSeconds)
+            int pdfGenerationTimeoutInSeconds,
+            int variableExpressionExcerptLength)
         {
             this.PdfGenerationTimeoutInMilliseconds = pdfGenerationTimeoutInSeconds * 1000;
             this.InstructionsExcerptLength = instructionsExcerptLength;
@@ -16,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.OptionsExcerptCount = optionsExcerptCount;
             this.MinAmountOfDigitsInCodes = minAmountOfDigitsInCodes;
             this.AttachmentSize = attachmentSize;
+            this.VariableExpressionExcerptLength = variableExpressionExcerptLength;
         }
 
         public int InstructionsExcerptLength { get; }
@@ -24,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int MinAmountOfDigitsInCodes { get; }
         public int AttachmentSize { get; }
         public int PdfGenerationTimeoutInMilliseconds { get; }
+        public int VariableExpressionExcerptLength { get; }
 
     }
 }
