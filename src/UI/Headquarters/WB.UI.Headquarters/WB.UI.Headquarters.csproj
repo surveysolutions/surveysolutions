@@ -15,7 +15,7 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1012,10 +1012,13 @@
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
+    <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
+    <Compile Include="Filters\HttpStatusException.cs" />
     <Compile Include="Filters\LimitsFilterAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using WB.UI.Shared.Web.Exceptions;
 
-namespace WB.UI.Shared.Web.Filters
+namespace WB.UI.Headquarters.Filters
 {
     public class HandleUIExceptionAttribute : FilterAttribute, IExceptionFilter
     {
