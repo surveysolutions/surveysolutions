@@ -316,7 +316,7 @@ article {
 }
 .option {
   margin-top: 8px;
-    vertical-align: middle;
+  
 }
 .option:first-of-type {
   margin-top: 0;
@@ -328,13 +328,13 @@ article {
 }
 
 .option .option-value {    
-    margin-left: 0;    
-    font-size: 10px;
+    font-size: 12px;
+    padding: 1px 0;
+    height: 18px;
     vertical-align: middle;
+    display: inline-block;
+    float:left;
     line-height: 18px;
-    /*display: inline-block;*/
-    /*margin-top: 5px;*/
-    /*float:left;*/
 }
 
 .points {
@@ -364,6 +364,8 @@ article {
   display: inline-block;
   width: 53px;
   vertical-align: top;
+  margin-left: 10px;
+  line-height: 18px;
 }
 .answer-editor .yes_no_multiselect label {
   padding-left: 5px;
@@ -375,14 +377,16 @@ article {
   line-height: 18px;
 }
 .option .yes_no-option-text {
-  margin-left: 9px;
+  margin-left: 5px;
   width: 65%;
-  vertical-align: middle;
+  vertical-align: top;
 }
 .option .option-text {
   width: 65%;
   display: inline-block;
   margin-left: 10px;
+  line-height: 18px;
+  vertical-align: top; 
 }
 input[type=date] {
   outline: 0;
@@ -400,7 +404,7 @@ input[type=date] {
   font-weight: normal;
 }
 .generated_by span a {
-  color: #000;
+  color: #0000EE;
   text-decoration: none;
 }
 .common-info {
