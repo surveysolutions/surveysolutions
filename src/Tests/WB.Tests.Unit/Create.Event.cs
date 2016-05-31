@@ -221,6 +221,15 @@ namespace WB.Tests.Unit
             public static InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
                 => new InterviewStatusChanged(status, comment);
 
+            public static VariablesDisabled VariablesDisabled(params Identity[] identites)
+                => new VariablesDisabled(identites);
+
+            public static VariablesEnabled VariablesEnabled(params Identity[] identites)
+             => new VariablesEnabled(identites);
+
+            public static VariablesChanged VariablesChanged(params ChangedVariable[] changedVariables)
+             => new VariablesChanged(changedVariables);
+
             public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
                 return new InterviewSynchronized(synchronizationDto);
@@ -825,6 +834,17 @@ namespace WB.Tests.Unit
             {
                 return new StaticTextsDeclaredValid(staticTextIdentity);
             }
+
+            public static ChangedVariable ChangedVariable(Identity variableIdentity, object value)
+            {
+                return new ChangedVariable(variableIdentity, value);
+            }
+
+            public static SubstitutionTitlesChanged SubstitutionTitlesChanged(
+                Identity[] questions = null, Identity[] staticTexts = null)
+                => new SubstitutionTitlesChanged(
+                    questions ?? new Identity[] {},
+                    staticTexts ?? new Identity[] {});
         }
     }
 }

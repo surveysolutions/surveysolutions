@@ -1,12 +1,13 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Utils
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 
 @model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletInformationView
 
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
-    ViewBag.Title = "Index";
+    ViewBag.Title = Pages.PackagesInfo_Title;
 }
 
 @section scripts
@@ -29,7 +30,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Tablet information packages</h3>
+    <h3 class="sinle-line-header">@Pages.PackagesInfo_Header</h3>
 }
 
 @section gridnavigation
@@ -53,11 +54,11 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
         <tr>
-            <th>Device Id</th>
-            <th>Upload date</th>
-            <th>User Name</th>
-            <th>User Id</th>
-            <th>Size(bytes)</th>
+            <th>@Pages.PackagesInfo_DeviceId</th>
+            <th>@Pages.PackagesInfo_UploadDate</th>
+            <th>@Pages.PackagesInfo_UserName</th>
+            <th>@Pages.PackagesInfo_UserId</th>
+            <th>@Pages.PackagesInfo_Size</th>
             <th></th>
         </tr>
         </thead>

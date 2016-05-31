@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -47,37 +48,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Static texts: enablement conditions and validations</summary>
         private readonly Version version_14 = new Version(14, 0, 0);
 
+        /// <summary>Variables</summary>
+        private readonly Version version_15 = new Version(15, 0, 0);
 
-        public Version GetLatestSupportedVersion() => this.version_14;
+
+        public Version GetLatestSupportedVersion() => this.version_15;
 
         public bool IsClientVersionSupported(Version clientVersion)
-        {
+        { 
             var engineVersion = this.GetLatestSupportedVersion();
-            if (engineVersion > clientVersion)
-            {
-                if (clientVersion < version_9)
-                    return false;
-            }
-            return true;
+            return (clientVersion >= this.version_10 && engineVersion >= clientVersion);
         }
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
             Version questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
 
-            if (clientVersion < this.version_14 && questionnaireContentVersion == this.version_14)
-                return false;
-
-            if (clientVersion < this.version_13 && questionnaireContentVersion == this.version_13)
-                return false;
-
-            if (clientVersion < this.version_12 && questionnaireContentVersion == this.version_12)
-                return false;
-
-            if (clientVersion < this.version_11 && questionnaireContentVersion == this.version_11)
-                return false;
-
-            if (clientVersion == this.version_9 && questionnaireContentVersion == this.version_10)
+            if (clientVersion < questionnaireContentVersion)
                 return false;
 
             return true;
@@ -85,6 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            bool hasVariables = questionnaireDocument.Find<Variable>().Any();
+            if (hasVariables)
+                return version_15;
+
             bool hasStaticTextsWithConditions = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
             if (hasStaticTextsWithConditions)
                 return version_14;
@@ -114,11 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (countOfLookupTables > 0)
                 return version_11;
 
-            var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
-            if (countOfHiddenQuestions > 0)
-                return version_10;
-
-            return this.version_9;
+            return this.version_10;
         }
     }
 }

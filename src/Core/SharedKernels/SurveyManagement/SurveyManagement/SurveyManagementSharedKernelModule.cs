@@ -54,6 +54,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -91,6 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<Questionnaire>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+            this.Bind<IQuestionnaireExportStructureStorage>().To<QuestionnaireExportStructureStorage>().InSingletonScope();
 
             CommandRegistry
                 .Setup<Questionnaire>()
@@ -98,7 +100,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
-                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
 
             this.Bind<User>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
@@ -123,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewCreatedOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewCreatedOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.IsValid, command.UserId))
                 .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId))
-                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command.QuestionnaireId, command.Version, command.PreloadedData, command.SupervisorId, command.AnswersTime, command.UserId))
+                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command.QuestionnaireId, command.Version, command.PreloadedData, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewerId))
                 .InitializesWith<SynchronizeInterviewFromHeadquarters>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewFromHeadquarters(command.Id, command.UserId, command.SupervisorId, command.InterviewDto, command.SynchronizationTime))
                 .InitializesWith<CreateInterviewByPrefilledQuestions>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewByPrefilledQuestions(command.QuestionnaireIdentity, command.UserId, command.SupervisorId, command.InterviewerId, command.AnswersTime, command.AnswersOnPrefilledQuestions))
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
@@ -265,6 +268,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             //this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
+            this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
         }
     }
 }

@@ -165,7 +165,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.answer = ko.observable(answerElement.val());
+        question.answer = ko.observable(observableTextAnswer());
 
         sendAnswerCommand(config.commands.answerNumericRealQuestionCommand, question);
     };

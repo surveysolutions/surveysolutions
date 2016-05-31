@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -434,16 +435,22 @@ namespace Main.Core.Documents
             foreach (var question in questions)
             {
                 bool isCategorical = question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.MultyOption;
+
                 if (isCategorical)
                 {
-                    foreach (var answer in question.Answers)
-                    {
-                        answer.AnswerCode = decimal.Parse(answer.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
-                        if (!string.IsNullOrEmpty(answer.ParentValue))
-                        {
-                            answer.ParentCode = decimal.Parse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
-                        }
-                    }
+                    ParseOptionsForCategoricalQuestion(question);
+                }
+            }
+        }
+
+        private static void ParseOptionsForCategoricalQuestion(IQuestion question)
+        {
+            foreach (var answer in question.Answers)
+            {
+                answer.AnswerCode = decimal.Parse(answer.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+                if (!string.IsNullOrEmpty(answer.ParentValue))
+                {
+                    answer.ParentCode = decimal.Parse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
                 }
             }
         }

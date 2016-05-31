@@ -62,6 +62,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not update user information because current user does not exist.
+        /// </summary>
+        public static string UserDoesNotExist {
+            get {
+                return ResourceManager.GetString("UserDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name &apos;{0}&apos; is taken by archived users.
         /// </summary>
         public static string UserNameIsTakenByArchivedUsersFormat {

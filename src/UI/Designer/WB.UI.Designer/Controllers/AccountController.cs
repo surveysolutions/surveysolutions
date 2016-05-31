@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI;
@@ -128,7 +129,7 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public ActionResult PasswordReset(ResetPasswordModel model)
+        public async Task<ActionResult> PasswordReset(ResetPasswordModel model)
         {
             if (!Membership.EnablePasswordReset)
             {
@@ -146,7 +147,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     string confirmationToken = WebSecurity.GeneratePasswordResetToken(user.UserName);
 
-                    this.mailer.ResetPasswordEmail(
+                    await this.mailer.ResetPasswordEmail(
                         new EmailConfirmationModel()
                             {
                                 Email = user.Email.ToWBEmailAddress(),
@@ -175,7 +176,7 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         [RecaptchaControlMvc.CaptchaValidatorAttribute]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public ActionResult Register(RegisterModel model, bool captchaValid)
+        public async Task<ActionResult> Register(RegisterModel model, bool captchaValid)
         {
             var isUserRegisterSuccessfully = false;
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
@@ -201,7 +202,7 @@ namespace WB.UI.Designer.Controllers
 
                             isUserRegisterSuccessfully = true;
 
-                            this.mailer.ConfirmationEmail(
+                            await this.mailer.ConfirmationEmail(
                                 new EmailConfirmationModel()
                                     {
                                         Email = model.Email.ToWBEmailAddress(),
@@ -238,7 +239,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResendConfirmation(string id)
+        public async Task<ActionResult> ResendConfirmation(string id)
         {
             MembershipUser model = Membership.GetUser(id, false);
             if (model != null)
@@ -249,7 +250,7 @@ namespace WB.UI.Designer.Controllers
                         ((DesignerMembershipProvider)Membership.Provider).GetConfirmationTokenByUserName(model.UserName);
                     if (!string.IsNullOrEmpty(token))
                     {
-                        this.mailer.ConfirmationEmail(
+                        await this.mailer.ConfirmationEmail(
                             new EmailConfirmationModel()
                                 {
                                     Email = model.Email.ToWBEmailAddress(),

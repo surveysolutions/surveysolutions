@@ -8,5 +8,6 @@
         Roster = 4,
         LookupTable = 5,
         StaticText = 6,
+        Variable = 7
     }
 }

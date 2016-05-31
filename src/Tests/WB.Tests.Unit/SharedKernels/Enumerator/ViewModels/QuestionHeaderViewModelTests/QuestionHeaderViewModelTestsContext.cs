@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -31,9 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             return new QuestionHeaderViewModel(questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 registry ?? Create.LiteEventRegistry(),
-                new SubstitutionService(),
-                new AnswerToStringService(),
-                rosterTitleSubstitutionService);
+                new SubstitutionViewModel(
+                    interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                    questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                    new SubstitutionService(),
+                    new AnswerToStringService(),
+                    new VariableToUIStringService(),
+                    rosterTitleSubstitutionService));
         }
     }
 }

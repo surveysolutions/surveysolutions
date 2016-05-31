@@ -168,4 +168,19 @@
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
   </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Invalid property</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Error when parse question answer</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Status set by Survey Solutions support team</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observer is not allowed to perform this action</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Unexpected error occurred</value>
+  </data>
 </root>

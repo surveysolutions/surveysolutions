@@ -7,6 +7,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model DetailsViewModel
 @{
@@ -57,9 +58,9 @@
     <div id="menu" class="col-md-3 sidebar">
         <div class="panel panel-default">
             <div class="panel-heading with-btn">
-                Groups
+                @Pages.InterviewDetails_GroupsLabel
                 <div class="btn-group btn-group-sm pull-right">
-                    <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
+                    <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> @Pages.InterviewDetails_HideGroupsLAbel</button>
                 </div>
             </div>
             <ul id="groups-menu" class="list-group">
@@ -77,36 +78,36 @@
         <div class="row-fluid">
             <h3 class="span10 text-overflow-ellipsis">
                 <span>@Model.InterviewDetails.Title</span>
-                <span class="small">Status:</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
-                <span class="small">Responsible:</span><span>@Model.InterviewDetails.Responsible.Name</span>
+                <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
+                <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
                 @if (Model.HasUnprocessedSyncPackages)
                 {
-                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> Interview has pending synchronization packages in queue</span>
+                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
                 }
             </h3>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
-                <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
+                <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
                 @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                          || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
                 {
-                    <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
-                    <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
+                    <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                    <button class="btn btn-danger" data-bind="click: showRejectModal">@Pages.ApproveRejectPartialView_RejectAction</button>
                 }
                 @if (Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
                 {
-                    <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">Unapprove</button>
+                    <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">@Pages.ApproveRejectPartialView_UnapproveAction</button>
                 }
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Enabled})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Enabled)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Enabled)"></i> enabled (<span>@Model.Statistic.EnabledCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> answered (<span>@Model.Statistic.AnsweredCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Unanswered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Unanswered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Unanswered)"></i> unanswered (<span>@Model.Statistic.UnansweredCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Invalid})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Invalid)"><i class="glyphicon glyphicon-warning-sign @SetFilterIconActiveClass(InterviewDetailsFilter.Invalid)"></i> invalid (<span>@Model.Statistic.InvalidCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> commented (<span id="commentsCounter">@Model.Statistic.CommentedCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> supervisor's (<span>@Model.Statistic.SupervisorsCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> hidden (<span>@Model.Statistic.HiddenCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">@Pages.InterviewDetails_AllButtonLabel</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Enabled})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Enabled)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Enabled)"></i> @Pages.InterviewDetails_EnabledButtonLabel (<span>@Model.Statistic.EnabledCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> @Pages.InterviewDetails_AnsweredButtonLabel (<span>@Model.Statistic.AnsweredCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Unanswered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Unanswered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Unanswered)"></i> @Pages.InterviewDetails_UnansweredButtonLabel (<span>@Model.Statistic.UnansweredCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Invalid})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Invalid)"><i class="glyphicon glyphicon-warning-sign @SetFilterIconActiveClass(InterviewDetailsFilter.Invalid)"></i> @Pages.InterviewDetails_InvalidButtonLabel (<span>@Model.Statistic.InvalidCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> @Pages.InterviewDetails_CommentedButtonLabel (<span id="commentsCounter">@Model.Statistic.CommentedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> @Pages.InterviewDetails_FlaggedButtonLabel (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> @Pages.InterviewDetails_SupervisorsButtonLabel (<span>@Model.Statistic.SupervisorsCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> @Pages.InterviewDetails_HiddenButtonLabel (<span>@Model.Statistic.HiddenCount</span>)</a>
 
             </div>
         </div>
@@ -187,7 +188,7 @@
 
     public string Stringify(decimal[] array)
     {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+        return string.Join("_", array.Select(x => x.ToString("N0", CultureInfo.InvariantCulture)));
     }
 
     private static bool IsFilteredCombobox(InterviewQuestionView entityView)

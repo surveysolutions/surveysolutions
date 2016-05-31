@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {
@@ -65,12 +66,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override void CreateRole(string roleName)
         {
-            throw new Exception("CreateRole operation is not allowed.");
+            throw new Exception("Operation is not allowed.");
         }
 
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            throw new Exception("DeleteRole operation is not allowed.");
+            throw new Exception("Operation is not allowed.");
         }
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)

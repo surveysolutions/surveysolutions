@@ -219,4 +219,7 @@
   <data name="InThe" xml:space="preserve">
     <value>in the</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
 </root>

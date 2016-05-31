@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -13,8 +15,19 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         Establish context = () =>
         {
             mapper = CreateVerificationErrorsMapper();
-            verificationMessages = CreateQuestionnaireVerificationErrors(Guid.Parse(questionId), Guid.Parse(groupId));
-            document = CreateQuestionnaireDocument(Guid.Parse(questionId), Guid.Parse(groupId), groupTitle, questionTitle);
+            verificationMessages = CreateQuestionnaireVerificationErrors(Guid.Parse(questionId), Guid.Parse(groupId), Guid.Parse(rosterId));
+
+            document = Create.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Group(Guid.Parse(groupId), title: groupTitle, children: new []
+                {
+                    Create.TextQuestion(Guid.Parse(questionId), text: questionTitle)
+                }),
+                Create.Roster(Guid.Parse(rosterId), title: rosterTitle, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []
+                {
+                    Create.FixedRosterTitle(1, "Hello"), Create.FixedRosterTitle(2, "World")
+                })
+            });
         };
 
         Because of = () =>
@@ -69,16 +82,21 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result.ElementAt(2).Message.ShouldEqual(verificationMessages.ElementAt(2).Message);
 
         It should_return_third_error_with_same_References_count_as_input_error_has = () =>
-            result.ElementAt(2).Errors.First().References.Count.ShouldEqual(2);
+            result.ElementAt(2).Errors.First().References.Count.ShouldEqual(3);
 
-        It should_return_third_error_that_references_question_with_questionId = () =>
-            result.ElementAt(2).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId);
+        It should_return_third_error_that_references_question_group_and_roster = () =>
+        {
+            var references = result.ElementAt(2).Errors.First().References;
+            references.ElementAt(0).ItemId.ShouldEqual(questionId);
+            references.ElementAt(0).Title.ShouldEqual(questionTitle);
 
-        It should_return_third_error_that_references_group_with_groupId = () =>
-            result.ElementAt(2).Errors.First().References.ElementAt(1).ItemId.ShouldEqual(groupId);
+            references.ElementAt(1).ItemId.ShouldEqual(groupId);
+            references.ElementAt(1).Title.ShouldEqual(groupTitle);
 
-        It should_return_third_error_that_references_question_with_questionTitle = () =>
-            result.ElementAt(2).Errors.First().References.ElementAt(0).Title.ShouldEqual(questionTitle);
+            references.ElementAt(2).ItemId.ShouldEqual(rosterId);
+            references.ElementAt(2).Title.ShouldEqual(rosterTitle);
+
+        };
 
         It should_return_third_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.ElementAt(2).IsGroupedMessage.ShouldBeFalse();
@@ -90,7 +108,9 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         private static VerificationMessage[] result;
         private static string questionId = "11111111111111111111111111111111";
         private static string groupId = "22222222222222222222222222222222";
+        private static string rosterId = "33333333333333333333333333333333";
         private static string groupTitle = "Group Title";
         private static string questionTitle = "Question Title";
+        private static readonly string rosterTitle = "Roster";
     }
 }

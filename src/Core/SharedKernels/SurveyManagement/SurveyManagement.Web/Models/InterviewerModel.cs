@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     public class InterviewerModel : UserModel
     {
         [Key]
-        [Required(ErrorMessageResourceName = "RequiredSupervisorErrorMessage", ErrorMessageResourceType = typeof(FieldsAndValidations))]
-        [Display(Name = "SupervisorFieldName", ResourceType = typeof(FieldsAndValidations), Order = 0)]
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredSupervisorErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [Display(Name = nameof(FieldsAndValidations.SupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 0)]
         public Guid SupervisorId { get; set; }
 
         public string SupervisorName { get; set; }

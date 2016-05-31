@@ -49,6 +49,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
+            if (this.Items == null)
+                return;
+
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 

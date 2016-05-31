@@ -32,7 +32,8 @@ namespace WB.UI.Designer.Code
                 pdfConfigSettings.OptionsExcerptCount.Value,
                 pdfConfigSettings.MinAmountrOfDigitsInCodes.Value,
                 pdfConfigSettings.AttachmentSize.Value,
-                pdfConfigSettings.PdfGenerationTimeoutInSeconds.Value);
+                pdfConfigSettings.PdfGenerationTimeoutInSeconds.Value,
+                pdfConfigSettings.VariableExpressionExcerptLength.Value);
         }
 
         public override void Load()

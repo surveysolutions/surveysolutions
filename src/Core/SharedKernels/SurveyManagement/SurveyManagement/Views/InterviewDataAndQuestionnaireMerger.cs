@@ -6,11 +6,15 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
@@ -18,11 +22,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
     public class InterviewDataAndQuestionnaireMerger : IInterviewDataAndQuestionnaireMerger
     {
         private readonly ISubstitutionService substitutionService;
+        private readonly IVariableToUIStringService variableToUiStringService;
 
         public InterviewDataAndQuestionnaireMerger(
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService, 
+            IVariableToUIStringService variableToUiStringService)
         {
             this.substitutionService = substitutionService;
+            this.variableToUiStringService = variableToUiStringService;
         }
 
         private class InterviewInfoInternal
@@ -30,17 +37,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             public InterviewData Interview { get; }
             public QuestionnaireDocument Questionnaire { get; }
             public Dictionary<string, Guid> VariableToQuestionId { get; }
+            public Dictionary<string, Guid> VariableToVariableId { get; }
             public Dictionary<string, AttachmentInfoView> Attachments { get; }
 
             public InterviewInfoInternal(
                 InterviewData interview,
                 QuestionnaireDocument questionnaire,
                 Dictionary<string, Guid> variableToQuestionId,
+                Dictionary<string, Guid> variableToVariableId,
                 Dictionary<string, AttachmentInfoView> attachments)
             {
                 this.Interview = interview;
                 this.Questionnaire = questionnaire;
                 this.VariableToQuestionId = variableToQuestionId;
+                this.VariableToVariableId = variableToVariableId;
                 this.Attachments = attachments;
             }
         }
@@ -65,6 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 interview: interview,
                 questionnaire: questionnaire,
                 variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
+                variableToVariableId:questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
                 attachments: attachmentInfos);
 
             var interviewGroups = new List<InterviewGroupView>();
@@ -253,8 +264,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                     }
 
                     var interviewStaticText = interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey) ? interviewLevel.StaticTexts[staticText.PublicKey] : null;
+                    var titleWithSubstitutedVariables = this.GetTitleWithSubstitutedVariables(staticText, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
                     var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
-                    var interviewStaticTextView = new InterviewStaticTextView(staticText, interviewStaticText, interviewAttachmentViewModel);
+                    var interviewStaticTextView = new InterviewStaticTextView(staticText, titleWithSubstitutedVariables, interviewStaticText, interviewAttachmentViewModel);
 
                     interviewEntity = interviewStaticTextView;
                     
@@ -263,6 +275,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             }
 
             return completedGroup;
+        }
+
+
+        private string GetTitleWithSubstitutedVariables(IStaticText staticText, 
+            InterviewLevel currentInterviewLevel,
+            List<InterviewLevel> upperInterviewLevels,
+            string rosterTitle,
+            InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+        {
+            string title = staticText.Text;
+
+            IEnumerable<string> usedVariables = substitutionService.GetAllSubstitutionVariableNames(title);
+
+            Dictionary<string, string> answersForTitleSubstitution = usedVariables
+                .Select(variableName => new
+                {
+                    Variable = variableName,
+                    Answer = this.GetAnswerForTitleSubstitution(variableName, currentInterviewLevel, upperInterviewLevels, rosterTitle, interviewInfo, interviewLinkedQuestionOptions),
+                })
+                .Where(x => x.Answer != null)
+                .ToDictionary(x => x.Variable, x => x.Answer);
+
+            foreach (string usedVariable in usedVariables)
+            {
+                string escapedVariable = $"%{usedVariable}%";
+                string actualAnswerOrDots = answersForTitleSubstitution.ContainsKey(usedVariable) ? answersForTitleSubstitution[usedVariable] : "[...]";
+
+                title = title.Replace(escapedVariable, actualAnswerOrDots);
+            }
+
+            return title;
         }
 
         private Dictionary<string, string> GetAnswersForTitleSubstitution(
@@ -283,7 +326,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         }
 
         private string GetAnswerForTitleSubstitution(string variableName, 
-            InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, string rosterTitle, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+            InterviewLevel currentInterviewLevel,
+            List<InterviewLevel> upperInterviewLevels, 
+            string rosterTitle, 
+            InterviewInfoInternal interviewInfo, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             if (variableName == this.substitutionService.RosterTitleSubstitutionReference)
             {
@@ -293,7 +340,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             }
 
             if (!interviewInfo.VariableToQuestionId.ContainsKey(variableName))
-                return null;
+                return SubstituteVariableValue(variableName, currentInterviewLevel, upperInterviewLevels, interviewInfo);
 
             Guid questionId = interviewInfo.VariableToQuestionId[variableName];
 
@@ -306,6 +353,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 return null;
 
             return GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
+        }
+
+        private string SubstituteVariableValue(string variableName, InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
+        {
+            if (!interviewInfo.VariableToVariableId.ContainsKey(variableName))
+                return null;
+
+            var variableId = interviewInfo.VariableToVariableId[variableName];
+            var questionRosterVector = currentInterviewLevel.RosterVector;
+            var allInterviewLevelsToLookForTheVariable =
+                upperInterviewLevels.Union(new[] {currentInterviewLevel}).ToArray();
+
+            var rosterLevelDepth = currentInterviewLevel.RosterVector.Length;
+            do
+            {
+                var variableRosterVector = questionRosterVector.Take(rosterLevelDepth).ToArray();
+                var levelToLookForTheVariable =
+                    allInterviewLevelsToLookForTheVariable.FirstOrDefault(
+                        x => x.RosterVector.Length == rosterLevelDepth && x.RosterVector.SequenceEqual(variableRosterVector));
+
+                if (levelToLookForTheVariable != null && levelToLookForTheVariable.Variables.ContainsKey(variableId))
+                {
+                    var variableValue = levelToLookForTheVariable.Variables[variableId];
+
+                    return this.variableToUiStringService.VariableToUIString(variableValue);
+                }
+
+                rosterLevelDepth--;
+            } while (rosterLevelDepth >= 0);
+
+            return null;
         }
 
         private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)

@@ -16,15 +16,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            var conditionExpression = "[var]==1";
+            var conditionExpression = "var==1";
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(conditionExpression) == new[] { "var" });
 
-            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
-            {
-                PublicKey = multimediaQuestionId,
-                StataExportCaption = "var"
-            },
+            questionnaire = CreateQuestionnaireDocument(
+                new MultimediaQuestion()
+                {
+                    PublicKey = multimediaQuestionId,
+                    StataExportCaption = "var"
+                },
                 new TextQuestion()
                 {
                     PublicKey = questionWhichUsesMultimediaInConditionExpression,

@@ -95,6 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 case QuestionnaireItemType.Question:
                 case QuestionnaireItemType.Roster:
                 case QuestionnaireItemType.StaticText:
+                case QuestionnaireItemType.Variable:
                     return questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId)!=null;
                 case QuestionnaireItemType.Person:
                     return true;

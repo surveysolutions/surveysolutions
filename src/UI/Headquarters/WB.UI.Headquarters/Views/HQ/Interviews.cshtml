@@ -29,20 +29,20 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Interviews</h3>
+    <h3 class="sinle-line-header">@Common.Interviews</h3>
 }
 
 @section actionbar{
     <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
     <div class="btn-group">
         <div class="form-inline">
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject</button>
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">Unapprove</button>
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">Delete</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">@Common.Approve</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">@Common.Reject</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">@Common.Unapprove</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">@Common.Delete</button>
 
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                <input type="text" class="form-control" placeholder="@Common.Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="button" data-bind="click: clear">
                         <i class="glyphicon glyphicon-remove"></i>
@@ -62,7 +62,7 @@
                     <input type="checkbox" data-bind="click: $root.selectAll($element)" />
                 </th>
                 <!-- ko if:SelectedTemplate() == '' -->
-                <th>Pre-filled Questions</th>
+                <th>@Common.PrefilledQuestions</th>
                 <!-- /ko -->
                 <!-- ko ifnot:SelectedTemplate() == '' -->
                 <!-- ko if:Items().length > 0-->
@@ -71,12 +71,12 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
-                <th data-bind='sortby: "ResponsibleName"'>Responsible</th>
-                <th data-bind='sortby: "UpdateDate"'>Last Update</th>
-                <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
-                <th data-bind='sortby: "Status"'>Status</th>
-                <th data-bind='sortby: "ReceivedByInterviewer"'>Received by Interviewer</th>
-                <th>Created on Client</th>
+                <th data-bind='sortby: "ResponsibleName"'>@Common.Responsible</th>
+                <th data-bind='sortby: "UpdateDate"'>@Common.LastUpdate</th>
+                <th data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
+                <th data-bind='sortby: "Status"'>@Common.Status</th>
+                <th data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
+                <th>@Common.CreatedOnClient</th>
                 <th></th>
             </tr>
         </thead>
@@ -151,12 +151,12 @@
 {
     <ul class="list-group">
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Template</h4>
+            <h4 class="list-group-item-heading">@Common.Template</h4>
             <p class="list-group-item-text">
                 <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @if (Model.Templates.Count() > 1)
                     {
-                        <option value="">Any</option>
+                        <option value="">@Common.Any</option>
                     }
                     @foreach (var item in Model.Templates)
                     {
@@ -166,10 +166,10 @@
             </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Responsible</h4>
+            <h4 class="list-group-item-heading">@Common.Responsible</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
                     <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                         <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -178,10 +178,10 @@
             </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Status</h4>
+            <h4 class="list-group-item-heading">@Common.Status</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: SelectedStatus" class="form-control">
-                    <option value="">Any</option>
+                    <option value="">@Common.Any</option>
                     @foreach (var item in Model.Statuses)
                     {
                         <option value="@item.Status">@item.StatusName</option>

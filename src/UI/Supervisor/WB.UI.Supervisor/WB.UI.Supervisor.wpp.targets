@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
@@ -56,16 +56,16 @@
         <AbsolutePath>\\App_Data\\logs$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipQuestionnaireExportStructureStorage">
+      <MsDeploySkipRules Include="SkipquestionnaireExportStructureStorage">
         <SkipAction>Delete</SkipAction>
         <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\QuestionnaireExportStructureStorage\\.*</AbsolutePath>
+        <AbsolutePath>\\App_Data\\questionnaireExportStructureStorage\\.*</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipQuestionnaireExportStructureStorageFolder">
+      <MsDeploySkipRules Include="SkipquestionnaireExportStructureStorageFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\QuestionnaireExportStructureStorage$</AbsolutePath>
+        <AbsolutePath>\\App_Data\\questionnaireExportStructureStorage$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
       <MsDeploySkipRules Include="SkipTabletInformationStorage">

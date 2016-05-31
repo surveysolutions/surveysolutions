@@ -121,5 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         [Obsolete("it should be removed when all clients has version 5.7 or higher")]
         void MigrateLinkedOptionsToFiltered();
+
+        object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
     }
 }

@@ -5,12 +5,13 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
-    public class QuestionnaireExportStructure : IReadSideRepositoryEntity
+    public class QuestionnaireExportStructure
     {
         public QuestionnaireExportStructure()
         {
             this.HeaderToLevelMap = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
         }
+
         public Guid QuestionnaireId { get; set; }
         public Dictionary<ValueVector<Guid>, HeaderStructureForLevel> HeaderToLevelMap { get; set; }
         public long Version { get; set; }

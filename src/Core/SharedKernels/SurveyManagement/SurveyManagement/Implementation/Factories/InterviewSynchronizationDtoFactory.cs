@@ -164,6 +164,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
             }
             Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions = CreateLinkedQuestionsOptions(interview);
+            
+            Dictionary<InterviewItemId, object> variableValues = CreateVariableValues(interview);
+            HashSet<InterviewItemId> disabledVariables = CreateDisabledVariables(interview);
 
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
@@ -184,8 +187,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
                 linkedQuestionOptions,
+                variableValues,
+                disabledVariables,
                 interview.WasCompleted,
                 interview.CreatedOnClient);
+        }
+
+        private static HashSet<InterviewItemId> CreateDisabledVariables(InterviewData interview)
+        {
+            var result = new HashSet<InterviewItemId>();
+
+            foreach (var interviewLevel in interview.Levels)
+            {
+                foreach (var disabledVariable in interviewLevel.Value.DisabledVariables)
+                {
+                    result.Add(new InterviewItemId(disabledVariable,interviewLevel.Value.RosterVector));
+                }
+            }
+
+            return result;
+        }
+
+        private Dictionary<InterviewItemId, object> CreateVariableValues(InterviewData interview)
+        {
+            var result = new Dictionary<InterviewItemId, object>();
+            foreach (var interviewLevel in interview.Levels)
+            {
+                foreach (var variable in interviewLevel.Value.Variables)
+                {
+                    result.Add(new InterviewItemId(variable.Key, interviewLevel.Value.RosterVector), variable.Value);
+                }
+            }
+            return result;
         }
 
         private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)

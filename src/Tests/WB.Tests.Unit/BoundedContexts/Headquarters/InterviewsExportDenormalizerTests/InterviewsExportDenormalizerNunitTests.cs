@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -78,6 +79,51 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             Assert.That(countInterviewRecords, Is.EqualTo(2));
         }
+
+        [Test]
+        public void
+            When_InterviewDeleted_event_received_Then_all_interview_levels_must_be_deleted
+            ()
+        {
+            Guid interviewId = Guid.NewGuid();
+
+            var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
+
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId),$"{interviewId}1");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+
+            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
+
+            interviewsExportDenormalizer.Handle(Create.InterviewDeletedEvent(interviewId: interviewId));
+
+            var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
+
+            Assert.That(countInterviewRecords, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void
+            When_InterviewHardDeleted_event_received_Then_all_interview_levels_must_be_deleted
+            ()
+        {
+            Guid interviewId = Guid.NewGuid();
+
+            var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
+
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}1");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+
+            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
+
+            interviewsExportDenormalizer.Handle(Create.InterviewHardDeletedEvent(interviewId: interviewId));
+
+            var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
+
+            Assert.That(countInterviewRecords, Is.EqualTo(0));
+        }
+
         private InterviewsExportDenormalizer CreateInterviewsExportDenormalizer(
             Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
         {
@@ -89,7 +135,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             interviewDataStorage.Store(interviewData, interviewId);
 
             return new InterviewsExportDenormalizer(interviewDataStorage, interviewReferenceStorage,
-                exportViewFactory, exportRecords,new InMemoryKeyValueStorage<QuestionnaireExportStructure>());
+                exportViewFactory, exportRecords,Mock.Of<IQuestionnaireExportStructureStorage>());
         }
     }
 }

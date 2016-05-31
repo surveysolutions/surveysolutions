@@ -70,6 +70,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error when parse question answer.
+        /// </summary>
+        public static string CommandTransformator_ParseQuestionError {
+            get {
+                return ResourceManager.GetString("CommandTransformator_ParseQuestionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status set by Survey Solutions support team.
+        /// </summary>
+        public static string ControlPanelController_RepeatLastInterviewStatus {
+            get {
+                return ResourceManager.GetString("ControlPanelController_RepeatLastInterviewStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account information successfully updated.
         /// </summary>
         public static string HQ_AccountController_AccountUpdatedSuccessfully {
@@ -205,11 +223,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observer is not allowed to perform this action.
+        /// </summary>
+        public static string ObserverNotAllowed {
+            get {
+                return ResourceManager.GetString("ObserverNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string SurverManagement_MainMenu_ManageAccount {
             get {
                 return ResourceManager.GetString("SurverManagement_MainMenu_ManageAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error occurred.
+        /// </summary>
+        public static string UnexpectedErrorOccurred {
+            get {
+                return ResourceManager.GetString("UnexpectedErrorOccurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid property.
+        /// </summary>
+        public static string ViewHelpers_Invalid_property {
+            get {
+                return ResourceManager.GetString("ViewHelpers_Invalid_property", resourceCulture);
             }
         }
     }
