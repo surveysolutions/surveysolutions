@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -34,6 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             => _.GetQuestionTitle(substitutionTargetQuestionId) == "Old title %substitute%"
             && _.GetQuestionInstruction(substitutionTargetQuestionId) == "Instruction"
             && _.GetQuestionIdByVariable("substitute") == substitedQuestionId
+            && _.HasQuestion("substitute") == true
             );
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
@@ -56,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
+            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
 

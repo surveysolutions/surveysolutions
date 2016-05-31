@@ -65,7 +65,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
-        IUpdateHandler<InterviewData, AnswerRemoved>
+        IUpdateHandler<InterviewData, AnswerRemoved>,
+
+        IUpdateHandler<InterviewData, VariablesChanged>,
+        IUpdateHandler<InterviewData, VariablesDisabled>,
+        IUpdateHandler<InterviewData, VariablesEnabled>
     {
         private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
@@ -701,6 +705,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             state.ReceivedByInterviewer = false;
             return state;
+        }
+
+        public InterviewData Update(InterviewData interview, IPublishedEvent<VariablesChanged> @event)
+        {
+            foreach (var changedVariable in @event.Payload.ChangedVariables)
+            {
+                PreformActionOnLevel(interview, changedVariable.Identity.RosterVector, (interviewLevel) =>
+                {
+                    interviewLevel.Variables[changedVariable.Identity.Id] = changedVariable.NewValue;
+                });
+            }
+            return interview;
+        }
+
+        public InterviewData Update(InterviewData interview, IPublishedEvent<VariablesDisabled> @event)
+        {
+            foreach (var disabledVariable in @event.Payload.Variables)
+            {
+                PreformActionOnLevel(interview, disabledVariable.RosterVector, (interviewLevel) =>
+                {
+                    interviewLevel.DisabledVariables.Add(disabledVariable.Id);
+                });
+            }
+            return interview;
+        }
+
+        public InterviewData Update(InterviewData interview, IPublishedEvent<VariablesEnabled> @event)
+        {
+            foreach (var enabledVariable in @event.Payload.Variables)
+            {
+                PreformActionOnLevel(interview, enabledVariable.RosterVector, (interviewLevel) =>
+                {
+                    interviewLevel.DisabledVariables.Remove(enabledVariable.Id);
+                });
+            }
+            return interview;
         }
     }
 }

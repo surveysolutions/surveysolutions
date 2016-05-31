@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Title;
         public string Breadcrumbs;
         public string Type;
+        public string VarName;
     }
 }

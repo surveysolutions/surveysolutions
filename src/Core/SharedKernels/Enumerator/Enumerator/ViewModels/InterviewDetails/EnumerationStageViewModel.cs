@@ -175,6 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
+            if (this.navigationState.CurrentGroup == null)
+                return;
+
             foreach (ChangedRosterInstanceTitleDto rosterInstance in @event.ChangedInstances)
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))

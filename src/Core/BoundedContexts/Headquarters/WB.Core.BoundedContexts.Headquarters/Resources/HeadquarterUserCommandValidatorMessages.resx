@@ -126,4 +126,7 @@
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
     <value>You can't unarchive interviewer until supervisor is archived</value>
   </data>
+  <data name="UserDoesNotExist" xml:space="preserve">
+    <value>Could not update user information because current user does not exist</value>
+  </data>
 </root>

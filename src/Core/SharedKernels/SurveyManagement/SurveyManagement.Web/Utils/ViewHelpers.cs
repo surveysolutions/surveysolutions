@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
 {
@@ -156,7 +157,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
             if (modelState == null)
                 return null;
             var attemptedValue = (modelState.Value != null) ? modelState.Value.AttemptedValue : null;
-            return string.Format(CultureInfo.CurrentCulture, "Invalid property", attemptedValue);
+            return string.Format(CultureInfo.CurrentCulture, Strings.ViewHelpers_Invalid_property, attemptedValue);
         }
     }
 }

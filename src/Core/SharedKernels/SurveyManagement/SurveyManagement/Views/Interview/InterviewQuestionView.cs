@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -155,9 +156,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         return date.ToString("u");
                     }
                     break;
+                case QuestionType.Numeric:
+                    var intAnswer = answer as int?;
+                    var longAnswer = intAnswer ??  (answer as long?);
+                    var decimalAnswer = longAnswer ?? (answer as decimal?);
+
+                    return decimalAnswer.FormatDecimal();
                 case QuestionType.GpsCoordinates:
                 case QuestionType.TextList:
-                case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:

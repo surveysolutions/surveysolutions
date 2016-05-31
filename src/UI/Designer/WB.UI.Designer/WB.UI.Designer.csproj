@@ -167,7 +167,7 @@
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.3.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
@@ -253,8 +253,8 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -446,11 +446,15 @@
     <Content Include="Content\images\pdf_logo.png" />
     <Content Include="Content\images\pdf-question-legend.jpg" />
     <Content Include="Content\images\pdf-roster-legend.jpg" />
+    <Content Include="Content\pdf-inline-fonts.css" />
+    <Content Include="Content\pdf-fonts.css" />
+    <Content Include="Content\pdf.css">
+      <DependentUpon>pdf.less</DependentUpon>
+    </Content>
+    <Content Include="Content\pdf.min.css">
+      <DependentUpon>pdf.css</DependentUpon>
+    </Content>
     <Content Include="fonts\lucidaconsole.svg" />
-    <Content Include="fonts\RobotoItalic.svg" />
-    <Content Include="fonts\RobotoLight.svg" />
-    <Content Include="fonts\RobotoMedium.svg" />
-    <Content Include="fonts\RobotoMediumItalic.svg" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -468,23 +472,18 @@
     <Content Include="fonts\lucidaconsole.ttf" />
     <Content Include="fonts\lucidaconsole.woff" />
     <Content Include="fonts\lucidaconsole.woff2" />
-    <Content Include="fonts\Roboto300.woff" />
-    <Content Include="fonts\RobotoItalic.eot" />
-    <Content Include="fonts\RobotoItalic.ttf" />
-    <Content Include="fonts\RobotoItalic.woff" />
-    <Content Include="fonts\RobotoItalic.woff2" />
-    <Content Include="fonts\RobotoLight.eot" />
-    <Content Include="fonts\RobotoLight.ttf" />
-    <Content Include="fonts\RobotoLight.woff" />
-    <Content Include="fonts\RobotoLight.woff2" />
-    <Content Include="fonts\RobotoMedium.eot" />
-    <Content Include="fonts\RobotoMedium.ttf" />
-    <Content Include="fonts\RobotoMedium.woff" />
-    <Content Include="fonts\RobotoMedium.woff2" />
-    <Content Include="fonts\RobotoMediumItalic.eot" />
-    <Content Include="fonts\RobotoMediumItalic.ttf" />
-    <Content Include="fonts\RobotoMediumItalic.woff" />
-    <Content Include="fonts\RobotoMediumItalic.woff2" />
+    <Content Include="Content\pdf.less" />
+    <Content Include="fonts\NotoNaskhArabic-Regular.ttf" />
+    <Content Include="fonts\NotoSans-Regular.ttf" />
+    <Content Include="fonts\NotoSansDevanagari-Regular.ttf" />
+    <Content Include="fonts\NotoSansEthiopic-Regular.ttf" />
+    <Content Include="fonts\NotoSansGeorgian-Regular.ttf" />
+    <Content Include="fonts\NotoSansHebrew-Regular.ttf" />
+    <Content Include="fonts\NotoSansMongolian-Regular.ttf" />
+    <Content Include="fonts\NotoSansMyanmar-Regular.ttf" />
+    <Content Include="fonts\NotoSansThai-Regular.ttf" />
+    <Content Include="fonts\NotoSansBengali-Regular.ttf" />
+    <Content Include="fonts\NotoSansArmenian-Regular.ttf" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -507,10 +506,15 @@
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\attachments.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\variable.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\userService.js" />
+    <Content Include="UpdatedDesigner\app\scripts\ui-js.js" />
+    <Content Include="UpdatedDesigner\app\views\treevariable.html" />
+    <Content Include="UpdatedDesigner\app\views\variable.html" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
     <Content Include="UpdatedDesigner\app\views\attachment-preview.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
@@ -1006,11 +1010,6 @@
     <Content Include="UpdatedDesigner\vendor\json3\lib\json3.min.js" />
     <Content Include="UpdatedDesigner\vendor\json3\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\json3\README.md" />
-    <Content Include="UpdatedDesigner\vendor\lodash\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\lodash\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
-    <Content Include="UpdatedDesigner\vendor\lodash\lodash.js" />
-    <Content Include="UpdatedDesigner\vendor\lodash\lodash.min.js" />
     <Content Include="UpdatedDesigner\vendor\moment\locale\af.js" />
     <Content Include="UpdatedDesigner\vendor\moment\locale\ar-ma.js" />
     <Content Include="UpdatedDesigner\vendor\moment\locale\ar-sa.js" />
@@ -1338,6 +1337,8 @@
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.nonblock.js" />
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.picon.css" />
     <Content Include="UpdatedDesigner\vendor\pnotify\pnotify.reference.js" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.js" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.min.js" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\dev\prettyCheckable.js" />
@@ -1418,7 +1419,7 @@
     <Content Include="UpdatedDesigner\content\i\cross.png" />
     <Content Include="UpdatedDesigner\content\i\d-loading.gif" />
     <Content Include="UpdatedDesigner\content\i\d-normal.gif" />
-    <Content Include="UpdatedDesigner\content\i\icons.png" />
+    <Content Include="UpdatedDesigner\content\i\icons1.png" />
     <Content Include="UpdatedDesigner\content\i\loading-bg.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
@@ -1447,7 +1448,6 @@
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
     <Content Include="Content\pdf-title-page.css" />
-    <Content Include="Content\pdf.css" />
     <Content Include="Global.asax" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1515,6 +1515,8 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
+    <Content Include="UpdatedDesigner\vendor\underscore\underscore-min.js" />
+    <Content Include="UpdatedDesigner\vendor\underscore\underscore.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
@@ -1601,6 +1603,16 @@
     <Content Include="Views\Pdf\_RenderChildren.cshtml" />
     <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
+    <Content Include="Views\Pdf\_RenderVariable.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\dist\position-calculator.min.map" />
+    <Content Include="UpdatedDesigner\vendor\position-calculator\LICENSE-MIT" />
+    <Content Include="UpdatedDesigner\vendor\underscore\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\underscore\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\underscore\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\underscore\README.md" />
+    <Content Include="UpdatedDesigner\vendor\underscore\underscore-min.map" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1762,7 +1774,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8011</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost/Designer</IISUrl>
+          <IISUrl>http://localhost/designer</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

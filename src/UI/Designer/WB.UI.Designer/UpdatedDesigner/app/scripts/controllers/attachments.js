@@ -52,21 +52,21 @@
                 attachment.name = attachmentDto.name;
 
                 attachment.file = null;
+                attachment.content = {};
+                attachment.meta = {};
+                attachment.content.details = {};
 
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
-                    attachment.content = {};
                     attachment.content.size = attachmentDto.content.size;
                     attachment.content.type = attachmentDto.content.contentType;
 
                     if (!_.isUndefined(attachmentDto.content.details) && !_.isNull(attachmentDto.content.details)) {
-                        attachment.content.details = {};
                         attachment.content.details.height = attachmentDto.content.details.height;
                         attachment.content.details.width = attachmentDto.content.details.width;
                     }
                 }
 
                 if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.meta = {};
                     attachment.meta.lastUpdated = moment(attachmentDto.meta.lastUpdated);
                     attachment.meta.fileName = attachmentDto.meta.fileName;
                 }
@@ -83,7 +83,7 @@
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
                     var attachment = {};
-                    if (!_.any($scope.attachments, 'attachmentId', attachmentDto.attachmentId)) {
+                    if (!_.any($scope.attachments, function(elem) { return elem.attachmentId === attachmentDto.attachmentId;})) {
                         dataBind(attachment, attachmentDto);
                         $scope.attachments.unshift(attachment);
                     }
@@ -121,7 +121,7 @@
 
                 var attachment = { attachmentId: utilityService.guid() };
 
-                $scope.fileSelected(attachment, file, undefined, function() {
+                $scope.fileSelected(attachment, file, function() {
                     commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                         attachment.initialAttachment = angular.copy(attachment);
                         $scope.attachments.unshift(attachment);
@@ -130,7 +130,7 @@
                 });
             };
 
-            $scope.fileSelected = function(attachment, file, attachmentForm, callback) {
+            $scope.fileSelected = function(attachment, file, callback) {
                 if (_.isUndefined(file) || _.isNull(file)) {
                     return;
                 }
@@ -156,8 +156,8 @@
                         attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
                             .substring(0, attachmentFileNameLength < maxAttachmentNameLength ? attachmentFileNameLength : maxAttachmentNameLength);
 
-                        if (!_.isUndefined(attachmentForm)) {
-                            attachmentForm.$setDirty();
+                        if (!_.isUndefined(attachment.form)) {
+                            attachment.form.$setDirty();
                         }
 
                         if (!_.isUndefined(callback)) {
@@ -169,17 +169,27 @@
                     });
             }
 
-            $scope.saveAttachment = function (attachment, form) {
+            $scope.saveAttachment = function (attachment) {
                 commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                     attachment.initialAttachment = angular.copy(attachment);
-                    form.$setPristine();
+                    attachment.form.$setPristine();
                 });
             };
 
-            $scope.cancel = function (attachment, form) {
+
+            $scope.$on('verifing', function (scope, params) {
+                for (var i = 0; i < $scope.attachments.length; i++) {
+                    var attachment = $scope.attachments[i];
+                    if (attachment.form.$dirty) {
+                        $scope.saveAttachment(attachment);
+                    }
+                }
+            });
+
+            $scope.cancel = function (attachment) {
                 var temp = angular.copy(attachment.initialAttachment);
                 dataBind(attachment, temp);
-                form.$setPristine();
+                attachment.form.$setPristine();
             };
 
             $scope.deleteAttachment = function (index) {

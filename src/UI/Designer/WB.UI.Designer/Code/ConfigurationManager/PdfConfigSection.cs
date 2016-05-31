@@ -6,6 +6,7 @@ namespace WB.UI.Designer.Code.ConfigurationManager
     {
         private const string INSTRUCTIONSEXCERPTLENGTH = "instructionsExcerptLength";
         private const string EXPRESSIONEXCERPTLENGTH = "expressionExcerptLength";
+        private const string VARIABLEEXPRESSIONEXCERPTLENGTH = "variableExpressionExcerptLength";
         private const string OPTIONSEXCERPTCOUNT = "optionsExcerptCount";
         private const string MINAMOUNTOFDIGITSINCODES = "minAmountOfDigitsInCodes";
         private const string ATTACHMENTSIZE = "attachmentSize";
@@ -23,6 +24,13 @@ namespace WB.UI.Designer.Code.ConfigurationManager
         {
             get { return ((PdfConfigurationElement)(base[EXPRESSIONEXCERPTLENGTH])); }
             set { base[EXPRESSIONEXCERPTLENGTH] = value; }
+        }
+
+        [ConfigurationProperty(VARIABLEEXPRESSIONEXCERPTLENGTH, IsRequired = true)]
+        public PdfConfigurationElement VariableExpressionExcerptLength
+        {
+            get { return ((PdfConfigurationElement)(base[VARIABLEEXPRESSIONEXCERPTLENGTH])); }
+            set { base[VARIABLEEXPRESSIONEXCERPTLENGTH] = value; }
         }
 
         [ConfigurationProperty(OPTIONSEXCERPTCOUNT, IsRequired = true)]

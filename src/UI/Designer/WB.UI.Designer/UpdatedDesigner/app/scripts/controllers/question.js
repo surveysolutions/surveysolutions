@@ -169,7 +169,7 @@
                     });
                 }
             };
-            
+
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
                 if (actualQuestion.type !== "SingleOption" || actualQuestion.type !== "MultyOption")
                     return false;
@@ -392,6 +392,13 @@
                         $scope.activeQuestion.cascadeFromQuestion = null;
                     }
                 }
+            });
+
+            $scope.$on('verifing', function (scope, params) {
+                if ($scope.questionForm.$dirty)
+                    $scope.saveQuestion(function() {
+                        $scope.questionForm.$setPristine();
+                    });
             });
 
             $scope.setLinkSource = function (itemId, linkedFilterExpression) {

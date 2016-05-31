@@ -3,6 +3,9 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -66,7 +69,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (this.EditText == null)
                 return;
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var currentTopActivity = topActivity.Activity;
 
+            currentTopActivity.HideKeyboard(Target.WindowToken);
             this.FireValueChanged(false);
         }
 
@@ -83,9 +89,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
     }
 }

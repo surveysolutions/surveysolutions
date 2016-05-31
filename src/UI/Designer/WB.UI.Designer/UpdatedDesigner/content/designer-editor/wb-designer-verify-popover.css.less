@@ -193,7 +193,6 @@
     &.warning{
         .modal-content {
             .modal-header {
-                
                 border-top-color: @verification-modal-warning-color;
                 h3 {
                     span {
@@ -201,7 +200,19 @@
                     }
                 }
             }
+            .modal-body{
+                 .verification-items .verification-item {
+                     &, .title{
+                         color: @verification-modal-neutral-color;
+                     }
+
+                     &:hover, &:hover .title{
+                         color: @verification-modal-warning-color;
+                     }
+                 }
+            } 
         }
+        
     }
 }
 

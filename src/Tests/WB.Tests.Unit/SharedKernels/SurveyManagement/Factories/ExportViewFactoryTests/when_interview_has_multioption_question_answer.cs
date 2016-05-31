@@ -16,12 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId, options: new List<Answer> {Create.Answer("foo", 28), Create.Answer("bar", 42)}));
+                Create.MultyOptionsQuestion(id: questionId, options: new List<Answer> {Create.Answer("foo", 28), Create.Answer("bar", 42), Create.Answer("bartender", 18) }));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.InterviewData(Create.InterviewQuestion(questionId, new [] {42m, 28m}));
+            interview = Create.InterviewData(Create.InterviewQuestion(questionId, new [] {42m, 18m}));
         };
 
          Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);
@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetQuestions().First();
-            exportedQuestion.Answers.Length.ShouldEqual(2);
-            exportedQuestion.Answers.SequenceEqual(new [] {"2", "1"}).ShouldBeTrue();
+            exportedQuestion.Answers.Length.ShouldEqual(3);
+            exportedQuestion.Answers.ShouldEqual(new [] {"0", "1", "1"});
         };
 
         static ExportViewFactory exportViewFactory;

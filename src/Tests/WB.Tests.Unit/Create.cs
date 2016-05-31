@@ -144,6 +144,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -165,6 +166,8 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
+        public static CommandFactory Command => new CommandFactory();
+
         public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewAnswersCommandValidator(interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
@@ -252,7 +255,7 @@ namespace WB.Tests.Unit
 
         public static Attachment Attachment(string attachementHash) => new Attachment { ContentId = attachementHash };
 
-        public static CategoricalQuestionOption CascadingOptionModel(int value, string title, int parentValue)
+        public static CategoricalQuestionOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
         {
             return new CategoricalQuestionOption
                    {
@@ -594,15 +597,19 @@ namespace WB.Tests.Unit
         }
 
         public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
-        {
-            return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
+            IFileSystemAccessor fileSystemAccessor = null)
+            => new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(),
                 new QuestionnaireRosterStructureFactory(),
-                Mock.Of<IExportViewFactory>());
-        }
+                questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, 
@@ -784,6 +791,12 @@ namespace WB.Tests.Unit
                 HideIfDisabled = hideIfDisabled,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
             };
+        }
+
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
         public static IPublishedEvent<GroupBecameARoster> GroupBecameARosterEvent(string groupId)
@@ -1255,7 +1268,9 @@ namespace WB.Tests.Unit
             bool? wasCompleted = false,
             List<Identity> disabledStaticTexts = null,
             List<Identity> validStaticTexts = null,
-            List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null)
+            List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null,
+            Dictionary<InterviewItemId, object> variables=null,
+            HashSet<InterviewItemId> disabledVariables=null)
         {
             return new InterviewSynchronizationDto(
                 interviewId ?? Guid.NewGuid(),
@@ -1276,7 +1291,9 @@ namespace WB.Tests.Unit
                 invalidStaticTexts,
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
-                new Dictionary<InterviewItemId, RosterVector[]>(), 
+                new Dictionary<InterviewItemId, RosterVector[]>(),
+                variables??new Dictionary<InterviewItemId, object>(),
+                disabledVariables??new HashSet<InterviewItemId>(),  
                 wasCompleted ?? false);
         }
 
@@ -1428,7 +1445,7 @@ namespace WB.Tests.Unit
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId =null)
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId =null, bool areAnswersOrdered=false)
         {
             return new MultyOptionsQuestion
             {
@@ -1440,7 +1457,8 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                AreAnswersOrdered = areAnswersOrdered
             };
         }
 
@@ -1811,15 +1829,16 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new QuestionnaireAssemblyImported { Version = version }, eventSourceId: questionnaireId);
         }
 
-        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId = null, string title = "Questionnaire Browse Item X")
-        {
-            return new QuestionnaireBrowseItem
+        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(
+            Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
+            string title = "Questionnaire Browse Item X", bool disabled = false)
+            => new QuestionnaireBrowseItem
             {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                Version = 1,
+                QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
+                Version = questionnaireIdentity?.Version ?? version ?? 1,
                 Title = title,
+                Disabled = disabled,
             };
-        }
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
@@ -1969,7 +1988,8 @@ namespace WB.Tests.Unit
         public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
         {
             return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of<IOptionsRepository>());
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
@@ -2692,79 +2712,6 @@ namespace WB.Tests.Unit
                 answers: answers ?? new decimal[] {});
         }
 
-        internal static class Command
-        {
-            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            {
-                return new AddLookupTable(questionnaireId, lookupTableName, null, lookupTableId, responsibleId);
-            }
-
-            public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            {
-                return new AddMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-            }
-
-            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
-                Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
-                DateTime? answerTime = null)
-            {
-                return new AnswerYesNoQuestion(
-                    interviewId: Guid.NewGuid(),
-                    userId: userId ?? Guid.NewGuid(),
-                    questionId: questionId ?? Guid.NewGuid(),
-                    rosterVector: rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
-                    answerTime: answerTime ?? DateTime.UtcNow,
-                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
-            }
-
-            public static DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
-            {
-                return new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
-            }
-
-            public static DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
-            {
-                return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
-            }
-
-            public static ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
-                Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
-                long questionnaireContentVersion = 1)
-            {
-                return new ImportFromDesigner(
-                    responsibleId ?? Guid.NewGuid(),
-                    new QuestionnaireDocument
-                    {
-                        PublicKey = questionnaireId ?? Guid.NewGuid(),
-                        Title = title,
-                    },
-                    false,
-                    base64StringOfAssembly,
-                    questionnaireContentVersion);
-            }
-
-            public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
-            {
-                return new LinkUserToDevice(userId, deviceId);
-            }
-
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
-            {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName,"file");
-            }
-
-            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
-            {
-                return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
-            }
-
-            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
-            {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
-            }
-        }
-
         private class SyncAsyncExecutorStub : IAsyncExecutor
         {
             public void ExecuteAsync(Action action)
@@ -2895,7 +2842,7 @@ namespace WB.Tests.Unit
         public static IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
         {
             return Mock.Of<IEventStore>(_ =>
-                _.ReadFrom(eventSourceId, Moq.It.IsAny<int>(), Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
+                _.Read(eventSourceId, Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
         }
 
         public static IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
@@ -2925,6 +2872,11 @@ namespace WB.Tests.Unit
             var result = Substitute.For<IPlainQuestionnaireRepository>();
             result.GetQuestionnaire(null).ReturnsForAnyArgs(questionnaire);
             return result;
+        }
+
+        public static ITopologicalSorter<int> TopologicalSorter()
+        {
+            return new TopologicalSorter<int>();
         }
     }
 }

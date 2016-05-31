@@ -47,9 +47,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 Create.InterviewData(Create.InterviewQuestion(questionId: multiMediaQuestion.PublicKey,
                     answer: "var.jpg")), interviewId.FormatGuid());
 
-            var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireExportStructure>>();
+            var questionnaireStorage = new Mock<IQuestionnaireExportStructureStorage>();
 
-            questionnaireStorage.Setup(x => x.GetById(Moq.It.IsAny<string>()))
+            questionnaireStorage.Setup(x => x.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaireExportStructure);
 
             plainInterviewFileStorageMock=new Mock<IPlainInterviewFileStorage>();

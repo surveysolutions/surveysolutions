@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -123,9 +124,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 InterviewTroubleshootView model = this.troubleshootInterviewViewFactory.Load(new InterviewTroubleshootInputModel { InterviewId = id });
                 return this.View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                this.Error("No interview with such identifier. Try another one.");
+                this.Logger.Error("Error on Troubleshooting", ex);
+
+                this.Error(Strings.UnexpectedErrorOccurred);
                 return this.RedirectToAction("Troubleshoot", new TroubleshootModel { InterviewId = id });
             }
         }
@@ -142,7 +145,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             catch (Exception exception)
             {
                 Logger.Error(exception.Message, exception);
-                this.TempData["Revalidation.Error"] = "Revalidation was unsuccessful.";
+                this.TempData["Revalidation.Error"] = Pages.InterviewController_RevalidationFailed;
                 this.TempData["Revalidation.ErrorDetails"] = exception.Message;
             }
             var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };
@@ -159,12 +162,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             try
             {
-                this.CommandService.Execute(new RepeatLastInterviewStatus(input.InterviewId, "Status set by Survey Solutions support team"));
+                this.CommandService.Execute(new RepeatLastInterviewStatus(input.InterviewId, Pages.InterviewController_RepeatLastStatus));
             }
             catch (Exception exception)
             {
                 Logger.Error(exception.Message, exception);
-                this.TempData["RepeatLastStatus.Error"] = "Repeating of last status was unsuccessful.";
+                this.TempData["RepeatLastStatus.Error"] = Pages.InterviewController_RepeatLastStatusFailed;
                 this.TempData["RepeatLastStatus.ErrorDetails"] = exception.Message;
             }
             var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };

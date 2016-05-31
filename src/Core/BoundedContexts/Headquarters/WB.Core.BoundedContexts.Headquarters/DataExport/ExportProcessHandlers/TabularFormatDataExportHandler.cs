@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage) : 
+            ILogger logger, IQuestionnaireExportStructureStorage questionnaireExportStructureStorage) : 
             base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
@@ -57,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
             {
                 var questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                    this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
                 this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
             });

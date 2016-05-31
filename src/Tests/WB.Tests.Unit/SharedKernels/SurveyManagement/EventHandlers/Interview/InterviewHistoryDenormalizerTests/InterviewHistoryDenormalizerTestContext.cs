@@ -40,9 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
                 new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
+                Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
-                        _.GetById(Moq.It.IsAny<string>()) ==
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
                         (questionnaire ?? new QuestionnaireExportStructure())));
         }
 

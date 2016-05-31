@@ -1,6 +1,7 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using System.Globalization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
 
 @switch (Model.QuestionType)
@@ -10,7 +11,7 @@
         <div class="input-group">
             <input id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" class="form-control mask" type="text" value="@Model.Answer" mask="@(textQuestionSettings.Mask)"/>
             <span class="input-group-btn">
-                <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
             </span>
         </div>
         break;
@@ -21,11 +22,11 @@
             <span class="input-group-btn">
                 @if (numericQuestionSetting.IsInteger)
                 {
-                    <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
                 }
                 else
                 {
-                    <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">@Pages.EditQuestion_Save</button>
                 }
             </span>
         </div>
@@ -37,7 +38,7 @@
             <div class="input-group">
                 <input id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" class="form-control" type="text" value="@Model.Answer"/>
                 <span class="input-group-btn">
-                    <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                    <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
                 </span>
             </div>
         }

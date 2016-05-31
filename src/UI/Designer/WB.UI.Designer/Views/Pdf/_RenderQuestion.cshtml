@@ -9,7 +9,7 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@question.QuestionText</div>
+        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@question.QuestionText.SanitizeHtml()</div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {
@@ -57,10 +57,10 @@
         <div class="question-meta">
             <div class="type">
                 @questionnaire.GetFormattedQuestionType(question)
-                @if (question.QuestionScope != QuestionScope.Interviewer)
+                @if (!@questionnaire.IsInterviewerQuestion(question))
                 {
                     <br />
-                    <span>Scope: @question.QuestionScope</span>
+                    <span>Scope: @questionnaire.GetQuestionScope(question)</span>
                 }
             </div>
             <div class="variable_name">@question.StataExportCaption</div>

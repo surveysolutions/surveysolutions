@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IDataQueryFactory dataQueryFactory;
@@ -39,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IDataQueryFactory dataQueryFactory,
             IDatasetWriterFactory datasetWriterFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -48,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.dataQueryFactory = dataQueryFactory;
         }
 
@@ -82,8 +83,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireExportStructureRepository.GetById(
-                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString()));
+                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];

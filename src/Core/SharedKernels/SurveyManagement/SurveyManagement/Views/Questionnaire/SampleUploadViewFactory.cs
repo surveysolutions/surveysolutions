@@ -8,7 +8,9 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -17,10 +19,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
     public class SampleUploadViewFactory : IViewFactory<SampleUploadViewInputModel, SampleUploadView>
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
-        public SampleUploadViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+        public SampleUploadViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.questionnaires = questionnaires;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -28,13 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 
         public SampleUploadView Load(SampleUploadViewInputModel input)
         {
-            var questionnaire = this.questionnaires.GetById(new QuestionnaireIdentity(input.QuestionnaireId, input.Version).ToString());
+            var questionnaireId = new QuestionnaireIdentity(input.QuestionnaireId, input.Version);
+            var questionnaire = this.questionnaires.GetById(questionnaireId.ToString());
             if (questionnaire == null)
                 return null;
 
             var questionnaireExportStructure =
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(input.QuestionnaireId, input.Version).ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
 
             if (questionnaireExportStructure == null)
                 return null;

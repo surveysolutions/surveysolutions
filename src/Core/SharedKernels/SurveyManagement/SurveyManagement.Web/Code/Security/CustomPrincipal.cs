@@ -1,6 +1,7 @@
 using System;
 using System.Security.Principal;
 using System.Web.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 {

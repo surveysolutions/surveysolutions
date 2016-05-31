@@ -1,10 +1,11 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.GenericSubdomains.Portable
+@using WB.Core.SharedKernels.SurveyManagement.Web.Properties
 @using WebGrease.Css.Ast
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = Pages.InterviewerCreate_Title;
 }
 
 @section scripts
@@ -25,7 +26,7 @@
 <div class="main">
     @Html.Partial("_alerts")
     <div class="page-header">
-        <h2>Create interviewer at <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> team</h2>
+        <h2> @Pages.InterviewerCreate_CreateIn <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> @Pages.InterviewerCreate_Team</h2>
     </div>
 
 
@@ -60,8 +61,8 @@
         }
         <div class="form-group">
             <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Save changes</button>
-                @Html.ActionLink("Cancel", "Back", new {  }, new { @class = "btn btn-default" })
+                <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
+                @Html.ActionLink(Pages.Cancel, "Back", new {  }, new { @class = "btn btn-default" })
             </div>
         </div>
     </form>

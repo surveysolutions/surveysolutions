@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -14,5 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId);
 
         List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id);
+
+        VariableView GetVariableEditView(string questionnaireId, Guid variableId);
     }
 }
