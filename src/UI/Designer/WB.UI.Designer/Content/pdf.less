@@ -369,12 +369,13 @@ article {
 }
 
 .option .option-value {    
-    margin-left: 0;    
-    font-size: 10px;
+    font-size: 12px;
+    padding: 1px 0;
+    height: 18px;
     vertical-align: middle;
+    display: inline-block;
+    float:left;
     line-height: 18px;
-    display: inline-block;   
-    /*float:left;*/
 }
 
 .points {
@@ -405,9 +406,11 @@ article {
 }
 
 .yes_no_multiselect {
-    display: inline-block;
-    width: 53px;
-    vertical-align: top;
+  display: inline-block;
+  width: 53px;
+  vertical-align: top;
+  margin-left: 10px;
+  line-height: 18px;
 }
 
 .answer-editor .yes_no_multiselect label {
@@ -422,14 +425,16 @@ article {
 }
 
 .option .yes_no-option-text {
-    margin-left: 9px;    
-    width: 65%;
-    vertical-align: middle;
+  margin-left: 5px;
+  width: 65%;
+  vertical-align: top;
 }
 .option .option-text {
   width: 65%;
   display: inline-block;
   margin-left: 10px;
+  line-height: 18px;
+  vertical-align: top; 
 }
 
 input[type=date] {
@@ -449,7 +454,7 @@ input[type=date] {
 }
 
 .generated_by span a {
-    color: #000;
+    color: #0000EE;
     text-decoration: none;
 }
 
