@@ -304,6 +304,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gps question required Latitude and Longitude columns.
+        /// </summary>
+        public static string PL0030_GpsFieldsRequired {
+            get {
+                return ResourceManager.GetString("PL0030_GpsFieldsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prefilled gps question requires Latitude and Longitude to be set..
         /// </summary>
         public static string PL0030_GpsMandatoryFilds {

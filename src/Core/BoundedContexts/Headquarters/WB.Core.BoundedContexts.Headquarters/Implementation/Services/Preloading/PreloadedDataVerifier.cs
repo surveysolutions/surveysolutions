@@ -438,7 +438,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
                 {
-                    yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsMandatoryFilds, this.CreateReference(rowIndex, levelData));
+                    yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(rowIndex, levelData));
                     yield break;
                 }
 
