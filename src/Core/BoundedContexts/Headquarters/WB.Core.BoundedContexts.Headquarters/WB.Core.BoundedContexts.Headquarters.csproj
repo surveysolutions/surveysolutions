@@ -307,7 +307,6 @@
     <Compile Include="Mappings\InterviewStatusesMap.cs" />
     <Compile Include="Mappings\InterviewStatusTimeSpansMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
-    <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
@@ -384,7 +383,6 @@
     <Compile Include="SyncProvider\ISyncEventHandler.cs" />
     <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\InterviewSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
