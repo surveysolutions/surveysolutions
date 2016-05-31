@@ -47,6 +47,7 @@ using WB.UI.Headquarters;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
