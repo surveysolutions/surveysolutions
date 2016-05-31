@@ -24,21 +24,27 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task BackwardCompatibilityAsync()
         {
-            var readSideVersion = 1;
             var settingsStorage = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
             var settings = settingsStorage.FirstOrDefault();
             if (settings != null)
             {
-                if (settings.ReadSideVersion.HasValue)
-                    return;
-
-                await this.MoveCategoricalOptionsToPlainStorage();
-                settings.ReadSideVersion = readSideVersion;
-                await settingsStorage.StoreAsync(settings);
+                await this.MigrateCategoricalOptionsAndSetReadSideVersionTo1(settings, settingsStorage);
                 return;
             }
 
             await MoveCategoricalOptionsToPlainStorage();
+        }
+
+        private async Task MigrateCategoricalOptionsAndSetReadSideVersionTo1(ApplicationSettingsView settings, IAsyncPlainStorage<ApplicationSettingsView> settingsStorage)
+        {
+            var isMigrationNeeded = !settings.ReadSideVersion.HasValue;
+
+            if (!isMigrationNeeded)
+                return;
+
+            await this.MoveCategoricalOptionsToPlainStorage();
+            settings.ReadSideVersion = 1;
+            await settingsStorage.StoreAsync(settings);
         }
 
         private async Task MoveCategoricalOptionsToPlainStorage()
