@@ -172,14 +172,19 @@ ko.bindingHandlers.typeahead = {
         var allBindings = allBindingsAccessor();
         var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
 
-        var states = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('label'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: source,
-            limit: 10
-        });
+        var substringMatcher = function (items) {
+            return function findMatches(query, cb) {
+                var matches = [];
+                var substringRegex = new RegExp(query, 'i');
+                $.each(items, function (i, item) {
+                    if (substringRegex.test(item.label)) {
+                        matches.push(item);
+                    }
+                });
 
-        states.initialize();
+                cb(matches.slice(0, 10));
+            };
+        };
 
         $element
             .attr('autocomplete', 'off')
@@ -192,7 +197,7 @@ ko.bindingHandlers.typeahead = {
             {
                 name: 'states',
                 displayKey: 'label',
-                source: states.ttAdapter()
+                source: substringMatcher(source)
             }).on('typeahead:selected', function(obj, datum) {
                 allBindings.id(datum.value);
                 $element.change();
