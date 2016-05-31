@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, 
             bool? isInteger, int? countOfDecimalPlaces, IList<ValidationCondition> validationConditions) : 
             base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, 
-                stataExportCaption, variableLabel, validationExpression, validationMessage, validationConditions)
+                stataExportCaption, variableLabel, validationExpression, validationMessage, validationConditions, false)
         {
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;

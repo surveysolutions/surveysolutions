@@ -34,7 +34,8 @@ namespace Main.Core.Entities
             Guid? cascadeFromQuestionId,
             bool? yesNoView,
             IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
+            string linkedFilterExpression,
+            bool isTimestamp)
         {
             this.PublicKey = publicKey;
             this.QuestionType = questionType;
@@ -64,6 +65,7 @@ namespace Main.Core.Entities
             this.YesNoView = yesNoView;
             this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
             this.Properties = questionProperties;
+            this.IsTimestamp = isTimestamp;
         }
 
         public readonly Guid PublicKey;
@@ -98,5 +100,6 @@ namespace Main.Core.Entities
         public readonly QuestionProperties Properties;
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
+        public bool IsTimestamp { get; set; }
     }
 }

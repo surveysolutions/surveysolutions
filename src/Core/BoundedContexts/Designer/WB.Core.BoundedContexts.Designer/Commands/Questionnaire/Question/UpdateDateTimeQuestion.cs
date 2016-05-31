@@ -17,12 +17,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             CommonQuestionParameters commonQuestionParameters,
             QuestionScope scope,
             bool isPreFilled,
-            List<ValidationCondition> validationConditions)
+            List<ValidationCondition> validationConditions,
+            bool isTimestamp)
              : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
                 validationConditions: validationConditions)
         {
+            this.IsTimestamp = isTimestamp;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
         }
@@ -30,5 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public QuestionScope Scope { get; set; }
 
         public bool IsPreFilled { get; set; }
+
+        public bool IsTimestamp { get; set; }
     }
 }

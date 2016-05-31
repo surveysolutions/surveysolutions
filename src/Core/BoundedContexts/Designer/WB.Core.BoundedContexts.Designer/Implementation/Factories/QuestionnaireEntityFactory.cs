@@ -55,7 +55,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.IsFilteredCombobox,
                 data.CascadeFromQuestionId,
                 data.YesNoView,
-                data.ValidationConditions);
+                data.ValidationConditions,
+                data.IsTimestamp);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -164,7 +165,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             bool? yesNoView,
-            IList<ValidationCondition> validationConditions)
+            IList<ValidationCondition> validationConditions,
+            bool isTimestamp)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -213,6 +215,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             if (textQuestion != null)
             {
                 textQuestion.Mask = mask;
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                dateTimeQuestion.IsTimestamp = isTimestamp;
             }
         }
     }
