@@ -783,8 +783,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
-    <Compile Include="Infrastructure\HybridEventBusTests\when_publishing_aggregate_root_events_and_publish_to_cqrs_event_bus_fails.cs" />
-    <Compile Include="Infrastructure\HybridEventBusTests\when_publishing_aggregate_root_events_and_publish_to_lite_event_bus_fails.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_handler_was_subscribed_and_unsubscribed.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\LiteEventBusTestsContext.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_two_handlers_was_subscribed_on_different_events.cs" />
