@@ -53,8 +53,7 @@
             <div class="question-type-specific-block"
                  ng-include="activeQuestion.type + '-template.html'"
                  ng-if="activeQuestion.type != undefined
-                 && ( activeQuestion.type!='DateTime'
-                 && activeQuestion.type!='GpsCoordinates'
+                 && (activeQuestion.type!='GpsCoordinates'
                  && activeQuestion.type!='QRBarcode'
                  && activeQuestion.type!='Multimedia')
                  ">
@@ -481,8 +480,14 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="DateTime-template.html">
-        </script>
+    <script type="text/ng-template" id="DateTime-template.html">
+        <div class="checkbox checkbox-in-column">
+            <input id="cb-is-timestamp" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isTimestamp" />
+            <label for="cb-is-timestamp"><span></span>Is Timestamp</label>
+            <help key="isTimestamp"></help>
+        </div>
+        
+    </script>
 
         <script type="text/ng-template" id="GpsCoordinates-template.html">
         </script>

@@ -182,6 +182,8 @@
                         command.useFormatting = question.useFormatting;
                         break;
                     case "DateTime":
+                        command.isTimestamp = question.isTimestamp;
+                        break;
                     case "GpsCoordinates":
                     case "Text":
                         break;

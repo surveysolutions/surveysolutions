@@ -76,6 +76,8 @@
 
                 $scope.activeQuestion.validationConditions = question.validationConditions;
 
+                $scope.activeQuestion.isTimestamp = question.isTimestamp;
+
                 var options = question.options || [];
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
