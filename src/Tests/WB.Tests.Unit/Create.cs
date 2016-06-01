@@ -4,6 +4,7 @@ namespace WB.Tests.Unit
 {
     internal class Create
     {
+        public static readonly AggregateRootFactory AggregateRoot = new AggregateRootFactory();
         public static readonly EntityFactory Entity = new EntityFactory();
 
         public static readonly ServiceFactory Service = new ServiceFactory();

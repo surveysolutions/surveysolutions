@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             Identity id = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
             viewModel.Init(interviewId, id, null);
 
-            fakeInterview = Create.Other.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 

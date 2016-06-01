@@ -163,7 +163,7 @@ namespace WB.Tests.Unit
                 questionnaireVersion: questionnaireVersion,
                 questionnaire: questionnaire);
 
-            Interview interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository);
+            Interview interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.InterviewCreated(
                 questionnaireId: questionnaireId,
@@ -193,7 +193,7 @@ namespace WB.Tests.Unit
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
-            return Create.Other.StatefulInterview(
+            return Create.AggregateRoot.StatefulInterview(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
                 questionnaireRepository: questionnaireRepository);

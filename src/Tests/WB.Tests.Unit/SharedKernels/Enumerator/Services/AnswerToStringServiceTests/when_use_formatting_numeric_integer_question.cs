@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
 
             answer = Create.Entity.IntegerNumericAnswer(Create.Entity.Identity(questionId, RosterVector.Empty), answer: 1234);
 
-            statefulInterview = Create.Other.StatefulInterview(questionnaire: questionnaire);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
         };
 
         Because of = () => stringAnswer = service.AnswerToUIString(questionId, answer, statefulInterview, questionnaire);

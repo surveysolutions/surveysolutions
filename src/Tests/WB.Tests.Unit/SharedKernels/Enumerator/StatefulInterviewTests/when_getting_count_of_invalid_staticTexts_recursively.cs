@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                                                             }.ToReadOnlyCollection());
             IPlainQuestionnaireRepository questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.StaticTextsDeclaredInvalid(new Identity(staticText1Id, targetRosterVector)));
             interview.Apply(Create.Event.StaticTextsDeclaredValid(new Identity(staticText2Id, targetRosterVector)));

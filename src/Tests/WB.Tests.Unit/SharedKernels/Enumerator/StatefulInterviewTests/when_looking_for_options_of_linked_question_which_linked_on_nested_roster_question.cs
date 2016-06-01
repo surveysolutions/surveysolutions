@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             questionnaire.GetRostersFromTopToSpecifiedQuestion(linkSourceId)
                 .Returns(new[] { rosterId, nestedRosterId });
 
-            interview = Create.Other.StatefulInterview(questionnaire: questionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 1, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 2, 2));
 
