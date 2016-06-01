@@ -5,9 +5,12 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
@@ -16,16 +19,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly ICsvWriter csvWriter;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IPlainTransactionManager transactionManager;
         private readonly string pathToHistoryFiles;
 
         public TabularParaDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IArchiveUtils archiveUtils, ICsvWriter csvWriter)
+            IArchiveUtils archiveUtils, ICsvWriter csvWriter, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
+            IPlainTransactionManager transactionManager)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.csvWriter = csvWriter;
+            this.questionnaires = questionnaires;
+            this.transactionManager = transactionManager;
 
             this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
                 interviewDataExportSettings.ExportedDataFolderName);
@@ -106,8 +115,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
         private string GetPathToFolderWithParaDataByQuestionnaire(Guid questionnaireId, long version)
         {
+            var id = new QuestionnaireIdentity(questionnaireId, version).ToString();
+            var questionnaireTitle = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(id)?.Title);
+
+            questionnaireTitle = this.fileSystemAccessor.MakeValidFileName(questionnaireTitle) ?? questionnaireId.FormatGuid();
+
             return this.fileSystemAccessor.CombinePath(this.pathToHistoryFiles,
-                $"{questionnaireId}-{version}");
+                $"{questionnaireTitle}-{version}");
         }
 
         private string GetPathToInterviewHistoryFile(Guid interviewId, Guid questionnaireId, long version)
