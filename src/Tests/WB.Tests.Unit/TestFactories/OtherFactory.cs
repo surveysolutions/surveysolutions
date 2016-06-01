@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.TestFactories
     {
         public CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1, Guid? commitId = null)
-        {
-            return new CommittedEvent(
+            => new CommittedEvent(
                 commitId ?? Guid.NewGuid(),
                 origin,
                 eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
@@ -25,35 +24,18 @@ namespace WB.Tests.Unit.TestFactories
                 new DateTime(2014, 10, 22),
                 0,
                 payload ?? Mock.Of<IEvent>());
-        }
 
         public EventContext EventContext()
-        {
-            return new EventContext();
-        }
-
-        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
-        {
-            return new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
-        }
-
+            => new EventContext();
 
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
-        {
-            var result = new NavigationState(
+            => new NavigationState(
                 Mock.Of<ICommandService>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IUserInteractionService>(),
                 Mock.Of<IUserInterfaceStateService>());
-            return result;
-        }
 
-        public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null,
-            IEvent payload = null,
-            int sequence = 1,
-            int initialVersion = 1)
-        {
-            return new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
-        }
+        public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
+            => new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
     }
 }
