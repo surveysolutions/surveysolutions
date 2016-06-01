@@ -62,7 +62,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator.Runner">
-      <HintPath>..\..\..\packages\FluentMigrator.Tools.1.6.1\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
+      <HintPath>..\..\..\packages\FluentMigrator.Tools.1.6.2\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
     </Reference>
     <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
