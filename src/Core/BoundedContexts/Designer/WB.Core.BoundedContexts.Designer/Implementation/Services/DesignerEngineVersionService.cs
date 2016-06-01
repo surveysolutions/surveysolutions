@@ -51,6 +51,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Variables</summary>
         private readonly Version version_15 = new Version(15, 0, 0);
 
+        /// <summary>
+        /// Timestamp questions
+        /// </summary>
         private readonly Version version_16 = new Version(16, 0, 0);
 
 
@@ -74,6 +77,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            bool hasTimestampQuestions = questionnaireDocument.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any();
+            if (hasTimestampQuestions)
+                return this.version_16;
+
             bool hasVariables = questionnaireDocument.Find<Variable>().Any();
             if (hasVariables)
                 return version_15;
