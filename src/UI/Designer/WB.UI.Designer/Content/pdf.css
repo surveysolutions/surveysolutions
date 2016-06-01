@@ -232,7 +232,7 @@ article {
   width: 87%;
   font-size: 16px;
   line-height: 18px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .answer {
   display: table-cell;
@@ -242,7 +242,7 @@ article {
 }
 .question-meta {
   overflow: hidden;
-  margin-bottom: 13px;
+  margin-bottom: 5px;
   word-break: break-all;
 }
 .type {
@@ -281,7 +281,7 @@ article {
   display: inline-block;
   font-size: 16px;
   line-height: 18px;
-  min-height: 20px;
+  min-height: 18px;
 }
 .answer-editor input + label {
   cursor: pointer;
@@ -307,15 +307,15 @@ article {
   height: 10px;
   border-radius: 100%;
   display: none;
-  top: 8px;
-  left: 5px;
+  top: 4px;
+  left: 2px;
   background-color: #000;
 }
 .answer-editor input:checked + label::after {
   display: block;
 }
 .option {
-  margin-top: 8px;
+  margin-top: 2px;
   
 }
 .option:first-of-type {
@@ -330,7 +330,6 @@ article {
 .option .option-value {    
     font-size: 12px;
     padding: 1px 0;
-    height: 18px;
     vertical-align: middle;
     display: inline-block;
     float:left;
@@ -341,6 +340,12 @@ article {
   width: 95%;
   border: none;
   border-bottom: 2px dotted #000;
+}
+
+.dashes {
+  width: 95%;
+  border: none;
+  border-bottom: 2px dashed #000;
 }
 .section_header {
   border-bottom: 3px solid #000;
