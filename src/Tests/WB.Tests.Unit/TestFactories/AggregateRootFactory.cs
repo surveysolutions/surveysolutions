@@ -22,6 +22,19 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class AggregateRootFactory
     {
+        public Interview Interview(Guid? interviewId = null, IPlainQuestionnaireRepository questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new Interview(
+                Mock.Of<ILogger>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
+
+            interview.SetId(interviewId ?? Guid.NewGuid());
+
+            return interview;
+        }
+
         public Questionnaire Questionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
@@ -37,20 +50,8 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 
-        public Interview Interview(Guid? interviewId = null, IPlainQuestionnaireRepository questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
-        {
-            var interview = new Interview(
-                Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
-
-            interview.SetId(interviewId ?? Guid.NewGuid());
-
-            return interview;
-        }
-
-        public StatefulInterview StatefulInterview(Guid? questionnaireId = null,
+        public StatefulInterview StatefulInterview(
+            Guid? questionnaireId = null,
             long? questionnaireVersion = null,
             Guid? userId = null,
             IPlainQuestionnaireRepository questionnaireRepository = null)

@@ -84,7 +84,7 @@ namespace WB.Tests.Unit
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
-            return Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            return Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
@@ -158,7 +158,7 @@ namespace WB.Tests.Unit
             Guid questionnaireId = Guid.NewGuid();
             long questionnaireVersion = 777;
 
-            IPlainQuestionnaireRepository questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(
+            IPlainQuestionnaireRepository questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
                 questionnaire: questionnaire);
