@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -63,18 +64,18 @@ namespace WB.Tests.Unit.TestFactories
         public Attachment Attachment(string attachmentHash)
             => new Attachment { ContentId = attachmentHash };
 
+        public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
+            => new Core.SharedKernels.Enumerator.Views.AttachmentContent
+            {
+                Id = id,
+            };
+
         public AttachmentContent AttachmentContent_SurveyManagement(string contentHash = null, string contentType = null, byte[] content = null)
             => new AttachmentContent
             {
                 ContentHash = contentHash ?? "content id",
                 ContentType = contentType,
                 Content = content ?? new byte[] {1, 2, 3}
-            };
-
-        public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
-            => new Core.SharedKernels.Enumerator.Views.AttachmentContent
-            {
-                Id = id,
             };
 
         public AttachmentContentData AttachmentContentData(byte[] content)
@@ -230,6 +231,9 @@ namespace WB.Tests.Unit.TestFactories
             model.SetAnswer(answer);
             return model;
         }
+
+        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
+            => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
