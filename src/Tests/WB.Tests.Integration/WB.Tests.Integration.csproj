@@ -332,7 +332,7 @@
     <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
-    <Compile Include="InterviewTests\Rosters\when_roster_is_inside_group_with_condition.cs" />
+    <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_and_roster_inside_it.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_with_nested_roster_inside_it.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
