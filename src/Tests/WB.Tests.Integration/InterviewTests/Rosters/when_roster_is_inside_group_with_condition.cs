@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static readonly Guid QuestionnaireId = Guid.Parse("77778888000000000000000000000000");
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

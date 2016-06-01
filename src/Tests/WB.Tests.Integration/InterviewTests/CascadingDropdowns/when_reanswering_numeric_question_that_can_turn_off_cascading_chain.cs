@@ -104,7 +104,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults
