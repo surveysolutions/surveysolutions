@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IPlainQuestionnaireRepository>(_
                 => _.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaireDocumentFromRepository));
 
-            questionnaire = Create.Other.DataCollectionQuestionnaire(
+            questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object);
 

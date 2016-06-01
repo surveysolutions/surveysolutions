@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
             var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(
                 Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-            statefulInterview = Create.Other.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
             statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));
         };
 

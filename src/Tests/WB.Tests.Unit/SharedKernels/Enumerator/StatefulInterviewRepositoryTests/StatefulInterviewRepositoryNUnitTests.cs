@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         {
             var liteEventBusMock = new Mock<ILiteEventBus>();
 
-            var statefulInterview = Create.Other.StatefulInterview(userId: null, questionnaire: null);
+            var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: null);
             statefulInterview.Apply(Create.Event.LinkedOptionsChanged());
 
             var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
 
             IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
 
-            var statefulInterview = Create.Other.StatefulInterview(userId: null, questionnaire: questionnaire);
+            var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire);
 
             var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
                 liteEventBusMock.Object);
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var snapshotStore = Create.Other.SnapshotStore(aggregateRootId);
             var eventStore = Create.Other.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var aggregateSnapshotter = Create.Other.AggregateSnapshotter();
-            Setup.InstanceToMockedServiceLocator(Create.Other.StatefulInterview(questionnaireId: Guid.NewGuid(),
+            Setup.InstanceToMockedServiceLocator(Create.AggregateRoot.StatefulInterview(questionnaireId: Guid.NewGuid(),
                 userId: Guid.NewGuid(), questionnaire: null));
             var domaiRepository = Create.Service.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
             var aggregateRootRepository = Create.Service.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
