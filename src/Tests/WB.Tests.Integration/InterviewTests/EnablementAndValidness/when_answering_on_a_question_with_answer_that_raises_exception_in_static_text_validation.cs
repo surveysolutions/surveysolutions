@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         It should_raise_StaticTextsDeclaredInvalid_event = () =>
             result.StaticTextsDeclaredInvalidCount.ShouldEqual(1);
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

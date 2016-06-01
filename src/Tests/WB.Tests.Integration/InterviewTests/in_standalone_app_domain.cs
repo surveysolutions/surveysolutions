@@ -16,6 +16,6 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext = null;
         };
 
-        protected static AppDomainContext appDomainContext;
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
     }
 }
