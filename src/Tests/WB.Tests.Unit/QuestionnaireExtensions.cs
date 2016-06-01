@@ -126,7 +126,7 @@ namespace WB.Tests.Unit
             int? countOfDecimalPlaces)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateDateTimeQuestion(
+            questionnaire.UpdateNumericQuestion(
                 questionId: questionId,
                 title: title,
                 variableName: variableName,
@@ -137,7 +137,9 @@ namespace WB.Tests.Unit
                 hideIfDisabled: false,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false, false));
+                validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false, false),
+                isInteger: isInteger,
+                countOfDecimalPlaces: countOfDecimalPlaces);
         }
 
         public static void AddQRBarcodeQuestion(
