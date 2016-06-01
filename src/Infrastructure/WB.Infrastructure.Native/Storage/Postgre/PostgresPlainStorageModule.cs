@@ -34,7 +34,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             
             try
             {
-                DatabaseManagement.CreateDatabase(this.settings.ConnectionString);
+                DatabaseManagement.InitDatabase(this.settings.ConnectionString);
             }
             catch (Exception exc)
             {
