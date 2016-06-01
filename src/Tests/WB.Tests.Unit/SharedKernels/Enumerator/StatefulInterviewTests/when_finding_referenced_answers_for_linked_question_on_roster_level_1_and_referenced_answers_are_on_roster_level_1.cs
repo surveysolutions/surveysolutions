@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
                 && _.GetRosterSizeSourcesForEntity(referencedQuestionId) == referencedQuestionRosters);
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(interview, referencedRoster1, referencedQuestionId, linkedQuestionIdentity);
         };

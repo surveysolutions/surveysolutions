@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             var questionnaireBrowseItemAccessor = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(a =>
                 a.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem);
 
-            var questionnaire = Create.Other.DataCollectionQuestionnaire(
+            var questionnaire = Create.AggregateRoot.Questionnaire(
                 plainQuestionnaireRepository: plainQuestionnaireRepository,
                 questionnaireBrowseItemStorage: questionnaireBrowseItemAccessor);
 

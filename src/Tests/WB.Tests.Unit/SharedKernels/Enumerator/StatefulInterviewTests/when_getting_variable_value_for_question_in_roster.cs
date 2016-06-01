@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                     Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(Create.Event.InterviewSynchronized(
                 Create.Entity.InterviewSynchronizationDto(variables: new Dictionary<InterviewItemId, object>
                 {

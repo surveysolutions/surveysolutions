@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             var questionnaireBrowseItemStorage = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                 id: questionnaireIdentity.ToString(), entity: null);
 
-            questionnaire = Create.Other.DataCollectionQuestionnaire(
+            questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
