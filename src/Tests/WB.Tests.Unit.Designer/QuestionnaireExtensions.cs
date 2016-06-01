@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.Designer
             int? countOfDecimalPlaces)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateDateTimeQuestion(
+            questionnaire.UpdateNumericQuestion(
                 questionId: questionId,
                 title: title,
                 variableName: variableName,
@@ -121,7 +121,9 @@ namespace WB.Tests.Unit.Designer
                 hideIfDisabled: false,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
+                validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties(),
+                isInteger: isInteger,
+                countOfDecimalPlaces: countOfDecimalPlaces);
         }
     }
 }
