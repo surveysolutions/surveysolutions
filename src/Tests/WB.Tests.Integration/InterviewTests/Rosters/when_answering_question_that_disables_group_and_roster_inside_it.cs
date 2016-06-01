@@ -37,9 +37,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             {
                                 Create.NumericIntegerQuestion(q2Id, variable: "q2"),
                             })
-                    }),
-                    Create.NumericIntegerQuestion(q3Id, variable: "q3", validationConditions: new List<ValidationCondition> { Create.ValidationCondition("r.Any(r=>IsAnswered(r.q2))") })
-                    );
+                    })
+                );
 
                 var result = new InvokeResults();
 
