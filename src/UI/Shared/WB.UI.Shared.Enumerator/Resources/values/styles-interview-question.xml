@@ -311,6 +311,10 @@
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>
 
+  <style name="Interview_Question_TimestampAnswer" parent="Interview_Question_TextAnswer">
+    <item name="android:layout_marginTop">@dimen/Interview_Question_TimestampAnswer_margin_top</item>
+  </style>
+
   <style name="Interview_Question_InputButton" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>

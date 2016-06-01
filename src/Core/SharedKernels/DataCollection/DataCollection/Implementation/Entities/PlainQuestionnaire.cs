@@ -742,6 +742,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
         }
 
+        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
