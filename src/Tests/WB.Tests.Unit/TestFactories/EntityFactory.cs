@@ -480,7 +480,7 @@ namespace WB.Tests.Unit.TestFactories
         public MultiOptionAnswer MultiOptionAnswer(Guid questionId, decimal[] rosterVector)
             => new MultiOptionAnswer(questionId, rosterVector);
 
-        public IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
+        public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
             bool isYesNo = false, bool hideIfDisabled = false, params decimal[] answers)
             => new MultyOptionsQuestion("Question MO")
@@ -540,7 +540,7 @@ namespace WB.Tests.Unit.TestFactories
                 LinkedToRosterId = linkedToRosterId,
             };
 
-        public INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+        public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null)
             => new NumericQuestion("Question N")
             {
@@ -752,11 +752,13 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public RosterVector RosterVector(params decimal[] coordinates)
-        {
-            return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
-        }
+            => new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
 
-        public SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
+        public SingleQuestion SingleOptionQuestion(
+            Guid? questionId = null,
+            string variable = null,
+            string enablementCondition = null,
+            string validationExpression = null,
             Guid? linkedToQuestionId = null,
             Guid? cascadeFromQuestionId = null,
             decimal[] answerCodes = null,
@@ -794,8 +796,7 @@ namespace WB.Tests.Unit.TestFactories
         public SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
             bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
-        {
-            return new SingleQuestion
+            => new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
@@ -809,38 +810,38 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox
             };
-        }
 
         public StaticText StaticText(
             Guid? publicKey = null,
             string text = "Static Text X",
             string attachmentName = null,
             List<ValidationCondition> validationConditions = null)
-        {
-            return new StaticText(publicKey ?? Guid.NewGuid(), text, null, false, validationConditions ?? new List<ValidationCondition>(), attachmentName);
-        }
+            => new StaticText(
+                publicKey ?? Guid.NewGuid(),
+                text,
+                null,
+                false,
+                validationConditions ?? new List<ValidationCondition>(),
+                attachmentName);
 
         public TextAnswer TextAnswer(string answer)
-        {
-            return Create.Entity.TextAnswer(answer, null, null);
-        }
+            => Create.Entity.TextAnswer(answer, null, null);
 
         public TextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
         {
-            var masedMaskedTextAnswer = new TextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
+            var textAnswer = new TextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
 
             if (answer != null)
             {
-                masedMaskedTextAnswer.SetAnswer(answer);
+                textAnswer.SetAnswer(answer);
             }
 
-            return masedMaskedTextAnswer;
+            return textAnswer;
         }
 
-        public ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+        public TextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
-        {
-            return new TextListQuestion("Question TL")
+            => new TextListQuestion("Question TL")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -850,7 +851,6 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.TextList,
                 StataExportCaption = variable
             };
-        }
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null,
@@ -863,9 +863,7 @@ namespace WB.Tests.Unit.TestFactories
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
             bool hideIfDisabled = false)
-
-        {
-            return new TextQuestion(text)
+            => new TextQuestion(text)
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -882,11 +880,11 @@ namespace WB.Tests.Unit.TestFactories
                 Instructions = instruction,
                 ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
             };
-        }
 
-        public TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null, InterviewExportedAction endStatus = InterviewExportedAction.ApprovedByHeadquarter)
-        {
-            return new TimeSpanBetweenStatuses()
+        public TimeSpanBetweenStatuses TimeSpanBetweenStatuses(
+            Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null,
+            InterviewExportedAction endStatus = InterviewExportedAction.ApprovedByHeadquarter)
+            => new TimeSpanBetweenStatuses
             {
                 BeginStatus = InterviewExportedAction.InterviewerAssigned,
                 EndStatus = endStatus,
@@ -895,7 +893,6 @@ namespace WB.Tests.Unit.TestFactories
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
                 TimeSpan = timeSpanWithPreviousStatus ?? new TimeSpan()
             };
-        }
 
         public User User(Guid? userId = null)
         {
@@ -906,7 +903,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
         {
-            var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
+            var user = new UserDocument { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
             if (supervisorId.HasValue)
             {
                 user.Roles.Add(UserRoles.Operator);
@@ -920,13 +917,12 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public UserLight UserLight(Guid? userId = null)
-        {
-            return new UserLight(userId ?? Guid.NewGuid(), "test");
-        }
+            => new UserLight(userId ?? Guid.NewGuid(), "test");
 
-        public UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email = "", string phoneNumber = "", string role = null)
-        {
-            return new UserPreloadingDataRecord()
+        public UserPreloadingDataRecord UserPreloadingDataRecord(
+            string login = "test", string supervisor = "", string password = "test", string email = "", string phoneNumber = "",
+            string role = null)
+            => new UserPreloadingDataRecord
             {
                 Login = login,
                 Supervisor = supervisor,
@@ -935,12 +931,11 @@ namespace WB.Tests.Unit.TestFactories
                 Email = email,
                 PhoneNumber = phoneNumber
             };
-        }
 
         public UserPreloadingProcess UserPreloadingProcess(string userPreloadingProcessId = null,
             UserPrelodingState state = UserPrelodingState.Uploaded, int recordsCount = 0, params UserPreloadingDataRecord[] dataRecords)
         {
-            var result = new UserPreloadingProcess()
+            var result = new UserPreloadingProcess
             {
                 UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
                 State = state,
@@ -955,50 +950,36 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public UserPreloadingSettings UserPreloadingSettings()
-        {
-            return new UserPreloadingSettings(5, 5, 12, 1, 10000, 100, 100, "^[a-zA-Z0-9_]{3,15}$",
+            => new UserPreloadingSettings(
+                5, 5, 12, 1, 10000, 100, 100, "^[a-zA-Z0-9_]{3,15}$",
                 @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",
                 "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
                 @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$");
-        }
 
         public UserPreloadingVerificationError UserPreloadingVerificationError()
-        {
-            return new UserPreloadingVerificationError();
-        }
+            => new UserPreloadingVerificationError();
 
         public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
-        {
-            return new ValidationCondition(expression, message);
-        }
+            => new ValidationCondition(expression, message);
 
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
-        {
-            return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression));
-        }
+            => new Variable(
+                id ?? Guid.NewGuid(),
+                new VariableData(type, variableName, expression));
 
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
-        {
-            return new VariableValueLabel(value, label);
-        }
+            => new VariableValueLabel(value, label);
 
         public YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
-        {
-            return new YesNoAnswer(questionId, rosterVector);
-        }
+            => new YesNoAnswer(questionId, rosterVector);
 
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
-        {
-            return new YesNoAnswers(allOptionCodes: allOptionCodes, yesNoAnswersOnly: yesNoAnswersOnly);
-        }
+            => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
 
-        public IMultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
-        {
-            return Create.Entity.MultipleOptionsQuestion(
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
+            => Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] { });
-        }
     }
 }
