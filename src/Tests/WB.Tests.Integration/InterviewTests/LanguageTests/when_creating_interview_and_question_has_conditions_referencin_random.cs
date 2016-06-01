@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_QuestionsDisabled_event = () =>
             result.QuestionsDisabledEventCount.ShouldEqual(1);
         
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid groupId = Guid.Parse("22222222222222222222222222222222");

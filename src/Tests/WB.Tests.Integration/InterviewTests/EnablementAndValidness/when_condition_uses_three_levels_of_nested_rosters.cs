@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         It should_enable_final_question = () =>
             result.FinalQuestionWasEnabled.ShouldBeTrue();
 
-        static AppDomainContext appDomainContext;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;
 
         [Serializable]

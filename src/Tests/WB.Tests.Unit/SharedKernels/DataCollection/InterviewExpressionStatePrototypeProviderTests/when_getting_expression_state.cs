@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
             appDomainContext = null; 
         };
 
-        static AppDomainContext appDomainContext;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static bool isResultNotNull;
     }
 }

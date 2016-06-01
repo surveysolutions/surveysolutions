@@ -71,7 +71,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_AnswersDeclaredValid_event_with_answered_question_id_only = () =>
             result.AnswersDeclaredValidQuestionIds.ShouldContainOnly(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]
