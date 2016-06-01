@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         Establish context = () =>
         {
-            publishableEvent = Create.Other.PublishableEvent();
+            publishableEvent = Create.Fake.PublishableEvent();
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
