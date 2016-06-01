@@ -1582,7 +1582,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationConditions: question.ValidationConditions,
                 linkedFilterExpression: question.LinkedFilterExpression,
 
-                isTimestamp: asDateTimeQuestion.IsTimestamp);
+                isTimestamp: asDateTimeQuestion?.IsTimestamp ?? false);
 
             return questionCloned;
         }
