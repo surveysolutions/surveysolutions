@@ -18,6 +18,7 @@ using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications
