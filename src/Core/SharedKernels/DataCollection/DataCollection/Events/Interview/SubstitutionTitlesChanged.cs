@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SubstitutionTitlesChanged : QuestionsPassiveEvent
     {
-        public Identity[] StaticTexts { get; private set; }
+        public Identity[] StaticTexts { get; }
 
         public SubstitutionTitlesChanged(Identity[] questions, Identity[] staticTexts)
             : base(questions)
