@@ -50,15 +50,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
 
-        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-        {
-            var events = this.connection.Table<EventView>().Where(eventView => eventView.EventSourceId == id &&
-                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
-                                                            .OrderBy(x => x.EventSequence);
-            
-            return new CommittedEventStream(id, events.Select(ToCommitedEvent));
-        }
-
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
             int lastReadEventSequence = Math.Max(minVersion, 0);
