@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
         private static string exportDatetimeFormat = "o";
         private static string exportDateFormat = "yyyy-MM-dd";
+        private static string exportTimestampFormat = "u";
         private const string DefaultDelimiter = "|";
 
         public ExportedQuestion()
@@ -104,15 +105,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 
                     if (shrinkedArrayOfAnswers.Length == 1)
                     {
-                        return this.ConvertAnswerToString(shrinkedArrayOfAnswers[0]);
+                        return this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionSubType);
                     }
 
-                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x)).ToArray()));
+                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray()));
                 }
-                return string.Join(DefaultDelimiter, arrayOfObject.Select(x => this.ConvertAnswerToString(x)).ToArray());
+                return string.Join(DefaultDelimiter, arrayOfObject.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray());
             }
             
-            return this.ConvertAnswerToString(answer);
+            return this.ConvertAnswerToString(answer, header.QuestionSubType);
         }
 
 
@@ -216,12 +217,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             }
         }
 
-        private string ConvertAnswerToString(object obj)
+        private string ConvertAnswerToString(object obj, QuestionSubtype? questionSubType)
         {
             var formattable = obj as IFormattable;
             if (formattable != null)
             {
-                return formattable.ToString(this.QuestionType == QuestionType.DateTime? exportDateFormat : null, exportCulture);
+                var isDateTimeQuestion = this.QuestionType == QuestionType.DateTime;
+                var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
+
+                return formattable.ToString(isTimestampQuestion ? exportTimestampFormat : isDateTimeQuestion ? exportDateFormat : null, exportCulture);
             }
             return  obj.ToString();
         }
