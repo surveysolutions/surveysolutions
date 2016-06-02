@@ -76,10 +76,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommittedEvents(CommittedEventStream committedEvents)
-        {
-            this.Publish(committedEvents);
-        }
+        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
             where TEvent: WB.Core.Infrastructure.EventBus.IEvent
