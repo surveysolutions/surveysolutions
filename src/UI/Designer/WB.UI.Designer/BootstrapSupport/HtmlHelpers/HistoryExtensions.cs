@@ -35,6 +35,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return MvcHtmlString.Create(lookupTableRecord);
             }
 
+            if (record.TargetType == QuestionnaireItemType.Variable)
+            {
+                var variableRecord = GetFormattedHistoricalRecordForVariable(record);
+                if (!string.IsNullOrWhiteSpace(variableRecord))
+                    return MvcHtmlString.Create(variableRecord);
+            }
+
             var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
 
             var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
@@ -56,6 +63,27 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             return MvcHtmlString.Create(mainRecord);
         }
+
+        private static string GetFormattedHistoricalRecordForVariable(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Add:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.VariableAdded;
+                    return string.Format(QuestionnaireHistoryResources.VariableAddedWithName, record.TargetTitle);
+                case QuestionnaireActionType.Delete:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.VariableDeleted;
+                    return string.Format(QuestionnaireHistoryResources.VariableDeletedWithName, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.VariableUpdated;
+                    return string.Format(QuestionnaireHistoryResources.VariableUpdatedWithName, record.TargetTitle);
+            }
+            return null;
+        }
+
         private static string GetFormattedHistoricalRecordForAttachment(QuestionnaireChangeHistoricalRecord record)
         {
             switch (record.ActionType)
@@ -137,7 +165,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var itemsToAdd = new[]
             {
                 QuestionnaireItemType.Group, QuestionnaireItemType.Person, QuestionnaireItemType.Question,
-                QuestionnaireItemType.Roster, QuestionnaireItemType.StaticText
+                QuestionnaireItemType.Roster, QuestionnaireItemType.StaticText, QuestionnaireItemType.Variable, 
             };
 
             switch (actionType)
@@ -179,8 +207,10 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return "question";
                 case QuestionnaireItemType.Roster:
                     return "roster";
-                    case QuestionnaireItemType.StaticText:
+                case QuestionnaireItemType.StaticText:
                     return "static-text";
+                case QuestionnaireItemType.Variable:
+                    return "variable";
             }
             return string.Empty;
         }

@@ -34,11 +34,21 @@
                     </div>
                 </div>
                 <div class="chapter-level-buttons" ng-show="!search.searchText">
-                    <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD SUB-SECTION" ng-click="addGroup(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)"/>
-                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" value="PASTE" ng-click="pasteItemInto(currentChapter)" />
+                    <div class="btn-group">
+                        <button type="button" class="btn lighter-hover" ng-click="addQuestion(currentChapter)">ADD QUESTION</button>
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);" ng-click="addGroup(currentChapter)">ADD SUB-SECTION</a></li>
+                            <li><a href="javascript:void(0);" ng-click="addRoster(currentChapter)">ADD ROSTER</a></li>
+                            <li><a href="javascript:void(0);" ng-click="addStaticText(currentChapter)">ADD STATIC TEXT</a></li>
+                            <li><a href="javascript:void(0);" ng-click="addVariable(currentChapter)">ADD VARIABLE</a></li>
+                        </ul>
+                    </div>
+
+                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" value="PASTE" ng-click="pasteItemInto(currentChapter)"/>
                 </div>
             </div>
 

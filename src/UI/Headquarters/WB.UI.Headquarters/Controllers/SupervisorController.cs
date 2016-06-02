@@ -3,10 +3,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -50,6 +51,9 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
+                if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                    this.Attention(Users.TryLater);
+
                 return this.View(model);
             }
 
@@ -64,10 +68,8 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
                
-            this.Success("Supervisor was successfully created");
+            this.Success(HQ.SuccessfullyCreated);
             return this.RedirectToAction("Index");
-            
-
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
@@ -114,7 +116,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = this.GetUserById(model.Id);
             if (user == null)
             {
-                this.Error("Could not update user information because current user does not exist");
+                this.Error(HQ.UserNotExists);
                 return this.View(model);
             }
             var forbiddenRoles = new string[] {UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
@@ -122,13 +124,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (doesUserInForbiddenRole)
             {
-                this.Error("Could not update user information because you don't have permission to perform this operation");
+                this.Error(HQ.NoPermission);
                 return this.View(model);
             }
 
             this.UpdateAccount(user: user, editModel: model);
             
-            this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+            this.Success(string.Format(HQ.UserWasUpdatedFormat, user.UserName));
             return this.RedirectToAction("Index");
         }
     }

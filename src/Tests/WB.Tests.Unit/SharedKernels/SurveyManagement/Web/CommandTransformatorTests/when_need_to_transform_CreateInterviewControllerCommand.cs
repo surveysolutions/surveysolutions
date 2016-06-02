@@ -21,6 +21,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorT
             command.ShouldBeOfExactType<CreateInterviewCommand>();
 
         private static CommandTransformator commandTransformator;
-        private static ICommand command = Create.CreateInterviewControllerCommand();
+        private static ICommand command = Create.Command.CreateInterviewControllerCommand();
     }
 }

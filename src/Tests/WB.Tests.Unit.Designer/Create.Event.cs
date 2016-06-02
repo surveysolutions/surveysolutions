@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -285,7 +286,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
                 bool hideIfDisabled = false,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -317,14 +318,15 @@ namespace WB.Tests.Unit.Designer
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: targetGroupKey,
                     validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -356,7 +358,8 @@ namespace WB.Tests.Unit.Designer
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid(),
                     validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
 
@@ -366,7 +369,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
                 Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
                 IList<ValidationCondition> validationConditions = null,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionCloned(
                     publicKey: publicKey,
@@ -402,7 +405,8 @@ namespace WB.Tests.Unit.Designer
                     maxAnswerCount: maxAnswerCount,
                     countOfDecimalPlaces: countOfDecimalPlaces,
                     validationConditions: validationConditions ?? new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
             public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
@@ -468,6 +472,58 @@ namespace WB.Tests.Unit.Designer
                     conditionExpression : enablementCondition,
                     validationExpression : validationExpression
                 );
+            }
+
+            public static VariableAdded VariableAdded(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null, 
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableAdded(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableUpdated VariableUpdated(Guid? entityId = null, Guid? responsibleId = null, 
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableUpdated(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableCloned VariableCloned(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null,
+                Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null, int targetIndex = 0,
+                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
+            {
+                return new VariableCloned(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    sourceQuestionnaireId,
+                    sourceEntityId ?? Guid.NewGuid(),
+                    targetIndex,
+                    new VariableData(
+                        variableType,
+                        variableName,
+                        variableExpression
+                        ));
+            }
+            public static VariableDeleted VariableDeleted(Guid? entityId = null)
+            {
+                return new VariableDeleted() { EntityId = entityId.GetValueOrDefault(Guid.NewGuid()) };
+            }
+
+            public static QuestionnaireCloned QuestionnaireCloned(QuestionnaireDocument source)
+            {
+                return new QuestionnaireCloned() {QuestionnaireDocument = source};
             }
         }
     }

@@ -2,6 +2,9 @@ using System;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -10,10 +13,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
@@ -23,7 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage) : 
+            ILogger logger, IQuestionnaireExportStructureStorage questionnaireExportStructureStorage) : 
             base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
@@ -57,8 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
             {
                 var questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                    this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
                 this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
             });

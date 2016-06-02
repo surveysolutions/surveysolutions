@@ -38,6 +38,9 @@ function CleanBinAndObjFolders() {
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
 function BuildNewDesigner(){
+    Write-Host "##teamcity[blockOpened name='Building updated designer files']"
+    Write-Host "##teamcity[progressStart 'Building updated designer files']"
+
     $installCommand = "npm install"
     $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
     Write-Host "Pushing location to $targetLocation"
@@ -46,6 +49,9 @@ function BuildNewDesigner(){
     iex $installCommand #install node js dependencies
     &gulp | Write-Host #will execute script gulpfile.js in UpdatedDesigner folder
     Pop-Location
+
+    Write-Host "##teamcity[progressFinish 'Building updated designer files']"
+    Write-Host "##teamcity[blockClosed name='Building updated designer files']"
 }
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
@@ -180,7 +186,10 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
 
         $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
-        .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
+        
+	$command = ".\packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe $assembly --result:$resultXml --teamcity"
+        Write-Host $command
+        iex $command | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
     }
 

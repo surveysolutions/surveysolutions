@@ -10,16 +10,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextId),
-                Create.Group(children: new[]
+                Create.Entity.StaticText(publicKey: staticTextId),
+                Create.Entity.Group(children: new[]
                 {
-                    Create.StaticText(publicKey: staticTextInSubgroupId)
+                    Create.Entity.StaticText(publicKey: staticTextInSubgroupId)
                 }),
-                Create.Roster(children: new[]
+                Create.Entity.Roster(children: new[]
                 {
-                    Create.StaticText(publicKey: staticTextInRosterId)
+                    Create.Entity.StaticText(publicKey: staticTextInRosterId)
                 })
             });
         };
@@ -35,9 +35,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         };
 
         private static PlainQuestionnaire plainQuestionnaire;
-        private static readonly Guid staticTextId = Guid.Parse("111111111111111111111111111111");
-        private static readonly Guid staticTextInSubgroupId = Guid.Parse("222222222222222222222222222222");
-        private static readonly Guid staticTextInRosterId = Guid.Parse("333333333333333333333333333333");
+        private static readonly Guid staticTextId = Guid.NewGuid();
+        private static readonly Guid staticTextInSubgroupId = Guid.NewGuid();
+        private static readonly Guid staticTextInRosterId = Guid.NewGuid();
         private static QuestionnaireDocument questionnaireDocument;
     }
 }

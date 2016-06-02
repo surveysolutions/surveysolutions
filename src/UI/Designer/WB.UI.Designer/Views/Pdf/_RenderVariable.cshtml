@@ -1,0 +1,32 @@
+﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@model WB.Core.SharedKernels.QuestionnaireEntities.IVariable
+
+@{
+    PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
+    var variable = Model;
+}
+
+<div class="question-container">
+    <div class="question">
+        <div class="question-title" ><div class="type">Variable</div></div>
+        <div class="common-info">
+            <div class="variable-expression">
+                @questionnaire.GetVariableExpressionExcerpt(variable)
+                @if (questionnaire.VariableExpressionIsTooLong(variable))
+                {
+                    <div class="more">
+                        And <a href="#@questionnaire.GetVariableRef(variable.PublicKey)">@(variable.Expression.Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(variable.PublicKey, "VE")]</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="answer">
+        <div class="question-meta">
+            <div class="type">
+                @questionnaire.GetFormattedVariableType(variable)
+            </div>
+            <div class="variable_name">@variable.Name</div>
+        </div>
+    </div>
+</div>

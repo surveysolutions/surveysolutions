@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
         Establish context = () =>
         {
             fileName = "nastya" + new string(Path.GetInvalidFileNameChars());
-            fileSystemIOAccessor = Create.FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.Service.FileSystemIOAccessor();
         };
 
         Because of = () =>
-            newFileName=fileSystemIOAccessor.MakeValidFileName(fileName);
+            newFileName=fileSystemIOAccessor.MakeStataCompatibleFileName(fileName);
 
         It should_from_file_name_be_cut_all_invalid_characters = () =>
             newFileName.ShouldEqual("nastya_");

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,27 +21,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<PortableExecutableReference> GetAssembliesToReference(Version apiVersion)
         {
-            if (apiVersion.Major < 8)
-                return this.ReturnReferencesForProfile24();
-
-            return ReturnReferencesForProfile111();
-        }
-
-        IEnumerable<PortableExecutableReference> ReturnReferencesForProfile111()
-        {
             var references = new List<PortableExecutableReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
             references.AddRange(this.GetPathToAssemblies("profile111"));
-            return references;
-        }
-
-        IEnumerable<PortableExecutableReference> ReturnReferencesForProfile24()
-        {
-            var references = new List<PortableExecutableReference>();
-            references.Add(AssemblyMetadata.CreateFromImage(
-                    RoslynCompilerResources.WB_Core_SharedKernels_DataCollection_Portable_Profile24
-                    ).GetReference());
-            references.AddRange(this.GetPathToAssemblies("profile24"));
             return references;
         }
 

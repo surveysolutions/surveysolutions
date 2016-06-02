@@ -1,7 +1,6 @@
 ﻿using System;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {

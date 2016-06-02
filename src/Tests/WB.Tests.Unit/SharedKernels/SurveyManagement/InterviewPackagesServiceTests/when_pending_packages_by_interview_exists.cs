@@ -1,8 +1,8 @@
 using System;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests

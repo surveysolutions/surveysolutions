@@ -18,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             answerToStringService = CreateAnswerToStringService();
           
             var answerOnSourceOfLinking = CreateSingleOptionAnswer(sourceOfLinkId, 3);
-            answerOnSourceOfLinking.RosterVector = Create.RosterVector(3);
+            answerOnSourceOfLinking.RosterVector = Create.Entity.RosterVector(3);
 
             statefulInterviewMock = Substitute.For<IStatefulInterview>();
             statefulInterviewMock.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkId, Arg.Any<Identity>())
                 .Returns(new[] { answerOnSourceOfLinking });
 
-            singleOptionAnswer = CreateLinkedSingleOptionAnswer(Create.RosterVector(3), linkedId);
+            singleOptionAnswer = CreateLinkedSingleOptionAnswer(Create.Entity.RosterVector(3), linkedId);
 
             questionnaire = Mock.Of<IQuestionnaire>(_ 
                 => _.IsQuestionLinked(linkedId) == true

@@ -37,9 +37,6 @@ namespace WB.UI.Interviewer.Activities
             var layoutManager = new LinearLayoutManager(this);
             recyclerView.SetLayoutManager(layoutManager);
             recyclerView.HasFixedSize = true;
-
-            var adapter = new InterviewerDashboardAdapter((IMvxAndroidBindingContext)this.BindingContext);
-            recyclerView.Adapter = adapter;
         }
 
         protected override void OnStart()

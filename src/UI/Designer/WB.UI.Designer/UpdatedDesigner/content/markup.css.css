@@ -6844,36 +6844,36 @@ input.wb-radio + label {
   font-weight: normal;
   font-size: 12px;
 }
-input.wb-checkbox + label span,
-input.wb-radio + label span {
+input.wb-checkbox + label > span,
+input.wb-radio + label > span {
   display: inline-block;
   width: 30px;
   height: 30px;
   background: transparent url(i/pretty-checkable-sprites.png) no-repeat;
   vertical-align: middle;
 }
-input.wb-checkbox + label span {
+input.wb-checkbox + label > span {
   background-position: 0 0;
 }
-input.wb-checkbox:checked + label span {
+input.wb-checkbox:checked + label > span {
   background-position: -60px 0;
 }
-input.wb-checkbox:disabled + label span {
+input.wb-checkbox:disabled + label > span {
   background-position: -30px 0;
 }
-input.wb-checkbox:checked:disabled + label span {
+input.wb-checkbox:checked:disabled + label > span {
   background-position: -90px 0;
 }
-input.wb-radio + label span {
+input.wb-radio + label > span {
   background-position: -180 0;
 }
-input.wb-radio:checked + label span {
+input.wb-radio:checked + label > span {
   background-position: -240px 0;
 }
-input.wb-radio:disabled + label span {
+input.wb-radio:disabled + label > span {
   background-position: -210px 0;
 }
-input.wb-radio:checked:disabled + label span {
+input.wb-radio:checked:disabled + label > span {
   background-position: -270px 0;
 }
 .form-control {
@@ -7127,8 +7127,8 @@ textarea {
 .icon {
   width: 20px;
   height: 20px;
-  background: url(i/icons.png);
-  background-position-x: 0px;
+  background: url(i/icons1.png);
+  background-position-x: 0;
   overflow: hidden;
 }
 .icon-numeric {
@@ -7165,13 +7165,16 @@ textarea {
   background-position: 0 -300px;
 }
 .icon-macro {
-  background-position: 0 -388px;
+  background-position: 0 -390px;
 }
 .icon-lookup {
-  background-position: 0 -413px;
+  background-position: 0 -420px;
 }
 .icon-attachment {
-  background-position: 0 -442px;
+  background-position: 0 -450px;
+}
+.icon-variable {
+  background-position: 0 -480px;
 }
 .icon-error.icon-numeric {
   background-position: -30px 0;
@@ -7207,13 +7210,16 @@ textarea {
   background-position: -30px -300px;
 }
 .icon-error.icon-macro {
-  background-position: -30px -388px;
+  background-position: -30px -390px;
 }
 .icon-error.icon-lookup {
-  background-position: -30px -413px;
+  background-position: -30px -420px;
 }
 .icon-error.icon-attachment {
-  background-position: -30px -442px;
+  background-position: -30px -450px;
+}
+.icon-error.icon-variable {
+  background-position: -30px -480px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7301,7 +7307,7 @@ input#edit-group-title {
   vertical-align: middle;
   width: 20px;
   height: 20px;
-  background-image: url(i/icons.png);
+  background-image: url(i/icons1.png);
   background-position-x: 0;
   overflow: hidden;
 }
@@ -7361,9 +7367,54 @@ input#edit-group-title {
   letter-spacing: normal;
   font-weight: normal;
 }
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .var-name-line,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .var-name-line {
+  color: #3da802;
+  font-weight: bold;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
   top: 14px;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-block,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-block {
+  width: 100%;
+  position: relative;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: table;
+  background-color: #fff;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block .var-name,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block .var-name {
+  color: #3da802;
+  vertical-align: middle;
+  display: table-cell;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block:before,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 75px;
+  top: 0px;
+  left: -75px;
+  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .var-block:hover,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .var-block:hover {
+  background-color: #f1f2f3;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu {
@@ -7397,7 +7448,7 @@ input#edit-group-title {
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-question-source,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-question-source {
   margin-left: 0px;
-  padding: 5px;
+  padding-right: 5px;
   padding-left: 20px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source,
@@ -7429,6 +7480,25 @@ input#edit-group-title {
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
   background: #f1f2f3;
   border-radius: 4px;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block {
+  background-color: #f1f2f3;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block:before,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover .var-block:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 75px;
+  top: 0px;
+  left: -75px;
+  background-image: -webkit-linear-gradient(left, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
+  background-image: -o-linear-gradient(left, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
+  background-image: linear-gradient(to right, rgba(241, 242, 243, 0) 0%, #f1f2f3 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f1f2f3', endColorstr='#fff1f2f3', GradientType=1);
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
@@ -8345,7 +8415,6 @@ textarea#edit-group-description {
   padding-right: 10px;
   font-family: Georgia, serif;
   font-size: 14px;
-  font-style: italic;
   color: #c1c7cb;
 }
 #designer-editor.container section#header > .header-line > .header-menu > a {
@@ -8985,6 +9054,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   width: 100%;
   background: transparent;
 }
+.item .item-body .variable-name {
+  color: #3da802;
+}
 .item .item-body .qname-block {
   position: absolute;
   right: 0;
@@ -9379,6 +9451,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   border-top-color: #2075bf;
 }
 #verification-modal.warning .modal-content .modal-header h3 span {
+  color: #2075bf;
+}
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item,
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item .title {
+  color: #4a4a4a;
+}
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item:hover,
+#verification-modal.warning .modal-content .modal-body .verification-items .verification-item:hover .title {
   color: #2075bf;
 }
 #verification-modal.ie9-backdrop {

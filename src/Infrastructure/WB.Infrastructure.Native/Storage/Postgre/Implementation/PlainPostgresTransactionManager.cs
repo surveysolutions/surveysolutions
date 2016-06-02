@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
+using NHibernate.Persister.Entity;
 using Ninject;
 using WB.Core.Infrastructure.PlainStorage;
 

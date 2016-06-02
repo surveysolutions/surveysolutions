@@ -32,7 +32,8 @@ namespace WB.UI.Designer.Code
                 pdfConfigSettings.OptionsExcerptCount.Value,
                 pdfConfigSettings.MinAmountrOfDigitsInCodes.Value,
                 pdfConfigSettings.AttachmentSize.Value,
-                pdfConfigSettings.PdfGenerationTimeoutInSeconds.Value);
+                pdfConfigSettings.PdfGenerationTimeoutInSeconds.Value,
+                pdfConfigSettings.VariableExpressionExcerptLength.Value);
         }
 
         public override void Load()
@@ -56,9 +57,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
             this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
             this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
-            this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
-            this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
             this.Bind<PdfSettings>().ToConstant(pdfSettings);
             this.Bind<IPdfFactory>().To<PdfFactory>();
         }

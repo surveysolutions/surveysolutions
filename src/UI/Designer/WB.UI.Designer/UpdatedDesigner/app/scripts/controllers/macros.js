@@ -32,8 +32,7 @@
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
                     var macro = {};
-                    if (!_.any($scope.macros, 'itemId', macroDto.itemId))
-                    {
+                    if (!_.any($scope.macros, function( elem ) {return elem.itemId === macroDto.itemId;})) {
                         dataBind(macro, macroDto);
                         $scope.macros.push(macro);
                     }
@@ -60,37 +59,37 @@
                 });
             };
 
-            $scope.saveMacro = function(macro, form) {
-                commandService.updateMacro($state.params.questionnaireId, macro).success(function() {
+            $scope.saveMacro = function (macro) {
+                commandService.updateMacro($state.params.questionnaireId, macro).success(function () {
                     macro.initialMacro = angular.copy(macro);
-                    form.$setPristine();
+                    macro.form.$setPristine();
                 });
             };
 
-            $scope.cancel = function(macro, form) {
+            $scope.cancel = function (macro) {
                 var temp = angular.copy(macro.initialMacro);
                 dataBind(macro, temp);
-                form.$setPristine();
+                macro.form.$setPristine();
             };
 
-            $scope.deleteMacro = function(index) {
+            $scope.deleteMacro = function (index) {
                 var macro = $scope.macros[index];
                 var macroName = macro.name || "macro with no name";
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(macroName));
 
-                modalInstance.result.then(function(confirmResult) {
+                modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function() {
+                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
                             $scope.macros.splice(index, 1);
                         });
                     }
                 });
             };
 
-            $scope.isDescriptionEmpty = function(macro) {
+            $scope.isDescriptionEmpty = function (macro) {
                 return _.isEmpty(macro.description);
             };
-            $scope.toggleDescription = function(macro) {
+            $scope.toggleDescription = function (macro) {
                 macro.isDescriptionVisible = !macro.isDescriptionVisible;
             };
 
@@ -164,5 +163,14 @@
 
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadMacros();
+            });
+
+            $scope.$on('verifing', function (scope, params) {
+                for (var i = 0; i < $scope.macros.length; i++) {
+                    var macro = $scope.macros[i];
+                    if (macro.form.$dirty) {
+                        $scope.saveMacro(macro);
+                    }
+                }
             });
         });

@@ -1,48 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
-using Android.Graphics;
-using Android.OS;
-using Android.Preferences;
-using Android.Widget;
-using Java.Lang;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
-using PCLStorage;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Shared.Enumerator;
-using WB.UI.Interviewer.Implementations.Services;
-using WB.UI.Interviewer.SharedPreferences;
-using WB.UI.Interviewer.ViewModel.Dashboard;
-using WB.UI.Interviewer.ViewModel.Login;
-using Environment = System.Environment;
-
-#warning we must keep "Sqo" namespace on siaqodb as long as at least one 5.1.0-5.3.* version exist
-#warning do not remove "Sqo" namespace
-#warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
-using Sqo;
-using SQLite.Net;
-using SQLite.Net.Attributes;
-using SQLite.Net.Platform.XamarinAndroid;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -61,239 +24,40 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task BackwardCompatibilityAsync()
         {
-            var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            if (settings.FirstOrDefault() != null) return;
-
-            await RestoreApplicationSettingsAsync();
-            await RestoreInterviewerAsync();
-            await Task.Run(this.RestoreInterviewsAsync);
-            await Task.Run(this.RestoreQuestionnairesAsync);
-            await Task.Run(this.RestoreEventStreamsAsync);
-            await Task.Run(this.RestoreInterviewDetailsAsync);
-            await Task.Run(this.RestoreInterviewImagesAsync);
-        }
-
-        private async Task RestoreInterviewImagesAsync()
-        {
-            var basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-
-            var fileSystemAccessor = Mvx.Resolve<IFileSystemAccessor>();
-            IPlainInterviewFileStorage oldImageFileStorage = new PlainInterviewFileStorage(fileSystemAccessor, basePath);
-            IPlainInterviewFileStorage newImageFileStorage = Mvx.Resolve<IPlainInterviewFileStorage>();
-
-            var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
-            foreach (var interview in interviews)
+            var settingsStorage = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
+            var settings = settingsStorage.FirstOrDefault();
+            if (settings != null)
             {
-                var binaryDataDescriptors = oldImageFileStorage.GetBinaryFilesForInterview(Guid.Parse(interview.Id));
-                foreach (var descriptor in binaryDataDescriptors)
-                {
-                    await newImageFileStorage.StoreInterviewBinaryDataAsync(descriptor.InterviewId, descriptor.FileName,
-                        descriptor.GetData());
-                }
-            }
-        }
-
-        private async Task RestoreInterviewDetailsAsync()
-        {
-            var commandService = Mvx.Resolve<ICommandService>();
-            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
-
-            var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
-
-            var pathToInterviewDetails =
-                PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "SyncCache");
-
-            var interviewDetailsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToInterviewDetails);
-
-            if (interviewDetailsFolder == null) return;
-
-            var interviewer = interviewersRepository.FirstOrDefault();
-
-            if (interviewer == null) return;
-
-            foreach (var interviewDetailsFile in await interviewDetailsFolder.GetFilesAsync())
-            {
-                var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
-                var interviewSynchronizationDto =
-                    jsonAllTypesSerializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText);
-
-                await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
-                    interviewId: Guid.Parse(interviewDetailsFile.Name),
-                    userId: interviewer.UserId,
-                    sycnhronizedInterview: interviewSynchronizationDto));
-            }
-        }
-
-        private async Task RestoreInterviewerAsync()
-        {
-            var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
-
-            var oldInterviewer = await GetInterviewerIdentityFromOldDatabase();
-            if (oldInterviewer != null)
-            {
-                await interviewersRepository.StoreAsync(oldInterviewer);
-            }
-            else
-            {
-                var veryOldInterviewersRepository = this.GetSqlLiteEntities<LoginDTO>("Projections");
-
-                var firstUserFromOldStorage = veryOldInterviewersRepository?.FirstOrDefault();
-
-                if (firstUserFromOldStorage != null)
-                {
-                    await interviewersRepository.StoreAsync(new InterviewerIdentity()
-                    {
-                        Id = firstUserFromOldStorage.Id,
-                        UserId = Guid.Parse(firstUserFromOldStorage.Id),
-                        Password = firstUserFromOldStorage.Password,
-                        Name = firstUserFromOldStorage.Login,
-                        SupervisorId = Guid.Parse(firstUserFromOldStorage.Supervisor)
-                    });
-                }
-            }
-        }
-
-        private static async Task<InterviewerIdentity> GetInterviewerIdentityFromOldDatabase()
-        {
-            InterviewerIdentity oldInterviewer;
-
-#warning we must keep this code as long as at least one 5.1.0-5.3.* version exist
-#warning do not remove this code
-            SiaqodbConfigurator.EncryptedDatabase = false;
-
-            using (var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")))
-            {
-                oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
+                await this.MigrateCategoricalOptionsAndSetReadSideVersionTo1(settings, settingsStorage);
+                return;
             }
 
-            return oldInterviewer;
+            await MoveCategoricalOptionsToPlainStorage();
         }
 
-        private async Task RestoreInterviewsAsync()
+        private async Task MigrateCategoricalOptionsAndSetReadSideVersionTo1(ApplicationSettingsView settings, IAsyncPlainStorage<ApplicationSettingsView> settingsStorage)
         {
-            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
-            var interviewViewRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewView>>();
+            var isMigrationNeeded = !settings.ReadSideVersion.HasValue;
 
-            var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
+            if (!isMigrationNeeded)
+                return;
 
-            await interviewViewRepository.StoreAsync(interviews.Select(x => new InterviewView
-            {
-                Id = x.Id,
-                InterviewId = Guid.Parse(x.Id),
-                ResponsibleId = Guid.Parse(x.Responsible),
-                InterviewerAssignedDateTime = x.InterviewerAssignedDateTime ?? x.CreatedDateTime,
-                CompletedDateTime = x.CompletedDateTime,
-                StartedDateTime = x.StartedDateTime,
-                RejectedDateTime = x.RejectedDateTime,
-                Census = x.CreatedOnClient ?? false,
-                QuestionnaireId = new QuestionnaireIdentity(Guid.Parse(x.Survey), x.SurveyVersion).ToString(),
-                LastInterviewerOrSupervisorComment = x.Comments,
-                Status = (InterviewStatus)x.Status,
-                AnswersOnPrefilledQuestions = jsonAllTypesSerializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y => new InterviewAnswerOnPrefilledQuestionView
-                {
-                    QuestionId = y.PublicKey,
-                    QuestionText = y.Title,
-                    Answer = y.Value
-                }).ToArray(),
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = string.IsNullOrEmpty(x.GpsLocationQuestionId) ? (Guid?)null : Guid.Parse(x.GpsLocationQuestionId),
-                    Coordinates = x.GpsLocationLatitude.HasValue && x.GpsLocationLongitude.HasValue ? new InterviewGpsCoordinatesView
-                    {
-                        Latitude = x.GpsLocationLatitude.Value,
-                        Longitude = x.GpsLocationLongitude.Value
-                    } : null
-                },
-                CanBeDeleted = x.JustInitilized ?? false
-            }));
+            await this.MoveCategoricalOptionsToPlainStorage();
+            settings.ReadSideVersion = 1;
+            await settingsStorage.StoreAsync(settings);
         }
 
-        private async Task RestoreEventStreamsAsync()
-        {
-            var pathToEventStreams = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "EventStore");
-            var eventViewRepository = Mvx.Resolve<IInterviewerEventStorage>();
-
-            var eventStreamsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToEventStreams);
-
-            if (eventStreamsFolder == null) return;
-
-            foreach (var eventStreamFile in await eventStreamsFolder.GetFilesAsync())
-            {
-                IEnumerable<StoredEvent> eventStream = this.GetSqlLiteEntities<StoredEvent>(eventStreamFile.Name, "EventStore");
-
-                var eventViews = eventStream.OrderBy(x => x.Sequence).Select((x, index) => new EventView
-                {
-                    EventSourceId = Guid.Parse(eventStreamFile.Name),
-                    DateTimeUtc = new DateTime(x.TimeStamp),
-                    EventSequence = index + 1,
-                    JsonEvent = x.Data,
-                    EventId = Guid.Parse(x.EventId)
-                });
-                eventViewRepository.MigrateOldEvents(eventViews);
-            }
-        }
-
-        private async Task RestoreQuestionnairesAsync()
+        private async Task MoveCategoricalOptionsToPlainStorage()
         {
             var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
+            var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
-            var questionnaires = this.GetSqlLiteEntities<SurveyDto>("Projections");
-
-            await questionnaireViewRepository.StoreAsync(questionnaires.Select(x => new QuestionnaireView
+            var questionnaires = await questionnaireViewRepository.LoadAllAsync();
+            foreach (var questionnaireView in questionnaires)
             {
-                Id = new QuestionnaireIdentity(Guid.Parse(x.QuestionnaireId), x.QuestionnaireVersion).ToString(),
-                Identity = new QuestionnaireIdentity(Guid.Parse(x.QuestionnaireId), x.QuestionnaireVersion),
-                Title = x.SurveyTitle,
-                Census = x.AllowCensusMode
-            }));
-        }
-
-        [Obsolete]
-        public class PlainStorageRow
-        {
-            [PrimaryKey]
-            public string Id { get; set; }
-
-            public string SerializedData { get; set; }
-        }
-
-        private static async Task RestoreApplicationSettingsAsync()
-        {
-            var settings = Mvx.Resolve<IInterviewerSettings>();
-
-            var endpoint = GetAppSettings(SettingsNames.Endpoint, string.Empty);
-            var httpResponseTimeoutInSec = GetAppSettings(SettingsNames.HttpResponseTimeout, string.Empty);
-            var communicationBufferSize = GetAppSettings(SettingsNames.BufferSize, string.Empty);
-            var gpsResponseTimeoutInSec = GetAppSettings(SettingsNames.GpsReceiveTimeoutSec, string.Empty);
-
-            if (!string.IsNullOrEmpty(endpoint))
-                await settings.SetEndpointAsync(endpoint);
-
-            if (!string.IsNullOrEmpty(communicationBufferSize))
-                await settings.SetCommunicationBufferSize(int.Parse(communicationBufferSize));
-
-            if (!string.IsNullOrEmpty(gpsResponseTimeoutInSec))
-                await settings.SetGpsResponseTimeoutAsync(int.Parse(gpsResponseTimeoutInSec));
-
-            if (!string.IsNullOrEmpty(httpResponseTimeoutInSec))
-                await settings.SetHttpResponseTimeoutAsync(int.Parse(httpResponseTimeoutInSec));
-        }
-
-        private static string GetAppSettings(string settingName, string defaultValue)
-        {
-            var newPreference = PreferenceManager.GetDefaultSharedPreferences(Application.Context).GetString(settingName, defaultValue);
-            return !string.IsNullOrEmpty(newPreference)
-                ? newPreference
-                : Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private).GetString(settingName, defaultValue);
-        }
-
-        private IEnumerable<TView> GetSqlLiteEntities<TView>(string dbName, string subFolder = "") where TView : class, new()
-        {
-            var databasePath = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), subFolder, dbName);
-            using (var connection = new SQLiteConnection(new SQLitePlatformAndroid(), databasePath))
-            {
-                connection.CreateTable<TView>();
-                return connection.Table<TView>().ToList();
+                var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
+                await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireView.Identity, questionnaire.Document);
             }
         }
     }

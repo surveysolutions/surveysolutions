@@ -3,6 +3,9 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -10,9 +13,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadViewFactoryTests
 {
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null, QuestionnaireExportStructure questionnaireExportStructure=null)
         {
             return new SampleUploadViewFactory(questionnaires ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireExportStructure));
+                Mock.Of<IQuestionnaireExportStructureStorage>(_=>_.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireExportStructure));
         }
 
         private SampleUploadViewInputModel CreateSampleUploadViewInputModel(Guid? questionnaireId=null)
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var questionnaireId = Guid.NewGuid();
 
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
-            questionnaireStorage.Store(Create.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
+            questionnaireStorage.Store(Create.Entity.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
 
             var sampleUploadViewFactory =
                 this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage);
@@ -69,8 +69,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
             var questionnaireExportStructureStorage = new InMemoryPlainStorageAccessor<QuestionnaireExportStructure>();
 
-            questionnaireStorage.Store(Create.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
-            (questionnaireExportStructureStorage).Store(Create.QuestionnaireExportStructure(), new QuestionnaireIdentity(questionnaireId, 1));
+            questionnaireStorage.Store(Create.Entity.QuestionnaireBrowseItem(questionnaireId: questionnaireId), new QuestionnaireIdentity(questionnaireId, 1));
+            (questionnaireExportStructureStorage).Store(Create.Entity.QuestionnaireExportStructure(), new QuestionnaireIdentity(questionnaireId, 1));
 
             var sampleUploadViewFactory =
                 this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage);
@@ -89,18 +89,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
 
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
 
-            var prefilledTxtQuestion = Create.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
+            var prefilledTxtQuestion = Create.Entity.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
 
             questionnaireStorage
-                .Store(Create.QuestionnaireBrowseItem(
-                    Create.QuestionnaireDocument(children:
-                    new IComposite[] { prefilledTxtQuestion, Create.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1).ToString());
+                .Store(Create.Entity.QuestionnaireBrowseItem(
+                    Create.Entity.QuestionnaireDocument(children:
+                    new IComposite[] { prefilledTxtQuestion, Create.Entity.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1).ToString());
 
-            var exportStructure = Create.QuestionnaireExportStructure();
-            var headerStructure = Create.HeaderStructureForLevel();
+            var exportStructure = Create.Entity.QuestionnaireExportStructure();
+            var headerStructure = Create.Entity.HeaderStructureForLevel();
             exportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructure);
             headerStructure.HeaderItems.Add(prefilledTxtQuestion.PublicKey,
-                Create.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
+                Create.Entity.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
                     variableName: prefiledQuestionVarName));
 
             var sampleUploadViewFactory =

@@ -125,7 +125,7 @@
                     );
                 };
 
-                $scope.saveRoster = function () {
+                $scope.saveRoster = function (callback) {
                     if ($scope.editRosterForm.$valid) {
                   
                         commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function () {
@@ -137,6 +137,9 @@
                                 title: $scope.activeRoster.title,
                                 hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition))
                             });
+                            if (_.isFunction(callback)) {
+                                callback();
+                            }
                         });
                     }
                 };
@@ -155,6 +158,14 @@
                         }
                     });
                 };
+
+                $scope.$on('verifing', function (scope, params) {
+                    if ($scope.editRosterForm.$dirty) {
+                        $scope.saveRoster(function() {
+                            $scope.editRosterForm.$setPristine();
+                        });
+                    }
+                });
 
                 $scope.cancelRoster = function() {
                     var temp = angular.copy($scope.initialRoster);

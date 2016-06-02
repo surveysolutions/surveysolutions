@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.UI.Headquarters.Models
 {

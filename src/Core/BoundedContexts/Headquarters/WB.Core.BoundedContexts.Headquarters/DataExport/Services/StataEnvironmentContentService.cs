@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {

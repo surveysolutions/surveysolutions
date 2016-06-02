@@ -14,6 +14,7 @@
         <locale>pt-PT</locale>
         <locale>ar</locale>
         <locale>zh-CN</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Properties\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -23,7 +24,7 @@
             <li lc="uk-UA" tx="Скасувати" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ยกเลิก&#xD;&#xA;" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Hủy bỏ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hủy bỏ" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Batal" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
@@ -38,12 +39,12 @@
             <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Todavía no hay cuestionarios&#xD;&#xA;&#xD;&#xA;Puede crear o editar sus cuestionarios en Survey Solutions Designer&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Không có câu hỏi yet&#xD;&#xA;&#xD;&#xA;You có thể tạo hoặc chỉnh sửa của bạn câu hỏi trong cuộc khảo sát giải pháp thiết kế" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Chưa có bộ câu hỏi nào&#xD;&#xA;Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="Yet&#xD;&#xA;&#xD;&#xA;You الاستبيانات لا يمكن إنشاء أو تحرير الاستبيانات الخاصة بك في &quot;مصمم حلول المسح&quot;" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
-            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -53,7 +54,7 @@
             <li lc="uk-UA" tx="Питальники було не знайдено" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="No se encuentra ningún cuestionario" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่พบแบบสอบถาม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Không có câu hỏi tìm thấy" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không tìm thấy bộ câu hỏi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Kuesioner tidak ditemukan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não há questionários encontrados" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استبيانات لم يتم العثور على" ts="Translated" qs="AutoTranslated" />
@@ -83,7 +84,7 @@
             <li lc="uk-UA" tx="Мої питальники" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Mis cuestionarios" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แบบสอบถามของฉัน" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu hỏi của tôi" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bộ câu hỏi của tôi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Kuesioner saya" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Meus questionários" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بلدي الاستبيانات" ts="Translated" qs="AutoTranslated" />
@@ -98,7 +99,7 @@
             <li lc="uk-UA" tx="Загальнодоступні питальники" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Cuestionarios públicos" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แบบสอบถามสาธารณะ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Khu vực câu hỏi" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bộ câu hỏi công khai" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Kuesioner publik" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Questionários públicos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات العامة" ts="Translated" qs="AutoTranslated" />
@@ -113,7 +114,7 @@
             <li lc="uk-UA" tx="Питальники" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Cuestionarios" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แบบสอบถาม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu hỏi" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bộ câu hỏi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Kuesioner" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Questionários" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
@@ -128,7 +129,7 @@
             <li lc="uk-UA" tx="Торкніться, щоб ввести дату" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para introducir fecha" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อป้อนวันที่" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để nhập ngày" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập ngày" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan tanggal" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para inserir data" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال تاريخ" ts="Translated" qs="AutoTranslated" />
@@ -143,7 +144,7 @@
             <li lc="uk-UA" tx="Кінцева точка синхронізації" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Punto final de sincronización" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แอดเดรสสำหรับการซิงโครไนส์" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đồng bộ hóa điểm cuối" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Điểm đích để đồng bộ hóa" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Sinkronisasi endpoint" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Ponto de extremidade de sincronização" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نقطة النهاية المزامنة" ts="Translated" qs="AutoTranslated" />
@@ -173,7 +174,7 @@
             <li lc="uk-UA" tx="Обліковий запис користувача заблоковано. Будь ласка, зв'яжіться з підтримкоб support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Su cuenta de usuario está bloqueada. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="บัญชีผู้ใช้ถูกล็อก กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Trương mục người dùng của bạn bị khóa. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Akun pengguna Anda terkunci. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Sua conta de usuário está bloqueada. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تأمين حساب المستخدم الخاص بك. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions." ts="Translated" qs="AutoTranslated" />
@@ -188,7 +189,7 @@
             <li lc="uk-UA" tx="Ваш обліковий запис не пітверджено. Будь ласка, спочатку підтвердіть свій запис." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Su cuenta no está aprobada. Por favor, confirme su cuenta primero." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="บัญชีผู้ใช้ไม่ได้รับการอนุมัติ กรุณายืนยันบัญชีผู้ใช้ก่อน" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Tài khoản của bạn không được chấp thuận. Xin vui lòng, xác nhận tài khoản của bạn lần đầu tiên." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Tài khoản của bạn chưa được chấp thuận. Vui lòng xác nhận tài khoản." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Akun Anda tidak disetujui. Silahkan, konfirmasi akun Anda terlebih dulu." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Sua conta não é aprovada. Por favor, confirme sua conta primeiro." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم تتم الموافقة على الحساب الخاص بك. الرجاء تأكيد الحساب الخاص بك أولاً." ts="Translated" qs="AutoTranslated" />
@@ -203,7 +204,7 @@
             <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Lỗi máy chủ. Vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="pt-PT" tx="Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions" ts="Changed" qs="ToReview" />
@@ -218,7 +219,7 @@
             <li lc="uk-UA" tx="Адрес Survey Solutions Designe URL є неприпустимим. Перевірте параметри." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="La URL de Survey Solutions Designer no es válida. Compruebe la configuración." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แอดเดรสของ Survey Solutions Designer ไม่ถูกต้อง กรุณาตรวจสอบการตั้งค่า" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Cung cấp khảo sát giải pháp thiết kế URL là không hợp lệ. Kiểm tra cài đặt." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Trang web Survey Solutions Designer được cung cấp không phù hợp. Kiểm tra cài đặt." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Url untuk Desainer Survey Solutions yang disediakan tidak valid. Periksa pengaturan." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Survey Solutions Designer URL fornecido é inválido. Verifique as configurações." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وقدمت دراسة حلول مصمم عنوان URL غير صحيح. تحقق من إعدادات." ts="Translated" qs="AutoTranslated" />
@@ -233,7 +234,7 @@
             <li lc="uk-UA" tx="Сайт Survey Solutions Designe зараз в режимі супроводу. Вибачте за незручності" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="La web de Survey Solutions Designer está ahora en el modo de mantenimiento. Disculpen las molestias" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="Survey Solutions Designer อยู่ระหว่างการบำรุงรักษา ขออภัยในความไม่สะดวก" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Các trang web của cuộc khảo sát giải pháp thiết kế là về chế độ bảo trì bây giờ. Xin lỗi vì sự bất tiện" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Trang web Survey Solutions Designer đang trong chế độ bảo trì. Xin lỗi vì sự bất tiện này" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Situs Desainer Survey Solutions sedang dalam perbaikan. Maaf atas ketidaknyamanannya" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="O site de Survey Solutions Designer agora ésta em modo de manutenção. Desculpe pela inconveniência" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مصمم موقع ويب حلول المسح الآن في وضع الصيانة. نأسف للإزعاج" ts="Changed" qs="ToReview" />
@@ -248,7 +249,7 @@
             <li lc="uk-UA" tx="Вичерпано час очікування під час підключення до Survey Solutions Designe веб-сайту. Перевірте підключення до Інтернету." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Se ha excedido el tiempo de espera de conexión a la página web de Survey Solutions Designer. Compruebe su conexión a internet." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="หมดเวลาการเชื่อมต่อ Survey Solutions Designer กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Thời gian chờ khi kết nối với các trang web khảo sát giải pháp thiết kế. Kiểm tra kết nối internet của bạn." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Thời gian kết nối với trang web  Survey Solutions Designer đã hết. Kiểm tra kết nối Internet của bạn." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Waktu habis ketika menyambungkan ke Situs Desainer Survey Solutions. Periksa koneksi internet Anda." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Timeout na conexão com o site de Survey Solutions Designer. Verifique sua conexão de internet." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المهلة عند الاتصال بموقع ويب &quot;مصمم حلول استقصاء&quot;. تحقق من اتصالك بالإنترنت." ts="Translated" qs="AutoTranslated" />
@@ -263,7 +264,7 @@
             <li lc="uk-UA" tx="Немає зв'язку веб-сайтом дизайнера. Будь ласка, переконайтеся, що веб-сайт доступний." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="No hay conexión con Survey Solutions Designer. Por favor, asegúrese de que el sitio web está disponible." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่สามารถเชื่อมต่อกับเว็บไซต์ Survey Solutions Designer กรุณาตรวจสอบให้แน่ใจว่าเว็บไซต์พร้อมใช้งาน" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không có kết nối để thiết kế giải pháp khảo sát. Xin vui lòng đảm bảo rằng trang web có sẵn." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không kết nối được với trang web Survey Solutions Designer. Vui lòng đảm bảo trang web này đang hoạt động." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tidak ada koneksi ke Survey Solutions Designer. Pastikan bahwa situs ini tersedia." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não há conexão para o Survey Solutions Designer. Por favor, certifique-se de que o site está disponível." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد اتصال &quot;مصمم حلول المسح&quot;. الرجاء التأكد من أن هذا الموقع متاح." ts="Translated" qs="AutoTranslated" />
@@ -278,7 +279,7 @@
             <li lc="uk-UA" tx="Логін або пароль вказано невірно" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Su cuenta de usuario o contraseña es incorrecta" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đăng nhập hoặc mật khẩu của bạn là không chính xác" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Tên đăng nhập hoặc mật khẩu không chính xác" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Login atau sandi salah" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seu login ou senha está incorreta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول أو كلمة المرور الخاصة بك غير صحيحة" ts="Translated" qs="AutoTranslated" />
@@ -293,7 +294,7 @@
             <li lc="uk-UA" tx="Вийшла нова версія програми. Будь ласка, оновіть додаток" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Existe una nueva versión de la aplicación. Por favor, actualice la aplicación" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว  กรุณาปรับปรุงเวอร์ชั่นของโปรแกรม Survey Solutions ในเครื่องของท่าน" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Các phiên bản mới của ứng dụng được phát hành. Xin vui lòng, Cập nhật các ứng dụng" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Đã có phiên bản mới của ứng dụng. Xin vui lòng cập nhật!" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Versi baru dari aplikasi telah dirilis. Silahkan, memperbarui aplikasi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Nova versão do aplicativo foi lançado. Por favor, atualizar o aplicativo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إصدار نسخة جديدة من التطبيق. من فضلك، تحديث التطبيق" ts="Translated" qs="AutoTranslated" />
@@ -308,7 +309,7 @@
             <li lc="uk-UA" tx="Натисніть, щоб ввести текст" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Pulse para ingresar texto" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อป้อนข้อความ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để nhập văn bản" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập văn bản" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan teks" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para introduzir texto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال النص" ts="Translated" qs="AutoTranslated" />
@@ -323,7 +324,7 @@
             <li lc="uk-UA" tx="GPS не вдалося визначити ваше місцезнаходження. Щоб виправити неполадки, спробуйте зробити наступне: гарантувати, що ви на вулиці, підтвердити, що ваш GPS включений, або змінити настройку вашого GPS тайм-аут." ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="El GPS fue incapaz de determinar su ubicación. Para solucionar el problema, por favor, pruebe lo siguiente: Asegúrese de que está al aire libre, confirme que su GPS está activado, o cambie la configuración de tiempo de espera de su GPS." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="GPS ไม่สามารถจับพิกัดได้ วิธีการแก้ปัญหาคือ ควรอยู่กลางแจ้ง หรือเปิดการใช้งาน GPS หรือเปลี่ยนการตั้งค่าเวลาในการจับพิกัด" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="GPS là không thể xác định vị trí của bạn. Để khắc phục sự cố, hãy thử như sau: đảm bảo rằng bạn đang ở ngoài trời, xác nhận rằng GPS của bạn được kích hoạt, hoặc thay đổi cài đặt thời gian chờ GPS của bạn." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="GPS là không thể xác định vị trí của bạn. Để khắc phục sự cố, hãy thử như sau: đảm bảo rằng bạn đang ở ngoài trời, xác nhận rằng GPS đã được kích hoạt, hoặc thay đổi cài đặt thời gian chờ GPS." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="GPS tidak dapat menentukan lokasi Anda. Untuk memecahkan masalah ini, cobalah yang berikut: pastikan bahwa Anda berada di luar ruangan, pastikan bahwa GPS Anda diaktifkan, atau ganti pengaturan batas waktu GPS Anda." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="GPS foi incapaz de determinar a sua localização. Para solucionar, por favor, tente o seguinte: Certifique-se de que você está ao ar livre, confirme que seu GPS está habilitado, ou alterar a configuração de tempo limite do seu GPS." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وكان نظام تحديد المواقع غير قادر على تحديد الموقع الخاص بك. لاستكشاف الأخطاء وإصلاحها، الرجاء محاولة ما يلي: ضمان أن كنت في الهواء الطلق، وتأكد من تمكين الخاص بك لتحديد المواقع، أو تغيير إعداد مهلة GPS الخاص بك." ts="Translated" qs="AutoTranslated" />
@@ -338,7 +339,7 @@
             <li lc="uk-UA" tx="Торкніться, щоб ввести номер" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para introducir número" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อป้อนตัวเลข" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Baám ñeå nhaäp soá" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn để nhập số" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan nomor" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para digitar um número" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال رقم" ts="Translated" qs="AutoTranslated" />
@@ -353,7 +354,7 @@
             <li lc="uk-UA" tx="Ваш коментар" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Comentarios" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ความคิดเห็นของคุณ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bình luận của bạn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bình luận của bạn" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Komentar Anda" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seu comentário" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التعليق الخاص بك" ts="Translated" qs="AutoTranslated" />
@@ -368,7 +369,7 @@
             <li lc="uk-UA" tx="Мають відповдь" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Respondido" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอบแล้ว" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Đã trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Terjawab" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Respondeu" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الرد على" ts="Translated" qs="AutoTranslated" />
@@ -383,7 +384,7 @@
             <li lc="uk-UA" tx="Завершення" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Completar" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="th-TH" tx="Complete" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Hoàn thành" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hoàn thành" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Selesai" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="pt-PT" tx="Completo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إكمال" ts="Translated" qs="AutoTranslated" />
@@ -398,7 +399,7 @@
             <li lc="uk-UA" tx="Після завершення цього інтерв'ю, його буде позначено як завершене й буде передано до супервізора під час наступної синхронізації" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Después de terminar esta entrevista, la misma será marcada como completada y mandada al supervisor durante la siguiente sincronización" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="หลังจากจบการสัมภาษณ์  เมื่อกดปุ่มนี้แล้ว ข้อมูลการสัมภาษณ์จะถูกกำหนดสถานะว่าเสร็จสมบูรณ์แล้วข้อมูลนี้ส่งไปที่ Supervisor เมื่อมีการซิงโครไนส์ครั้งถัดไป" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Sau khi bạn hoàn thành cuộc phỏng vấn này nó sẽ được đánh dấu là hoàn thành và sẽ được tải lên để giám sát trong quá trình đồng bộ hóa tiếp theo của bạn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Sau khi bạn kết thúc, cuộc phỏng vấn sẽ được đánh dấu là đã hoàn thành và được chuyển tải đến giám sát viên trong quá trình đồng bộ hóa tiếp theo của bạn" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Setelah Anda selesai wawancara, ini akan ditandai sebagai selesai dan akan diunggah ke penyelia pada saat sinkronisasi berikutnya" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Depois que você terminar esta entrevista, será marcada como concluída e será enviado para supervisor durante a próxima sincronização" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بعد الانتهاء من هذه المقابلة أنه سيتم وضع علامة كمكتملة وسيتم تحميلها للمشرف أثناء المزامنة التالية" ts="Translated" qs="AutoTranslated" />
@@ -428,7 +429,7 @@
             <li lc="uk-UA" tx="Ні" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="No" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่มี" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Tidak" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
@@ -443,7 +444,7 @@
             <li lc="uk-UA" tx="Примітка для супервізора" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Nota para el supervisor" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="บันทึกข้อความถึง Supervisor" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Lưu ý cho giám sát viên" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Lưu ý cho giám sát viên" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Catatan untuk penyelia" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Nota para supervisor" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ملاحظة للمشرف" ts="Translated" qs="AutoTranslated" />
@@ -458,7 +459,7 @@
             <li lc="uk-UA" tx="Статуси запитань" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Estado de las preguntas" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="สถานะของคำถาม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu hỏi tình trạng" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Tình trạng câu hỏi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Status Pertanyaan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Status de perguntas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وضع الأسئلة" ts="Translated" qs="AutoTranslated" />
@@ -473,7 +474,7 @@
             <li lc="uk-UA" tx="Ви збираєтеся завершити це інтерв'ю" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Está a punto de terminar esta entrevista" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="การดำเนินการสัมภาษณ์ใกล้เสร็จแล้ว" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bạn chuẩn là hoàn thành cuộc phỏng vấn này" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bạn chuẩn bị hoàn thành cuộc phỏng vấn này" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Anda akan menyelesaikan wawancara ini" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Você está prestes a terminar esta entrevista" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أنت على وشك الانتهاء من هذه المقابلة" ts="Translated" qs="AutoTranslated" />
@@ -488,7 +489,7 @@
             <li lc="uk-UA" tx="Завершення" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Estado" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="th-TH" tx="Complete" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Hoàn thành" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hoàn thành" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Lengkap" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="pt-PT" tx="Completo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إكمال" ts="Translated" qs="AutoTranslated" />
@@ -503,7 +504,7 @@
             <li lc="uk-UA" tx="Без відповіді" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sin respuesta" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ยังไม่ตอบ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Được trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Chưa trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Belum terjawab" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Sem resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بلا إجابة" ts="Translated" qs="AutoTranslated" />
@@ -522,6 +523,7 @@
             <li lc="id-ID" tx="Untuk menyelesaikan layar&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไปยังหน้าจอ Complete&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="转到完成屏幕" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Chuyển tới màn hình hoàn thành" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -531,7 +533,7 @@
             <li lc="uk-UA" tx="{0} відповіді" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="{0} respuestas" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} คำตอบ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="{0} câu trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="{0} câu trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} jawaban" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="{0} respostas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} إجابات" ts="Translated" qs="AutoTranslated" />
@@ -546,7 +548,7 @@
             <li lc="uk-UA" tx="одна відповідь" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="una respuesta" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="1 คำตอบ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="một trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="một trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu jawaban" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="uma resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إجابة واحدة" ts="Translated" qs="AutoTranslated" />
@@ -561,7 +563,7 @@
             <li lc="uk-UA" tx="{0} помилки" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="{0} errores" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ข้อผิดพลาด" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="{0} lỗi" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="{0} lỗi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} kesalahan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="{0} erros" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} أخطاء" ts="Translated" qs="AutoTranslated" />
@@ -576,7 +578,7 @@
             <li lc="uk-UA" tx="одна помилка" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="un error" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="1 ข้อผิดพลาด " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="một lỗi" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="một lỗi" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu kesalahan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="um erro" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ واحد" ts="Translated" qs="AutoTranslated" />
@@ -591,7 +593,7 @@
             <li lc="uk-UA" tx="Розділ завершено: {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sección completada: {0}" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนที่สมบูรณ์แล้ว" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Phần hoàn thành: {0}" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Số mục đã hoàn thành: {0}" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian selesai: {0}" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seção concluída: {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم الانتهاء: {0}" ts="Translated" qs="AutoTranslated" />
@@ -606,7 +608,7 @@
             <li lc="uk-UA" tx="Розділ не розпочато" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sección no iniciada" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอนที่ยังไม่เริ่ม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Phần không bắt đầu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Số mục chưa phỏng vấn" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seção não começada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم لم تبدأ" ts="Translated" qs="AutoTranslated" />
@@ -621,7 +623,7 @@
             <li lc="uk-UA" tx="Розділ частково заповнен: {0}" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Sección iniciada: {0}" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนที่เริ่มไปแล้ว" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Phần bắt đầu: {0}" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Số mục đã bắt đầu phỏng vấn: {0}" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian mulai: {0}" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seção começada: {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدأ القسم: {0}" ts="Translated" qs="AutoTranslated" />
@@ -636,7 +638,7 @@
             <li lc="uk-UA" tx="{0} підрозділів" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="{0} subsecciones" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนย่อย" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="{0} phần phụ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="{0} mục con" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} Sub-Bagian" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="{0} sub-seções" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} الأقسام الفرعية" ts="Translated" qs="AutoTranslated" />
@@ -651,7 +653,7 @@
             <li lc="uk-UA" tx="один підрозділ" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="una subsección" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="1 ตอนย่อย" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="một phần phụ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="một mục con" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu sub-bagian" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="uma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم فرعي واحد" ts="Translated" qs="AutoTranslated" />
@@ -666,12 +668,18 @@
             <li lc="uk-UA" tx="немає підрозділів" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="sin subsecciones" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่มีตอนย่อย" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="không có phần phụ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không có mục con" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="tidak ada sub-bagian" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="nenhuma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد أقسام فرعية" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="aucune sous-section" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="没有子部分" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\UIResources.resx" nm="Interview_Instruction_ShowInstruction" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Show instruction" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Показать инструкцию" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Instruction_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -681,7 +689,7 @@
             <li lc="uk-UA" tx="Інструкція" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Instrucción" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คำแนะนำ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Hướng dẫn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hướng dẫn:" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Instruksi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Instrução" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليمات" ts="Translated" qs="AutoTranslated" />
@@ -696,7 +704,7 @@
             <li lc="uk-UA" tx="Опції будуть доступні після відповіді на питання які посилаються" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Habrán opciones disponibles después de responder la pregunta a la que se hace referencia" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตัวเลือกจะแสดงหลังจากตอบคำถามตามเงื่อนไข" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Tùy chọn sẽ có sẵn sau khi trả lời câu hỏi tham chiếu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Các tùy chọn sẽ hiển thị sau khi trả lời câu hỏi tham chiếu" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Pilihan akan tersedia setelah menjawab pertanyaan yang dirujuk" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="As opções estarão disponíveis depois de responder a pergunta referenciada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الخيارات ستكون متاحة بعد الإجابة على السؤال المشار إليه" ts="Translated" qs="AutoTranslated" />
@@ -711,7 +719,7 @@
             <li lc="uk-UA" tx="Наступний розділ" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Siguiente sección" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไปตอนถัดไป" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Phần kế tiếp" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Mục tiếp theo" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian berikutnya" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Próxima seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المقطع التالي" ts="Translated" qs="AutoTranslated" />
@@ -730,6 +738,7 @@
             <li lc="id-ID" tx="Menuju direktori induk&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไปตอนก่อนหน้า&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="转到上一屏" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Về mục chính" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_AnsweredQuestions" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -739,7 +748,7 @@
             <li lc="uk-UA" tx="На всі {0} питання було дано відповіді" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Todas las {0} preguntas respondidas" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอบคำถามทั้งหมด {0} แล้ว" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Tất cả {0} câu trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Tất cả {0} câu hỏi đã được trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Semua {0} pertanyaan dijawab" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Todos os {0} perguntas respondidas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} جميع الإجابة على الأسئلة" ts="Translated" qs="AutoTranslated" />
@@ -754,7 +763,7 @@
             <li lc="uk-UA" tx="Примітка: {0} питання є без відповіді" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Nota: {0} preguntas sin respuesta" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="หมายเหตุ: {0} คำถามที่ยังไม่ได้ตอบ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Lưu ý: {0} câu hỏi là chưa được trả lời" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Lưu ý: {0} câu hỏi chưa được trả lời" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Catatan: {0} pertanyaan tidak terjawab" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Nota: {0} perguntas são sem resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ملاحظة: {0} الأسئلة التي لم يرد عليها" ts="Translated" qs="AutoTranslated" />
@@ -769,7 +778,7 @@
             <li lc="uk-UA" tx="Відповідь &quot;{0}&quot; не відповідає ніякому варіанту" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Respuesta «{0}» no corresponde a ninguna opción" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอบไม่ตรงเงื่อนไข : {0} " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Câu trả lời &quot;{0}&quot; không khớp với bất kỳ tùy chọn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời &quot;{0}&quot; không khớp với bất kỳ tùy chọn nào" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawaban &quot;{0}&quot; tidak cocok dengan pilihan apapun" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Resposta &quot;{0}&quot; não coincide com qualquer opção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا يتطابق مع أي خيار" ts="Translated" qs="AutoTranslated" />
@@ -784,7 +793,7 @@
             <li lc="uk-UA" tx="Відповідь &quot;{0}&quot; не відповідає ніякому варіанту" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Respuesta «{0}» no corresponde a ninguna opción" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอบไม่ตรงเงื่อนไข : {0} " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Câu trả lời &quot;{0}&quot; không khớp với bất kỳ tùy chọn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời &quot;{0}&quot; không khớp với bất kỳ tùy chọn nào" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawaban &quot;{0}&quot; tidak cocok dengan pilihan apapun" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Resposta &quot;{0}&quot; não coincide com qualquer opção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا يتطابق مع أي خيار" ts="Translated" qs="AutoTranslated" />
@@ -799,7 +808,7 @@
             <li lc="uk-UA" tx="Не вдалося зберегти пусте значення" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Valor en blanco no se puede guardar" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่สามารถบันทึกค่าว่างได้" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Giá trị sản phẩm nào không được lưu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không thể lưu câu trả lời trống" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Nilai kosong tidak bisa disimpan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Valor vazio não pode ser salvo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن حفظ قيمة فارغة" ts="Translated" qs="AutoTranslated" />
@@ -814,7 +823,7 @@
             <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="จำนวนสมาชิกต้องมากกว่า {0}" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu hỏi được sử dụng như kích thước của danh sách và câu trả lời cụ thể là tiêu cực" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Câu trả lời '{0}' không chính xác vì câu hỏi này để xác định kích cỡ danh sách mà câu trả lời cụ thể là số âm" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a pergunta é usada como tamanho do plantel e a resposta especificada é negativa" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن السؤال كحجم قائمة والجواب المحدد سلبي" ts="Changed" qs="ToReview" />
@@ -829,7 +838,7 @@
             <li lc="uk-UA" tx="Введене значення не вдалося проаналізувати як ціле значення" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Valor introducido no puede ser analizado como entero" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ค่าที่ป้อนต้องเป็นจำนวนเต็มเท่านั้น" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Nhập giá trị không có thể được phân tích như là giá trị số nguyên" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời không có dạng số nguyên" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Nilai yang dimasukkan tidak bisa diurai sebagai nilai integer" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Valor inserido não pode ser analisado como um valor inteiro" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن تحليل القيمة المدخلة كقيمة عدد صحيح" ts="Translated" qs="AutoTranslated" />
@@ -844,7 +853,7 @@
             <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, тому що відповідь більше, ніж верхня межа списку '{1}'." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la respuesta es mayor que el límite superior de lista '{1}'." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} จำนวนสมาชิกที่ใส่มากกว่าที่กำหนด {1}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu trả lời là lớn hơn danh sách ràng buộc '{1}'." ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời '{0}' không chính xác vì lớn hơn giá trị chặn trên của danh sách '{1}'." ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena jawabannya lebih besar dari batas atas daftar '{1}'." ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a resposta é maior que o limite superior do Roster '{1}'." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن الجواب أكبر من الحد الأعلى قائمة '{1}'." ts="Translated" qs="AutoTranslated" />
@@ -859,7 +868,7 @@
             <li lc="uk-UA" tx="Пустими значення не допускаються" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="No se permiten valores en blanco" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่อนุญาตให้เป็นค่าว่าง" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Giá trị sản phẩm nào không được phép" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không được phép để trống" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Nilai-nilai kosong tidak diperbolehkan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não são permitidos valores vazios" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="غير مسموح بالقيم الفارغة" ts="Translated" qs="AutoTranslated" />
@@ -874,7 +883,7 @@
             <li lc="uk-UA" tx="Введене значення не вдалося проаналізувати як десяткове значення" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Valor introducido no puede ser analizado como valor decimal" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ค่าที่ป้อนห้ามเป็นทศนิยม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Nhập giá trị không có thể được phân tích như giá trị thập phân" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Giá trị không có dạng số thập phân" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Nilai yang dimasukkan tidak bisa diurai sebagai nilai desimal" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Valor inserido não pode ser analisado como um valor decimal" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن تحليل القيمة المدخلة كقيمة عشرية" ts="Translated" qs="AutoTranslated" />
@@ -889,7 +898,7 @@
             <li lc="uk-UA" tx="Будь ласка, заповніть усі необхідні значення" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Por favor, rellene todos los valores necesarios" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="กรุณาป้อนข้อมูลให้ครบทุกคำถาม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Xin vui lòng, điền vào tất cả các giá trị yêu cầu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hãy điền tất cả các giá trị được yêu cầu" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Silahkan mengisi semua nilai-nilai yang diperlukan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Por favor, preencha todos os valores requeridos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يرجى ملء كافة القيم المطلوبة" ts="Translated" qs="AutoTranslated" />
@@ -904,7 +913,7 @@
             <li lc="uk-UA" tx="Визначити місце розташування" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Pulse para registrar GPS" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อบันทึก GPS" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để ghi GPS" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để ghi lại vị trí" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk merekam GPS" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para registrar GPS" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اضغط على سجل لتحديد المواقع" ts="Translated" qs="AutoTranslated" />
@@ -919,7 +928,7 @@
             <li lc="uk-UA" tx="Торкніться, щоб зробити знімок" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para tomar fotografía" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อถ่ายรูป" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để chụp ảnh" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để chụp ảnh" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk mengambil foto" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para tirar uma foto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لالتقاط صورة" ts="Translated" qs="AutoTranslated" />
@@ -934,7 +943,7 @@
             <li lc="uk-UA" tx="Торкніться кнопки прийняти штрих-коду" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para leer código de barras" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อสแกนบาร์โค้ด" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để có mã vạch" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để lấy mã vạch" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk mengambil kode batang" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para tirar o código de barras" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اضغط على اتخاذ الرمز الشريطي" ts="Translated" qs="AutoTranslated" />
@@ -949,7 +958,7 @@
             <li lc="uk-UA" tx="Ви дійсно бажаєте видалити {0} рядків з пов'язаних списків?" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Confirma que desea eliminar {0} filas de cada lista relacionada?" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คุณต้องการลบจำนวน {0} สมาชิกใช่ไหม" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Bạn có chắc bạn muốn loại bỏ {0} Row(s) từ mỗi danh sách có liên quan?" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bạn có chắc là bạn muốn bỏ {0} lựa chọn từ danh sách này?" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Apakah Anda yakin Anda ingin menghapus {0} baris dari setiap daftar terkait?" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Tem certeza que deseja remover {0} linha(s) de cada lista relacionada?" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="هل أنت متأكد من أنك تريد إزالة {0} الصف (الصفوف) من كل قائمة ذات الصلة?" ts="Translated" qs="AutoTranslated" />
@@ -964,7 +973,7 @@
             <li lc="uk-UA" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Entrevistador de Survey Solutions" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Khảo sát giải pháp phỏng vấn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Pewawancara Survey Solutions" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Entrevistador de Survey Solutions" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="دراسة الحلول المقابلة" ts="Translated" qs="AutoTranslated" />
@@ -978,6 +987,7 @@
             <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Діагностіка" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="诊断" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Xem lỗi " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -987,7 +997,7 @@
             <li lc="uk-UA" tx="Скасувати" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ยกเลิก" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Hủy bỏ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Hủy bỏ" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Batal" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
@@ -1002,7 +1012,7 @@
             <li lc="uk-UA" tx="Ваш обліковий запис вже прив'язаний до іншого пристрою" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Usted ya ha sido vinculado/a a otro dispositivo" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="คุณถูกมอบหมายให้ทำงานด้วยเครื่องอื่นแล้ว" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Bạn đã được đặt cho một thiết bị khác" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Bạn đang thực hiện nhiệm vụ trên một thiết bị khác" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Anda sudah dialokasikan perangkat lain" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Você já atribuído a outro instumento" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="يمكنك تعيينها بالفعل إلى جهاز آخر" ts="Changed" qs="ToReview" />
@@ -1017,7 +1027,7 @@
             <li lc="uk-UA" tx="Повторно зв'язати" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Volver a vincular " ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="เชื่อมโยง" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Relink" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Liên kết lại" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Menautkan kembali" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Revinculação" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إعادة ربط" ts="Translated" qs="AutoTranslated" />
@@ -1032,7 +1042,7 @@
             <li lc="uk-UA" tx="Якщо ви повторно зв'яжите цей пристрою&lt;br&gt;всі дані на старом пристрої буде втрачено" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Si usted se vincula a este dispositivo&lt;br&gt;se perderán todos los datos en su dispositivo anterior  " ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ถ้าคุณเข้าใช้เครื่องนี้ ข้อมูลทั้งหมดในเครื่องเก่าจะสูญหาย" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Nếu bạn relink cho thiết bị này&lt;br&gt;Tất cả dữ liệu trên một cũ sẽ bị mất" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nếu bạn liên kết cho thiết bị này&lt;br&gt;Tất cả dữ liệu trên liên kết cũ sẽ bị mất" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jika Anda menautkan kembali ke perangkat ini &lt;br/&gt; semua data pada yang lama akan hilang" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Se você vincular novamente a este dispositivo &lt;br/&gt; todos os dados no antigo será perdidos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إذا كان يمكنك إعادة ربط لهذا الجهاز&lt;br&gt;سيتم فقدان كافة البيانات الموجودة على القديم" ts="Translated" qs="AutoTranslated" />
@@ -1047,7 +1057,7 @@
             <li lc="uk-UA" tx="Спробуйте увійти онлайн" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Intente iniciar sesión en línea" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ลองเข้าสู่ระบบแบบออนไลน์" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Cố gắng để đăng nhập trực tuyến" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Cố gắng để đăng nhập trực tuyến" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Coba untuk masuk secara online" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Tente o login on-line" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حاول تسجيل الدخول على الإنترنت" ts="Translated" qs="AutoTranslated" />
@@ -1062,7 +1072,7 @@
             <li lc="uk-UA" tx="Ваш Логін" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Su inicio de sesión" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ชื่อผู้ใช้ของคุณ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Thông tin đăng nhập" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Thông tin đăng nhập" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Login Anda" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seu login" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول الخاص بك" ts="Translated" qs="AutoTranslated" />
@@ -1077,7 +1087,7 @@
             <li lc="uk-UA" tx="Ввійти" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Iniciar sesión" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="เข้าสู่ระบบ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đăng nhập" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Đăng nhập" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Masuk" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="iniciar sessão" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول" ts="Translated" qs="AutoTranslated" />
@@ -1092,7 +1102,7 @@
             <li lc="uk-UA" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Khảo sát giải pháp bảng câu hỏi Tester" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Penguji Kuesioner Survey Solutions" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اختبار الاستبيان حلول المسح" ts="Translated" qs="AutoTranslated" />
@@ -1107,7 +1117,7 @@
             <li lc="uk-UA" tx="Ні" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="No" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่ใช่" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Không được" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Tidak" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
@@ -1122,7 +1132,7 @@
             <li lc="uk-UA" tx="Пароль" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Contraseña" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="รหัสผ่าน" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Mật khẩu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Mật khẩu" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Sandi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Senha" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="كلمة المرور" ts="Translated" qs="AutoTranslated" />
@@ -1137,7 +1147,7 @@
             <li lc="uk-UA" tx="Сервіс Google Play недоступний" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Google Play Services no está disponible" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่มีบริการ Google Play" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Dịch vụ chơi của Google không có sẵn" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Google Play Services không có sẵn" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Layanan Google Play tidak tersedia" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Google Play Services não estão disponíveis" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا تتوفر &quot;خدمات تشغيل جوجل&quot;" ts="Translated" qs="AutoTranslated" />
@@ -1152,7 +1162,7 @@
             <li lc="uk-UA" tx="Роботу клієнта розташування не розпочато" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Ubicación cliente no iniciado" ts="Translated" qs="AutoTranslated" />
             <li lc="th-TH" tx="พิกัดของเครื่องยังไม่ถูกกำหนด" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Vị trí khách hàng không bắt đầu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Location Client chưa hoạt động" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Lokasi Klien belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Cliente de Localização não foi iniciado" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="موقع العميل لم تبدأ" ts="Translated" qs="AutoTranslated" />
@@ -1167,7 +1177,7 @@
             <li lc="uk-UA" tx="Не вдається запустити службу MvxLocation більш ніж один раз" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="No se puede iniciar servicio de MvxLocation más de una vez" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คุณไม่สามารถเปิดบริการ MvxLocation ได้มากกว่า 1 ครั้ง" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bạn không thể khởi động dịch vụ MvxLocation nhiều hơn một lần" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bạn không thể khởi động dịch vụ MvxLocation nhiều hơn một lần" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Anda tidak dapat memulai layanan MvxLocation lebih dari sekali" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Você não pode iniciar o serviço de MvxLocation mais de uma vez" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن بدء تشغيل خدمة مفكسلوكيشن أكثر من مرة" ts="Translated" qs="AutoTranslated" />
@@ -1182,7 +1192,7 @@
             <li lc="uk-UA" tx="ПОЧАТИ" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="INICIO" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="เริ่มสัมภาษณ์" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="BẮT ĐẦU" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="BẮT ĐẦU" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="MULAI" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="INÍCIO" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدء تشغيل" ts="Translated" qs="AutoTranslated" />
@@ -1192,14 +1202,15 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracySubTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="{0:N0} meters" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="{0:N0} метров" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Number of meters to set accuracy" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Значение в метрах для задания точности." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracyTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Desired accuracy of GPS questions" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Желаемая точность GPS вопроса" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Độ chính xác mong muốn của các câu hỏi GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="RealQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1209,7 +1220,7 @@
             <li lc="uk-UA" tx="Натисніть, щоб ввести десяткове число" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Pulse para entrar decimal" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อใส่ตัวเลขทศนิยม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Khai thác vào thập phân" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập số thập phân" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan desimal" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para digitar decimal" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال رقم عشري" ts="Translated" qs="AutoTranslated" />
@@ -1224,7 +1235,7 @@
             <li lc="uk-UA" tx="Залишатися в системі" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Mantenerse conectado" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ยังคงอยู่ในระบบ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Ở trạng thái đăng nhập" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Ở trạng thái đăng nhập" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tetap masuk" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Permaneça assinado" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاحتفاظ بتسجيل الدخول" ts="Translated" qs="AutoTranslated" />
@@ -1239,7 +1250,7 @@
             <li lc="ru-RU" tx="У вас нет ни одного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="No tiene ninguna tarea en este dispositivo. Enviar información en la tableta, borrar datos de la aplicación y de la conexión a otra cuenta " ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คุณไม่ได้รับมอบหมายงานบนเครื่องนี้  ส่งข้อมูลเกี่ยวกับแท็บเล็ต ล้างข้อมูลของแอพพลิเคชันและเข้าสู่ระบบด้วยบัญชีผู้ใช้อื่น" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Bạn không có bất kỳ bài tập trên thiết bị này. Gửi thông tin máy tính bảng, rõ ràng của ứng dụng dữ liệu và đăng nhập bằng tài khoản khác" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Bạn không có nhiệm vụ nào trên thiết bị này. Gửi thông tin máy tính bảng, xóa dữ liệu và đăng nhập bằng tài khoản khác" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Anda tidak memiliki tugas apapun pada perangkat ini. Kirimkan informasi tablet, hapus data aplikasi dan login menggunakan akun lain" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Você não tem quaisquer atribuições neste instrumento. Enviar informações de tablet, limpar dados do aplicativo e logon de conta outra" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ليس لديك أي تعيينات في هذا الجهاز. إرسال معلومات الكمبيوتر اللوحي، ومسح البيانات للتطبيق وتسجيل الدخول بحساب آخر" ts="Translated" qs="AutoTranslated" />
@@ -1254,7 +1265,7 @@
             <li lc="uk-UA" tx="Торкніться, щоб ввести новий елемент" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para entrar otro elemento" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อใส่ข้อมูลใหม่" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để nhập mục mới" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập mục mới" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan item baru" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para inserir novo item" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال عنصر جديد" ts="Translated" qs="AutoTranslated" />
@@ -1269,7 +1280,7 @@
             <li lc="uk-UA" tx="Натисніть, щоб ввести текст" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Pulse para ingresar texto" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อป้อนข้อความ" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để nhập văn bản" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập văn bản" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan teks" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para introduzir texto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال النص" ts="Translated" qs="AutoTranslated" />
@@ -1284,7 +1295,7 @@
             <li lc="uk-UA" tx="Натисніть, щоб ввести текст ({0})" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Pulse para ingresar texto ({0})" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อป้อนข้อความ ({0})" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Bấm vào để nhập văn bản ({0})" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Nhấn vào để nhập văn bản ({0})" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Tekan untuk memasukkan teks ({0})" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Toque para inserir texto ({0})" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال نص ({0})" ts="Translated" qs="AutoTranslated" />
@@ -1299,7 +1310,7 @@
             <li lc="uk-UA" tx="Неприпустима відповідь" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Respuesta no válida" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คำตอบไม่ถูกต้อง" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu trả lời là không hợp lệ" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời không phù hợp" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawabannya tidak valid" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Resposta é inválida" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة غير صحيحة" ts="Translated" qs="AutoTranslated" />
@@ -1314,7 +1325,7 @@
             <li lc="uk-UA" tx="Відповідь не збережено" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Respuesta no guardada" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="คำตอบไม่ถูกบันทึก" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu trả lời không lưu" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Câu trả lời chưa được lưu" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Jawabannya belum disimpan" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Resposta não foi salvo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يتم حفظ الإجابات" ts="Translated" qs="AutoTranslated" />
@@ -1329,7 +1340,7 @@
             <li lc="uk-UA" tx="Так" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sí" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ใช่" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Có" ts="Translated" qs="AutoTranslated" />
+            <li lc="vi-VN" tx="Có" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Ya" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Sim" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نعم" ts="Translated" qs="AutoTranslated" />

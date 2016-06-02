@@ -1,10 +1,10 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 

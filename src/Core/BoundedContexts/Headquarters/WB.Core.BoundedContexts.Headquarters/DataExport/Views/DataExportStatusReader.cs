@@ -5,6 +5,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -12,8 +14,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     internal class DataExportStatusReader : IDataExportStatusReader
     {
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -41,20 +42,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IParaDataAccessor paraDataAccessor, 
             IFileSystemAccessor fileSystemAccessor,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.paraDataAccessor = paraDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status = null)
         {
             var questionnaire =
-                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             if (questionnaire == null)
                 return null;
@@ -118,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             switch (dataType)
             {
                 case DataExportType.ParaData:
-                    path = this.paraDataAccessor.GetPathToParaDataByQuestionnaire(
+                    path = this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(
                         questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     break;
                 case DataExportType.Data:

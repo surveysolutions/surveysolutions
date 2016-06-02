@@ -3,10 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {

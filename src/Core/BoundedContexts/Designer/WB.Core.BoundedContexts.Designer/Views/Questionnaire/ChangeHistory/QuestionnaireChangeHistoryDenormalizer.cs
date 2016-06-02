@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -51,6 +52,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>,
+
+        IEventHandler<VariableAdded>,
+        IEventHandler<VariableUpdated>,
+        IEventHandler<VariableCloned>,
+        IEventHandler<VariableDeleted>,
 
         IEventHandler<SharedPersonToQuestionnaireAdded>,
         IEventHandler<SharedPersonFromQuestionnaireRemoved>,
@@ -429,6 +435,50 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
+        public void Handle(IPublishedEvent<VariableAdded> evnt)
+        {
+            var variableName = evnt.Payload.VariableData.Name;
+            this.AddOrUpdateVariableState(evnt.EventSourceId, evnt.Payload.EntityId, variableName);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Add, QuestionnaireItemType.Variable, evnt.Payload.EntityId,
+                variableName, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<VariableUpdated> evnt)
+        {
+            var variableName = evnt.Payload.VariableData.Name;
+            this.AddOrUpdateVariableState(evnt.EventSourceId, evnt.Payload.EntityId, variableName);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Update, QuestionnaireItemType.Variable, evnt.Payload.EntityId,
+                variableName, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<VariableCloned> evnt)
+        {
+            var variableName = evnt.Payload.VariableData.Name;
+            this.AddOrUpdateVariableState(evnt.EventSourceId, evnt.Payload.EntityId, variableName);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Clone, QuestionnaireItemType.Variable, evnt.Payload.EntityId,
+                variableName, evnt.EventSequence,
+                CreateQuestionnaireChangeReference(QuestionnaireItemType.Variable, evnt.Payload.SourceEntityId, variableName));
+        }
+
+        public void Handle(IPublishedEvent<VariableDeleted> evnt)
+        {
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+            var variableName = questionnaire.VariableState[evnt.Payload.EntityId];
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Delete, QuestionnaireItemType.Variable, evnt.Payload.EntityId,
+                variableName, evnt.EventSequence);
+
+            questionnaire.VariableState.Remove(evnt.Payload.EntityId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
         public void Handle(IPublishedEvent<LookupTableAdded> evnt)
         {
             AddOrUpdateLookupTableState(evnt.EventSourceId, evnt.Payload.LookupTableId, string.Empty);
@@ -551,6 +601,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 movedItemType = QuestionnaireItemType.StaticText;
                 moveditemTitle = questionnaire.StaticTextState[evnt.Payload.PublicKey];
             }
+            else if (questionnaire.VariableState.ContainsKey(evnt.Payload.PublicKey))
+            {
+                movedItemType = QuestionnaireItemType.Variable;
+                moveditemTitle = questionnaire.VariableState[evnt.Payload.PublicKey];
+            }
             else
             {
                 return;
@@ -611,6 +666,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 {
                     questionnaireStateTacker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
                     continue;
+                }
+                var variable = compositeElement as IVariable;
+                if (variable != null)
+                {
+                    questionnaireStateTacker.VariableState[variable.PublicKey] = variable.Name;
                 }
             }
             questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
@@ -676,6 +736,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
                 (s, id, title) => { s.StaticTextState[id] = title;});
+        }
+
+        private void AddOrUpdateVariableState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => { s.VariableState[id] = title;});
         }
 
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,

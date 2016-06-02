@@ -9,15 +9,15 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -32,40 +32,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
+            var variable = Create.Entity.Variable(variableName: "va", type: VariableType.String);
+            //interviewVariables = new InterviewVariables();
+
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(0))] =
+            //    "nastya0";
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(1))] =
+            //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = parentRosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: parentRosterId,
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
+                        variable,
                         new NumericQuestion()
                         {
                             PublicKey = substitutionReferenceQuestionId,
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "var_source"
                         },
-                        new Group()
-                        {
-                            PublicKey = nestedRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" },
-                            Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId,
+                            fixedTitles: new[] {"a", "b"},
+                            children: new IComposite[]
                             {
                                 new NumericQuestion()
                                 {
                                     PublicKey = questionWithSubstitutionId,
                                     QuestionType = QuestionType.Numeric,
-                                    QuestionText = "test %var_source%",
+                                    QuestionText = "test %var_source% %va%",
                                     StataExportCaption = "var"
                                 }
-                            }
-                        }
-                    }
-                });
+                            })
+                    }));
 
             interview = CreateInterviewData(interviewId);
 
@@ -73,10 +71,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId }, new decimal[] { 0 },
               new Dictionary<Guid, object> { { substitutionReferenceQuestionId ,18} },
-              new Dictionary<Guid, string>() { { parentRosterId, "1" } });
+              new Dictionary<Guid, string>() { { parentRosterId, "1" } },
+              variables:new Dictionary<Guid,object>() { {variable.PublicKey, "nastya0"} });
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId }, new decimal[] { 1 },
                 new Dictionary<Guid, object> { { substitutionReferenceQuestionId, 4 } },
-                new Dictionary<Guid, string>() { { parentRosterId, "2" } });
+                new Dictionary<Guid, string>() { { parentRosterId, "2" } },
+              variables: new Dictionary<Guid, object>() { { variable.PublicKey, "nastya1" } });
 
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId, nestedRosterId }, new decimal[] { 0, 0 },
                 new Dictionary<Guid, object>(),
@@ -101,16 +101,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
 
         It should_title_of_question_in_first_row_of_first_roster_has_rostertitle_replaced_with_a = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 0 }).Title.ShouldEqual("test 18");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 0 }).Title.ShouldEqual("test 18 nastya0");
 
         It should_title_of_question_in_second_row_of_first_roster_has_rostertitle_replaced_with_b = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 1 }).Title.ShouldEqual("test 18");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 0, 1 }).Title.ShouldEqual("test 18 nastya0");
 
         It should_title_of_question_in_first_row_of_second_roster_has_rostertitle_replaced_with_a = () =>
-           GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 0 }).Title.ShouldEqual("test 4");
+           GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 0 }).Title.ShouldEqual("test 4 nastya1");
 
         It should_title_of_question_in_second_row_of_second_roster_has_rostertitle_replaced_with_b = () =>
-            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 1 }).Title.ShouldEqual("test 4");
+            GetQuestion(mergeResult, questionWithSubstitutionId, new decimal[] { 1, 1 }).Title.ShouldEqual("test 4 nastya1");
 
 
         private static InterviewDataAndQuestionnaireMerger merger;

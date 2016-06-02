@@ -1,9 +1,8 @@
 ﻿using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests

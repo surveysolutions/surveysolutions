@@ -3,10 +3,10 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTests
 {

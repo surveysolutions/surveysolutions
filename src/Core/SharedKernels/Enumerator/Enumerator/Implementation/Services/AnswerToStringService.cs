@@ -23,8 +23,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (answer is IntegerNumericAnswer)
             {
-                var integerNumericAnswer = ((IntegerNumericAnswer)answer);
-                return Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                var integerNumericAnswer = (IntegerNumericAnswer)answer;
+                var answerValue = (decimal?)integerNumericAnswer.Answer;
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return answerValue.FormatDecimal();
+                }
+
+                return
+                    Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                    String.Empty;
             }
 
             if (answer is DateTimeAnswer)
@@ -38,7 +46,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (answer is RealNumericAnswer)
             {
                 var realNumericAnswer = (RealNumericAnswer)answer;
-                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return realNumericAnswer.Answer.FormatDecimal();
+                }
+
+                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                       String.Empty;
             }
 
             if (answer is MultiOptionAnswer)
@@ -97,6 +111,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         return this.AnswerToUIString(questionIdReferencedByLinkedQuestion, referencedAnswer, interview, questionnaire);
                     }
                 }
+                if (questionnaire.IsQuestionLinkedToRoster(questionId))
+                {
+                    var referencedRosterIdentity = new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector);
+
+                    var rosterIdReferencedByLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(singleOptionLinkedAnswer.Id);
+
+                    var referencedRoster = interview.FindReferencedRostersForLinkedQuestion(rosterIdReferencedByLinkedQuestion, referencedRosterIdentity)
+                        .FirstOrDefault(a => a.RosterVector.SequenceEqual(singleOptionLinkedAnswer.Answer));
+
+                    if (referencedRoster != null)
+                    {
+                        return referencedRoster.Title;
+                    }
+                }
+                return string.Empty;
             }
         
             return answer.ToString();

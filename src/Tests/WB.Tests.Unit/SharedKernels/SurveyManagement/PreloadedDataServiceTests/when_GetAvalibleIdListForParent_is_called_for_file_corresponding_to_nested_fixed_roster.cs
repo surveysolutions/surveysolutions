@@ -7,8 +7,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -17,25 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Establish context = () =>
         {
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(new Group("rosterGroup")
-                {
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    VariableName = "rosterGroup",
-                    PublicKey = rosterGroupId,
-                    Children = new List<IComposite>
-                    {
-                        new Group("nestedRoster")
+                CreateQuestionnaireDocumentWithOneChapter(
+
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "rosterGroup",  variable: "rosterGroup",
+                        fixedTitles: new[] {"1", "2"},
+                        children: new IComposite[]
                         {
-                            IsRoster = true,
-                            PublicKey = nestedRosterId,
-                            VariableName = "nestedRoster",
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a" }
-                        }
-                    }
-                });
+                            Create.Entity.FixedRoster(rosterId: nestedRosterId, variable: "nestedRoster",
+                                fixedTitles: new[] {"a"}, title: "nestedRoster")
+                        }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

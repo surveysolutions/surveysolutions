@@ -38,7 +38,7 @@
             <div class="enabling-group-marker"></div>
             <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label>
             <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeRoster.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
             <br>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.enablementCondition"></div>
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <script type="text/ng-template" id="List-template.html">
+<script type="text/ng-template" id="List-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question (answer determines both the number and the name of roster rows): </label>
@@ -66,7 +66,9 @@
                     <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedListQuestion !== null">
                         <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}
+                            (<span class="var-name-line">{{selectedListQuestion.varName}}</span>)
+                        </span>
                     </span>
                     <span class="dropdown-arrow"></span>
                 </button>
@@ -80,7 +82,13 @@
                            role="menuitem"
                            tabindex="-1"
                            href="javascript:void(0);">
-                            <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
                         </a>
                     </li>
                 </ul>
@@ -89,7 +97,7 @@
 
     </script>
 
-    <script type="text/ng-template" id="Numeric-template.html">
+<script type="text/ng-template" id="Numeric-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question for number of rows:</label>
@@ -98,7 +106,9 @@
                     <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedNumericQuestion !== null">
                         <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}
+                            (<span class="var-name-line">{{selectedNumericQuestion.varName}}</span>)
+                        </span>
                     </span>
                     <span class="dropdown-arrow"></span>
                 </button>
@@ -112,7 +122,13 @@
                            role="menuitem"
                            tabindex="-1"
                            href="javascript:void(0);">
-                            <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
                         </a>
                     </li>
                 </ul>
@@ -126,7 +142,9 @@
                     <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedTitleQuestion !== null">
                         <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}
+                            (<span class="var-name-line">{{selectedTitleQuestion.varName}}</span>)
+                        </span>
                     </span>
                     <span class="dropdown-arrow"></span>
                 </button>
@@ -140,7 +158,13 @@
                            role="menuitem"
                            tabindex="-1"
                            href="javascript:void(0);">
-                            <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
                         </a>
                     </li>
                 </ul>
@@ -177,7 +201,7 @@
         </div>
     </script>
 
-    <script type="text/ng-template" id="Multi-template.html">
+<script type="text/ng-template" id="Multi-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question (answer determines both the number and the name of roster rows): </label>
@@ -186,7 +210,9 @@
                     <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedMultiQuestion !== null">
                         <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}
+                            (<span class="var-name-line">{{selectedMultiQuestion.varName}}</span>)
+                        </span>
                     </span>
                     <span class="dropdown-arrow"></span>
                 </button>
@@ -200,7 +226,13 @@
                            role="menuitem"
                            tabindex="-1"
                            href="javascript:void(0);">
-                            <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
                         </a>
                     </li>
                 </ul>

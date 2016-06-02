@@ -16,24 +16,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(
-                new Group()
-                {
-                    PublicKey = Guid.NewGuid(),
-                    IsRoster = true,
-                    RosterFixedTitles = new string[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "varRoster",
-                    Children = new List<IComposite>
+                Create.FixedRoster(variable: "varRoster",
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
                         new MultimediaQuestion()
                         {
                             PublicKey = multimediaQuestionId,
                             StataExportCaption = "var1"
                         }
-                    }
-
-                },
-                new SingleQuestion() { PublicKey = questionWhichUsesMultimediaAsLinkSource, LinkedToQuestionId = multimediaQuestionId, StataExportCaption = "var2"});
+                    }),
+                new SingleQuestion()
+                {
+                    PublicKey = questionWhichUsesMultimediaAsLinkSource,
+                    LinkedToQuestionId = multimediaQuestionId,
+                    StataExportCaption = "var2"
+                });
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class EnablementChanges
     {
-        internal EnablementChanges() : this(null, null, null, null, null, null) {}
+        internal EnablementChanges() : this(null, null, null, null, null, null, null, null) {}
 
         public EnablementChanges(
             List<Identity> groupsToBeDisabled,
@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 questionsToBeDisabled,
                 questionsToBeEnabled,
                 null,
+                null, 
+                null, 
                 null) {}
 
         public EnablementChanges(
@@ -26,7 +28,26 @@ namespace WB.Core.SharedKernels.DataCollection
             List<Identity> questionsToBeDisabled,
             List<Identity> questionsToBeEnabled,
             List<Identity> staticTextsToBeDisabled,
-            List<Identity> staticTextsToBeEnabled)
+            List<Identity> staticTextsToBeEnabled): this(
+                groupsToBeDisabled,
+                groupsToBeEnabled,
+                questionsToBeDisabled,
+                questionsToBeEnabled,
+                staticTextsToBeDisabled, staticTextsToBeEnabled, 
+                null, 
+                null)
+        {
+        }
+
+        public EnablementChanges(
+            List<Identity> groupsToBeDisabled,
+            List<Identity> groupsToBeEnabled,
+            List<Identity> questionsToBeDisabled,
+            List<Identity> questionsToBeEnabled,
+            List<Identity> staticTextsToBeDisabled,
+            List<Identity> staticTextsToBeEnabled,
+            List<Identity> variablesToBeDisabled,
+            List<Identity> variablesToBeEnabled)
         {
             this.GroupsToBeDisabled = groupsToBeDisabled ?? new List<Identity>();
             this.GroupsToBeEnabled = groupsToBeEnabled ?? new List<Identity>();
@@ -34,6 +55,8 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionsToBeEnabled = questionsToBeEnabled ?? new List<Identity>();
             this.StaticTextsToBeDisabled = staticTextsToBeDisabled ?? new List<Identity>();
             this.StaticTextsToBeEnabled = staticTextsToBeEnabled ?? new List<Identity>();
+            this.VariablesToBeDisabled= variablesToBeDisabled??new List<Identity>();
+            this.VariablesToBeEnabled= variablesToBeEnabled??new List<Identity>();
         }
 
         public List<Identity> GroupsToBeDisabled { get; }
@@ -42,6 +65,8 @@ namespace WB.Core.SharedKernels.DataCollection
         public List<Identity> QuestionsToBeEnabled { get; }
         public List<Identity> StaticTextsToBeDisabled { get; }
         public List<Identity> StaticTextsToBeEnabled { get; }
+        public List<Identity> VariablesToBeDisabled { get; }
+        public List<Identity> VariablesToBeEnabled { get; }
 
         public static EnablementChanges Union(EnablementChanges first, EnablementChanges second)
             => new EnablementChanges(
@@ -50,7 +75,9 @@ namespace WB.Core.SharedKernels.DataCollection
                 first.QuestionsToBeDisabled.Union(second.QuestionsToBeDisabled, IdentityComparer.Instance).ToList(),
                 first.QuestionsToBeEnabled.Union(second.QuestionsToBeEnabled, IdentityComparer.Instance).ToList(),
                 first.StaticTextsToBeDisabled.Union(second.StaticTextsToBeDisabled, IdentityComparer.Instance).ToList(),
-                first.StaticTextsToBeEnabled.Union(second.StaticTextsToBeEnabled, IdentityComparer.Instance).ToList());
+                first.StaticTextsToBeEnabled.Union(second.StaticTextsToBeEnabled, IdentityComparer.Instance).ToList(),
+                first.VariablesToBeDisabled.Union(second.VariablesToBeDisabled, IdentityComparer.Instance).ToList(),
+                first.VariablesToBeEnabled.Union(second.VariablesToBeEnabled, IdentityComparer.Instance).ToList());
 
         public static EnablementChanges Union(IEnumerable<EnablementChanges> manyChanges)
             => manyChanges.Aggregate(new EnablementChanges(), Union);
@@ -63,6 +90,8 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionsToBeDisabled.Clear();
             this.StaticTextsToBeEnabled.Clear();
             this.StaticTextsToBeDisabled.Clear();
+            this.VariablesToBeDisabled.Clear();
+            this.VariablesToBeEnabled.Clear();
         }
     }
 }

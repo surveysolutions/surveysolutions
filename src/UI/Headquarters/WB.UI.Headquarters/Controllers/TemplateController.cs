@@ -2,11 +2,11 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LoginToDesigner()
         {
-            this.Attention("Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode");
+            this.Attention(QuestionnaireImport.BeforeSignInToDesigner);
             return this.View();
         }
 
@@ -81,11 +81,12 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.Error(
-                        string.Format(
-                            "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
-                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
+
+                    this.Error(string.Format(
+                            QuestionnaireImport.LoginToDesignerError,
+                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
+                    
                 }
             }
 

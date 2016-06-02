@@ -6,9 +6,11 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Properties;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -34,6 +36,35 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly Type[] QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new[]
         {typeof (TextDetailsView), typeof (NumericDetailsView), typeof (DateTimeDetailsView)};
+
+        private static readonly SelectOption[] VariableTypeOptions =
+        {
+            new SelectOption
+            {
+                Value = VariableType.Boolean.ToString(),
+                Text = "Boolean"
+            },
+            new SelectOption
+            {
+                Value = VariableType.Double.ToString(),
+                Text = "Double"
+            },
+            new SelectOption
+            {
+                Value = VariableType.DateTime.ToString(),
+                Text = "Date/Time"
+            },
+            new SelectOption
+            {
+                Value = VariableType.LongInteger.ToString(),
+                Text = "Long Integer"
+            },
+            new SelectOption
+            {
+                Value = VariableType.String.ToString(),
+                Text = "String"
+            }
+        };
 
         private static readonly SelectOption[] QuestionTypeOptions =
         {
@@ -241,6 +272,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
+        public VariableView GetVariableEditView(string questionnaireId, Guid variableId)
+        {
+            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+
+            VariableView result = questionnaire?.Variables?.FirstOrDefault(x => x.Id == variableId);
+            if (result == null)
+                return null;
+
+            result.TypeOptions = VariableTypeOptions;
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, result);
+
+            return result;
+        }
+
         public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id)
         {
             var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
@@ -397,7 +442,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         Id = q.Id.FormatGuid(),
                         Title = q.Title,
                         Breadcrumbs = GetBreadcrumbsAsString(questionsCollection,q),
-                        Type = q.Type.ToString().ToLower()
+                        Type = q.Type.ToString().ToLower(),
+                        VarName = q.VariableName
                     }).ToList();
             return questions;
         }
@@ -411,7 +457,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Id = roster.Id.FormatGuid(),
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = rosterPlaceholder.Title,
-                Type = this.rosterType
+                Type = this.rosterType,
+                VarName = roster.VariableName
             };
             return rosterTitlePlaceholder;
         }
@@ -485,7 +532,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = q.Id.FormatGuid(),
                     Title = q.Title,
                     Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
-                    Type = q.Type.ToString().ToLower()
+                    Type = q.Type.ToString().ToLower(),
+                    VarName = q.VariableName
                 }).ToArray();
 
 
@@ -507,7 +555,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = question.Id,
                     IsSectionPlaceHolder = false,
                     Breadcrumbs = brief.Key,
-                    Type = question.Type
+                    Type = question.Type,
+                    VarName = question.VarName
                 }));
             }
             return result;

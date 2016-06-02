@@ -17,14 +17,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.Children.Add(new TextQuestion() { StataExportCaption = "var" });
-            questionnaire.Children.Add(new Group()
-            {
-                PublicKey = rosterGroupId,
-                IsRoster = true,
-                VariableName = "a",
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new [] { "fixed title 1" }
-            });
+            questionnaire.Children.Add(
+                   Create.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] { "fixed title 1" }, variable:"a"));
             verifier = CreateQuestionnaireVerifier();
         };
 

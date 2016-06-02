@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Resources;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -39,7 +38,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ICommandPostprocessor commandPostprocessor;
@@ -49,7 +48,7 @@ namespace WB.UI.Designer.Controllers
             ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 

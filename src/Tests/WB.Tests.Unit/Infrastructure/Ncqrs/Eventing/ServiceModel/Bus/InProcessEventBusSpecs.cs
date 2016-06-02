@@ -33,12 +33,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
         private static IPublishableEvent CreateAEvent()
         {
-            return Create.PublishableEvent(payload: new AEvent());
+            return Create.Other.PublishableEvent(payload: new AEvent());
         }
 
         private static IPublishableEvent CreateADomainEvent()
         {
-            return Create.PublishableEvent(payload: new ADomainEvent());
+            return Create.Other.PublishableEvent(payload: new ADomainEvent());
         }
 
         [Test]
@@ -201,7 +201,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         {
             var eventSourceToIgnore = Guid.NewGuid();
 
-            var eventToPublish = Create.PublishableEvent(eventSourceId: eventSourceToIgnore, payload: new AEvent());
+            var eventToPublish = Create.Other.PublishableEvent(eventSourceId: eventSourceToIgnore, payload: new AEvent());
             
             var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<IEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(),

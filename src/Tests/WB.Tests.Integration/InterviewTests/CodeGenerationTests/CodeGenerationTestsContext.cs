@@ -159,7 +159,11 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             {
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"}
+                FixedRosterTitles = new[]
+                                          {
+                                              Create.FixedRosterTitle(1, "Roster X-1"),
+                                              Create.FixedRosterTitle(2, "Roster X-2")
+                                          }
             };
 
             foreach (var varName in varNames)
@@ -205,7 +209,11 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                             {
                                 IsRoster = true,
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"},
+                                FixedRosterTitles =   new[]
+                                          {
+                                              Create.FixedRosterTitle(1, "Roster X-1"),
+                                              Create.FixedRosterTitle(2, "Roster X-2")
+                                          },
                                 Children = new List<IComposite>()
                                 {
                                     new TextQuestion("Text")

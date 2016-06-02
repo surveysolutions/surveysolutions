@@ -3,8 +3,8 @@ using System.Net.Http;
 using System.Web.Http.Controllers;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests

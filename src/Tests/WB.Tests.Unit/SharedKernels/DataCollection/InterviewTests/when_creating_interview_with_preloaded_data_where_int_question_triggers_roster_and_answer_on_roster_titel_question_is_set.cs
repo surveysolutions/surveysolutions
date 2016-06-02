@@ -53,13 +53,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.DoesQuestionSpecifyRosterTitle(rosterTitleQuestionId) == true
                    && _.GetRostersAffectedByRosterTitleQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId });
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId, null);
 
         Cleanup stuff = () =>
         {

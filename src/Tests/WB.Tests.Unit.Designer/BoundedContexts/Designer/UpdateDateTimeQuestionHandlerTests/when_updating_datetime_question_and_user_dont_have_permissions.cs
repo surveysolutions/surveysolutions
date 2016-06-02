@@ -42,7 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: notExistinigUserId,
-                    validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties()));
+                    validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties(),
+                    isTimestamp: false));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

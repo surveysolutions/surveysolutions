@@ -3,9 +3,9 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests

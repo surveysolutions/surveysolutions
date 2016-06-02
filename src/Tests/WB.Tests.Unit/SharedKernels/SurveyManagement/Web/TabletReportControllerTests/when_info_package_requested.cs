@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
 
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControlle
         Establish context = () =>
         {
             var tabletInformationService = new Mock<ITabletInformationService>();
-            tabletInformationService.Setup(x => x.GetPackageNameWithoutRegistrationId(packageName)).Returns(packageName);
+            tabletInformationService.Setup(x => x.GetFileName(packageName, Moq.It.IsAny<string>())).Returns(packageName);
             tabletInformationService.Setup(x => x.GetFullPathToContentFile(packageName)).Returns(packageName);
 
             tabletReportController = CreateTabletReportController(tabletInformationService.Object);

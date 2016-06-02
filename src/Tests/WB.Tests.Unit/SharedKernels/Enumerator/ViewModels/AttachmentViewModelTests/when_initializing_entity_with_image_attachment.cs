@@ -24,10 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentContentId = "cccccc";
-            var attachment = Create.Attachment(attachmentContentId);
-            attachmentContentMetadata = Create.AttachmentContentMetadata("image/png");
-            attachmentContentData = Create.AttachmentContentData(new byte[] { 1, 2, 3 });
-            var questionnaireIdentity = Create.QuestionnaireIdentity(Guid.NewGuid());
+            var attachment = Create.Entity.Attachment(attachmentContentId);
+            attachmentContentMetadata = Create.Entity.AttachmentContentMetadata("image/png");
+            attachmentContentData = Create.Entity.AttachmentContentData(new byte[] { 1, 2, 3 });
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ 
                 => _.GetAttachmentForEntity(entityId) == attachment);
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
                 s.GetMetadata(attachmentContentId) == attachmentContentMetadata
                 && s.GetContent(attachmentContentId) == attachmentContentData.Content);
 
-            viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
+            viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));

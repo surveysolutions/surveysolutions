@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.LinkedOptionsDenormalizerTests
 {
@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.LinkedOptio
         {
             LinkedOptionsDenormalizer linkedOptionsDenormalizer = CreateLinkedOptionsDenormalizer();
             var linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var linkedQuestionIdentity = Create.Identity(linkedQuestionId, RosterVector.Empty);
+            var linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
             var changedLinkedOptions = new ChangedLinkedOptions(linkedQuestionIdentity,
                 new[]
                 {
-                    Create.RosterVector(1),
-                    Create.RosterVector(2)
+                    Create.Entity.RosterVector(1),
+                    Create.Entity.RosterVector(2)
                 });
             var updatedInterviewLinkedQuestionOptions = linkedOptionsDenormalizer.Update(new InterviewLinkedQuestionOptions(),
                 Create.Event.LinkedOptionsChanged(new[]{changedLinkedOptions}).ToPublishedEvent());

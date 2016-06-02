@@ -3,12 +3,13 @@ using System;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Tests.Unit.TestFactories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -37,6 +38,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 // assert
                 Assert.Throws<QuestionnaireException>(act);
             }
+        }
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_execute_DeleteQuestionnaire_command()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Guid questionnaireId = Guid.NewGuid() ;
+            long questionnaireVersion = 7;
+
+            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter();
+            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r => 
+                r.GetQuestionnaireDocument(questionnaireId, questionnaireVersion) == questionnaireDocument);
+            var questionnaireBrowseItem = new EntityFactory().QuestionnaireBrowseItem(questionnaireId, questionnaireVersion);
+            var questionnaireBrowseItemAccessor = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(a =>
+                a.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem);
+
+            var questionnaire = Create.AggregateRoot.Questionnaire(
+                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                questionnaireBrowseItemStorage: questionnaireBrowseItemAccessor);
+
+            questionnaire.DisableQuestionnaire(Create.Command.DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId));
+            questionnaire.DeleteQuestionnaire(Create.Command.DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId));
+
+            // assert
+            Assert.AreEqual(questionnaireDocument.IsDeleted, true);
+            Assert.AreEqual(questionnaireBrowseItem.IsDeleted, true);
         }
 
         [Test]

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Machine.Specifications.It;
 

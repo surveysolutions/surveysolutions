@@ -79,7 +79,6 @@
                                 {
                                     <li class="divider"></li>
                                     <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
-                                    <li>@Html.ActionLink("Print", "PrintPreview", "Pdf", routevalues, null)</li>
                                 }
                                 if (actionModel.CanSynchronize)
                                 {
@@ -123,7 +122,7 @@
             @{
                 if (isTableSortedByThisField)
                 {
-                    <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "bottom" : "top")"></span>
                 }
             }
         </a>

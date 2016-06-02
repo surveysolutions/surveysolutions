@@ -384,12 +384,15 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Diagnostics</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>{0:N0} meters</value>
+    <value>Number of meters to set accuracy</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
     <value>Desired accuracy of GPS questions</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Show instruction</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Tap to record current time</value>
   </data>
 </root>

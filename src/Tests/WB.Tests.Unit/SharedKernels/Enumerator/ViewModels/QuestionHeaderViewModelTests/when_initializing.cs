@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 => _.GetQuestionTitle(substitutionTargetId) == "title with %subst%"
                 && _.GetQuestionInstruction(substitutionTargetId) == "Instruction"
                 && _.GetQuestionIdByVariable("blah") == substitutionTargetId
-                && _.GetQuestionIdByVariable("subst") == substitutedQuesiton);
+                && _.GetQuestionIdByVariable("subst") == substitutedQuesiton
+                && _.HasQuestion("subst") == true);
 
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();

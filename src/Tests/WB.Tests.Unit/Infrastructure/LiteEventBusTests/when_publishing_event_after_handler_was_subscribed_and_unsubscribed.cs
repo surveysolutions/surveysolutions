@@ -12,13 +12,13 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
     {
         Establish context = () =>
         {
-            liteEventRegistry = Create.LiteEventRegistry();
-            eventBus = Create.LiteEventBus(liteEventRegistry);
+            liteEventRegistry = Create.Service.LiteEventRegistry();
+            eventBus = Create.Service.LiteEventBus(liteEventRegistry);
             eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
             handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
             liteEventRegistry.Subscribe(handlerMock.Object, "id");
-            liteEventRegistry.Unsubscribe(handlerMock.Object, "id");
+            liteEventRegistry.Unsubscribe(handlerMock.Object);
         };
 
         Because of = () =>

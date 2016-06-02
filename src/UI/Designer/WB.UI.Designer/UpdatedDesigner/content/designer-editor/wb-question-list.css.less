@@ -21,12 +21,12 @@
         }
     }
 }
-
+@icon-dim: 30px;
 .icon {
     width: 20px;
     height: 20px;
-    background: url(../i/icons.png);
-    background-position-x: 0px;
+    background: url(../i/icons1.png);
+    background-position-x: 0;
     overflow: hidden;
 }
 
@@ -35,111 +35,119 @@
 }
 
 .icon-text {
-    background-position: 0 -30px;
+    background-position: 0 -@icon-dim;
 }
 
 .icon-singleoption {
-    background-position: 0 -60px;
+    background-position: 0 -2*@icon-dim;
 }
 
 .icon-multyoption {
-    background-position: 0 -90px;
+    background-position: 0 -3*@icon-dim;
 }
 
 .icon-datetime {
-    background-position: 0 -120px;
+    background-position: 0 -4*@icon-dim;
 }
 
 .icon-gpscoordinates {
-    background-position: 0 -150px;
+    background-position: 0 -5*@icon-dim;
 }
 
 .icon-qrbarcode {
-    background-position: 0 -180px;
+    background-position: 0 -6*@icon-dim;
 }
 
 .icon-textlist {
-    background-position: 0 -210px;
+    background-position: 0 -7*@icon-dim;
 }
 
 .icon-photo {
-    background-position: 0 -270px;
+    background-position: 0 -9*@icon-dim;
 }
 
 .icon-multimedia {
-    background-position: 0 -270px;
+    background-position: 0 -9*@icon-dim;
 }
 
 .icon-statictext {
-    background-position: 0 -300px;
+    background-position: 0 -10*@icon-dim;
 }
 
 .icon-macro {
-    background-position: 0 -388px;
+    background-position: 0 -13*@icon-dim;
 }
 
 .icon-lookup {
-    background-position: 0 -413px;
+    background-position: 0 -14*@icon-dim;
 }
 
 .icon-attachment {
-    background-position: 0 -442px;
+    background-position: 0 -15*@icon-dim;
 }
+
+.icon-variable {
+    background-position: 0 -16*@icon-dim;
+}
+
 
 .icon-error {
     &.icon-numeric {
-        background-position: -30px 0;
+        background-position: -@icon-dim 0;
     }
 
     &.icon-text {
-        background-position: -30px -30px;
+        background-position: -@icon-dim -@icon-dim;
     }
 
     &.icon-singleoption {
-        background-position: -30px -60px;
+        background-position: -@icon-dim -2*@icon-dim;
     }
 
     &.icon-multyoption {
-        background-position: -30px -90px;
+        background-position: -@icon-dim -3*@icon-dim;
     }
 
     &.icon-datetime {
-        background-position: -30px -120px;
+        background-position: -@icon-dim -4*@icon-dim;
     }
 
     &.icon-gpscoordinates {
-        background-position: -30px -150px;
+        background-position: -@icon-dim -5*@icon-dim;
     }
 
     &.icon-qrbarcode {
-        background-position: -30px -180px;
+        background-position: -@icon-dim -6*@icon-dim;
     }
 
     &.icon-textlist {
-        background-position: -30px -210px;
+        background-position: -@icon-dim -7*@icon-dim;
     }
 
     &.icon-photo {
-        background-position: -30px -270px;
+        background-position: -@icon-dim -9*@icon-dim;
     }
 
     &.icon-multimedia {
-        background-position: -30px -270px;
+        background-position: -@icon-dim -9*@icon-dim;
     }
 
     &.icon-statictext {
-        background-position: -30px -300px;
+        background-position: -@icon-dim -10*@icon-dim;
     }
 
     &.icon-macro {
-        background-position: -30px -388px;
+        background-position: -@icon-dim -13*@icon-dim;
     }
 
     &.icon-lookup {
-        background-position: -30px -413px;
+        background-position: -@icon-dim -14*@icon-dim;
     }
 
     &.icon-attachment {
-        background-position: -30px -442px;
+        background-position: -@icon-dim -15*@icon-dim;
+    }
+    &.icon-variable {
+        background-position: -@icon-dim -16*@icon-dim;
     }
 }

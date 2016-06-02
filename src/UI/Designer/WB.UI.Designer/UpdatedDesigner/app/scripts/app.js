@@ -71,6 +71,14 @@
                         controller: 'GroupCtrl'
                     }
                 }
+            }).state('questionnaire.chapter.variable', {
+                url: "/variable/{itemId}",
+                views: {
+                    '': {
+                        templateUrl: 'views/variable.html',
+                        controller: 'VariableCtrl'
+                    }
+                }
             }).state('questionnaire.chapter.roster', {
                 url: "/roster/{itemId}",
                 views: {

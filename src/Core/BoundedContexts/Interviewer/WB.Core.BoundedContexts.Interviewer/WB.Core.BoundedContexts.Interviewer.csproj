@@ -53,23 +53,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.1.6\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.1.6\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.File, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.File.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.File.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.File.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.File.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Network, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Network.4.0.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Network.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Network.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Network.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -79,20 +79,12 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Nito.AsyncEx, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.0\lib\portable-net45+netcore45+wpa81+MonoTouch+MonoAndroid\Nito.AsyncEx.dll</HintPath>
+    <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.0\lib\portable-net45+netcore45+wpa81+MonoTouch+MonoAndroid\Nito.AsyncEx.Concurrent.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.Concurrent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -143,6 +135,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.vi-VN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.vi-VN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\InterviewerUIResources.zh-CN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,14 +163,8 @@
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalOption.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedItem.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\GpsCoordinatesViewModel.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\QuestionnaireDTO.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\SurveyDTO.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
-    <Compile Include="Views\InterviewEventHandler.cs" />
+    <Compile Include="Views\InterviewerDashboardEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
@@ -260,6 +251,10 @@
       <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.vi-VN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.zh-CN.Designer.cs</LastGenOutput>

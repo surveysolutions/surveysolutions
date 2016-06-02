@@ -13,7 +13,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 	$ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 	$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
-	$ProjectSupervisor = 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj'
 
 	$versionString = (GetVersionString 'src\core')
 	UpdateProjectVersion $BuildNumber -ver $versionString
@@ -51,17 +50,12 @@ try {
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	RunConfigTransform $ProjectSupervisor $BuildConfiguration
-	CopyCapi -Project $ProjectSupervisor -source $PackageName
-	BuildWebPackage $ProjectSupervisor $BuildConfiguration | %{ if (-not $_) { Exit } }
-
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
 	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-	AddArtifacts $ProjectSupervisor $BuildConfiguration -folder "Supervisor"
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }

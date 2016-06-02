@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessages {
+    public class ErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user name or password provided is incorrect..
+        /// </summary>
+        public static string IncorrectUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("IncorrectUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
-        internal static string Questionnaire_verification_failed {
+        public static string Questionnaire_verification_failed {
             get {
                 return ResourceManager.GetString("Questionnaire_verification_failed", resourceCulture);
             }
@@ -72,7 +81,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Please, check your internet connection..
         /// </summary>
-        internal static string RequestTimeout {
+        public static string RequestTimeout {
             get {
                 return ResourceManager.GetString("RequestTimeout", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Internal server error occurred. Please contact with customer support of Survey Solutions..
         /// </summary>
-        internal static string ServerError {
+        public static string ServerError {
             get {
                 return ResourceManager.GetString("ServerError", resourceCulture);
             }
@@ -90,16 +99,25 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Server is unavailable.  Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
         /// </summary>
-        internal static string ServiceUnavailable {
+        public static string ServiceUnavailable {
             get {
                 return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have no access to this site. Contact your administrator..
+        /// </summary>
+        public static string SiteAccessNotAllowed {
+            get {
+                return ResourceManager.GetString("SiteAccessNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; cannot be found. Please refresh the list of questionnaires..
         /// </summary>
-        internal static string TemplateNotFound {
+        public static string TemplateNotFound {
             get {
                 return ResourceManager.GetString("TemplateNotFound", resourceCulture);
             }

@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var linkedAnswerRosterVector = new decimal[]{1, 1};
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(secondRosterTitlQuestionId, Arg.Any<Identity>())
                 .Returns(new List<BaseInterviewAnswer> {
-                    Create.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
-                    Create.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
-                    Create.TextAnswer("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
-                    Create.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
+                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
+                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
+                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
+                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
                 });
 
             interview.GetParentRosterTitlesWithoutLast(secondRosterTitlQuestionId, linkedAnswerRosterVector)
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel = CreateViewModel(questionnaire, interview);
         };
 
-        Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.NavigationState());
+        Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.Other.NavigationState());
 
         It should_substitute_titles_from_both_questions = () => questionViewModel.Options.First().Title.ShouldEqual("nastya: hamster");
 

@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
+            List<CommittedEvent> storedEvents = this.eventStore.Read(interviewId, 0).ToList();
 
             var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
 

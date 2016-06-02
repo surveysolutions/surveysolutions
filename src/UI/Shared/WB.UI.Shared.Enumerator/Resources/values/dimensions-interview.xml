@@ -58,8 +58,11 @@
   <dimen name="Interview_Comments_Details_margin_bottom">16dp</dimen>
 
   <dimen name="Interview_Question_YesNo_paddingLeft">25dp</dimen>
+
+  <dimen name="Interview_Question_QR_width">410dp</dimen>
   
   <dimen name="Interview_Question_TextAnswer_margin_top">8dp</dimen>
+  <dimen name="Interview_Question_TimestampAnswer_margin_top">15dp</dimen>
   <dimen name="Interview_Question_TextAnswer_margin_bottom">28dp</dimen>
 
   <dimen name="Interview_Question_InputButton_padding">16dp</dimen>

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var questionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.InterviewView();
+            dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
 
             @event = Create.Event.YesNoQuestionAnswered(questionId, new AnsweredYesNoOption[0]).ToPublishedEvent();
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
                 r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_interview_be_strated = () =>
             dashboardItem.StartedDateTime.ShouldNotBeNull();
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<YesNoQuestionAnswered> @event;
         private static InterviewView dashboardItem;
     }

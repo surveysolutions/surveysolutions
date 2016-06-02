@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamUsersAndQuestionnairesFactoryTests
 {
@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamUsersAndQuestionnaire
         Establish context = () =>
         {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = new TestPlainStorage<QuestionnaireBrowseItem>();
-            var questionnaireBrowseItem = Create.QuestionnaireBrowseItem();
+            var questionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem();
             questionnaireBrowseItem.IsDeleted = true;
             questionnaires.Store(questionnaireBrowseItem, "id");
             viewFactory = CreateViewFactory(questionnaires);

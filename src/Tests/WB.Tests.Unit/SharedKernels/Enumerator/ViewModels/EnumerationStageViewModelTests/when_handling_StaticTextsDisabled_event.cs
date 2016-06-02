@@ -39,14 +39,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             var mvxMainThreadDispatcher = Stub.MvxMainThreadDispatcher();
             Setup.InstanceToMockedServiceLocator<IMvxMainThreadDispatcher>(mvxMainThreadDispatcher);
 
-            viemModel = Create.EnumerationStageViewModel(
+            viemModel = Create.ViewModel.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
                 interviewViewModelFactory: interviewViewModelFactory,
                 interviewRepository: interviewRepository,
                 mvxMainThreadDispatcher: mvxMainThreadDispatcher);
 
             var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
-            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
+            viemModel.Init(interviewId, Create.Other.NavigationState(), groupId, null);
             (viemModel.Items as INotifyCollectionChanged).CollectionChanged += (s, e) =>
             {
                 if (e.Action == NotifyCollectionChangedAction.Replace)
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             updateItemCollection.WaitOne(TimeSpan.FromMilliseconds(100)).ShouldBeTrue();
 
         private static EnumerationStageViewModel viemModel;
-        private static Identity disabledAndNotHideIfDisabledStaticText = Create.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
+        private static Identity disabledAndNotHideIfDisabledStaticText = Create.Entity.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 99);
         private static string interviewId = "11111111111111111111111111111111";
         private static readonly ManualResetEvent updateItemCollection = new ManualResetEvent(false);

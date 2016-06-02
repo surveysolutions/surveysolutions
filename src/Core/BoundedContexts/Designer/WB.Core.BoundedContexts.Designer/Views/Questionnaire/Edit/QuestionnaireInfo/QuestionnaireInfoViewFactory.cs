@@ -14,25 +14,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IAttachmentService attachmentService;
 
         public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons,
+            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
             IAttachmentService attachmentService)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.sharedPersons = sharedPersons;
+            this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;
             this.attachmentService = attachmentService;
         }
 
-        public QuestionnaireInfoView Load(string questionnaireId, Guid personId)
+        public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
         {
             QuestionnaireInfoView questionnaireInfoView = this.questionnaireStorage.GetById(questionnaireId);
 
@@ -65,35 +65,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var sharedPersonsList = new List<SharedPerson>();
-
-            QuestionnaireSharedPersons questionnaireSharedPersons = sharedPersons.GetById(questionnaireId);
-            if (questionnaireSharedPersons != null)
-            {
-                sharedPersonsList = questionnaireSharedPersons.SharedPersons;
-            }
-
-            if (questionnaireDocument.CreatedBy.HasValue)
+            var sharedPersons = this.sharedPersonsStorage.GetById(questionnaireId)?.SharedPersons ?? new List<SharedPerson>();
+            
+            if (questionnaireDocument.CreatedBy.HasValue &&
+                sharedPersons.All(x => x.Id != questionnaireDocument.CreatedBy))
             {
                 var owner = accountsDocumentReader.GetById(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
-                    sharedPersonsList.Insert(0,
-                        new SharedPerson() { Email = owner.Email, Id = questionnaireDocument.CreatedBy.Value, IsOwner = true });
+                    sharedPersons.Insert(0, new SharedPerson
+                    {
+                        Email = owner.Email,
+                        Id = questionnaireDocument.CreatedBy.Value,
+                        IsOwner = true
+                    });
                 }
             }
 
-            var person = sharedPersonsList.FirstOrDefault(x => x.Id == personId);
+            var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.Id == viewerId);
 
-            if (person != null)
-            {
-                questionnaireInfoView.SharedPersons = sharedPersonsList;
-                questionnaireInfoView.IsReadOnlyForUser = !person.IsOwner && person.ShareType != 0;
-            }
-            else
-            {
-                questionnaireInfoView.IsReadOnlyForUser = true;
-            }
+            questionnaireInfoView.SharedPersons = sharedPersons;
+            questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros

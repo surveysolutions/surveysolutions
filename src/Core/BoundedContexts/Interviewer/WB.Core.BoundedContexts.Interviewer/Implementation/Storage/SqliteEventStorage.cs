@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Ncqrs.Eventing;
@@ -10,7 +10,6 @@ using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -26,12 +25,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
             ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor,
             ITraceListener traceListener, 
             SqliteSettings settings, 
             IEnumeratorSettings enumeratorSettings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
+            string pathToDatabase = settings.PathToDatabaseDirectory;
+            if (pathToDatabase != ":memory:")
+            {
+                pathToDatabase = Path.Combine(settings.PathToDatabaseDirectory, "events-data.sqlite3");
+            }
+
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, 
                     new BlobSerializerDelegate(
@@ -115,8 +118,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var expectedVersion = eventStream.InitialVersion;
             if (expectedVersion == 0)
             {
-                var views = this.connection.Table<EventView>().Where(x => x.EventSourceId == eventStream.SourceId).ToList();
-                if (views.Count > 0)
+                var viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                if (viewExists)
                 {
                     var errorMessage = $"Wrong version number. Expected to store new event stream, but it already exists. EventStream Id: {eventStream.SourceId}";
                     this.logger.Error(errorMessage);
@@ -125,7 +128,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             else
             {
-                var commandText = string.Format("SELECT MAX({0}) FROM {1} WHERE {2} = ?", nameof(EventView.EventSequence), nameof(EventView), nameof(EventView.EventSourceId));
+                var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
                 var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
                 int currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
 
@@ -144,27 +147,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             try
             {
                 this.connection.BeginTransaction();
-
-                var eventViews = this.connection.Table<EventView>().Where(x => x.EventSourceId == interviewId);
-                foreach (var eventView in eventViews)
-                {
-                    this.connection.Delete(eventView);
-                }
+                var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+                var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
+                sqLiteCommand.ExecuteNonQuery();
                 this.connection.Commit();
             }
             catch
             {
                 this.connection.Rollback();
                 throw;
-            }
-        }
-
-        [Obsolete("Remove when all clients are upgraded to 5.5")]
-        public void MigrateOldEvents(IEnumerable<EventView> eventViews)
-        {
-            foreach (var eventView in eventViews)
-            {
-                this.connection.Insert(eventView);
             }
         }
 
@@ -178,7 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings));
+                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings()));
         }
 
         private CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
@@ -203,7 +194,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings)
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings())
             };
         }
 
@@ -212,7 +203,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.connection.Dispose();
         }
 
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        internal static Func<JsonSerializerSettings> JsonSerializerSettings = () => new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All,
             NullValueHandling = NullValueHandling.Ignore,
@@ -221,7 +212,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         };
 
         [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
-        private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
+        internal class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)
             {

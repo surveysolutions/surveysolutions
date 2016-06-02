@@ -22,10 +22,18 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using NHibernate.Transform;
 using Npgsql;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -46,22 +54,16 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -479,7 +481,9 @@ namespace WB.Tests.Integration
             {
                 if (fixedRosterTitles == null)
                 {
-                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                    group.FixedRosterTitles =
+                        (fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
+                            (x, i) => Create.FixedRosterTitle(i, x)).ToArray();
                 }
                 else
                 {
@@ -519,7 +523,11 @@ namespace WB.Tests.Integration
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(), 
                 new QuestionnaireRosterStructureFactory(),
-                Mock.Of<IExportViewFactory>());
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
+                Mock.Of<IFileSystemAccessor>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
@@ -801,5 +809,53 @@ namespace WB.Tests.Integration
         }
 
         public static RosterVector RosterVector(params decimal[] coordinates) => new RosterVector(coordinates);
+
+        public static DesignerEngineVersionService DesignerEngineVersionService()
+            => new DesignerEngineVersionService();
+
+        public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
+            ISessionProvider sessionProvider = null, string idColumnName = "Id")
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new PostgreReadSideStorage<TEntity>(
+                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                Mock.Of<ILogger>(), idColumnName);
+        }
+
+        public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
+        }
+
+        public static ChangedVariable ChangedVariableValueDto(Guid? variableId=null, RosterVector vector=null, object value=null)
+        {
+            return new ChangedVariable(Create.Identity(variableId ?? Guid.NewGuid(), vector?? new RosterVector(new decimal[0])), value);
+        }
+
+        public static InterviewSummary InterviewSummary(
+         Guid? interviewId = null,
+         Guid? questionnaireId = null,
+         long? questionnaireVersion = null,
+         InterviewStatus? status = null,
+         Guid? responsibleId = null,
+         Guid? teamLeadId = null,
+         string responsibleName = null,
+         string teamLeadName = null,
+         UserRoles role = UserRoles.Operator)
+        {
+            return new InterviewSummary()
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Status = status.GetValueOrDefault(),
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
+                TeamLeadId = teamLeadId.GetValueOrDefault(),
+                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                ResponsibleRole = role
+            };
+        }
     }
 }

@@ -76,6 +76,8 @@
 
                 $scope.activeQuestion.validationConditions = question.validationConditions;
 
+                $scope.activeQuestion.isTimestamp = question.isTimestamp;
+
                 var options = question.options || [];
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
@@ -169,7 +171,7 @@
                     });
                 }
             };
-            
+
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
                 if (actualQuestion.type !== "SingleOption" || actualQuestion.type !== "MultyOption")
                     return false;
@@ -392,6 +394,13 @@
                         $scope.activeQuestion.cascadeFromQuestion = null;
                     }
                 }
+            });
+
+            $scope.$on('verifing', function (scope, params) {
+                if ($scope.questionForm.$dirty)
+                    $scope.saveQuestion(function() {
+                        $scope.questionForm.$setPristine();
+                    });
             });
 
             $scope.setLinkSource = function (itemId, linkedFilterExpression) {

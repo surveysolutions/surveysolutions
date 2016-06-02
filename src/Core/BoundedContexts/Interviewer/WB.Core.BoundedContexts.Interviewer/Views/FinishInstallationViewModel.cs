@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 #if DEBUG
             this.Endpoint = "http://192.168.88.39/Headquarters";
             this.UserName = "int";
-            this.Password = "1";
+            this.Password = "q";
 #endif
 
             return Task.FromResult(true);

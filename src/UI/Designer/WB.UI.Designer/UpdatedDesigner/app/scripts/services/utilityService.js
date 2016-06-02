@@ -124,6 +124,17 @@
                     return emptyStaticText;
                 };
 
+                utilityService.createEmptyVariable = function (parent) {
+                    var newId = utilityService.guid();
+                    var emptyVariable = {
+                        itemId: newId,
+                        itemType: 'Variable',
+                        variableData: {},
+                        getParentItem: function () { return parent; }
+                    };
+                    return emptyVariable;
+                };
+
                 utilityService.isTreeItemVisible = function (item) {
                     var viewport = {
                         top: $(".questionnaire-tree-holder > .scroller").offset().top,

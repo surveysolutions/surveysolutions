@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -28,12 +29,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public int RostersCount { get; set; } = 0;
             public int QuestionsCount { get; set; } = 0;
             public int StaticTextsCount { get; set; } = 0;
+            public int VariablesCount { get; set; } = 0;
         }
 
         public class QuestionnaireStatistics : GroupStatistics
         {
             public int SectionsCount { get; set; } = 0;
-            public int QuestionsWithConditionsCount { get; set; } = 0;
+            public int QuestionsWithEnablingConditionsCount { get; set; } = 0;
+            public int QuestionsWithValidationConditionsCount { get; set; } = 0;
         }
 
         public class EntityWithLongCondition
@@ -77,6 +80,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<EntityWithLongValidation> ItemsWithLongValidations { get; internal set; }
 
         public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; }
+
+        public List<IVariable> VariableWithLongExpressions { get; internal set; }
 
         public string Title => this.questionnaire.Title;
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
@@ -126,6 +131,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return text != null;
         }
 
+        public bool IsVariable(IComposite item)
+        {
+            var variable = item as IVariable;
+            return variable != null;
+        }
+
         public string GetBreadcrumbsForGroup(Guid groupId)
         {
             var parents = this.GetAllParentGroupsStartingFromBottom(this.Find<Group>(groupId), this.questionnaire).ToList();
@@ -163,8 +174,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     statistics.RostersCount++;
                 else if (this.IsGroup(item))
                     statistics.GroupsCount++;
-                else
+                else if (this.IsStaticText(item))
                     statistics.StaticTextsCount++;
+                else if (this.IsVariable(item))
+                    statistics.VariablesCount++;
             }
             return statistics;
         }
@@ -272,6 +285,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
+        public string GetFormattedVariableType(IVariable variable)
+        {
+            switch (variable.Type)
+            {
+                case VariableType.String:
+                    return "string";
+                case VariableType.Boolean:
+                    return "boolean";
+                case VariableType.DateTime:
+                    return "datetime";
+                case VariableType.Double:
+                    return "double";
+                case VariableType.LongInteger:
+                    return "long";
+                default:
+                    return string.Empty;
+            }
+        }
+
         private string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
         {
             var maxValue = values.Select(x => Math.Floor(Math.Log10(Math.Abs(x)) + 1)).Max();
@@ -282,26 +314,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public string GetQuestionInstructionExcerpt(IQuestion question) =>
             question.Instructions.Substring(0, Math.Min(this.Settings.InstructionsExcerptLength, question.Instructions.Length));
 
+        public string GetVariableExpressionExcerpt(IVariable variable) =>
+            variable.Expression?.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, variable.Expression.Length));
+
         public bool InstructionIsTooLong(IQuestion question) =>
             question.Instructions?.Length > this.Settings.InstructionsExcerptLength;
 
-        public int GetEntityIndexInAppendix(Guid questionId, string appendix)
+        public bool VariableExpressionIsTooLong(IVariable variable) =>
+            variable.Expression?.Length > this.Settings.VariableExpressionExcerptLength;
+
+        public int GetEntityIndexInAppendix(Guid entityId, string appendix)
         {
             switch (appendix)
             {
                 case "E":
-                    return this.ItemsWithLongConditions.Single(x => x.Id == questionId).Index;
+                    return this.ItemsWithLongConditions.Single(x => x.Id == entityId).Index;
                 case "V":
-                    return this.ItemsWithLongValidations.Single(x => x.Id == questionId).Index;
+                    return this.ItemsWithLongValidations.Single(x => x.Id == entityId).Index;
                 case "I":
                 {
-                    var question = Find<IQuestion>(questionId);
+                    var question = Find<IQuestion>(entityId);
                     return  QuestionsWithLongInstructions.IndexOf(question) + 1;
                 }
                 case "O":
                 {
-                    var question = Find<IQuestion>(questionId);
+                    var question = Find<IQuestion>(entityId);
                     return QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                }
+                case "VE":
+                {
+                    return this.VariableWithLongExpressions.FindIndex(x => x.PublicKey == entityId) + 1;
                 }
             }
             return -1;
@@ -318,6 +360,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetOptionsRef(Guid id) => $"options-{id.FormatGuid()}";
 
+        public string GetVariableRef(Guid id) => $"variables-{id.FormatGuid()}";
+
         public string GetItemRef(Guid id) => $"{id.FormatGuid()}";
 
         public bool IsYesNoMultiQuestion(IQuestion question) => (question as MultyOptionsQuestion)?.YesNoView ?? false;
@@ -328,5 +372,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool StaticTextHasAttachedImage(IStaticText staticText) => !string.IsNullOrWhiteSpace(staticText.AttachmentName) &&
                                                                           this.questionnaire.Attachments.Any(x => x.Name == staticText.AttachmentName);
+
+        public string GetQuestionScope(IQuestion question)
+        {
+            if (question.QuestionScope == QuestionScope.Interviewer && question.Featured)
+            {
+                return "prefilled";
+            }
+            return question.QuestionScope.ToString();
+        }
+
+        public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
+
+        public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
+        public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
+        public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;
+        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
+        public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
+
+        public char ConditionsAppendixIndex => 'A';
+        public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);
+        public char InstructionsAppendixIndex => IsValidationsAppendixEmpty ? ValidationsAppendixIndex : (char)(ValidationsAppendixIndex + 1);
+        public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
+        public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
     }
 }

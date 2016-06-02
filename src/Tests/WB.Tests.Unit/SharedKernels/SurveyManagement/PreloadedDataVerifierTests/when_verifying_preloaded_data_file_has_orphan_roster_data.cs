@@ -7,12 +7,12 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -24,13 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var rosterId = Guid.NewGuid();
             questionnaire =
-                CreateQuestionnaireDocumentWithOneChapter(new Group(rosterTitle)
-                {
-                    IsRoster = true,
-                    PublicKey = rosterId,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a" }
-                });
+                CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterId,
+                    fixedTitles: new[] {"a"}, title: rosterTitle));
             questionnaire.Title = questionnaireTitle;
             preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id" }, new string[0][],
                 questionnaireTitle + ".csv");

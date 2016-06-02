@@ -21,8 +21,8 @@ namespace WB.UI.Designer.Api
     {
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
@@ -31,8 +31,8 @@ namespace WB.UI.Designer.Api
         public ImportControllerBase(
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
+            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper, 

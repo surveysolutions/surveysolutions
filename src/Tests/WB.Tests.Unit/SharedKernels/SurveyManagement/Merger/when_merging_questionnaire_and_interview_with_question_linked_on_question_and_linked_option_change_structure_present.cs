@@ -5,10 +5,10 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -29,63 +29,63 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire =
-                Create.QuestionnaireDocumentWithOneChapter(children:
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children:
                     new IComposite[]
                     {
-                        Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: linkedQuestionSourceId,
+                        Create.Entity.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: linkedQuestionSourceId,
                             variable: "link"),
-                        Create.SingleQuestion(id: linkedOnNestedRosterQuestionId,
+                        Create.Entity.SingleQuestion(id: linkedOnNestedRosterQuestionId,
                             linkedToQuestionId: linkedOnNestedRosterQuestionSourceId,
                             variable: "nestedlink"),
-                        Create.Roster(rosterId: rosterId, variable: "ros",
+                        Create.Entity.Roster(rosterId: rosterId, variable: "ros",
                             children:
                                 new IComposite[]
                                 {
-                                    Create.Roster(rosterId: nestedRosterId, variable: "ros1", children:
+                                    Create.Entity.Roster(rosterId: nestedRosterId, variable: "ros1", children:
                                         new[]
                                         {
-                                            Create.TextQuestion(questionId: linkedOnNestedRosterQuestionSourceId,
+                                            Create.Entity.TextQuestion(questionId: linkedOnNestedRosterQuestionSourceId,
                                                 variable: "txt_nested_source")
                                         }),
-                                    Create.TextQuestion(questionId: linkedQuestionSourceId, variable: "txt_source")
+                                    Create.Entity.TextQuestion(questionId: linkedQuestionSourceId, variable: "txt_source")
                                 })
                     });
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, new ValueVector<Guid> {rosterId}, Create.RosterVector(0).ToArray(),
+            AddInterviewLevel(interview, new ValueVector<Guid> {rosterId}, Create.Entity.RosterVector(0).ToArray(),
                 rosterTitles: new Dictionary<Guid, string>() {{rosterId, "roster0"}},
                 answeredQuestions: new Dictionary<Guid, object>() {{linkedQuestionSourceId, "ros0_txt"}});
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.RosterVector(0, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros00_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.RosterVector(0, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros01_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.RosterVector(1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } }, answeredQuestions: new Dictionary<Guid, object>() { { linkedQuestionSourceId, "ros1_txt" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } }, answeredQuestions: new Dictionary<Guid, object>() { { linkedQuestionSourceId, "ros1_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.RosterVector(1, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros10_txt" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.RosterVector(1, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros11_txt" } });
 
-            interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.InterviewQuestion(linkedQuestionId, Create.RosterVector(1).ToArray()));
+            interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).ToArray()));
 
             user = Mock.Of<UserDocument>();
             interviewLinkedQuestionOptions =
-                Create.InterviewLinkedQuestionOptions(Create.ChangedLinkedOptions(linkedQuestionId,
+                Create.Entity.InterviewLinkedQuestionOptions(Create.Entity.ChangedLinkedOptions(linkedQuestionId,
                     options:
                         new[]
                         {
-                            Create.RosterVector(0), Create.RosterVector(1)
+                            Create.Entity.RosterVector(0), Create.Entity.RosterVector(1)
                         }),
-                    Create.ChangedLinkedOptions(linkedOnNestedRosterQuestionId,
+                    Create.Entity.ChangedLinkedOptions(linkedOnNestedRosterQuestionId,
                         options:
                             new[]
                             {
-                                Create.RosterVector(0, 0), Create.RosterVector(0, 1), Create.RosterVector(1, 0),
-                                Create.RosterVector(1, 1)
+                                Create.Entity.RosterVector(0, 0), Create.Entity.RosterVector(0, 1), Create.Entity.RosterVector(1, 0),
+                                Create.Entity.RosterVector(1, 1)
                             }));
 
             merger = CreateMerger(questionnaire);
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).AnswerString.ShouldEqual("1");
 
         It should_answer_on_linked_question_be_roster_vector = () =>
-             GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Answer.ShouldEqual(Create.RosterVector(1));
+             GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Answer.ShouldEqual(Create.Entity.RosterVector(1));
 
         It should_question_linked_on_nested_roster_has_4_options = () =>
             GetQuestion(mergeResult, linkedOnNestedRosterQuestionId, new decimal[0]).Options.Select(x => x.Label).ShouldContainOnly("roster0: ros00_txt", "roster0: ros01_txt", "roster1: ros10_txt", "roster1: ros11_txt");

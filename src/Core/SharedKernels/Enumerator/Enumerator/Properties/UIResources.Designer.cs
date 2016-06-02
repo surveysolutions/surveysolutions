@@ -640,6 +640,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to record current time.
+        /// </summary>
+        public static string Interview_Questions_Timestamp_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Timestamp_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Survey Solutions Interviewer.
         /// </summary>
         public static string Interviewer_ApplicationName {
@@ -784,7 +793,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:N0} meters.
+        ///   Looks up a localized string similar to Number of meters to set accuracy.
         /// </summary>
         public static string Prefs_GpsDesiredAccuracySubTitle {
             get {
