@@ -250,6 +250,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             }
 
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                if (dateTimeQuestion.IsTimestamp)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTime_Timestamp;
+            }
+
             exportedHeaderItem.VariableName = question.StataExportCaption;
             exportedHeaderItem.Titles = new[]
             { string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
