@@ -384,12 +384,15 @@
     <value>Диагностика</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>{0:N0} метров</value>
+    <value>Значение в метрах для задания точности.</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
     <value>Желаемая точность GPS вопроса</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Показать инструкцию</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Сохранить текущее время</value>
   </data>
 </root>

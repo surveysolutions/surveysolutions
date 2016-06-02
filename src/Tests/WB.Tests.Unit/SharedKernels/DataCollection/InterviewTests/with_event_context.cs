@@ -7,7 +7,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            eventContext = Create.EventContext();
+            eventContext = Create.Other.EventContext();
         };
 
         Cleanup stuff = () =>

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using CsvHelper;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {

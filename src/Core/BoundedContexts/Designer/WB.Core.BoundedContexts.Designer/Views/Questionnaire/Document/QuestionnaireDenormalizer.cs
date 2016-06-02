@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -55,6 +54,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>,
+
+        IEventHandler<VariableAdded>,
+        IEventHandler<VariableUpdated>,
+        IEventHandler<VariableCloned>,
+        IEventHandler<VariableDeleted>,
 
         IEventHandler<MacroAdded>,
         IEventHandler<MacroUpdated>,
@@ -475,6 +479,61 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             item.RemoveEntity(evnt.Payload.EntityId);
             
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<VariableAdded> evnt)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+
+            var parentGroup = questionnaireDocument?.Find<IGroup>(evnt.Payload.ParentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var variable = questionnaireEntityFactory.CreateVariable(evnt.Payload);
+            questionnaireDocument.Add(variable, evnt.Payload.ParentId, null);
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<VariableUpdated> evnt)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+
+            var oldVariable = questionnaireDocument?.Find<IVariable>(evnt.Payload.EntityId);
+            if (oldVariable == null)
+            {
+                return;
+            }
+
+            var newVariable = this.questionnaireEntityFactory.CreateVariable(evnt.Payload);
+            questionnaireDocument.ReplaceEntity(oldVariable, newVariable);
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<VariableCloned> evnt)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+
+            var parentGroup = questionnaireDocument?.Find<IGroup>(evnt.Payload.ParentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var variable = questionnaireEntityFactory.CreateVariable(evnt.Payload);
+
+            questionnaireDocument.Insert(index: evnt.Payload.TargetIndex, c: variable, parent: evnt.Payload.ParentId);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<VariableDeleted> evnt)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            item.RemoveEntity(evnt.Payload.EntityId);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 

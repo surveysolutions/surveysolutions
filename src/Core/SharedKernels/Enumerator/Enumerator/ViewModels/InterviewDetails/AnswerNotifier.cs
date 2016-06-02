@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (this.interviewId != null)
             {
-                this.registry.Unsubscribe(this, this.interviewId);
+                this.registry.Unsubscribe(this);
             }
 
             this.interviewId = interviewId;
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (this.interviewId != null)
             {
-                this.registry.Unsubscribe(this, this.interviewId);
+                this.registry.Unsubscribe(this);
             }
 
             this.interviewId = interviewId;
@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this, interviewId);
+            this.registry.Unsubscribe(this);
         }
     }
 }

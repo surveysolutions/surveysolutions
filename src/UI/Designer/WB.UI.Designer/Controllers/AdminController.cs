@@ -77,8 +77,8 @@ namespace WB.UI.Designer.Controllers
         private readonly IStringCompressor zipUtils;
         private readonly ISerializer serializer;
         private readonly ICommandService commandService;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IAccountListViewFactory accountListViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
 
@@ -88,9 +88,9 @@ namespace WB.UI.Designer.Controllers
             ILogger logger,
             IStringCompressor zipUtils,
             ICommandService commandService,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
             ISerializer serializer, 
-            IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, 
+            IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService)
             : base(userHelper)

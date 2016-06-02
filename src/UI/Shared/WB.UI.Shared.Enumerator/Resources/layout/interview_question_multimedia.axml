@@ -9,30 +9,29 @@
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-          <TableLayout style="@style/FullWidthWrappingLayout"
-              android:stretchColumns="0">
-            <TableRow local:MvxBind="Visible QuestionState.IsAnswered;">
-                <ImageView style="@style/Interview_Question_Multimedia_Picture"
-                  android:scaleType="centerCrop"
-                  android:adjustViewBounds="true"
-                  local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; 
+        <TableLayout style="@style/FullWidthWrappingLayout"
+            android:stretchColumns="0">
+          <TableRow local:MvxBind="Visible QuestionState.IsAnswered;">
+            <ImageView style="@style/Interview_Question_Multimedia_Picture"
+              android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
+              android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+              android:scaleType="centerCrop"
+              android:adjustViewBounds="true"
+              local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; 
                                  Visible QuestionState.IsAnswered"/>
-                <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                             local:MvxBind="HideKeyboardOnClick .; 
-                                            Visible QuestionState.IsAnswered;
-                                            Click RemoveAnswerCommand;" />
-            </TableRow>
-            <TableRow>
-              <FrameLayout android:layout_height="wrap_content" 
-                           android:layout_width="wrap_content">
-                <Button style="@style/Interview_Question_InputButton"
-                        local:MvxBind="HideKeyboardOnClick .; 
+            <include layout="@layout/interview_question__remove_button" />
+          </TableRow>
+          <TableRow>
+            <FrameLayout android:layout_height="wrap_content"
+                         android:layout_width="wrap_content">
+              <Button style="@style/Interview_Question_InputButton"
+                      local:MvxBind="HideKeyboardOnClick .; 
                                        Click RequestAnswerCommand; 
                                        Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');
                                        BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-              </FrameLayout>
-            </TableRow>
-          </TableLayout>
+            </FrameLayout>
+          </TableRow>
+        </TableLayout>
 
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />

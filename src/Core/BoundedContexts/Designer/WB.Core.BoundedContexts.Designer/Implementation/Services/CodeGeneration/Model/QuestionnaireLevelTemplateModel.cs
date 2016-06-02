@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             new List<StaticTextTemplateModel>(), 
             new List<RosterTemplateModel>(), 
             new List<Guid>(),
+            new List<VariableTemplateModel>(), 
             null)
         {
         }

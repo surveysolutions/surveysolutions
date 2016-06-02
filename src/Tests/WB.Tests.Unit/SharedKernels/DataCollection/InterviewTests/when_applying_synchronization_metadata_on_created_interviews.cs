@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 var exceptionByStatuses = new List<InterviewStatus>();
                 foreach (var interviewStatus in Enum.GetValues(typeof (InterviewStatus)).Cast<InterviewStatus>())
                 {
-                    var interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+                    var interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
                     interview.Apply(new InterviewStatusChanged(originalInterviewStatus, ""));
                     try
                     {

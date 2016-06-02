@@ -20,12 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         {
             attachments = new[]
             {
-                Create.Attachment("1"),
-                Create.Attachment("3"),
-                Create.Attachment("2"),
-                Create.Attachment("5"),
+                Create.Entity.Attachment("1"),
+                Create.Entity.Attachment("3"),
+                Create.Entity.Attachment("2"),
+                Create.Entity.Attachment("5"),
             };
-            questionnaireDocument = Create.QuestionnaireDocumentWithAttachments(chapterId: Guid.NewGuid(), attachments: attachments);
+            questionnaireDocument = Create.Entity.QuestionnaireDocumentWithAttachments(chapterId: Guid.NewGuid(), attachments: attachments);
 
             plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
                 x => x.GetQuestionnaireDocument(questionnairesId, questionnairesVersion) == questionnaireDocument);

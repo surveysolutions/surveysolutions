@@ -1,59 +1,36 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using CsvHelper;
-using CsvHelper.Configuration;
-using Main.Core.Documents;
+using Resources;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Microsoft.CSharp.RuntimeBinder;
-using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
-using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Services;
-using Binder = System.Reflection.Binder;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -61,25 +38,25 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
-        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
+        private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
+        private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewImportService interviewImportService;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
+            ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             Func<ISampleImportService> sampleImportServiceFactory,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
+            ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewImportService interviewImportService)
@@ -110,8 +87,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.Success(
                     string.Format(
-                        @"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>",
-                        this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
+                        @"{0} <a class=""btn btn-success"" href=""{1}""><i class=""icon-plus""></i>{2}</a>",
+                        HQ.InterviewWasCreated,
+                        this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value }),
+                        HQ.CreateOneMore));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
             return this.View(this.Filters());
@@ -135,6 +114,55 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        [ObserverNotAllowed]
+        public ActionResult CloneQuestionnaire(Guid id, long version)
+        {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
+            if (questionnaireBrowseItem == null)
+                return new HttpNotFoundResult(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
+
+            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
+        }
+
+        [HttpPost]
+        [PreventDoubleSubmit]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                    this.Attention(Users.TryLater);
+
+                return this.View(model);
+            }
+            try
+            {
+                this.CommandService.Execute(new CloneQuestionnaire(
+                    model.Id, model.Version, model.NewTitle, userId: this.GlobalInfo.GetCurrentUser().Id));
+            }
+            catch (QuestionnaireException exception)
+            {
+                this.Error(exception.Message);
+                return this.View(model);
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
+                this.Error(QuestionnaireClonning.UnexpectedError);
+                return this.View(model);
+            }
+
+            this.Success(
+                model.NewTitle == model.OriginalTitle
+                    ? string.Format(HQ.QuestionnaireClonedFormat, model.OriginalTitle)
+                    : string.Format(HQ.QuestionnaireClonedAndRenamedFormat, model.OriginalTitle, model.NewTitle));
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -146,12 +174,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
@@ -179,12 +201,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.RedirectToAction("BatchUpload",
                     new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);

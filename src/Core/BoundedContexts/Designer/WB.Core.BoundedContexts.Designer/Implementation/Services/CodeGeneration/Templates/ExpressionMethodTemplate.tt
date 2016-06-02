@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
    internal partial class <#=Model.ClassName#>
    {   
-      private bool <#=Model.MethodName#>()
+      private <#=Model.ReturnType#> <#=Model.MethodName#>()
       {
 <# 
 	if(Model.GenerateSelf) 

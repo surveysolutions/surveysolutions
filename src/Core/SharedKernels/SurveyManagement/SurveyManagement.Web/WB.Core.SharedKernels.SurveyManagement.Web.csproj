@@ -48,7 +48,7 @@
       <HintPath>..\..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -84,8 +84,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -178,275 +178,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\BaseApiServiceController.cs" />
-    <Compile Include="Api\ControlPanelApiController.cs" />
-    <Compile Include="Api\HealthCheckApiController.cs" />
-    <Compile Include="Api\InterviewerSyncController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
-    <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
-    <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
-    <Compile Include="Api\Interviewer\QuestionnairesControllerBase.cs" />
-    <Compile Include="Api\Interviewer\InterviewsControllerBase.cs" />
-    <Compile Include="Api\Interviewer\v1\InterviewerApiV1Controller.cs" />
-    <Compile Include="Api\Interviewer\v1\DevicesApiV1Controller.cs" />
-    <Compile Include="Api\Interviewer\v1\InterviewsApiV1Controller.cs" />
-    <Compile Include="Api\Interviewer\v1\QuestionnairesApiV1Controller.cs" />
-    <Compile Include="Api\Interviewer\v1\UsersApiV1Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\AttachmentsApiV2Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
-    <Compile Include="Api\Interviewer\v2\UsersApiV2Controller.cs" />
-    <Compile Include="Api\InterviewsController.cs" />
-    <Compile Include="Api\QuestionnairesController.cs" />
-    <Compile Include="Api\UsersController.cs" />
-    <Compile Include="Code\ApiBasicAuthAttribute.cs" />
-    <Compile Include="Code\ProtobufJsonFormatter.cs" />
-    <Compile Include="Code\ProtobufSerializer.cs" />
-    <Compile Include="Code\Security\CustomIdentity.cs" />
-    <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\Security\IdentityExtentions.cs" />
-    <Compile Include="Code\Security\PrincipalReplacer.cs" />
-    <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
-    <Compile Include="Code\WriteToSyncLogAttribute.cs" />
-    <Compile Include="Controllers\AttachmentsController.cs" />
-    <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\HealthCheckController.cs" />
-    <Compile Include="Controllers\InterviewersController.cs" />
-    <Compile Include="Controllers\PeriodicStatusReportController.cs" />
-    <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Controllers\TabletReportApiController.cs" />
-    <Compile Include="Controllers\TeamsController.cs" />
-    <Compile Include="Filters\LimitsFilterAttribute.cs" />
-    <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Filters\ReplacePrincipal.cs" />
-    <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
-    <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
-    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
-    <Compile Include="Models\Api\AssignChangeApiModel.cs" />
-    <Compile Include="Models\Api\StatusChangeApiModel.cs" />
-    <Compile Include="Models\CypherSettingsModel.cs" />
-    <Compile Include="Models\TabletInfoReportListViewModel.cs" />
-    <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\Api\BatchUploadModel.cs" />
-    <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\EventHandlerDescriptionModel.cs" />
-    <Compile Include="Models\ImportQuestionnaireRequest.cs" />
-    <Compile Include="Models\InterviewersFilter.cs" />
-    <Compile Include="Models\InterviewersModel.cs" />
-    <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
-    <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
-    <Compile Include="Models\RebuildReadSideType.cs" />
-    <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
-    <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
-    <Compile Include="Models\InterviewersListViewModel.cs" />
-    <Compile Include="Models\UserBatchUploadModel.cs" />
-    <Compile Include="Properties\SyncLogMessages.Designer.cs">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\Archived.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Archived.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\EnumNames.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\TabletSyncMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\Interviews.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\LimitsIndicator.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Resources\EnumNames.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Scripts\viewmodels\pages\create-interviewer.js" />
-    <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
-    <Compile Include="Utils\Binding\IModelBinder.cs" />
-    <Compile Include="Utils\Binding\ModelBinder.cs" />
-    <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
-    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
-    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
-    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
-    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
-    <Compile Include="Code\EnumToStringConverter.cs" />
-    <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
-    <Compile Include="Code\HttpForbiddenResult.cs" />
-    <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
-    <Compile Include="Code\LocalizationExtensions.cs" />
-    <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
-    <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
-    <Compile Include="Code\StatusHelper.cs" />
-    <Compile Include="Code\ValidateFileAttribute.cs" />
-    <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\CommandApiController.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
-    <Compile Include="Controllers\InterviewApiController.cs" />
-    <Compile Include="Controllers\InterviewController.cs" />
-    <Compile Include="Controllers\InterviewerController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Api\ReportDataApiController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Controllers\TabletReportController.cs" />
-    <Compile Include="Controllers\TeamController.cs" />
-    <Compile Include="Controllers\UsersApiController.cs" />
-    <Compile Include="Models\Api\BaseApiView.cs" />
-    <Compile Include="Models\Api\InterviewApiDetails.cs" />
-    <Compile Include="Models\Api\InterviewApiItem.cs" />
-    <Compile Include="Models\Api\InterviewApiView.cs" />
-    <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
-    <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiView.cs" />
-    <Compile Include="Models\Api\UserApiDetails.cs" />
-    <Compile Include="Models\Api\UserApiItem.cs" />
-    <Compile Include="Models\Api\UserApiView.cs" />
-    <Compile Include="Models\AssigmentModel.cs" />
-    <Compile Include="Models\AssignSuveyData.cs" />
-    <Compile Include="Models\BatchUploadModel.cs" />
-    <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
-    <Compile Include="Models\ChartDataModel.cs" />
-    <Compile Include="Models\CompleteQuestionSettings.cs" />
-    <Compile Include="Models\DeleteInterviewsModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\DocumentFilter.cs" />
-    <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\GlobalHelper.cs" />
-    <Compile Include="Models\HistoryItemView.cs" />
-    <Compile Include="Models\HQDashboardModel.cs" />
-    <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
-    <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
-    <Compile Include="Models\InterviewSummaryViewModel.cs" />
-    <Compile Include="Models\InterviewDetailsViewModel.cs" />
-    <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\InterviewModel.cs" />
-    <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
-    <Compile Include="Models\JsonBaseResponse.cs" />
-    <Compile Include="Models\JsonBundleCommandResponse.cs" />
-    <Compile Include="Models\JsonCommandResponse.cs" />
-    <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\MenuItem.cs" />
-    <Compile Include="Models\PagingExtensions.cs" />
-    <Compile Include="Models\PagingHelper.cs" />
-    <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
-    <Compile Include="Models\TroubleshootModel.cs" />
-    <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StringExtension.cs" />
-    <Compile Include="Models\SummaryListViewModel.cs" />
-    <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
-    <Compile Include="Models\InterviewerModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\UserEditModel.cs" />
-    <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\FieldsAndValidations.Designer.cs">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Properties\Strings.Designer.cs">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="SurveyManagementAreaRegistration.cs" />
     <Compile Include="SurveyManagementWebModule.cs" />
-    <Compile Include="Utils\Compression\ZipHelper.cs" />
-    <Compile Include="Utils\Compression\ZipManager.cs" />
-    <Compile Include="Utils\EnumExtensions.cs" />
-    <Compile Include="Utils\ExceptionExtensoins.cs" />
-    <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\Membership\GlobalInfo.cs" />
-    <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
-    <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
-    <Compile Include="Utils\Security\FormsAuthentication.cs" />
-    <Compile Include="Utils\Security\IFormsAuthentication.cs" />
-    <Compile Include="Utils\Security\QuestionnaireMembershipProvider.cs" />
-    <Compile Include="Utils\Security\QuestionnaireRoleProvider.cs" />
-    <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
-    <Compile Include="Utils\Alerts.cs" />
-    <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
-    <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="Models\User\UserBrowseInputModel.cs" />
-    <Compile Include="Models\User\UserBrowseItem.cs" />
-    <Compile Include="Models\User\UserBrowseView.cs" />
-    <Compile Include="Models\User\UserBrowseViewFactory.cs" />
-    <Compile Include="Models\User\UserWebView.cs" />
-    <Compile Include="Models\User\UserWebViewFactory.cs" />
-    <Compile Include="Models\User\UserWebViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\FieldsAndValidations.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\SyncLogMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Strings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Archived.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LimitsIndicator.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -454,13 +198,6 @@
     <EmbeddedResource Include="Scripts\bootstrap.file-input.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\datepicker.css" />
-    <EmbeddedResource Include="Content\font-awesome.css" />
-    <EmbeddedResource Include="Content\font-awesome.min.css" />
-    <EmbeddedResource Include="Content\jquery.dataTables.css" />
-    <EmbeddedResource Include="Content\jquery.pnotify.default.css" />
-    <EmbeddedResource Include="Content\listview.css" />
-    <EmbeddedResource Include="Content\main-not-logged.css" />
     <EmbeddedResource Include="Scripts\jquery.pnotify.js" />
     <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.js" />
     <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -485,32 +222,8 @@
     <EmbeddedResource Include="Scripts\moment.min.js" />
     <EmbeddedResource Include="Scripts\query-string.js" />
     <EmbeddedResource Include="Scripts\jquery.validate-vsdoc.js" />
-    <EmbeddedResource Include="Content\img\clear.png" />
-    <EmbeddedResource Include="Content\img\details_bg.jpg" />
-    <EmbeddedResource Include="Content\img\divider.png" />
-    <EmbeddedResource Include="Content\img\glyphicons-halflings-white.png" />
-    <EmbeddedResource Include="Content\img\glyphicons-halflings.png" />
-    <EmbeddedResource Include="Content\img\loader.gif" />
-    <EmbeddedResource Include="Content\img\loading.gif" />
-    <EmbeddedResource Include="Content\img\sort_asc.png" />
-    <EmbeddedResource Include="Content\img\sort_asc_disabled.png" />
-    <EmbeddedResource Include="Content\img\sort_both.png" />
-    <EmbeddedResource Include="Content\img\sort_desc.png" />
-    <EmbeddedResource Include="Content\img\sort_desc_disabled.png" />
-    <EmbeddedResource Include="fonts\fontawesome-webfont.eot" />
-    <EmbeddedResource Include="fonts\fontawesome-webfont.ttf" />
-    <EmbeddedResource Include="fonts\fontawesome-webfont.woff" />
-    <EmbeddedResource Include="fonts\FontAwesome.otf" />
     <None Include="app.config" />
-    <None Include="Content\bootstrap-theme.css.map" />
-    <None Include="Content\bootstrap.css.map" />
-    <None Include="fonts\glyphicons-halflings-regular.eot" />
-    <None Include="fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Views\Interview\Troubleshooting.cshtml" />
-    <EmbeddedResource Include="Views\Interview\Troubleshoot.cshtml" />
-    <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
     <EmbeddedResource Include="Scripts\supervisor.framework.js" />
     <EmbeddedResource Include="Scripts\viewmodels\listview.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pagebase.js" />
@@ -528,81 +241,15 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\users.js" />
     <EmbeddedResource Include="Scripts\viewmodels\viewmodelbase.js" />
-    <EmbeddedResource Include="Views\Backup\Index.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\Designer.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
-    <EmbeddedResource Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
-    <EmbeddedResource Include="Views\Survey\Index.cshtml" />
-    <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />
-    <EmbeddedResource Include="Views\Survey\Status.cshtml" />
-    <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <EmbeddedResource Include="Views\_ViewStart.cshtml" />
-    <EmbeddedResource Include="Views\Account\LogOn.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\ReadSide.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
-    <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
-    <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
-    <EmbeddedResource Include="Content\controlpanel.css" />
-    <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
-    <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
-    <EmbeddedResource Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
-    <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
-    <EmbeddedResource Include="Views\Shared\GlobalSettings.cshtml" />
-    <EmbeddedResource Include="Views\Error\AccessDenied.cshtml" />
-    <EmbeddedResource Include="Views\Error\Forbidden.cshtml" />
-    <EmbeddedResource Include="Views\Error\Index.cshtml" />
-    <EmbeddedResource Include="Views\Error\NotFound.cshtml" />
-    <EmbeddedResource Include="Views\Error\WebsitePathIsTooLong.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_LayoutForErrorPage.cshtml" />
-    <EmbeddedResource Include="Views\Account\Manage.cshtml" />
-    <EmbeddedResource Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="Scripts\moment.min.js.map">
       <DependentUpon>moment.min.js</DependentUpon>
     </None>
-    <EmbeddedResource Include="Views\HealthCheck\Index.cshtml" />
-    <EmbeddedResource Include="Content\interview.css" />
-    <EmbeddedResource Include="Views\Interview\Details.cshtml" />
-    <EmbeddedResource Include="Views\Interview\HistoryOfStatusesPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\DetailsQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Shared\Error.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
-    <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
-    <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
     <None Include="Scripts\spin.min.js.map">
       <DependentUpon>spin.min.js</DependentUpon>
     </None>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
-    <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\EventStore.cshtml" />
-    <EmbeddedResource Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
-    <EmbeddedResource Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\DetailsReadOnlyQuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\PackagesInfo.cshtml" />
-    <EmbeddedResource Include="Views\Shared\ApiUserCreateForm.cshtml" />
-    <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
-    <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
-    <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
-    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
@@ -653,12 +300,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\app.css" />
-    <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\questionnaires.js" />
-    <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <EmbeddedResource Include="Scripts\components\bindings.js" />
   </ItemGroup>
   <ItemGroup>
@@ -678,7 +320,7 @@
     <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\Services\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\details.js" />
@@ -712,19 +354,6 @@
     <EmbeddedResource Include="Scripts\spin.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.extenders.js" />
     <Content Include="Scripts\spin.min.js" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.min.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker3.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker3.min.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker3.standalone.css" />
-    <EmbeddedResource Include="Content\bootstrap-datepicker3.standalone.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

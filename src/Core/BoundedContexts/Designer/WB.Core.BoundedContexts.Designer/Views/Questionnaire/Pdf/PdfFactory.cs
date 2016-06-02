@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
@@ -90,18 +91,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     UserId = person.Id,
                     Name = accountsDocumentReader.GetById(person.Id)?.UserName,
                     Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.Id)?.Date
-                }),
+                }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
-                QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList()
+                QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
+                VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList()
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);
             pdfView.Statistics.SectionsCount = questionnaire.Children.Count;
             pdfView.Statistics.GroupsCount -= pdfView.Statistics.SectionsCount;
-            pdfView.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
+            pdfView.Statistics.QuestionsWithEnablingConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression)).Count();
+            pdfView.Statistics.QuestionsWithValidationConditionsCount = Find<IQuestion>(allItems, x => x.ValidationConditions.Any()).Count();
+            
             return pdfView;
         }
 
@@ -130,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Title = x.Text,
                     ValidationConditions = x.ValidationConditions.ToList()
                 });
-            var entitiesWithLongValidations = questions.Union(staticTexts).ToList();
+            var entitiesWithLongValidations = questions.Concat(staticTexts).ToList();
 
             int index = 1;
             entitiesWithLongValidations.ForEach(x => x.Index = index++);
@@ -163,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     EnablementCondition = x.ConditionExpression.Trim()
                 });
 
-            var entitiesWithLongConditions = questions.Union(groupsAndRosters).Union(staticTexts).ToList();
+            var entitiesWithLongConditions = questions.Concat(groupsAndRosters).Concat(staticTexts).ToList();
 
             int index = 1;
             entitiesWithLongConditions.ForEach(x => x.Index = index++);

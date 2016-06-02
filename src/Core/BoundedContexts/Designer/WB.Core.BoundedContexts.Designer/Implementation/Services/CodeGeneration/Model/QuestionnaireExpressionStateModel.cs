@@ -12,9 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             AllGroups = new List<GroupTemplateModel>();
             AllRosters = new List<RosterTemplateModel>();
             AllLinkedQuestionFilters = new List<LinkedQuestionFilterExpressionModel>();
+            AllVariables=new List<VariableTemplateModel>();
         }
         public Guid Id { set; get; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
+        public List<VariableTemplateModel> AllVariables { get; }
         public List<StaticTextTemplateModel> AllStaticTexts { get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }

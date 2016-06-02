@@ -3,12 +3,12 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
@@ -17,18 +17,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
     {
         Establish context = () =>
         {
-            @event = Create.Event.Published.InterviewDeleted(interviewId: interviewId);
+            @event = Create.PublishedEvent.InterviewDeleted(interviewId: interviewId);
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                Create.GpsCoordinateQuestion(variable: gpsVariable1),
-                Create.GpsCoordinateQuestion(variable: gpsVariable2),
+                Create.Entity.GpsCoordinateQuestion(variable: gpsVariable1),
+                Create.Entity.GpsCoordinateQuestion(variable: gpsVariable2),
             });
 
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(
-                Create.InterviewReferences());
+                Create.Entity.InterviewReferences());
 
-            denormalizer = Create.MapReportDenormalizer(
+            denormalizer = Create.Service.MapReportDenormalizer(
                 mapReportPointStorage: mapReportPointStorageMock.Object,
                 interviewReferencesStorage: interviewReferencesStorage,
                 questionnaireDocument: questionnaireDocument);

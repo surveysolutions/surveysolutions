@@ -6,7 +6,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class CreateInterviewWithPreloadedData : InterviewCommand
     {
-        public CreateInterviewWithPreloadedData(Guid interviewId, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedDataDto, DateTime answersTime, Guid supervisorId)
+        public CreateInterviewWithPreloadedData(Guid interviewId, Guid userId, Guid questionnaireId, long version, 
+            PreloadedDataDto preloadedDataDto, DateTime answersTime, Guid supervisorId, Guid? interviewerId)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -15,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.PreloadedData = preloadedDataDto;
             this.AnswersTime = answersTime;
             this.SupervisorId = supervisorId;
+            this.InterviewerId = interviewerId;
         }
 
         public Guid Id { get; private set; }
@@ -22,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public long Version { get; private set; }
         public PreloadedDataDto PreloadedData { get; private set; }
         public Guid SupervisorId { get; private set; }
+        public Guid? InterviewerId { get; private set; }
 
         public DateTime AnswersTime { get; private set; }
     }

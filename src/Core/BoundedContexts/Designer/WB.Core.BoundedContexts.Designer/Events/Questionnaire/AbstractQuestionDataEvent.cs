@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         {
         }
 
-        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
+        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions, bool isTimestamp) : base(responsibleId)
         {
             this.ConditionExpression = conditionExpression;
             this.HideIfDisabled = hideIfDisabled;

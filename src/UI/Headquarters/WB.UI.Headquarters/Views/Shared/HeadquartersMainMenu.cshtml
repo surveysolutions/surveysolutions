@@ -1,5 +1,6 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Resources
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -81,10 +82,10 @@
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
-            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
+            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
+            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
     <li>

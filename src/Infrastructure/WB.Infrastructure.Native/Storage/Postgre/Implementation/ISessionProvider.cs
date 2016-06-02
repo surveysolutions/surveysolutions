@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System;
+using NHibernate;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {

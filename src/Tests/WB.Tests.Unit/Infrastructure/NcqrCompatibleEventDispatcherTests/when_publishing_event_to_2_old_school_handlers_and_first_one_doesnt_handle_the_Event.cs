@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         Establish context = () =>
         {
-            publishableEvent = Create.QuestionClonedEvent();
+            publishableEvent = Create.PublishedEvent.QuestionCloned();
 
-            eventDispatcher = Create.NcqrCompatibleEventDispatcher();
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
 
             eventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(_=>_.GetTransactionManager()== transactionManagerMock.Object);
 

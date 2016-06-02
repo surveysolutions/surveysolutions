@@ -13,16 +13,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<StaticTextTemplateModel> staticTexts,
             List<RosterTemplateModel> rosters, 
             List<Guid> rosterScope,
+            List<VariableTemplateModel> variables,
             string parentTypeName)
         {
-            this.RosterScopeName = rosterScopeName;
-            this.TypeName = typeName;
+            RosterScopeName = rosterScopeName;
+            TypeName = typeName;
             Groups = groups;
             Questions = questions;
             StaticTexts = staticTexts;
             Rosters = rosters;
             RosterScope = rosterScope;
-            this.ParentTypeName = parentTypeName;
+            Variables = variables;
+            ParentTypeName = parentTypeName;
         }
 
         protected RosterScopeBaseModel()
@@ -31,21 +33,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.StaticTexts = new List<StaticTextTemplateModel>();
             this.Groups = new List<GroupTemplateModel>();
             this.Rosters = new List<RosterTemplateModel>();
+            this.Variables=new List<VariableTemplateModel>();
         }
 
-        public string RosterScopeName { get; set; }
+        public string RosterScopeName { get;}
 
-        public string TypeName { set; get; }
+        public string TypeName { get; }
 
-        public string ParentTypeName { set; get; }
+        public string ParentTypeName { get; }
 
-        public List<QuestionTemplateModel> Questions { get; set; }
+        public List<QuestionTemplateModel> Questions { get; }
 
-        public List<StaticTextTemplateModel> StaticTexts { get; set; }
+        public List<VariableTemplateModel> Variables { get; }
 
-        public List<GroupTemplateModel> Groups { get; set; }
+        public List<StaticTextTemplateModel> StaticTexts { get; }
 
-        public List<RosterTemplateModel> Rosters { get; set; }
+        public List<GroupTemplateModel> Groups { get; }
+
+        public List<RosterTemplateModel> Rosters { get;}
 
         public List<Guid> RosterScope { set; get; }
     }

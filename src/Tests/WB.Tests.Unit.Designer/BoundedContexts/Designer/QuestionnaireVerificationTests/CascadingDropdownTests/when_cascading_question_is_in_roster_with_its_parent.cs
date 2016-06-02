@@ -18,13 +18,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group
-                {
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "varRoster",
-                    Children = new List<IComposite>
+                Create.FixedRoster(variable: "varRoster",
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
                         new SingleQuestion
                         {
@@ -33,8 +29,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             QuestionType = QuestionType.SingleOption,
                             Answers = new List<Answer>
                             {
-                                new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                                new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                                new Answer {AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid()},
+                                new Answer {AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid()}
                             }
                         },
                         new SingleQuestion
@@ -45,14 +41,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             CascadeFromQuestionId = parentSingleOptionQuestionId,
                             Answers = new List<Answer>
                             {
-                                new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                                new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                                new Answer
+                                {
+                                    AnswerText = "child 1",
+                                    AnswerValue = "1",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "1"
+                                },
+                                new Answer
+                                {
+                                    AnswerText = "child 2",
+                                    AnswerValue = "2",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "2"
+                                },
                             }
                         }
-                    },
-                }
-
+                    })
                 );
+
             verifier = CreateQuestionnaireVerifier();
         };
 

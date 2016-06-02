@@ -13,14 +13,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
     {
         Establish context = () =>
         {
-            rosterIdentity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new[] {0m});
+            rosterIdentity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new[] {0m});
             interview = Substitute.For<IStatefulInterview>();
             interview.HasGroup(rosterIdentity)
                      .Returns(true);
             interview.IsEnabled(rosterIdentity)
                      .Returns(true);
 
-            navigationState = Create.NavigationState(Setup.StatefulInterviewRepository(interview));
+            navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
             navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(rosterIdentity)).WaitAndUnwrapException();
 
             emptyHistoryHandler = () => emptyHandlerCalled = true;

@@ -90,7 +90,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             result.StaticTextsDeclaredValidCount.ShouldEqual(0);
 
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

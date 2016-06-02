@@ -44,7 +44,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                 {
                     new ValidationCondition { Message = validationMessage, Expression = validationExpression }
-                }, properties: Create.QuestionProperties());
+                }, 
+                properties: Create.QuestionProperties(),
+                isTimestamp: isTimestamp);
 
         Cleanup stuff = () =>
         {
@@ -52,44 +54,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
             eventContext = null;
         };
 
-        It should_raise_QuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>();
+        It should_raise_QuestionChanged_event_with_specified_properties = () =>
+        {
+            var changedEvent = eventContext.GetSingleEvent<QuestionChanged>();
 
-        It should_raise_QuestionChanged_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .PublicKey.ShouldEqual(questionId);
-
-        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .StataExportCaption.ShouldEqual(variableName);
-
-        It should_raise_QuestionChanged_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .QuestionText.ShouldEqual(title);
-
-        It should_raise_QuestionChanged_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .ConditionExpression.ShouldEqual(enablementCondition);
-        
-        It should_raise_QuestionChanged_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .Instructions.ShouldEqual(instructions);
-
-        It should_raise_QuestionChanged_event_with_featured_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .Featured.ShouldEqual(isPreFilled);
-
-        It should_raise_QuestionChanged_event_with_scope_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .QuestionScope.ShouldEqual(scope);
-
-        It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
-
-        It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
-           eventContext.GetSingleEvent<QuestionChanged>()
-               .ValidationConditions.First().Message.ShouldEqual(validationMessage);
+            changedEvent.PublicKey.ShouldEqual(questionId);
+            changedEvent.StataExportCaption.ShouldEqual(variableName);
+            changedEvent.QuestionText.ShouldEqual(title);
+            changedEvent.ConditionExpression.ShouldEqual(enablementCondition);
+            changedEvent.Instructions.ShouldEqual(instructions);
+            changedEvent.Featured.ShouldEqual(isPreFilled);
+            changedEvent.QuestionScope.ShouldEqual(scope);
+            changedEvent.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
+            changedEvent.ValidationConditions.First().Message.ShouldEqual(validationMessage);
+            changedEvent.IsTimestamp.ShouldEqual(isTimestamp);
+        };
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
@@ -104,5 +83,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         private static string enablementCondition = "some condition";
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
+        private static bool isTimestamp = true;
     }
 }

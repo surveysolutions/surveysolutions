@@ -1,7 +1,6 @@
 using System;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -20,18 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         Establish context = () =>
         {
             interviewId = "interviewId";
-            questionnaireId = "questionnaireId";
             userId = Guid.NewGuid();
 
             var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3 && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireId == questionnaireId
+                => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
-
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithFilteredQuestion();
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -39,14 +35,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
             
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object,
                 principal: principal,
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository);
+                optionsRepository: optionsRepository);
 
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
         };
 
         Because of = () =>
@@ -73,7 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
         private static Mock<AnsweringViewModel> answeringViewModelMock;
         private static string interviewId;
-        private static string questionnaireId;
         private static Guid userId;
     }
 }

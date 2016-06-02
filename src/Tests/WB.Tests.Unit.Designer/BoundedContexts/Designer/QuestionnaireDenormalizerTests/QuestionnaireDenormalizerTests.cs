@@ -119,7 +119,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null,
             Guid? cascadeFromQuestionId = null, string conditionExpression = null, bool hideIfDisabled = false, Order? answerOrder = null,
-            IList<ValidationCondition> validationConditions = null)
+            IList<ValidationCondition> validationConditions = null, bool isTimestamp = false)
         {
             return new QuestionChanged(
                 publicKey: publicKey,
@@ -151,7 +151,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 cascadeFromQuestionId: cascadeFromQuestionId,
                 targetGroupKey: Guid.NewGuid(),
                     validationConditions: validationConditions ?? new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
         }
     }
 }

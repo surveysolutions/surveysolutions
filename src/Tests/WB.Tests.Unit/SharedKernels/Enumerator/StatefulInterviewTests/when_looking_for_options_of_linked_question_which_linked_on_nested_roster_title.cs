@@ -16,15 +16,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            linkedQuestionIdentity = Create.Identity(linkedQuestionId, RosterVector.Empty);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
             newOptionsEvent = new[] {
                 new ChangedLinkedOptions(linkedQuestionIdentity,
                                          new []
                                          {
-                                             Create.RosterVector(1,1),
-                                             Create.RosterVector(2,1),
-                                             Create.RosterVector(1,2),
-                                             Create.RosterVector(2,2)
+                                             Create.Entity.RosterVector(1,1),
+                                             Create.Entity.RosterVector(2,1),
+                                             Create.Entity.RosterVector(1,2),
+                                             Create.Entity.RosterVector(2,2)
                                          })
             };
             var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             questionnaire.GetRostersFromTopToSpecifiedGroup(nestedRosterId)
                 .Returns(new[] { rosterId, nestedRosterId });
 
-            interview = Create.StatefulInterview(questionnaire: questionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 1, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 2, 2));
 
@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 1, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 2, null));
             
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.RosterVector(1, 1), "a"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.RosterVector(1, 2), "b"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.RosterVector(2, 1), "a"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.RosterVector(2, 2), "b"));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(1, 1), "a"));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(1, 2), "b"));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(2, 1), "a"));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(2, 2), "b"));
             interview.Apply(Create.Event.LinkedOptionsChanged(newOptionsEvent));
         };
 

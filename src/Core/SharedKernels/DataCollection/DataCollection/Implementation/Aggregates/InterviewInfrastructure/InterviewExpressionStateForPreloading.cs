@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.V8;
+using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -114,7 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
 
         }
-
+       
         public bool AreLinkedQuestionsSupported()
         {
             return true;
@@ -127,20 +129,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) {}
 
-        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        public VariableValueChanges ProcessVariables()
         {
-            return new InterviewExpressionStateForPreloading();
+           return new VariableValueChanges();
         }
 
-        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
-        {
-            return new InterviewExpressionStateForPreloading();
-        }
+        public void DisableVariables(IEnumerable<Identity> variablesToDisable) {}
 
-        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
-        {
-            return new InterviewExpressionStateForPreloading();
-        }
+        public void EnableVariables(IEnumerable<Identity> variablesToEnable) { }
+
+        public void UpdateVariableValue(Identity variableIdentity, object value) { }
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
@@ -158,6 +156,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
             return new LinkedQuestionOptionsChanges(new Dictionary<Guid, RosterVector[]>());
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
         }
 
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()

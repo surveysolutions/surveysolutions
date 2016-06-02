@@ -33,29 +33,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code__WB0029 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0029");
+        It should_return_WB0026_error = () =>
+           verificationMessages.ShouldContainCritical("WB0026");
 
         It should_return_message_with_Critical_level = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_message_with_1_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
         It should_return_first_message_reference_with_type_Question = () =>
-            verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_second_message_reference_with_type_LookupTable = () =>
-            verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.LookupTable);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.LookupTable);
 
         It should_return_first_message_reference_with_id_of_question = () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(rosterId);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Id.ShouldEqual(rosterId);
 
         It should_return_second_message_reference_with_id_of_table = () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(table1Id);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Id.ShouldEqual(table1Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

@@ -14,16 +14,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgreReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>,
         IReadSideRepositoryCleaner,
-        INaviteReadSideStorage<TEntity>
+        INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
         private readonly ILogger logger;
+        private readonly string entityIdentifierColumnName;
 
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
+        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger, string entityIdentifierColumnName)
         {
             this.sessionProvider = sessionProvider;
             this.logger = logger;
+            this.entityIdentifierColumnName = entityIdentifierColumnName;
         }
 
         public virtual int Count()
@@ -46,6 +48,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 return;
 
             session.Delete(entity);
+        }
+
+        public void RemoveIfStartsWith(string beginingOfId)
+        {
+            var session = this.sessionProvider.GetSession();
+
+            string hql = $"DELETE {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
+
+            session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
         }
 
         public virtual void Store(TEntity entity, string id)

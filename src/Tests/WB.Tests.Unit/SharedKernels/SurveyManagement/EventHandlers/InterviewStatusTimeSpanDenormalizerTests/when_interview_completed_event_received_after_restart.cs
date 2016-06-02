@@ -1,10 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
@@ -15,29 +15,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
 
             interviewStatusTimeSpansStorage.Store(
-                Create.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
+                Create.Entity.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
                     timeSpans:
                         new[]
                         {
-                            Create.TimeSpanBetweenStatuses(interviewerId: interviewId,
+                            Create.Entity.TimeSpanBetweenStatuses(interviewerId: interviewId,
                                 endStatus: InterviewExportedAction.Completed)
                         }), interviewId.FormatGuid());
 
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.InterviewCompletedEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
 
         It should_contain_only_one_complete_record =
             () =>

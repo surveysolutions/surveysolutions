@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             statusEventsToPublish = new List<IPublishableEvent>();
 
-            statusEventsToPublish.Add(Create.InterviewOnClientCreatedEvent(interviewId: Guid.NewGuid()));
-            statusEventsToPublish.Add(Create.InterviewCreatedEvent(interviewId: Guid.NewGuid()));
-            statusEventsToPublish.Add(Create.InterviewFromPreloadedDataCreatedEvent(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewOnClientCreated(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: Guid.NewGuid()));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewFromPreloadedDataCreated(interviewId: Guid.NewGuid()));
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };

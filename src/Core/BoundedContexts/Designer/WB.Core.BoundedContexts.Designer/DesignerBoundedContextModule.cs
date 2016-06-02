@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -50,10 +51,15 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
+
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
-
-            this.Bind<IAsyncExecutor>().To<AsyncExecutor>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
+            this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
+            this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
+            this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
+            this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
+            this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
+            this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
@@ -74,15 +80,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
-
-            this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireViewFactory>();
-            this.Kernel.RegisterFactory<ChapterInfoViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireInfoViewFactory>();
-            this.Kernel.RegisterFactory<QuestionnaireSharedPersonsFactory>();
-            this.Kernel.RegisterFactory<AccountListViewFactory>();
-            this.Kernel.RegisterFactory<AccountViewFactory>();
-
+            this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
+            
             CommandRegistry
                 .Setup<AccountAR>()
                 .InitializesWith<RegisterAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.RegisterAccount(command.ApplicationName, command.UserName, command.Email, command.AccountId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))
@@ -127,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddDefaultTypeQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddDefaultTypeQuestionAdnMoveIfNeeded(command))
                 .Handles<DeleteQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestion(command.QuestionId, command.ResponsibleId))
                 .Handles<UpdateCascadingComboboxOptions>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateCascadingComboboxOptions(command.QuestionId, command.ResponsibleId, command.Options))
-                .Handles<UpdateDateTimeQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateDateTimeQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.ValidationConditions, command.Properties))
+                .Handles<UpdateDateTimeQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateDateTimeQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.ValidationConditions, command.Properties, command.IsTimestamp))
                 .Handles<UpdateFilteredComboboxOptions>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateFilteredComboboxOptions(command.QuestionId, command.ResponsibleId, command.Options))
                 .Handles<UpdateGpsCoordinatesQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateGpsCoordinatesQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.ValidationConditions, command.Properties))
                 .Handles<UpdateMultimediaQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMultimediaQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Scope, command.Properties))
@@ -146,6 +145,11 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<MoveStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveStaticText(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
                 .Handles<UpdateStaticText>(command => command.QuestionnaireId, aggregate => aggregate.UpdateStaticText)
                 .Handles<DeleteStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))
+                // Variable
+                .Handles<AddVariable>(command => command.QuestionnaireId, aggregate => aggregate.AddVariableAndMoveIfNeeded)
+                .Handles<MoveVariable>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveVariable(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
+                .Handles<UpdateVariable>(command => command.QuestionnaireId, aggregate => aggregate.UpdateVariable)
+                .Handles<DeleteVariable>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteVariable(command.EntityId, command.ResponsibleId))
                 // Sharing
                 .Handles<AddSharedPersonToQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))
                 .Handles<RemoveSharedPersonFromQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId));

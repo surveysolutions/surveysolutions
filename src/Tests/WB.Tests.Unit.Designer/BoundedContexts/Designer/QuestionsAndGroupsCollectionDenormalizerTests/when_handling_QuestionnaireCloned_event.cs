@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
                         PublicKey = g1Id,
                         Children = new List<IComposite>
                         {
-                            new TextQuestion{ PublicKey = q1Id, QuestionType = QuestionType.Text},
-                            new MultyOptionsQuestion{ PublicKey = q2Id, QuestionType = QuestionType.MultyOption},
+                            new TextQuestion {PublicKey = q1Id, QuestionType = QuestionType.Text},
+                            new MultyOptionsQuestion {PublicKey = q2Id, QuestionType = QuestionType.MultyOption},
                             new Group("R1.1")
                             {
                                 PublicKey = g2Id,
@@ -50,25 +50,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
                                 RosterTitleQuestionId = q3Id,
                                 Children = new List<IComposite>
                                 {
-                                    new TextQuestion{ PublicKey = q3Id, QuestionType = QuestionType.Text},
-                                    new Group("R1.1.1")
-                                    {
-                                        PublicKey = g3Id,
-                                        IsRoster = true,
-                                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                        RosterFixedTitles = new[] { "1", "2", "3" },
-                                        Children = new List<IComposite>
-                                        {
-                                             new TextQuestion{ PublicKey = q4Id, QuestionType = QuestionType.Text},
-                                        }
-                                    },
+                                    new TextQuestion {PublicKey = q3Id, QuestionType = QuestionType.Text},
+                                    Create.FixedRoster(rosterId: g3Id,
+                                        fixedTitles: new[] {"1", "2", "3"},
+                                        children: new IComposite[]
+                                        {new TextQuestion {PublicKey = q4Id, QuestionType = QuestionType.Text}}),
                                     new Group("G1.1.2")
                                     {
                                         PublicKey = g4Id,
                                         Children = new List<IComposite>
                                         {
                                             Create.StaticText(staticTextId: st2Id, text: st2Text),
-                                            new TextQuestion{ PublicKey = q5Id, QuestionType = QuestionType.Text},
+                                            new TextQuestion {PublicKey = q5Id, QuestionType = QuestionType.Text},
                                         }
                                     }
                                 }
@@ -81,7 +74,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
                         Children = new List<IComposite>
                         {
                             Create.StaticText(staticTextId: st1Id, text: st1Text),
-                            new TextQuestion{ PublicKey = q6Id, QuestionType = QuestionType.Text},
+                            new TextQuestion {PublicKey = q6Id, QuestionType = QuestionType.Text},
                         }
                     },
                 }

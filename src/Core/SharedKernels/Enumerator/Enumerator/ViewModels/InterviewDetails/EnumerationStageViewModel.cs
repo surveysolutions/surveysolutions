@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
-            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+            if (!this.eventRegistry.IsSubscribed(this))
             {
                 this.eventRegistry.Subscribe(this, this.interviewId);
             }
@@ -175,6 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
+            if (this.navigationState.CurrentGroup == null)
+                return;
+
             foreach (ChangedRosterInstanceTitleDto rosterInstance in @event.ChangedInstances)
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
@@ -343,7 +346,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
             var disposableItems = this.Items.OfType<IDisposable>().ToArray();
 
             foreach (var disposableItem in disposableItems)

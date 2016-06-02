@@ -1,4 +1,4 @@
-CREATE TABLE events
+CREATE TABLE IF NOT EXISTS events
 (
   id uuid NOT NULL,
   origin text,
@@ -14,8 +14,12 @@ WITH (
   OIDS=FALSE
 );
 
-CREATE INDEX event_source_indx
+CREATE INDEX IF NOT EXISTS event_source_indx
   ON events
   USING btree
   (eventsourceid);
 
+CREATE INDEX IF NOT EXISTS globalsequence_indx
+  ON events
+  USING btree
+  (globalsequence);

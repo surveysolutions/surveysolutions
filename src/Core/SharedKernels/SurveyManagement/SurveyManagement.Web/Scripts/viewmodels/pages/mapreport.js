@@ -13,7 +13,36 @@
     self.interiewSummaryUrl = interiewSummaryUrl;
 
     self.map = null;
-    self.mapClustererOptions = { gridSize: 50, maxZoom: 15 };
+    self.mapClustererOptions = {
+        gridSize: 50, maxZoom: 15,
+        styles: [
+            {
+                height: 53,
+                url: "../Content/img/google-maps-markers/m1.png",
+                width: 53
+            },
+            {
+                height: 56,
+                url: "../Content/img/google-maps-markers/m2.png",
+                width: 56
+            },
+            {
+                height: 66,
+                url: "../Content/img/google-maps-markers/m3.png",
+                width: 66
+            },
+            {
+                height: 78,
+                url: "../Content/img/google-maps-markers/m4.png",
+                width: 78
+            },
+            {
+                height: 90,
+                url: "../Content/img/google-maps-markers/m5.png",
+                width: 90
+            }
+        ]
+    };
     self.mapClusterer = null;
 
     self.initializeMap = function() {
@@ -34,7 +63,7 @@
                 style: google.maps.ZoomControlStyle.LARGE,
                 position: google.maps.ControlPosition.TOP_RIGHT
             },
-            minZoom:3,
+            minZoom: 3,
             scaleControl: true,
             streetViewControl: false
         };
@@ -206,7 +235,7 @@
                     for (var j = 0; j < mapPointAnswers.length; j++) {
                         var points = mapPointAnswers[j].split(';');
                         var marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
+                            position: new google.maps.LatLng(parseFloat(points[0].replace(',', '.')) * 1, parseFloat(points[1].replace(',', '.')) * 1)
                         });
                         marker.interviewId = mapPoint.Id;
                         

@@ -8,7 +8,7 @@ namespace Ncqrs.Eventing
     public static class EventMergeUtils
     {
         public static UncommittedEventStream CreateUncommittedEventStream(
-            this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
+            this IEnumerable<AggregateRootEvent> stream, IReadOnlyCollection<CommittedEvent> baseStream)
         {
             if (!stream.Any())
             {
@@ -23,7 +23,7 @@ namespace Ncqrs.Eventing
         }
 
         public static UncommittedEventStream CreateUncommittedEventStream(
-            this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream, Guid? dvergentEventId)
+            this IEnumerable<AggregateRootEvent> stream, IReadOnlyCollection<CommittedEvent> baseStream, Guid? dvergentEventId)
         {
             var uncommitedStream = new UncommittedEventStream(Guid.NewGuid(), null);
 
@@ -62,14 +62,14 @@ namespace Ncqrs.Eventing
         }
 
         public static Guid? FindDivergentEventGuid(
-            this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
+            this IEnumerable<AggregateRootEvent> stream, IReadOnlyCollection<CommittedEvent> baseStream)
         {
             if (!stream.Any())
             {
                 throw new ArgumentException("event stream is empty");
             }
             
-            if (baseStream.IsEmpty)
+            if (baseStream.Count == 0)
             {
                 return null;
             }

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -31,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -688,9 +690,11 @@ namespace WB.Tests.Unit.Designer
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
+            string variableLabel =null,
+            string title= "Question X test",
             params Answer[] answers)
         {
-            return new TextQuestion("Question X")
+            return new TextQuestion(title)
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = questionType,
@@ -698,6 +702,7 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
+                VariableLabel = variableLabel,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
@@ -756,7 +761,8 @@ namespace WB.Tests.Unit.Designer
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             ));
         }
 
@@ -837,6 +843,16 @@ namespace WB.Tests.Unit.Designer
             return ToPublishedEvent(new Main.Core.Events.Questionnaire.QuestionnaireDeleted(), eventSourceId: questionnaireId);
         }
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithSharedPersons(Guid? id = null, Guid? createdBy = null, List<Guid> sharedPersons = null)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                CreatedBy = createdBy,
+                SharedPersons = sharedPersons
+            };
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument
@@ -844,6 +860,12 @@ namespace WB.Tests.Unit.Designer
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
             };
+        }
+
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
+        {
+            return new Variable(publicKey: id ?? Guid.NewGuid(),
+                variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
@@ -935,10 +957,12 @@ namespace WB.Tests.Unit.Designer
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
-        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
+                variable: variable,
+                title: title,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public static Group Roster(
@@ -967,7 +991,9 @@ namespace WB.Tests.Unit.Designer
             {
                 if (fixedRosterTitles == null)
                 {
-                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                    group.FixedRosterTitles =
+                        (fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" }).Select(
+                            (x, i) => Create.FixedRosterTitle(i, x)).ToArray();
                 }
                 else
                 {
@@ -1310,6 +1336,11 @@ namespace WB.Tests.Unit.Designer
             {
                 return new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
             }
+
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
+            {
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1342,6 +1373,22 @@ namespace WB.Tests.Unit.Designer
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
                 attachmentMetaStorage: attachmentMetaStorage);
+        }
+
+        public static ITopologicalSorter<T> TopologicalSorter<T>()
+        {
+            return new TopologicalSorter<T>();
+        }
+
+        public static SharedPerson SharedPerson(Guid? id = null, string email = null, bool isOwner = true, ShareType shareType = ShareType.Edit)
+        {
+            return new SharedPerson
+            {
+                Id = id ?? Guid.NewGuid(),
+                IsOwner = isOwner,
+                Email = email ?? "user@e.mail",
+                ShareType = shareType
+            };
         }
     }
 }

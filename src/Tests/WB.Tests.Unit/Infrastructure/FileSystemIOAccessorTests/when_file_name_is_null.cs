@@ -13,11 +13,11 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
     {
         Establish context = () =>
         {
-            fileSystemIOAccessor = Create.FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.Service.FileSystemIOAccessor();
         };
 
         Because of = () =>
-            newFileName = fileSystemIOAccessor.MakeValidFileName(null);
+            newFileName = fileSystemIOAccessor.MakeStataCompatibleFileName(null);
 
         It should_return_empty_string = () =>
             newFileName.ShouldEqual("");

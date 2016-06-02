@@ -171,6 +171,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshDashboard()
         {
+            if(this.principal.CurrentUserIdentity == null)
+                return;
+
             this.DashboardInformation = this.dashboardFactory.GetInterviewerDashboardAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
@@ -230,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async Task SignOutAsync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-
+            
             await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToLoginAsync();
         }

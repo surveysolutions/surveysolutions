@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         Establish context = () =>
         {
             questionDataParser = CreateQuestionDataParser();
-            question = Create.GpsCoordinateQuestion(questionId: questionId, variable: questionVarName);
+            question = Create.Entity.GpsCoordinateQuestion(questionId: questionId, variable: questionVarName);
         };
 
         Because of =

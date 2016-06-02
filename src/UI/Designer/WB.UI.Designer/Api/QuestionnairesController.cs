@@ -18,12 +18,12 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v16/questionnaires")]
+    [RoutePrefix("api/v17/questionnaires")]// if you change version of the controller don't forget to mark previous version as obsolete in QuestionnairesObsoleteController
     public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -31,8 +31,8 @@ namespace WB.UI.Designer.Api
         private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory,
+            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
@@ -49,13 +49,13 @@ namespace WB.UI.Designer.Api
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v16/login")]
+        [Route("~/api/v17/login")]
         [HttpGet]
         public void Login()
         {
         }
 
-        [Route("~/api/v16/attachment/{id}")]
+        [Route("~/api/v17/attachment/{id}")]
         [HttpGet]
         public HttpResponseMessage Attachment(string id)
         {
@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Api
             };
         }
 
-        [Route("")]
+        [Route("")] 
         public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
             var userId = this.userHelper.WebUser.UserId;

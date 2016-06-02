@@ -749,6 +749,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website.
+        /// </summary>
+        public static string NotSupportedServerSyncProtocolVersion {
+            get {
+                return ResourceManager.GetString("NotSupportedServerSyncProtocolVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About application.
         /// </summary>
         public static string Prefs_AboutApplication {
@@ -925,6 +934,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Cancel {
             get {
                 return ResourceManager.GetString("Synchronization_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for obsolete questionnaires.
+        /// </summary>
+        public static string Synchronization_Check_Obsolete_Questionnaires {
+            get {
+                return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing {0} questionnaire out of {1}.
+        /// </summary>
+        public static string Synchronization_Check_Obsolete_Questionnaires_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires_Description", resourceCulture);
             }
         }
         

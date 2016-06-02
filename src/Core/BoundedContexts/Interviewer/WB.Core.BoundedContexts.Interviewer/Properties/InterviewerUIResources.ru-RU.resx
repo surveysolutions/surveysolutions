@@ -576,7 +576,16 @@
   <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
     <value>Количество событий в запросе</value>
   </data>
-   <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
     <value>Удаление вложений</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Проверка на наличие удалённых опросников</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Удаление {0} опросника из {1}</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Supervisor</value>
   </data>
 </root>

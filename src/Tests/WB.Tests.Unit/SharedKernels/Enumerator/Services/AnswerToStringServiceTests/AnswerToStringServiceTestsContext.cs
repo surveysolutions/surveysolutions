@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
 
         public static SingleOptionAnswer CreateSingleOptionAnswer(Guid id, decimal answer)
         {
-            var singleOptionAnswer = new SingleOptionAnswer(id, Create.RosterVector());
+            var singleOptionAnswer = new SingleOptionAnswer(id, Create.Entity.RosterVector());
             singleOptionAnswer.SetAnswer(answer);
             return singleOptionAnswer;
         }
@@ -32,6 +32,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             var model= new LinkedSingleOptionAnswer(id ?? Guid.NewGuid(),new decimal[0]);
             model.SetAnswer(answer);
             return model;
+        }
+
+        public static InterviewRoster CreateInterviewRoster(string title=null, decimal[] rosterVector=null)
+        {
+            var result = new InterviewRoster();
+            result.Title = title;
+            result.RosterVector = rosterVector?? new decimal[0];
+            return result;
         }
     }
 }

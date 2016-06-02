@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
-            interviewSynchronizationDto = Create.InterviewSynchronizationDto(status: InterviewStatus.InterviewerAssigned);
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interviewSynchronizationDto = Create.Entity.InterviewSynchronizationDto(status: InterviewStatus.InterviewerAssigned);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };

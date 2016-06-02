@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -101,7 +103,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) ||
+            
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Title, trimmedSearchText, CompareOptions.IgnoreCase) >= 0 ||
                     (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
@@ -289,7 +292,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage);
                     var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
-                    this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
+                    await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
                     var interviewId = await this.CreateInterview(questionnaireIdentity);
 
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
@@ -352,14 +355,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return interviewId;
         }
 
-        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
+        private async Task StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
         {
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
             var questionnaireDocument = questionnairePackage.Document;
             var supportingAssembly = questionnairePackage.Assembly;
 
-            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+            await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly);
         }
 
         private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
@@ -468,11 +471,19 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             if (string.IsNullOrEmpty(searchTerm)) return questionnaireTitle;
 
-            var index = questionnaireTitle.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+            var index = CultureInfo.CurrentCulture.CompareInfo.IndexOf(questionnaireTitle, searchTerm, CompareOptions.IgnoreCase);
+                //questionnaireTitle.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
 
-            var title = index >= 0
-                ? Regex.Replace(questionnaireTitle, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
-                : questionnaireTitle;
+            string title;
+            if (index >= 0)
+            {
+                var substringToHightlight =  questionnaireTitle.Substring(index, searchTerm.Length);
+                title = Regex.Replace(questionnaireTitle, searchTerm, "<b>" + substringToHightlight + "</b>", RegexOptions.IgnoreCase);
+            }
+            else
+            {
+                title = questionnaireTitle;
+            }
             return title;
         }
 

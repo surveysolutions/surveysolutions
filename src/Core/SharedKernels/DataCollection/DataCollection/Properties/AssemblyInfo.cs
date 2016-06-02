@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement")]
+[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Headquarters")]
 [assembly: InternalsVisibleTo("WB.UI.Shared.Android")]
 [assembly: InternalsVisibleTo("WB.UI.Interviewer")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.Enumerator")]

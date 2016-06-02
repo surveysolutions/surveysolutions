@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.InterviewView();
+            dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
             dashboardItem.GpsLocation = new InterviewGpsLocationView
             {
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
               }
             };
 
-            @event = Create.Event.AnswersRemoved(Create.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
+            @event = Create.Event.AnswersRemoved(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
 
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
                 r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_clear_GPS_location = () =>
             dashboardItem.GpsLocation.Coordinates.ShouldBeNull();
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<AnswersRemoved> @event;
         private static InterviewView dashboardItem;
     }

@@ -61,6 +61,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        public static ExpressionLocation Variable(Guid variableId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Variable,
+                ExpressionType = ExpressionLocationType.Expression,
+                Id = variableId
+            };
+        }
+
         public static ExpressionLocation QuestionValidation(Guid questionId, int? position) => new ExpressionLocation
         {
             ItemType = ExpressionLocationItemType.Question,

@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
 
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
         }

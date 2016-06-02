@@ -23,15 +23,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Children = new List<IComposite>()
                 {
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "subst"),
-                    Create.Roster(rosterSizeSourceType: RosterSizeSourceType.Question, 
+                    Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "subst"),
+                    Create.Entity.Roster(rosterSizeSourceType: RosterSizeSourceType.Question, 
                         rosterSizeQuestionId: rosterSizeQuestionId, 
                         title: "roster",
                         children: 
                             new List<IComposite>
                             {
-                                Create.TextQuestion(questionId: questionA, text: "this is %subst% A"),
-                                Create.TextQuestion(questionId: questionB, text: "this is %subst% B")
+                                Create.Entity.TextQuestion(questionId: questionA, text: "this is %subst% A"),
+                                Create.Entity.TextQuestion(questionId: questionB, text: "this is %subst% B")
                             })
                 }
             });

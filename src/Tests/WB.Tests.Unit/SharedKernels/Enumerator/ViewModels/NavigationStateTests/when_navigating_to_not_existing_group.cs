@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 => _.HasGroup(notExistingGroup) == false
                    && _.IsEnabled(notExistingGroup) == true);
 
-            navigationState = Create.NavigationState(
+            navigationState = Create.Other.NavigationState(
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             navigatedTo.ShouldBeNull();
 
         private static NavigationState navigationState;
-        private static Identity notExistingGroup = Create.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
+        private static Identity notExistingGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
         private static Identity navigatedTo;
     }
 }

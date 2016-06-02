@@ -445,10 +445,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_IsLike2()
         {
-            "abcdefgh".IsLike("*cdef*");
+            Assert.Throws<ArgumentException>(() => "abcdefgh".IsLike("*cdef*"));
         }
 
         [Test]
@@ -695,119 +694,104 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TestForNullsInSex()
         {
-            ZScore.Ssfa(12, null, 0);
+            Assert.Throws<ArgumentNullException>(() => ZScore.Ssfa(12, null, 0));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TestForNullsInLen()
         {
-            ZScore.Wfl(null, true, 0);
+            Assert.Throws<ArgumentNullException>(() => ZScore.Wfl(null, true, 0));
         }
 
 
         #region WFH
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Test_ZscoresWfh_When_height_is_null()
         {
-            ZScore.Wfh(null, true, 10);
+            Assert.Throws<ArgumentNullException>(() => ZScore.Wfh(null, true, 10));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_ZscoresWfh()
         {
-            ZScore.Wfh(0, true, -10);
+            Assert.Throws<ArgumentException>(() => ZScore.Wfh(0, true, -10));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresWfh2()
         {
-            ZScore.Wfh(49, true, 14);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Wfh(49, true, 14));
         }
 
         #endregion
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresTsfa2()
         {
-            ZScore.Tsfa(-3, true, 14);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Tsfa(-3, true, 14));
         }
 
         #region WFL
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresWfl2()
         {
-            ZScore.Wfl(-3, true, 14);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Wfl(-3, true, 14));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_ZscoresWfl3()
         {
-            ZScore.Wfl(3, true, -14);
+            Assert.Throws<ArgumentException>(() => ZScore.Wfl(3, true, -14));
         }
 
         #endregion
 
         #region SSFA
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TestSsfaForNullsInAge()
         {
-            ZScore.Ssfa(null, true, 0);
+            Assert.Throws<ArgumentNullException>(() => ZScore.Ssfa(null, true, 0));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TestSsfaForNullsInSex()
         {
-            ZScore.Ssfa(20, null, 0);
+            Assert.Throws<ArgumentNullException>(() => ZScore.Ssfa(20, null, 0));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestSsfaForRangeMonths()
         {
-            ZScore.Ssfa(-3, true, 14);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Ssfa(-3, true, 14));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_ZscoresSsfa4()
         {
-            ZScore.Ssfa(5, true, -10);
+            Assert.Throws<ArgumentException>(() => ZScore.Ssfa(5, true, -10));
         }
         #endregion
 
         #region ACFA
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresAcfa2()
         {
-            ZScore.Acfa(-3, true, 14);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Acfa(-3, true, 14));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresAcfa3()
         {
-            ZScore.Acfa(1, true, 14); // still out of range
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Acfa(1, true, 14)); // still out of range
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_ZscoresAcfa4()
         {
-            ZScore.Acfa(5, true, -10);
+            Assert.Throws<ArgumentException>(() => ZScore.Acfa(5, true, -10));
         }
 
         #endregion
@@ -815,17 +799,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         #region HCFA
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_ZscoresHcfa2()
         {
-            ZScore.Hcfa(-3, false, 48);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ZScore.Hcfa(-3, false, 48));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Test_ZscoresHcfa3()
         {
-            ZScore.Hcfa(3, true, -48);
+            Assert.Throws<ArgumentException>(() => ZScore.Hcfa(3, true, -48));
         }
 
         #endregion

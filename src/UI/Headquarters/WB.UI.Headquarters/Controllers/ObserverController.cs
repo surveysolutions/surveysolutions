@@ -2,11 +2,12 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Resources;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -57,10 +58,13 @@ namespace WB.UI.Headquarters.Controllers
                     return this.View(model);
                 }
                 
-                this.Success("Observer user was successfully created");
+                this.Success(HQ.ObserverCreated);
                 return this.RedirectToAction("Index");
             }
-           
+
+            if (this.ModelState.ContainsKey("ExcessiveRequests"))
+                this.Attention(Users.TryLater);
+
             return this.View(model);
         }
 
@@ -107,15 +111,15 @@ namespace WB.UI.Headquarters.Controllers
                     if (!isAdmin)
                     {
                         this.UpdateAccount(user: user, editModel: model);
-                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        this.Success(string.Format(HQ.UserWasUpdatedFormat, user.UserName));
                         return this.RedirectToAction("Index");
                     }
 
-                    this.Error("Could not update user information because you don't have permission to perform this operation");
+                    this.Error(HQ.NoPermission);
                 }
                 else
                 {
-                    this.Error("Could not update user information because current user does not exist");
+                    this.Error(HQ.UserNotExists);
                 }
             }
 

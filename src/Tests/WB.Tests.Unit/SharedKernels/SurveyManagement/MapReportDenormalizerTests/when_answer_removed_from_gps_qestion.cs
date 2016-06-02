@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
 {
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
             gpsVariableName = "gps";
 
             var interviews = new TestInMemoryWriter<InterviewReferences>();
-            interviews.Store(Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
+            interviews.Store(Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
             var pointId = $"{interviewId}-{gpsVariableName}-{Empty.RosterVector}";
@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 }
             };
 
-            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
-            answersRemoved = Create.Event.AnswersRemoved(Create.Identity(questionId, Empty.RosterVector)).ToPublishedEvent(eventSourceId: interviewId);
+            denormalizer = Create.Service.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
+            answersRemoved = Create.Event.AnswersRemoved(Create.Entity.Identity(questionId, Empty.RosterVector)).ToPublishedEvent(eventSourceId: interviewId);
         };
 
         Because of = () => denormalizer.Handle(answersRemoved);

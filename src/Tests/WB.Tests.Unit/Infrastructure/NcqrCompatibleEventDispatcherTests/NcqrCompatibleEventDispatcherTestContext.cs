@@ -14,12 +14,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null)
         {
-            return Create.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings);
+            return Create.Service.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null)
         {
-            return Create.PublishableEvent(eventSourceId);
+            return Create.Other.PublishableEvent(eventSourceId);
         }
 
         protected static IEnumerable<IPublishableEvent> CreatePublishableEvents(int countOfEvents, Guid? eventSourceId = null)

@@ -7,7 +7,7 @@
 <div class="group">
     <div class="group_container">
         <div class="breacrumbs">@questionnaire.GetBreadcrumbsForGroup(group.PublicKey)</div>
-        <div class="sub_section">@(group.Title)</div>
+        <div class="sub_section">@group.Title.SanitizeHtml()</div>
         @if (questionnaire.GroupHasEnablementCondition(group))
             {
             <div class="common-info">

@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -16,15 +22,9 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -40,7 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
 
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             InterviewDataExportSettings exportSettings, 
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.exportSettings = exportSettings;
-            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
@@ -130,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => _
                         .Where(expression)
-                        .OrderBy(x => x.SummaryId)
+                        .OrderBy(x => x.InterviewId)
                         .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
                         .Select(x => x.InterviewId)
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
@@ -151,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             if (questionnaireExportStructure == null)
                 return;
@@ -201,8 +202,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureRepository.GetById(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
+            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             return questionnaireExportStructure;
         }
     }

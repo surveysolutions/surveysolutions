@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

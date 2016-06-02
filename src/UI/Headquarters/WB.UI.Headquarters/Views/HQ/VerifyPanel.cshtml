@@ -1,9 +1,9 @@
 ﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
-@model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
+@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
-    ViewBag.Title = "Index";
+    ViewBag.Title = BatchUpload.VerifyPanelData;
 }
 
 @section scripts
@@ -30,9 +30,9 @@
             <table class="table table-striped table-bordered table-condensed table-break-words">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Message</th>
-                        <th>Details</th>
+                        <th>@BatchUpload.Code</th>
+                        <th>@BatchUpload.Message</th>
+                        <th>@BatchUpload.Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,17 +51,17 @@
                                     }
                                     if (reference.PositionX.HasValue)
                                     {
-                                        <span>Column: @reference.PositionX</span>
+                                        <span>@BatchUpload.Column: @reference.PositionX</span>
                                         <br />
                                     }
 
                                     if (reference.PositionY.HasValue)
                                     {
-                                        <span>Row: @reference.PositionY</span>
+                                        <span>@BatchUpload.Row: @reference.PositionY</span>
                                         <br />
                                     }
 
-                                    <span>File name: @reference.DataFile </span>
+                                    <span>@BatchUpload.FileName: @reference.DataFile </span>
 
                                 }
                                 <br />
@@ -71,7 +71,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
+        <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>@BatchUpload.UploadNewData</a>
     }
     else
     {
@@ -79,10 +79,10 @@
             <div class="form-horizontal">
                 <fieldset>
                     <legend>
-                        Data is valid
+                        @BatchUpload.DataValid
                     </legend>
                     <div class="form-group">
-                        <label class="control-label col-sm-4">Responsible</label>
+                        <label class="control-label col-sm-4">@Common.Responsible</label>
                         <div class="col-sm-8">
                             @if (!Model.WasSupervsorProvided)
                             {
@@ -96,14 +96,14 @@
                             }
                             else
                             {
-                                <h4 class="list-group-item-heading">Responsible supervisor will be assigned automatically.</h4>
+                                <h4 class="list-group-item-heading">@BatchUpload.ResponsibleSupervisorWillBeAssigned</h4>
                             }
                         </div>
                     </div>
                 </fieldset>
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-8">
-                        <button class="btn btn-large btn-primary" type="submit" data-bind="click: uploadSample, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">Create sample from this data</button>
+                        <button class="btn btn-large btn-primary" type="submit" data-bind="click: uploadSample, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">@Common.Create</button>
                     </div>
                 </div>
             </div>

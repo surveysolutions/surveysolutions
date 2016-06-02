@@ -3,8 +3,8 @@ using System.Globalization;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             gpsQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             interviewData =
-                Create.InterviewData(Create.InterviewQuestion(questionId: gpsQuestionId,
-                    answer: Create.GeoPosition()));
+                Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId: gpsQuestionId,
+                    answer: Create.Entity.GeoPosition()));
 
             questionnaireDocument =
-                Create.QuestionnaireDocument(children: Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variable: "gps"));
+                Create.Entity.QuestionnaireDocument(children: Create.Entity.GpsCoordinateQuestion(questionId: gpsQuestionId, variable: "gps"));
 
             exportViewFactory = CreateExportViewFactory();
         };

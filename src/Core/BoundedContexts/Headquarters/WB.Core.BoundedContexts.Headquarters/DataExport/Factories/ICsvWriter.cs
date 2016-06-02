@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {

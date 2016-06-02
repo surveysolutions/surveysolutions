@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServiceTests
 {

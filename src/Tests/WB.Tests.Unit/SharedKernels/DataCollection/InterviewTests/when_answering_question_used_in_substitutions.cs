@@ -17,33 +17,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            substitutedQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            questionA = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionB = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             QuestionnaireDocument questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("top level fixed group")
             {
-                Children = new List<IComposite>()
+                Children = new List<IComposite>
                 {
-                    new TextQuestion
-                    {
-                        QuestionType = QuestionType.Text,
-                        PublicKey = substitutedQuestionId,
-                        StataExportCaption = "subst"
-                    },
-                    new TextQuestion
-                    {
-                        QuestionType = QuestionType.Text,
-                        PublicKey = questionA,
-                        QuestionText = "question A %subst%"
-                    },
-                    new TextQuestion
-                    {
-                        QuestionType = QuestionType.Text,
-                        PublicKey = questionB,
-                        QuestionText = "question B %subst%"
-                    }
+                    Create.Entity.TextQuestion(questionId: substitutedQuestionId, variable: "subst"),
+
+                    Create.Entity.TextQuestion(questionId: questionA, text: "question A %subst%"),
+                    Create.Entity.TextQuestion(questionId: questionB, text: "question B %subst%"),
+                    Create.Entity.StaticText(publicKey: staticTextId, text: "static text %subst%"),
                 }
             });
 
@@ -51,18 +35,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            events = new EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), substitutedQuestionId, Empty.RosterVector, DateTime.Now, "answer");
 
-        It should_raise_substitution_changed_event = () => events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 2);
+        It should_raise_substitution_changed_event_with_2_questions = () =>
+            eventContext.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 2);
 
-        static Guid substitutedQuestionId;
-        static Guid questionA;
-        static Guid questionB;
+        It should_raise_substitution_changed_event_with_1_static_text = () =>
+            eventContext.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.StaticTexts.Length == 1);
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
+        };
+
+        static Guid substitutedQuestionId = Guid.Parse("88888888888888888888888888888888");
+        static Guid questionA = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static Guid questionB = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Interview interview;
-        static EventContext events;
+        static EventContext eventContext;
     }
 }
 

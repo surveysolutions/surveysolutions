@@ -1,7 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using PCLStorage;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             private readonly string assemblyStorageDirectory;
 
-            public BackwardCompatibleQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
+            public BackwardCompatibleQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory,
+                IFileSystemAccessor fileSystemAccessor)
             {
                 this.fileSystemAccessor = fileSystemAccessor;
                 this.assemblyStorageDirectory = assemblyStorageDirectory;
@@ -63,7 +64,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly BackwardCompatibleQuestionnaireAssemblyFileAccessor backwardCompatibleAccessor;
 
         public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor,
-            IAsynchronousFileSystemAccessor asyncFileSystemAccessor, ILogger logger,  string pathToAssembliesDirectory)
+            IAsynchronousFileSystemAccessor asyncFileSystemAccessor, 
+            ILogger logger, 
+            string pathToAssembliesDirectory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.asyncFileSystemAccessor = asyncFileSystemAccessor;
@@ -106,14 +109,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
-            var assembliesDirectory = await FileSystem.Current.GetFolderFromPathAsync(this.pathToStore);
-
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            var assemblyFile = await assembliesDirectory.CreateFileAsync(assemblyFileName, CreationCollisionOption.ReplaceExisting);
-            using (var fileHandler = await assemblyFile.OpenAsync(FileAccess.ReadAndWrite))
+            var assemblyFile = this.fileSystemAccessor.OpenOrCreateFile(Path.Combine(this.pathToStore, assemblyFileName), false);
+            using (assemblyFile)
             {
-                await fileHandler.WriteAsync(assembly, 0, assembly.Length);
+                await assemblyFile.WriteAsync(assembly, 0, assembly.Length);
             }
         }
 

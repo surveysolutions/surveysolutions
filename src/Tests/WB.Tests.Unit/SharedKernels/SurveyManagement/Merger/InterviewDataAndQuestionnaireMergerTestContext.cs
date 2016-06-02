@@ -6,16 +6,17 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
             decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
-            Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null)
+            Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null, Dictionary<Guid, object> variables = null)
         {
             InterviewLevel rosterLevel;
             var levelKey = string.Join(",", rosterVector);
@@ -76,7 +77,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     rosterLevel.RosterRowTitles.Add(rosterTitle.Key, rosterTitle.Value);
                 }
             }
-
+            if (variables != null)
+            {
+                rosterLevel.Variables = variables;
+            }
             interview.Levels[levelKey] = rosterLevel;
         }
 
@@ -91,6 +95,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 return interviewGroupView
                     .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionId);
             return null;
+        }
+
+        internal static InterviewStaticTextView GetStaticText(InterviewDetailsView interviewDetailsView, 
+            Guid staticTextId,
+            decimal[] questionRosterVector)
+        {
+            var interviewGroupView = interviewDetailsView.Groups.FirstOrDefault(g => 
+                g.Entities.Any(q => q.Id == staticTextId) && 
+                g.RosterVector.SequenceEqual(questionRosterVector));
+
+            return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
         }
 
         internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo(QuestionnaireDocument questionnaireDocument = null)
@@ -112,13 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         PublicKey = groupId,
                         IsRoster = false
                     },
-                    new Group(fixedRosterTitle)
-                    {
-                        PublicKey = fixedRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = rosterFixedTitles
-                    }
+                    Create.Entity.FixedRoster(rosterId: fixedRosterId, fixedTitles: rosterFixedTitles, title:fixedRosterTitle)
                 }
             };
         }
@@ -182,7 +191,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
             return new InterviewDataAndQuestionnaireMerger(
-                substitutionService: new SubstitutionService());
+                substitutionService: new SubstitutionService(),
+                variableToUiStringService: new VariableToUIStringService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

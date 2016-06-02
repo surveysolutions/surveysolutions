@@ -24,15 +24,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 fixedTitles.Add(string.Format("Fixed Title {0}", i));
             }
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
-            {
-                PublicKey = rosterGroupId,
-                IsRoster = true,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                VariableName = "a",
-                RosterFixedTitles = fixedTitles.ToArray(),
-                Children = new List<IComposite>() { new TextQuestion(){StataExportCaption = "var"} }
-            });
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.FixedRoster(rosterId: rosterGroupId,
+                    variable: "a",
+                    fixedTitles: fixedTitles.ToArray(),
+                    children: new IComposite[]
+                    {new TextQuestion() {StataExportCaption = "var"}}));
 
             verifier = CreateQuestionnaireVerifier();
         };

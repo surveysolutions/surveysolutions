@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             {
                 mto.Index("UserPreloadingVerificationErrors_UserPreloadingProcesses");
                 mto.Cascade(Cascade.None);
+                mto.ForeignKey("FK_UserPreloadingProcesses_UserPreloadingVerificationErrors");
             });
         }
     }

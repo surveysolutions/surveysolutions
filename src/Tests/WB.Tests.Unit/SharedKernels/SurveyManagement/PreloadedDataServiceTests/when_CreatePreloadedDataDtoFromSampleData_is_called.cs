@@ -8,8 +8,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -19,16 +19,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { StataExportCaption = "nq1", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() },
-                    new TextQuestion() { StataExportCaption = "tq1", QuestionType = QuestionType.Text, PublicKey = Guid.NewGuid() },
-                    new Group("Roster Group")
+                    new NumericQuestion()
                     {
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        PublicKey = rosterGroupId,
-                        RosterFixedTitles = new[] { "a" },
-                        Children = new List<IComposite> { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() } }
-                    });
+                        StataExportCaption = "nq1",
+                        QuestionType = QuestionType.Numeric,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    new TextQuestion()
+                    {
+                        StataExportCaption = "tq1",
+                        QuestionType = QuestionType.Text,
+                        PublicKey = Guid.NewGuid()
+                    },
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] {"a"},
+                        children: new IComposite[]
+                        {
+                            new NumericQuestion()
+                            {
+                                StataExportCaption = "nq2",
+                                QuestionType = QuestionType.Numeric,
+                                PublicKey = Guid.NewGuid()
+                            }
+                        }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

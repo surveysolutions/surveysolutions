@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -20,14 +19,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         Establish context = () =>
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
-            var user = Create.UserDocument(isArchived: false, userName: userName, userId: userId);
+            var user = Create.Entity.UserDocument(isArchived: false, userName: userName, userId: userId);
 
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidatorWithUsers(user);
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(null, Create.Command.CreateUserCommand(role: UserRoles.Supervisor, userName: userName)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();

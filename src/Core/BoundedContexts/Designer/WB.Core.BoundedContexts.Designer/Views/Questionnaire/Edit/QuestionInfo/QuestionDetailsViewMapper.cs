@@ -86,6 +86,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 }
             }
 
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                var dateTimeQuestionView = questionView as DateTimeDetailsView;
+                if (dateTimeQuestionView != null)
+                {
+                    dateTimeQuestionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
+                    return dateTimeQuestionView;
+                }
+            }
+
             return questionView;
         }
 

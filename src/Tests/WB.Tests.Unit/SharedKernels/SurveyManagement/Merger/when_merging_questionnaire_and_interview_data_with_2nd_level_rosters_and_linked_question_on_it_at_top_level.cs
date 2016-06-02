@@ -10,14 +10,13 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -48,13 +47,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new Group()
-                        {
-                            PublicKey = secondLevelRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "t1", "t2" },
-                            Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId,
+                            fixedTitles: new[] {"t1", "t2"},
+                            children: new IComposite[]
                             {
                                 new NumericQuestion()
                                 {
@@ -62,8 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                     QuestionType = QuestionType.Numeric,
                                     StataExportCaption = "sourceForLinkedQuestionId"
                                 }
-                            }
-                        }
+                            })
                     }
                 },
                 new SingleQuestion()
