@@ -25,15 +25,15 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             IMembershipUserService userHelper = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IQuestionnaireHelper questionnaireHelper = null,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
+            IQuestionnaireViewFactory questionnaireViewFactory = null,
+            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             ILogger logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {
             return new QuestionnaireController(commandService ?? Mock.Of<ICommandService>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
-                questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
+                questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),

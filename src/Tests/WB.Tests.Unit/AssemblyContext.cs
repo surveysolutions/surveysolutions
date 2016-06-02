@@ -4,43 +4,44 @@ using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Tests.Unit;
 
-namespace WB.Tests.Unit
+[SetUpFixture]
+public class AssemblyContext : IAssemblyContext
 {
-    public class AssemblyContext : IAssemblyContext
+    [OneTimeSetUp]
+    public void OnAssemblyStart()
     {
-        public void OnAssemblyStart()
-        {
-            SetupServiceLocator();
-        }
+        SetupServiceLocator();
+    }
 
-        public void OnAssemblyComplete()
-        {
-        }
+    public void OnAssemblyComplete()
+    {
+    }
 
-        public static void SetupServiceLocator()
-        {
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            if (ServiceLocator.IsLocationProviderSet)
-                return;
+    public static void SetupServiceLocator()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+        if (ServiceLocator.IsLocationProviderSet)
+            return;
 
-            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+        var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
 
-            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+        ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
-            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
-            Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
-            Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
+        Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+        Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
+        Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
-            Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
-            Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
-        }
+        Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
+        Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
     }
 }

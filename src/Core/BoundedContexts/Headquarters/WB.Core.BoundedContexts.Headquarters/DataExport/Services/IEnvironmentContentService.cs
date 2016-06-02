@@ -1,5 +1,5 @@
 using System.Threading;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {

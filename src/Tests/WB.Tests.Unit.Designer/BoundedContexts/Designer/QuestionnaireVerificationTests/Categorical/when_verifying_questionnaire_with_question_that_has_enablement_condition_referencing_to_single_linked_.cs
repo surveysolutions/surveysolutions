@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -18,23 +19,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             var linkedSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument(
-                new Group()
+            questionnaire = CreateQuestionnaireDocument(Create.FixedRoster(variable: "a",
+                fixedTitles: new[] {"fixed title 1", "fixed title 2"},
+                children: new IComposite[]
                 {
-                    IsRoster = true,
-                    VariableName = "a",
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "fixed title 1", "fixed title 2" },
-                    Children =
+                    new TextQuestion()
                     {
-                        new TextQuestion()
-                        {
-                            PublicKey = linkedSourceQuestionId,
-                            QuestionType = QuestionType.Text,
-                            StataExportCaption = "var"
-                        }
+                        PublicKey = linkedSourceQuestionId,
+                        QuestionType = QuestionType.Text,
+                        StataExportCaption = "var"
                     }
-                },
+                }),
                 new SingleQuestion()
                 {
                     PublicKey = categoricalQuestionId,

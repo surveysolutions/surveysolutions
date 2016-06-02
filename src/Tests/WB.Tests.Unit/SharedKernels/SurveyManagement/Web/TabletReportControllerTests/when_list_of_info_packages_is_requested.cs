@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControllerTests

@@ -93,7 +93,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         It should_invalid_validation_count_equal_2 = () =>
             result.CountInvalidValidations.ShouldEqual(2);
 
-        static AppDomainContext appDomainContext;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;
 
         [Serializable]

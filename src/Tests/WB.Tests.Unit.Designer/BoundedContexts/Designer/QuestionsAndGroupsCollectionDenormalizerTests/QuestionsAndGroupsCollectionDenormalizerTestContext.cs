@@ -306,5 +306,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
 
             });
         }
+
+        protected static IPublishedEvent<VariableAdded> CreateVariableAddedEvent(Guid entityId, Guid parentId, string variableName)
+        {
+            return ToPublishedEvent(Create.Event.VariableAdded(
+                entityId: entityId,
+                parentId: parentId,
+                variableName: variableName));
+        }
     }
 }

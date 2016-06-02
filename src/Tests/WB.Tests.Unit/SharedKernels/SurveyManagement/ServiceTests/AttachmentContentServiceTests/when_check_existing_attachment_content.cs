@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests;
 using It = Machine.Specifications.It;
 
@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
-            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentService = Create.Service.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
             isAttachmentContentExists.ShouldBeTrue();
 
         private static AttachmentContentService attachmentContentService;
-        private static readonly AttachmentContent expectedContent = Create.AttachmentContent();
+        private static readonly AttachmentContent expectedContent = Create.Entity.AttachmentContent_SurveyManagement();
         private static bool isAttachmentContentExists;
     }
 }

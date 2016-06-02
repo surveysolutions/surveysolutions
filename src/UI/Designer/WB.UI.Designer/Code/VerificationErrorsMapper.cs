@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Code
@@ -109,7 +110,8 @@ namespace WB.UI.Designer.Code
                     }
                 }
 
-                if (reference.Type == QuestionnaireVerificationReferenceType.Group)
+                if (reference.Type == QuestionnaireVerificationReferenceType.Group
+                    || reference.Type == QuestionnaireVerificationReferenceType.Roster)
                 {
                     var group = questionnaireDocument.Find<IGroup>(reference.Id);
 
@@ -133,6 +135,17 @@ namespace WB.UI.Designer.Code
                         Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
                         FailedValidationConditionIndex = reference.FailedValidationConditionIndex
+                    };
+                }
+                else if (reference.Type == QuestionnaireVerificationReferenceType.Variable)
+                {
+                    var variable = questionnaireDocument.Find<IVariable>(reference.Id);
+                    yield return new VerificationReferenceEnriched
+                    {
+                        ItemId = reference.Id.FormatGuid(),
+                        Type = reference.Type,
+                        Variable = variable.Name,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
                 }
                 else

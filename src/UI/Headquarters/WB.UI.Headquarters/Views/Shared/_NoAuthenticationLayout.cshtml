@@ -10,11 +10,8 @@
 
 @section interviewerlink
 {
-    @if (LegacyOptions.SupervisorFunctionsEnabled)
-    {
-        <text>|</text>
-        <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">Get Interviewer App</a>
-    }
+    <text>|</text>
+    <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
 }
 
 @section scripts

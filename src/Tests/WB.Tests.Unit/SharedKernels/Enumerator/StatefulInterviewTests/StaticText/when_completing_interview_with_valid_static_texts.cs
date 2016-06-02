@@ -14,17 +14,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
     {
         Establish context = () =>
         {
-            staticTextIdentity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.PlainQuestionnaire(Create.QuestionnaireDocument(questionnaireId,
-                Create.Group(children: new List<IComposite>()
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
+                Create.Entity.Group(children: new List<IComposite>()
                 {
-                    Create.StaticText(staticTextIdentity.Id)
+                    Create.Entity.StaticText(staticTextIdentity.Id)
                 })));
 
             var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-            statefulInterview = Create.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
 
             statefulInterview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
             statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));

@@ -43,6 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetQuestionIdByVariable(string variable);
 
+        Guid GetVariableIdByVariableName(string variableName);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -109,6 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllQuestions();
 
+        ReadOnlyCollection<Guid> GetAllVariables();
+
         ReadOnlyCollection<Guid> GetAllStaticTexts();
 
         ReadOnlyCollection<Guid> GetAllGroups();
@@ -167,6 +171,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
 
         /// <summary>
+        /// Gets list of static text ids that use question with provided <param name="questionId">questionId</param> as a substitution.
+        /// </summary>
+        IEnumerable<Guid> GetSubstitutedStaticTexts(Guid questionId);
+
+        /// <summary>
         /// Gets first level child questions of a group
         /// </summary>
         ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
@@ -193,5 +202,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetTextQuestionMask(Guid questionId);
         bool GetHideInstructions(Guid questionId);
         bool ShouldUseFormatting(Guid questionId);
+        bool HasVariable(string variableName);
+        bool HasQuestion(string variableName);
+        bool IsTimestampQuestion(Guid questionId);
     }
 }

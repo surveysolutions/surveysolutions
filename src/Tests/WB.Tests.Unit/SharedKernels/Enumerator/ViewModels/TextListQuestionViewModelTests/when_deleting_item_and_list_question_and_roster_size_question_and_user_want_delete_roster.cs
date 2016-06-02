@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
 
         private static TextListQuestionViewModel listModel;
-        private static NavigationState navigationState = Create.NavigationState();
+        private static NavigationState navigationState = Create.Other.NavigationState();
 
         private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock =
            new Mock<QuestionStateViewModel<TextListQuestionAnswered>> { DefaultValue = DefaultValue.Mock };

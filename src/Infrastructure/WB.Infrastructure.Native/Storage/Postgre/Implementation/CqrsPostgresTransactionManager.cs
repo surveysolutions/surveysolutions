@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
+using NHibernate.Persister.Entity;
 using Ninject;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation

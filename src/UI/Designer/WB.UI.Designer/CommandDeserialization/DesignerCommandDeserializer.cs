@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.CommandDeserialization
@@ -46,6 +47,12 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateStaticText", typeof (UpdateStaticText) },
                     { "DeleteStaticText", typeof (DeleteStaticText) },
                     { "MoveStaticText", typeof (MoveStaticText) },
+
+                    // Variables
+                    { "AddVariable", typeof(AddVariable) },
+                    { "UpdateVariable", typeof(UpdateVariable) },
+                    { "DeleteVariable", typeof(DeleteVariable) },
+                    { "MoveVariable", typeof(MoveVariable) },
                     
                     //obsolete
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},

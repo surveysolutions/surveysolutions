@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -20,21 +20,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             interviewStatusesStorage.Store(history, history.InterviewId);
 
             statusEventsToPublish = new List<IPublishableEvent>();
-            statusEventsToPublish.Add(Create.InterviewerAssignedEvent(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.InterviewCompletedEvent(interviewId: interviewId, comment: "comment Completed"));
-            statusEventsToPublish.Add(Create.InterviewRejectedEvent(interviewId: interviewId, comment: "comment Rejected"));
-            statusEventsToPublish.Add(Create.InterviewApprovedEvent(interviewId: interviewId, comment: "comment Approved"));
-            statusEventsToPublish.Add(Create.InterviewRejectedByHQEvent(interviewId: interviewId, comment: "comment RejectedByHQ"));
-            statusEventsToPublish.Add(Create.InterviewApprovedByHQEvent(interviewId: interviewId, comment: "comment ApprovedByHQ"));
-
-            statusEventsToPublish.Add(Create.UnapprovedByHeadquartersEvent(interviewId: interviewId, comment: "comment Unapproved"));
-            statusEventsToPublish.Add(Create.InterviewApprovedByHQEvent(interviewId: interviewId, comment: "comment ApprovedByHQ 2nd"));
-
-            statusEventsToPublish.Add(Create.InterviewRestartedEvent(interviewId: interviewId, comment: "comment Restarted"));
-            statusEventsToPublish.Add(Create.SupervisorAssignedEvent(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.InterviewRestoredEvent(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.InterviewDeletedEvent(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.InterviewHardDeletedEvent(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCompleted(interviewId: interviewId, comment: "comment Completed"));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewRejected(interviewId: interviewId, comment: "comment Rejected"));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewApproved(interviewId: interviewId, comment: "comment Approved"));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewRejectedByHQ(interviewId: interviewId, comment: "comment RejectedByHQ"));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId, comment: "comment ApprovedByHQ"));
+                                             
+            statusEventsToPublish.Add(Create.PublishedEvent.UnapprovedByHeadquarters(interviewId: interviewId, comment: "comment Unapproved"));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId, comment: "comment ApprovedByHQ 2nd"));
+                                             
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewRestarted(interviewId: interviewId, comment: "comment Restarted"));
+            statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewRestored(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewDeleted(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewHardDeleted(interviewId: interviewId));
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };

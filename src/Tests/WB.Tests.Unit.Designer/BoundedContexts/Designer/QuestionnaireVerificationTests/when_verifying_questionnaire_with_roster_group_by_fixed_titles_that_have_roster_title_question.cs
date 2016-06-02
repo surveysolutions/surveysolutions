@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 VariableName = "a",
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 RosterTitleQuestionId = rosterTitleQuestionId,
-                RosterFixedTitles = new[] { "fixed title 1", "fixed title 2" },
+                FixedRosterTitles = new[] { Create.FixedRosterTitle(1, "fixed title 1"), Create.FixedRosterTitle(2, "fixed title 2") },
                 Children = new List<IComposite>()
                 {
                     new NumericQuestion("question 1")

@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        internal static string Actions {
+            get {
+                return ResourceManager.GetString("Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All data.
         /// </summary>
         internal static string AllData {
@@ -142,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clone questionnaire.
+        /// </summary>
+        internal static string CloneQuestionnaire {
+            get {
+                return ResourceManager.GetString("CloneQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creation Date.
         /// </summary>
         internal static string CreationDate {
@@ -178,7 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Interview.
+        ///   Looks up a localized string similar to New interview.
         /// </summary>
         internal static string NewInterview {
             get {

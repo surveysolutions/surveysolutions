@@ -301,7 +301,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void RemoveMe()
         {
-            this.eventRegistry.Unsubscribe(this, this.interviewId);
+            this.eventRegistry.Unsubscribe(this);
             this.RefreshHasChildrenFlag();
             this.Dispose();
         }

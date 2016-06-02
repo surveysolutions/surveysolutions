@@ -12,7 +12,6 @@ using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.EventStoreTests

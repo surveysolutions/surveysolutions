@@ -18,10 +18,10 @@ namespace WB.UI.Designer.Api
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IDesignerEngineVersionService engineVersionService)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IQuestionnaireViewFactory questionnaireViewFactory, IDesignerEngineVersionService engineVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;

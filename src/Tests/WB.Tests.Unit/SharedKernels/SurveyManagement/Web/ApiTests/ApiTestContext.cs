@@ -3,12 +3,6 @@ using System.IO;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -16,13 +10,19 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Hosting;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
@@ -55,17 +55,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null)
+            IAllInterviewsFactory allInterviewsViewFactory = null)
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>());
+                allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>());
         }
 
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
+            IAllInterviewsFactory allInterviewsViewViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfoProvider = null,
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
+                allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),

@@ -168,6 +168,9 @@
   <data name="TeamAndRoles" xml:space="preserve">
     <value>Team and Roles</value>
   </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Team members and Statuses</value>
+  </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Teams and Roles</value>
   </data>

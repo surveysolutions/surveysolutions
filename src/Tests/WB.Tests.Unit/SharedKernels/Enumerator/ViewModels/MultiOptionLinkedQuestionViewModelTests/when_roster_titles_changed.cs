@@ -22,32 +22,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var linkToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var linkedQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             topRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-            var questionIdentity = Create.Identity(linkedQuestionId, RosterVector.Empty);
+            var questionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.TextListQuestion(questionId: level1TriggerId),
-                Create.Roster(rosterSizeQuestionId: level1TriggerId, rosterId: topRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextListQuestion(questionId: level1TriggerId),
+                Create.Entity.Roster(rosterSizeQuestionId: level1TriggerId, rosterId: topRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                 {
-                    Create.TextListQuestion(questionId: level2triggerId),
-                    Create.Roster(rosterSizeQuestionId: level2triggerId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Create.Entity.TextListQuestion(questionId: level2triggerId),
+                    Create.Entity.Roster(rosterSizeQuestionId: level2triggerId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.TextQuestion(questionId: linkToQuestionId)
+                        Create.Entity.TextQuestion(questionId: linkToQuestionId)
                     })
                 }),
-                Create.MultipleOptionsQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
+                Create.Entity.MultipleOptionsQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
                 );
 
             var interview = Substitute.For<IStatefulInterview>();
-            interview.GetParentRosterTitlesWithoutLast(linkToQuestionId, Create.RosterVector(1, 1))
+            interview.GetParentRosterTitlesWithoutLast(linkToQuestionId, Create.Entity.RosterVector(1, 1))
                 .Returns(new List<string> { "title" });
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
-                .Returns(new[] { Create.TextAnswer("subtitle", linkToQuestionId, Create.RosterVector(1, 1)) });
+                .Returns(new[] { Create.Entity.TextAnswer("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1)) });
 
-            viewModel = CreateViewModel(Create.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.NavigationState());
+            viewModel = CreateViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
+            viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
         };
 
-        Because of = () => viewModel.Handle(Create.RosterInstancesTitleChanged(rosterId: topRosterId));
+        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
         It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
 

@@ -4,18 +4,18 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
+                if (Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
                 {
                     var userRoles = Roles.GetRolesForUser(model.UserName);
 
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
                     bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
                     bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
 
-                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin || isObserver)
+                    if (isHeadquarter || isSupervisor || isAdmin || isObserver)
                     {
                         this.authentication.SignIn(model.UserName, false);
                         
@@ -72,10 +72,10 @@ namespace WB.UI.Headquarters.Controllers
                         }
                     }
 
-                    this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
+                    this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
                 }
                 else
-                    this.ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
+                    this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
             }
 
             return this.View(model);

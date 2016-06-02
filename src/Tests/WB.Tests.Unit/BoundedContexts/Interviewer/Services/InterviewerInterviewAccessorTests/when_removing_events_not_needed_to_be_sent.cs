@@ -15,44 +15,56 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             eventStream = new[]
             {
-                questionAnswered = Create.CommittedEvent(payload: Create.Event.TextQuestionAnswered()),
-                Create.CommittedEvent(payload: Create.Event.GroupsDisabled()),
-                Create.CommittedEvent(payload: Create.Event.GroupsEnabled()),
-                Create.CommittedEvent(payload: Create.Event.QuestionsDisabled()),
-                Create.CommittedEvent(payload: Create.Event.QuestionsEnabled()),
-                Create.CommittedEvent(payload: Create.Event.AnswersDeclaredInvalid()),
-                Create.CommittedEvent(payload: Create.Event.AnswersDeclaredValid()),
-                Create.CommittedEvent(payload: Create.Event.StaticTextsDisabled()),
-                Create.CommittedEvent(payload: Create.Event.StaticTextsEnabled()),
-                Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredInvalid()),
-                Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredValid()),
+                questionAnswered = Create.Other.CommittedEvent(payload: Create.Event.TextQuestionAnswered()),
+                Create.Other.CommittedEvent(payload: Create.Event.GroupsDisabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.GroupsEnabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.QuestionsDisabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.QuestionsEnabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.AnswersDeclaredInvalid()),
+                Create.Other.CommittedEvent(payload: Create.Event.AnswersDeclaredValid()),
+                Create.Other.CommittedEvent(payload: Create.Event.StaticTextsDisabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.StaticTextsEnabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.StaticTextsDeclaredInvalid()),
+                Create.Other.CommittedEvent(payload: Create.Event.StaticTextsDeclaredValid()),
+                Create.Other.CommittedEvent(payload: Create.Event.LinkedOptionsChanged()),
+                Create.Other.CommittedEvent(payload: Create.Event.VariablesDisabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.VariablesEnabled()),
+                Create.Other.CommittedEvent(payload: Create.Event.VariablesChanged()),
 
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsDisabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsEnabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.QuestionsDisabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
-                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
-                firstCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsDisabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsEnabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.QuestionsDisabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.LinkedOptionsChanged()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesDisabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesEnabled()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesChanged()),
+                firstCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
 
-                lastAggregatedGroupsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
-                lastAggregatedGroupsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsEnabled()),
-                lastAggregatedQuestionsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.QuestionsDisabled()),
-                lastAggregatedQuestionsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
-                lastAggregatedQuestionsInvalid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
-                lastAggregatedQuestionsValid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
-                lastAggregatedStaticTextsValid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
-                lastAggregatedStaticTextsInvalid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
-                lastAggregatedStaticTextsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
-                lastAggregatedStaticTextsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
-                lastCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
+                lastAggregatedGroupsDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
+                lastAggregatedGroupsEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsEnabled()),
+                lastAggregatedQuestionsDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.QuestionsDisabled()),
+                lastAggregatedQuestionsEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
+                lastAggregatedQuestionsInvalid = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
+                lastAggregatedQuestionsValid = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
+                lastAggregatedStaticTextsValid = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
+                lastAggregatedStaticTextsInvalid = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
+                lastAggregatedStaticTextsEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
+                lastAggregatedStaticTextsDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
+                lastAggregatedLinkedOptionsChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.LinkedOptionsChanged()),
+                lastAggregatedVariablesDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesDisabled()),
+                lastAggregatedVariablesEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesEnabled()),
+                lastAggregatedVariablesValuesChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesChanged()),
+                lastCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
             };
 
-            optimizer = Create.InterviewEventStreamOptimizer();
+            optimizer = Create.Service.InterviewEventStreamOptimizer();
         };
 
         Because of = () =>
@@ -75,6 +87,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedStaticTextsInvalid,
                 lastAggregatedStaticTextsEnabled,
                 lastAggregatedStaticTextsDisabled,
+                lastAggregatedLinkedOptionsChanged,
+                lastAggregatedVariablesDisabled,
+                lastAggregatedVariablesEnabled,
+                lastAggregatedVariablesValuesChanged,
 
                 lastCompletion,
             });
@@ -94,6 +110,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static CommittedEvent lastAggregatedStaticTextsInvalid;
         private static CommittedEvent lastAggregatedStaticTextsEnabled;
         private static CommittedEvent lastAggregatedStaticTextsDisabled;
+        private static CommittedEvent lastAggregatedLinkedOptionsChanged;
+        private static CommittedEvent lastAggregatedVariablesDisabled;
+        private static CommittedEvent lastAggregatedVariablesEnabled;
+        private static CommittedEvent lastAggregatedVariablesValuesChanged;
         private static CommittedEvent lastCompletion;
     }
 }

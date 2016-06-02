@@ -5,8 +5,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -17,15 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             linkedSourceQuestionId = Guid.NewGuid();
 
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), 
+            questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.Roster(rosterId: Guid.NewGuid(), 
                     variable: "row", 
                     fixedTitles: new[] {"1", "2"},
                     children: new[]
                     {
-                        Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                        Create.Entity.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
                     }),
-                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.Entity.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 

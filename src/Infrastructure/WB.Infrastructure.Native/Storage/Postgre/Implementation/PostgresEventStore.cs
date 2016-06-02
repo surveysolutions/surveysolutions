@@ -16,7 +16,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     public class PostgresEventStore : IStreamableEventStore
     {
-        private const string MissingTableErrorCode = "42P01";
         private readonly PostgreConnectionSettings connectionSettings;
         private static long lastUsedGlobalSequence = -1;
         private static readonly object lockObject = new object();
@@ -28,6 +27,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
+            CreateRelations();
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
@@ -69,36 +69,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
                 {
                     connection.Open();
-                    try
-                    {
-                        return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, connection));
-                    }
-                    catch (NpgsqlException npgsqlException)
-                    {
-                        connection.Open();
-                        if (npgsqlException.Code == MissingTableErrorCode)
-                        {
-                            this.CreateRelations(connection);
-                            return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, connection));
-                        }
-                    }
+                    return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, connection));
                 }
             }
 
             return new CommittedEventStream(eventStream.SourceId);
         }
 
-        private void CreateRelations(IDbConnection connection)
+        private void CreateRelations()
         {
+            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString);
+
             var assembly = Assembly.GetAssembly(typeof(PostgresEventStore));
             var resourceName = typeof(PostgresEventStore).Namespace + ".InitEventStore.sql";
-            
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                var dbCommand = connection.CreateCommand();
-                dbCommand.CommandText = reader.ReadToEnd();
-                dbCommand.ExecuteNonQuery();
+                connection.Open();
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var dbCommand = connection.CreateCommand();
+                    dbCommand.CommandText = reader.ReadToEnd();
+                    dbCommand.ExecuteNonQuery();
+                }
             }
         }
 
@@ -147,40 +141,28 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                try
-                {
-                    connection.Open();
-                    var command = connection.CreateCommand();
-                    command.CommandText = "SELECT COUNT(*) FROM events";
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "select reltuples::bigint from pg_class where relname='events'";
+                var scalar = command.ExecuteScalar();
 
-                    var scalar = command.ExecuteScalar();
-                    return scalar is DBNull ? 0 : Convert.ToInt32(scalar);
-                }
-                catch (NpgsqlException npgsqlException)
-                {
-                    if (npgsqlException.Code == MissingTableErrorCode)
-                    {
-                        this.CreateRelations(connection);
-                        return this.CountOfAllEvents();
-                    }
-                    throw;
-                }
+                return scalar == null ? 0 : Convert.ToInt32(scalar);
             }
         }
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var countOfAllEvents = this.CountOfAllEvents();
             int processed = 0;
-
-            while (processed < countOfAllEvents)
+            IEnumerable<CommittedEvent> eventsBatch;
+            do
             {
-                foreach (var committedEvent in this.ReadEventsBatch(processed))
+                eventsBatch = this.ReadEventsBatch(processed).ToList();
+                foreach (var committedEvent in eventsBatch)
                 {
                     processed++;
                     yield return committedEvent;
                 }
-            }
+            } while (eventsBatch.Any());
         }
 
         private IEnumerable<CommittedEvent> ReadEventsBatch(int processed)

@@ -1,16 +1,10 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Core.Platform;
-using MvvmCross.Droid.Support.V7.Fragging.Fragments;
 using MvvmCross.Platform;
-using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
@@ -25,10 +19,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private Toolbar toolbar;
 
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.interview; }
-        }
+        protected override int ViewResourceId => Resource.Layout.interview;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -42,7 +33,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.SupportActionBar.SetHomeButtonEnabled(true);
 
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
-            this.drawerLayout.SetDrawerListener(this.drawerToggle);
+            this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
             {
                 this.RemoveFocusFromEditText();
@@ -95,8 +86,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnPostCreate(savedInstanceState);
             this.drawerToggle.SyncState();
         }
-
-       
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {

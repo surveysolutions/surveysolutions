@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -36,13 +37,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
+        private Dictionary<Guid, IVariable> variableCache = null;
         private Dictionary<Guid, IStaticText> staticTextCache = null;
         private Dictionary<Guid, IQuestion> questionCache = null;
+        
         private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
         private List<Guid> sectionCache = null;
 
-        private Dictionary<string, HashSet<Guid>> cacheOfSubstitutionReferencedQuestions = null;
+        private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
+        private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -85,6 +89,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private Dictionary<Guid, IVariable> VariablesCache
+        {
+            get
+            {
+                return this.variableCache ?? (this.variableCache
+                    = this.innerDocument
+                        .Find<IVariable>(_ => true)
+                        .ToDictionary(
+                            variable => variable.PublicKey,
+                            variable => variable));
+            }
+        }
+
         private Dictionary<Guid, IStaticText> StaticTextCache
         {
             get
@@ -111,6 +128,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private Dictionary<Guid, IVariable> VariableCache
+        {
+            get
+            {
+                return this.variableCache ?? (this.variableCache
+                    = this.innerDocument
+                        .Find<IVariable>(_ => true)
+                        .ToDictionary(
+                            variable => variable.PublicKey,
+                            variable => variable));
+            }
+        }
+
         private Dictionary<string, IGroup> GroupCache
         {
             get
@@ -123,18 +153,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private Dictionary<string, HashSet<Guid>> CacheOfSubstitutionReferencedQuestions
-        {
-            get
-            {
-                return this.cacheOfSubstitutionReferencedQuestions ??
-                       (this.cacheOfSubstitutionReferencedQuestions = this.GetAllSubstitutionReferences());
-            }
-        }
+        private Dictionary<string, HashSet<Guid>> SubstitutionReferencedQuestionsCache
+            => this.substitutionReferencedQuestionsCache
+            ?? (this.substitutionReferencedQuestionsCache = this.GetSubstitutionReferencedQuestions());
+
+        private Dictionary<string, HashSet<Guid>> SubstitutionReferencedStaticTextsCache
+            => this.substitutionReferencedStaticTextsCache
+            ?? (this.substitutionReferencedStaticTextsCache = this.GetSubstitutionReferencedStaticTexts());
 
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
+
+        private IEnumerable<IVariable> AllVariables => this.VariableCache.Values;
 
         private IEnumerable<IGroup> AllGroups => this.GroupCache.Values;
 
@@ -241,6 +272,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid GetQuestionIdByVariable(string variable)
         {
             return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+        }
+
+        public Guid GetVariableIdByVariableName(string variableName)
+        {
+            return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
@@ -533,6 +569,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
+        public
+        ReadOnlyCollection<Guid> GetAllVariables()
+              => this.AllVariables.Select(variable => variable.PublicKey).ToReadOnlyCollection();
+
         public ReadOnlyCollection<Guid> GetAllStaticTexts()
             => this.AllStaticTexts.Select(staticText => staticText.PublicKey).ToReadOnlyCollection();
 
@@ -578,6 +618,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfChildEntities[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children
+                        .Where(entity => !(entity is IVariable))
                         .Select(entity => entity.PublicKey)
                         .ToReadOnlyCollection();
             }
@@ -690,6 +731,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var numericQuestion = this.GetQuestion(questionId) as INumericQuestion;
             return numericQuestion?.UseFormatting ?? false;
         }
+
+        public bool HasVariable(string variableName)
+        {
+            return this.VariablesCache.Values.Any(x => x.Name == variableName);
+        }
+
+        public bool HasQuestion(string variableName)
+        {
+            return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
+        }
+
+        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
@@ -908,7 +961,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return parentValuesFromQuestion.Contains(parentValue);
         }
 
-        private Dictionary<string, HashSet<Guid>> GetAllSubstitutionReferences()
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedQuestions()
         {
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
             foreach (var question in this.AllQuestions)
@@ -926,17 +979,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return referenceOccurences;
         }
 
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedStaticTexts()
+        {
+            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
+            foreach (var staticText in this.AllStaticTexts)
+            {
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(staticText.Text);
+
+                foreach (var substitutedVariableName in substitutedVariableNames)
+                {
+                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
+                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
+                    if (!referenceOccurences[substitutedVariableName].Contains(staticText.PublicKey))
+                        referenceOccurences[substitutedVariableName].Add(staticText.PublicKey);
+                }
+            }
+            return referenceOccurences;
+        }
+
         public IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId)
         {
             string targetVariableName = this.GetQuestionVariableName(questionId);
 
             if (!string.IsNullOrWhiteSpace(targetVariableName))
             {
-                if (this.CacheOfSubstitutionReferencedQuestions.ContainsKey(targetVariableName))
+                if (this.SubstitutionReferencedQuestionsCache.ContainsKey(targetVariableName))
                 {
-                    foreach (var guid in this.CacheOfSubstitutionReferencedQuestions[targetVariableName])
+                    foreach (var referencingQuestionId in this.SubstitutionReferencedQuestionsCache[targetVariableName])
                     {
-                        yield return guid;
+                        yield return referencingQuestionId;
                     }
                 }
             }
@@ -951,6 +1022,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     if (this.SubstitutionService.ContainsRosterTitle(questionTitle))
                     {
                         yield return questionsInRosterId;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Guid> GetSubstitutedStaticTexts(Guid questionId)
+        {
+            string targetVariableName = this.GetQuestionVariableName(questionId);
+
+            if (!string.IsNullOrWhiteSpace(targetVariableName))
+            {
+                if (this.SubstitutionReferencedStaticTextsCache.ContainsKey(targetVariableName))
+                {
+                    foreach (var referencingStaticTextId in this.SubstitutionReferencedStaticTextsCache[targetVariableName])
+                    {
+                        yield return referencingStaticTextId;
+                    }
+                }
+            }
+
+            var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
+            foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
+            {
+                IEnumerable<Guid> staticTextsInRoster = this.GetAllUnderlyingStaticTexts(rosterId);
+                foreach (var staticTextInRosterId in staticTextsInRoster)
+                {
+                    var staticTextTitle = GetStaticText(staticTextInRosterId);
+                    if (this.SubstitutionService.ContainsRosterTitle(staticTextTitle))
+                    {
+                        yield return staticTextInRosterId;
                     }
                 }
             }

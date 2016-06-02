@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests

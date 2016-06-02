@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.V4;
-using WB.Core.SharedKernels.DataCollection.V5;
-using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.V8
 {
-    public abstract class AbstractConditionalLevelInstanceV8<T> : AbstractConditionalLevelInstanceV7<T>, IExpressionExecutableV8
+    public abstract class AbstractConditionalLevelInstanceV8<T> : AbstractConditionalLevelInstanceV7<T>
         where T : IExpressionExecutableV8
     {
 
@@ -65,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             => this.CopyMembers(ConvertGetInstancesV7ToV8(getInstancesV7));
 
         private static Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> ConvertGetInstancesV7ToV8(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV7>> getInstancesV7)
-            => (x, y) => getInstancesV7(x, y).Cast<IExpressionExecutableV8>();
+            => (x, y) => getInstancesV7(x, y)?.Cast<IExpressionExecutableV8>();
 
         public abstract IExpressionExecutableV8 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> getInstances);
 
@@ -74,32 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        protected abstract void SetParentImpl(IExpressionExecutable parent);
-        protected abstract IExpressionExecutableV8 GetParentImpl();
-
         protected virtual IDictionary<Guid, IReadOnlyList<FailedValidationCondition>> FailedValidations => this.InvalidAnsweredFailedValidations;
 
-        public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
-            => this.Validate(out questionsToBeValid, out questionsToBeInvalid);
-
-        public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
         
-        public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
-
-        public void SetParent(IExpressionExecutable parent) => this.SetParentImpl(parent);
-        public void SetParent(IExpressionExecutableV2 parent) => this.SetParentImpl(parent);
-        public void SetParent(IExpressionExecutableV5 parent) => this.SetParentImpl(parent);
-        public void SetParent(IExpressionExecutableV6 parent) => this.SetParentImpl(parent);
-        public void SetParent(IExpressionExecutableV7 parent) => this.SetParentImpl(parent);
-        public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);
-
-        IExpressionExecutable IExpressionExecutable.GetParent() => this.GetParentImpl();
-        IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => this.GetParentImpl();
-        IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => this.GetParentImpl();
-        IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => this.GetParentImpl();
-        IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => this.GetParentImpl();
-        IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.GetParentImpl();
-
         public void DisableStaticText(Guid staticTextId)
         {
             if (this.EnablementStates.ContainsKey(staticTextId))

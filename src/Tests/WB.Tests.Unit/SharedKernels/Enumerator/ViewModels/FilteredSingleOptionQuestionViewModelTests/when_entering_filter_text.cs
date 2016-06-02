@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object);
+
             viewModel.Options = new List<FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel>()
             {
                 new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "abc", Value = 1},

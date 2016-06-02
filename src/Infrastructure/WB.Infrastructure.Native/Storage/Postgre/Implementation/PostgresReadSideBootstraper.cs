@@ -1,52 +1,34 @@
-﻿using System;
-using NHibernate.Tool.hbm2ddl;
-using Npgsql;
+﻿using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideBootstraper : IPostgresReadSideBootstraper
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private readonly SchemaUpdate schemaUpdate;
+        private readonly DbUpgradeSettings dbUpgradeSettings;
 
-        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, SchemaUpdate schemaUpdate)
+        public PostgresReadSideBootstraper(PostgreConnectionSettings connectionSettings, DbUpgradeSettings dbUpgradeSettings)
         {
             this.connectionSettings = connectionSettings;
-            this.schemaUpdate = schemaUpdate;
+            this.dbUpgradeSettings = dbUpgradeSettings;
         }
 
         public void ReCreateViewDatabase()
         {
-            using (NpgsqlConnection connection = new Npgsql.NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                var dbCommand = connection.CreateCommand();
-
-                dbCommand.CommandText = "drop schema public cascade;create schema public;";
-                dbCommand.ExecuteNonQuery();
-            }
-
-            this.schemaUpdate.Execute(true, true);
-        }
-
-        public void CreateIndexesAfterRebuildReadSide()
-        {
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
-                NpgsqlCommand dbCommand = connection.CreateCommand();
-                dbCommand.AllResultTypesAreUnknown = true;
+                NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
+                string schemaName = connectionStringBuilder.SearchPath ?? "public";
 
-                dbCommand.CommandText = "SELECT to_regclass('public.userdocuments')";
-                var tableExists = dbCommand.ExecuteScalar();
-
-                if (tableExists != DBNull.Value)
-                {
-                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));CREATE INDEX answerstofeaturedquestions_answervalue ON answerstofeaturedquestions (answervalue text_pattern_ops); ";
-                    dbCommand.ExecuteNonQuery();
-                }
+                var dbCommand = connection.CreateCommand();
+                dbCommand.CommandText = $"drop schema {schemaName} cascade;create schema {schemaName};";
+                dbCommand.ExecuteNonQuery();
             }
+
+            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.dbUpgradeSettings);
         }
 
         public bool CheckDatabaseConnection()

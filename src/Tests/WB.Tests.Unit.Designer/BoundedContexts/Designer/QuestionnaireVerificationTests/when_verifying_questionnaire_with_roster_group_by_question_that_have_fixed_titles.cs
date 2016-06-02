@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 VariableName = "a",
                 RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterFixedTitles = new [] { "fixed title 1" }
+                FixedRosterTitles = new[] { Create.FixedRosterTitle(1, "fixed title 1")}
             });
             verifier = CreateQuestionnaireVerifier();
         };

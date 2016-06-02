@@ -4,7 +4,9 @@ using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
@@ -53,11 +55,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.IsFilteredCombobox,
                 data.CascadeFromQuestionId,
                 data.YesNoView,
-                data.ValidationConditions);
+                data.ValidationConditions,
+                data.IsTimestamp);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
             return q;
+        }
+
+        public IVariable CreateVariable(QuestionnaireVariableEvent variableEvent)
+        {
+            var variable = new Variable(variableEvent.EntityId, variableEvent.VariableData);
+            return variable;
         }
 
         private AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
@@ -156,7 +165,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             bool? yesNoView,
-            IList<ValidationCondition> validationConditions)
+            IList<ValidationCondition> validationConditions,
+            bool isTimestamp)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -205,6 +215,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             if (textQuestion != null)
             {
                 textQuestion.Mask = mask;
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                dateTimeQuestion.IsTimestamp = isTimestamp;
             }
         }
     }

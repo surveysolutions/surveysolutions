@@ -1,20 +1,20 @@
 ﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
-    ViewBag.Title = "Index";
+    ViewBag.Title = BatchUpload.BatchUpload_Title;
 }
 
 @section scripts
 {
+    @Scripts.Render("~/validate")
     <script type="text/javascript">
         $(function () {
             $('.prefilled-file-upload').bind('change', function() {
                 var fileSize = this.files[0].size / 1024 / 1024;
                 if (fileSize > 300) {
-                    bootbox.alert('The file size can not exceed 300MB.');
+                    bootbox.alert('@BatchUpload.FileSizeLimit');
                     $(".prefilled-file-upload").val('');
                 }
             });
@@ -65,10 +65,10 @@
                     @Html.HiddenFor(x => x.QuestionnaireId)
                     @Html.HiddenFor(x => x.QuestionnaireVersion)
                     <br />
-                    <div class="control-group">
+                    <div class="control-group form-group">
                         <div class="controls">
                             @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "prefilled-file-upload" })
-                            @Html.ValidationMessageFor(x => x.File)
+                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                         </div>
                     </div>
                     <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload"/>
@@ -90,10 +90,10 @@
             @Html.HiddenFor(x => x.QuestionnaireId)
             @Html.HiddenFor(x => x.QuestionnaireVersion)
             <br />
-            <div class="control-group">
+            <div class="control-group form-group">
                 <div class="controls">
                     @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip" })
-                    @Html.ValidationMessageFor(x => x.File)
+                    @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                 </div>
             </div>
                 <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload" />

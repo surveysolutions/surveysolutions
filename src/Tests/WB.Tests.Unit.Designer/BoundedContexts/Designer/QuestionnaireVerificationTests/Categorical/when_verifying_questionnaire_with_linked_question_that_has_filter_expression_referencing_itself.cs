@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -19,13 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             var linkedSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new Group()
-                {
-                    IsRoster = true,
-                    VariableName = "a",
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "fixed title 1", "fixed title 2" },
-                    Children =
+                Create.FixedRoster(variable: "a",
+                    fixedTitles: new[] {"fixed title 1", "fixed title 2"},
+                    children: new IComposite[]
                     {
                         new TextQuestion()
                         {
@@ -33,8 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             QuestionType = QuestionType.Text,
                             StataExportCaption = "var"
                         }
-                    }
-                },
+                    }),
                 Create.SingleOptionQuestion(questionId: questionWithFilterId,
                     variable: "s546i",
                     linkedToQuestionId: linkedSourceQuestionId,
@@ -42,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { questionWithFilterId.ToString() });
+                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
         };

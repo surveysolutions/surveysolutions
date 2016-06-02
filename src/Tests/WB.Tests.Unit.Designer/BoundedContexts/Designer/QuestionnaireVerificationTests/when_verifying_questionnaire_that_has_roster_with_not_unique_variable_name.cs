@@ -17,24 +17,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new Group
-                {
-                    PublicKey = rosterId1,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = nonUniqueVariableName,
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var1" } }
-                },
-                 new Group
-                {
-                    PublicKey = rosterId2,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = nonUniqueVariableName,
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var2" } }
-                }
+                Create.FixedRoster(rosterId: rosterId1,
+                    fixedTitles: new[] {"1", "2"},
+                    variable: nonUniqueVariableName,
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var1"}}),
+
+                Create.FixedRoster(rosterId: rosterId2,
+                    fixedTitles: new[] {"1", "2"},
+                    variable: nonUniqueVariableName,
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var2"}})
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -43,29 +36,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code_WB0068 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0068");
+        It should_return_WB0026_error = () =>
+           verificationMessages.ShouldContainCritical("WB0026");
 
         It should_return_message_with_level_critical = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_message_with_two_references = () =>
-            verificationMessages.First().References.Count().ShouldEqual(2);
+            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
         It should_return_message_with_first_references_with_Group_type = () =>
-            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.GetCritical("WB0026").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_with_first_references_with_id_equals_rosterId1 = () =>
-            verificationMessages.First().References.First().Id.ShouldEqual(rosterId1);
+            verificationMessages.GetCritical("WB0026").References.First().Id.ShouldEqual(rosterId1);
 
         It should_return_message_with_second_references_with_Group_type = () =>
-         verificationMessages.First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.GetCritical("WB0026").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_with_second_references_with_id_equals_rosterId2 = () =>
-            verificationMessages.First().References.Last().Id.ShouldEqual(rosterId2);
+            verificationMessages.GetCritical("WB0026").References.Last().Id.ShouldEqual(rosterId2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

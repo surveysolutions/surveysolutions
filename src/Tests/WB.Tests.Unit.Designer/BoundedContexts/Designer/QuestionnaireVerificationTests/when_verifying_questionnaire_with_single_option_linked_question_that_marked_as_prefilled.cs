@@ -15,30 +15,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new Group()
-            {
-                PublicKey = Guid.NewGuid(),
-                IsRoster = true,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new[] { "1", "2" },
-                VariableName = "varRoster",
-                Children = new List<IComposite>
-                {
-                    new TextQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                Create.FixedRoster(variable: "varRoster",
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
-                        PublicKey = sourceLinkedQuestionId,
-                        QuestionType = QuestionType.Text,
-                        StataExportCaption = "var1"
-                    }
-                },
-            }, new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                StataExportCaption = "var2",
-                Featured = true,
-                QuestionType = QuestionType.SingleOption,
-                LinkedToQuestionId = sourceLinkedQuestionId
-            });
+                        new TextQuestion()
+                        {
+                            PublicKey = sourceLinkedQuestionId,
+                            QuestionType = QuestionType.Text,
+                            StataExportCaption = "var1"
+                        }
+                    }), new SingleQuestion()
+                    {
+                        PublicKey = linkedQuestionId,
+                        StataExportCaption = "var2",
+                        Featured = true,
+                        QuestionType = QuestionType.SingleOption,
+                        LinkedToQuestionId = sourceLinkedQuestionId
+                    });
 
             verifier = CreateQuestionnaireVerifier();
         };

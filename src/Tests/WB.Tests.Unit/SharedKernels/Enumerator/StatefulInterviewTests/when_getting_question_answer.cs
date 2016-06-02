@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var targetRosterVector = new[] {0m};
 
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetRosterLevelForQuestion(questionId) == 1);
-            IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            IPlainQuestionnaireRepository questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(Create.Event.TextQuestionAnswered(questionId, targetRosterVector, "answer"));
         };
 

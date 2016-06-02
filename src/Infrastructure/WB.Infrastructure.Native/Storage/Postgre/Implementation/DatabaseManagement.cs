@@ -4,13 +4,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal static class DatabaseManagement
     {
-        public static void CreateDatabase(string connectionString)
+        public static void InitDatabase(string connectionString)
         {
-            var builder = new NpgsqlConnectionStringBuilder(connectionString);
-            var databaseName = builder.Database; 
-            builder.Database = "postgres"; // System DB name.
+            CreateDatabase(connectionString);
+        }
 
-            using (var connection = new NpgsqlConnection(builder.ConnectionString))
+        private static void CreateDatabase(string connectionString)
+        {
+            var masterDbConnectionString = new NpgsqlConnectionStringBuilder(connectionString);
+            var databaseName = masterDbConnectionString.Database;
+            masterDbConnectionString.Database = "postgres"; // System DB name.
+
+            using (var connection = new NpgsqlConnection(masterDbConnectionString.ConnectionString))
             {
                 connection.Open();
                 var checkDbExistsCommand = connection.CreateCommand();
@@ -21,10 +26,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 if (dbExists == null)
                 {
                     var createCommand = connection.CreateCommand();
-                    createCommand.CommandText = string.Format(@"CREATE DATABASE ""{0}"" ENCODING = 'UTF8'", databaseName); // unfortunately there is no way to use parameters based syntax here 
+                    createCommand.CommandText = $@"CREATE DATABASE ""{databaseName}"" ENCODING = 'UTF8'";
+                        // unfortunately there is no way to use parameters based syntax here 
                     createCommand.ExecuteNonQuery();
                 }
             }
         }
-   }
+    }
 }

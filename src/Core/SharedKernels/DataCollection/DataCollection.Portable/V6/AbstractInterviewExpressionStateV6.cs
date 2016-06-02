@@ -165,9 +165,8 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             foreach (var failedValidationCondition in failedValidationConditions)
             {
                 var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
-                if (targetLevel == null) return;
 
-                (targetLevel as IExpressionExecutableV6).ApplyFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
+                (targetLevel as IExpressionExecutableV6)?.ApplyFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
             }
         }
 

@@ -214,6 +214,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team members and Statuses.
+        /// </summary>
+        internal static string TeamMembersAndStatuses {
+            get {
+                return ResourceManager.GetString("TeamMembersAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teams and Roles.
         /// </summary>
         internal static string TeamsAndRoles {

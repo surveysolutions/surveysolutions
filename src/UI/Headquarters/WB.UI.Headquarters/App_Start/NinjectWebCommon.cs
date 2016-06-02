@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -17,9 +18,15 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -29,13 +36,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
-using WB.Core.SharedKernels.SurveyManagement.Web;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
@@ -44,15 +44,15 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Migrations.PlainStore;
+using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Services;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -69,19 +69,10 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
-    /// <summary>
-    ///     The ninject web common.
-    /// </summary>
     public static class NinjectWebCommon
     {
-        /// <summary>
-        ///     The bootstrapper.
-        /// </summary>
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
-        /// <summary>
-        ///     Starts the application
-        /// </summary>
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
@@ -89,18 +80,11 @@ namespace WB.UI.Headquarters
             Bootstrapper.Initialize(CreateKernel);
         }
 
-        /// <summary>
-        ///     Stops the application.
-        /// </summary>
         public static void Stop()
         {
             Bootstrapper.ShutDown();
         }
 
-        /// <summary>
-        ///     Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
@@ -131,15 +115,14 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly };
+            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
-                    typeof(SurveyManagementSharedKernelModule).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(SynchronizationModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
                 }
             };
@@ -159,13 +142,15 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
+                new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
                 new HeadquartersRegistry(),
-                new SynchronizationModule(synchronizationSettings),
-                new SurveyManagementWebModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
+                new PostgresReadSideModule(
+                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace), 
+                    cacheSettings, 
+                    mappingAssemblies)
             );
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
@@ -207,13 +192,15 @@ namespace WB.UI.Headquarters
 
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(basePath, 
+                new HeadquartersBoundedContextModule(basePath, 
                     interviewDetailsDataLoaderSettings,
                     readSideSettings,
-                    LegacyOptions.SupervisorFunctionsEnabled,
-                    interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, exportSettings,
-                    interviewDataExportSettings, sampleImportSettings));
+                    userPreloadingSettings, 
+                    exportSettings,
+                    interviewDataExportSettings, 
+                    sampleImportSettings,
+                    synchronizationSettings,
+                    interviewCountLimit));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -234,9 +221,6 @@ namespace WB.UI.Headquarters
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
-            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(FilterScope.Controller)
-               .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
-
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
@@ -249,6 +233,7 @@ namespace WB.UI.Headquarters
 
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
+            kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>().To<RestoreDeletedQuestionnaireProjectionsService>();
 
             return kernel;
         }
@@ -267,7 +252,10 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-            foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
+
+            //Kernel.RegisterDenormalizer<>() - should be used instead
+            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
+            foreach (object handler in enumerable)
             {
                 bus.Register((IEventHandler)handler);
             }

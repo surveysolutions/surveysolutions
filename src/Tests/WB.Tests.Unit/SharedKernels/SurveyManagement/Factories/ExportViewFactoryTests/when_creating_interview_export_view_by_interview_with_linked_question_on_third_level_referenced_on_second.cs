@@ -7,12 +7,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
@@ -28,13 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new string[] { "t1", "t2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {"t1", "t2"},
+                    children: new IComposite[]
                     {
                         new NumericQuestion()
                         {
@@ -42,25 +35,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "q1"
                         },
-                        new Group()
-                        {
-                            PublicKey = nestedRosterId,
-                            IsRoster = true,
-                            RosterFixedTitles = new string[] { "n1", "n2" },
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            Children = new List<IComposite>
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId, fixedTitles: new[] {"n1", "n2"},
+                            children: new IComposite[]
                             {
-
                                 new SingleQuestion()
                                 {
                                     PublicKey = linkedQuestionId,
                                     QuestionType = QuestionType.SingleOption,
                                     LinkedToQuestionId = linkedQuestionSourceId
                                 }
-                            }
-                        }
-                    }
-                });
+                            })
+                    }));
 
             interview = CreateInterviewData();
             var rosterLevel = new InterviewLevel(new ValueVector<Guid>{ rosterId, nestedRosterId }, null, new decimal[] { 0, 0 });

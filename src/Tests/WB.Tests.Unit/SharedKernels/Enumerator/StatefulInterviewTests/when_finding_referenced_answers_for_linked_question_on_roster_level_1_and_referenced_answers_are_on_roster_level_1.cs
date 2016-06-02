@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionRosterVector = new[] { 1m };
             var linkedQuestionRosters = new[] { referencedRoster1 };
-            linkedQuestionIdentity = Create.Identity(linkedQuestionId, linkedQuestionRosterVector);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
             var referencedQuestionRosters = new[] { referencedRoster1 };
 
             IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
                 && _.GetRosterSizeSourcesForEntity(referencedQuestionId) == referencedQuestionRosters);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(interview, referencedRoster1, referencedQuestionId, linkedQuestionIdentity);
         };

@@ -35,11 +35,11 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         }
         Establish context = () =>
         {
-            publishableEvent = Create.PublishableEvent(payload: new FunctionalEventHandlerEvent());
+            publishableEvent = Create.Other.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
 
-            eventDispatcher = Create.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
                 {
                     EventHandlerTypesWithIgnoredExceptions = new[]

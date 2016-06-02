@@ -8,12 +8,12 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.InterviewActionsExporterTests
@@ -32,16 +32,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
 
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: questionnaireId, 
+                Create.Entity.InterviewStatuses(questionnaireId: questionnaireId, 
                     questionnaireVersion: questionnaireVersion,
-                    statuses: new[] {Create.InterviewCommentedStatus(
+                    statuses: new[] {Create.Entity.InterviewCommentedStatus(
                             status: InterviewExportedAction.Completed)},
                     interviewid: intervieId),
                 intervieId.FormatGuid());
 
 
-            var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
-            var headerStructureForLevel = Create.HeaderStructureForLevel();
+            var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            var headerStructureForLevel = Create.Entity.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
             readSideToTabularFormatExportService = CreateExporter(csvWriter: csvWriterMock.Object,

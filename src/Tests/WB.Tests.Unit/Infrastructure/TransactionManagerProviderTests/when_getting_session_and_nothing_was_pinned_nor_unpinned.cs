@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Infrastructure.TransactionManagerProviderTests
     {
         Establish context = () =>
         {
-            transactionManagerProvider = Create.TransactionManagerProvider(transactionManagerFactory: () => transactionManagerFromFactory);
+            transactionManagerProvider = Create.Service.TransactionManagerProvider(transactionManagerFactory: () => transactionManagerFromFactory);
         };
 
         Because of = () =>

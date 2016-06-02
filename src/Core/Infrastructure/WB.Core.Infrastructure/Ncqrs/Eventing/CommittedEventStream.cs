@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Ncqrs.Eventing
 {
-    public class CommittedEventStream : IEnumerable<CommittedEvent>
+    public class CommittedEventStream : IReadOnlyCollection<CommittedEvent>
     {
         private readonly int _fromVersion;
         private readonly int _toVersion;
@@ -37,6 +37,8 @@ namespace Ncqrs.Eventing
         {
             get { return _toVersion; }
         }
+
+        public int Count => this._events.Count;
 
         public IEnumerator<CommittedEvent> GetEnumerator()
         {

@@ -6,18 +6,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {
@@ -26,7 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly ILogger logger;
-        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
+        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
@@ -37,15 +33,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             ILogger logger,
             IMetaDescriptionFactory metaDescriptionFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
@@ -119,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
         {
             return
-                this.questionnaireExportStructureStorage.GetById(questionnaireId.ToString());
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)

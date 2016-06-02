@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             Type = QuestionType.DateTime;
         }
 
+        public bool IsTimestamp { get; set; }
         public override sealed QuestionType Type { get; set; }
     }
 }

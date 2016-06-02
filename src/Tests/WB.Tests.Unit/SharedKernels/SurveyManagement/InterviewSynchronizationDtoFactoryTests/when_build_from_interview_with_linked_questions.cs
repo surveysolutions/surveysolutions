@@ -5,12 +5,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
 {
@@ -29,12 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             AddInterviewLevel(interviewData, new ValueVector<Guid>(new[] { rosterId }), new decimal[] { 3 },
               new Dictionary<Guid, object>());
 
-            questionnaireDocument = Create.QuestionnaireDocument(children: new IComposite[]
+            questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Roster(rosterId: rosterId, variable: "fix",
-                    children: new[] {Create.TextQuestion(questionId: txtQuestionId, variable: "txt")}),
-                Create.SingleQuestion(id:linkOnRosterQuestionId , variable: "link_on_roster", linkedToRosterId: rosterId),
-                Create.SingleQuestion(id: singleLinkQuestionId, variable: "link_on_question", linkedToQuestionId: txtQuestionId),
+                Create.Entity.Roster(rosterId: rosterId, variable: "fix",
+                    children: new[] {Create.Entity.TextQuestion(questionId: txtQuestionId, variable: "txt")}),
+                Create.Entity.SingleQuestion(id:linkOnRosterQuestionId , variable: "link_on_roster", linkedToRosterId: rosterId),
+                Create.Entity.SingleQuestion(id: singleLinkQuestionId, variable: "link_on_question", linkedToQuestionId: txtQuestionId),
             });
 
             interviewSynchronizationDtoFactory = CreateInterviewSynchronizationDtoFactory(questionnaireDocument);

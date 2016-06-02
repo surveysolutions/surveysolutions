@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
@@ -72,11 +73,11 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static void ShouldContainWarning(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code, string warningMessage =null)
         {
             verificationMessages.ShouldContain(message
                 => message.MessageLevel == VerificationMessageLevel.Warning
-                && message.Code == code);
+                   && message.Code == code && (warningMessage == null || message.Message == warningMessage));
         }
 
         public static void ShouldContainError(
@@ -84,6 +85,14 @@ namespace WB.Tests.Unit.Designer
         {
             verificationMessages.ShouldContain(message
                 => message.MessageLevel == VerificationMessageLevel.General
+                && message.Code == code);
+        }
+
+        public static void ShouldContainCritical(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldContain(message
+                => message.MessageLevel == VerificationMessageLevel.Critical
                 && message.Code == code);
         }
 

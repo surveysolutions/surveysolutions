@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
 
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
-            
+
             expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
                 expressionState.QuestionnaireLevelModel.Questions,
                 expressionState.QuestionnaireLevelModel.StaticTexts,
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             UpdateReferencesOnParentRosters(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
-            UpdateReferencesOnParentQuestions(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+            UpdateReferencesOnParentQuestionsAndVariables(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
@@ -173,6 +173,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     string.Empty));
             }
 
+            foreach (var variable in questionnaireTemplate.AllVariables)
+            {
+                methodModels.Add(ExpressionLocation.Variable(variable.Id).Key, new ConditionDescriptionModel(
+
+                    variable.ParentScopeTypeName,
+                    variable.ExpressionMethodName,
+                    codeGenerationSettings.Namespaces,
+                    variable.Expression,
+                    false,
+                    variable.VariableName,
+                    returnType: variable.TypeName));
+            }
+
             return methodModels;
         }
 
@@ -185,6 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
             var staticTexts = rostersInScope.SelectMany(r => r.StaticTexts).ToList();
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
+            var variables = rostersInScope.SelectMany(r => r.Variables).ToList();
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
@@ -192,7 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 questions, staticTexts, groups, rostersInScope, template.ConditionsPlayOrder);
 
             return new RosterScopeTemplateModel(rosterScopeType, questions, staticTexts, groups, rosters, rostersInScope,
-                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions);
+                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions, variables);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
@@ -286,7 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public static void UpdateReferencesOnParentQuestions(
+        public static void UpdateReferencesOnParentQuestionsAndVariables(
            Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
            QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -299,7 +313,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(questionnaireLevelModel.Questions)
                     .Select(x => new HierarchyReferenceModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
+                var allParentsVariablesToTop = parentRosters
+                    .SelectMany(x => x.Variables)
+                    .Union(questionnaireLevelModel.Variables)
+                    .Select(x => new HierarchyReferenceModel {TypeName = x.TypeName, VariableName = x.VariableName})
+                    .ToList();
+
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop;
+                rosterScopeModel.AllParentsVariablesToTop = allParentsVariablesToTop;
             }
         }
 
@@ -373,7 +394,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         continue;
                     }
+                    if (child is IVariable)
+                    {
+                        var variable = this.CreateVariableTemplateModel((IVariable)child, currentScope, questionnaireDoc);
 
+                        currentScope.Variables.Add(variable);
+
+                        expressionState.AllVariables.Add(variable);
+
+                        continue;
+                    }
                     if (child is IStaticText)
                     {
                         var staticTextModel = this.CreateStaticTextTemplateModel((IStaticText) child, currentScope, questionnaireDoc);
@@ -552,18 +582,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             linkedQuestionFilters.ForEach(x => x.ParentScopeTypeName = typeName);
 
-            var roster = new RosterTemplateModel
-            {
-                Id = childAsIGroup.PublicKey,
-                Conditions = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
-                VariableName = varName,
-                TypeName = typeName,
-                RosterScopeName = CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
-                RosterScope = currentRosterScope,
-                ParentTypeName = currentScope.TypeName,
-                ParentScopeTypeName = currentScope.TypeName,
-                LinkedQuestionFilterExpressions = linkedQuestionFilters
-            };
+            var roster = new RosterTemplateModel(
+                rosterScopeName: CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
+                typeName: typeName,
+                rosterScope: currentRosterScope,
+                parentTypeName: currentScope.TypeName,
+                conditions: macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression,questionnaireDoc.Macros.Values),
+                id: childAsIGroup.PublicKey,
+                variableName: varName,
+                parentScopeTypeName: currentScope.TypeName,
+                linkedQuestionFilterExpressions: linkedQuestionFilters);
+
             return roster;
         }
 
@@ -580,6 +609,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ParentScopeTypeName = currentScope.TypeName,
             };
 
+        private VariableTemplateModel CreateVariableTemplateModel(IVariable variable, RosterScopeBaseModel currentScope,
+            QuestionnaireDocument questionnaire)
+            =>
+                new VariableTemplateModel(variable.PublicKey, variable.Name,
+                    this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values),
+                    CreateVariablesCSharpType(variable.Type), currentScope.RosterScopeName, currentScope.TypeName);
+
         private StaticTextTemplateModel CreateStaticTextTemplateModel(IStaticText staticText, RosterScopeBaseModel currentScope, QuestionnaireDocument questionnaire)
             => new StaticTextTemplateModel(
                 staticText.PublicKey,
@@ -591,6 +627,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .ToList(),
                 currentScope.RosterScopeName,
                 currentScope.TypeName);
+
+        private string CreateVariablesCSharpType(VariableType variableType)
+        {
+            switch (variableType)
+            {
+                case VariableType.LongInteger:
+                    return "long?";
+                case VariableType.Double:
+                    return "double?";
+                case VariableType.Boolean:
+                    return "bool?";
+                case VariableType.DateTime:
+                    return "DateTime?";
+                case VariableType.String:
+                    return "string";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(variableType), variableType, $"unknown variable type {variableType}");
+            }
+        }
 
         private string GetConditionForCascadingQuestion(QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
         {
@@ -604,18 +659,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 return conditionForChildCascadingQuestion;
             }
 
-            string childQuestionCondition = (string.IsNullOrWhiteSpace(conditionForChildCascadingQuestion)
-                ? string.Empty
-                : $" && {conditionForChildCascadingQuestion}");
+            string childQuestionCondition = (string.IsNullOrWhiteSpace(conditionForChildCascadingQuestion) ? string.Empty : $" && {conditionForChildCascadingQuestion}");
 
             var valuesOfParentCascadingThatHaveChildOptions = childQuestion.Answers.Select(x => x.ParentValue).Distinct();
             var allValuesOfParentCascadingQuestion = parentQuestion.Answers.Select(x => x.AnswerValue);
 
             var parentOptionsThatHaveNoChildOptions = allValuesOfParentCascadingQuestion.Where(x => !valuesOfParentCascadingThatHaveChildOptions.Contains(x));
 
-            var expressionToDisableChildThatHasNoOptionsForChosenParent = !parentOptionsThatHaveNoChildOptions.Any()
-                ? string.Empty
-                : GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(parentOptionsThatHaveNoChildOptions, parentQuestion.StataExportCaption);
+            var expressionToDisableChildThatHasNoOptionsForChosenParent = !parentOptionsThatHaveNoChildOptions.Any() ? string.Empty : GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(parentOptionsThatHaveNoChildOptions, parentQuestion.StataExportCaption);
 
             return $"!IsAnswerEmpty({parentQuestion.StataExportCaption})" + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
         }
@@ -623,10 +674,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var allGroups = questionnaireDocument.GetAllGroups().ToList();
-            Dictionary<string, Guid> variableNames = questionnaireDocument
-                .GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))
-                .ToDictionary(q => q.StataExportCaption, q => q.PublicKey);
+            Dictionary<string, Guid> variableNames = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.StataExportCaption)).ToDictionary(q => q.StataExportCaption, q => q.PublicKey);
 
             foreach (var roster in allGroups.Where(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName)))
             {
@@ -634,36 +682,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var staticTextsWithConditions = questionnaireDocument
-                .GetEntitiesByType<IStaticText>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var questionsWithCondition = questionnaireDocument
-                .GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var staticTextsWithConditions = questionnaireDocument.GetEntitiesByType<IStaticText>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var questionsWithCondition = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
 
-            Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
-                x => x.PublicKey,
-                x => this.GetIdsOfQuestionsInvolvedInExpression(
-                    this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values),
-                    variableNames));
+            Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames));
 
-            staticTextsWithConditions.ToDictionary(
-                x => x.PublicKey,
-                x => this.GetIdsOfQuestionsInvolvedInExpression(
-                    this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames))
-                .ToList()
-                .ForEach(x => dependencies.Add(x.Key, x.Value));
+            staticTextsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
 
-            questionsWithCondition.ToDictionary(
-                x => x.PublicKey,
-                x => this.GetIdsOfQuestionsInvolvedInExpression(
-                    this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames))
-                .ToList()
-                .ForEach(x => dependencies.Add(x.Key, x.Value));
+            questionsWithCondition.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
 
-            var cascadingQuestions = questionnaireDocument
-                .GetEntitiesByType<SingleQuestion>()
-                .Where(x => x.CascadeFromQuestionId.HasValue);
+            var cascadingQuestions = questionnaireDocument.GetEntitiesByType<SingleQuestion>().Where(x => x.CascadeFromQuestionId.HasValue);
 
             foreach (var cascadingQuestion in cascadingQuestions)
             {
@@ -673,7 +701,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 }
                 else
                 {
-                    dependencies.Add(cascadingQuestion.PublicKey, new List<Guid> { cascadingQuestion.CascadeFromQuestionId.Value });
+                    dependencies.Add(cascadingQuestion.PublicKey, new List<Guid> {cascadingQuestion.CascadeFromQuestionId.Value});
                 }
             }
 
@@ -713,7 +741,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "DateTime?";
 
                 case QuestionType.SingleOption:
-                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId==null) ? "decimal?" : "decimal[]";
+                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) ? "decimal?" : "decimal[]";
 
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";
@@ -729,15 +757,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression,
-            Dictionary<string, Guid> variableNames)
+        private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression, Dictionary<string, Guid> variableNames)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
-            return new List<Guid>(
-                from variable in identifiersUsedInExpression
-                where variableNames.ContainsKey(variable)
-                select variableNames[variable]);
+            return new List<Guid>(from variable in identifiersUsedInExpression where variableNames.ContainsKey(variable) select variableNames[variable]);
         }
 
         private string GenerateTypeNameByScope(string rosterClassNamePrefix, IEnumerable<Guid> currentRosterScope, Dictionary<string, string> scopesTypeNames)

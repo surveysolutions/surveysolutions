@@ -37,6 +37,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             this.storage.Remove(id);
         }
 
+        public void RemoveIfStartsWith(string beginingOfId)
+        {
+            var allKeyToRemove = this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
+            foreach (var keyToRemove in allKeyToRemove)
+            {
+                this.storage.Remove(keyToRemove);
+            }
+        }
+
         public void Remove(T view)
         {
             var keyOfItemToRemove = storage.FirstOrDefault(item => item.Value == view).Key;

@@ -4,10 +4,10 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests;
 using It = Machine.Specifications.It;
 
@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         Establish context = () =>
         {
             var multiOptionQuestion =
-                    Create.MultyOptionsQuestion(id: Guid.NewGuid(), variable: questionsVariableName,
-                        options: new[] { Create.Option("1", "one"), Create.Option("3", "three") });
+                    Create.Entity.MultyOptionsQuestion(id: Guid.NewGuid(), variable: questionsVariableName,
+                        options: new[] { Create.Entity.Option("1", "one"), Create.Entity.Option("3", "three") });
             multiOptionQuestion.QuestionText = questionsTitle;
-            var questionnaire = Create.QuestionnaireDocument(children: new[]
+            var questionnaire = Create.Entity.QuestionnaireDocument(children: new[]
             {
                 multiOptionQuestion
             });

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests.FolderPermissionCheckerTests

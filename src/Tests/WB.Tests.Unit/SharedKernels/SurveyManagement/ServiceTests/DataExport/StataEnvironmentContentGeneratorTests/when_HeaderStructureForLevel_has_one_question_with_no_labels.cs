@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         {
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName, exportedHeaderItems: new [] { CreateExportedHeaderItem(questionsVariableName, questionsTitle)});
-            questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
             stataEnvironmentContentService =
