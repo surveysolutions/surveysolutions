@@ -224,6 +224,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
 
+            this.Bind<IExportFileNameService>().To<ExportExportFileNameService>();
+
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
