@@ -550,6 +550,8 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
+    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
@@ -686,6 +688,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
