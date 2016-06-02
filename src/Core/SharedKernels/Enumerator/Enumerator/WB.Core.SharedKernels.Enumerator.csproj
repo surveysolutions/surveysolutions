@@ -132,6 +132,7 @@
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
+    <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TimestampQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />

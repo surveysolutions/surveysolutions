@@ -49,14 +49,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             return new StaticTextViewModel(
                 questionnaireRepository: plainQuestionnaireRepository,
                 interviewRepository: statefulInterviewRepository,
-                registry: liteEventRegistry,
                 questionState: questionState ??
                                new StaticTextStateViewModel(
                                    new EnablementViewModel(statefulInterviewRepository, liteEventRegistry),
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository,
                                        plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
                 attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
-                substitutionViewModel: replacerService);
+                dynamicTextViewModel: new DynamicTextViewModel(liteEventRegistry, replacerService));
         }
     }
 }
