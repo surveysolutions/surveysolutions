@@ -65,8 +65,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return this.Back();
             }
 
-            if (this.ModelState.ContainsKey("ExcessiveRequests"))
-                this.Attention(Users.TryLater);
             return this.View(model);
         }
 
