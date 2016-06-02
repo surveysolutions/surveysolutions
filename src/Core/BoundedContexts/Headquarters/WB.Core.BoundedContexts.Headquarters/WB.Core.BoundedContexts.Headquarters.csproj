@@ -268,6 +268,7 @@
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
+    <Compile Include="Implementation\Services\FileNameService.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Services\IAttachmentContentService.cs" />
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
+    <Compile Include="Services\IFileNameService.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\ISampleImportService.cs" />

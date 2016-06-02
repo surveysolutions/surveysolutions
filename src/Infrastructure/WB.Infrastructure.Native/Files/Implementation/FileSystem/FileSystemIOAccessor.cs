@@ -147,12 +147,13 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public Stream OpenOrCreateFile(string pathToFile, bool append)
         {
-            var stream = new FileStream(
-                ZlpIOHelper.CreateFileHandle(pathToFile,
-                                             this.IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
-                                             ZetaLongPaths.Native.FileAccess.GenericWrite,
-                                             FileShare.Write),
-                FileAccess.Write);
+            var creationDisposition = this.IsFileExists(pathToFile) 
+                ? CreationDisposition.OpenExisting 
+                : CreationDisposition.New;
+
+            var fileHandle = ZlpIOHelper.CreateFileHandle(pathToFile, creationDisposition, ZetaLongPaths.Native.FileAccess.GenericWrite, FileShare.Write);
+
+            var stream = new FileStream(fileHandle, FileAccess.Write);
 
             if (append && stream.CanSeek)
             {
@@ -175,7 +176,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public string MakeStataCompatibleFileName(string name)
         {
             var result = this.RemoveNonAscii(MakeValidFileName(name)).Trim();
-            return result.Length < 128 ? result : result.Substring(0, 128);
+            var clippedResult = result.Length < 128 ? result : result.Substring(0, 128);
+            return string.IsNullOrWhiteSpace(clippedResult) ? "_" : clippedResult;
         }
 
         public string MakeValidFileName(string name)
