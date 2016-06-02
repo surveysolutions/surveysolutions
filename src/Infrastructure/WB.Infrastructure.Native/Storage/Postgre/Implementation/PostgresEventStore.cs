@@ -30,14 +30,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             CreateRelations();
         }
 
-        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-            => minVersion > maxVersion
-                ? new CommittedEventStream(id)
-                : new CommittedEventStream(id,
-                    maxVersion == int.MaxValue
-                        ? this.Read(id, minVersion)
-                        : this.Read(id, minVersion).Take(maxVersion - Math.Max(0, minVersion) + 1));
-
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
