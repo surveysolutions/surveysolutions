@@ -269,20 +269,20 @@ angular.module('designerApp')
                 $rootScope.$broadcast("variablesChanged", {});
             };
 
-            $rootScope.addLocalVariableName = function (variable) {
-                if ($scope.variableNames.indexOf(variable) == -1) {
-                    $scope.variableNames.push(variable);
-
-                    $rootScope.$broadcast("variablesChanged", {});
+            $rootScope.addOrUpdateLocalVariable = function (variableId, variableName) {
+                var current = _.find($scope.variableNames, { id: variableId });
+                if (!_.isUndefined(current)) {
+                    current.name = variableName;
+                } else {
+                    $scope.variableNames.push({ id: variableId, name: variableName });
                 }
+                
+                $rootScope.$broadcast("variablesChanged", {});
             };
             
-            $rootScope.removeLocalVariableName = function (variable) {
-                for (var i = $scope.variableNames.length - 1; i--;) {
-                    if ($scope.variableNames[i] === variable)
-                        $scope.variableNames.splice(i, 1);
-                }
-
+            $rootScope.removeLocalVariable = function (variableId) {
+                $scope.variableNames.splice(_.indexOf($scope.variableNames, _.findWhere($scope.variableNames, { id: variableId })), 1);
+               
                 $rootScope.$broadcast("variablesChanged", {});
             };
 
@@ -294,11 +294,20 @@ angular.module('designerApp')
             $rootScope.$on('questionDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.questionsCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
+
+                $rootScope.removeLocalVariable(removedItemId);
+            });
+
+            $rootScope.$on('varibleDeleted', function (scope, removedItemId) {
+                $scope.removeItemWithIdFromErrors(removedItemId);
+
+                $rootScope.removeLocalVariable(removedItemId);
             });
 
             $rootScope.$on('rosterDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.rostersCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
+                $rootScope.removeLocalVariable(removedItemId);
             });
 
             $rootScope.$on('groupAdded', function () {
@@ -380,20 +389,20 @@ angular.module('designerApp')
                 
             };
 
-            $scope.getVariables = function () {
-                return $rootScope.variableNames;
+            $scope.getVariablesNames = function () {
+                return _.pluck($rootScope.variableNames, "name");;
             }
 
             $scope.aceEditorUpdateMode = function(editor) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
-                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
+                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariablesNames));
 
                     var variablesCompletor =
                     {
                         getCompletions: function (editor, session, pos, prefix, callback) {
                             var i = 0;
-                            callback(null, $scope.getVariables().sort().reverse().map(function (variable) {
+                            callback(null, $scope.getVariablesNames().sort().reverse().map(function (variable) {
                                     return { name: variable, value: variable, score: i++, meta: "variable" }
                                 }));
                         }

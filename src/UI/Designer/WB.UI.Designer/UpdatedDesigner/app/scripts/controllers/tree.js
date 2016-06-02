@@ -686,7 +686,7 @@
                 question.hasValidation = data.hasValidation;
                 question.hasCondition = data.hasCondition;
 
-                $rootScope.addLocalVariableName(data.variable);
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable);
 
             });
 
@@ -703,7 +703,7 @@
                 var variable = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(variable)) return;
                 variable.variableData.name = data.name;
-                $rootScope.addLocalVariableName(data.name);
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.name);
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {
@@ -724,7 +724,7 @@
                 roster.variable = data.variable;
                 roster.hasCondition = data.hasCondition;
 
-                $rootScope.addLocalVariableName(data.variable);
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable);
             });
         }
     );
