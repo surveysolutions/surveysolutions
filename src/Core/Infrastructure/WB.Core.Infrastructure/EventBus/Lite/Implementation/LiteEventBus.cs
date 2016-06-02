@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return commitUncommittedEvents;
         }
 
-        public void PublishCommittedEvents(CommittedEventStream committedEvents)
+        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
         {
             foreach (var uncommittedChange in committedEvents)
             {
