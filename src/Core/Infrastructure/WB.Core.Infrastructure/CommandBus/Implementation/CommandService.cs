@@ -170,7 +170,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            IEnumerable<CommittedEvent> commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
             aggregate.MarkChangesAsCommitted();
 
             try
