@@ -149,14 +149,6 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public async Task SetReadSideVersionAsync(int version)
-        {
-            await this.SaveCurrentSettings(settings =>
-            {
-                settings.ReadSideVersion = version;
-            });
-        }
-
         public async Task SetCommunicationBufferSize(int bufferSize)
         {
             await this.SaveCurrentSettings(settings =>

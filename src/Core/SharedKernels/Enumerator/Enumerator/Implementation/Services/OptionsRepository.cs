@@ -65,6 +65,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public long OptionsCount()
+        {
+            return this.optionsStorage.Count(_ => true);
+        }
+
         private async Task StoreOptionsForQuestionAsync(string questionnaireIdAsString, string questionIdAsString, List<Answer> answers)
         {
             var optionsToSave = new List<OptionView>();
