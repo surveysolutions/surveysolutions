@@ -68,14 +68,6 @@ namespace Ncqrs.Eventing.Sourcing
             _initialVersion = _currentVersion = snapshot.Version;
         }
 
-        public void InitializeFromHistory(CommittedEventStream history)
-        {
-            if (history == null)
-                throw new ArgumentNullException(nameof(history));
-
-            this.InitializeFromHistory(history.SourceId, history);
-        }
-
         public void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
         {
             if (history == null)
