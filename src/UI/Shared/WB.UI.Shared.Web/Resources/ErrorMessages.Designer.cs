@@ -68,5 +68,14 @@ namespace WB.UI.Shared.Web.Resources {
                 return ResourceManager.GetString("ExcessiveRequestAttemptsDetected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please try again later.
+        /// </summary>
+        internal static string TryLater {
+            get {
+                return ResourceManager.GetString("TryLater", resourceCulture);
+            }
+        }
     }
 }

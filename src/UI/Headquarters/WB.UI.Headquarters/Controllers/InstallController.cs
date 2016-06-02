@@ -56,8 +56,6 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Index", "Headquarters");
             }
 
-            if (this.ModelState.ContainsKey("ExcessiveRequests"))
-                this.Attention(Users.TryLater);
             return View(model);
         }
     }

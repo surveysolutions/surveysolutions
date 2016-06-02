@@ -1190,7 +1190,6 @@
     <Compile Include="Services\InterviewImportState.cs" />
     <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
-    <Compile Include="Utils\Alerts.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
@@ -1336,6 +1335,7 @@
     <Content Include="App_GlobalResources\Users.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Users.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireImport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>

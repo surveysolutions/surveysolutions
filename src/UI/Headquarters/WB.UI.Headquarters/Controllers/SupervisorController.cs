@@ -51,9 +51,6 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                if (this.ModelState.ContainsKey("ExcessiveRequests"))
-                    this.Attention(Users.TryLater);
-
                 return this.View(model);
             }
 
