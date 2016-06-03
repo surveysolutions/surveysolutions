@@ -417,9 +417,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Reverse()
                     .ToReadOnlyCollection());
 
-        public Guid? GetParentGroup(Guid groupOrQuestionId)
+        public Guid? GetParentGroup(Guid entityId)
         {
-            var groupOrQuestion = this.GetGroupOrQuestionOrThrow(groupOrQuestionId);
+            var groupOrQuestion = this.GetEntityOrThrow(entityId);
 
             IComposite parent = groupOrQuestion.GetParent();
 

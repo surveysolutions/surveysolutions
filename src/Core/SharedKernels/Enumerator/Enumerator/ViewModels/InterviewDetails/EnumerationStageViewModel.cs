@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (scrollTo != null)
             {
-                var childItem = this.Items.OfType<GroupViewModel>()
+                var childItem = this.Items
                     .FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                 anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
