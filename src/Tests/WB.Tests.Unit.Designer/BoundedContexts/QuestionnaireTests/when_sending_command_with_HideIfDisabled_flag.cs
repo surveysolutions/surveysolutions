@@ -5,6 +5,8 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -35,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private Because of = () =>
         {
             questionnaire.UpdateNumericQuestion(questionId: questionNumericId, title: "title", variableName: "variableName2", variableLabel: "variableLabel", isPreFilled: false, scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, properties: Create.QuestionProperties(), responsibleId: responsibleId, isInteger: true, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>());
-            questionnaire.UpdateDateTimeQuestion(questionId: questionDateTimeId, title: "title", variableName: "variableName1", variableLabel: "variableLabel", isPreFilled: false, scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties(), isTimestamp: false);
+            questionnaire.UpdateDateTimeQuestion(new UpdateDateTimeQuestion(questionnaireId: Guid.Parse("22222222222222222222222222222222"), questionId: questionDateTimeId, isPreFilled: false, scope: QuestionScope.Interviewer, responsibleId: responsibleId, validationConditions: new List<ValidationCondition>(), commonQuestionParameters: new CommonQuestionParameters{Title = "title", VariableName = "variableName1", VariableLabel = "variableLabel", EnablementCondition = null, HideIfDisabled = true, Instructions = null}, isTimestamp: false));
             questionnaire.UpdateGpsCoordinatesQuestion(questionId: questionGpsCoordinatesId, title: "title", variableName: "variableName3", variableLabel: "variableLabel3", isPreFilled: false, scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
             questionnaire.UpdateMultimediaQuestion(questionId: questionMultimediaId, title: "title", variableName: "variableName4", variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
             questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, options: new Option[] { new Option(Guid.NewGuid(), "1", "1"), new Option(Guid.NewGuid(), "2", "2"), }, linkedToEntityId: null, areAnswersOrdered: false, maxAllowedAnswers: 2, yesNoView: false,
