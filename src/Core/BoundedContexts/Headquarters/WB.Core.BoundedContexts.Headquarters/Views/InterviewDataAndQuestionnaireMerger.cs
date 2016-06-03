@@ -204,7 +204,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
 
             var rosterTitle = !string.IsNullOrEmpty(rosterTitleFromLevel)
                 ? $"{currentGroup.Title}: {rosterTitleFromLevel}"
-                : currentGroup.Title;
+                : this.GetTitleWithSubstitutedVariables(currentGroup.Title, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
+
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
             {
                 Depth = depth,
@@ -260,7 +261,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                     }
 
                     var interviewStaticText = interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey) ? interviewLevel.StaticTexts[staticText.PublicKey] : null;
-                    var titleWithSubstitutedVariables = this.GetTitleWithSubstitutedVariables(staticText, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
+                    var titleWithSubstitutedVariables = this.GetTitleWithSubstitutedVariables(staticText.Text, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
                     var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
                     var interviewStaticTextView = new InterviewStaticTextView(staticText, titleWithSubstitutedVariables, interviewStaticText, interviewAttachmentViewModel);
 
@@ -274,14 +275,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         }
 
 
-        private string GetTitleWithSubstitutedVariables(IStaticText staticText, 
+        private string GetTitleWithSubstitutedVariables(string title, 
             InterviewLevel currentInterviewLevel,
             List<InterviewLevel> upperInterviewLevels,
             string rosterTitle,
             InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
-            string title = staticText.Text;
-
             IEnumerable<string> usedVariables = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
             Dictionary<string, string> answersForTitleSubstitution = usedVariables
