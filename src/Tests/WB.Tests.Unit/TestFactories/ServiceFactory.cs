@@ -39,6 +39,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -103,7 +105,7 @@ namespace WB.Tests.Unit.TestFactories
                 liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
                 eventStore ?? Mock.Of<IEventStore>());
 
-        public ILiteEventRegistry LiteEventRegistry()
+        public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
         public MapReportDenormalizer MapReportDenormalizer(
@@ -175,5 +177,8 @@ namespace WB.Tests.Unit.TestFactories
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 Create.Entity.ReadSideCacheSettings());
+
+        public VariableToUIStringService VariableToUIStringService()
+            => new VariableToUIStringService();
     }
 }
