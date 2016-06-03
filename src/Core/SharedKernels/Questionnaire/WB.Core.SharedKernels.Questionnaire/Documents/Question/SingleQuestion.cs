@@ -31,7 +31,6 @@ namespace Main.Core.Entities.SubEntities.Question
             this.Answers.Add(answer);
         }
 
-
         public override T Find<T>(Guid publicKey)
         {
             return null;
