@@ -7,5 +7,6 @@
         Validation = 2,
         Filter = 4,
         Expression = 5,
+        CategoricalFilter = 6
     }
 }

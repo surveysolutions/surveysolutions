@@ -23,6 +23,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string RosterScopeName { set; get; }
         public string ParentScopeTypeName { get; set; }
-
+        public string OptionsFilterExpression { get; set; }
     }
 }
