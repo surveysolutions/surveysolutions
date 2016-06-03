@@ -230,12 +230,18 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\StaticTextTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\VariableTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
       <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.cs">
       <DependentUpon>QuestionnaireLevelTemplateV10.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -831,6 +837,10 @@
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SharedTemplateV10.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
     </None>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
