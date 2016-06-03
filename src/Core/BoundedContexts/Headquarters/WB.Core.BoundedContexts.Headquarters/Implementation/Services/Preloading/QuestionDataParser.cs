@@ -102,10 +102,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 case QuestionType.DateTime:
                     DateTime date;
-                    if (
-                        !DateTime.TryParse(answer, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None,
-                            out date))
+                    if (!DateTime.TryParse(answer, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date) ||
+                        date.TimeOfDay != TimeSpan.Zero)
+                    {
                         return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
+                    }
                     parsedValue = date;
                     return ValueParsingResult.OK;
 
