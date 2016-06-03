@@ -102,11 +102,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 case QuestionType.DateTime:
                     DateTime date;
-                    if (!DateTime.TryParse(answer, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date) ||
-                        date.TimeOfDay != TimeSpan.Zero)
+
+                    var dateTimeQuestion = question as DateTimeQuestion;
+                    if (dateTimeQuestion == null) return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
+
+                    var dateTimeImportFormat = dateTimeQuestion.IsTimestamp ? "o" : "yyyy-MM-dd";
+
+                    if (!DateTime.TryParseExact(answer, dateTimeImportFormat, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date))
                     {
                         return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
                     }
+
                     parsedValue = date;
                     return ValueParsingResult.OK;
 
