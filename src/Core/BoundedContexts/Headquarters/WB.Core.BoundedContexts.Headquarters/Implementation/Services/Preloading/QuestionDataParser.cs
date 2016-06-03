@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 
@@ -106,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     var dateTimeQuestion = question as DateTimeQuestion;
                     if (dateTimeQuestion == null) return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
 
-                    var dateTimeImportFormat = dateTimeQuestion.IsTimestamp ? "o" : "yyyy-MM-dd";
+                    var dateTimeImportFormat = dateTimeQuestion.IsTimestamp ? ExportedQuestion.ExportDateTimeFormat : ExportedQuestion.ExportDateFormat;
 
                     if (!DateTime.TryParseExact(answer, dateTimeImportFormat, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date))
                     {
