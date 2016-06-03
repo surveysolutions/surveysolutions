@@ -344,6 +344,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_latitude_longitude_in_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_has_time.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
@@ -1332,7 +1333,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question_with_invalid_answer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_geolocation_question_which_cant_be_parsed.cs" />
