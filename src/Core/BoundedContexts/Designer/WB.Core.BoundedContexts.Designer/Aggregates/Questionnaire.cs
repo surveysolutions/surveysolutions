@@ -1781,34 +1781,37 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateDateTimeQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions, QuestionProperties properties, bool isTimestamp)
+        public void UpdateDateTimeQuestion(UpdateDateTimeQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
-
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                QuestionType.DateTime, responsibleId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
+                QuestionType.DateTime, command.ResponsibleId);
             
             this.ApplyEvent(new QuestionChanged
             (
-                publicKey: questionId,
+                publicKey: command.QuestionId,
                 groupPublicKey: null, //?
                 questionText: title,
                 questionType: QuestionType.DateTime,
-                stataExportCaption: variableName,
-                variableLabel: variableLabel,
-                featured: isPreFilled,
-                questionScope: scope,
-                conditionExpression: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
+                stataExportCaption: command.VariableName,
+                variableLabel: variableName,
+                featured: command.IsPreFilled,
+                questionScope: command.Scope,
+                conditionExpression: command.EnablementCondition,
+                hideIfDisabled: command.HideIfDisabled,
                 validationExpression: null,
                 validationMessage: null,
-                instructions: instructions,
-                properties: properties,
-                responsibleId: responsibleId,
+                instructions: command.Instructions,
+                properties: command.Properties,
+                responsibleId: command.ResponsibleId,
                 mask: null,
                 capital: false,
                 answerOrder: null,
@@ -1822,9 +1825,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
                 targetGroupKey: Guid.Empty,
-                validationConditions: validationConditions,
+                validationConditions: command.ValidationConditions,
                 linkedFilterExpression: null,
-                isTimestamp: isTimestamp
+                isTimestamp: command.IsTimestamp
             ));
         }
 
