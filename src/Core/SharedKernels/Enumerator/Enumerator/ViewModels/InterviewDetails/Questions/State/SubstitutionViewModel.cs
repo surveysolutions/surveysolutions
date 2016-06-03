@@ -54,11 +54,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, string textWithSubstitutions)
         {
             this.interviewId = interviewId;
-            this.textWithSubstitutions = textWithSubstitutions;
             this.entityIdentity = entityIdentity;
+
+            this.SetText(textWithSubstitutions);
+        }
+
+        private void SetText(string textWithSubstitutions)
+        {
+            this.textWithSubstitutions = textWithSubstitutions;
 
             this.substitutionVariables = this.GetSubstitutionVariables();
         }
+
+        public void ChangeText(string textWithSubstitutions) => this.SetText(textWithSubstitutions);
 
         public bool HasVariablesInText(IEnumerable<Identity> variableIdentities)
         {

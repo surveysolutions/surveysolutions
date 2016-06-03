@@ -29,6 +29,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private Identity identity;
 
+        public void InitAsStatic(string textWithoutSubstitutions)
+        {
+            if (textWithoutSubstitutions == null) throw new ArgumentNullException(nameof(textWithoutSubstitutions));
+
+            this.HtmlText = textWithoutSubstitutions;
+            this.PlainText = textWithoutSubstitutions;
+        }
+
         public void Init(string interviewId, Identity entityIdentity, string textWithSubstitutions)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
@@ -39,9 +47,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.substitutionViewModel.Init(interviewId, entityIdentity, textWithSubstitutions);
 
-            this.UpdateTexts();
+            this.RefreshTexts();
 
             this.registry.Subscribe(this, interviewId);
+        }
+
+        public void ChangeText(string textWithSubstitutions)
+        {
+            this.substitutionViewModel.ChangeText(textWithSubstitutions);
+
+            this.RefreshTexts();
         }
 
         private string htmlText;
@@ -73,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (!shouldUpdateTexts) return;
 
-            this.UpdateTexts();
+            this.RefreshTexts();
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
@@ -84,10 +99,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (!shouldUpdateTexts) return;
 
-            this.UpdateTexts();
+            this.RefreshTexts();
         }
 
-        private void UpdateTexts()
+        private void RefreshTexts()
         {
             this.HtmlText = this.substitutionViewModel.ReplaceSubstitutions();
             this.PlainText = RemoveHtmlTags(this.HtmlText);
