@@ -36,7 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string textWithSubstitutions;
         private Identity entityIdentity;
 
-        public SubstitutionViewModel(IStatefulInterviewRepository interviewRepository,
+        public SubstitutionViewModel(
+            IStatefulInterviewRepository interviewRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
