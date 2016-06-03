@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EntityWithErrorsViewModel : MvxViewModel
     {
-        public async void Init(NavigationIdentity entityIdentity, string errorMessage, NavigationState navigationState)
+        public void Init(NavigationIdentity entityIdentity, string errorMessage, NavigationState navigationState)
         {
             this.navigationState = navigationState;
             this.entityIdentity = entityIdentity;

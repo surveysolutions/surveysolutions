@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
-       // private NavigationState navigationState;
         private readonly IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory;
         protected readonly IPrincipal principal;
 
@@ -55,7 +54,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.UnansweredCount = questionsCount - this.AnsweredCount;
-      //      this.navigationState = navigationState;
 
             this.EntitiesWithErrors =
                 new ObservableCollection<EntityWithErrorsViewModel>(
