@@ -67,7 +67,8 @@ namespace WB.Tests.Integration
                     new SubstitutionService(),
                     new LiteEventRegistry(),
                     sideBarSectionViewModelsFactory,
-                    Mock.Of<IMvxMessenger>());
+                    Mock.Of<IMvxMessenger>(),
+                    Create.DynamicTextViewModel());
                 barSectionViewModel.NavigationState = Mock.Of<NavigationState>();
                 return barSectionViewModel;
             };

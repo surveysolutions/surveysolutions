@@ -45,7 +45,8 @@ namespace WB.Tests.Unit
                 Create.Service.SubstitutionService(),
                 Create.Service.LiteEventRegistry(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
-                Mock.Of<IMvxMessenger>());
+                Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel());
             sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;

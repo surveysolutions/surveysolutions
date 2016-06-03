@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
                 Create.Service.SubstitutionService(), 
                 Create.Service.LiteEventRegistry(), 
                 Stub.SideBarSectionViewModelsFactory(),
-                Mock.Of<IMvxMessenger>());
+                Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel());
         }
     }
 }
