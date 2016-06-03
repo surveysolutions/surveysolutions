@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
+    [Ignore("TLK should fix in KP-7256")]
     internal class when_roster_instances_added : SectionsViewModelTestContext
     {
         Establish context = () =>
