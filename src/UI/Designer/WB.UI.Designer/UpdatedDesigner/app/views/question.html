@@ -129,7 +129,7 @@
             </div>
         </div>
 
-        <script type="text/ng-template" id="SingleOption-template.html">
+    <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -172,6 +172,7 @@
                         </div>
                     </div>
                 </div>
+                <ng-include src="'categorical-filter-expression'"></ng-include>
             </div>
             <p>
                 <a ng-if="activeQuestion.isFilteredCombobox"
@@ -341,7 +342,7 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="MultyOption-template.html">
+    <script type="text/ng-template" id="MultyOption-template.html">
             <div class="multyOption">
                 <div ng-if="!activeQuestion.isLinked">
 
@@ -382,6 +383,7 @@
                             </p>
                         </div>
                     </div>
+                    <ng-include src="'categorical-filter-expression'"></ng-include>
                 </div>
             </div>
             <div class="table-holder">
@@ -496,6 +498,15 @@
         </script>
 
         <script type="text/ng-template" id="Multimedia-template.html">
+        </script>
+    
+        <script type="text/ng-template" id="categorical-filter-expression">
+            <div class="form-group">
+                <label class="wb-label" for="optionsFilterExpression">Filter</label> <help></help>
+                <div class="pseudo-form-control">
+                    <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
+                </div>
+            </div>
         </script>
     </div>
     <div class="form-buttons-holder">
