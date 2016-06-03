@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private NavigationState navigationState;
         private Identity groupIdentity;
 
-        public EnablementViewModel Enablement { get; private set; }
+        public EnablementViewModel Enablement { get; }
         public string Title { get; private set; }
         public bool IsRoster { get; private set; }
 
