@@ -12,8 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
     public class ExportedQuestion
     {
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
-        private static string exportDatetimeFormat = "o";
-        private static string exportDateFormat = "yyyy-MM-dd";
+        public const string ExportDateTimeFormat = "s";
+        public const string ExportDateFormat = "yyyy-MM-dd";
         private const string DefaultDelimiter = "|";
 
         public ExportedQuestion()
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                     gpsQuestion.Longitude.ToString(exportCulture),
                     gpsQuestion.Accuracy.ToString(exportCulture),
                     gpsQuestion.Altitude.ToString(exportCulture),
-                    gpsQuestion.Timestamp.DateTime.ToString(exportDatetimeFormat, exportCulture)
+                    gpsQuestion.Timestamp.DateTime.ToString(ExportDateTimeFormat, exportCulture)
                 };
             }
 
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 var isDateTimeQuestion = this.QuestionType == QuestionType.DateTime;
                 var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
 
-                return formattable.ToString(isTimestampQuestion ? exportDatetimeFormat : isDateTimeQuestion ? exportDateFormat : null, exportCulture);
+                return formattable.ToString(isTimestampQuestion ? ExportDateTimeFormat : isDateTimeQuestion ? ExportDateFormat : null, exportCulture);
             }
             return  obj.ToString();
         }
