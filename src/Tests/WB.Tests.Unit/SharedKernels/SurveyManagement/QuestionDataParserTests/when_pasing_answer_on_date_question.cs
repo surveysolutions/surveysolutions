@@ -5,11 +5,11 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
-    internal class when_pasing_answer_on_datetime_question_and_answer_has_time : QuestionDataParserTestContext
+    internal class when_pasing_answer_on_date_question : QuestionDataParserTestContext
     {
         Establish context = () =>
         {
-            answer = "2016-01-01T12:12:31";
+            answer = "2016-01-14";
             questionDataParser = CreateQuestionDataParser();
             question = new DateTimeQuestion()
             {
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 
         Because of = () => parsingResult = questionDataParser.TryParse(answer, questionVarName, question, out parcedValue);
 
-        It should_result_be_AnswerAsDateTimeWasNotParsed = () =>
-            parsingResult.ShouldEqual(ValueParsingResult.AnswerAsDateTimeWasNotParsed);
+        It should_result_be_parsed_successfully = () =>
+            parsingResult.ShouldEqual(ValueParsingResult.OK);
     }
 }

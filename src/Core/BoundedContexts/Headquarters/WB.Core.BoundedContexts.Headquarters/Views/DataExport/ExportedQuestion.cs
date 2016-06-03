@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
         private static string exportDatetimeFormat = "o";
         private static string exportDateFormat = "yyyy-MM-dd";
-        private static string exportTimestampFormat = "u";
         private const string DefaultDelimiter = "|";
 
         public ExportedQuestion()
@@ -225,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 var isDateTimeQuestion = this.QuestionType == QuestionType.DateTime;
                 var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
 
-                return formattable.ToString(isTimestampQuestion ? exportTimestampFormat : isDateTimeQuestion ? exportDateFormat : null, exportCulture);
+                return formattable.ToString(isTimestampQuestion ? exportDatetimeFormat : isDateTimeQuestion ? exportDateFormat : null, exportCulture);
             }
             return  obj.ToString();
         }
