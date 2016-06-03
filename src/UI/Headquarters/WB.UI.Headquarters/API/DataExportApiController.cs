@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.API
 
             result.Content = new StreamContent(stream);
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(filePath);
+            result.Content.Headers.ContentDisposition.FileName = HttpUtility.UrlEncode(fileSystemAccessor.GetFileName(filePath));
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
 
             return result;
