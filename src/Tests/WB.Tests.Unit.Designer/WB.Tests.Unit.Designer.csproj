@@ -489,7 +489,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\Macros\when_updating_macro_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Macros\when_updating_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_fixed_titles_contain_one_item.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_21_rosters.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
