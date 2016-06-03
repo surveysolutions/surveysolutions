@@ -344,6 +344,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_latitude_longitude_in_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_has_time.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
