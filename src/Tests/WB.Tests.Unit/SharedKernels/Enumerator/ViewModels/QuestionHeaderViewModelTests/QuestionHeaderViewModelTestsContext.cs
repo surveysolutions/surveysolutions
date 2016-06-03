@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
@@ -29,16 +30,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 rosterTitleSubstitutionService = substStub.Object;
             }
 
-            return new QuestionHeaderViewModel(questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+            return new QuestionHeaderViewModel(
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                registry ?? Create.Service.LiteEventRegistry(),
-                new SubstitutionViewModel(
-                    interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                    questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                    new SubstitutionService(),
-                    new AnswerToStringService(),
-                    new VariableToUIStringService(),
-                    rosterTitleSubstitutionService));
+                new DynamicTextViewModel(
+                    registry ?? Create.Service.LiteEventRegistry(),
+                    new SubstitutionViewModel(
+                        interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                        questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                        new SubstitutionService(),
+                        new AnswerToStringService(),
+                        new VariableToUIStringService(),
+                        rosterTitleSubstitutionService)));
         }
     }
 }

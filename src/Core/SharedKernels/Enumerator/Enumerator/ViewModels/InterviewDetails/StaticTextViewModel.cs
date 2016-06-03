@@ -13,9 +13,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public DynamicTextViewModel Text { get; set; }
-        public AttachmentViewModel Attachment { get; set; }
-        public StaticTextStateViewModel QuestionState { get; set; }
+        public DynamicTextViewModel Text { get; }
+        public AttachmentViewModel Attachment { get; }
+        public StaticTextStateViewModel QuestionState { get; }
 
         public StaticTextViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+
             this.Text = dynamicTextViewModel;
             this.Attachment = attachmentViewModel;
             this.QuestionState = questionState;
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.QuestionState.Dispose();
+            this.Text.Dispose();
         }
     }
 }
