@@ -543,7 +543,7 @@ input[type=date] {
   margin-top: 20px;
 }
 .more > a {
-  color: #000;
+  color: #0000EE;
   display: inline-block;
   padding-bottom: 3px;
 }
@@ -613,13 +613,12 @@ figure img {
 }
 .appendix_detail > a {
   text-decoration: none;
-  border-bottom: 1px solid #000;
 }
 .appendix_detail > a:hover {
   border: transparent;
 }
 .appendix_detail a {
-  color: #000;
+  color: #0000EE;
   font-weight: normal;
 }
 .appendix_link:hover {
