@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.TestFactories
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null,
-            QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false)
+            QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false, bool isTimestamp = false)
             => new DateTimeQuestion("Question DT")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -133,7 +133,8 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
-                Featured = preFilled
+                Featured = preFilled,
+                IsTimestamp = isTimestamp
             };
 
         public EnablementChanges EnablementChanges(
