@@ -72,7 +72,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
+            expressionState.CategoricalOptionsFilterModels = BuildCategoricalOptionsFilterModels(codeGenerationSettings, expressionState);
+
             return expressionState;
+        }
+
+        public static Dictionary<string, OptionsFilterConditionDescriptionModel> BuildCategoricalOptionsFilterModels(
+            CodeGenerationSettings codeGenerationSettings, 
+            QuestionnaireExpressionStateModel questionnaireTemplate)
+        {
+            var methodModels = new Dictionary<string, OptionsFilterConditionDescriptionModel>();
+            foreach (var question in questionnaireTemplate.AllQuestions)
+            {
+                if (question.HasOptionsFilter)
+                {
+                    methodModels.Add(ExpressionLocation.CategoricalQuestionFilter(question.Id).Key, new OptionsFilterConditionDescriptionModel(
+                        question.ParentScopeTypeName,
+                        question.OptionsFilterMethodName,
+                        codeGenerationSettings.Namespaces,
+                        question.OptionsFilterExpression,
+                        question.VariableName));
+                }
+            }
+            return methodModels;
         }
 
         public static Dictionary<string,ConditionDescriptionModel> BuildMethodModels(
@@ -533,6 +555,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         index))
                 .ToList();
 
+            var optionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaireDoc.Macros.Values);
+
             var questionModel = new QuestionTemplateModel
             {
                 Id = question.PublicKey,
@@ -542,7 +566,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
                 ValidationExpressions = validationExpressions,
-                OptionsFilterExpression = question.Properties.OptionsFilterExpression
+                OptionsFilterExpression = optionsFilterExpression
             };
 
             if (IsMultiQuestion(question))
