@@ -12,6 +12,7 @@ using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -60,7 +61,9 @@ namespace WB.Tests.Unit.TestFactories
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     questionnaireRepository: questionnaireRepository,
-                    interviewRepository: interviewRepository));
+                    interviewRepository: interviewRepository),
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<IEnumeratorSettings>());
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,

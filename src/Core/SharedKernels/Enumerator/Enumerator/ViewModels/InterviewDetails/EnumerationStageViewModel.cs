@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using MvvmCross.Plugins.Messenger;
 using Nito.AsyncEx;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<QuestionsDisabled>,
         ILiteEventHandler<StaticTextsDisabled>,
         ILiteEventHandler<StaticTextsEnabled>,
+        ILiteEventHandler<AnswersDeclaredInvalid>,
+        ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
         private ObservableRangeCollection<IInterviewEntityViewModel> items;
@@ -50,7 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMessenger messenger;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
@@ -73,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel, IMvxMessenger messenger, IEnumeratorSettings settings)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -84,6 +89,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
 
             this.Name = dynamicTextViewModel;
+            this.messenger = messenger;
+            this.settings = settings;
         }
 
         public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -234,6 +241,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.AddMissingEntities();
             this.InvalidateViewModelsByConditions(@event.StaticTexts);
+        }
+
+        public void Handle(AnswersDeclaredInvalid @event)
+        {
+            SendCountOfInvalidEntitiesIncreasedMessageIfNeeded();
+        }
+
+        public void Handle(StaticTextsDeclaredInvalid @event)
+        {
+            SendCountOfInvalidEntitiesIncreasedMessageIfNeeded();
+        }
+
+        private void SendCountOfInvalidEntitiesIncreasedMessageIfNeeded()
+        {
+            if (this.settings.VibrateOnError)
+                this.messenger.Publish(new CountOfInvalidEntitiesIncreasedMessage(this));
+
         }
 
         private void AddMissingEntities()
