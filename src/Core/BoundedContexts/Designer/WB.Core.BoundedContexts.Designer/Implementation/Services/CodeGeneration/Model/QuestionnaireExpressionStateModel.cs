@@ -34,6 +34,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<LookupTableTemplateModel> LookupTables { get; set; }
         public Dictionary<string, ConditionDescriptionModel> MethodModels { get; set; }
 
+        public Dictionary<string, OptionsFilterConditionDescriptionModel> CategoricalOptionsFilterModels { get; set; }
+
         public List<LinkedQuestionFilterExpressionModel> AllLinkedQuestionFilters {get;set;}
     }
 }

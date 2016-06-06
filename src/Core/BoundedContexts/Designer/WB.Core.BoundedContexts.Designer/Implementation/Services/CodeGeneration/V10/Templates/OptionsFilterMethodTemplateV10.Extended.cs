@@ -2,13 +2,13 @@
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates
 {
-    public partial class OptionsFilterMethodTemplate
+    public partial class OptionsFilterMethodTemplateV10
     {
-        public OptionsFilterMethodTemplate(ConditionDescriptionModel model)
+        public OptionsFilterMethodTemplateV10(OptionsFilterConditionDescriptionModel model)
         {
             this.Model = model;
         }
 
-        protected ConditionDescriptionModel Model { get; set; }
+        protected OptionsFilterConditionDescriptionModel Model { get; set; }
     }
 }
