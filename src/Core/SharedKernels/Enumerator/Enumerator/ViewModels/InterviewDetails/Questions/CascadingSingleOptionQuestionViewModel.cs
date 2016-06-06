@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private IReadOnlyList<CategoricalQuestionOption> Options;
+        private IReadOnlyList<CategoricalOption> Options;
         private readonly ILiteEventRegistry eventRegistry;
 
         public Identity Identities => this.questionIdentity;
@@ -110,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id);
+            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id).ToReadOnlyCollection();
 
             if (answerModel.IsAnswered)
             {
@@ -270,7 +271,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield break;
             }
 
-            foreach (CategoricalQuestionOption model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
+            foreach (CategoricalOption model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
             {
                 var index = model.Title.IndexOf(textHint, StringComparison.OrdinalIgnoreCase);
                 if (index >= 0)
@@ -280,7 +281,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalQuestionOption model, string hint = null)
+        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalOption model, string hint = null)
         {
             var text = !string.IsNullOrEmpty(hint) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :

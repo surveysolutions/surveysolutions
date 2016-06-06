@@ -7,10 +7,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -23,22 +23,48 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-
-        public IReadOnlyList<CategoricalQuestionOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
+        
+        public IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
 
-            var categoricalQuestionOptions = this.optionsStorage.Where(x => x.QuestionnaireId == questionnaireIdAsString && x.QuestionId == questionIdAsString)
-                .Select(x => new CategoricalQuestionOption
+            var categoricalQuestionOptions = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString && 
+                            x.QuestionId == questionIdAsString)
+                .Select(x => new CategoricalOption
                 {
-                    ParentValue = x.ParentValue,
-                    Value = x.Value,
+                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt64(x.ParentValue) : (long?)null,
+                    Value = Convert.ToInt64(x.Value),
                     Title = x.Title
                 })
                 .OrderBy(x => x.Title)
-                .ToList()
-                .ToReadOnlyCollection();
+                .ToList().ToReadOnlyCollection();
+
+            return categoricalQuestionOptions;
+        }
+
+        //read by page
+        public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, long? parentValue, string filter)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+
+            var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
+
+            var categoricalQuestionOptions = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            x.ParentValue == parentValueAsDecimal &&
+                            x.Title.Contains(filter))
+                .Select(x => new CategoricalOption
+                {
+                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt64(x.ParentValue) : (long?)null,
+                    Value = Convert.ToInt64(x.Value),
+                    Title = x.Title
+                })
+                .OrderBy(x => x.Title)
+                .ToList();
 
             return categoricalQuestionOptions;
         }

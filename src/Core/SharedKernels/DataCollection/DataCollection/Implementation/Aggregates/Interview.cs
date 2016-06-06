@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -21,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -4693,6 +4691,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswersOnly((AnsweredYesNoOption[])answerChange.Answer));
                     break;
             }
+        }
+
+        public IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, long? parentQuestionValue, string filter)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            var filteredOptions = questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter);
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion( question, filteredOptions);
         }
 
         protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();
