@@ -43,11 +43,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.CategoricalOption(12, "Option 12"),
                 };
 
-                return interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options);
+                results = new InvokeResults
+                {
+                    FilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options)
+                };
+                return results;
             });
 
         It should_return_2_options = () =>
-            results.Count().ShouldEqual(2);
+            results.FilteredOptions.Count().ShouldEqual(2);
 
         Cleanup stuff = () =>
         {
@@ -55,10 +59,16 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
             appDomainContext = null;
         };
 
-        private static IEnumerable<CategoricalOption> results;
+        private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        [Serializable]
+        internal class InvokeResults
+        {
+            public IEnumerable<CategoricalOption> FilteredOptions { get; set; }
+        }
     }
 }

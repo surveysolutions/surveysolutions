@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class <#=Model.ClassName#>
 	{   
-		private <#=Model.ReturnType#> <#=Model.MethodName#>(long optioncode, string optiontext)
+		private <#=Model.ReturnType#> <#=Model.MethodName#>(long optioncode, string optiontext, long? parentValue = null)
 		{
 			var self = <#=Model.VariableName#>; 
 			return <#=Model.Expression#>;

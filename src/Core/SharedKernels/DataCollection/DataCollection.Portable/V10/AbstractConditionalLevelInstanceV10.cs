@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, Func<long, string, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, bool>>();
+        protected Dictionary<Guid, Func<long, string, long?, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, long?, bool>>();
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             var filter = OptionFiltersMap[questionId];
             foreach (var option in options)
             {
-                var isOptionSatisfyFilter = filter(option.Value, option.Title);
+                var isOptionSatisfyFilter = filter(option.Value, option.Title, option.ParentValue);
                 if (isOptionSatisfyFilter)
                 {
                     yield return option;
