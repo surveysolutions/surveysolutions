@@ -1,9 +1,8 @@
 {
   "name": "angular-hotkeys",
-  "version": "1.4.5",
   "main": [
-    "build/hotkeys.min.js",
-    "build/hotkeys.min.css"
+    "build/hotkeys.js",
+    "build/hotkeys.css"
   ],
   "ignore": [
     "**/.*",
@@ -13,18 +12,20 @@
     "example"
   ],
   "devDependencies": {
-    "mousetrap": "~1.4.6",
-    "angular-mocks": "~1.2.15"
+    "mousetrap": "~1.5.2",
+    "angular-mocks": "~1.2.15",
+    "angular-route": "~1.2.15"
   },
   "homepage": "https://github.com/chieffancypants/angular-hotkeys",
-  "_release": "1.4.5",
+  "version": "1.7.0",
+  "_release": "1.7.0",
   "_resolution": {
     "type": "version",
-    "tag": "1.4.5",
-    "commit": "d83cd97e764e8ed782df0f6a4b019db269fc1d17"
+    "tag": "1.7.0",
+    "commit": "07251370c2f772acff204387d4b7d74831f1d777"
   },
   "_source": "git://github.com/chieffancypants/angular-hotkeys.git",
-  "_target": "1.4.5",
+  "_target": "^1.7.0",
   "_originalSource": "chieffancypants/angular-hotkeys",
   "_direct": true
 }
