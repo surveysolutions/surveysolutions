@@ -17,16 +17,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly SubstitutionViewModel substitutionViewModel;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly int maxCountOfErrors = 50;
 
         public EntityWithErrorsViewModelFactory(
             IStatefulInterviewRepository interviewRepository, 
             IPlainQuestionnaireRepository questionnaireRepository, 
-            SubstitutionViewModel substitutionViewModel)
+            SubstitutionViewModel substitutionViewModel, 
+            IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionViewModel = substitutionViewModel;
+            this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
         public IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState)
@@ -38,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var entitiesWithErrors = new List<EntityWithErrorsViewModel>();
             foreach (var invalidEntity in invalidEntities)
             {
-                var entityWithErrorsViewModel = new EntityWithErrorsViewModel();
+                var entityWithErrorsViewModel = interviewViewModelFactory.GetNew<EntityWithErrorsViewModel>();
 
                 var errorTitle = questionnaire.HasQuestion(invalidEntity.Id)
                     ? questionnaire.GetQuestionTitle(invalidEntity.Id)
