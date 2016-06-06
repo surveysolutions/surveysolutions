@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.V10;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -45,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 results = new InvokeResults
                 {
-                    FilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options)
+                    FilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options).ToList()
                 };
                 return results;
             });
