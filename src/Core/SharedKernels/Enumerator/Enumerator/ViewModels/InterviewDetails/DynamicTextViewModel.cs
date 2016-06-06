@@ -41,7 +41,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-            if (textWithSubstitutions == null) throw new ArgumentNullException(nameof(textWithSubstitutions));
 
             this.identity = entityIdentity;
 
@@ -80,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(VariablesChanged @event)
         {
-            // this is needed because for static texts update is not published if variable changes
+            // this is needed because update is not published if variable changes
 
             bool shouldUpdateTexts =
                 this.substitutionViewModel.HasVariablesInText(

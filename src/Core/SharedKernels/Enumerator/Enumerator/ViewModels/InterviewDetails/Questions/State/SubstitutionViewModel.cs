@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
-            this.SetText(textWithSubstitutions);
+            this.SetText(textWithSubstitutions ?? string.Empty);
         }
 
         private void SetText(string textWithSubstitutions)

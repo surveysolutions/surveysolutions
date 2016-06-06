@@ -10,12 +10,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 using System;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -87,7 +84,7 @@ namespace WB.Tests.Unit.TestFactories
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new SubstitutionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
                 Create.Service.SubstitutionService(),
                 Create.Service.AnswerToStringService(),
                 Create.Service.VariableToUIStringService(),
@@ -102,7 +99,7 @@ namespace WB.Tests.Unit.TestFactories
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(
-                    x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                    x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 Stub.MvxMainThreadDispatcher());
     }
 }
