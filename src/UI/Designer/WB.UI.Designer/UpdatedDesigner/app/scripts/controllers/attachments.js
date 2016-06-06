@@ -1,7 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService,
-            utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService, moment) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachments';
@@ -209,7 +208,7 @@
 
             $scope.previewAttachment = function (attachment) {
                 var baseURL = $scope.downloadLookupFileBaseUrl;
-                var modalInstance = $uibModal.open({
+                var modalInstance = $modal.open({
                     templateUrl: 'views/attachment-preview.html',
                     controller: function ($scope, attachment) {
                         $scope.attachment = attachment;

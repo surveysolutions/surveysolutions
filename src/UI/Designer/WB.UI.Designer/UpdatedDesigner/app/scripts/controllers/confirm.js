@@ -2,7 +2,7 @@
     'use strict';
     angular.module('designerApp').controller('confirmCtrl',
     [
-        '$scope', '$log', '$uibModalInstance', 'item',
+        '$scope', '$log', '$modalInstance', 'item',
         function ($scope, $log, $modalInstance, item) {
             $scope.item = item;
 

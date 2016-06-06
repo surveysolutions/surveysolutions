@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -349,7 +349,7 @@ angular.module('designerApp')
             };
 
             $scope.showShareInfo = function () {
-                $uibModal.open({
+                $modal.open({
                     templateUrl: 'views/share.html',
                     controller: 'shareCtrl',
                     windowClass: 'share-window',
