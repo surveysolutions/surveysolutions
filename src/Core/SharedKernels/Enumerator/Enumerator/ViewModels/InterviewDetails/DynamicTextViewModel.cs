@@ -94,7 +94,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             bool shouldUpdateTexts =
                 @event.Questions.Contains(this.identity) ||
-                @event.StaticTexts.Contains(this.identity);
+                @event.StaticTexts.Contains(this.identity) ||
+                @event.Groups.Contains(this.identity);
 
             if (!shouldUpdateTexts) return;
 
