@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -58,8 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UnansweredCount = questionsCount - this.AnsweredCount;
 
             this.EntitiesWithErrors =
-                new ObservableCollection<EntityWithErrorsViewModel>(
-                    entityWithErrorsViewModelFactory.GetEntities(interviewId, navigationState));
+                    entityWithErrorsViewModelFactory.GetEntities(interviewId, navigationState).ToList();
         }
 
         public int AnsweredCount { get; set; }
@@ -68,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
 
-        public ObservableCollection<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
+        public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 
         private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand

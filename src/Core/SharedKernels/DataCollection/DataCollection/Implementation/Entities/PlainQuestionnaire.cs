@@ -419,9 +419,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid? GetParentGroup(Guid entityId)
         {
-            var groupOrQuestion = this.GetEntityOrThrow(entityId);
+            var entity = this.GetEntityOrThrow(entityId);
 
-            IComposite parent = groupOrQuestion.GetParent();
+            IComposite parent = entity.GetParent();
 
             if (parent == this.innerDocument)
                 return null;
