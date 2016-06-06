@@ -19,13 +19,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
+        private readonly InterviewEntityViewFactory interviewEntityViewFactory;
 
         public InterviewDataAndQuestionnaireMerger(
             ISubstitutionService substitutionService, 
-            IVariableToUIStringService variableToUiStringService)
+            IVariableToUIStringService variableToUiStringService,
+            InterviewEntityViewFactory interviewEntityViewFactory
+            )
         {
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
+            this.interviewEntityViewFactory = interviewEntityViewFactory;
         }
 
         private class InterviewInfoInternal
@@ -51,16 +55,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             }
         }
 
+
         public InterviewDetailsView Merge(InterviewData interview, QuestionnaireDocument questionnaire, UserLight responsible, 
             InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews)
         {
             questionnaire.ConnectChildrenWithParent();
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
 
-            var questionnaireDocument = questionnaire as QuestionnaireDocument;
-            if (questionnaireDocument != null && questionnaireDocument.Attachments != null && attachmentInfoViews != null)
+            if (questionnaire.Attachments != null && attachmentInfoViews != null)
             {
-                foreach (var attachment in questionnaireDocument.Attachments)
+                foreach (var attachment in questionnaire.Attachments)
                 {
                     AttachmentInfoView attachmentInfoView = attachmentInfoViews.FirstOrDefault(x => x.ContentHash == attachment.ContentId);
                     attachmentInfos.Add(attachment.Name, attachmentInfoView);
@@ -202,9 +206,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 ? interviewLevel.RosterRowTitles[nearestParentRosterId]
                 : null;
 
+            var currentGroupTitle = this.GetTitleWithSubstitutedVariables(currentGroup.Title, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
+
             var rosterTitle = !string.IsNullOrEmpty(rosterTitleFromLevel)
-                ? $"{currentGroup.Title}: {rosterTitleFromLevel}"
-                : this.GetTitleWithSubstitutedVariables(currentGroup.Title, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
+                ? $"{currentGroupTitle}: {rosterTitleFromLevel}"
+                : currentGroupTitle;
 
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
             {
@@ -225,22 +231,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 {
                     var answeredQuestion = interviewLevel.QuestionsSearchCache.ContainsKey(question.PublicKey) ? interviewLevel.QuestionsSearchCache[question.PublicKey] : null;
 
-                    var answersForTitleSubstitution = this.GetAnswersForTitleSubstitution(question, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
+                    var answersForTitleSubstitution = this.GetAnswersForTitleSubstitution(question.QuestionText, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
 
                     bool isQuestionsParentGroupDisabled = interviewLevel.DisabledGroups != null && IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                     if (question.LinkedToQuestionId.HasValue)
-                        interviewEntity = new InterviewLinkedQuestionView(question, answeredQuestion,
+                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedQuestionView(question, answeredQuestion,
                             answersForTitleSubstitution,
                             this.GetAvailableOptions(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else if (question.LinkedToRosterId.HasValue)
-                        interviewEntity = new InterviewLinkedQuestionView(question, answeredQuestion,
+                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedQuestionView(question, answeredQuestion,
                             answersForTitleSubstitution,
                             this.GetAvailableOptionsForQuestionLinkedOnRoster(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else
-                        interviewEntity = new InterviewQuestionView(question,
+                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewQuestionView(question,
                             answeredQuestion,
                             answersForTitleSubstitution, 
                             isQuestionsParentGroupDisabled, 
@@ -260,10 +266,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                         interviewInfo.Attachments.TryGetValue(staticText.AttachmentName, out attachment); 
                     }
 
+                    var answersForTitleSubstitution = this.GetAnswersForTitleSubstitution(staticText.Text, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
                     var interviewStaticText = interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey) ? interviewLevel.StaticTexts[staticText.PublicKey] : null;
-                    var titleWithSubstitutedVariables = this.GetTitleWithSubstitutedVariables(staticText.Text, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
-                    var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
-                    var interviewStaticTextView = new InterviewStaticTextView(staticText, titleWithSubstitutedVariables, interviewStaticText, interviewAttachmentViewModel);
+                    var interviewAttachmentViewModel = attachment == null ? null : this.interviewEntityViewFactory.BuildInterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
+                    var interviewStaticTextView = this.interviewEntityViewFactory.BuildInterviewStaticTextView(staticText, interviewStaticText, answersForTitleSubstitution, interviewAttachmentViewModel);
 
                     interviewEntity = interviewStaticTextView;
                     
@@ -279,18 +285,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             InterviewLevel currentInterviewLevel,
             List<InterviewLevel> upperInterviewLevels,
             string rosterTitle,
-            InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+            InterviewInfoInternal interviewInfo, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             IEnumerable<string> usedVariables = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
-            Dictionary<string, string> answersForTitleSubstitution = usedVariables
-                .Select(variableName => new
-                {
-                    Variable = variableName,
-                    Answer = this.GetAnswerForTitleSubstitution(variableName, currentInterviewLevel, upperInterviewLevels, rosterTitle, interviewInfo, interviewLinkedQuestionOptions),
-                })
-                .Where(x => x.Answer != null)
-                .ToDictionary(x => x.Variable, x => x.Answer);
+            Dictionary<string, string> answersForTitleSubstitution = GetAnswersForTitleSubstitution(title,
+                currentInterviewLevel, upperInterviewLevels, rosterTitle, interviewInfo, interviewLinkedQuestionOptions);
 
             foreach (string usedVariable in usedVariables)
             {
@@ -304,13 +305,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         }
 
         private Dictionary<string, string> GetAnswersForTitleSubstitution(
-            IQuestion question, 
+            string text, 
             InterviewLevel currentInterviewLevel, 
             List<InterviewLevel> upperInterviewLevels, 
             string rosterTitle, 
-            InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+            InterviewInfoInternal interviewInfo, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
-            return question.GetVariablesUsedInTitle()
+            var allSubstitutionVariableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
+
+            return allSubstitutionVariableNames
                 .Select(variableName => new
                 {
                     Variable = variableName,
