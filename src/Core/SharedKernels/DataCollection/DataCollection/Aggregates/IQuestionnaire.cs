@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -15,6 +14,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
         long Version { get; }
+
+        Guid QuestionnaireId { get; }
 
         string Title { get; }
 
@@ -58,6 +59,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
+
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, long? parentQuestionValue, string filter);
+
+        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, long? parentQuestionValue, string filter);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 

@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(
                 questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+                .Select(x => new CategoricalOption { Value = Convert.ToInt64(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
                 .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
                 .ToList());
         }
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return true; }
         }
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
