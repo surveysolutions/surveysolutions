@@ -957,13 +957,15 @@ namespace WB.Tests.Unit.Designer
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
-        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, 
+            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
                 variable: variable,
                 title: title,
-                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
+                fixedRosterTitles: fixedRosterTitles);
 
         public static Group Roster(
             Guid? rosterId = null,
