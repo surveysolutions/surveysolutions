@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t\treturn ");
+            this.Write("; \r\n\t\t\treturn ");
             
             #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
