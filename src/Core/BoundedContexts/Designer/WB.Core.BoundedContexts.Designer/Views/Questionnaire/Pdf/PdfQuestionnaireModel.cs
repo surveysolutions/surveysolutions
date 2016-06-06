@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return "numeric: " + (isInteger ? "integer" : "decimal");
                 case QuestionType.DateTime:
                     var isTimestamp = (question as DateTimeQuestion)?.IsTimestamp ?? false;
-                    return isTimestamp ? "timestamp: HH:MM" : "date: MM/DD/YYYY";
+                    return isTimestamp ? "current time" : "date";
                 case QuestionType.GpsCoordinates:
                     return "GPS";
                 case QuestionType.Text:
