@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                        plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
                 attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
-                    registry: liteEventRegistry,
+                    eventRegistry: liteEventRegistry,
                     interviewRepository: statefulInterviewRepository,
                     questionnaireRepository: plainQuestionnaireRepository,
                     rosterTitleSubstitutionService: rosterTitleSubstitutionService));

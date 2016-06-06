@@ -35,13 +35,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<StaticTextsEnabled>,
         IDisposable
     {
-        private string name;
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; this.RaisePropertyChanged(); }
-        }
-
         private ObservableRangeCollection<IInterviewEntityViewModel> items;
         public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
@@ -70,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IQuestionnaire questionnaire;
         string interviewId;
 
+        public DynamicTextViewModel Name { get; }
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -78,7 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher)
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
+            DynamicTextViewModel dynamicTextViewModel)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -87,6 +82,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry = eventRegistry;
             this.userInterfaceStateService = userInterfaceStateService;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+
+            this.Name = dynamicTextViewModel;
         }
 
         public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -101,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this))
             {
@@ -109,19 +106,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
-            if (this.questionnaire.IsRosterGroup(groupId.Id))
+            if (this.questionnaire.IsRosterGroup(groupIdentity.Id))
             {
-                string title = this.questionnaire.GetGroupTitle(groupId.Id);
-                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(groupId));
+                string rosterTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
+                var fullRosterName = this.substitutionService.GenerateRosterName(rosterTitle, this.interview.GetRosterTitle(groupIdentity));
+                this.Name.Init(this.interviewId, groupIdentity, fullRosterName);
             }
             else
             {
-                this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
+                var groupTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
+                this.Name.Init(this.interviewId, groupIdentity, groupTitle);
             }
 
-            this.LoadFromModel(groupId);
+            this.LoadFromModel(groupIdentity);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -182,9 +181,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    this.Name = this.substitutionService.GenerateRosterName(
+                    var fullRosterName = this.substitutionService.GenerateRosterName(
                         this.questionnaire.GetGroupTitle(this.navigationState.CurrentGroup.Id),
                         this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
+
+                    this.Name.ChangeText(fullRosterName);
                 }
             }
         }

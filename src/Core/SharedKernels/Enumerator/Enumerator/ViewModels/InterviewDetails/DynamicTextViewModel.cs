@@ -16,14 +16,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private static readonly Regex HtmlRemovalRegex = new Regex("<.*?>");
 
-        private readonly ILiteEventRegistry registry;
+        private readonly ILiteEventRegistry eventRegistry;
         private readonly SubstitutionViewModel substitutionViewModel;
 
         public DynamicTextViewModel(
-            ILiteEventRegistry registry,
+            ILiteEventRegistry eventRegistry,
             SubstitutionViewModel substitutionViewModel)
         {
-            this.registry = registry;
+            this.eventRegistry = eventRegistry;
             this.substitutionViewModel = substitutionViewModel;
         }
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.RefreshTexts();
 
-            this.registry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void ChangeText(string textWithSubstitutions)
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this);
+            this.eventRegistry.Unsubscribe(this);
         }
 
         public void Handle(VariablesChanged @event)

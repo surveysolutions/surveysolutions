@@ -31,13 +31,13 @@ namespace WB.Tests.Unit.TestFactories
             => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
 
         public DynamicTextViewModel DynamicTextViewModel(
-            ILiteEventRegistry registry = null, 
+            ILiteEventRegistry eventRegistry = null, 
             SubstitutionViewModel substitutionViewModel = null,
             IStatefulInterviewRepository interviewRepository = null,
             IPlainQuestionnaireRepository questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new DynamicTextViewModel(
-                registry ?? Create.Service.LiteEventRegistry(),
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
                 substitutionViewModel ?? Create.ViewModel.SubstitutionViewModel(
                     interviewRepository: interviewRepository,
                     questionnaireRepository: questionnaireRepository,
@@ -59,7 +59,11 @@ namespace WB.Tests.Unit.TestFactories
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
+                Create.ViewModel.DynamicTextViewModel(
+                    eventRegistry: eventRegistry,
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository));
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
