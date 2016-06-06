@@ -7,8 +7,6 @@
         'ngResource',
         'ngAnimate',
         'ui.bootstrap',
-        'ui.bootstrap.tpls',
-        'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
         'jlareau.pnotify',

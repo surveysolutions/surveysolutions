@@ -1,6 +1,6 @@
 ﻿(function() {
     angular.module('designerApp').factory('confirmService', [
-        '$modal',
+        '$uibModal',
         function($modal) {
             var confirmService = {};
 
