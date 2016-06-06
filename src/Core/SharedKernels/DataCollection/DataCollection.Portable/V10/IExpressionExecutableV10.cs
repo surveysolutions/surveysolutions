@@ -11,5 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         new IExpressionExecutableV10 GetParent();
         new IExpressionExecutableV10 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
+
+        IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options);
     }
 }

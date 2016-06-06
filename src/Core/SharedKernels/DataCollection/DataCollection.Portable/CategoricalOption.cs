@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.DataCollection.V10
+namespace WB.Core.SharedKernels.DataCollection
 {
     public class CategoricalOption
     {

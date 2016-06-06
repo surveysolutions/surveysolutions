@@ -53,7 +53,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options)
         {
-            return options;
+            var targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
+            if (targetLevel == null) return options;
+
+            return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
         }
 
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();
