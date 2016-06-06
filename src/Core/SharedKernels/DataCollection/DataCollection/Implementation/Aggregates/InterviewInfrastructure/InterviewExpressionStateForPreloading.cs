@@ -158,6 +158,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new LinkedQuestionOptionsChanges(new Dictionary<Guid, RosterVector[]>());
         }
 
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => options;
+
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
         {
             return new InterviewExpressionStateForPreloading();

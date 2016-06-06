@@ -17,7 +17,7 @@ namespace Main.Core.Events.Questionnaire
             string mask, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions) : 
             base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, 
                 questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, null, isInteger, 
-                areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions, null)
+                areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions, null, false)
         {
         }
     }

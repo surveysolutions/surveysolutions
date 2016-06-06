@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -18,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         {
             return new PeriodicStatusReportController(Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(), Mock.Of<ILogger>(),
-                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(
+                Mock.Of<IAllUsersAndQuestionnairesFactory>(
                     _ =>
                         _.Load(Moq.It.IsAny<AllUsersAndQuestionnairesInputModel>()) ==
                         new AllUsersAndQuestionnairesView() {Questionnaires = new TemplateViewItem[0]}), Mock.Of<IUserViewFactory>());

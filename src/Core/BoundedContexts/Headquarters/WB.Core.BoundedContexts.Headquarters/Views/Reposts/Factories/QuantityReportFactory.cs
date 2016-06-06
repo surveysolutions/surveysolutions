@@ -6,14 +6,17 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
-    public class QuantityReportFactory : 
-        IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView>,
-        IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView>
+    public interface IQuantityReportFactory
+    {
+        QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input);
+        QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input);
+    }
+
+    public class QuantityReportFactory : IQuantityReportFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;

@@ -56,8 +56,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         It should_read_stored_events = () =>
         {
-            var eventStream = eventStore.ReadFrom(eventSourceId, 0, int.MaxValue);
-            eventStream.IsEmpty.ShouldBeFalse();
+            var eventStream = eventStore.Read(eventSourceId, 0);
             eventStream.Count().ShouldEqual(3);
 
             var firstEvent = eventStream.First();
@@ -69,7 +68,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         It should_persist_items_with_global_sequence_set = () =>
         {
-            var eventStream = eventStore.ReadFrom(eventSourceId, 0, int.MaxValue);
+            var eventStream = eventStore.Read(eventSourceId, 0);
             eventStream.Select(x => x.GlobalSequence).SequenceEqual(new [] {1L, 2, 3}).ShouldBeTrue();
         };
         

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
@@ -24,28 +25,21 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task BackwardCompatibilityAsync()
         {
-            var readSideVersion = 1;
-            var settingsStorage = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            var settings = settingsStorage.FirstOrDefault();
-            if (settings != null)
-            {
-                if (!settings.ReadSideVersion.HasValue)
-                {
-                    await MoveCategoricalOptionsToPlainStorage();
-                    settings.ReadSideVersion = readSideVersion;
-                    await settingsStorage.StoreAsync(settings);
-                }
-                return;
-            }
-
-            await MoveCategoricalOptionsToPlainStorage();
+            await this.MoveCategoricalOptionsToPlainStorageIfNeeded();
         }
 
-        private async Task MoveCategoricalOptionsToPlainStorage()
+        [Obsolete("Released on the 1st of June. Version 5.9")]
+        private async Task MoveCategoricalOptionsToPlainStorageIfNeeded()
         {
+            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
+
+            var isMigrationNeeded = optionsRepository.OptionsCount() == 0;
+
+            if (!isMigrationNeeded)
+                return;
+
             var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
             var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
-            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
             var questionnaires = await questionnaireViewRepository.LoadAllAsync();
             foreach (var questionnaireView in questionnaires)

@@ -214,10 +214,11 @@ namespace WB.Tests.Unit.TestFactories
                 enablementCondition,
                 validationConditions);
 
-        public SubstitutionTitlesChanged SubstitutionTitlesChanged(Identity[] questions = null, Identity[] staticTexts = null)
+        public SubstitutionTitlesChanged SubstitutionTitlesChanged(Identity[] questions = null, Identity[] staticTexts = null, Identity[] groups = null)
             => new SubstitutionTitlesChanged(
                 questions ?? new Identity[] {},
-                staticTexts ?? new Identity[] {});
+                staticTexts ?? new Identity[] {},
+                groups ?? new Identity[] {});
 
         public TextQuestionAnswered TextQuestionAnswered(
             Guid? questionId = null, decimal[] rosterVector = null, string answer = null)

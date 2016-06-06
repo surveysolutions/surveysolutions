@@ -121,10 +121,10 @@
     <value>Fichier CSV</value>
   </data>
   <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+    <value>Sélectionner un fichier à importer</value>
   </data>
   <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>S’il vous plaît sélectionnez fichier</value>
+    <value>Veuillez choisir un fichier</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
     <value>Titre du questionnaire est nécessaire</value>
@@ -136,22 +136,22 @@
     <value>Le mot de passe et le mot de passe de confirmation ne correspondent pas</value>
   </data>
   <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Confirmer mot de passe</value>
+    <value>Confirmer le mot de passe</value>
   </data>
   <data name="EmailErrorMessage" xml:space="preserve">
-    <value>N’est pas une adresse e-mail valide</value>
+    <value>Adresse courriel invalide</value>
   </data>
   <data name="EmailFieldName" xml:space="preserve">
-    <value>Messagerie</value>
+    <value>Adresse courriel</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>Utilisateur non valide</value>
+    <value>Utilisateur invalide</value>
   </data>
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Est verrouillée par le superviseur</value>
+    <value>Verrouillé par le superviseur</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Est verrouillée par Admin ou HQ</value>
+    <value>Verrouillée par l'administrateur ou le quartier général</value>
   </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Mot de passe</value>
@@ -160,55 +160,55 @@
     <value>Nom d’utilisateur</value>
   </data>
   <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Mot de passe doit contenir au moins un chiffre, une majuscule et une minuscule personnage</value>
+    <value>Mot de passe doit contenir au moins un chiffre, une lettre majuscule et une lettre minuscule</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
   <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>Mot de passe doit comporter au moins {2} caractères de long</value>
+    <value>Mot de passe doit comporter au moins {2} caractères</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Nom d’entrée est trop longue</value>
+    <value>Entrée trop longue</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>Nom et prénom</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Numéro de téléphone non valide</value>
+    <value>Numéro de téléphone invalide</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Numéro de téléphone</value>
   </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
-    <value>Email est obligatoire</value>
+    <value>Adresse courriel obligatoire</value>
   </data>
   <data name="RequiredPasswordErrorMessage" xml:space="preserve">
-    <value>Mot de passe est requis</value>
+    <value>Mot de passe requis</value>
   </data>
   <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Superviseur est requis</value>
+    <value>Superviseur requis</value>
   </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
-    <value>Nom d’utilisateur est requis</value>
+    <value>Nom d’utilisateur requis</value>
   </data>
   <data name="SupervisorFieldName" xml:space="preserve">
     <value>Superviseur</value>
   </data>
   <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Entrez le Guid valide au format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, svp</value>
+    <value>Saisir un Guid valide dans le format suivant: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
   </data>
   <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
     <value>Fichier CSV</value>
   </data>
   <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+    <value>Sélectionner un fichier à importer</value>
   </data>
   <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
-    <value>S’il vous plaît sélectionnez fichier</value>
+    <value>Veuillez choisir un fichier</value>
   </data>
   <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Nom doit être entre 3 et 15 caractères et contient uniquement des lettres, des chiffres et des symboles du trait de soulignement</value>
+    <value>Nom doit être entre 3 et 15 caractères de long et ne contenir que des lettres, des chiffres, et des symboles du tiret de du tiret bas</value>
   </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nom d’utilisateur</value>

@@ -1,7 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using It = Machine.Specifications.It;
@@ -12,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            allInterviewsViewFactory = new Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>();
+            allInterviewsViewFactory = new Mock<IAllInterviewsFactory>();
             controller = CreateInterviewsController(allInterviewsViewViewFactory : allInterviewsViewFactory.Object);
         };
 
@@ -30,6 +29,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static InterviewApiView actionResult;
         private static InterviewsController controller;
 
-        private static Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>> allInterviewsViewFactory;
+        private static Mock<IAllInterviewsFactory> allInterviewsViewFactory;
     }
 }

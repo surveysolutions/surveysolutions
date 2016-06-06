@@ -7,6 +7,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         string RosterTitleSubstitutionReference { get; }
         string DefaultSubstitutionText { get; }
         bool ContainsRosterTitle(string input);
-        string GenerateRosterName(string groupTitle, string rosterTitle);
+        string GenerateRosterName(string groupTitle, string rosterInstanceTitle);
     }
 }

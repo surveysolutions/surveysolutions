@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                         Create.Entity.NumericRealQuestion(id: questionid)
                     })));
 
-            var questionnaireStorageStub = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);
+            var questionnaireStorageStub = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaire);
 
             var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);

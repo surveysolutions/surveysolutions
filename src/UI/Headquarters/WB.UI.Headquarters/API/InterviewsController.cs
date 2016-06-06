@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [ApiBasicAuth(new [] {UserRoles.ApiUser}, TreatPasswordAsPlain = true)]
     public class InterviewsController : BaseApiServiceController
     {
-        private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
+        private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IGlobalInfoProvider globalInfoProvider;
 
         public InterviewsController(ILogger logger,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
+            IAllInterviewsFactory allInterviewsViewFactory,
             IInterviewDetailsViewFactory interviewDetailsViewFactory, 
             IInterviewHistoryFactory interviewHistoryViewFactory,
             ICommandService commandService,

@@ -761,7 +761,8 @@ namespace WB.Tests.Unit.Designer
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             ));
         }
 

@@ -2,12 +2,16 @@
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
-    public class QuestionnaireQuestionInfoFactory : IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>
+    public interface IQuestionnaireQuestionInfoFactory
+    {
+        QuestionnaireQuestionInfoView Load(QuestionnaireQuestionInfoInputModel input);
+    }
+
+    public class QuestionnaireQuestionInfoFactory : IQuestionnaireQuestionInfoFactory
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 

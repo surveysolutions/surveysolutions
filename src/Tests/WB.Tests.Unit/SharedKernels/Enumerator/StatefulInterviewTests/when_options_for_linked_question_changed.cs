@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
                 .Returns(linkSourceId);
 
-            interview = Create.Other.StatefulInterview(questionnaire: questionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(1), "one"));
             interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(2), "two"));
         };

@@ -36,7 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string textWithSubstitutions;
         private Identity entityIdentity;
 
-        public SubstitutionViewModel(IStatefulInterviewRepository interviewRepository,
+        public SubstitutionViewModel(
+            IStatefulInterviewRepository interviewRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
@@ -54,11 +55,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, string textWithSubstitutions)
         {
             this.interviewId = interviewId;
-            this.textWithSubstitutions = textWithSubstitutions;
             this.entityIdentity = entityIdentity;
+
+            this.SetText(textWithSubstitutions ?? string.Empty);
+        }
+
+        private void SetText(string textWithSubstitutions)
+        {
+            this.textWithSubstitutions = textWithSubstitutions;
 
             this.substitutionVariables = this.GetSubstitutionVariables();
         }
+
+        public void ChangeText(string textWithSubstitutions) => this.SetText(textWithSubstitutions);
 
         public bool HasVariablesInText(IEnumerable<Identity> variableIdentities)
         {

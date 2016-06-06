@@ -3,8 +3,8 @@ using System.Text;
 using System.Web;
 using Machine.Specifications;
 using Moq;
-using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Extensions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests

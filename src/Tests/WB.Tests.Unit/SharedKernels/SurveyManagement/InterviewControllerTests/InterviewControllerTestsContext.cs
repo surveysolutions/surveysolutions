@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -18,8 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfoProvider = null,
             ILogger logger = null,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
-            IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> revalidateInterviewViewFactory = null,
+            IChangeStatusFactory changeStatusFactory = null,
+            IInterviewTroubleshootFactory revalidateInterviewViewFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsViewFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null)
@@ -28,8 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
                 commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 logger ?? Mock.Of<ILogger>(),
-                changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
-                revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView>>(),
+                changeStatusFactory ?? Stub<IChangeStatusFactory>.WithNotEmptyValues,
+                revalidateInterviewViewFactory ?? Mock.Of<IInterviewTroubleshootFactory>(),
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues,
                 Mock.Of<IInterviewHistoryFactory>(),
                 interviewDetailsViewFactory ?? Mock.Of<IInterviewDetailsViewFactory>());

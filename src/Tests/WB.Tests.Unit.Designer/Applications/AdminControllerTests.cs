@@ -18,6 +18,7 @@ using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications
             this.CommandServiceMock=new Mock<ICommandService>();
             this.ZipUtilsMock = new Mock<IStringCompressor>();
             this.UserHelperMock = new Mock<IMembershipUserService>();
-            this.questionnaireViewFactoryMock =  new Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>();
+            this.questionnaireViewFactoryMock =  new Mock<IQuestionnaireViewFactory>();
             
             AssemblyContext.SetupServiceLocator();
         }
@@ -132,7 +133,7 @@ namespace WB.Tests.Unit.Designer.Applications
             ILogger logger = null,
             IStringCompressor zipUtils = null,
             ICommandService commandService = null,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null)
+            IQuestionnaireViewFactory questionnaireViewFactory = null)
         {
             return new AdminController(userHelper ?? this.UserHelperMock.Object,
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
@@ -141,7 +142,7 @@ namespace WB.Tests.Unit.Designer.Applications
                 commandService ?? this.CommandServiceMock.Object,
                 questionnaireViewFactory ?? this.questionnaireViewFactoryMock.Object,
                 Mock.Of<ISerializer>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
-                Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>(),
+                Mock.Of<IAccountListViewFactory>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>());
         }
@@ -149,6 +150,6 @@ namespace WB.Tests.Unit.Designer.Applications
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
         protected Mock<IMembershipUserService> UserHelperMock;
-        protected Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>> questionnaireViewFactoryMock;
+        protected Mock<IQuestionnaireViewFactory> questionnaireViewFactoryMock;
     }
 }

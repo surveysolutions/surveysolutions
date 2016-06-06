@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -40,6 +39,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -85,11 +86,6 @@ namespace WB.Tests.Unit.TestFactories
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
 
-        public HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
-            => new HybridEventBus(
-                liteEventBus ?? Mock.Of<ILiteEventBus>(),
-                cqrsEventBus ?? Mock.Of<IEventBus>());
-
         public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
@@ -109,7 +105,7 @@ namespace WB.Tests.Unit.TestFactories
                 liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
                 eventStore ?? Mock.Of<IEventStore>());
 
-        public ILiteEventRegistry LiteEventRegistry()
+        public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
         public MapReportDenormalizer MapReportDenormalizer(
@@ -181,5 +177,8 @@ namespace WB.Tests.Unit.TestFactories
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 Create.Entity.ReadSideCacheSettings());
+
+        public VariableToUIStringService VariableToUIStringService()
+            => new VariableToUIStringService();
     }
 }

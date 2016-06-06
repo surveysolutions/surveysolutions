@@ -78,7 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         private static readonly Guid childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
 

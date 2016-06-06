@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrateur</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
     <value>Tous droits réservés</value>
@@ -127,10 +127,10 @@
     <value>N’importe quel</value>
   </data>
   <data name="Approve" xml:space="preserve">
-    <value>Approuver les</value>
+    <value>Approuver</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Affectation de</value>
+    <value>Affectation</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Annuler</value>
@@ -139,31 +139,31 @@
     <value>Créer</value>
   </data>
   <data name="CreatedOnClient" xml:space="preserve">
-    <value>Créé sur le Client</value>
+    <value>Créé sur la tablette</value>
   </data>
   <data name="CreateNewInterview" xml:space="preserve">
-    <value>Créer nouvelle interview</value>
+    <value>Créer un nouveau entertien</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
   <data name="ErrorsLog" xml:space="preserve">
-    <value>Journal des erreurs</value>
+    <value>Journal d'erreurs</value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Obtenir l’intervieweur App</value>
+    <value>Obtenir l’appli Intervieweur</value>
   </data>
   <data name="Interviews" xml:space="preserve">
-    <value>Entrevues</value>
+    <value>Entretiens</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
     <value>Dernière mise à jour</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Juridiques</value>
+    <value>Mentions légales</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Chargement, veuillez patienter</value>
+    <value>Chargement en cours. Veuillez patienter</value>
   </data>
   <data name="Logoff" xml:space="preserve">
     <value>Fermeture de session</value>
@@ -172,7 +172,7 @@
     <value>Nom</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
-    <value>Aucun résultat trouvé</value>
+    <value>Aucun résultat retrouvé</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
     <value>Questions préremplies</value>
@@ -181,16 +181,16 @@
     <value>Questionnaires</value>
   </data>
   <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>Reçue par l’intervieweur</value>
+    <value>Reçu(s) par l’enquêteur</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Actualisation</value>
+    <value>Actualiser</value>
   </data>
   <data name="Reject" xml:space="preserve">
     <value>Rejeter</value>
   </data>
   <data name="Responsible" xml:space="preserve">
-    <value>Responsable</value>
+    <value>Membre responsable</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Enregistrer</value>
@@ -205,13 +205,13 @@
     <value>Paramètres</value>
   </data>
   <data name="SignIn" xml:space="preserve">
-    <value>Connexion</value>
+    <value>Se connecter</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Statut</value>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>Modèle</value>
+    <value>Masque</value>
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>Le groupe de la Banque mondiale</value>
@@ -226,6 +226,6 @@
     <value>Désapprouver</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
-    <value>Erreurs Нas</value>
+    <value>Erreurs</value>
   </data>
 </root>

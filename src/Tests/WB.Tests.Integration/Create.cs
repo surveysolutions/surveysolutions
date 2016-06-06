@@ -36,11 +36,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -50,13 +52,19 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -857,5 +865,44 @@ namespace WB.Tests.Integration
                 ResponsibleRole = role
             };
         }
+
+        public static SubstitutionViewModel SubstitutionViewModel(
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new SubstitutionViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                new SubstitutionService(),
+                new AnswerToStringService(),
+                new VariableToUIStringService(),
+                rosterTitleSubstitutionService ?? Create.FakeRosterTitleSubstitutionService());
+
+        private static IRosterTitleSubstitutionService FakeRosterTitleSubstitutionService()
+        {
+            var rosterTitleSubstitutionService = Mock.Of<IRosterTitleSubstitutionService>();
+
+            Mock.Get(rosterTitleSubstitutionService)
+                .Setup(x => x.Substitute(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<string>()))
+                .Returns<string, Identity, string>((title, id, interviewId) => title);
+
+            return rosterTitleSubstitutionService;
+        }
+
+        public static LiteEventRegistry LiteEventRegistry()
+            => new LiteEventRegistry();
+
+        public static DynamicTextViewModel DynamicTextViewModel(
+            ILiteEventRegistry registry = null,
+            SubstitutionViewModel substitutionViewModel = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new DynamicTextViewModel(
+                registry ?? Create.LiteEventRegistry(),
+                substitutionViewModel ?? Create.SubstitutionViewModel(
+                    interviewRepository: interviewRepository,
+                    questionnaireRepository: questionnaireRepository,
+                    rosterTitleSubstitutionService: rosterTitleSubstitutionService));
     }
 }

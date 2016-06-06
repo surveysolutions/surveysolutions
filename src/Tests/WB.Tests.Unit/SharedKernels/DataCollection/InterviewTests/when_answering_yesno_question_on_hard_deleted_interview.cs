@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             command = Create.Command.AnswerYesNoQuestion();
 
-            interview = Create.Other.Interview();
+            interview = Create.AggregateRoot.Interview();
 
             interview.Apply(Create.Event.InterviewHardDeleted());
         };

@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
@@ -19,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
+        private readonly IAllInterviewsFactory allInterviewsViewFactory;
 
         public QuestionnairesController(ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory)
+            IAllInterviewsFactory allInterviewsViewFactory)
             :base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;

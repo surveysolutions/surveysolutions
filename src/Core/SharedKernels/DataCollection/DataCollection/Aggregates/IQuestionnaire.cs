@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
 
-        Guid? GetParentGroup(Guid groupOrQuestionId);
+        Guid? GetParentGroup(Guid entityId);
 
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
@@ -204,5 +204,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldUseFormatting(Guid questionId);
         bool HasVariable(string variableName);
         bool HasQuestion(string variableName);
+        bool IsTimestampQuestion(Guid questionId);
     }
 }

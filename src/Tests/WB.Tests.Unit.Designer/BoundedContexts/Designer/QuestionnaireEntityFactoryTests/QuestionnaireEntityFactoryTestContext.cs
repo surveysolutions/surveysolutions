@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireEntityFac
                 null,
                 null,
                 new List<ValidationCondition>(),
-                null);
+                null,
+                false);
         }
     }
 }

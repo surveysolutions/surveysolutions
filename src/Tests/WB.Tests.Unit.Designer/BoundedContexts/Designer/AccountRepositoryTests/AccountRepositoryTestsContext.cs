@@ -10,12 +10,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
     internal class AccountRepositoryTestsContext
     {
         protected static CQRSAccountRepository CreateAccountRepository(ICommandService commandService = null,
-            IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory = null,
-            IViewFactory<AccountViewInputModel, AccountView> accountViewFactory = null)
+            IAccountListViewFactory accountListViewFactory = null,
+            IAccountViewFactory accountViewFactory = null)
         {
             return new CQRSAccountRepository(commandService: commandService ?? Mock.Of<ICommandService>(),
-                accountListViewFactory: accountListViewFactory ?? Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>(),
-                accountViewFactory: accountViewFactory ?? Mock.Of<IViewFactory<AccountViewInputModel, AccountView>>());
+                accountListViewFactory: accountListViewFactory ?? Mock.Of<IAccountListViewFactory>(),
+                accountViewFactory: accountViewFactory ?? Mock.Of<IAccountViewFactory>());
         }
     }
 }

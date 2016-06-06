@@ -17,8 +17,8 @@ namespace Main.Core.Events.Questionnaire
             string conditionExpression, 
             bool hideIfDisabled, 
             bool featured, 
-            string instructions,
-            QuestionProperties properties,
+            string instructions, 
+            QuestionProperties properties, 
             bool capital, 
             Guid publicKey, 
             string questionText, 
@@ -40,8 +40,9 @@ namespace Main.Core.Events.Questionnaire
             string mask, 
             bool? isFilteredCombobox, 
             Guid? cascadeFromQuestionId, 
-            IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression) 
+            IList<ValidationCondition> validationConditions, 
+            string linkedFilterExpression, 
+            bool isTimestamp) 
             : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, validationConditions)
         {
@@ -59,6 +60,7 @@ namespace Main.Core.Events.Questionnaire
             this.Mask = mask;
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
+            this.IsTimestamp = isTimestamp;
         }
 
         public QuestionType QuestionType { get; private set; }
@@ -70,6 +72,8 @@ namespace Main.Core.Events.Questionnaire
         public Guid? LinkedToRosterId { get; private set; }
         public string LinkedFilterExpression { get; set; }
         public bool? IsInteger { get; private set; }
+
+        public bool IsTimestamp { get; private set; }
 
         public bool? AreAnswersOrdered { get; private set; }
 

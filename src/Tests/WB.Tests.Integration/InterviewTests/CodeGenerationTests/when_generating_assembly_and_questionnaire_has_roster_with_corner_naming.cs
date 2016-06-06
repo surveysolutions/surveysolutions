@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             appDomainContext = null;
         };
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;
         private static string[] namesToCheck = new[] { "parent", "conditionExpressions" };
 

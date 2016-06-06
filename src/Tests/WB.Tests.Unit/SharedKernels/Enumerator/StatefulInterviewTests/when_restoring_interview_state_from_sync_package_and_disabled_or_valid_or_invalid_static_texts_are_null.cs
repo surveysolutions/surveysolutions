@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId));
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId));
 
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: new AnsweredQuestionSynchronizationDto[0]);
         };

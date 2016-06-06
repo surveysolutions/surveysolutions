@@ -59,14 +59,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             Identity id = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
             viewModel.Init(interviewId, id, null);
 
-            fakeInterview = Create.Other.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
 
-        It should_change_item_title = () => viewModel.StaticText.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
+        It should_change_item_title = () => viewModel.Text.PlainText.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
 
         static StaticTextViewModel viewModel;
         static ILiteEventBus liteEventBus;

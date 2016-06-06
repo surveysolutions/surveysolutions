@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetAnswerType(gpsQestionId) == AnswerType.GpsData
                 && _.GetAnswerType(multimediaQuestionId) == AnswerType.FileName);
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             var answersDtos = new[]
             {

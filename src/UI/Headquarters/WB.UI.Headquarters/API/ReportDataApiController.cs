@@ -13,8 +13,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -35,15 +33,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IMapReport mapReport;
 
-        private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
+        private readonly IQuestionnaireQuestionInfoFactory questionInforFactory;
   
-        private readonly IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport;
-        private readonly IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport;
+        private readonly IQuantityReportFactory quantityReport;
 
-        private readonly IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport;
-        private readonly IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport;
-        private readonly IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesBySupervisorsReport;
-        private readonly IViewFactory<SpeedBetweenStatusesByInterviewersReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesByInterviewersReport;
+        private readonly ISpeedReportFactory speedReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -54,14 +48,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IMapReport mapReport, 
-            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
+            IQuestionnaireQuestionInfoFactory questionInforFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
-            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, 
-            IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport, 
-            IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport, 
-            IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport, 
-            IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesBySupervisorsReport, 
-            IViewFactory<SpeedBetweenStatusesByInterviewersReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesByInterviewersReport)
+            IQuantityReportFactory quantityReport, 
+            ISpeedReportFactory speedReport)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -71,12 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.mapReport = mapReport;
             this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
-            this.quantityByInterviewersReport = quantityByInterviewersReport;
-            this.quantityBySupervisorsReport = quantityBySupervisorsReport;
-            this.speedByInterviewersReport = speedByInterviewersReport;
-            this.speedBySupervisorsReport = speedBySupervisorsReport;
-            this.speedBetweenStatusesBySupervisorsReport = speedBetweenStatusesBySupervisorsReport;
-            this.speedBetweenStatusesByInterviewersReport = speedBetweenStatusesByInterviewersReport;
+            this.quantityReport = quantityReport;
+            this.speedReport = speedReport;
         }
 
         [HttpPost]
@@ -144,7 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                ReportType = data.ReportType
             }; 
 
-            return this.quantityByInterviewersReport.Load(input);
+            return this.quantityReport.Load(input);
         }
 
         public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel data)
@@ -163,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Orders = data.SortOrder
             };
 
-            return this.quantityBySupervisorsReport.Load(input);
+            return this.quantityReport.Load(input);
         }
 
         public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel data)
@@ -183,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Orders = data.SortOrder
             };
 
-            return this.speedByInterviewersReport.Load(input);
+            return this.speedReport.Load(input);
         }
 
         public SpeedByResponsibleReportView SpeedBetweenStatusesBySupervisors(SpeedBySupervisorsReportModel input)
@@ -202,7 +188,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
             };
 
-            return this.speedBetweenStatusesBySupervisorsReport.Load(inputParameters);
+            return this.speedReport.Load(inputParameters);
         }
 
         public SpeedByResponsibleReportView SpeedBetweenStatusesByInterviewers(SpeedByInterviewersReportModel input)
@@ -222,7 +208,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 SupervisorId = input.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id
             };
 
-            return this.speedBetweenStatusesByInterviewersReport.Load(inputParameters);
+            return this.speedReport.Load(inputParameters);
         }
 
         public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel data)
@@ -241,7 +227,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Orders = data.SortOrder
             };
 
-            return this.speedBySupervisorsReport.Load(input);
+            return this.speedReport.Load(input);
         }
 
         [HttpPost]

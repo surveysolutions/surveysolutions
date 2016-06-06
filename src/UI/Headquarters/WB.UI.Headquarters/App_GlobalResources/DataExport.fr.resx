@@ -133,13 +133,13 @@
     <value>DDI</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>Export</value>
+    <value>Exporter</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Format</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
-    <value>Date de dernière mise à jour</value>
+    <value>Dernière date de mise à jour</value>
   </data>
   <data name="Metadata" xml:space="preserve">
     <value>Métadonnées</value>
@@ -148,7 +148,7 @@
     <value>Nom</value>
   </data>
   <data name="ParaData" xml:space="preserve">
-    <value>Données de para</value>
+    <value>Paradonnées</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Progrès</value>

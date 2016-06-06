@@ -286,7 +286,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
                 bool hideIfDisabled = false,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -318,14 +318,15 @@ namespace WB.Tests.Unit.Designer
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: targetGroupKey,
                     validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -357,7 +358,8 @@ namespace WB.Tests.Unit.Designer
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid(),
                     validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
 
@@ -367,7 +369,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
                 Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
                 IList<ValidationCondition> validationConditions = null,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, bool isTimestamp = false)
             {
                 return new QuestionCloned(
                     publicKey: publicKey,
@@ -403,7 +405,8 @@ namespace WB.Tests.Unit.Designer
                     maxAnswerCount: maxAnswerCount,
                     countOfDecimalPlaces: countOfDecimalPlaces,
                     validationConditions: validationConditions ?? new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
             }
 
             public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
