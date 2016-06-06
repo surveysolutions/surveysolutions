@@ -46,7 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
                     Create.Service.SubstitutionService(),
                     Create.Service.LiteEventRegistry(),
                     Stub.SideBarSectionViewModelsFactory(),
-                    Mock.Of<IMvxMessenger>());
+                    Mock.Of<IMvxMessenger>(),
+                    Create.ViewModel.DynamicTextViewModel(
+                        interviewRepository: interviewsRepository.Object,
+                        questionnaireRepository: questionnaireRepository.Object));
                 barSectionViewModel.NavigationState = Create.Other.NavigationState(); 
                 return barSectionViewModel;
             };

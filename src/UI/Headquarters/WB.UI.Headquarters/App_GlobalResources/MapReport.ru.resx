@@ -127,9 +127,9 @@
     <value>Не все маркеры были загружены для текущего масштаба. Пожалуйста, масштабируйте и обновите маркеры.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Обновить маркеры на карте</value>
+    <value>Обновить маркеры</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
-    <value>Перейти к интервью</value>
+    <value>Просмотреть интервью</value>
   </data>
 </root>

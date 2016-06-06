@@ -103,7 +103,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_AnswersDeclaredInvalid_event_for_questiona_b_3 = () =>
             result.IsQuestionB3InValid.ShouldBeTrue();
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

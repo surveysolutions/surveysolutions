@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IPlainQuestionnaireRepository questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = Create.Other.Interview(
+            var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider);
 
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
-            return Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            return Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionaire);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)

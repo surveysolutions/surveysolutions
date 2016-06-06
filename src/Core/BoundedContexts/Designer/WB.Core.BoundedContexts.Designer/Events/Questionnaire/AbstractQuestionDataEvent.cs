@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 

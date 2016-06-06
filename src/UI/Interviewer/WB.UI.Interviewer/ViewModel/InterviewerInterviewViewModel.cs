@@ -89,7 +89,7 @@ namespace WB.UI.Interviewer.ViewModel
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
                 var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId);
+                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
                 return completeInterviewViewModel;
             }
             else

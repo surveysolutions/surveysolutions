@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PLU0001" xml:space="preserve">
-    <value> Пользователь с таким логином уже существует</value>
+    <value>Пользователь с таким именем уже существует</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
-    <value> Имеются повторяющиеся значения логинов в файле</value>
+    <value>Имеются повторяющиеся значения имени пользователя в файле</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value> Логин архивного пользователя не может быть повторно использован потому что он принадлежит к другой команде</value>
+    <value>Имя архивного пользователя не может быть повторно использовано потому, что он принадлежит к другой команде</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value> Логин архивного пользователя не может быть повторно использован потому что он существует в другой роли</value>
+    <value>Имя архивного пользователя не может быть повторно использовано, потому что он существует в другой роли</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
-    <value> Логин должен быть от 3 до 15 символов и содержать только буквы, цифры и символ подчеркивания</value>
+    <value>Имя пользователя должно быть от 3 до 15 символов и содержать только буквы, цифры и символ подчеркивания</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
-    <value> Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один – в нижнем</value>
+    <value>Пароль должен содержать по крайней мере одну цифру, один символ в верхнем регистре и один – в нижнем</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
-    <value> Недопустимое значение электронной почты</value>
+    <value>Недопустимое формат электронной почты</value>
   </data>
   <data name="PLU0008" xml:space="preserve">
-    <value> Неверный телефонный номер</value>
+    <value>Неправильный формат номера телефона</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value> Недопустимая роль. Допускаются только значения «Supervisor» или «Interviewer»</value>
+    <value>Недопустимая роль. Допускаются только значения «Supervisor» или «Interviewer»</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
-    <value> Supervisor должен быть активным пользователем в системе или существовать в файле</value>
+    <value>Supervisor должен быть активным пользователем в системе или существовать в файле</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
-    <value> Колонка Supervisor должна быть пустой для пользователя с ролью «Supervisor»</value>
+    <value>Колонка Supervisor должна быть пустой для пользователя с ролью «Supervisor»</value>
   </data>
 </root>

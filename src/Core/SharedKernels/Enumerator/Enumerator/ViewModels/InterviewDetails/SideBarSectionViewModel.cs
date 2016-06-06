@@ -34,6 +34,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
+
+        public DynamicTextViewModel Title { get; }
+
         private string interviewId;
         QuestionnaireIdentity questionnaireId;
 
@@ -45,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            DynamicTextViewModel dynamicTextViewModel)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.questionnaireRepository = questionnaireRepository;
@@ -53,6 +57,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry = eventRegistry;
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
+
+            this.Title = dynamicTextViewModel;
+
             this.Children = new List<SideBarSectionViewModel>();
         }
 
@@ -80,14 +87,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
             this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
             var groupId = navigationIdentity.TargetGroup.Id;
+            var groupTitle = questionnaire.GetGroupTitle(groupId);
             if (questionnaire.IsRosterGroup(groupId))
             {
                 string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-                this.Title = this.substitutionService.GenerateRosterName(questionnaire.GetGroupTitle(groupId), rosterTitle);
+                var rosterFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
+                this.Title.Init(interviewId, this.SectionIdentity, rosterFullName);
             }
             else
             {
-                this.Title = questionnaire.GetGroupTitle(groupId);
+                this.Title.Init(interviewId, this.SectionIdentity, groupTitle);
             }
             if (this.Parent != null)
             {
@@ -111,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.HasChildren = false;
             this.NodeDepth = 0;
             this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Complete;
-            this.Title = UIResources.Interview_Complete_Screen_Title;
+            this.Title.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
             groupStateViewModel.Init(interviewId, null);
 
             this.SideBarGroupState = groupStateViewModel;
@@ -150,13 +159,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public NavigationState NavigationState { get; set; }
         public Identity SectionIdentity { get; set; }
         public ScreenType ScreenType { get; set; }
-
-        private string title;
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = value; this.RaisePropertyChanged(); }
-        }
 
         private bool isSelected;
         public bool IsSelected
@@ -294,8 +296,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 string groupTitle = questionnaire.GetGroupTitle(this.SectionIdentity.Id);
                 string rosterTitle = myChangedInstance.Title;
 
-                string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
-                this.Title = sectionFullName;
+                string rosterFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
+                this.Title.ChangeText(rosterFullName);
             }
         }
 

@@ -392,4 +392,10 @@
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Показать инструкцию</value>
   </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Сохранить текущее время</value>
+  </data>
+  <data name="Interview_Complete_Questions_With_Errors" xml:space="preserve">
+    <value>Вопросы с ошибками:</value>
+  </data>
 </root>

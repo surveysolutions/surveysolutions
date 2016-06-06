@@ -124,24 +124,24 @@
     <value>Utilisateur de l’API</value>
   </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
-    <value>Contenu du fichier est manquant pour {0} de nom de fichier Interview {1}</value>
+    <value>Contenu manquant pour le fichier {0} de l'entretien {1}</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>Siège social</value>
+    <value>Quartier général</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Intervieweur</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>Entrevue avec l’id « {0} » est absent</value>
+    <value>L'entretien avec l'identifiant « {0} » est manquant</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Superviseur</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;UNKNOWN role=""&gt;&lt;/UNKNOWN&gt;</value>
+    <value>&lt;ROLE INCONNU&gt;</value>
   </data>
   <data name="UnknownUser" xml:space="preserve">
-    <value>&lt;UNKNOWN user=""&gt;&lt;/UNKNOWN&gt;</value>
+    <value>&lt;UTILISATEUR INCONNU&gt;</value>
   </data>
 </root>

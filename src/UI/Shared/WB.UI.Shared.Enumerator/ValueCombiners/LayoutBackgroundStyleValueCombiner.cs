@@ -1,62 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MvvmCross.Binding.Bindings.SourceSteps;
-using MvvmCross.Binding.Combiners;
+﻿using System.Collections.Generic;
 using MvvmCross.Binding.ExtensionMethods;
-using MvvmCross.Platform.Converters;
 using WB.UI.Shared.Enumerator.Converters;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
-    public class LayoutBackgroundStyleValueCombiner: MvxValueCombiner
+    public class LayoutBackgroundStyleValueCombiner : BaseValueCombiner<QuestionStateStyle>
     {
-        public override Type SourceType(IEnumerable<IMvxSourceStep> steps)
+        protected override int ExpectedParamsCount => 2;
+
+        protected override QuestionStateStyle GetValue(List<object> values)
         {
-            return typeof(QuestionStateStyle);
-        }
+            bool isInvalid = values[0].ConvertToBoolean();
+            bool isAnswered = values[1].ConvertToBoolean();
 
-        public override bool TryGetValue(IEnumerable<IMvxSourceStep> steps, out Object value)
-        {
-            var sourceSteps = steps.ToList();
-
-            if (sourceSteps.Count < 2)
-                return base.TryGetValue(sourceSteps, out value);
-
-            var isInvalidValue = sourceSteps[0].GetValue();
-            var isAnsweredValue = sourceSteps[1].GetValue();
-
-            if (isInvalidValue == MvxBindingConstant.DoNothing
-                || isAnsweredValue == MvxBindingConstant.DoNothing)
-            {
-                value = MvxBindingConstant.DoNothing;
-                return false;
-            }
-
-            if (isInvalidValue == MvxBindingConstant.UnsetValue
-                || isAnsweredValue == MvxBindingConstant.UnsetValue)
-            {
-                value = MvxBindingConstant.UnsetValue;
-                return false;
-            }
-
-            var isInvalid = isInvalidValue.ConvertToBoolean();
-            var isAnswered = isAnsweredValue.ConvertToBoolean();
-
-            if (isInvalid)
-            {
-                value = QuestionStateStyle.Invalid;
-            }
-            else if (isAnswered)
-            {
-                value = QuestionStateStyle.Answered;
-            }
-            else
-            {
-                value = QuestionStateStyle.NonAnswered;
-            }
-
-            return true;
+            return isInvalid
+                ? QuestionStateStyle.Invalid
+                : (isAnswered
+                    ? QuestionStateStyle.Answered
+                    : QuestionStateStyle.NonAnswered);
         }
     }
 }

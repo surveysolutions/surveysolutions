@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null)
         {
-            return Create.Other.PublishableEvent(eventSourceId);
+            return Create.Fake.PublishableEvent(eventSourceId);
         }
 
         protected static IEnumerable<IPublishableEvent> CreatePublishableEvents(int countOfEvents, Guid? eventSourceId = null)

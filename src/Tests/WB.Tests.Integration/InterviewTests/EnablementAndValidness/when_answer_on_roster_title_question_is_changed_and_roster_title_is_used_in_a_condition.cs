@@ -69,6 +69,6 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         };
 
         private static bool isQuestionWithRosterTitleConditionEnabled;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
     }
 }

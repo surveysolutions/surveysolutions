@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
 
-            statefulInterview = Create.Other.StatefulInterview(questionnaireId: questionnaireId,
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository);
 
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId,

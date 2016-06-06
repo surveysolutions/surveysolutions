@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
-                db.ConnectionString = pgSqlConnection.ConnectionString;
+                db.ConnectionString = TestConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });

@@ -130,7 +130,7 @@
     <value>Среднее время обработки хедквотером</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между моментом, когда Супервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен на хедквотером.</value>
+    <value>Временной промежуток между моментом, когда cупервизор утверждает вопросник и моментом, когда он будет утвержден или отклонен хедквотером.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Средняя продолжительность интервью</value>
@@ -142,7 +142,7 @@
     <value>Среднее время обработки</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между первым назначением и интервью и моментом, когда интервью утверждено хедкотером.</value>
+    <value>Временной промежуток между первым назначением интервью и моментом, когда интервью утверждено хедквотером.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
     <value>Среднее время обработки супервизором</value>
@@ -151,16 +151,16 @@
     <value>Временной промежуток между завершением интервью и утверждением или отклонением супервизора.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value>Вернуться к супервизорам</value>
+    <value>К супервизорам</value>
   </data>
   <data name="By" xml:space="preserve">
-    <value>По</value>
+    <value>Кем</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>День</value>
   </data>
   <data name="InThe" xml:space="preserve">
-    <value>В</value>
+    <value>в</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Месяц</value>

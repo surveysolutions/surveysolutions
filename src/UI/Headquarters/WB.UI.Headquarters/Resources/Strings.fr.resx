@@ -121,22 +121,22 @@
     <value>Annuler</value>
   </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Erreur parse quelle question réponse</value>
+    <value>Erreur lors de l'analyse de la  réponse à la question</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>État défini par l’équipe de soutien de Solutions d’enquête</value>
+    <value>État défini par l’équipe de soutien de Survey Solutions</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
-    <value>Mis à jour des informations de compte</value>
+    <value>Mise à jour du compte réalisée avec succès</value>
   </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
-    <value>Gestion de compte</value>
+    <value>Gérer le compte</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approuvé par l’administration centrale</value>
+    <value>Approuvé par quartier général</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvés par superviseur</value>
+    <value>Approuvé par superviseur</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Terminé</value>
@@ -148,39 +148,39 @@
     <value>Supprimé</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Intervieweur assigné</value>
+    <value>Affecté à l'enquêteur</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
-    <value>Prêt pour l’entrevue</value>
+    <value>Prêt pour l’entretien</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejetée par l’administration centrale</value>
+    <value>Rejeté par quartier général</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejetée par superviseur</value>
+    <value>Rejeté par superviseur</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Redémarré</value>
+    <value>Réinitialisé</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Restaurée</value>
+    <value>Restauré</value>
   </data>
   <data name="InterviewStatus_SentToCapi" xml:space="preserve">
-    <value>Envoyé à Capi</value>
+    <value>Envoyé au serveur</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Superviseur assigné</value>
+    <value>Affecté au superviseur</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
     <value>Observateur n’est pas autorisé à effectuer cette action</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
-    <value>Gestion de compte</value>
+    <value>Gérer votre compte</value>
   </data>
   <data name="UnexpectedErrorOccurred" xml:space="preserve">
     <value>Une erreur inattendue s’est produite</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
-    <value>Propriété non valide</value>
+    <value>Propriété invalide</value>
   </data>
 </root>

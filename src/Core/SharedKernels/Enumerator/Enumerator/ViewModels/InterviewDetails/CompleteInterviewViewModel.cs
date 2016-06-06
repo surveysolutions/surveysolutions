@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -16,38 +19,49 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
+        private readonly IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory;
         protected readonly IPrincipal principal;
+
+        public InterviewStateViewModel InterviewState { get; set; }
+        public DynamicTextViewModel Name { get; }
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
             IPrincipal principal, 
             IMvxMessenger messenger,
-            InterviewStateViewModel interviewState)
+            IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory,
+            InterviewStateViewModel interviewState,
+            DynamicTextViewModel dynamicTextViewModel)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
             this.messenger = messenger;
+            this.entityWithErrorsViewModelFactory = entityWithErrorsViewModelFactory;
+
             this.InterviewState = interviewState;
+            this.Name = dynamicTextViewModel;
         }
 
         protected Guid interviewId;
 
-        public virtual void Init(string interviewId)
+        public virtual void Init(string interviewId,
+            NavigationState navigationState)
         {
             this.interviewId = Guid.Parse(interviewId);
 
-            InterviewState.Init(interviewId, null);
+            this.InterviewState.Init(interviewId, null);
+            this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.UnansweredCount = questionsCount - this.AnsweredCount;
 
+            this.EntitiesWithErrors =
+                    entityWithErrorsViewModelFactory.GetEntities(interviewId, navigationState).ToList();
         }
-
-        public string Name => UIResources.Interview_Complete_Screen_Title;
 
         public int AnsweredCount { get; set; }
 
@@ -55,8 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
 
-
-        public InterviewStateViewModel InterviewState { get; set; }
+        public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 
         private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand

@@ -27,8 +27,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
                 RegisterHandler(handler);
         }
 
-        public bool CanApplyHistory(CommittedEventStream history) => history.All(this.CanHandleEvent);
-
         protected override bool CanHandleEvent(CommittedEvent committedEvent)
             => this._mappingStrategy.CanHandleEvent(this, committedEvent.Payload.GetType());
     }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
-using System.Web.Compilation;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -13,10 +10,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
 using Elmah;
-using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,7 +21,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters
@@ -103,13 +97,9 @@ namespace WB.UI.Headquarters
             
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
-            //WebApiConfig.Register(GlobalConfiguration.Configuration);
 
-            RegisterVirtualPathProvider();
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
@@ -169,25 +159,6 @@ namespace WB.UI.Headquarters
                 this.logger.Info("ShutDownStack: " + shutDownStack);
             }
         }
-
-        private static void RegisterVirtualPathProvider()
-        {
-            Assembly[] assemblies = BuildManager
-                .GetReferencedAssemblies()
-                .Cast<Assembly>()
-                .Where(assembly => assembly.GetName().Name.Contains("SharedKernels") && assembly.GetName().Name.Contains("Web"))
-                .ToArray();
-
-            HostingEnvironment.RegisterVirtualPathProvider(new Vpp(assemblies)
-            {
-                //you can do a specific assembly registration too. If you provide the assemly source path, it can read
-                //from the source file so you can change the content while the app is running without needing to rebuild
-                //{typeof(SomeAssembly.SomeClass).Assembly, @"..\SomeAssembly"} 
-            });
-
-            BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
-        }
-
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,6 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             RealNumericQuestionModel = 101,
 
             DateTimeQuestionModel = 110,
+            TimestampQuestionModel = 111,
+
             TextQuestionModel = 120,
             TextListQuestionModel = 130,
             GpsCoordinatesQuestionModel = 140,
@@ -72,13 +72,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel> },
                 { InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel> },
                 { InterviewEntityType.GroupModel, Load<GroupViewModel> },
-                { InterviewEntityType.RosterModel, Load<GroupViewModel>}
+                { InterviewEntityType.RosterModel, Load<GroupViewModel>},
+                { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
             };
 
-        private static T Load<T>() where T : class
-        {
-            return Mvx.Resolve<T>();
-        }
+        private static T Load<T>() where T : class => Mvx.Resolve<T>();
 
         public InterviewViewModelFactory(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -177,7 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             ? InterviewEntityType.IntegerNumericQuestionModel
                             : InterviewEntityType.RealNumericQuestionModel;
                     case QuestionType.DateTime:
-                        return InterviewEntityType.DateTimeQuestionModel;
+                        return questionnaire.IsTimestampQuestion(entityId)
+                            ? InterviewEntityType.TimestampQuestionModel
+                            : InterviewEntityType.DateTimeQuestionModel;
                     case QuestionType.GpsCoordinates:
                         return InterviewEntityType.GpsCoordinatesQuestionModel;
                     case QuestionType.Text:
@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (!this.EntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
                 var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[InterviewEntityType.StaticTextModel].Invoke();
-                text.StaticText = entityModelType.ToString();
+                text.Text.PlainText = entityModelType.ToString();
                 return text;
             }
 

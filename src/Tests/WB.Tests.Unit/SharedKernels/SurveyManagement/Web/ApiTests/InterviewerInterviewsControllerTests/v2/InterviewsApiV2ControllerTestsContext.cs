@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
 {
@@ -21,7 +20,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             IInterviewInformationFactory interviewsFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             ICommandService commandService = null,
-            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader = null,
             IMetaInfoBuilder metaBuilder = null,
             IJsonAllTypesSerializer synchronizationSerializer =  null)
         {
@@ -31,7 +29,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                syncPackagesMetaReader: syncPackagesMetaReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
                 metaBuilder: metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>());
         }

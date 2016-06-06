@@ -121,25 +121,25 @@
     <value>Utilisateurs de l’API</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Tableau cumulatif Interview</value>
+    <value>Tableau du progrès cumulatif de collecte</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Exportation de données</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Siège social</value>
+    <value>Headquarters</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Aide</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>Intervieweurs</value>
+    <value>Enquêteurs</value>
   </data>
   <data name="Interviews" xml:space="preserve">
-    <value>Entrevues</value>
+    <value>Entretiens</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Rapport de la carte</value>
+    <value>Rapport cartographique</value>
   </data>
   <data name="Observers" xml:space="preserve">
     <value>Observateurs</value>
@@ -148,10 +148,10 @@
     <value>Quantité</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Enquête sur le programme d’installation</value>
+    <value>Paramètres d'enquête</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Nombre d’entrevues synchronisées, mais non encore transformés</value>
+    <value>Nombre d'entretiens synchronisés mais pas encore décryptés</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Rapports</value>
@@ -166,7 +166,7 @@
     <value>Enquêtes et statuts</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
-    <value>Équipe et rôles</value>
+    <value>Équipes et rôles</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
     <value>Membres de l’équipe et statuts</value>
@@ -178,7 +178,7 @@
     <value>Équipes et statuts</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch Upload utilisateur</value>
+    <value>Importation en lots de comptes d'utilisateur</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Utilisateurs</value>

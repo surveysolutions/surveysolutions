@@ -6,16 +6,19 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
-    public class SpeedReportFactory:
-        IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView>,
-        IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView>, 
-        IViewFactory<SpeedBetweenStatusesByInterviewersReportInputModel, SpeedByResponsibleReportView>,
-        IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView>
+    public interface ISpeedReportFactory
+    {
+        SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input);
+        SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input);
+        SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input);
+        SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input);
+    }
+
+    public class SpeedReportFactory: ISpeedReportFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
 

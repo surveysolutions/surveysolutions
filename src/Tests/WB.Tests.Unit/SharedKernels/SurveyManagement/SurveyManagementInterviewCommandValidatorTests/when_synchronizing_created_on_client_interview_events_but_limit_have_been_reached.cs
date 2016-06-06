@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
               CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
                   interviewSummaryStorage: summaries);
 
-            interview = Create.Other.Interview();
+            interview = Create.AggregateRoot.Interview();
         };
 
         Because of = () =>

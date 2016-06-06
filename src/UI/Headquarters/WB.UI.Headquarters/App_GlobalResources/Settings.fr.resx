@@ -121,16 +121,16 @@
     <value>Activer le cryptage</value>
   </data>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Chiffrement de l’exportation</value>
+    <value>Cryptage des données à exporter</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Exporter les paramètres de chiffrement</value>
+    <value>Paramètres de cryptage</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de que vouloir régénérer le mot de passe ? Vous aurez besoin régénérer les données exportées afin de l’ouvrir.</value>
+    <value>Êtes-vous sûr de que vouloir créer un nouveau mot de passe ? Vous aurez à exporter les données à nouveau afin de les ouvrir.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Paramètres</value>

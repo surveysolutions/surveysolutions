@@ -28,4 +28,12 @@
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
     }
+
+    public class OptionsFilterConditionDescriptionModel : ConditionDescriptionModel
+    {
+        public OptionsFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string variableName) 
+            : base(className, methodName, namespaces, expression, true, variableName, "bool")
+        {
+        }
+    }
 }

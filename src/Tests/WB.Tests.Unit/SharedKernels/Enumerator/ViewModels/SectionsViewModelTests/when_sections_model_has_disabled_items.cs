@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         {
             viewModel.Sections.ElementAt(1).SectionIdentity.Id.Equals(sectionDId);
             viewModel.Sections.ElementAt(1).SectionIdentity.RosterVector.Equals(Empty.RosterVector);
-            viewModel.Sections.ElementAt(1).Title.ShouldEqual("D");
+            viewModel.Sections.ElementAt(1).Title.PlainText.ShouldEqual("D");
         };
 
         static SideBarSectionsViewModel viewModel;

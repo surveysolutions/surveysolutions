@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {

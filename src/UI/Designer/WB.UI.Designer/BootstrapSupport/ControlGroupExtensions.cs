@@ -83,15 +83,4 @@ namespace WB.UI.Designer.BootstrapSupport
             return new ControlGroup(html);
         }
     }
-
-    public static class Alerts
-    {
-        public const string SUCCESS = "success";
-        public const string ERROR = "danger";
-        public const string INFO = "info";
-
-        public static string[] ALL{
-            get { return new[] {SUCCESS, ERROR, INFO}; }
-        }
-    }
 }

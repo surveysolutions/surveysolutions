@@ -121,13 +121,13 @@
     <value>Создайте еще один?</value>
   </data>
   <data name="InterviewWasCreated" xml:space="preserve">
-    <value>Был успешно Создан, интервью.</value>
+    <value>пользователей было создано.</value>
   </data>
   <data name="NoPermission" xml:space="preserve">
     <value>Не удалось обновить данные пользователя, потому что у вас нет разрешения на выполнение этой операции.</value>
   </data>
   <data name="ObserverCreated" xml:space="preserve">
-    <value>Обозреватель был успешно Создан.</value>
+    <value>Обозреватель был успешно создан.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
     <value>Вопросник «{0}» успешно клонирован с новым названием «{1}».</value>
@@ -139,15 +139,15 @@
     <value>Анкета с id {0} и версия {1} не найден.</value>
   </data>
   <data name="SuccessfullyCreated" xml:space="preserve">
-    <value>Руководитель был успешно Создан.</value>
+    <value>Супервизор был успешно создан.</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Не удалось обновить данные пользователя, поскольку пользователь не существует</value>
   </data>
   <data name="UserWasCreated" xml:space="preserve">
-    <value>Штаб-квартира пользователь был успешно Создан.</value>
+    <value>Хедквотер пользователь был успешно создан.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
-    <value>Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлен</value>
+    <value>Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
   </data>
 </root>

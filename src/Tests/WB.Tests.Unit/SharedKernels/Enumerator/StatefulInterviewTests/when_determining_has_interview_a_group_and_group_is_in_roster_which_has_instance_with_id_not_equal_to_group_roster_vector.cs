@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 => _.HasGroup(@group.Id) == true
                 && _.GetRostersFromTopToSpecifiedGroup(@group.Id) == new Guid[] { rosterId });
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstanceId }));
         };

@@ -4,8 +4,7 @@ using System.Web.Mvc;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.UI.Designer.BootstrapSupport;
+using WB.UI.Shared.Web.Extensions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests

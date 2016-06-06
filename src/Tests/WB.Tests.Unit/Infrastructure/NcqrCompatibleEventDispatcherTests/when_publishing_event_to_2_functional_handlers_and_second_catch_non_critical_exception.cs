@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         }
         Establish context = () =>
         {
-            publishableEvent = Create.Other.PublishableEvent(payload: new FunctionalEventHandlerEvent());
+            publishableEvent = Create.Fake.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
 

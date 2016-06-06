@@ -173,13 +173,24 @@ ko.bindingHandlers.typeahead = {
         var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
 
         var states = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('label'),
+            datumTokenizer: function (item) {
+                var tokens = Bloodhound.tokenizers.whitespace(item.label);
+                $.each(tokens, function (k, v) {
+                    var i = 0;
+                    while ((i + 1) < v.length) {
+                        tokens.push(v.substr(i, v.length));
+                        i++;
+                    }
+                });
+                return tokens;
+            },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: source,
             limit: 10
         });
 
         states.initialize();
+        
 
         $element
             .attr('autocomplete', 'off')

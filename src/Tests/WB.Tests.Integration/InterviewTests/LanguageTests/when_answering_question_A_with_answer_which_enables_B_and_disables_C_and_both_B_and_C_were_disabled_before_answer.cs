@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_QuestionsEnabled_event_with_question_B_only = () =>
             result.QuestionsEnabledQuestionIds.ShouldContainOnly(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

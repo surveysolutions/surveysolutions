@@ -7,7 +7,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 {
-    public class ChangeStatusFactory : IViewFactory<ChangeStatusInputModel, ChangeStatusView>
+    public interface IChangeStatusFactory
+    {
+        ChangeStatusView Load(ChangeStatusInputModel input);
+    }
+
+    public class ChangeStatusFactory : IChangeStatusFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviews;
 

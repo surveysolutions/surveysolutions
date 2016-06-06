@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateOneMore" xml:space="preserve">
-    <value>Créer un plus?</value>
+    <value>Créer un de plus?</value>
   </data>
   <data name="InterviewWasCreated" xml:space="preserve">
-    <value>Entrevue a été créé avec succès.</value>
+    <value>Entretien créé avec succès.</value>
   </data>
   <data name="NoPermission" xml:space="preserve">
-    <value>Pourrait pas mettre à jour les informations utilisateur parce que vous n’avez pas l’autorisation d’effectuer cette opération.</value>
+    <value>Impossible de mettre à jour les informations de l'utilisateur parce que vous n’avez pas l’autorisation d’effectuer cette opération.</value>
   </data>
   <data name="ObserverCreated" xml:space="preserve">
-    <value>Utilisateur de l’observateur a été créé avec succès.</value>
+    <value>Utilisateur de rôle Observer créé avec succès.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Questionnaire « {0} » a été cloné avec succès avec un nouveau titre '{1}'.</value>
+    <value>Questionnaire « {0} » cloné avec succès avec le nouveau titre '{1}'.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Questionnaire « {0} » a été cloné avec succès.</value>
+    <value>Questionnaire « {0} » cloné avec succès.</value>
   </data>
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Questionnaire avec id {0} et version {1} n’est pas trouvé.</value>
+    <value>Impossible de retrouver questionnaire avec l'identifiant {0} et version {1}.</value>
   </data>
   <data name="SuccessfullyCreated" xml:space="preserve">
-    <value>Surveillant a été créé avec succès.</value>
+    <value>Utilisateur avec rôle Supervisor créé avec succès.</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
-    <value>Pourrait pas mettre à jour les informations utilisateur car l’utilisateur n’existe pas</value>
+    <value>Impossible de mettre à jour les informations de l'utilisateur car l’utilisateur n’existe pas</value>
   </data>
   <data name="UserWasCreated" xml:space="preserve">
-    <value>Utilisateur de siège a été créé avec succès.</value>
+    <value>Utilisateur de rôle Headquarters créé avec succès.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
-    <value>Informations sur &lt;b&gt;{0}&lt;/b&gt; mis à jour</value>
+    <value>Informations sur &lt;b&gt;{0}&lt;/b&gt; mises à jour</value>
   </data>
 </root>

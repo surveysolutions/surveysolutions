@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetAnswerType(integerQuestionId) == AnswerType.Integer);
 
-            interview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             var answersDtos = new[]
             {

@@ -1991,7 +1991,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new SubstitutionTitlesChanged(
                     changedQuestionIds ?? new Identity[] {},
-                    changedStaticTextIds ?? new Identity[] { }));
+                    changedStaticTextIds ?? new Identity[] { },
+                    new Identity[] {}));
             }
         }
 

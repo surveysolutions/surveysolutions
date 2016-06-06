@@ -97,6 +97,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool? IsFilteredCombobox { get; set; }
 
+        public bool IsTimestamp { get; set; }
+
         public IList<ValidationCondition> ValidationConditions
         {
             get

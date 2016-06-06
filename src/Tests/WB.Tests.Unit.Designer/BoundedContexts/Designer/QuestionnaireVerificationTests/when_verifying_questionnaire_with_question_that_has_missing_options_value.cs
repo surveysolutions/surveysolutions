@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
         It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(2);
+            verificationMessages.Count().ShouldEqual(3);
 
         It should_return_message_with_code__WB0045 = () =>
             verificationMessages.First().Code.ShouldEqual("WB0045");

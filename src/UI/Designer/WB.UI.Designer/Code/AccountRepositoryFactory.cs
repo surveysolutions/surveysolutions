@@ -18,19 +18,19 @@ namespace WB.UI.Designer
             }
         }
 
-        private static IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory
+        private static IAccountListViewFactory accountListViewFactory
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IViewFactory<AccountListViewInputModel, AccountListView>>();
+                return ServiceLocator.Current.GetInstance<IAccountListViewFactory>();
             }
         }
 
-        private static IViewFactory<AccountViewInputModel, AccountView> accountViewFactory
+        private static IAccountViewFactory accountViewFactory
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IViewFactory<AccountViewInputModel, AccountView>>();
+                return ServiceLocator.Current.GetInstance<IAccountViewFactory>();
             }
         }
 

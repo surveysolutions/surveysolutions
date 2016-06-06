@@ -10,7 +10,12 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Preloading
 {
-    public class QuestionnairePreloadingDataViewFactory : IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>
+    public interface IQuestionnairePreloadingDataViewFactory
+    {
+        QuestionnairePreloadingDataItem Load(QuestionnairePreloadingDataInputModel input);
+    }
+
+    public class QuestionnairePreloadingDataViewFactory : IQuestionnairePreloadingDataViewFactory
     {
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 

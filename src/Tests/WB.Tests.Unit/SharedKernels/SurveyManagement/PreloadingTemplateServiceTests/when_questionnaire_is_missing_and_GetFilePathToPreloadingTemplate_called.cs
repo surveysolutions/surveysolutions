@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateServiceTests
 {
@@ -12,7 +16,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
     {
         Establish context = () =>
         {
-            preloadingTemplateService = CreatePreloadingTemplateService();
+            var exportFileNameService = Mock.Of<IExportFileNameService>(x =>
+                x.GetFileNameForBatchUploadByQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == "template.zip");
+            preloadingTemplateService = CreatePreloadingTemplateService(exportFileNameService: exportFileNameService);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(Guid.NewGuid(), 1);

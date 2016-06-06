@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Views;
@@ -16,6 +17,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
+        private MvxSubscriptionToken countOfInvalidEntitiesIncreasedToken;
 
         private Toolbar toolbar;
 
@@ -48,6 +50,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
+            this.countOfInvalidEntitiesIncreasedToken = messenger.Subscribe<CountOfInvalidEntitiesIncreasedMessage>(this.OnCountOfInvalidEntitiesIncreased);
             base.OnStart();
         }
 
@@ -68,6 +71,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
+        private void OnCountOfInvalidEntitiesIncreased(CountOfInvalidEntitiesIncreasedMessage msg)
+        {
+            Vibrator vibrator = (Vibrator)this.GetSystemService(Context.VibratorService);
+            vibrator.Vibrate(100);
+        }
+
         private void OnSectionChange(SectionChangeMessage msg)
         {
             Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers();}, null);
@@ -78,6 +87,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
+            messenger.Unsubscribe<CountOfInvalidEntitiesIncreasedMessage>(this.countOfInvalidEntitiesIncreasedToken);
             base.OnStop();
         }
 

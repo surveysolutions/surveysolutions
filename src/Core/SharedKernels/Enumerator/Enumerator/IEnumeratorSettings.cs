@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator
         int GpsReceiveTimeoutSec { get; }
         double GpsDesiredAccuracy { get; }
         int EventChunkSize { get; }
+        bool VibrateOnError { get; }
     }
 }

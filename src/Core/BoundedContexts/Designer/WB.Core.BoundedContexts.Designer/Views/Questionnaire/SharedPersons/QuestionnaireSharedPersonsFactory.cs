@@ -3,7 +3,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
-    public class QuestionnaireSharedPersonsFactory : IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>
+    public interface IQuestionnaireSharedPersonsFactory
+    {
+        QuestionnaireSharedPersons Load(QuestionnaireSharedPersonsInputModel input);
+    }
+
+    public class QuestionnaireSharedPersonsFactory : IQuestionnaireSharedPersonsFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> _repository;
         public QuestionnaireSharedPersonsFactory(IReadSideKeyValueStorage<QuestionnaireSharedPersons> repository)

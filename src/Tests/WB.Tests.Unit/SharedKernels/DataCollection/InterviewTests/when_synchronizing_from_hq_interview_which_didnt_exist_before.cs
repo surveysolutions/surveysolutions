@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
-            interview = Create.Other.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };

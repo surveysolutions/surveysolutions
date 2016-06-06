@@ -334,6 +334,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questions with errors:.
+        /// </summary>
+        public static string Interview_Complete_Questions_With_Errors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Questions_With_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are about to complete this interview.
         /// </summary>
         public static string Interview_Complete_Screen_Description {
@@ -636,6 +645,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
                 return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to record current time.
+        /// </summary>
+        public static string Interview_Questions_Timestamp_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Timestamp_SaveAnswer", resourceCulture);
             }
         }
         

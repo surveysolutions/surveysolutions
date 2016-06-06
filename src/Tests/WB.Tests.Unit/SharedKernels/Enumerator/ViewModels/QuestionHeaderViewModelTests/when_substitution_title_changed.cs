@@ -54,13 +54,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 {
                     new Identity(substitutionTargetQuestionId, Empty.RosterVector)
                 };
-            fakeInterview = Create.Other.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
+        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Old title new value");
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;

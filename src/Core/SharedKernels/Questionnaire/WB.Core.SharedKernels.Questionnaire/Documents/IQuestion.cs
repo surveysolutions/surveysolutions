@@ -25,7 +25,8 @@ namespace Main.Core.Entities.SubEntities
         string LinkedFilterExpression { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
-        
+        bool IsTimestamp { get; set; }
+
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
     }
