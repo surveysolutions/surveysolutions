@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -21,13 +20,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private NavigationIdentity entityIdentity;
 
-        private MvxCommand navigateToSectionCommand;
+        private IMvxAsyncCommand navigateToSectionCommand;
 
-        public ICommand NavigateToSectionCommand
+        public IMvxAsyncCommand NavigateToSectionCommand
         {
             get
             {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateAsync());
+                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxAsyncCommand(async () => await this.NavigateAsync());
                 return this.navigateToSectionCommand;
             }
         }
