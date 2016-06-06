@@ -14,7 +14,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
-    [Ignore("TLK should fix in KP-7256")]
     internal class when_section_is_expanded_and_complete_screen_is_opening : SectionsViewModelTestContext
     {
         Establish context = () =>

@@ -40,7 +40,8 @@ namespace WB.Tests.Unit
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
-            var sideBarSectionViewModel = new SideBarSectionViewModel(Mock.Of<IStatefulInterviewRepository>(),
+            var sideBarSectionViewModel = new SideBarSectionViewModel(
+                Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Create.Service.SubstitutionService(),
                 Create.Service.LiteEventRegistry(),

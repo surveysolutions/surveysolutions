@@ -12,7 +12,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    [Ignore("TLK should fix in KP-7256")]
     internal class when_answering_yesno_question_that_trigger_nested_rosters : InterviewTestsContext
     {
         Establish context = () =>
