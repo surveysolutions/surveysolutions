@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -90,8 +91,8 @@ namespace WB.Tests.Unit.TestFactories
                 ContentType = contentType,
             };
 
-        public CategoricalQuestionOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
-            => new CategoricalQuestionOption
+        public CategoricalOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
+            => new CategoricalOption
             {
                 Value = value,
                 Title = title,

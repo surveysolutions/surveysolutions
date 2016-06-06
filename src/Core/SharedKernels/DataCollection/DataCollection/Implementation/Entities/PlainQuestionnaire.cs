@@ -14,22 +14,18 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     internal class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService
-        {
-            get
-            {
-                return this.substitutionService ??
-                       (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
-            }
-        }
-
+        public ISubstitutionService SubstitutionService => this.substitutionService ?? (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
         private ISubstitutionService substitutionService;
+
+        public IQuestionOptionsRepository QuestionOptionsRepository => this.questionOptionsRepository ?? (this.questionOptionsRepository = ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>());
+        private IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
 
@@ -62,6 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new Dictionary<Guid, ReadOnlyCollection<decimal>>();
         private readonly Dictionary<Guid, Dictionary<decimal, Answer>> cacheOfAnswerOptions = new Dictionary<Guid, Dictionary<decimal, Answer>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
+        
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -196,6 +193,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public long Version => this.getVersion();
 
+        public Guid QuestionnaireId => this.innerDocument.PublicKey;
+
         public string Title => this.innerDocument.Title;
 
         public void InitializeQuestionnaireDocument()
@@ -302,6 +301,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
              => this.cacheOfAnswerOptionsAsValues.GetOrUpdate(questionId, () 
                 => this.GetAnswerOptionsAsValuesImpl(questionId));
+
+        //should be used on HQ only
+        //cache - more memory?
+        //
+        //Add filter support
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, long? parentQuestionValue, string filter)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if(answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >=0 && answer.ParentCode == parentQuestionValue)
+                        yield return new CategoricalOption() {Value = Convert.ToInt64(answer.AnswerCode.Value), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value):(long?)null};
+                }
+            }
+            else
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 && answer.ParentCode == parentQuestionValue)
+                        yield return new CategoricalOption() { Value = Convert.ToInt64(ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value) : (long?)null };
+                }
+            }
+
+        }
+
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, long? parentQuestionValue, string filter)
+        {
+            return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
+        }
 
         public ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
