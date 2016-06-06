@@ -12,7 +12,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
-    [Ignore("TLK should fix in KP-7256")]
     internal class when_section_is_expanded_while_other_section_is_expanded : SectionsViewModelTestContext
     {
         Establish context = () =>
