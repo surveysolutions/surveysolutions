@@ -15,9 +15,20 @@ angular.module('designerApp')
                 groupsCount: 0,
                 rostersCount: 0
             };
+            var openCompilationPage = 'ctrl+shift+b';
             var focusTreePane = 'shift+alt+x';
             var focusEditorPane = 'shift+alt+e';
             var openChaptersPane = 'left';
+
+            hotkeys.add({
+                combo: openCompilationPage,
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                callback: function (event) {
+
+                    var printWindow = window.open("../../questionnaire/expressiongeneration/" + $state.params.questionnaireId);
+                    event.preventDefault();
+                }
+            });
 
             hotkeys.add({
                 combo: 'ctrl+p',
@@ -35,7 +46,7 @@ angular.module('designerApp')
                     event.preventDefault();
                 }
             });
-
+            
             hotkeys.add({
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
