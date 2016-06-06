@@ -16,7 +16,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel,
+    public class GroupViewModel : MvxNotifyPropertyChanged,
+        ILiteEventHandler<RosterInstancesTitleChanged>,
+        IInterviewEntityViewModel,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -29,16 +31,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private Identity groupIdentity;
 
         public EnablementViewModel Enablement { get; }
-        public string Title { get; private set; }
         public bool IsRoster { get; private set; }
 
-        private string rosterTitle;
-        public string RosterTitle
+        public DynamicTextViewModel GroupTitle { get; }
+
+        private string rosterInstanceTitle;
+        public string RosterInstanceTitle
         {
-            get { return rosterTitle; }
+            get { return this.rosterInstanceTitle; }
             set
             {
-                this.rosterTitle = value;
+                this.rosterInstanceTitle = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -73,6 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,
+            DynamicTextViewModel dynamicTextViewModel,
             ILiteEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
@@ -80,6 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
+            this.GroupTitle = dynamicTextViewModel;
             this.eventRegistry = eventRegistry;
         }
 
@@ -109,8 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Enablement.Init(interviewId, groupIdentity);
             this.GroupState.Init(interviewId, groupIdentity);
 
-            this.Title = questionnaire.GetGroupTitle(groupIdentity.Id);
-            this.RosterTitle = interview.GetRosterTitle(groupIdentity);
+            this.GroupTitle.Init(interviewId, groupIdentity, questionnaire.GetGroupTitle(groupIdentity.Id));
+            this.RosterInstanceTitle = interview.GetRosterTitle(groupIdentity);
             this.IsRoster = questionnaire.IsRosterGroup(groupIdentity.Id);
             
             if (groupWithAnswersToMonitor != null)
@@ -140,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.Identity.Equals(changedInstance.RosterInstance.GetIdentity())))
             {
-                this.RosterTitle = changedInstance.Title;
+                this.RosterInstanceTitle = changedInstance.Title;
             }
         }
 
