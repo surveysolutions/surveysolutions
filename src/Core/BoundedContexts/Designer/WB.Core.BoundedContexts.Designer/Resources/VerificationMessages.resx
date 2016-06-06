@@ -523,6 +523,9 @@
     <value>Question is too short. This might be an incomplete question.</value>
   </data>
   <data name="WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Single select question supports only integer positive values</value>
+    <value>Single select question supports only integer values</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>Fix roster supports only integer title values</value>
   </data>
 </root>

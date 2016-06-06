@@ -1091,11 +1091,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single select question supports only integer positive values.
+        ///   Looks up a localized string similar to Single select question supports only integer values.
         /// </summary>
         internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
                 return ResourceManager.GetString("WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix roster supports only integer title values.
+        /// </summary>
+        internal static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
+            get {
+                return ResourceManager.GetString("WB0115_FixRosterSupportsOnlyIntegerTitleValues", resourceCulture);
             }
         }
         
