@@ -85,6 +85,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 };
             }
 
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                this.Settings = new DateTimeQuestionSettings
+                {
+                    IsTimestamp = question.IsTimestamp
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered();
@@ -153,7 +162,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     if (answer is DateTime)
                     {
                         var date = (DateTime)answer;
-                        return date.ToString("u");
+
+                        return ((DateTimeQuestionSettings)this.Settings).IsTimestamp ? date.ToString("t") : date.ToString("u");
                     }
                     break;
                 case QuestionType.Numeric:
@@ -223,6 +233,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class TextQuestionSettings
     {
         public string Mask { get; set; }
+    }
+
+    public class DateTimeQuestionSettings
+    {
+        public bool IsTimestamp { get; set; }
     }
 
     public class NumericQuestionSettings

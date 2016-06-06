@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -63,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (breadCrumb != null)
                 {
                     var groupTitle = questionnaire.GetGroupTitle(changedRosterInstance.RosterInstance.GroupId);
-                    breadCrumb.Text = this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
+                    breadCrumb.ChangeText(this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title));
                 }
             }
         }
@@ -110,20 +111,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var rosterInstance = interview.GetRoster(itemIdentity);
                         
                     var title = this.GenerateRosterTitle(groupTitle, rosterInstance.Title);
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
-                    {
-                        Text = title,
-                        ItemId = itemIdentity
-                    });
+                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    breadCrumb.Init(this.interviewId, itemIdentity, title, this.navigationState);
+                    breadCrumbs.Add(breadCrumb);
                 }
                 else
                 {
-                    var itemId = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
-                    {
-                        ItemId = itemId,
-                        Text = groupTitle + " / "
-                    });
+                    var itemIdentity = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
+                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    breadCrumb.Init(this.interviewId, itemIdentity, groupTitle + " / ", this.navigationState);
+                    breadCrumbs.Add(breadCrumb);
                 }
             }
 

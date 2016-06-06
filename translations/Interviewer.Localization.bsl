@@ -15,6 +15,7 @@
         <locale>vi-VN</locale>
         <locale>pt-PT</locale>
         <locale>zh-CN</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Properties\InterviewerUIResources.resx" nm="AccountIsLockedOnServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -94,17 +95,17 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_CreateInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Create interview" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Create&#xD;&#xA;interview" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Создать&#xD;&#xA;интервью" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Cтворити &#xD;&#xA;iнтервью" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Crear entrevista" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="สร้างการสัมภาษณ์" ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Membuat&#xD;&#xA;Wawancara" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Thực hiện phỏng vấn" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Thực hiện phỏng vấn" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Criar entrevista" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="Create&#xD;&#xA;interview" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Créer entretien" ts="Changed" qs="ToReview" />
-            <li lc="zh-CN" tx="创建调查" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="创建调查" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_NewItemsLinkText" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -619,11 +620,11 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Collect and send to HQ all tablet infromation" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Collect and send to HQ all tablet information" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Собрать и отправить на сервер информацию о приложении" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Відправити на сервер інформацію про додаток" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="收集所有平板电脑信息并发送给总部。" ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Tập hợp và gửi tới HQ tất cả các thông tin trên máy tính bảng" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Tập hợp và gửi tới HQ tất cả các thông tin trên máy tính bảng" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -923,6 +924,12 @@
             <li lc="ar" tx="عدم وجود شبكة اتصال. تحقق من إعدادات شبكة الاتصال الخاصة بك" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Aucune connexion. Vérifiez vos paramètres sans fil et réseaux" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="没有网络连接。请检查网络设置。" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="NotSupportedServerSyncProtocolVersion" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Supervisor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_AboutApplication" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1676,7 +1683,7 @@
             <li lc="es-ES" tx="Paquete de información enviado con éxito" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="th-TH" tx="แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Paket informasi berhasil dikirim" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Gói thông tin được gửi thành công" er="" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Gói thông tin được gửi thành công" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Pacote de informações é enviada com sucesso" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="يتم إرسال حزمة المعلومات بنجاح" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr-FR" tx="Paquet d'information envoyé avec succès" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
@@ -1781,7 +1788,7 @@
             <li lc="es-ES" tx="Paquete de información enviado con éxito." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="th-TH" tx="แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว" ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Paket informasi berhasil dikirim." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="vi-VN" tx="Gói thông tin được gửi thành công" er="" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Gói thông tin được gửi thành công" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Pacote de informações é enviada com sucesso." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="ar" tx="يتم إرسال حزمة المعلومات بنجاح." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="fr-FR" tx="Paquet d'information envoyé avec succès." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />

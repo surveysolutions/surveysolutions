@@ -33,9 +33,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return input.Contains(string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference));
         }
 
-        public string GenerateRosterName(string groupTitle, string rosterTitle)
+        public string GenerateRosterName(string groupTitle, string rosterInstanceTitle)
         {
-            return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterTitle) ? DefaultSubstitutionText : rosterTitle);
+            return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterInstanceTitle) ? DefaultSubstitutionText : rosterInstanceTitle);
         }
 
         public string DefaultSubstitutionText => "[...]";

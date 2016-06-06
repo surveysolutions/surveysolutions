@@ -26,15 +26,6 @@ namespace WB.Core.BoundedContexts.Designer
             }
         }
 
-        public static void RegisterFactory<T>(this IKernel kernel)
-        {
-            var interfaceType = typeof(IViewFactory<,>);
-            var factoryType = typeof(T);
-            Func<IContext, object> scope = (c) => kernel;
-
-            GetValue(kernel, factoryType, interfaceType, scope);
-        }
-
         private static void GetValue(IKernel kernel, Type factoryType, Type interfaceType, Func<IContext, object> scope)
         {
             var interfaceImplementations = factoryType.GetInterfaces()

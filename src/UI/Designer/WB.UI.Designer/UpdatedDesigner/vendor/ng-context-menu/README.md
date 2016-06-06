@@ -1,11 +1,17 @@
-# [ng-context-menu](http://ianwalter.github.io/ng-context-menu/)
+# [ng-context-menu](https://talis.github.io/ng-context-menu/)
 *An AngularJS directive to display a context menu when a right-click event is triggered*
 
-[![Code Climate](https://codeclimate.com/github/ianwalter/ng-context-menu.png)](https://codeclimate.com/github/ianwalter/ng-context-menu)
+This repository was originally created and maintained by @ianwalter.
+Many thanks to Ian and [others](https://github.com/talis/ng-context-menu/graphs/contributors) 
+for their contributions.
 
-[ ![Codeship Status for ianwalter/ng-boilerplate](https://www.codeship.io/projects/0c2504d0-1b2a-0132-844a-4292efa71b6f/status)](https://www.codeship.io/projects/31717)
+---
 
-This project was built using [ng-boilerplate](https://github.com/ianwalter/ng-boilerplate)!
+[![Code Climate](https://codeclimate.com/github/ianwalter/ng-context-menu.png)](https://codeclimate.com/github/ianwalter/ng-context-menu) [![Build Status](https://travis-ci.org/talis/ng-context-menu.svg)](https://travis-ci.org/talis/ng-context-menu)
+
+---
+
+### Implementation steps
 
 #### Step 1: Install ng-context-menu
 
@@ -24,7 +30,7 @@ var app = angular.module('menu-demo', ['ngRoute', 'ng-context-menu'])
 ```
 
 #### Step 3: Add the context-menu directive to a DOM element
-
+Note that the `data-target` attribute value must match the `id` of the menu in the next step.
 ```html
 <div context-menu class="panel panel-default position-fixed"
      data-target="menu-{{ $index }}"
@@ -70,7 +76,7 @@ Customize the menu to your needs. It may look something like:
       </a>
     </li>
     <li>
-      <a href="https://github.com/ianwalter/ng-context-menu"
+      <a href="https://github.com/talis/ng-context-menu"
          role="menuitem"
          tabindex="-1">
          ng-context-menu on GitHub
@@ -90,21 +96,52 @@ As you can see in the demo, I just created a class called position-fixed and add
 }
 ```
 
+---
+
+### Options
+
 #### Disabling the contextmenu
 
 If you need to disable the contextmenu in certain circumstances, you can add an expression to the
  ```context-menu-disabled``` attribute. If the expression evaluates to true, the contextmenu will be
  disabled, for example, ```context-menu-disabled="1 === 1"```
 
-That's it, I hope you find this useful!
+#### Open callback
 
-#### `close` Callback
+You can add a callback function to the `context-menu` property which will be
+called when the menu is opened:
+
+```html
+<div context-menu="onShow()">
+<!-- ... -->
+</div>
+```
+
+#### Close callback
 
 Add the following attribute to the `context-menu` element: `context-menu-close` which should be a function
 that will be called whenever the context menu is closed.
 
 ```html
-<div context-menu="onShow()" context-menu-close="onClose()"></div>
+<div context-menu context-menu-close="onClose()">
+<!-- ... -->
+</div>
 ```
 
-«–– [Ian](http://ianvonwalter.com)
+#### Margin bottom
+
+Add the following attribute to the `context-menu` element: `context-menu-margin-bottom` to keep the context menu
+away from the bottom of the page at least by this attribute value in pixels.
+
+```html
+<div context-menu context-menu-margin-bottom="10">
+<!-- ... -->
+</div>
+```
+
+---
+
+---
+
+We hope you find this useful!  
+⌁ [Talis](http://engineering.talis.com/)

@@ -38,25 +38,25 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
-        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
+        private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
+        private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewImportService interviewImportService;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
+            ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             Func<ISampleImportService> sampleImportServiceFactory,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
+            ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewImportService interviewImportService)
@@ -133,9 +133,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                if (this.ModelState.ContainsKey("ExcessiveRequests"))
-                    this.Attention(Users.TryLater);
-
                 return this.View(model);
             }
             try

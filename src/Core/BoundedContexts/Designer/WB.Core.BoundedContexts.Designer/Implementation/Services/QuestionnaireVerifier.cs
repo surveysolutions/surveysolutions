@@ -185,6 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
             Verifier<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
             Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+            Verifier<SingleQuestion>(this.SingleOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0114", VerificationMessages.WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues),
             Verifier<SingleQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
@@ -269,16 +270,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (question.Answers == null)
                 return false;
-            foreach (var option in question.Answers)
+
+            return CheckAnswerOpsionsHaveOnlyIntegerValues(question.Answers);
+        }
+
+        private bool SingleOptionQuestionSupportsOnlyIntegerPositiveValues(SingleQuestion question)
+        {
+            if (question.Answers == null)
+                return false;
+            return CheckAnswerOpsionsHaveOnlyIntegerValues(question.Answers);
+        }
+
+        private static bool CheckAnswerOpsionsHaveOnlyIntegerValues(List<Answer> answers)
+        {
+            foreach (var option in answers)
             {
                 int optionValue;
-                if (int.TryParse(option.AnswerValue, out optionValue))
-                {
-                    if (optionValue < 0)
-                        return true;
-                }
-                else
-                {
+                if (!int.TryParse(option.AnswerValue, out optionValue))
+                { 
                     return true;
                 }
             }

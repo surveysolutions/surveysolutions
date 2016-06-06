@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi option yes/no question can&apos;t be linked.
+        ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
         /// </summary>
         internal static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi option question supports only integer positive values.
+        ///   Looks up a localized string similar to Multi select question supports only integer positive values.
         /// </summary>
         internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1087,6 +1087,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0113_VariableHasEmptyVariableName {
             get {
                 return ResourceManager.GetString("WB0113_VariableHasEmptyVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single select question supports only integer positive values.
+        /// </summary>
+        internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
+            get {
+                return ResourceManager.GetString("WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
             }
         }
         

@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetRostersFromTopToSpecifiedEntity(interviewerTextQuetionId) == new Guid[] { }
                 && _.GetRostersFromTopToSpecifiedEntity(groupId) == new Guid[] { });
 
-            statefulInterview = Create.Other.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId, rosterInstanceId: rosterInstance2Id, sortIndex:1));
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId, rosterInstanceId: rosterInstance1Id, sortIndex:2));

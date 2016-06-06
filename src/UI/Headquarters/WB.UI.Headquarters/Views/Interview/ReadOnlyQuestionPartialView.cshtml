@@ -102,9 +102,16 @@
         }
         break;
     case QuestionType.DateTime:
-        if (!string.IsNullOrEmpty(Model.AnswerString))
+        if (((DateTimeQuestionSettings)Model.Settings).IsTimestamp)
         {
-            <span data-bind="text: moment('@Model.AnswerString').format('M/D/YYYY')"></span>
+            <span data-bind="text: '@Model.AnswerString'"></span>
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(Model.AnswerString))
+            {
+                <span data-bind="text: moment('@Model.AnswerString').format('M/D/YYYY')"></span>
+            }
         }
         break;
     case QuestionType.Numeric:

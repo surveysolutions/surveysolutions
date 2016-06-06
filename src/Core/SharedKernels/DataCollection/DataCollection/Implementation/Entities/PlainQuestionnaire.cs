@@ -417,11 +417,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Reverse()
                     .ToReadOnlyCollection());
 
-        public Guid? GetParentGroup(Guid groupOrQuestionId)
+        public Guid? GetParentGroup(Guid entityId)
         {
-            var groupOrQuestion = this.GetGroupOrQuestionOrThrow(groupOrQuestionId);
+            var entity = this.GetEntityOrThrow(entityId);
 
-            IComposite parent = groupOrQuestion.GetParent();
+            IComposite parent = entity.GetParent();
 
             if (parent == this.innerDocument)
                 return null;
@@ -741,6 +741,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
         }
+
+        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {

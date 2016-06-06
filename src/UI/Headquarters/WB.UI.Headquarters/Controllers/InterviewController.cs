@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -22,8 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory;
+        private readonly IChangeStatusFactory changeStatusFactory;
+        private readonly IInterviewTroubleshootFactory troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
@@ -32,8 +33,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ICommandService commandService, 
             IGlobalInfoProvider provider, 
             ILogger logger,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewTroubleshootFactory troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)

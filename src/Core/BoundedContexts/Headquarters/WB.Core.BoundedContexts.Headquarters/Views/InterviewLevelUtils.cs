@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views
 {
-    [Obsolete("please don't use this class or extend it, the class serves only one purpose - support linked questions barward compatibility")]
+    [Obsolete("please don't use this class or extend it, the class serves only one purpose - support linked questions barward compatibility. v5.7")]
     public static class InterviewLevelUtils
     {
         public static InterviewLevel[] GetAvailableOptionsForQuestionLinkedOnRoster(

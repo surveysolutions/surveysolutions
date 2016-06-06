@@ -39,16 +39,11 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly", c => c.Action<QuestionnairesApiV1Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/packages/{lastPackageId?}", c => c.Action<InterviewsApiV1Controller>(x => x.GetPackages(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v1/package/{id}", c => c.Action<InterviewsApiV1Controller>(x => x.GetPackage(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v1/package/{id}/logstate", c => c.Action<InterviewsApiV1Controller>(x => x.LogPackageAsSuccessfullyHandled(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v1/package/{id:guid}", c => c.Action<InterviewsApiV1Controller>(x => x.PostPackage(Param.Any<Guid>(), Param.Any<string>())));
             config.TypedRoute("api/interviewer/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v1/interviews/{id:guid}", c => c.Action<InterviewsApiV1Controller>(x => x.Details(Param.Any<Guid>())));
             config.TypedRoute("api/interviewer/v1/interviews/{id:guid}/logstate", c => c.Action<InterviewsApiV1Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
             config.TypedRoute("api/interviewer/v1/interviews/{id:guid}", c => c.Action<InterviewsApiV1Controller>(x => x.Post(Param.Any<Guid>(), Param.Any<string>())));
             config.TypedRoute("api/interviewer/v1/interviews/{id:guid}/image", c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
-
 
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));

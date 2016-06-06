@@ -73,8 +73,11 @@
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
+                $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
 
                 $scope.activeQuestion.validationConditions = question.validationConditions;
+
+                $scope.activeQuestion.isTimestamp = question.isTimestamp;
 
                 var options = question.options || [];
                 _.each(options, function(option) {

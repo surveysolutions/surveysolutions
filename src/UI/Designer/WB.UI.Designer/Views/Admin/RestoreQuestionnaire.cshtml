@@ -1,4 +1,4 @@
-﻿@using WB.UI.Designer.BootstrapSupport
+﻿@using WB.UI.Shared.Web.Extensions
 @{
     ViewBag.Title = "Restore Questionnaire from Backup";
 }
@@ -12,9 +12,9 @@
         <pre class="alert alert-danger">@Html.Raw(@TempData[Alerts.ERROR])</pre>
     }
 
-    @if (TempData.ContainsKey(Alerts.INFO))
+    @if (TempData.ContainsKey(Alerts.INFORMATION))
     {
-        <pre class="alert alert-info">@Html.Raw(@TempData[Alerts.INFO])</pre>
+        <pre class="alert alert-info">@Html.Raw(@TempData[Alerts.INFORMATION])</pre>
     }
 
     @if (TempData.ContainsKey(Alerts.SUCCESS))
@@ -22,7 +22,7 @@
         <pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
     }
 
-    @if (TempData.ContainsKey(Alerts.SUCCESS) || TempData.ContainsKey(Alerts.INFO) || TempData.ContainsKey(Alerts.ERROR))
+    @if (TempData.ContainsKey(Alerts.SUCCESS) || TempData.ContainsKey(Alerts.INFORMATION) || TempData.ContainsKey(Alerts.ERROR))
     {
         <hr/>
         @Html.ActionLink("Restore another questionnaire", "RestoreQuestionnaire", "Admin", null, new { @class = "btn btn-lg btn-default" })

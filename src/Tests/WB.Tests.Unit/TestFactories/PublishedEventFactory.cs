@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.TestFactories
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
             string sourceQuestionId = null, IList<ValidationCondition> validationConditions = null,
-            bool hideIfDisabled = false, QuestionProperties properties = null)
+            bool hideIfDisabled = false, QuestionProperties properties = null, bool isTimestamp = false)
             => new QuestionCloned(
                 publicKey: ToGuid(questionId) ?? Guid.NewGuid(),
                 groupPublicKey: ToGuid(parentGroupId) ?? Guid.NewGuid(),
@@ -119,7 +119,8 @@ namespace WB.Tests.Unit.TestFactories
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null)
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp)
                 .ToPublishedEvent();
 
         public IPublishedEvent<SupervisorAssigned> SupervisorAssigned(Guid? interviewId = null, string userId = null,

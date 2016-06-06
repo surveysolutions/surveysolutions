@@ -121,46 +121,46 @@
     <value>Moyenne</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>Durée moyenne de cession affaire</value>
+    <value>Durée moyenne d'affectation</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Une différence de temps entre le moment où un entretien est assigné à un intervieweur et le moment où la complète touche sur une tablette.</value>
+    <value>s</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Délai moyen de traitement HQ</value>
+    <value>Délai moyen de traitement par quartier général</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Une différence de temps entre le moment qu'un superviseur approuve un questionnaire et ce questionnaire soit approuvée ou refusée sur HQ.</value>
+    <value>La durée entre le moment où un superviseur approuve un questionnaire et où ce même questionnaire est approuvé ou rejeté par quartier général.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
-    <value>Interview de moyenne durée</value>
+    <value>Durée moyenne de l'entretien</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Une différence de temps entre le moment où la première réponse est enregistrée sur une tablette, et lorsque la touche complet.</value>
+    <value>La durée entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme complet.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Délai moyen de traitement global</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Une différence de temps entre la première tâche et le moment où l’interview est approuvée par l’AC.</value>
+    <value>Le temps écoulé entre l'affectation du questionnaire tâche et  l'appprobation par le quartier général.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
     <value>Temps de traitement moyen de superviseur</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Une différence de temps entre le bouton complet et le contrôleur accepte ou rejette ce questionnaire.</value>
+    <value>Durée entre le moment où l'enquêteur termine un entretien et le moment où le superviseur approuve ou rejette ce même entretien.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value> Retour aux superviseurs</value>
+    <value> Retourer aux superviseurs</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>Par</value>
   </data>
   <data name="Day" xml:space="preserve">
-    <value>Journée</value>
+    <value>Jour</value>
   </data>
   <data name="From" xml:space="preserve">
-    <value>De</value>
+    <value>A partir de</value>
   </data>
   <data name="InThe" xml:space="preserve">
     <value>dans le</value>
@@ -169,34 +169,34 @@
     <value>Mois</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>Nombre d’entrevues</value>
+    <value>Nombre d’entretiens achevés</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Nombre d’achèvements entrevue par un {0}. Rejeté et compléta entrevues sont comptés en tant qu’événements distincts d’achèvement.</value>
+    <value>Nombre d’entretiens achevés par un {0}. Sont comptés comme deux événements distincts d'achèvement le rejet et la correction d'un même entretien.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Nombre d’entrevues approuvée par l’AC</value>
+    <value>Nombre d’entetiens approuvés par le quartier général</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Nombre d’interviews recueillies par un {0} qui ont été approuvées par l’AC.</value>
+    <value>Nombre d’entretiens achevés par un {0} qui ont été approuvés par le quartier général.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Nombre d’opérations d’entretien par l’AC</value>
+    <value>Nombre d'actions sur des entretiens par le quartier général</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Numéro d’agrément et les rejets effectués par un QG sur questionnaires recueillis par un {0}.</value>
+    <value>Nombre de rejets ou d'approbations rendus par le QG sur les entretiens réalisés par un {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Nombre de transactions d’entrevue superviseur</value>
+    <value>Nombre d'actions par le superviseur</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Numéro d’agrément et les rejets effectués par un superviseur sur questionnaires recueillis par un {0}.</value>
+    <value>Nombre de rejets ou d'approbations rendus par un superviseur sur les entretiens réalisés par un {0}.</value>
   </data>
   <data name="Period" xml:space="preserve">
-    <value>Période</value>
+    <value>Unité de temps</value>
   </data>
   <data name="PeriodCount" xml:space="preserve">
-    <value>Nombre de période</value>
+    <value>Nombre d'unités</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
@@ -208,13 +208,13 @@
     <value>Membre de l’équipe</value>
   </data>
   <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
-    <value>Temps moyen à l’issue de l’entrevue</value>
+    <value>Temps moyen de l'achèvement d'entretien</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type de</value>
+    <value>Type de rapport</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>ver.</value>

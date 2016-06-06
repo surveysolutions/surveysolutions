@@ -70,7 +70,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         private static Guid questionWhichIncreasesRosterSizeId;
         private static Guid questionWhichDisablesRosterSizeQuestion;
         private static Guid rosterId;
-        private static AppDomainContext appDomainContext;  
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;  
         private static bool results;
     }
 }

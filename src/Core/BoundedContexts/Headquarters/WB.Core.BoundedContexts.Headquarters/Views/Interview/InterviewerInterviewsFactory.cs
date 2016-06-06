@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
+        private readonly IChangeStatusFactory interviewStatusesFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
+            IChangeStatusFactory interviewStatusesFactory,
             IInterviewPackagesService incomingSyncPackagesQueue)
         {
             this.reader = reader;

@@ -10,7 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         where T : IExpressionExecutableV10
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
-       
+
+        protected Dictionary<Guid, Func<long, string, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, bool>>();
+
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
@@ -133,6 +135,25 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     {
                         stack.Enqueue(dependentQuestionId);
                     }
+                }
+            }
+        }
+
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options)
+        {
+            if (!OptionFiltersMap.ContainsKey(questionId))
+            {
+                foreach (var option in options)
+                    yield return option;
+            }
+
+            var filter = OptionFiltersMap[questionId];
+            foreach (var option in options)
+            {
+                var isOptionSatisfyFilter = filter(option.Value, option.Title);
+                if (isOptionSatisfyFilter)
+                {
+                    yield return option;
                 }
             }
         }

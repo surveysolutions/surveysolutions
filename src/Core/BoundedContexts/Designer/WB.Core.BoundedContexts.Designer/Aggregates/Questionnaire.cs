@@ -244,7 +244,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CascadeFromQuestionId,
                         null,
                         e.ValidationConditions,
-                        e.LinkedFilterExpression));
+                        e.LinkedFilterExpression,
+                        e.IsTimestamp));
 
             if (question == null)
             {
@@ -289,7 +290,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CascadeFromQuestionId,
                         e.YesNoView,
                         e.ValidationConditions,
-                        e.LinkedFilterExpression));
+                        e.LinkedFilterExpression,
+                        e.IsTimestamp));
 
             if (question == null)
             {
@@ -333,7 +335,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -378,7 +381,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -431,7 +435,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CascadeFromQuestionId,
                         e.YesNoView,
                         e.ValidationConditions,
-                        e.LinkedFilterExpression));
+                        e.LinkedFilterExpression,
+                        e.IsTimestamp));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -471,7 +476,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null)
+                        null,
+                        false)
                     );
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -512,7 +518,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -569,7 +576,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -611,7 +619,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -652,7 +661,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.ValidationConditions,
-                        null));
+                        null,
+                        false));
 
             if (question == null)
             {
@@ -1251,7 +1261,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             responsibleId: responsibleId, 
                             scope: dateTitmeQuestion.QuestionScope,
                             isPreFilled: dateTitmeQuestion.Featured,
-                            validationConditions: dateTitmeQuestion.ValidationConditions));
+                            validationConditions: dateTitmeQuestion.ValidationConditions,
+                            isTimestamp: dateTitmeQuestion.IsTimestamp));
                         continue;
                     }
 
@@ -1527,6 +1538,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var asMultioptions = question as IMultyOptionsQuestion;
             var asNumeric = question as NumericQuestion;
             var asListQuestion = question as TextListQuestion;
+            var asDateTimeQuestion = question as DateTimeQuestion;
 
             var questionCloned = new QuestionCloned(
                 publicKey: targetId,
@@ -1554,21 +1566,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedToQuestionId: question.LinkedToQuestionId,
                 linkedToRosterId: question.LinkedToRosterId,
 
-                areAnswersOrdered: asMultioptions != null ? (bool?) asMultioptions.AreAnswersOrdered : null,
-                yesNoView: asMultioptions != null ? (bool?) asMultioptions.YesNoView : null,
+                areAnswersOrdered: asMultioptions?.AreAnswersOrdered,
+                yesNoView: asMultioptions?.YesNoView,
 
-                mask: asTextQuestion != null ? asTextQuestion.Mask : null,
+                mask: asTextQuestion?.Mask,
 
                 cascadeFromQuestionId: question.CascadeFromQuestionId,
                 isFilteredCombobox: question.IsFilteredCombobox,
 
-                isInteger: (asNumeric != null) ? (bool?) asNumeric.IsInteger : null,
-                countOfDecimalPlaces: (asNumeric != null) ? (int?) asNumeric.CountOfDecimalPlaces : null,
-                maxAnswerCount: asListQuestion != null ? asListQuestion.MaxAnswerCount : null,
-                maxAllowedAnswers: asMultioptions != null ? asMultioptions.MaxAllowedAnswers : null,
+                isInteger: asNumeric?.IsInteger,
+                countOfDecimalPlaces: asNumeric?.CountOfDecimalPlaces,
+                maxAnswerCount: asListQuestion?.MaxAnswerCount,
+                maxAllowedAnswers: asMultioptions?.MaxAllowedAnswers,
                 answerOrder : null,
                 validationConditions: question.ValidationConditions,
-                linkedFilterExpression: question.LinkedFilterExpression);
+                linkedFilterExpression: question.LinkedFilterExpression,
+
+                isTimestamp: asDateTimeQuestion?.IsTimestamp ?? false);
 
             return questionCloned;
         }
@@ -1716,7 +1730,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: null,
                 targetGroupKey: Guid.Empty,
                 validationConditions: validationCoditions,
-                linkedFilterExpression:null
+                linkedFilterExpression:null,
+                isTimestamp: false
             ));
         }
 
@@ -1761,38 +1776,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: null,
                 targetGroupKey: Guid.Empty,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             ));
         }
 
-        public void UpdateDateTimeQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions, QuestionProperties properties)
+        public void UpdateDateTimeQuestion(UpdateDateTimeQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
-
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                QuestionType.DateTime, responsibleId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
+                QuestionType.DateTime, command.ResponsibleId);
             
             this.ApplyEvent(new QuestionChanged
             (
-                publicKey: questionId,
+                publicKey: command.QuestionId,
                 groupPublicKey: null, //?
                 questionText: title,
                 questionType: QuestionType.DateTime,
-                stataExportCaption: variableName,
-                variableLabel: variableLabel,
-                featured: isPreFilled,
-                questionScope: scope,
-                conditionExpression: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
+                stataExportCaption: command.VariableName,
+                variableLabel: variableName,
+                featured: command.IsPreFilled,
+                questionScope: command.Scope,
+                conditionExpression: command.EnablementCondition,
+                hideIfDisabled: command.HideIfDisabled,
                 validationExpression: null,
                 validationMessage: null,
-                instructions: instructions,
-                properties: properties,
-                responsibleId: responsibleId,
+                instructions: command.Instructions,
+                properties: command.Properties,
+                responsibleId: command.ResponsibleId,
                 mask: null,
                 capital: false,
                 answerOrder: null,
@@ -1806,8 +1825,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
                 targetGroupKey: Guid.Empty,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null
+                validationConditions: command.ValidationConditions,
+                linkedFilterExpression: null,
+                isTimestamp: command.IsTimestamp
             ));
         }
 
@@ -1860,7 +1880,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: null,
                 targetGroupKey: Guid.Empty,
                 validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression
+                linkedFilterExpression: linkedFilterExpression,
+                isTimestamp:false
             ));
         }
 
@@ -1937,7 +1958,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: cascadeFromQuestionId,
                 targetGroupKey: Guid.Empty,
                 validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression
+                linkedFilterExpression: linkedFilterExpression,
+                isTimestamp: false
             ));
         }
 
@@ -1993,7 +2015,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: categoricalOneAnswerQuestion.CascadeFromQuestionId,
                 targetGroupKey: Guid.Empty,
                 validationConditions: categoricalOneAnswerQuestion.ValidationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             ));
         }
 
@@ -2042,7 +2065,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: categoricalOneAnswerQuestion.CascadeFromQuestionId,
                 targetGroupKey: Guid.Empty,
                 validationConditions: categoricalOneAnswerQuestion.ValidationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             ));
         }
         #endregion
@@ -4303,7 +4327,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             );
         }
 
@@ -4346,14 +4371,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAnswerCount : null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null
+                linkedFilterExpression: null,
+                isTimestamp: false
             );
         }
 
         private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties,
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
-            IList<ValidationCondition> validationConditions)
+            IList<ValidationCondition> validationConditions, bool isTimestamp)
         {
             yield return new QuestionCloned(
                 publicKey : questionId,
@@ -4389,7 +4415,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: null);
+                linkedFilterExpression: null,
+                isTimestamp: isTimestamp);
         }
 
         private IEnumerable<IEvent> CreateCategoricalMultiAnswersQuestionClonedEvents(
@@ -4451,7 +4478,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression);
+                linkedFilterExpression: linkedFilterExpression,
+                isTimestamp: false);
         }
 
         private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
@@ -4495,7 +4523,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
                 validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression);
+                linkedFilterExpression: linkedFilterExpression,
+                isTimestamp: false);
         }
 
         private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
@@ -4623,7 +4652,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     maxAnswerCount: null,
                     countOfDecimalPlaces: null,
                     validationConditions: validationConditions,
-                    linkedFilterExpression: null);
+                    linkedFilterExpression: null,
+                    isTimestamp: false);
             yield return
                 new MultimediaQuestionUpdated
                 {

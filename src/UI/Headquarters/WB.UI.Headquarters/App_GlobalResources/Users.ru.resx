@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddAPIUser" xml:space="preserve">
-    <value>Добавить  API пользователя</value>
+    <value>Добавить API пользователя</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
     <value>Добавить хедквотера</value>
@@ -175,7 +175,7 @@
     <value>Хедквотеры</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Просмотр от лица этого пользователя</value>
+    <value>Просмотр от имени этого пользователя</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Интервьюер</value>

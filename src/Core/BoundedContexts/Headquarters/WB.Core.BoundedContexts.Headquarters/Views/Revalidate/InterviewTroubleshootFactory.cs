@@ -4,14 +4,18 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
 {
-    public class InterviewTroubleshootFactory : IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView>
+    public interface IInterviewTroubleshootFactory
+    {
+        InterviewTroubleshootView Load(InterviewTroubleshootInputModel input);
+    }
+
+    public class InterviewTroubleshootFactory : IInterviewTroubleshootFactory
     {
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;

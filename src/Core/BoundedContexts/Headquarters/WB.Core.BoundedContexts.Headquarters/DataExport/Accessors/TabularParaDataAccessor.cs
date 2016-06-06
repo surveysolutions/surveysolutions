@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
@@ -16,16 +16,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly ICsvWriter csvWriter;
+        private readonly IExportFileNameService exportFileNameService;
         private readonly string pathToHistoryFiles;
 
         public TabularParaDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IArchiveUtils archiveUtils, ICsvWriter csvWriter)
+            IArchiveUtils archiveUtils, ICsvWriter csvWriter, 
+            IExportFileNameService exportFileNameService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.csvWriter = csvWriter;
+            this.exportFileNameService = exportFileNameService;
 
             this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
                 interviewDataExportSettings.ExportedDataFolderName);
@@ -104,16 +107,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             return GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version) + ".zip";
         }
 
-        private string GetPathToFolderWithParaDataByQuestionnaire(Guid questionnaireId, long version)
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToHistoryFiles,
-                $"{questionnaireId}-{version}");
-        }
-
         private string GetPathToInterviewHistoryFile(Guid interviewId, Guid questionnaireId, long version)
         {
-            return this.fileSystemAccessor.CombinePath(GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version),
-                $"{interviewId.FormatGuid()}.tab");
+            return this.fileSystemAccessor.CombinePath(GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version), $"{interviewId.FormatGuid()}.tab");
+        }
+
+        private string GetPathToFolderWithParaDataByQuestionnaire(Guid questionnaireId, long version)
+        {
+            return this.exportFileNameService.GetFolderNameForParaDataByQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), this.pathToHistoryFiles);
         }
     }
 }

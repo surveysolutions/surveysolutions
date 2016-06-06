@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
-                "~/Scripts/jquery-2.1.0.js",
+                "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",
                 "~/Scripts/modernizr-2.7.2.js",
                 "~/Scripts/bootstrap.js",

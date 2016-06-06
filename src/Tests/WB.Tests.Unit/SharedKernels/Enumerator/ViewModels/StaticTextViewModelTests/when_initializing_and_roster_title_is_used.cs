@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             viewModel.Init("interview", new Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
 
         It should_substitute_roster_title_value = () => 
-            viewModel.StaticText.ShouldEqual($"uses {rosterTitleAnswerValue}");
+            viewModel.Text.PlainText.ShouldEqual($"uses {rosterTitleAnswerValue}");
 
         static StaticTextViewModel viewModel;
         static Guid staticTextWithSubstitutionToRosterTitleId;

@@ -223,7 +223,7 @@
     <value>по</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
-    <value>с комментарием</value>
+    <value>комментарий</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
     <value>на</value>
@@ -295,7 +295,7 @@
     <value>Информация о {0} успешно обновлена</value>
   </data>
   <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
-    <value>Интервьюер был успешно Создан</value>
+    <value>Интервьюер был успешно создан</value>
   </data>
   <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
     <value>Не удалось обновить информацию пользователя, поскольку текущий пользователь не существует</value>
@@ -313,7 +313,7 @@
     <value>Идентификатор планшета</value>
   </data>
   <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
-    <value>Интервьюер еще не синхронизировался. Нет информации об устройствах.</value>
+    <value>Интервьюер еще не синхронизировался. Информации об устройствах отсутствует.</value>
   </data>
   <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
     <value>Дата начала использования</value>
@@ -322,13 +322,13 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>пользователи будут архивированы.</value>
+    <value>пользователь(ей) будут архивированы</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>Интервью на планшете будут потеряны если они Созданы в census режиме.</value>
+    <value>Интервью на планшете будут потеряны если они созданы в census режиме.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус</value>
@@ -346,7 +346,7 @@
     <value>Интервьюеры</value>
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
-    <value>Супервизоры</value>
+    <value>Супервизор</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -367,13 +367,13 @@
     <value>Результаты не найдены</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
-    <value>All Rights Reserved.</value>
+    <value>Все права защищены</value>
   </data>
   <data name="Layout_WorldBank" xml:space="preserve">
-    <value>The World Bank Group</value>
+    <value>Группа Всемирного Банка</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
-    <value>Пожалуйста, войдите</value>
+    <value>Пожалуйста войдите</value>
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
     <value>Войти</value>
@@ -502,7 +502,7 @@
     <value>Активные пользователи</value>
   </data>
   <data name="Interviewers_Archive" xml:space="preserve">
-    <value>Архив</value>
+    <value>Архивировать</value>
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
     <value>Архивные пользователи</value>

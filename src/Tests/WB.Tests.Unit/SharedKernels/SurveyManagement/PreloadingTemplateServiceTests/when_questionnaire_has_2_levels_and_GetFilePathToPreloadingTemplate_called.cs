@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -22,17 +23,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             exportedDataFormatter = new Mock<ITabularFormatExportService>();
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { "1.tab" });
-            preloadingTemplateService = CreatePreloadingTemplateService(fileSystemAccessor.Object,
-                tabularFormatExportService: exportedDataFormatter.Object);
+
+            var exportFileNameService = Mock.Of<IExportFileNameService>(x => 
+                x.GetFileNameForBatchUploadByQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == "template.zip");
+
+            preloadingTemplateService = CreatePreloadingTemplateService(
+                fileSystemAccessor.Object,
+                tabularFormatExportService: exportedDataFormatter.Object,
+                exportFileNameService: exportFileNameService);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
 
         It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
-
-        It should_return_valid_archive_name = () =>
-            result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
         It should_only_create_template_for_preload_once = () =>
             exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, 1), Moq.It.IsAny<string>()), Times.Once);
@@ -41,6 +45,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
         private static string result;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static Mock<ITabularFormatExportService> exportedDataFormatter;
-        private static Guid questionnaireId = Guid.NewGuid();
+        private static readonly Guid questionnaireId = Guid.NewGuid();
     }
 }

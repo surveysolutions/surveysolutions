@@ -182,7 +182,8 @@
                 <div class="table-holder">
                     <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
                         <div class="column-2">
-                            <input type="text" ng-model="title.value" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
+                            <input type="text" ng-model="title.value" name="title_value_{{$index}}" ng-pattern="/^([-+]?\d+)$/" 
+                                   ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
                         </div>
                         <div class="column-3">
                             <input type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">

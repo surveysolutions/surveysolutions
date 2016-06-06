@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
                 var completeInterviewViewModel = interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId);
+                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
                 return completeInterviewViewModel;
             }
             else
