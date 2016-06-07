@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             x.QuestionId == questionIdAsString)
                 .Select(x => new CategoricalOption
                 {
-                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt64(x.ParentValue) : (long?)null,
-                    Value = Convert.ToInt64(x.Value),
+                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
+                    Value = Convert.ToInt32(x.Value),
                     Title = x.Title
                 })
                 .OrderBy(x => x.Title)
@@ -59,8 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             x.Title.Contains(filter))
                 .Select(x => new CategoricalOption
                 {
-                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt64(x.ParentValue) : (long?)null,
-                    Value = Convert.ToInt64(x.Value),
+                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
+                    Value = Convert.ToInt32(x.Value),
                     Title = x.Title
                 })
                 .OrderBy(x => x.Title)
