@@ -1,0 +1,56 @@
+﻿using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+{
+    public class BaseViewModelNavigationService : MvxNavigatingObject
+    {
+        private readonly ICommandService commandService;
+        private readonly IUserInteractionService userInteractionService;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
+        private bool isNavigationStarted;
+
+        public BaseViewModelNavigationService(ICommandService commandService,
+            IUserInteractionService userInteractionService,
+            IUserInterfaceStateService userInterfaceStateService)
+        {
+            this.commandService = commandService;
+            this.userInteractionService = userInteractionService;
+            this.userInterfaceStateService = userInterfaceStateService;
+        }
+
+        public virtual bool HasPendingOperations => this.isNavigationStarted;
+
+        public virtual async Task NavigateToAsync<TViewModel>(object parameters) where TViewModel : IMvxViewModel
+        {
+            await this.WaitPendingOperationsCompletionAsync();
+            if (!this.HasPendingOperations)
+                this.ShowViewModel<TViewModel>(parameters);
+        }
+
+        public async Task WaitPendingOperationsCompletionAsync()
+        {
+            if (this.isNavigationStarted)
+            {
+                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
+                return;
+            }
+
+            this.isNavigationStarted = true;
+
+            try
+            {
+                await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
+                await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            }
+            finally
+            {
+                this.isNavigationStarted = false;
+            }
+        }
+    }
+}

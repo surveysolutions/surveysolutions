@@ -17,10 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter = null;
 
-        private Activity CurrentActivity
-        {
-            get { return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity; }
-        }
+        private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
         public Task<bool> ConfirmAsync(
             string message,
@@ -68,6 +65,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                 return userInteractionsAwaiter.Task;
             }
+        }
+
+        public void ShowToast(string message)
+        {
+            Toast.MakeText(this.CurrentActivity, message, ToastLength.Short).Show();
         }
 
         private void Confirm(

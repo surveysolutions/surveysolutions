@@ -10,7 +10,7 @@ namespace WB.UI.Tester.Ninject
     {
         public override void Load()
         {
-            this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
+            this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>().InSingletonScope();
         }
     }
 }
