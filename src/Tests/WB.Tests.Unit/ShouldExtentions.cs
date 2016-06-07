@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
@@ -15,6 +16,7 @@ namespace WB.Tests.Unit
 {
     internal static class ShouldExtensions
     {
+        [DebuggerStepThrough]
         public static void ShouldMatchMethodInfo(this MetodInfo left, MetodInfo right)
         {
             left.Name.ShouldEqual(right.Name);
@@ -22,6 +24,7 @@ namespace WB.Tests.Unit
             left.ParamsType.ShouldContainOnly(right.ParamsType);
         }
 
+        [DebuggerStepThrough]
         public static void ShouldContainValues(this QuestionTemplateModel question,
             Guid id,
             string variableName,
@@ -51,11 +54,13 @@ namespace WB.Tests.Unit
             question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
         }
 
+        [DebuggerStepThrough]
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
         {
             eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
         }
 
+        [DebuggerStepThrough]
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
             where TEvent : IEvent
         {
@@ -72,6 +77,7 @@ namespace WB.Tests.Unit
             }
         }
 
+        [DebuggerStepThrough]
         public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
             where TEvent : IEvent
         {
@@ -88,11 +94,13 @@ namespace WB.Tests.Unit
             }
         }
 
+        [DebuggerStepThrough]
         public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
         {
             questionnaireDocument.GetAllGroups().ShouldContain(condition);
         }
 
+        [DebuggerStepThrough]
         public static void ShouldContainWarning(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
@@ -101,6 +109,7 @@ namespace WB.Tests.Unit
                 && message.Code == code);
         }
 
+        [DebuggerStepThrough]
         public static void ShouldNotContainMessage(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {

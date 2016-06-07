@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
+        private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -58,7 +59,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new Dictionary<Guid, ReadOnlyCollection<decimal>>();
         private readonly Dictionary<Guid, Dictionary<decimal, Answer>> cacheOfAnswerOptions = new Dictionary<Guid, Dictionary<decimal, Answer>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
-        
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -157,6 +157,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> SubstitutionReferencedStaticTextsCache
             => this.substitutionReferencedStaticTextsCache
             ?? (this.substitutionReferencedStaticTextsCache = this.GetSubstitutionReferencedStaticTexts());
+
+
+        private Dictionary<string, HashSet<Guid>> SubstitutionReferencedGroupsCache
+           => this.substitutionReferencedGroupsCache
+           ?? (this.substitutionReferencedGroupsCache = this.GetSubstitutionReferencedGroups());
 
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
@@ -1035,6 +1040,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return referenceOccurences;
         }
 
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedGroups()
+        {
+            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
+            var allGroups = this.AllGroups.ToList();
+            foreach (var group in allGroups)
+            {
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(group.Title);
+
+                foreach (var substitutedVariableName in substitutedVariableNames)
+                {
+                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
+                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
+                    if (!referenceOccurences[substitutedVariableName].Contains(group.PublicKey))
+                        referenceOccurences[substitutedVariableName].Add(group.PublicKey);
+                }
+            }
+            return referenceOccurences;
+        }
+
         public IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId)
         {
             string targetVariableName = this.GetQuestionVariableName(questionId);
@@ -1090,6 +1114,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     if (this.SubstitutionService.ContainsRosterTitle(staticTextTitle))
                     {
                         yield return staticTextInRosterId;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Guid> GetSubstitutedGroups(Guid questionId)
+        {
+            string targetVariableName = this.GetQuestionVariableName(questionId);
+
+            if (!string.IsNullOrWhiteSpace(targetVariableName))
+            {
+                if (this.SubstitutionReferencedGroupsCache.ContainsKey(targetVariableName))
+                {
+                    foreach (var referencingGroupId in this.SubstitutionReferencedGroupsCache[targetVariableName])
+                    {
+                        yield return referencingGroupId;
+                    }
+                }
+            }
+
+            var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
+            foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
+            {
+                IEnumerable<Guid> groupsInRoster = this.GetAllUnderlyingChildGroups(rosterId);
+                foreach (var groupId in groupsInRoster)
+                {
+                    var groupTitle = GetGroupTitle(groupId);
+                    if (this.SubstitutionService.ContainsRosterTitle(groupTitle))
+                    {
+                        yield return groupId;
                     }
                 }
             }
