@@ -250,9 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 case QuestionType.DateTime:
                     if (answer is DateTime)
                     {
-                        var date = (DateTime)answer;
-
-                        return ((DateTimeQuestionSettings)questionView.Settings).IsTimestamp ? date.ToString("t") : date.ToString("u");
+                        return ((DateTime)answer).ToString("u");
                     }
                     break;
                 case QuestionType.Numeric:
