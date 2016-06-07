@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        private It should_return_1_message = () =>
+        It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0045 = () =>

@@ -270,12 +270,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private bool MultiOptionQuestionHasNonIntegerOptionsValues(IMultyOptionsQuestion question)
-            => CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(question.Answers);
+            => HaveOptionsNonIntegerValues(question.Answers);
 
         private bool SingleOptionQuestionHasNonIntegerOptionsValues(SingleQuestion question)
-            => CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(question.Answers);
+            => HaveOptionsNonIntegerValues(question.Answers);
 
-        private static bool CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(List<Answer> answers)
+        private static bool HaveOptionsNonIntegerValues(List<Answer> answers)
         {
             if (answers == null)
                 return false;
