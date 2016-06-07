@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -15,6 +14,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
         long Version { get; }
+
+        Guid QuestionnaireId { get; }
 
         string Title { get; }
 
@@ -59,6 +60,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, long? parentQuestionValue, string filter);
+
+        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, long? parentQuestionValue, string filter);
+
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
         decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
@@ -79,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
 
-        Guid? GetParentGroup(Guid groupOrQuestionId);
+        Guid? GetParentGroup(Guid entityId);
 
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
@@ -174,6 +179,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets list of static text ids that use question with provided <param name="questionId">questionId</param> as a substitution.
         /// </summary>
         IEnumerable<Guid> GetSubstitutedStaticTexts(Guid questionId);
+
+        /// <summary>
+        /// Gets list of <see cref="IGroup"/> ids that use <see cref="IQuestion"/> with provided <param name="questionId">questionId</param> as a substitution.
+        /// </summary>
+        IEnumerable<Guid> GetSubstitutedGroups(Guid questionId);
 
         /// <summary>
         /// Gets first level child questions of a group

@@ -25,24 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             StaticTextStateViewModel questionState = null,
             SubstitutionViewModel substitutionViewModel = null)
         {
-            if (rosterTitleSubstitutionService == null)
-            {
-                var substStub = new Mock<IRosterTitleSubstitutionService>();
-                substStub.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
-                    .Returns<string, Identity, string>((title, id, interviewId) => title);
-                rosterTitleSubstitutionService = substStub.Object;
-            }
-
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var plainQuestionnaireRepository = questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>();
-
-            var replacerService = new SubstitutionViewModel(
-                statefulInterviewRepository,
-                plainQuestionnaireRepository,
-                new SubstitutionService(),
-                new AnswerToStringService(),
-                new VariableToUIStringService(),
-                rosterTitleSubstitutionService);
 
             var liteEventRegistry = registry ?? Create.Service.LiteEventRegistry();
 
@@ -55,7 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository,
                                        plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
                 attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
-                dynamicTextViewModel: new DynamicTextViewModel(liteEventRegistry, replacerService));
+                dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
+                    eventRegistry: liteEventRegistry,
+                    interviewRepository: statefulInterviewRepository,
+                    questionnaireRepository: plainQuestionnaireRepository,
+                    rosterTitleSubstitutionService: rosterTitleSubstitutionService));
         }
     }
 }

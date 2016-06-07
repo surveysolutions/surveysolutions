@@ -344,7 +344,13 @@
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_exporession_contains_substitution.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_recursively.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_latitude_longitude_in_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_has_time.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
@@ -1333,7 +1339,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question_with_invalid_answer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_geolocation_question_which_cant_be_parsed.cs" />

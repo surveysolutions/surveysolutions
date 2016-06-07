@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
@@ -14,12 +15,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             {
                 PublicKey = questionId,
                 QuestionType = QuestionType.DateTime,
-                StataExportCaption = questionVarName
+                StataExportCaption = questionVarName,
+                IsTimestamp = true
             };
         };
 
         Because of = () => 
-            parsingResult = questionDataParser.TryParse(expectedDateTimeAnswer.ToString("yyyy-MM-ddTHH:mm:ss"), questionVarName, question, out parcedValue);
+            parsingResult = questionDataParser.TryParse(expectedDateTimeAnswer.ToString(ExportedQuestion.ExportDateTimeFormat), questionVarName, question, out parcedValue);
 
         It should_result_be_equal_to_epexted = () =>
             parcedValue.ShouldEqual(expectedDateTimeAnswer);

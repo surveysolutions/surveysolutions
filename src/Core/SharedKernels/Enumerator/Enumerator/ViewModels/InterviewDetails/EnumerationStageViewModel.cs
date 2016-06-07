@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using MvvmCross.Plugins.Messenger;
 using Nito.AsyncEx;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -33,15 +34,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<QuestionsDisabled>,
         ILiteEventHandler<StaticTextsDisabled>,
         ILiteEventHandler<StaticTextsEnabled>,
+        ILiteEventHandler<AnswersDeclaredInvalid>,
+        ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private string name;
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; this.RaisePropertyChanged(); }
-        }
-
         private ObservableRangeCollection<IInterviewEntityViewModel> items;
         public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
@@ -57,7 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMessenger messenger;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
@@ -70,6 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IQuestionnaire questionnaire;
         string interviewId;
 
+        public DynamicTextViewModel Name { get; }
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -78,7 +77,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher)
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
+            DynamicTextViewModel dynamicTextViewModel, IMvxMessenger messenger, IEnumeratorSettings settings)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -87,6 +87,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry = eventRegistry;
             this.userInterfaceStateService = userInterfaceStateService;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+
+            this.Name = dynamicTextViewModel;
+            this.messenger = messenger;
+            this.settings = settings;
         }
 
         public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -101,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this))
             {
@@ -109,19 +113,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
-            if (this.questionnaire.IsRosterGroup(groupId.Id))
+            if (this.questionnaire.IsRosterGroup(groupIdentity.Id))
             {
-                string title = this.questionnaire.GetGroupTitle(groupId.Id);
-                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(groupId));
+                string rosterTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
+                var fullRosterName = this.substitutionService.GenerateRosterName(rosterTitle, this.interview.GetRosterTitle(groupIdentity));
+                this.Name.Init(this.interviewId, groupIdentity, fullRosterName);
             }
             else
             {
-                this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
+                var groupTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
+                this.Name.Init(this.interviewId, groupIdentity, groupTitle);
             }
 
-            this.LoadFromModel(groupId);
+            this.LoadFromModel(groupIdentity);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -131,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (scrollTo != null)
             {
-                var childItem = this.Items.OfType<GroupViewModel>()
+                var childItem = this.Items
                     .FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                 anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
@@ -182,9 +188,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    this.Name = this.substitutionService.GenerateRosterName(
+                    var fullRosterName = this.substitutionService.GenerateRosterName(
                         this.questionnaire.GetGroupTitle(this.navigationState.CurrentGroup.Id),
                         this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
+
+                    this.Name.ChangeText(fullRosterName);
                 }
             }
         }
@@ -233,6 +241,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.AddMissingEntities();
             this.InvalidateViewModelsByConditions(@event.StaticTexts);
+        }
+
+        public void Handle(AnswersDeclaredInvalid @event)
+        {
+            SendCountOfInvalidEntitiesIncreasedMessageIfNeeded();
+        }
+
+        public void Handle(StaticTextsDeclaredInvalid @event)
+        {
+            SendCountOfInvalidEntitiesIncreasedMessageIfNeeded();
+        }
+
+        private void SendCountOfInvalidEntitiesIncreasedMessageIfNeeded()
+        {
+            if (this.settings.VibrateOnError)
+                this.messenger.Publish(new CountOfInvalidEntitiesIncreasedMessage(this));
+
         }
 
         private void AddMissingEntities()

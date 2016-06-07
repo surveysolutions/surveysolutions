@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
             outerRosterVector: Empty.RosterVector,
             instanceId: 0m));
 
-        It should_change_own_title = () => viewModel.Title.ShouldEqual("group title - rosterTitle");
+        It should_change_own_title = () => viewModel.Title.PlainText.ShouldEqual("group title - rosterTitle");
 
         static SideBarSectionViewModel viewModel;
         static Identity sectionIdentity;

@@ -1156,6 +1156,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Count(question => !this.IsValid(question));
         }
 
+        public IEnumerable<Identity> GetInvalidEntitiesInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            foreach (var sectionInstance in sectionInstances)
+            {
+                var invalidEntitiesInSection = this
+                    .GetEnabledInterviewerChildQuestions(sectionInstance)
+                    .Union(this.GetEnabledInvalidChildStaticTexts(sectionInstance))
+                    .Where(entity => !this.IsValid(entity));
+
+                foreach (var identity in invalidEntitiesInSection)
+                {
+                    yield return identity;
+                }
+            }
+        }
+
         public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
         {
             return this

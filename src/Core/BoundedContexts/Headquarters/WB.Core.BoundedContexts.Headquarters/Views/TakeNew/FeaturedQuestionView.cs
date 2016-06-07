@@ -69,6 +69,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
                     Mask = textQuestion.Mask
                 };
             }
+
+            var dateQuestion = doc as DateTimeQuestion;
+            if (dateQuestion != null)
+            {
+                this.Settings = new
+                {
+                    IsTimestamp = dateQuestion.IsTimestamp
+                };
+            }
         }
 
         public Guid? ParentId { get; set; }

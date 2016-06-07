@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -90,8 +91,8 @@ namespace WB.Tests.Unit.TestFactories
                 ContentType = contentType,
             };
 
-        public CategoricalQuestionOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
-            => new CategoricalQuestionOption
+        public CategoricalOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
+            => new CategoricalOption
             {
                 Value = value,
                 Title = title,
@@ -121,7 +122,7 @@ namespace WB.Tests.Unit.TestFactories
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null,
-            QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false)
+            QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false, bool isTimestamp = false)
             => new DateTimeQuestion("Question DT")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -133,7 +134,8 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
-                Featured = preFilled
+                Featured = preFilled,
+                IsTimestamp = isTimestamp
             };
 
         public EnablementChanges EnablementChanges(
@@ -615,10 +617,11 @@ namespace WB.Tests.Unit.TestFactories
             string enablementCondition = null,
             string validationExpression = null,
             string validationMessage = null,
+            string title = null,
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
-            => new TextQuestion("Question X")
+            => new TextQuestion(title ?? "Question X")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = questionType,

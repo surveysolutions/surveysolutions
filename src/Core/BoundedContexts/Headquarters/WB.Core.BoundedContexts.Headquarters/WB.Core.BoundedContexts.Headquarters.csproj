@@ -261,6 +261,7 @@
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
