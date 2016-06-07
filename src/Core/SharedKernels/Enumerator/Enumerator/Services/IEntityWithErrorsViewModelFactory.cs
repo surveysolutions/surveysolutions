@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IEntityWithErrorsViewModelFactory
     {
         IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState);
+        int MaxNumberOfEntities { get; }
     }
 }

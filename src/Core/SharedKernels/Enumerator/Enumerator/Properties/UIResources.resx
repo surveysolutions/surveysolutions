@@ -395,7 +395,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Tap to record current time</value>
   </data>
-  <data name="Interview_Complete_Questions_With_Errors" xml:space="preserve">
-    <value>Questions with errors:</value>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entities with errors:</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>First {0} entities with errors:</value>
   </data>
 </root>
