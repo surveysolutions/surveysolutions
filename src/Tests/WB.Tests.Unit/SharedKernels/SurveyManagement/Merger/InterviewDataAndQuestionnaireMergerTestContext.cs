@@ -190,9 +190,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
+            var substitutionService = new SubstitutionService();
             return new InterviewDataAndQuestionnaireMerger(
-                substitutionService: new SubstitutionService(),
-                variableToUiStringService: new VariableToUIStringService());
+                substitutionService: substitutionService,
+                variableToUiStringService: new VariableToUIStringService(),
+                interviewEntityViewFactory: new InterviewEntityViewFactory(substitutionService));
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

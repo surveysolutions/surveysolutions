@@ -8,16 +8,17 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
-    internal class when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled
+    internal class when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled : InterviewEntityViewFactoryTestsContext
     {
         Establish context = () =>
         {
             question = Mock.Of<IQuestion>();
+            interviewEntityViewFactory = CreateInterviewEntityViewFactory();
         };
 
         Because of = () =>
             result =
-                new InterviewQuestionView(question: question, answeredQuestion: null,
+                interviewEntityViewFactory.BuildInterviewQuestionView(question: question, answeredQuestion: null,
                     answersForTitleSubstitution: new Dictionary<string, string>(), isParentGroupDisabled: false,
                     rosterVector:new decimal[0],
                     interviewStatus: InterviewStatus.Completed);
@@ -28,6 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         It should_set_readonly_flag_to_true = () =>
             result.IsReadOnly.ShouldBeTrue();
 
+        private static IInterviewEntityViewFactory interviewEntityViewFactory;
         private static InterviewQuestionView result;
         private static IQuestion question;
     }

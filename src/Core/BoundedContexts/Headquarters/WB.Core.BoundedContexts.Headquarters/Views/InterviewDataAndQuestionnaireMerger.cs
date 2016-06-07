@@ -20,12 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
-        private readonly InterviewEntityViewFactory interviewEntityViewFactory;
+        private readonly IInterviewEntityViewFactory interviewEntityViewFactory;
 
         public InterviewDataAndQuestionnaireMerger(
             ISubstitutionService substitutionService, 
             IVariableToUIStringService variableToUiStringService,
-            InterviewEntityViewFactory interviewEntityViewFactory
+            IInterviewEntityViewFactory interviewEntityViewFactory
             )
         {
             this.substitutionService = substitutionService;
