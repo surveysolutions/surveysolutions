@@ -43,6 +43,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             public HashSet<Identity> EnablementChanged = new HashSet<Identity>();
             public HashSet<Identity> ValidityChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInQuestionsChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInGroupsChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInStaticTextsChanged = new HashSet<Identity>();
         }
 
         private CalculatedState calculated = null;
@@ -362,6 +365,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
+            if (this.delta.SubstitutionsInGroupsChanged.Any() || 
+                this.delta.SubstitutionsInQuestionsChanged.Any() ||
+                this.delta.SubstitutionsInStaticTextsChanged.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(this.delta.SubstitutionsInQuestionsChanged.ToArray(), 
+                    this.delta.SubstitutionsInStaticTextsChanged.ToArray(),
+                    this.delta.SubstitutionsInGroupsChanged.ToArray()));
+            }
 
             this.ApplyEvent(this.HasInvalidAnswers() || this.HasInvalidStaticTexts
                 ? new InterviewDeclaredInvalid() as IEvent
@@ -396,6 +407,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
             if (this.Answers.ContainsKey(questionId))
                 this.Answers[questionId].RemoveAnswer();
+        }
+
+        public new void Apply(SubstitutionTitlesChanged @event)
+        {
+            @event.Groups.ForEach(x => this.delta.SubstitutionsInGroupsChanged.Add(new Identity(x.Id, x.RosterVector)));
+            @event.Questions.ForEach(x => this.delta.SubstitutionsInQuestionsChanged.Add(new Identity(x.Id, x.RosterVector)));
+            @event.StaticTexts.ForEach(x => this.delta.SubstitutionsInStaticTextsChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
         public new void Apply(AnswersDeclaredValid @event)

@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.Other.CommittedEvent(payload: Create.Event.VariablesDisabled()),
                 Create.Other.CommittedEvent(payload: Create.Event.VariablesEnabled()),
                 Create.Other.CommittedEvent(payload: Create.Event.VariablesChanged()),
+                Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged()),
 
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsDisabled()),
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsEnabled()),
@@ -45,6 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesDisabled()),
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesEnabled()),
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesChanged()),
+                Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.SubstitutionTitlesChanged()),
                 firstCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
 
                 lastAggregatedGroupsDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
@@ -61,6 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedVariablesDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesDisabled()),
                 lastAggregatedVariablesEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesEnabled()),
                 lastAggregatedVariablesValuesChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesChanged()),
+                lastAggregatedSubstitutionTitlesChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.SubstitutionTitlesChanged()),
                 lastCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
             };
 
@@ -91,6 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedVariablesDisabled,
                 lastAggregatedVariablesEnabled,
                 lastAggregatedVariablesValuesChanged,
+                lastAggregatedSubstitutionTitlesChanged,
 
                 lastCompletion,
             });
@@ -115,5 +119,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static CommittedEvent lastAggregatedVariablesEnabled;
         private static CommittedEvent lastAggregatedVariablesValuesChanged;
         private static CommittedEvent lastCompletion;
+        private static CommittedEvent lastAggregatedSubstitutionTitlesChanged;
     }
 }
