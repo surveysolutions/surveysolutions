@@ -617,10 +617,11 @@ namespace WB.Tests.Unit.TestFactories
             string enablementCondition = null,
             string validationExpression = null,
             string validationMessage = null,
+            string title = null,
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
-            => new TextQuestion("Question X")
+            => new TextQuestion(title ?? "Question X")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = questionType,
