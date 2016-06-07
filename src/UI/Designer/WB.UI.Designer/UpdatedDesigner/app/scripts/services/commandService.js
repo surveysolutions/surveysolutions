@@ -142,7 +142,8 @@
                             enablementCondition: question.enablementCondition,
                             hideIfDisabled: question.hideIfDisabled,
                             instructions: question.instructions,
-                            hideInstructions: question.hideInstructions
+                            hideInstructions: question.hideInstructions,
+                            optionsFilterExpression: question.optionsFilterExpression
                         }
                     };
 

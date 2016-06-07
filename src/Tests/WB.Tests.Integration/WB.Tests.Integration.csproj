@@ -321,6 +321,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_single_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
     <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option.cs" />
     <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option.cs" />

@@ -68,7 +68,11 @@ namespace WB.UI.Interviewer.Activities
                 await interviewerSettings.SetGpsResponseTimeoutAsync(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
                 this.UpdateSettings();
             };
-
+            this.FindPreference(SettingsNames.VibrateOnError).PreferenceChange += async (sender, e) =>
+            {
+                await interviewerSettings.SetVibrateOnErrorAsync(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
+                this.UpdateSettings();
+            };
             this.UpdateSettings();
         }
 
@@ -96,6 +100,17 @@ namespace WB.UI.Interviewer.Activities
             this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
                 InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
 
+            this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, InterviewerUIResources.Prefs_VibrateOnErrorTitle,
+                InterviewerUIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
+
+        }
+        private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
+        {
+            bool intValue;
+            if (bool.TryParse(settingsValue.ToString(), out intValue))
+                return intValue;
+
+            return defaultValue;
         }
 
         private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
@@ -118,6 +133,19 @@ namespace WB.UI.Interviewer.Activities
             if (editPreference != null)
             {
                 editPreference.Text = defaultValue;
+            }
+        }
+
+        private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary, bool defaultValue)
+        {
+            var preference = this.FindPreference(preferenceKey);
+
+            preference.Title = title;
+            preference.Summary = summary;
+            var checkBoxPreference = preference as CheckBoxPreference;
+            if (checkBoxPreference != null)
+            {
+                checkBoxPreference.Checked = defaultValue;
             }
         }
     }

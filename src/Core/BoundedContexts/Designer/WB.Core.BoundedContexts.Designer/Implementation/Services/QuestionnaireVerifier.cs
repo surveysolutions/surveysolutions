@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -16,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -149,6 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
+            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
             Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan40Items),
             Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
@@ -164,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
             Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
-            Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
+            Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionHasNonIntegerOptionsValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
             Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
             Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
@@ -185,6 +188,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
             Verifier<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
             Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+            Verifier<SingleQuestion>(this.SingleOptionQuestionHasNonIntegerOptionsValues, "WB0114", VerificationMessages.WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues),
             Verifier<SingleQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
@@ -265,20 +269,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.YesNoView && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private bool MultiOptionQuestionSupportsOnlyIntegerPositiveValues(IMultyOptionsQuestion question)
+        private bool MultiOptionQuestionHasNonIntegerOptionsValues(IMultyOptionsQuestion question)
+            => CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(question.Answers);
+
+        private bool SingleOptionQuestionHasNonIntegerOptionsValues(SingleQuestion question)
+            => CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(question.Answers);
+
+        private static bool CheckAnswerNonEmptyOptionsHaveOnlyIntegerValues(List<Answer> answers)
         {
-            if (question.Answers == null)
+            if (answers == null)
                 return false;
-            foreach (var option in question.Answers)
+
+            foreach (var option in answers)
             {
+                if (string.IsNullOrWhiteSpace(option.AnswerValue))
+                    continue;
+
                 int optionValue;
-                if (int.TryParse(option.AnswerValue, out optionValue))
-                {
-                    if (optionValue < 0)
-                        return true;
-                }
-                else
-                {
+                if (!int.TryParse(option.AnswerValue, out optionValue))
+                { 
                     return true;
                 }
             }
@@ -546,7 +555,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (question.Answers != null)
             {
-                return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
+                var answersValues =  question.Answers.Where(x => !string.IsNullOrWhiteSpace(x.AnswerValue)).Select(x => x.AnswerValue.Trim()).ToList();
+                return answersValues.Distinct().Count() != answersValues.Count();
             }
             return false;
         }
@@ -883,6 +893,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return group.FixedRosterTitles.Select(x => x.Value).Distinct().Count() != group.FixedRosterTitles.Length;
         }
 
+        private static bool GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues(IGroup group)
+        {
+            if (!IsRosterByFixedTitles(group))
+                return false;
+
+            if (group.FixedRosterTitles == null)
+                return false;
+
+            if (group.FixedRosterTitles.Length == 0)
+                return false;
+
+            foreach (var rosterTitle in group.FixedRosterTitles)
+            {
+                if((rosterTitle.Value % 1) != 0)
+                    return true;
+            }
+
+            return false;
+        }
+
         private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group)
         {
             if (!IsRosterByFixedTitles(group))
@@ -1026,7 +1056,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return false;
 
-            return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
+            return question.Answers.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
         }
 
         private static bool QuestionnaireTitleHasInvalidCharacters(ReadOnlyQuestionnaireDocument questionnaire)
@@ -1434,13 +1464,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity));
+                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle());
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
 
                 IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
-                    .Select(identifier => GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
+                    .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
                     .Where(errorOrNull => errorOrNull != null);
 
                 foundErrors.AddRange(entityErrors);
@@ -1454,11 +1484,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             || entity is IStaticText;
 
         private bool HasSubstitionVariablesInTitle(IComposite entity)
-            => this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity)).Any();
-
-        private static string GetTitle(IComposite entity)
-            => (entity as IQuestion)?.QuestionText
-            ?? (entity as IStaticText)?.Text;
+            => this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).Any();
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {

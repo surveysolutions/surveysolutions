@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
     {
         Establish context = () =>
         {
-            answer = "01.01.2016 12:12:31";
+            answer = "2016-01-01T12:12:31";
             questionDataParser = CreateQuestionDataParser();
             question = new DateTimeQuestion()
             {

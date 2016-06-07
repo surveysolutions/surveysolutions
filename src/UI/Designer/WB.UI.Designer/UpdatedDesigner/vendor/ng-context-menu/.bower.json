@@ -1,6 +1,6 @@
 {
   "name": "ng-context-menu",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "An AngularJS directive to display a context menu when a right-click event is triggered",
   "keywords": [
     "ng-context-menu",
@@ -13,7 +13,7 @@
     "Ian Kennington Walter (http://ianvonwalter.com)"
   ],
   "license": "MIT",
-  "homepage": "http://ianwalter.github.io/ng-context-menu/",
+  "homepage": "https://talis.github.io/ng-context-menu/",
   "main": [
     "dist/ng-context-menu.js"
   ],
@@ -33,14 +33,14 @@
   "devDependencies": {
     "requirejs": "~2.1.15"
   },
-  "_release": "1.0.1",
+  "_release": "1.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.1",
-    "commit": "50257bab3efc9abbb1bd433167002e36dd0b591c"
+    "tag": "v1.0.3",
+    "commit": "f048d26f7f75d418ce8de4937a61ecc0cdcc7f95"
   },
-  "_source": "git://github.com/ianwalter/ng-context-menu.git",
-  "_target": "~1.0.1",
+  "_source": "https://github.com/talis/ng-context-menu.git",
+  "_target": "^1.0.3",
   "_originalSource": "ng-context-menu",
   "_direct": true
 }

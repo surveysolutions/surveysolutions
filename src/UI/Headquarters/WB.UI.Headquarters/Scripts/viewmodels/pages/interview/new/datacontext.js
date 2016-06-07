@@ -51,7 +51,13 @@
                         break;
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
-                    var answerUTC = dateAnswer.getFullYear() + '-' + (dateAnswer.getMonth() + 1) + '-' + dateAnswer.getDate();
+                    var answerUTC = null;
+
+                    if (question.settings().IsTimestamp) {
+                        answerUTC = moment(dateAnswer);
+                    } else {
+                        answerUTC = dateAnswer.getFullYear() + '-' + (dateAnswer.getMonth() + 1) + '-' + dateAnswer.getDate();
+                    }
                     answer = {
                         id: question.id(),
                         answer: answerUTC,

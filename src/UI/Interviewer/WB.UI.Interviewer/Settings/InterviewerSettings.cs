@@ -56,11 +56,13 @@ namespace WB.UI.Interviewer.Settings
             EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
             GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
-            GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy)
+            GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy),
+            VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError)
         };
 
         public string Endpoint => this.CurrentSettings.Endpoint;
         public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
+        public bool VibrateOnError => this.CurrentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
@@ -154,6 +156,14 @@ namespace WB.UI.Interviewer.Settings
             await this.SaveCurrentSettings(settings =>
             {
                 settings.CommunicationBufferSize = bufferSize;
+            });
+        }
+
+        public async Task SetVibrateOnErrorAsync(bool vibrateOnError)
+        {
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.VibrateOnError = vibrateOnError;
             });
         }
 

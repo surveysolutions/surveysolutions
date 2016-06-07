@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -76,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
-        protected static readonly List<CategoricalQuestionOption> options = new List<CategoricalQuestionOption>
+        protected static readonly List<CategoricalOption> options = new List<CategoricalOption>
         {
             Create.Entity.CategoricalQuestionOption(1, "title abc 1", 1),
             Create.Entity.CategoricalQuestionOption(2, "title def 2", 1),

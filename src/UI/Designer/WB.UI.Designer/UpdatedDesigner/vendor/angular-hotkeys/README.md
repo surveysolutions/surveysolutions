@@ -1,4 +1,4 @@
-angular-hotkeys 
+angular-hotkeys
 ================
 Configuration-centric keyboard shortcuts for your Angular apps.
 
@@ -35,8 +35,8 @@ Other projects out there rely too heavily on HTML markup for keyboard shortcuts.
 
 ```html
 <div class="player">
-  <div class="playPause-btn" shortcut="{space: playPause}"></div>
-  <div class="mute-btn" shortcut="{'ctrl+down': mute}"></div>
+  <div class="playPause-btn" hotkey="{space: playPause}"></div>
+  <div class="mute-btn" hotkey="{'ctrl+down': mute}"></div>
 </div>
 ```
 
@@ -45,7 +45,7 @@ While this is a great approach for many Angular apps, some applications do not h
 Additionally, this only allows you to pass a function reference, you can't pass arguments to the function you intend to call. So instead of simply calling `seek(currentTime + 30)` and `seek(currentTime + 60)`,  I needed to create a ton of helper functions on the scope (such as `forward30` and `forward60`), and litter my HTML like this:
 
 ```html
-<div class="player" shortcut="{space: playPause,
+<div class="player" hotkey="{space: playPause,
                               'alt+right': forward30,
                               'ctrl+right': forward60,
                               'left': back30,
@@ -66,7 +66,6 @@ With a few dozen shortcuts, this left the DOM really messy, and with multiple vi
 
 
 ### Usage:
-
 You can either define hotkeys in your Controller, or in your Route configuration (or both).  To start, though, require the lib as a dependency for your angular app:
 
 ```js
@@ -74,6 +73,8 @@ angular.module('myApp', ['ngRoute', 'cfp.hotkeys']);
 ```
 
 Behind the scenes, I'm using the [Mousetrap](https://github.com/ccampbell/mousetrap) library to manage the key bindings.  Check out the docs there for more information on what kind of key combinations can be used.  This library is included in the files from the `build` directory, so there is no need to install and include Mousetrap separately.
+
+**Update:** [A YouTube video tutorial was created for this project](https://www.youtube.com/watch?v=silr0L7rJOY). Thanks guys!
 
 
 #### Binding hotkeys in controllers:
@@ -138,7 +139,9 @@ Example of how directive-based hotkeys works:
 <modal title="Modal Title" hotkey="{esc: close}">
 ```
 
-### Configuration
+#### Cheatsheet
+
+A cheatsheet is created automatically for you, showing which hotkeys are available for the current route, along with a description as to what it does. The default binding to show the cheatsheet is `?`. Be sure to include the `build/hotkeys.css` stylesheet. [Cheatsheet demo](http://chieffancypants.github.io/angular-hotkeys/#features)
 
 **Disable the cheatsheet:**
 
@@ -151,12 +154,38 @@ angular.module('myApp', ['cfp.hotkeys'])
   })
 ```
 
+### Configuration
+
+**Disable ngRoute integration:**
+
+To prevent listening for $routeChangeSuccess events use `hotkeysProvider`.
+This option defaults to false if ngRoute module is not loaded:
+
+```js
+angular.module('myApp', ['cfp.hotkeys'])
+  .config(function(hotkeysProvider) {
+    hotkeysProvider.useNgRoute = false;
+  })
+```
+
 **Cheatsheet template:**
 
 ```js
 angular.module('myApp', ['cfp.hotkeys'])
   .config(function(hotkeysProvider) {
     hotkeysProvider.template = '<div class="my-own-cheatsheet">...</div>';
+  })
+```
+
+**Header and footer:**
+
+You can specify a custom header and footer for the cheatsheet.  Both are HTML, and if the header is set it will override the normal title.
+
+```js
+angular.module('myApp', ['cfp.hotkeys'])
+  .config(function(hotkeysProvider) {
+    hotkeysProvider.templateHeader = '<div class="my-own-header">...</div>';
+    hotkeysProvider.templateFooter = '<div class="my-own-footer">...</div>';
   })
 ```
 

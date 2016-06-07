@@ -16,32 +16,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private static readonly Regex HtmlRemovalRegex = new Regex("<.*?>");
 
-        private readonly ILiteEventRegistry registry;
+        private readonly ILiteEventRegistry eventRegistry;
         private readonly SubstitutionViewModel substitutionViewModel;
 
         public DynamicTextViewModel(
-            ILiteEventRegistry registry,
+            ILiteEventRegistry eventRegistry,
             SubstitutionViewModel substitutionViewModel)
         {
-            this.registry = registry;
+            this.eventRegistry = eventRegistry;
             this.substitutionViewModel = substitutionViewModel;
         }
 
         private Identity identity;
 
+        public void InitAsStatic(string textWithoutSubstitutions)
+        {
+            if (textWithoutSubstitutions == null) throw new ArgumentNullException(nameof(textWithoutSubstitutions));
+
+            this.HtmlText = textWithoutSubstitutions;
+            this.PlainText = textWithoutSubstitutions;
+        }
+
         public void Init(string interviewId, Identity entityIdentity, string textWithSubstitutions)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-            if (textWithSubstitutions == null) throw new ArgumentNullException(nameof(textWithSubstitutions));
 
             this.identity = entityIdentity;
 
             this.substitutionViewModel.Init(interviewId, entityIdentity, textWithSubstitutions);
 
-            this.UpdateTexts();
+            this.RefreshTexts();
 
-            this.registry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        public void ChangeText(string textWithSubstitutions)
+        {
+            this.substitutionViewModel.ChangeText(textWithSubstitutions);
+
+            this.RefreshTexts();
         }
 
         private string htmlText;
@@ -60,12 +74,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this);
+            this.eventRegistry.Unsubscribe(this);
         }
 
         public void Handle(VariablesChanged @event)
         {
-            // this is needed because for static texts update is not published if variable changes
+            // this is needed because update is not published if variable changes
 
             bool shouldUpdateTexts =
                 this.substitutionViewModel.HasVariablesInText(
@@ -73,21 +87,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (!shouldUpdateTexts) return;
 
-            this.UpdateTexts();
+            this.RefreshTexts();
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
         {
             bool shouldUpdateTexts =
                 @event.Questions.Contains(this.identity) ||
-                @event.StaticTexts.Contains(this.identity);
+                @event.StaticTexts.Contains(this.identity) ||
+                @event.Groups.Contains(this.identity);
 
             if (!shouldUpdateTexts) return;
 
-            this.UpdateTexts();
+            this.RefreshTexts();
         }
 
-        private void UpdateTexts()
+        private void RefreshTexts()
         {
             this.HtmlText = this.substitutionViewModel.ReplaceSubstitutions();
             this.PlainText = RemoveHtmlTags(this.HtmlText);

@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -86,7 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static Mock<ILiteEventRegistry> EventRegistry;
 
-        protected static List<CategoricalQuestionOption> Options = new List<CategoricalQuestionOption>
+        protected static List<CategoricalOption> Options = new List<CategoricalOption>
         {
             Create.Entity.CategoricalQuestionOption(1, "title abc 1", 1),
             Create.Entity.CategoricalQuestionOption(2, "title def 2", 1),

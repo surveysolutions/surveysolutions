@@ -64,6 +64,11 @@
         self.isViewModelValid = isViewModelValid;
     };
 
+    self.answerTimestampQuestion = function(question) {
+        var formattedDate = moment().format('YYYY-MM-DD[T]hh:mm:ss');
+        question.selectedOption(formattedDate);
+    }
+
     self.isViewModelValid = function() { return true };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.NewInterview, Supervisor.VM.BasePage);

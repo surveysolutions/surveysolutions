@@ -7565,6 +7565,12 @@ input#edit-group-title {
   color: #3da802;
   font-size: 14px;
 }
+
+.question-editor .singleOption .table-holder .table-row .column-2 input.has-error,
+.question-editor .multyOption .table-holder .table-row .column-2 input.has-error{
+    border-color: #a94442;
+    border-width: 2px;
+}
 .question-editor .singleOption .table-holder .table-row .column-3 input,
 .question-editor .multyOption .table-holder .table-row .column-3 input {
   border-color: #fff;

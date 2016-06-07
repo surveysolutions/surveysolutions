@@ -22,7 +22,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 PublicKey = questionWithMissingValues,
                 StataExportCaption = "var",
                 QuestionType = QuestionType.SingleOption,
-                Answers = { new Answer() { AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                Answers = {
+                    new Answer() {                    AnswerText = "opt 1" },
+                    new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -31,8 +33,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(2);
+        private It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0045 = () =>
             verificationMessages.First().Code.ShouldEqual("WB0045");
