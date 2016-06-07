@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
@@ -1024,36 +1025,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedStaticTexts()
         {
-            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var staticText in this.AllStaticTexts)
-            {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(staticText.Text);
-
-                foreach (var substitutedVariableName in substitutedVariableNames)
-                {
-                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
-                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
-                    if (!referenceOccurences[substitutedVariableName].Contains(staticText.PublicKey))
-                        referenceOccurences[substitutedVariableName].Add(staticText.PublicKey);
-                }
-            }
-            return referenceOccurences;
+            return this.GetSubstitutionReferencedEntities(this.AllStaticTexts);
         }
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedGroups()
         {
+            return this.GetSubstitutionReferencedEntities(this.AllGroups);
+        }
+
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)
+        {
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            var allGroups = this.AllGroups.ToList();
-            foreach (var group in allGroups)
+            foreach (var entity in entities)
             {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(group.Title);
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle());
 
                 foreach (var substitutedVariableName in substitutedVariableNames)
                 {
                     if (!referenceOccurences.ContainsKey(substitutedVariableName))
                         referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
-                    if (!referenceOccurences[substitutedVariableName].Contains(group.PublicKey))
-                        referenceOccurences[substitutedVariableName].Add(group.PublicKey);
+                    if (!referenceOccurences[substitutedVariableName].Contains(entity.PublicKey))
+                        referenceOccurences[substitutedVariableName].Add(entity.PublicKey);
                 }
             }
             return referenceOccurences;
