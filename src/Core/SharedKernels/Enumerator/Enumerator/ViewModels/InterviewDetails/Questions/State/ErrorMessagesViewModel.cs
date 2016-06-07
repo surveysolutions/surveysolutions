@@ -1,13 +1,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class ErrorMessagesViewModel : MvxNotifyPropertyChanged
     {
+        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
+
+        public ErrorMessagesViewModel(IDynamicTextViewModelFactory dynamicTextViewModelFactory)
+        {
+            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
+        }
+
         private string interviewId;
         private Identity entityIdentity;
 
@@ -34,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (string error in errors)
             {
-                var errorViewModel = Mvx.Resolve<DynamicTextViewModel>();
+                var errorViewModel = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
                 errorViewModel.Init(this.interviewId, this.entityIdentity, error);
 
                 this.ValidationErrors.Add(errorViewModel);
