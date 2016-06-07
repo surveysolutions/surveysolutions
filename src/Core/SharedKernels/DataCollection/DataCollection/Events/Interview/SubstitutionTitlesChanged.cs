@@ -7,10 +7,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public Identity[] StaticTexts { get; }
 
-        public SubstitutionTitlesChanged(Identity[] questions, Identity[] staticTexts)
+        public Identity[] Groups { get; set; }
+
+        public SubstitutionTitlesChanged(Identity[] questions, Identity[] staticTexts, Identity[] groups)
             : base(questions)
         {
             this.StaticTexts = staticTexts?.ToArray() ?? new Identity[]{};
+            this.Groups = groups?.ToArray() ?? new Identity[] {};
         }
     }
 }

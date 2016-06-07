@@ -88,7 +88,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-
+        public bool VibrateOnError => true;
         public int EventChunkSize => 1000;
     }
 }

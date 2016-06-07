@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -57,14 +59,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
 
         It should_create_option_models_with_specified_values = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt64(x.Value)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
 
         It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt64(x.ParentValue)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
 
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 
-        private static readonly List<CategoricalQuestionOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
+        private static readonly List<CategoricalOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }

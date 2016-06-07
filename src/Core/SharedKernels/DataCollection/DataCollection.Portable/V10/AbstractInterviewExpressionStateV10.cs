@@ -50,7 +50,15 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new virtual IExpressionExecutableV10 GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
             => (IExpressionExecutableV10) base.GetRosterByIdAndVector(questionId, rosterVector);
 
-      
+
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
+            if (targetLevel == null) return options;
+
+            return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
+        }
+
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();
     }
 }

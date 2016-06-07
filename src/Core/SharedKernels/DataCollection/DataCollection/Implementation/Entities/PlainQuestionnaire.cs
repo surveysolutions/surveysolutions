@@ -14,22 +14,19 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     internal class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService
-        {
-            get
-            {
-                return this.substitutionService ??
-                       (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
-            }
-        }
-
+        public ISubstitutionService SubstitutionService => this.substitutionService ?? (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
         private ISubstitutionService substitutionService;
+
+        public IQuestionOptionsRepository QuestionOptionsRepository => this.questionOptionsRepository ?? (this.questionOptionsRepository = ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>());
+        private IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
 
@@ -47,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
+        private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -161,6 +159,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.substitutionReferencedStaticTextsCache
             ?? (this.substitutionReferencedStaticTextsCache = this.GetSubstitutionReferencedStaticTexts());
 
+
+        private Dictionary<string, HashSet<Guid>> SubstitutionReferencedGroupsCache
+           => this.substitutionReferencedGroupsCache
+           ?? (this.substitutionReferencedGroupsCache = this.GetSubstitutionReferencedGroups());
+
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
@@ -195,6 +198,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public long Version => this.getVersion();
+
+        public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
 
@@ -302,6 +307,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
              => this.cacheOfAnswerOptionsAsValues.GetOrUpdate(questionId, () 
                 => this.GetAnswerOptionsAsValuesImpl(questionId));
+
+        //should be used on HQ only
+        //cache - more memory?
+        //
+        //Add filter support
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, long? parentQuestionValue, string filter)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if(answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >=0 && answer.ParentCode == parentQuestionValue)
+                        yield return new CategoricalOption() {Value = Convert.ToInt64(answer.AnswerCode.Value), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value):(long?)null};
+                }
+            }
+            else
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 && answer.ParentCode == parentQuestionValue)
+                        yield return new CategoricalOption() { Value = Convert.ToInt64(ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value) : (long?)null };
+                }
+            }
+
+        }
+
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, long? parentQuestionValue, string filter)
+        {
+            return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
+        }
 
         public ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
@@ -417,11 +461,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Reverse()
                     .ToReadOnlyCollection());
 
-        public Guid? GetParentGroup(Guid groupOrQuestionId)
+        public Guid? GetParentGroup(Guid entityId)
         {
-            var groupOrQuestion = this.GetGroupOrQuestionOrThrow(groupOrQuestionId);
+            var entity = this.GetEntityOrThrow(entityId);
 
-            IComposite parent = groupOrQuestion.GetParent();
+            IComposite parent = entity.GetParent();
 
             if (parent == this.innerDocument)
                 return null;
@@ -963,37 +1007,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedQuestions()
         {
-            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var question in this.AllQuestions)
-            {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
-
-                foreach (var substitutedVariableName in substitutedVariableNames)
-                {
-                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
-                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
-                    if (!referenceOccurences[substitutedVariableName].Contains(question.PublicKey))
-                        referenceOccurences[substitutedVariableName].Add(question.PublicKey);
-                }
-            }
-            return referenceOccurences;
+            return this.GetSubstitutionReferencedEntities(this.AllQuestions);
         }
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedStaticTexts()
         {
+            return this.GetSubstitutionReferencedEntities(this.AllStaticTexts);
+        }
+
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedGroups()
+        {
+            return this.GetSubstitutionReferencedEntities(this.AllGroups);
+        }
+
+        private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)
+        {
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var staticText in this.AllStaticTexts)
+            foreach (IComposite entity in entities)
             {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(staticText.Text);
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).ToList();
+                var validateable = entity as IValidatable;
+                if (validateable != null)
+                {
+                    foreach (ValidationCondition validationCondition in validateable.ValidationConditions)
+                    {
+                        var substitutedVariablesInValidation = this.SubstitutionService.GetAllSubstitutionVariableNames(validationCondition.Message);
+                        substitutedVariableNames.AddRange(substitutedVariablesInValidation);
+                    }
+                }
 
                 foreach (var substitutedVariableName in substitutedVariableNames)
                 {
                     if (!referenceOccurences.ContainsKey(substitutedVariableName))
+                    {
                         referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
-                    if (!referenceOccurences[substitutedVariableName].Contains(staticText.PublicKey))
-                        referenceOccurences[substitutedVariableName].Add(staticText.PublicKey);
+                    }
+                    if (!referenceOccurences[substitutedVariableName].Contains(entity.PublicKey))
+                    {
+                        referenceOccurences[substitutedVariableName].Add(entity.PublicKey);
+                    }
                 }
             }
+
             return referenceOccurences;
         }
 
@@ -1052,6 +1107,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     if (this.SubstitutionService.ContainsRosterTitle(staticTextTitle))
                     {
                         yield return staticTextInRosterId;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Guid> GetSubstitutedGroups(Guid questionId)
+        {
+            string targetVariableName = this.GetQuestionVariableName(questionId);
+
+            if (!string.IsNullOrWhiteSpace(targetVariableName))
+            {
+                if (this.SubstitutionReferencedGroupsCache.ContainsKey(targetVariableName))
+                {
+                    foreach (var referencingGroupId in this.SubstitutionReferencedGroupsCache[targetVariableName])
+                    {
+                        yield return referencingGroupId;
+                    }
+                }
+            }
+
+            var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
+            foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
+            {
+                IEnumerable<Guid> groupsInRoster = this.GetAllUnderlyingChildGroups(rosterId);
+                foreach (var groupId in groupsInRoster)
+                {
+                    var groupTitle = GetGroupTitle(groupId);
+                    if (this.SubstitutionService.ContainsRosterTitle(groupTitle))
+                    {
+                        yield return groupId;
                     }
                 }
             }

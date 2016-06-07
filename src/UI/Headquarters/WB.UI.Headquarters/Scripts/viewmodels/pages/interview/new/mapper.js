@@ -63,7 +63,10 @@
                     }
                     break;
                 case "DateTime":
-                    item.selectedOption(new Date());
+                    item.settings(dto.Settings);
+                    if (!item.settings().IsTimestamp) {
+                        item.selectedOption(new Date());
+                    }
                     item.selectedOption.extend({ required: true, date: true });
                     break;
                 case "Text":

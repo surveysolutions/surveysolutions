@@ -86,14 +86,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption {  Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
+                .Select(x => new CategoricalOption {  Value = Convert.ToInt64(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, YesNoAnswer answerModel)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, YesNoAnswer answerModel)
         {
             var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
