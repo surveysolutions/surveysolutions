@@ -30,10 +30,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
             => new NavigationState(
-                Mock.Of<ICommandService>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IUserInteractionService>(),
-                Mock.Of<IUserInterfaceStateService>());
+                Mock.Of<IViewModelNavigationService>());
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
             => new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
