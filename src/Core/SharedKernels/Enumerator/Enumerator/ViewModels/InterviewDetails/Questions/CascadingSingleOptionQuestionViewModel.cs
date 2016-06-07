@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id).ToReadOnlyCollection();
+            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id);
 
             if (answerModel.IsAnswered)
             {
