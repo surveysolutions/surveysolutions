@@ -14,11 +14,11 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class InterviewEntityViewFactory
+    public class InterviewEntityViewFactory : IInterviewEntityViewFactory
     {
         private readonly ISubstitutionService substitutionService;
 
-        public InterviewEntityViewFactory(ISubstitutionService substitutionService, IVariableToUIStringService variableToUiStringService)
+        public InterviewEntityViewFactory(ISubstitutionService substitutionService)
         {
             this.substitutionService = substitutionService;
         }
@@ -277,10 +277,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             foreach (string usedVariable in usedVariables)
             {
-                string escapedVariable = $"%{usedVariable}%";
                 string actualAnswerOrDots = answersForTitleSubstitution.ContainsKey(usedVariable) ? answersForTitleSubstitution[usedVariable] : "[...]";
-
-                title = title.Replace(escapedVariable, actualAnswerOrDots);
+                title = substitutionService.ReplaceSubstitutionVariable(title, usedVariable, actualAnswerOrDots);
             }
 
             return title;

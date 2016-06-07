@@ -11,17 +11,17 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
-    internal class when_creating_InterviewQuestionView_for_TextList_question
+    internal class when_creating_InterviewQuestionView_for_TextList_question : InterviewEntityViewFactoryTestsContext
     {
         Establish context = () =>
         {
             textListQuestionTemplate = new TextListQuestion("text list");
             textListQuestionData = new InterviewQuestion(textListQuestionId);
-            textListQuestionData.Answer =
-                new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, "q1"), new Tuple<decimal, string>(2, "q2") });
+            textListQuestionData.Answer = new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, "q1"), new Tuple<decimal, string>(2, "q2") });
+            interviewEntityViewFactory = CreateInterviewEntityViewFactory();
         };
 
-        Because of = () => textListQuestionView = new InterviewQuestionView(textListQuestionTemplate, textListQuestionData, null, false, new decimal[0], InterviewStatus.Completed);
+        Because of = () => textListQuestionView = interviewEntityViewFactory.BuildInterviewQuestionView(textListQuestionTemplate, textListQuestionData, null, false, new decimal[0], InterviewStatus.Completed);
 
         It should_answer_be_null = () =>
             textListQuestionView.Answer.ShouldBeNull();
@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         It should_first_option_answer_equal_1 = () =>
             textListQuestionView.Options[0].Label.ShouldEqual("q1");
 
+        private static IInterviewEntityViewFactory interviewEntityViewFactory;
         private static InterviewQuestionView textListQuestionView;
         private static TextListQuestion textListQuestionTemplate;
         private static InterviewQuestion textListQuestionData;
