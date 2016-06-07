@@ -1481,7 +1481,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool SupportsTitleSubstitution(IComposite entity)
             => entity is IQuestion
-            || entity is IStaticText;
+            || entity is IStaticText
+            || entity is IGroup;
 
         private bool HasSubstitionVariablesInTitle(IComposite entity)
             => this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).Any();
