@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalOption {  Value = Convert.ToInt64(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
+                .Select(x => new CategoricalOption {  Value = Convert.ToInt32(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
 
