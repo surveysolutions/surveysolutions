@@ -149,15 +149,13 @@
     <script type="text/html" id="DateTimeTimestamp">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-3">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-bind="click: $root.answerTimestampQuestion">
-                            <i class="glyphicon glyphicon-time"></i>
-                        </button>
-                    </span>
-                    <input type="text" class="form-control" disabled="disabled" data-bind="value: selectedOption">
-                </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" disabled="disabled" data-bind="value: selectedOption">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-info" type="button" data-bind="click: $root.answerTimestampQuestion" title="@TakeNewInterview.TimestampBtnText">
+                    <i class="glyphicon glyphicon-time"></i>
+                </button>
             </div>
         </div>
     </script>

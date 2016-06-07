@@ -302,6 +302,10 @@
     <Content Include="Content\jquery.pnotify.default.css" />
     <Content Include="Content\listview.css" />
     <Content Include="Content\main-not-logged.css" />
+    <Content Include="App_GlobalResources\TakeNewInterview.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.Designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\clear.png" />
     <EmbeddedResource Include="Content\img\details_bg.jpg" />
     <EmbeddedResource Include="Content\img\divider.png" />
@@ -927,6 +931,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Settings.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Users.Designer.cs">
       <AutoGen>True</AutoGen>
