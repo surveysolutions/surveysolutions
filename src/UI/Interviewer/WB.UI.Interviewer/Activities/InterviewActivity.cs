@@ -3,6 +3,7 @@ using Android.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -42,7 +43,7 @@ namespace WB.UI.Interviewer.Activities
 
         protected override async void OnMenuItemSelected(int resourceId)
         {
-            await this.CommandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
 
             switch (resourceId)
             {
@@ -53,8 +54,12 @@ namespace WB.UI.Interviewer.Activities
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
-                    this.ViewModel.SignOutCommand.Execute();
-                    this.Finish();
+                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
+                    if (!viewModelNavigationService.HasPendingOperations)
+                    {
+                        this.ViewModel.SignOutCommand.Execute();
+                        this.Finish();
+                    }
                     break;
             }
         }
