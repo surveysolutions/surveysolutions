@@ -1481,7 +1481,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool SupportsTitleSubstitution(IComposite entity)
             => entity is IQuestion
-            || entity is IStaticText;
+            || entity is IStaticText
+            || entity is IGroup;
 
         private bool HasSubstitionVariablesInTitle(IComposite entity)
             => this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).Any();
@@ -1593,19 +1594,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(IComposite entityWithSubstitution, IComposite entityToSubstitute)
             => QuestionnaireVerificationMessage.Error("WB0019",
-                VerificationMessages.WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
+                VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
                 CreateReference(entityWithSubstitution),
                 CreateReference(entityToSubstitute));
 
         private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionReferencesEntityOfNotSupportedType(IComposite entityWithSubstitution, IComposite entityToSubstitute)
             => QuestionnaireVerificationMessage.Error("WB0018",
-                VerificationMessages.WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity,
+                VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
                 CreateReference(entityWithSubstitution),
                 CreateReference(entityToSubstitute));
 
         private static QuestionnaireVerificationMessage EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(IComposite entityWithSubstitution)
             => QuestionnaireVerificationMessage.Error("WB0017",
-                VerificationMessages.WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable,
+                VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
                 CreateReference(entityWithSubstitution));
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
@@ -1615,7 +1616,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster(IComposite entityWithSubstitution)
             => QuestionnaireVerificationMessage.Error("WB0059",
-                VerificationMessages.WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
+                VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
                 CreateReference(entityWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
