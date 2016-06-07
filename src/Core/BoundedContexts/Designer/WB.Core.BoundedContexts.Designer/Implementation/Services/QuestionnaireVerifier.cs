@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -1463,13 +1464,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity));
+                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle());
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
 
                 IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
-                    .Select(identifier => GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
+                    .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
                     .Where(errorOrNull => errorOrNull != null);
 
                 foundErrors.AddRange(entityErrors);
@@ -1483,11 +1484,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             || entity is IStaticText;
 
         private bool HasSubstitionVariablesInTitle(IComposite entity)
-            => this.substitutionService.GetAllSubstitutionVariableNames(GetTitle(entity)).Any();
-
-        private static string GetTitle(IComposite entity)
-            => (entity as IQuestion)?.QuestionText
-            ?? (entity as IStaticText)?.Text;
+            => this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).Any();
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
