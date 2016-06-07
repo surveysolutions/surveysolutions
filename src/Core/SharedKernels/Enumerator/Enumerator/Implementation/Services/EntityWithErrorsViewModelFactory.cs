@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly SubstitutionViewModel substitutionViewModel;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly int maxCountOfErrors = 50;
+        private readonly int maxNumberOfEntities = 30;
 
         public EntityWithErrorsViewModelFactory(
             IStatefulInterviewRepository interviewRepository, 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(maxCountOfErrors).ToArray();
+            Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
            
             var entitiesWithErrors = new List<EntityWithErrorsViewModel>();
             foreach (var invalidEntity in invalidEntities)
@@ -55,5 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return entitiesWithErrors;
         }
 
+        public int MaxNumberOfEntities => this.maxNumberOfEntities;
     }
 }
