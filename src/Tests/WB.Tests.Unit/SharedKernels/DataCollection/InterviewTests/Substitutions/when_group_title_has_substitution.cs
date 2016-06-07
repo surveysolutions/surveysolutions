@@ -8,7 +8,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitutions
 {
@@ -50,7 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
         Because of = () => interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
         It should_raise_title_changed_event_for_group_after_answer = () =>
-            events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Groups.Length == 3);
+            events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Groups.Length == 3 && 
+                x.Groups[0].Id == group1Id && 
+                x.Groups[1].Equals(Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0))) &&
+                x.Groups[2].Equals(Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1))) 
+            );
 
         static EventContext events;
         static Interview interview;
