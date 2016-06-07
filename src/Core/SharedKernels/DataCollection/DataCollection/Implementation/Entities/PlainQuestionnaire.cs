@@ -1007,20 +1007,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedQuestions()
         {
-            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var question in this.AllQuestions)
-            {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
-
-                foreach (var substitutedVariableName in substitutedVariableNames)
-                {
-                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
-                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
-                    if (!referenceOccurences[substitutedVariableName].Contains(question.PublicKey))
-                        referenceOccurences[substitutedVariableName].Add(question.PublicKey);
-                }
-            }
-            return referenceOccurences;
+            return this.GetSubstitutionReferencedEntities(this.AllQuestions);
         }
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedStaticTexts()
@@ -1036,18 +1023,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)
         {
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var entity in entities)
+            foreach (IComposite entity in entities)
             {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle());
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).ToList();
+                var validateable = entity as IValidatable;
+                if (validateable != null)
+                {
+                    foreach (ValidationCondition validationCondition in validateable.ValidationConditions)
+                    {
+                        var substitutedVariablesInValidation = this.SubstitutionService.GetAllSubstitutionVariableNames(validationCondition.Message);
+                        substitutedVariableNames.AddRange(substitutedVariablesInValidation);
+                    }
+                }
 
                 foreach (var substitutedVariableName in substitutedVariableNames)
                 {
                     if (!referenceOccurences.ContainsKey(substitutedVariableName))
+                    {
                         referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
+                    }
                     if (!referenceOccurences[substitutedVariableName].Contains(entity.PublicKey))
+                    {
                         referenceOccurences[substitutedVariableName].Add(entity.PublicKey);
+                    }
                 }
             }
+
             return referenceOccurences;
         }
 
