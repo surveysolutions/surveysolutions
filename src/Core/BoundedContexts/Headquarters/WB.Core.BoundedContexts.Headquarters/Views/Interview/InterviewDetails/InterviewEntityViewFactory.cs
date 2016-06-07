@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -248,9 +249,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         return AnswerUtils.AnswerToString(answer, x => questionView.Options.First(o => (decimal)o.Value == x).Label);
                     }
                 case QuestionType.DateTime:
+                    var isTimestamp = (questionView.Settings as DateTimeQuestionSettings)?.IsTimestamp ?? false;
                     if (answer is DateTime)
                     {
-                        return ((DateTime)answer).ToString("u");
+                        var dateTimeAnswer = ((DateTime)answer);
+                        return isTimestamp
+                            ? dateTimeAnswer.ToString(ExportedQuestion.ExportDateTimeFormat)
+                            : dateTimeAnswer.ToString(ExportedQuestion.ExportDateFormat);
                     }
                     break;
                 case QuestionType.Numeric:
