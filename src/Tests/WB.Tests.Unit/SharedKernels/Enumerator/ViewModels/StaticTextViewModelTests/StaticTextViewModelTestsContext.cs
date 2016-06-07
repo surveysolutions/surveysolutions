@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                new StaticTextStateViewModel(
                                    new EnablementViewModel(statefulInterviewRepository, liteEventRegistry),
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository,
-                                       plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>())),
+                                       plainQuestionnaireRepository, Mock.Of<IMvxMainThreadDispatcher>(), Create.ViewModel.ErrorMessagesViewModel())),
                 attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: liteEventRegistry,
