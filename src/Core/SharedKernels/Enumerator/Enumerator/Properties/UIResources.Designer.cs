@@ -757,6 +757,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please wait until the current operation is completed.
+        /// </summary>
+        public static string Messages_WaitPendingOperation {
+            get {
+                return ResourceManager.GetString("Messages_WaitPendingOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
