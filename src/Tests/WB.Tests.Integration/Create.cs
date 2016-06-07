@@ -912,7 +912,7 @@ namespace WB.Tests.Integration
                     questionnaireRepository: questionnaireRepository,
                     rosterTitleSubstitutionService: rosterTitleSubstitutionService));
 
-        public static CategoricalOption CategoricalOption(long value, string title, long? parentValue = null)
+        public static CategoricalOption CategoricalOption(int value, string title, int? parentValue = null)
         {
             return new CategoricalOption
             {

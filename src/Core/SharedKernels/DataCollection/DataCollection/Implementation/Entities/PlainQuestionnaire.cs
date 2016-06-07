@@ -328,7 +328,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 foreach (var answer in question.Answers)
                 {
                     if(answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >=0 && answer.ParentCode == parentQuestionValue)
-                        yield return new CategoricalOption() {Value = Convert.ToInt64(answer.AnswerCode.Value), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value):(long?)null};
+                        yield return new CategoricalOption() {Value = Convert.ToInt32(answer.AnswerCode.Value), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value):(int?)null};
                 }
             }
             else
@@ -336,7 +336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 foreach (var answer in question.Answers)
                 {
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 && answer.ParentCode == parentQuestionValue)
-                        yield return new CategoricalOption() { Value = Convert.ToInt64(ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt64(answer.AnswerCode.Value) : (long?)null };
+                        yield return new CategoricalOption() { Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null };
                 }
             }
 
