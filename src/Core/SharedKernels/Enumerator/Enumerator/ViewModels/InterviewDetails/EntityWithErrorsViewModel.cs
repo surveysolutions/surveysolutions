@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -26,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxAsyncCommand(async () => await this.NavigateAsync());
+                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxAsyncCommand(this.NavigateAsync);
                 return this.navigateToSectionCommand;
             }
         }
