@@ -65,6 +65,9 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IMvxMessenger>(),
                 Mock.Of<IEnumeratorSettings>());
 
+        public ErrorMessagesViewModel ErrorMessagesViewModel()
+            => new ErrorMessagesViewModel();
+
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
@@ -103,6 +106,7 @@ namespace WB.Tests.Unit.TestFactories
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(
                     x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Stub.MvxMainThreadDispatcher());
+                Stub.MvxMainThreadDispatcher(),
+                Create.ViewModel.ErrorMessagesViewModel());
     }
 }

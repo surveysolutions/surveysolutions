@@ -1,0 +1,44 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using WB.Core.SharedKernels.DataCollection;
+
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
+{
+    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged
+    {
+        private string interviewId;
+        private Identity entityIdentity;
+
+        public void Init(string interviewId, Identity entityIdentity)
+        {
+            this.interviewId = interviewId;
+            this.entityIdentity = entityIdentity;
+        }
+
+        private string caption;
+        public string Caption
+        {
+            get { return this.caption; }
+            set { this.RaiseAndSetIfChanged(ref this.caption, value); }
+        }
+
+        public ObservableCollection<DynamicTextViewModel> ValidationErrors { get; } = new ObservableCollection<DynamicTextViewModel>();
+
+        public void SetValidationErrors(IEnumerable<string> errors) => this.ChangeValidationErrors(errors);
+
+        public void ChangeValidationErrors(IEnumerable<string> errors)
+        {
+            this.ValidationErrors.Clear();
+
+            foreach (string error in errors)
+            {
+                var errorViewModel = Mvx.Resolve<DynamicTextViewModel>();
+                errorViewModel.Init(this.interviewId, this.entityIdentity, error);
+
+                this.ValidationErrors.Add(errorViewModel);
+            }
+        }
+    }
+}
