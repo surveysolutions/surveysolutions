@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IEntityWithErrorsViewModelFactory>().To<EntityWithErrorsViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
+            this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();

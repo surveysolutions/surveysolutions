@@ -150,14 +150,14 @@
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
     <value>Question with title substitution cannot reference itself.</value>
   </data>
-  <data name="WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
-    <value>Question or static text with title substitution references a nonexistent question or variable.</value>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Substitution references a nonexistent question or variable.</value>
   </data>
-  <data name="WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity" xml:space="preserve">
-    <value>Question or static text with title substitution references an entity that is not supported in substitutions.</value>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>Substitution references an item that is not supported in substitutions.</value>
   </data>
-  <data name="WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question or static text with title substitution cannot reference items from a deeper roster level.</value>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>Substitution cannot reference items from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
     <value>Max number of answers is greater than number of question's options.</value>
@@ -237,8 +237,8 @@
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Variable name or roster ID cannot be a reserved word.</value>
   </data>
-  <data name="WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
-    <value>If question or static text uses %rostertitle% in title it need to be placed inside roster.</value>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>If item uses %rostertitle% substitution it needs to be placed inside roster.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
     <value>Question has less than 2 options.</value>

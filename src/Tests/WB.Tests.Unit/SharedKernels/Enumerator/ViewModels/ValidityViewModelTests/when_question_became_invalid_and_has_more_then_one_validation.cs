@@ -64,8 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         It should_show_error_messages_according_to_failed_validation_indexes_with_postfix_added = () =>
         {
-            viewModel.Error.ValidationErrors.First().ShouldEqual("message 2 [2]");
-            viewModel.Error.ValidationErrors.Second().ShouldEqual("message 1 [1]");
+            viewModel.Error.ValidationErrors.First()?.PlainText.ShouldEqual("message 2 [2]");
+            viewModel.Error.ValidationErrors.Second()?.PlainText.ShouldEqual("message 1 [1]");
         };
 
         static ValidityViewModel viewModel;
