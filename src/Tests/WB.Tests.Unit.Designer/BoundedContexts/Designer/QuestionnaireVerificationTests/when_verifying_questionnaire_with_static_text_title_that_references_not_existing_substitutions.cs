@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_static_text_that_references_not_existing_substitutions : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_static_text_title_that_references_not_existing_substitutions : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
