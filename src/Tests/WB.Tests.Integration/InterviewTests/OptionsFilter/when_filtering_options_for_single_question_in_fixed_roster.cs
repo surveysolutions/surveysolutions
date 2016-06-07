@@ -44,13 +44,13 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 results = new InvokeResults
                 {
-                    FilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options).ToList()
+                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options).Count()
                 };
                 return results;
             });
 
         It should_return_2_options = () =>
-            results.FilteredOptions.Count().ShouldEqual(2);
+            results.CountOfFilteredOptions.ShouldEqual(2);
 
         Cleanup stuff = () =>
         {
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         [Serializable]
         internal class InvokeResults
         {
-            public IEnumerable<CategoricalOption> FilteredOptions { get; set; }
+            public int CountOfFilteredOptions{ get; set; }
         }
     }
 }
