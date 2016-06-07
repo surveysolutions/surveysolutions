@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitutions
 {
-    internal class when_validation_expression_contains_substitution : InterviewTestsContext
+    internal class when_validation_message_contains_substitution : InterviewTestsContext
     {
         private Establish context = () =>
         {
