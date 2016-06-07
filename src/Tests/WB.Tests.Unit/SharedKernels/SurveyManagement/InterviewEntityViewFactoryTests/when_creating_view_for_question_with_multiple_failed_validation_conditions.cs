@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
-    public class when_creating_view_for_question_with_multiple_failed_validation_conditions
+    public class when_creating_view_for_question_with_multiple_failed_validation_conditions : InterviewEntityViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -33,10 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
                     new FailedValidationCondition(2)
                 }
             };
+
+            interviewEntityViewFactory = CreateInterviewEntityViewFactory();
         };
 
         Because of = () =>
-            result = new InterviewQuestionView(question, answeredQuestion, new Dictionary<string, string>(),
+            result = interviewEntityViewFactory.BuildInterviewQuestionView(question, answeredQuestion, new Dictionary<string, string>(),
                 isParentGroupDisabled: false,
                 rosterVector: new decimal[0],
                 interviewStatus: InterviewStatus.Completed);
@@ -51,6 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
             result.FailedValidationMessages.Second().Message.ShouldEqual(secondFailedCondition.Message);
         };
 
+        private static IInterviewEntityViewFactory interviewEntityViewFactory;
         static InterviewQuestionView result;
         static IQuestion question;
         static InterviewQuestion answeredQuestion;

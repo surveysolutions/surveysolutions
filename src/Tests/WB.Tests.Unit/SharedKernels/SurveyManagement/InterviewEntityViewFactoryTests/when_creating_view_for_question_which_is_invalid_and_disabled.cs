@@ -8,19 +8,18 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
-    using System.Linq.Expressions;
-
-    internal class when_creating_view_for_question_which_is_invalid_and_disabled
+    internal class when_creating_view_for_question_which_is_invalid_and_disabled : InterviewEntityViewFactoryTestsContext
     {
         Establish context = () =>
         {
             question = Mock.Of<IQuestion>();
 
             answeredQuestion = new InterviewQuestion {QuestionState = QuestionState.Valid | QuestionState.Valid};
+            interviewEntityViewFactory = CreateInterviewEntityViewFactory();
         };
 
         Because of = () =>
-            result = new InterviewQuestionView(question, answeredQuestion, new Dictionary<string, string>(), 
+            result = interviewEntityViewFactory.BuildInterviewQuestionView(question, answeredQuestion, new Dictionary<string, string>(), 
                 isParentGroupDisabled: false, 
                 rosterVector: new decimal[0], 
                 interviewStatus: InterviewStatus.Completed);
@@ -28,6 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         It should_set_validity_flag_to_valid = () =>
             result.IsValid.ShouldBeTrue();
 
+        private static IInterviewEntityViewFactory interviewEntityViewFactory;
         private static InterviewQuestionView result;
         private static IQuestion question;
         private static InterviewQuestion answeredQuestion;
