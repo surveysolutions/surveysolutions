@@ -114,9 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var questionnaireIdAsString = questionnaireIdentity.ToString();
 
-            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<SingleQuestion>(
-                x => x.CascadeFromQuestionId.HasValue 
-                || (x.IsFilteredCombobox ?? false));
+            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<SingleQuestion>();
 
             foreach (var x in questionsWithLongOptionsList)
             {
