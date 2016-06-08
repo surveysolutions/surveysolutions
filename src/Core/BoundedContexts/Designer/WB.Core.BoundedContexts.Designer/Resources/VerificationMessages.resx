@@ -373,7 +373,7 @@
     <value>Multi select yes/no question can't be linked</value>
   </data>
   <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Multi select question supports only integer positive values</value>
+    <value>Multi select question supports only integer values</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
