@@ -331,18 +331,23 @@ namespace WB.Tests.Integration
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null, bool yesNo = false)
+            IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, 
+            Guid? linkedToRosterId=null, 
+            bool yesNo = false,
+            string optionsFilter = null)
         {
-            return new MultyOptionsQuestion
+            var multyOptionsQuestion = new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
-                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable,
                 LinkedToRosterId = linkedToRosterId,
-                YesNoView = yesNo
+                YesNoView = yesNo,
+                Properties = {OptionsFilterExpression = optionsFilter}
             };
+            return multyOptionsQuestion;
         }
 
         public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 

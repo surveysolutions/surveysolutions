@@ -16,8 +16,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties,
+		Dictionary<Guid, Guid[]> dependentAnswersToVerify)
+		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, dependentAnswersToVerify)
 	{
 		this.@_parent = parent; 
 	}
@@ -28,8 +29,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties, 
+		Dictionary<Guid, Guid[]> dependentAnswersToVerify)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, dependentAnswersToVerify)
 	{	
 <#
 	GroupsStatesInLevelConstructor(Model.Groups);
@@ -39,14 +41,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	RostersStatesInLevelConstructor(Model.Rosters);
 	VariablesStatesInLevelConstructor(Model.Variables);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
-#>
-<#
-	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
-    {
-#>
-		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
-<#
-	}
+	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
 #>
 
 <#
@@ -104,7 +99,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 
 	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
-		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest, DependentAnswersToVerify)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),

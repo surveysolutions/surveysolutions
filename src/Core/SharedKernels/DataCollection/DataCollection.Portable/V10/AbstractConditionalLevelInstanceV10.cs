@@ -13,21 +13,24 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected Dictionary<Guid, Func<long, string, long?, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, long?, bool>>();
 
+        protected Dictionary<Guid, Guid[]> DependentAnswersToVerify { get; set; }
+
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
-            Dictionary<Guid, Guid[]> structuralDependencies)
+            Dictionary<Guid, Guid[]> structuralDependencies, Dictionary<Guid, Guid[]> dependentAnswersToVerify)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
+            this.DependentAnswersToVerify = dependentAnswersToVerify;
         }
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
             Dictionary<Guid, Guid[]> structuralDependencies,
-            IInterviewProperties properties)
-            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
+            IInterviewProperties properties, Dictionary<Guid, Guid[]> dependentAnswersToVerify)
+            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies, dependentAnswersToVerify)
         {
             this.Quest = properties;
         }
@@ -76,6 +79,30 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        protected virtual Action AnswerVerifier(Func<long, string, long?, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
+        {
+            return () =>
+            {
+                if (getAnswer().HasValue && optionFilter(Convert.ToInt64(getAnswer().Value), "", null) == false)
+                {
+                    setAnswer(null);
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Func<long, string, long?, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
+        {
+            return () =>
+            {
+                decimal[] previousAnswer = getAnswer();
+                if (previousAnswer == null || previousAnswer.Length == 0)
+                    return;
+
+                var actualAnswer = previousAnswer.Where(selectedOption => optionFilter(Convert.ToInt64(selectedOption), "", null));
+                setAnswer(actualAnswer.ToArray());
+            };
+        }
+
         protected new Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
         {
             return () =>
@@ -85,13 +112,29 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
                 questionState.State = this.GetConditionExpressionState(isEnabled);
 
+                var hasNoDependentAnswersToBeVerified = !DependentAnswersToVerify.ContainsKey(itemId) || !DependentAnswersToVerify[itemId].Any();
+                if (!hasNoDependentAnswersToBeVerified)
+                {
+                    foreach (var questionId in DependentAnswersToVerify[itemId])
+                    {
+                        VerifyAnswer(questionId);
+                    }
+                }
+
                 this.UpdateAllNestedItemsStateAndPropagateStateOnRosters(itemId, this.StructuralDependencies, questionState.State);
             };
         }
 
+        private void VerifyAnswer(Guid questionId)
+        {
+            this.QuestionDecimalUpdateMap[questionId].Invoke(null);
+        }
+
         protected void UpdateAllNestedItemsStateAndPropagateStateOnRosters(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
         {
-            if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
+            var hasNoStructureDependencies = !structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any();
+            
+            if (hasNoStructureDependencies) return;
 
             var stack = new Queue<Guid>(structureDependencies[itemId]);
             while (stack.Any())
