@@ -309,9 +309,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetAnswerOptionsAsValuesImpl(questionId));
 
         //should be used on HQ only
-        //cache - more memory?
-        //
-        //Add filter support
         public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -323,31 +320,67 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
+            foreach (var categoricalOption in GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter))
+                yield return categoricalOption;
+
+        }
+
+        private static IEnumerable<CategoricalOption> GetFromQuestionCategoricalOptions(IQuestion question, int? parentQuestionValue, string filter)
+        {
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
             {
                 foreach (var answer in question.Answers)
                 {
-                    if(answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >=0 && answer.ParentCode == parentQuestionValue)
-                        yield return new CategoricalOption() {Value = Convert.ToInt32(answer.AnswerCode.Value), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value):(int?)null};
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                        answer.ParentCode == parentQuestionValue)
+                        yield return
+                            new CategoricalOption()
+                            {
+                                Value = Convert.ToInt32(answer.AnswerCode.Value),
+                                Title = answer.AnswerText,
+                                ParentValue =
+                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                            };
                 }
             }
             else
             {
                 foreach (var answer in question.Answers)
                 {
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 && answer.ParentCode == parentQuestionValue)
-                        yield return new CategoricalOption() { Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)), Title = answer.AnswerText, ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null };
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                        answer.ParentCode == parentQuestionValue)
+                        yield return
+                            new CategoricalOption()
+                            {
+                                Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
+                                Title = answer.AnswerText,
+                                ParentValue =
+                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                            };
                 }
             }
-
         }
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
         {
-            return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+
+            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            {
+                return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
+            }
+
+            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
+
         }
 
-        public ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
+        private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
