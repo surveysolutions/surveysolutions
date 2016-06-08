@@ -119,6 +119,14 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
+        public DateTimeAnswer DateTimeAnswer(Identity answerIdentity, DateTime answer)
+        {
+            var model = new DateTimeAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+            model.SetAnswer(answer);
+            return model;
+        }
+
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null,
@@ -437,9 +445,11 @@ namespace WB.Tests.Unit.TestFactories
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false);
 
-        public InterviewView InterviewView(Guid? prefilledQuestionId = null)
+        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null)
             => new InterviewView
             {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId,
                 GpsLocation = new InterviewGpsLocationView
                 {
                     PrefilledQuestionId = prefilledQuestionId
