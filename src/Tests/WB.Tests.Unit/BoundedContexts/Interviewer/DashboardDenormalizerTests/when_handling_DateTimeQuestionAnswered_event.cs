@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 questionnaire: Create.Entity.PlainQuestionnaire(
                     Create.Entity.QuestionnaireDocument(questionnaireIdentity.QuestionnaireId, new IComposite[]
                     {
-                        Create.Entity.DateTimeQuestion(questionId: dateTimeQuestionIdentity.Id)
+                        Create.Entity.DateTimeQuestion(questionId: dateTimeQuestionIdentity.Id, preFilled: true)
                     })));
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);

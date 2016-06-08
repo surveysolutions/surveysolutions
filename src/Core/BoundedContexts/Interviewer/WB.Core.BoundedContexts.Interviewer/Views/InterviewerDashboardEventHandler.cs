@@ -358,12 +358,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             else
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
-
                 var interviewPrefilledQuestion = interviewView.AnswersOnPrefilledQuestions?.FirstOrDefault(question => question.QuestionId == questionId);
                 if (interviewPrefilledQuestion != null)
                 {
+                    var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                    var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
+
                     interviewPrefilledQuestion.Answer = this.GetAnswerOnPrefilledQuestion(questionnairePrefilledQuestion, answer).Answer;
                 }
             }
