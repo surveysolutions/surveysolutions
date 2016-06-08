@@ -1181,9 +1181,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             foreach (var sectionInstance in sectionInstances)
             {
+                IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(sectionInstance.Id);
+                IEnumerable<Guid> allStaticTextInGroup = questionnaire.GetAllUnderlyingStaticTexts(sectionInstance.Id);
+
                 var invalidEntitiesInSection = this
-                    .GetEnabledInterviewerChildQuestions(sectionInstance)
-                    .Union(this.GetEnabledInvalidChildStaticTexts(sectionInstance))
+                    .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
+                    .Union(this
+                        .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
                     .Where(entity => !this.IsValid(entity));
 
                 foreach (var identity in invalidEntitiesInSection)
