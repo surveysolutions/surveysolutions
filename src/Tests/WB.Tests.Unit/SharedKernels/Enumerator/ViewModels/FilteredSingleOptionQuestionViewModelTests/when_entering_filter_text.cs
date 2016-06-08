@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -9,37 +14,49 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    /*internal class when_entering_filter_text : FilteredSingleOptionQuestionViewModelTestsContext
+    internal class when_entering_filter_text : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
             var interviewId = "interviewId";
+            var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3);
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
 
-            var optionsRepo = SetupOptionsRepositoryForQuestionnaire();
+
+            var interview = Mock.Of<IStatefulInterview>(_
+               => _.QuestionnaireIdentity == questionnaireId
+                  && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer &&
+                  _.GetFilteredOptionsForQuestion(questionIdentity, null, answerValue) == new List<CategoricalOption>() {
+                    new CategoricalOption() {Title = "abc", Value = 1},
+                    new CategoricalOption() {Title = "bac", Value = 2},
+                    new CategoricalOption() {Title = "bba", Value = 4}});
+
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
+            
+            var optionsRepo = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id,
+                new List<CategoricalOption>()
+                {
+                    new CategoricalOption() {Title = "abc", Value = 1},
+                    new CategoricalOption() {Title = "bac", Value = 2},
+                    new CategoricalOption() {Title = "bbc", Value = 3},
+                    new CategoricalOption() {Title = "bba", Value = 4},
+                    new CategoricalOption() {Title = "ccc", Value = 5},
+                });
 
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
-                answering: answeringViewModelMock.Object);
-
-
-            viewModel.Options = new List<FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel>()
-            {
-                new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "abc", Value = 1},
-                new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "bac", Value = 2},
-                new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "bbc", Value = 3},
-                new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "bba", Value = 4},
-                new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() {Text = "ccc", Value = 5},
-            };
+                answering: answeringViewModelMock.Object,
+                interviewRepository: interviewRepository,
+                optionsRepository: optionsRepo);
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>
-            viewModel.FilterText = "a";
+            viewModel.FilterText = answerValue;
 
         It should_update_suggestions_list = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
@@ -56,5 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
 
         private static Mock<AnsweringViewModel> answeringViewModelMock;
-    }*/
+
+        private static string answerValue = "a";
+    }
 }
