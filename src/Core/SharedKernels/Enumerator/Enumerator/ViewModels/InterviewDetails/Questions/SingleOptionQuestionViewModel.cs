@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly AnswerNotifier answerNotifier;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -33,7 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            AnswerNotifier answerNotifier)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
@@ -46,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.answerNotifier = answerNotifier;
         }
 
         private Identity questionIdentity;
@@ -68,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.answerNotifier.Init(interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
@@ -77,12 +82,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalOption { Value = Convert.ToInt32(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, null)
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
+
+            this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
+        {
+            var interview = this.interviewRepository.Get(interviewId.FormatGuid());
+            var answerModel = interview.GetSingleOptionAnswer(questionIdentity);
+            var selectedValue = Monads.Maybe(() => answerModel.Answer);
+            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, null)
+                .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
+                .ToList();
+            var currentOptions = this.Options;
+
+            if (!Enumerable.SequenceEqual(currentOptions, newOptions, new SingleOptionQuestionOptionViewModelEqualityComparer()))
+            {
+                this.Options = newOptions;
+                this.RaisePropertyChanged(() => Options);
+            }
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
@@ -171,6 +193,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.answerNotifier.Dispose();
+
             foreach (var option in Options)
             {
                 option.BeforeSelected -= this.OptionSelected;
