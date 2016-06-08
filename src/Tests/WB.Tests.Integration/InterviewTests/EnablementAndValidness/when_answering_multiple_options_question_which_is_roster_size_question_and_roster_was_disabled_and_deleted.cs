@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
-                        answers: new List<Answer>{ Create.Option(text:"Hello", value: "1"), Create.Option(text:"World", value: "2") }),
+                        options: new List<Answer>{ Create.Option(text:"Hello", value: "1"), Create.Option(text:"World", value: "2") }),
                     Create.Roster(rosterId, 
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
