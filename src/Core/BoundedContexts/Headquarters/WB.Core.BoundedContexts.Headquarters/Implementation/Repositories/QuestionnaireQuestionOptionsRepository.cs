@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, Guid questionId, long? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, Guid questionId, int? parentQuestionValue, string filter)
         {
             return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
         }

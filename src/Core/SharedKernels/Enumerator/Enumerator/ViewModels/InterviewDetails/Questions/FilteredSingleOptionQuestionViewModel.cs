@@ -8,7 +8,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.V10;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -33,16 +34,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private const int SuggestionsMaxCount = 15;
+
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IOptionsRepository optionsRepository;
 
         private Identity questionIdentity;
+        private QuestionnaireIdentity questionnaireIdentity;
         private Guid interviewId;
+        protected IStatefulInterview interview;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public List<FilteredComboboxItemViewModel> Options { get; set; }
+        private List<FilteredComboboxItemViewModel> Options { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -73,12 +78,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
-
+            this.questionnaireIdentity = interview.QuestionnaireIdentity;
+            
+            //should be removed
             this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, this.questionIdentity.Id)
                 .Select(this.ToViewModel)
                 .ToList();
@@ -86,14 +93,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                FilteredComboboxItemViewModel answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
+                FilteredComboboxItemViewModel answerOption = 
+                    this.ToViewModel(optionsRepository.GetQuestionOption(interview.QuestionnaireIdentity, this.questionIdentity.Id, Convert.ToInt32(selectedValue)));  
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
-                this.AutoCompleteSuggestions = this.Options;
+                UpdateAutoCompleteList();
             }
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -172,18 +180,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.filterText = value;
 
-                var list = this.GetSuggestionsList(this.filterText).ToList();
-
-                if (list.Any())
-                {
-                    this.AutoCompleteSuggestions = list;
-                }
-                else
-                {
-                    this.SetSuggestionsEmpty();
-                }
+                this.UpdateAutoCompleteList();
 
                 this.RaisePropertyChanged();
+            }
+        }
+
+        private void UpdateAutoCompleteList()
+        {
+            var list = this.GetSuggestionsList(this.filterText).ToList();
+
+            if (list.Any())
+            {
+                this.AutoCompleteSuggestions = list;
+            }
+            else
+            {
+                this.SetSuggestionsEmpty();
             }
         }
 
@@ -205,7 +218,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            foreach (var model in this.Options)
+            var options = interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, searchFor)
+                .Select(this.ToViewModel)
+                .Take(SuggestionsMaxCount)
+                .ToList();
+
+            foreach (var model in options)
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;

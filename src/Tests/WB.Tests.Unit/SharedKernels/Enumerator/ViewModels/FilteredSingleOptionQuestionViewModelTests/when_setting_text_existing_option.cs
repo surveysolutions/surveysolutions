@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -18,10 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         Establish context = () =>
         {
             var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3);
+            var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer);
+                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer &&
+                   _.GetFilteredOptionsForQuestion(questionIdentity, null, answerValue) == new List<CategoricalOption> () { option});
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -45,10 +49,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         };
 
         Because of = () =>
-            viewModel.FilterText = "é";
+            viewModel.FilterText = answerValue;
 
         It should_set_value = () =>
-            viewModel.FilterText.ShouldEqual("é");
+            viewModel.FilterText.ShouldEqual(answerValue);
 
         It should_provide_suggesions = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
@@ -59,5 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         private static Mock<AnsweringViewModel> answeringViewModelMock;
         private static string interviewId = "interviewId";
         private static readonly Guid userId = Guid.NewGuid();
+
+        private static string answerValue = "é";
     }
 }
