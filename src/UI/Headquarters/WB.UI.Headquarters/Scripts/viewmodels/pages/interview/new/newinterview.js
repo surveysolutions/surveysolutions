@@ -65,7 +65,7 @@
     };
 
     self.answerTimestampQuestion = function(question) {
-        var formattedDate = moment().format('YYYY-MM-DD[T]hh:mm:ss');
+        var formattedDate = moment().format('YYYY-MM-DD[T]HH:mm:ssZ');
         question.selectedOption(formattedDate);
     }
 
