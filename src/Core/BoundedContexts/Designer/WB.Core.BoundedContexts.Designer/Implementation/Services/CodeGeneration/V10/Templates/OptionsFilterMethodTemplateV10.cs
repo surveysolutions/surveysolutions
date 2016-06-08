@@ -79,8 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("(long optioncode, string optiontext, long? parentValue = null)\r\n\t\t{\r\n\t\t\tvar self " +
-                    "= ");
+            this.Write("(int optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
             
             #line 28 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.VariableName));
