@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -21,8 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual event GroupChanged ScreenChanged;
         public virtual event BeforeGroupChanged BeforeScreenChanged;
-
-        private bool isNavigationStarted;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
