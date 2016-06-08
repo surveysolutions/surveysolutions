@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
-        private bool isNavigationStarted;
 
         public BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
