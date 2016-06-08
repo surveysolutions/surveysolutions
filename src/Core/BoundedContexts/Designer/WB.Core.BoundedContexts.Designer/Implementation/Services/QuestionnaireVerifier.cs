@@ -1448,44 +1448,73 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsWithSubstitutions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
-            IEnumerable<IComposite> entitiesWithSubstitutions = questionnaire
-                .Find<IComposite>()
-                .Where(SupportsTitleSubstitution)
-                .Where(this.HasSubstitionVariablesInTitle)
-                .ToList();
-
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
-            foreach (var entity in entitiesWithSubstitutions)
+            IEnumerable<IComposite> entitiesSupportingSubstitutions = questionnaire.Find<IComposite>().Where(SupportsSubstitutions).ToList();
+
+            foreach (var entity in entitiesSupportingSubstitutions)
             {
-                if (entity is IQuestion && IsPreFilledQuestion((IQuestion) entity))
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(entity, entity.GetTitle(), questionnaire));
+
+                if (entity is IValidatable)
                 {
-                    foundErrors.Add(QuestionWithTitleSubstitutionCantBePrefilled((IQuestion) entity));
-                    continue;
+                    var validationConditions = ((IValidatable) entity).ValidationConditions;
+
+                    for (int validationConditionIndex = 0; validationConditionIndex < validationConditions.Count; validationConditionIndex++)
+                    {
+                        var validationCondition = validationConditions[validationConditionIndex];
+                        foundErrors.AddRange(this.GetErrorsBySubstitutionsInValidationCondition(
+                            entity, validationCondition.Message, validationConditionIndex, questionnaire));
+                    }
                 }
-
-                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle());
-
-                Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
-                    GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
-
-                IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
-                    .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(entity, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire))
-                    .Where(errorOrNull => errorOrNull != null);
-
-                foundErrors.AddRange(entityErrors);
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesComparer());
         }
 
-        private static bool SupportsTitleSubstitution(IComposite entity)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(
+            IComposite entity, string title, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
+
+            if (!substitutionReferences.Any())
+                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+
+            if (entity is IQuestion && IsPreFilledQuestion((IQuestion) entity))
+                return QuestionWithTitleSubstitutionCantBePrefilled((IQuestion) entity).ToEnumerable();
+
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+
+            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+                .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
+                    entity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                .Where(errorOrNull => errorOrNull != null);
+
+            return entityErrors;
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(
+            IComposite entity, string validationCondition, int validationConditionIndex, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition);
+
+            if (!substitutionReferences.Any())
+                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+
+            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+                .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
+                    entity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                .Where(errorOrNull => errorOrNull != null);
+
+            return entityErrors;
+        }
+
+        private static bool SupportsSubstitutions(IComposite entity)
             => entity is IQuestion
             || entity is IStaticText
             || entity is IGroup;
-
-        private bool HasSubstitionVariablesInTitle(IComposite entity)
-            => this.substitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).Any();
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
@@ -1501,7 +1530,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return QuestionnaireVerificationReference.CreateForStaticText(entity.PublicKey);
         }
 
-        private static QuestionnaireVerificationReference CreateReference(IComposite entity, int failedValidationIndex)
+        private static QuestionnaireVerificationReference CreateReference(IComposite entity, int? failedValidationIndex)
         {
             return new QuestionnaireVerificationReference(
                 entity is IGroup
@@ -1547,20 +1576,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
             IComposite entityWithSubstitution,
+            int? validationConditionIndex,
             string substitutionReference,
             Guid[] vectorOfRosterQuestionsByEntityWithSubstitutions,
             ReadOnlyQuestionnaireDocument questionnaire)
         {
-            if (entityWithSubstitution is IQuestion && substitutionReference == ((IQuestion)entityWithSubstitution).StataExportCaption)
+            bool isTitle = validationConditionIndex == null;
+            var referenceToEntityWithSubstitution = CreateReference(entityWithSubstitution, validationConditionIndex);
+
+            if (entityWithSubstitution is IQuestion && isTitle && substitutionReference == ((IQuestion)entityWithSubstitution).StataExportCaption)
             {
-                return QuestionWithTitleSubstitutionCantReferenceSelf((IQuestion)entityWithSubstitution);
+                return QuestionnaireVerificationMessage.Error("WB0016",
+                    VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                    referenceToEntityWithSubstitution);
             }
 
-            if (substitutionReference == substitutionService.RosterTitleSubstitutionReference)
+            if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
                 {
-                    return EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster(entityWithSubstitution);
+                    return QuestionnaireVerificationMessage.Error("WB0059",
+                        VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        referenceToEntityWithSubstitution);
                 }
                 return null;
             }
@@ -1568,20 +1605,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (entityToSubstitute == null)
             {
-                return EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(entityWithSubstitution);
+                return QuestionnaireVerificationMessage.Error("WB0017",
+                    VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    referenceToEntityWithSubstitution);
             }
+
+            var referenceToEntityBeingSubstituted = CreateReference(entityToSubstitute);
 
             var isNotVariable = !(entityToSubstitute is IVariable);
             var isQuestionaOfUnsupportedType = (entityToSubstitute is IQuestion) && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
             if (isNotVariable && isQuestionaOfUnsupportedType)
             {
-                return EntityWithTitleSubstitutionReferencesEntityOfNotSupportedType(entityWithSubstitution, entityToSubstitute);
+                return QuestionnaireVerificationMessage.Error("WB0018",
+                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
             }
 
             if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(entityToSubstitute,
                 vectorOfRosterQuestionsByEntityWithSubstitutions, questionnaire))
             {
-                return EntityWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(entityWithSubstitution, entityToSubstitute);
+                return QuestionnaireVerificationMessage.Error("WB0019",
+                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
             }
 
             return null;
@@ -1591,33 +1638,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => QuestionnaireVerificationMessage.Error("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
                 CreateReference(questionsWithSubstitution));
-
-        private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionCantReferenceEntitiesWithDeeperPropagationLevel(IComposite entityWithSubstitution, IComposite entityToSubstitute)
-            => QuestionnaireVerificationMessage.Error("WB0019",
-                VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
-                CreateReference(entityWithSubstitution),
-                CreateReference(entityToSubstitute));
-
-        private static QuestionnaireVerificationMessage EntityWithTitleSubstitutionReferencesEntityOfNotSupportedType(IComposite entityWithSubstitution, IComposite entityToSubstitute)
-            => QuestionnaireVerificationMessage.Error("WB0018",
-                VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
-                CreateReference(entityWithSubstitution),
-                CreateReference(entityToSubstitute));
-
-        private static QuestionnaireVerificationMessage EntityWithSubstitutionReferencesNotExistingQuestionOrVariable(IComposite entityWithSubstitution)
-            => QuestionnaireVerificationMessage.Error("WB0017",
-                VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
-                CreateReference(entityWithSubstitution));
-
-        private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
-            => QuestionnaireVerificationMessage.Error("WB0016",
-                VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
-                CreateReference(questionsWithSubstitution));
-
-        private static QuestionnaireVerificationMessage EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster(IComposite entityWithSubstitution)
-            => QuestionnaireVerificationMessage.Error("WB0059",
-                VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
-                CreateReference(entityWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
             => QuestionnaireVerificationMessage.Error("WB0011",
