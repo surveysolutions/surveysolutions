@@ -446,15 +446,19 @@ namespace WB.Tests.Unit.TestFactories
                 wasCompleted ?? false);
 
         public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null)
-            => new InterviewView
+        {
+            interviewId = interviewId ?? Guid.NewGuid();
+            return new InterviewView
             {
-                InterviewId = interviewId ?? Guid.NewGuid(),
+                Id = interviewId.FormatGuid(),
+                InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
                 GpsLocation = new InterviewGpsLocationView
                 {
                     PrefilledQuestionId = prefilledQuestionId
                 }
             };
+        }
 
         public LabeledVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
             => new LabeledVariable(variableName, label, questionId, variableValueLabels);
