@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer.ToString("s"), @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer.ToString("u"), @event.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
