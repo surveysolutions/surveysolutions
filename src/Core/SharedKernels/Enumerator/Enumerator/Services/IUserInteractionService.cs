@@ -11,5 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task WaitPendingUserInteractionsAsync();
 
         void ShowToast(string message);
+
+        bool HasPendingUserInterations { get; }
     }
 }

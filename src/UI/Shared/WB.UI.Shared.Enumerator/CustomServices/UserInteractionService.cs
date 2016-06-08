@@ -72,6 +72,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             Toast.MakeText(this.CurrentActivity, message, ToastLength.Short).Show();
         }
 
+        public bool HasPendingUserInterations => userInteractions.Count > 0;
+
         private void Confirm(
             string message,
             Action<bool> answer,
