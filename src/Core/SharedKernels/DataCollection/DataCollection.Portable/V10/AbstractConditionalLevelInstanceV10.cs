@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, Func<long, string, long?, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, long?, bool>>();
+        protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
         protected Dictionary<Guid, Guid[]> DependentAnswersToVerify { get; set; }
 
@@ -79,18 +79,31 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
-        protected virtual Action AnswerVerifier(Func<long, string, long?, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
+        private bool GetOptionFilterResult(Func<int, bool> optionFilter, int optionValue)
+        {
+            try
+            {
+                return optionFilter(optionValue);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
         {
             return () =>
             {
-                if (getAnswer().HasValue && optionFilter(Convert.ToInt64(getAnswer().Value), "", null) == false)
+                var previousAnswer = getAnswer();
+                if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
                 {
                     setAnswer(null);
                 }
             };
         }
 
-        protected virtual Action AnswerVerifier(Func<long, string, long?, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
         {
             return () =>
             {
@@ -98,7 +111,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (previousAnswer == null || previousAnswer.Length == 0)
                     return;
 
-                var actualAnswer = previousAnswer.Where(selectedOption => optionFilter(Convert.ToInt64(selectedOption), "", null));
+                var actualAnswer = previousAnswer.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)));
+
                 setAnswer(actualAnswer.ToArray());
             };
         }
@@ -112,22 +127,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
                 questionState.State = this.GetConditionExpressionState(isEnabled);
 
-                var hasNoDependentAnswersToBeVerified = !DependentAnswersToVerify.ContainsKey(itemId) || !DependentAnswersToVerify[itemId].Any();
-                if (!hasNoDependentAnswersToBeVerified)
-                {
-                    foreach (var questionId in DependentAnswersToVerify[itemId])
-                    {
-                        VerifyAnswer(questionId);
-                    }
-                }
-
                 this.UpdateAllNestedItemsStateAndPropagateStateOnRosters(itemId, this.StructuralDependencies, questionState.State);
             };
-        }
-
-        private void VerifyAnswer(Guid questionId)
-        {
-            this.QuestionDecimalUpdateMap[questionId].Invoke(null);
         }
 
         protected void UpdateAllNestedItemsStateAndPropagateStateOnRosters(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
@@ -193,7 +194,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             var filter = OptionFiltersMap[questionId];
             foreach (var option in options)
             {
-                var isOptionSatisfyFilter = filter(option.Value, option.Title, option.ParentValue);
+                var isOptionSatisfyFilter = GetOptionFilterResult(filter, option.Value);
                 if (isOptionSatisfyFilter)
                 {
                     yield return option;
