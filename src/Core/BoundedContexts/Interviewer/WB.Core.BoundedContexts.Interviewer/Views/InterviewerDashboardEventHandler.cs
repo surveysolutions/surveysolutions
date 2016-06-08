@@ -185,8 +185,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 switch (prefilledQuestion.QuestionType)
                 {
                     case QuestionType.DateTime:
+                        DateTime dateTimeAnswer;
                         if (answer is string)
-                            answer = DateTime.Parse((string) answer).ToLocalTime();
+                            dateTimeAnswer = DateTime.Parse((string) answer);
+                        else
+                            dateTimeAnswer = (DateTime) answer;
+
+                        var isTimestamp = (prefilledQuestion as DateTimeQuestion)?.IsTimestamp ?? false;
+
+                        answer = dateTimeAnswer.ToLocalTime().ToString(isTimestamp
+                            ? CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern
+                            : CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
                         break;
                     case QuestionType.MultyOption:
                     case QuestionType.SingleOption:
@@ -288,7 +297,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
-            this.AnswerOnPrefilledQuestion(interviewId, questionId, answer, answerTimeUtc);
+            this.AnswerOnPrefilledQuestion(interviewId, questionId, answer);
             this.SetStartedDateTimeOnFirstAnswer(interviewId, answerTimeUtc);
         }
 
@@ -315,7 +324,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private readonly Dictionary<Guid, QuestionnaireIdentity> mapInterviewIdToQuestionnaireIdentity = new Dictionary<Guid, QuestionnaireIdentity>();
 
-        private void AnswerOnPrefilledQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
+        private void AnswerOnPrefilledQuestion(Guid interviewId, Guid questionId, object answer)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (this.mapInterviewIdToQuestionnaireIdentity.TryGetValue(interviewId, out questionnaireIdentity))
@@ -349,36 +358,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             else
             {
-                var prefilledQuestion = interviewView.AnswersOnPrefilledQuestions?.FirstOrDefault(
-                    question => question.QuestionId == questionId);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
-                if (prefilledQuestion != null)
+                var interviewPrefilledQuestion = interviewView.AnswersOnPrefilledQuestions?.FirstOrDefault(question => question.QuestionId == questionId);
+                if (interviewPrefilledQuestion != null)
                 {
-                    var questionnaire =
-                        this.questionnaireRepository.GetQuestionnaireDocument(
-                            QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                    var questionnairePrefilledQuestion =
-                        questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
-
-                    var numericQuestion = questionnairePrefilledQuestion as INumericQuestion;
-                    if (numericQuestion != null && answer != null)
-                    {
-                        var @decimal = Convert.ToDecimal(answer);
-                        if (numericQuestion.UseFormatting)
-                        {
-                            prefilledQuestion.Answer = @decimal.FormatDecimal();
-                        }
-                        else
-                        {
-                            prefilledQuestion.Answer = @decimal.ToString(CultureInfo.CurrentCulture);
-                        }
-                    }
-                    else
-                    {
-                        prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, 
-                            GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
-                    }
-                    
+                    interviewPrefilledQuestion.Answer = this.GetAnswerOnPrefilledQuestion(questionnairePrefilledQuestion, answer).Answer;
                 }
             }
 
