@@ -125,5 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
+
+        IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter);
     }
 }

@@ -45,10 +45,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         //read by page
-        public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, long? parentValue, string filter)
+        //filter in db
+        public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, int? parentValue, string filter)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
+
+            filter = filter ?? String.Empty;
 
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
@@ -63,10 +66,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Value = Convert.ToInt32(x.Value),
                     Title = x.Title
                 })
-                .OrderBy(x => x.Title)
-                .ToList();
+                .OrderBy(x => x.Title);
 
             return categoricalQuestionOptions;
+        }
+
+        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, int optionValue)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+
+            var categoricalQuestionOption = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            x.Value == optionValue)
+                .FirstOrDefault();
+            
+            return new CategoricalOption
+            {
+                ParentValue = categoricalQuestionOption.ParentValue.HasValue ? Convert.ToInt32(categoricalQuestionOption.ParentValue) : (int?)null,
+                Value = Convert.ToInt32(categoricalQuestionOption.Value),
+                Title = categoricalQuestionOption.Title
+            };
         }
 
         public async Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId)

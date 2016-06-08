@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public readonly IOptionsRepository optionsRepository;
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, Guid questionId, long? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, Guid questionId, int? parentQuestionValue, string filter)
         {
             return optionsRepository.GetFilteredQuestionOptions(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, parentQuestionValue, filter);
         }
