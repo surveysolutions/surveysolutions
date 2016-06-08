@@ -22,7 +22,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.userInterfaceStateService = userInterfaceStateService;
         }
 
-        public virtual bool HasPendingOperations => this.isNavigationStarted;
+        public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
+                                                    this.userInteractionService.HasPendingUserInterations ||
+                                                    this.userInterfaceStateService.IsUserInferfaceLocked;
 
         public virtual async Task NavigateToAsync<TViewModel>(object parameters) where TViewModel : IMvxViewModel
         {
@@ -33,24 +35,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task WaitPendingOperationsCompletionAsync()
         {
-            if (this.isNavigationStarted)
+            if (this.HasPendingOperations)
             {
                 this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
                 return;
             }
 
-            this.isNavigationStarted = true;
-
-            try
-            {
-                await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
-                await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
-            }
-            finally
-            {
-                this.isNavigationStarted = false;
-            }
+            await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+            await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
         }
     }
 }
