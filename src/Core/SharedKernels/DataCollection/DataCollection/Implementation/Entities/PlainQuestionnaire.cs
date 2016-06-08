@@ -312,7 +312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         //cache - more memory?
         //
         //Add filter support
-        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, long? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         }
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, long? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
         {
             return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
         }

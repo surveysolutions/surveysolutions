@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 optionsRepository: optionsRepository);
 
             var navigationState = Create.Other.NavigationState();
+            
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 

@@ -1384,6 +1384,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.InterviewerComment;
         }
 
+
+        IEnumerable<CategoricalOption> IStatefulInterview.GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
+        {
+            return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
+        }
+
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
         {
             return GetOrCalculate(
