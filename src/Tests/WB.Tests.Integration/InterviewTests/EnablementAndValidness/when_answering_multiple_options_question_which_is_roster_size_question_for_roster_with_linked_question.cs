@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Create.TextQuestion(variable: "txt", id: txtSourceOfLinkId)}),
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
-                        answers:
+                        options:
                             new List<Answer>
                             {
                                 Create.Option(text: "Hello", value: "1"),

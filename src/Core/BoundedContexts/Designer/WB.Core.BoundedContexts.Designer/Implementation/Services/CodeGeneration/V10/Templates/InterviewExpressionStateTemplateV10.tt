@@ -32,14 +32,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				this.GetRosterInstances, 
 				IdOf.conditionalDependencies, 
 				IdOf.structuralDependencies, 
-				this.InterviewProperties);
+				this.InterviewProperties,
+				IdOf.dependentAnswersToVerify);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
 			
 <#
 			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
 			{
 #>
-				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
 <# 
 			}
 #>		
@@ -49,13 +50,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			IDictionary<string, IExpressionExecutableV10> interviewScopes, 
 			Dictionary<string, List<string>> siblingRosters, 
 			IInterviewProperties interviewProperties)
-		 :base(interviewScopes, siblingRosters, interviewProperties){		<#
-			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
-			{
+		 :base(interviewScopes, siblingRosters, interviewProperties)
+		 {		
+<#
+		foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
+		{
 #>
-				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
 <# 
-			}
+		}
 #>		}
 
 		protected override bool HasParentScropeRosterId(Guid rosterId) => IdOf.parentScopeMap.ContainsKey(rosterId);
@@ -182,6 +185,19 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 #>
 			}},
 <#
+			}
+#>
+		};
+
+		public static Dictionary<Guid, Guid[]> dependentAnswersToVerify = new Dictionary<Guid, Guid[]>
+		{
+		
+<#			//questions
+			foreach (var q in QuestionnaireStructure.DependentAnswersToVerify) 
+			{
+#>
+			{ Guid.Parse("<#= q.Key#>"), new Guid[] {  <#= string.Join(",",  q.Value.Select(x => string.Format("Guid.Parse(\"{0}\")", x))) #> } },
+<# 
 			}
 #>
 		};

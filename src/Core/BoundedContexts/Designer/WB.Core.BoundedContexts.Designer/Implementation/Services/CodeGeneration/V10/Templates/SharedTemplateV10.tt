@@ -8,6 +8,25 @@
 <#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model" #> 
 
 <#+
+void ConditionMethodsInLevelConstructor(List<ConditionMethodAndState> methods)
+{
+	foreach (var method in methods) 
+    {
+		if (method.IsAnswerVerifier)
+		{
+#>
+		_conditionExpressions.Add(AnswerVerifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, () => <#= method.MemberName#>, (<#= method.Type#> val) => {<#= method.MemberName#>  = val; }));
+<#+
+		}
+		else
+		{
+#>
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));
+<#+
+        }
+	}
+}
+
 void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
 {
 	foreach (var @group in groups) 
@@ -100,7 +119,7 @@ void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
 	foreach (var @roster in rosters) 
 	{
 #>
-		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
+		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest, this.DependentAnswersToVerify));
 <#+
 	}
 }
