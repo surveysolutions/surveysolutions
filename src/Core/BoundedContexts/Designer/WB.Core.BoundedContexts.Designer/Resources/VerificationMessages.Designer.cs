@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question supports only integer positive values.
+        ///   Looks up a localized string similar to Multi select question supports only integer values.
         /// </summary>
         internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
