@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
     public class ExportedQuestion
     {
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
-        public const string ExportDateTimeFormat = "s";
+        public const string ExportDateTimeFormat = "yyyy-MM-ddTHH:mm:ssK";
         public const string ExportDateFormat = "yyyy-MM-dd";
         private const string DefaultDelimiter = "|";
 

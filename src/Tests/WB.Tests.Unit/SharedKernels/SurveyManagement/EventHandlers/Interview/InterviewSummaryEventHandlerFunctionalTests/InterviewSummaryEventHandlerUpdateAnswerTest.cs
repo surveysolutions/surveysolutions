@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Documents;
@@ -8,6 +9,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -81,7 +83,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
-        [TestCase(QuestionType.DateTime, "2012-02-01 22:00:00Z")]
+        [TestCase(QuestionType.DateTime, "2012-02-01T22:00:00Z")]
         [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
@@ -140,7 +142,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 case QuestionType.DateTime:
                     return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
-                        DateTime.Parse(answer.ToString()).ToUniversalTime());
+                        DateTime.ParseExact(answer.ToString(), ExportedQuestion.ExportDateTimeFormat, CultureInfo.InvariantCulture).ToUniversalTime());
                 case QuestionType.Numeric:
                     if (answer is int)
                         return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);
