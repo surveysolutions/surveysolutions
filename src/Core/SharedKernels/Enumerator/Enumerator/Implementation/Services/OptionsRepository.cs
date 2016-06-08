@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-        
+        [Obsolete("Should be removed")]
         public IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
@@ -44,31 +44,44 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return categoricalQuestionOptions;
         }
 
-        //read by page
-        //filter in db
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, int? parentValue, string filter)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
-
             filter = filter ?? String.Empty;
+            int pagesize = 50;
+            decimal lastLoadedValue = decimal.MinValue;
 
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
-            var categoricalQuestionOptions = this.optionsStorage
+            List<CategoricalOption> loadedBatch;
+
+            do
+            {
+                loadedBatch = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
                             x.ParentValue == parentValueAsDecimal &&
-                            x.Title.Contains(filter))
+                            x.Title.Contains(filter) &&
+                            x.Value > lastLoadedValue)
                 .Select(x => new CategoricalOption
                 {
                     ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
                     Value = Convert.ToInt32(x.Value),
                     Title = x.Title
                 })
-                .OrderBy(x => x.Title);
+                .OrderBy(x => x.Value)
+                .Take(pagesize)
+                .ToList();
 
-            return categoricalQuestionOptions;
+                foreach (var option in loadedBatch)
+                {
+                    yield return option;
+                    lastLoadedValue = option.Value;
+                }
+
+            } while (loadedBatch.Count > 0);
+
         }
 
         public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, int optionValue)
