@@ -1525,7 +1525,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return QuestionnaireVerificationReference.CreateForVariable(entity.PublicKey);
 
             if (entity is IGroup)
-                return QuestionnaireVerificationReference.CreateForGroup(entity.PublicKey);
+                return ((IGroup)entity).IsRoster
+                    ? QuestionnaireVerificationReference.CreateForRoster(entity.PublicKey)
+                    : QuestionnaireVerificationReference.CreateForGroup(entity.PublicKey);
 
             if (entity is IQuestion)
                 return QuestionnaireVerificationReference.CreateForQuestion(entity.PublicKey);
@@ -1568,14 +1570,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static IComposite GetEntityByVariable(string identifier, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            var question = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier);
-            if (question != null)
-                return question;
-
-            var variable = questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier);
-            return variable;
-        }
+            => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
+            ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
+            ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
 
         private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
             IComposite entityWithSubstitution,
@@ -1604,8 +1601,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
                 return null;
             }
-            var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
 
+            var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
             if (entityToSubstitute == null)
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
@@ -1615,9 +1612,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var referenceToEntityBeingSubstituted = CreateReference(entityToSubstitute);
 
-            var isNotVariable = !(entityToSubstitute is IVariable);
-            var isQuestionaOfUnsupportedType = (entityToSubstitute is IQuestion) && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
-            if (isNotVariable && isQuestionaOfUnsupportedType)
+            var isVariable = entityToSubstitute is IVariable;
+            var isQuestion = entityToSubstitute is IQuestion;
+            var isNotVariableNorQuestions = !(isVariable || isQuestion);
+            var isQuestionOfNotSupportedType = isQuestion && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
+            if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
                     VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
