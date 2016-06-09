@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
@@ -84,8 +85,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             return
                 new StatefulInterviewRepository(
                     Mock.Of<IEventSourcedAggregateRootRepository>(
-                        _ => _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()) == statefulInterview),
-                    liteEventBus??Mock.Of<ILiteEventBus>());
+                        _ =>
+                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()) == statefulInterview &&
+                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<IProgress<int>>(),
+                                Moq.It.IsAny<CancellationToken>()) == statefulInterview),
+                    liteEventBus ?? Mock.Of<ILiteEventBus>());
         }
     }
 }
