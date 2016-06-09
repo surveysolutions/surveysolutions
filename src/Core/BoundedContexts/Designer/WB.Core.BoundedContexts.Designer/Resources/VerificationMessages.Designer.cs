@@ -314,11 +314,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Question with options filter expression cannot be prefilled..
         /// </summary>
-        internal static string WB0029_ {
+        internal static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
-                return ResourceManager.GetString("WB0029_", resourceCulture);
+                return ResourceManager.GetString("WB0029_QuestionWithOptionsFilterCannotBePrefilled", resourceCulture);
             }
         }
         

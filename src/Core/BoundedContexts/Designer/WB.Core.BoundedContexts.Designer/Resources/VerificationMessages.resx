@@ -390,8 +390,8 @@
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
-  <data name="WB0029_" xml:space="preserve">
-    <value />
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Question with options filter expression cannot be prefilled.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
     <value>Items with with the same name found.</value>
