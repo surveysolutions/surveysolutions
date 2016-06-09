@@ -207,7 +207,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
-
+            Verifier<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
+            
 
             Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
             Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName, VerificationMessageLevel.Critical),
@@ -1049,6 +1050,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
+        }
+
+        private static bool QuestionWithOptionsFilterCannotBePrefilled(IQuestion question)
+        {
+            return !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) && IsPreFilledQuestion(question);
         }
 
         private static bool TextListQuestionCannotBePrefilled(ITextListQuestion question)
