@@ -612,11 +612,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Option filter expression has a syntax error..
         /// </summary>
-        internal static string WB0062_ {
+        internal static string WB0062_OptionFilterExpresssionHasIncorrectSyntax {
             get {
-                return ResourceManager.GetString("WB0062_", resourceCulture);
+                return ResourceManager.GetString("WB0062_OptionFilterExpresssionHasIncorrectSyntax", resourceCulture);
             }
         }
         

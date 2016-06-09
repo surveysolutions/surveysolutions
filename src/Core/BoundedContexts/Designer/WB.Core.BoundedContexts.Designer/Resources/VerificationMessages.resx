@@ -246,8 +246,8 @@
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
     <value>Question has max allowed answers less than 2.</value>
   </data>
-  <data name="WB0062_" xml:space="preserve">
-    <value />
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Option filter expression has a syntax error.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
     <value>Categorical linked question cannot be used in validation condition #{0}.</value>
