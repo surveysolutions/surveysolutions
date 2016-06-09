@@ -215,5 +215,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasVariable(string variableName);
         bool HasQuestion(string variableName);
         bool IsTimestampQuestion(Guid questionId);
+        bool IsSupportFilteringForOptions(Guid questionId);
     }
 }

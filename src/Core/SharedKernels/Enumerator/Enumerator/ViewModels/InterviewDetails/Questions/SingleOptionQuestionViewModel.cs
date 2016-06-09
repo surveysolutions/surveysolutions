@@ -86,7 +86,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
 
-            this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
+            if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
+            {
+                this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
+            }
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
