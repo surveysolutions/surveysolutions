@@ -1063,7 +1063,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox,
-                Featured = true,
+                Featured = isPrefilled,
                 Properties = {OptionsFilterExpression = optionsFilter}
             };
         }
