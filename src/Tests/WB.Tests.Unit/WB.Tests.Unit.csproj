@@ -404,7 +404,6 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\Diagnostics\CheckNewVersionViewModelTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\Diagnostics\SendTabletInformationViewModelTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\InterviewDashboardItemViewModelTestsContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\when_rejected_interview_is_created_on_client.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\LoginViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_initializing_and_user_activated_on_device.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_initializing_and_no_user_activated_on_device.cs" />
