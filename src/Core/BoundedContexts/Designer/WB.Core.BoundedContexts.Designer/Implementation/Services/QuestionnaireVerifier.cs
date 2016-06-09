@@ -1665,12 +1665,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             switch (expressionLocation.ItemType)
             {
                 case ExpressionLocationItemType.Group:
-                case ExpressionLocationItemType.Roster:
                     reference = QuestionnaireVerificationReference.CreateForGroup(expressionLocation.Id);
+                    break;
+                case ExpressionLocationItemType.Roster:
+                    reference = QuestionnaireVerificationReference.CreateForRoster(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Question:
                     reference = QuestionnaireVerificationReference.CreateForQuestion(expressionLocation.Id);
-
                     break;
                 case ExpressionLocationItemType.StaticText:
                     reference = QuestionnaireVerificationReference.CreateForStaticText(expressionLocation.Id);
