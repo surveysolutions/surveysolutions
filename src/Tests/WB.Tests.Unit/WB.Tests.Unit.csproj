@@ -345,6 +345,7 @@
     <Compile Include="ChangeCurrentCulture.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
+    <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_500_characters.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_parent_group_disabled.cs" />
