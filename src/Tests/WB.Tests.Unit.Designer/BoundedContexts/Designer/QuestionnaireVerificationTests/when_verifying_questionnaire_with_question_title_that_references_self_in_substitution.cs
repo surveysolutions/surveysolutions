@@ -3,26 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_title_that_references_self_in_substitution : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionWithSelfSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new SingleQuestion()
+            questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
-                PublicKey = questionWithSelfSubstitutionsId,
-                StataExportCaption = "me",
-                QuestionText = "hello %me%!",
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                Create.Question(questionId: questionWithSelfSubstitutionsId, variable: "me", title: "hello %me%!"),
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -50,6 +43,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static Guid questionWithSelfSubstitutionsId;
+        private static Guid questionWithSelfSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
     }
 }
