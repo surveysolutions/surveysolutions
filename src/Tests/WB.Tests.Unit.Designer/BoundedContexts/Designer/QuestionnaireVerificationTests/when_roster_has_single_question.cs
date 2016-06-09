@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_contain_WB0203_warning = () => errors.ShouldContain(item => item.Code == "WB0203" && item.MessageLevel == VerificationMessageLevel.Warning);
 
         It should_reference_to_a_roster = () => errors.FirstOrDefault(item => item.Code == "WB0203")
-            .References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            .References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_reference_to_a_roster_with_single_question = () => errors.FirstOrDefault(item => item.Code == "WB0203")
             .References.First().Id.ShouldEqual(rosterId);
