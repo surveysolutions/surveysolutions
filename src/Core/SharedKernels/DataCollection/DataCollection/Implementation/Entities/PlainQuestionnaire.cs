@@ -812,6 +812,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
+        public bool IsSupportFilteringForOptions(Guid questionId)
+        {
+            return (this.GetQuestion(questionId) as SingleQuestion)?.Capital ?? false;
+        }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
