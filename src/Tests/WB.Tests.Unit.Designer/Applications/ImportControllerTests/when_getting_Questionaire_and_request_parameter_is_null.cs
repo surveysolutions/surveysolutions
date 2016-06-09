@@ -1,6 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {

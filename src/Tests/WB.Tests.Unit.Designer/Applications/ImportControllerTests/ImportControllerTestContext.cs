@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 

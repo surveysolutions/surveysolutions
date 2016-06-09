@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,9 +8,9 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
@@ -54,21 +54,21 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public HttpResponseMessage Get(string id)
         {
-            var questionnaireInfoView = questionnaireInfoViewFactory.Load(id, userHelper.WebUser.UserId);
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, this.userHelper.WebUser.UserId);
 
             if (questionnaireInfoView == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);
+            return this.Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);
         }
 
         [HttpGet]
         [CamelCase]
         public NewChapterView Chapter(string id, string chapterId)
         {
-            var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
+            var chapterInfoView = this.chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
 
             if (chapterInfoView == null)
             {
@@ -84,10 +84,10 @@ namespace WB.UI.Designer.Api
         {
             var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
 
-            if (variableView == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound,
+            if (variableView == null) return this.Request.CreateErrorResponse(HttpStatusCode.NotFound,
                 $"variable with id {variableId} was not found in questionnaire {id}");
 
-            var result = Request.CreateResponse(HttpStatusCode.OK, new
+            var result = this.Request.CreateResponse(HttpStatusCode.OK, new
             {
                 Id = variableView.ItemId,
                 Expression = variableView.VariableData.Expression,
@@ -104,7 +104,7 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public NewEditQuestionView EditQuestion(string id, Guid questionId)
         {
-            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+            var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             if (editQuestionView == null)
             {
@@ -128,7 +128,7 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public NewEditGroupView EditGroup(string id, Guid groupId)
         {
-            var editGroupView = questionnaireInfoFactory.GetGroupEditView(id, groupId);
+            var editGroupView = this.questionnaireInfoFactory.GetGroupEditView(id, groupId);
 
             if (editGroupView == null)
             {
@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public NewEditRosterView EditRoster(string id, Guid rosterId)
         {
-            var editRosterView = questionnaireInfoFactory.GetRosterEditView(id, rosterId);
+            var editRosterView = this.questionnaireInfoFactory.GetRosterEditView(id, rosterId);
 
             if (editRosterView == null)
             {
@@ -156,7 +156,7 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public NewEditStaticTextView EditStaticText(string id, Guid staticTextId)
         {
-            var staticTextEditView = questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
+            var staticTextEditView = this.questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
 
             if (staticTextEditView == null)
             {
@@ -171,7 +171,7 @@ namespace WB.UI.Designer.Api
         public VerificationResult Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireDocument).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
@@ -183,8 +183,8 @@ namespace WB.UI.Designer.Api
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            VerificationMessage[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-            VerificationMessage[] warnings = verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);
+            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
+            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);
 
             return new VerificationResult
             {
@@ -197,7 +197,7 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string id, Guid groupId)
         {
-            return questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
+            return this.questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
