@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             AnsweringViewModel answering,
             IPrincipal principal = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IOptionsRepository optionsRepository = null)
+            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             return new FilteredSingleOptionQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
@@ -30,7 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 Mock.Of<ILiteEventRegistry>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                optionsRepository ?? Mock.Of<IOptionsRepository>());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
+                );
         }
 
         protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, List<CategoricalOption> optionList = null)
