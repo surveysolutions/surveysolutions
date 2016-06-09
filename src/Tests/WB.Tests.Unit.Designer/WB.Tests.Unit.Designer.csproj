@@ -393,6 +393,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_attachment_with_empty_content.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_variable_with_expression_longer_10000_chars.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_circular_reference_in_option_filter_and_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_title_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
