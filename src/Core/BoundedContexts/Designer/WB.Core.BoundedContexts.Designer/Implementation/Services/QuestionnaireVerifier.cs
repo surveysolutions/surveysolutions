@@ -229,7 +229,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
-            ErrorsByQuestionsWithSubstitutions,
+            this.ErrorsBySubstitutions,
             ErrorsByMacrosWithDuplicateName,
             ErrorsByAttachmentsWithDuplicateName,
             ErrorsByLookupTablesWithDuplicateVariableName,
@@ -1445,7 +1445,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 group.Select(x => x.Reference).ToArray()));
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsWithSubstitutions(
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsBySubstitutions(
             ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
@@ -1456,9 +1456,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(entity, entity.GetTitle(), questionnaire));
 
-                if (entity is IValidatable)
+                var entityAsValidatable = entity as IValidatable;
+
+                if (entityAsValidatable != null)
                 {
-                    var validationConditions = ((IValidatable) entity).ValidationConditions;
+                    var validationConditions = entityAsValidatable.ValidationConditions;
 
                     for (int validationConditionIndex = 0; validationConditionIndex < validationConditions.Count; validationConditionIndex++)
                     {
@@ -1480,8 +1482,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            if (entity is IQuestion && IsPreFilledQuestion((IQuestion) entity))
-                return QuestionWithTitleSubstitutionCantBePrefilled((IQuestion) entity).ToEnumerable();
+            var question = entity as IQuestion;
+            if (question != null && IsPreFilledQuestion(question))
+                return QuestionWithTitleSubstitutionCantBePrefilled(question).ToEnumerable();
 
             Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
 
