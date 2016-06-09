@@ -1352,6 +1352,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 return this.notAnsweredQuestionsEnablementStatus[entityKey];
             }
 
+            var parentGroup = GetParentGroup(entityIdentity);
+            while (parentGroup != null)
+            {
+                if (!IsEnabled(parentGroup))
+                {
+                    return false;
+                }
+
+                parentGroup = GetParentGroup(parentGroup);
+            }
+
             return true;
         }
 
