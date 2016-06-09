@@ -32,8 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				this.GetRosterInstances, 
 				IdOf.conditionalDependencies, 
 				IdOf.structuralDependencies, 
-				this.InterviewProperties,
-				IdOf.dependentAnswersToVerify);
+				this.InterviewProperties);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
 			
 <#
@@ -188,20 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			}
 #>
 		};
-
-		public static Dictionary<Guid, Guid[]> dependentAnswersToVerify = new Dictionary<Guid, Guid[]>
-		{
 		
-<#			//questions
-			foreach (var q in QuestionnaireStructure.DependentAnswersToVerify) 
-			{
-#>
-			{ Guid.Parse("<#= q.Key#>"), new Guid[] {  <#= string.Join(",",  q.Value.Select(x => string.Format("Guid.Parse(\"{0}\")", x))) #> } },
-<# 
-			}
-#>
-		};
-
 		public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
 		{
 <#			//questions

@@ -74,36 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             expressionState.CategoricalOptionsFilterModels = BuildCategoricalOptionsFilterModels(codeGenerationSettings, expressionState);
 
-            expressionState.DependentAnswersToVerify = this.BuildDependentAnswersToVerifyMap(expressionState);
-
             return expressionState;
-        }
-
-        private Dictionary<Guid, List<Guid>> BuildDependentAnswersToVerifyMap(QuestionnaireExpressionStateModel questionnaireTemplate)
-        {
-            var answersToVerifyMap = new Dictionary<Guid, List<Guid>>
-            {
-                { Guid.Empty, new List<Guid>() }
-            };
-
-            foreach (var question in questionnaireTemplate.AllQuestions.Where(x => x.HasOptionsFilter))
-            {
-                if (questionnaireTemplate.ConditionalDependencies.ContainsKey(question.Id))
-                {
-                    foreach (var questionId in questionnaireTemplate.ConditionalDependencies[question.Id])
-                    {
-                        if (!answersToVerifyMap.ContainsKey(questionId))
-                            answersToVerifyMap.Add(questionId, new List<Guid>());
-                        answersToVerifyMap[questionId].Add(question.Id);
-                    }
-                }
-                else
-                {
-                    answersToVerifyMap[Guid.Empty].Add(question.Id);
-                }
-            }
-
-            return answersToVerifyMap;
         }
 
         public static Dictionary<string, OptionsFilterConditionDescriptionModel> BuildCategoricalOptionsFilterModels(

@@ -119,7 +119,7 @@ void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
 	foreach (var @roster in rosters) 
 	{
 #>
-		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest, this.DependentAnswersToVerify));
+		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
 <#+
 	}
 }
