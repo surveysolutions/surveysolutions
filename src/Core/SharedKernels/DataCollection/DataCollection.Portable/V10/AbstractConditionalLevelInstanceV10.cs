@@ -13,24 +13,21 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
-        protected Dictionary<Guid, Guid[]> DependentAnswersToVerify { get; set; }
-
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
-            Dictionary<Guid, Guid[]> structuralDependencies, Dictionary<Guid, Guid[]> dependentAnswersToVerify)
+            Dictionary<Guid, Guid[]> structuralDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.DependentAnswersToVerify = dependentAnswersToVerify;
         }
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
             Dictionary<Guid, Guid[]> structuralDependencies,
-            IInterviewProperties properties, Dictionary<Guid, Guid[]> dependentAnswersToVerify)
-            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies, dependentAnswersToVerify)
+            IInterviewProperties properties)
+            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.Quest = properties;
         }
