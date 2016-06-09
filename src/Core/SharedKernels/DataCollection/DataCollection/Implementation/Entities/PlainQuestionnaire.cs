@@ -313,16 +313,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+            CheckShouldQestionProvideOptions(question, questionId);
 
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
-
-            foreach (var categoricalOption in GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter))
-                yield return categoricalOption;
-
+            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
         private static IEnumerable<CategoricalOption> GetFromQuestionCategoricalOptions(IQuestion question, int? parentQuestionValue, string filter)
@@ -364,12 +357,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+            CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
@@ -383,13 +371,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+            CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
             {
@@ -399,6 +381,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
             }
+        }
+
+        private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
+        {
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).AnswerText;
