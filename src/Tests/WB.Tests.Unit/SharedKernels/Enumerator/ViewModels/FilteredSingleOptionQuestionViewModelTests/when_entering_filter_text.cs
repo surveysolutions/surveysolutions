@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object,
                 interviewRepository: interviewRepository,
-                optionsRepository: optionsRepo);
+                filteredOptionsViewModel: optionsRepo);
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);

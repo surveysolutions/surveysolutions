@@ -39,10 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly IOptionsRepository optionsRepository;
+        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         private Identity questionIdentity;
-        private QuestionnaireIdentity questionnaireIdentity;
         private Guid interviewId;
         protected IStatefulInterview interview;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
@@ -55,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
-            IOptionsRepository optionsRepository)
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
@@ -66,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
-            this.optionsRepository = optionsRepository;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -77,33 +76,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
-
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
-            this.questionnaireIdentity = interview.QuestionnaireIdentity;
-            
+
+            this.UpdateOptionsState();
+
+            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void UpdateOptionsState()
+        {
+            var answerModel = this.interview.GetSingleOptionAnswer(questionIdentity);
+
             //should be removed
-            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, this.questionIdentity.Id)
-                .Select(this.ToViewModel)
-                .ToList();
+            this.Options = this.filteredOptionsViewModel.Options.Select(this.ToViewModel).ToList();
 
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                FilteredComboboxItemViewModel answerOption = 
-                    this.ToViewModel(optionsRepository.GetQuestionOption(interview.QuestionnaireIdentity, this.questionIdentity.Id, Convert.ToInt32(selectedValue)));  
+                var answerOption = this.Options.Single(o => o.Value == selectedValue.Value);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
-                UpdateAutoCompleteList();
+                this.UpdateAutoCompleteList();
             }
-            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            this.UpdateOptionsState();
+            this.RaisePropertyChanged(() => Options);
         }
 
         private FilteredComboboxItemViewModel ToViewModel(CategoricalOption model)
@@ -313,6 +322,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             this.QuestionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
         }

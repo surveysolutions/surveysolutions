@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IUserInteractionService userInteraction;
+        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private Guid interviewId;
         private string interviewIdAsString;
         private bool areAnswersOrdered;
@@ -47,7 +49,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            IUserInteractionService userInteraction)
+            IUserInteractionService userInteraction,
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -61,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.userInteraction = userInteraction;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
         public Identity Identity { get; private set; }
@@ -73,10 +77,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             interviewIdAsString = interviewId;
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            var answerModel = interview.GetYesNoAnswer(entityIdentity);
 
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
@@ -84,13 +88,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalOption {  Value = Convert.ToInt32(x), Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
+            this.UpdateQuestionOptions();
+
+            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void UpdateQuestionOptions()
+        {
+            var interview = this.interviewRepository.Get(interviewIdAsString);
+            var answerModel = interview.GetYesNoAnswer(Identity);
+
+            this.Options = this.filteredOptionsViewModel.Options
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
+        }
 
-            this.eventRegistry.Subscribe(this, interviewId);
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            this.UpdateQuestionOptions();
+            this.RaisePropertyChanged(() => Options);
         }
 
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, YesNoAnswer answerModel)
@@ -251,6 +268,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }

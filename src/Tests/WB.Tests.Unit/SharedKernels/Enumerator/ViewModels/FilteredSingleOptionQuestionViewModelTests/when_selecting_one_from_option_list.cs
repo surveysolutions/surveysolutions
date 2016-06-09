@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 answering: answeringViewModelMock.Object,
                 principal: principal,
                 interviewRepository: interviewRepository,
-                optionsRepository: optionsRepository);
+                filteredOptionsViewModel: optionsRepository);
 
             var navigationState = Create.Other.NavigationState();
             
