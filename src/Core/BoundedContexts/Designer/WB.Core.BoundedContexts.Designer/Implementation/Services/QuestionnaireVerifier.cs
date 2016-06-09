@@ -1313,12 +1313,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var dependencies = new Dictionary<string, string[]>();
             var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
+            var questionsWithOptionsFilter = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression));
             var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Expression));
 
             foreach (var question in questionsWithConditions)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
                     dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
+            }
+
+            foreach (var question in questionsWithOptionsFilter)
+            {
+                if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
+                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression).ToArray());
             }
 
             foreach (var variable in variables)
