@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -25,28 +25,28 @@ namespace WB.UI.Designer.Api
         [Route("{id:Guid}")]
         public HttpResponseMessage Get(Guid id)
         {
-            return CreateAttachmentResponse(id);
+            return this.CreateAttachmentResponse(id);
         }
 
         [HttpGet]
         [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
         public HttpResponseMessage Thumbnail(Guid id)
         {
-            return CreateAttachmentResponse(id, defaultImageSizeToScale);
+            return this.CreateAttachmentResponse(id, defaultImageSizeToScale);
         }
 
         [HttpGet]
         [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public HttpResponseMessage Thumbnail(Guid id, int size)
         {
-            return CreateAttachmentResponse(id, size);
+            return this.CreateAttachmentResponse(id, size);
         }
 
         private HttpResponseMessage CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null)
         {
             var attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
 
-            if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (attachment == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
             if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag.Trim('"') == attachment.ContentId))
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
