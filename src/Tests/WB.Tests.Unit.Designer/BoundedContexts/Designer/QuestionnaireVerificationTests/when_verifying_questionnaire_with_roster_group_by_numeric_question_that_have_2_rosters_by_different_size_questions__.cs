@@ -60,8 +60,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_2_errors_with_1_references = () =>
             verificationMessages.ShouldEachConformTo(error => error.References.Count() == 1);
 
-        It should_return_message_reference_with_type_group = () =>
-            verificationMessages.ShouldEachConformTo(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_reference_with_type_Roster = () =>
+            verificationMessages.ShouldEachConformTo(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_reference_with_id_of_rosterGroup1Id = () =>
             verificationMessages.ElementAt(0).References.First().Id.ShouldEqual(rosterGroup1Id);

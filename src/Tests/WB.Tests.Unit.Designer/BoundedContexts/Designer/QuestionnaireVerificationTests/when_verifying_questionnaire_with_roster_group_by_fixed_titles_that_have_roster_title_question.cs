@@ -51,8 +51,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_message_with_1_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_group = () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_reference_with_type_Roster = () =>
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_reference_with_id_of_rosterGroupId = () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);
