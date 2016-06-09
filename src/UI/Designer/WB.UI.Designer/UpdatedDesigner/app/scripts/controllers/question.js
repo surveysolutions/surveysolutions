@@ -378,6 +378,7 @@
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;
                     $scope.activeQuestion.linkedFilterExpression = null;
+                    $scope.activeQuestion.optionsFilterExpression = null;
                 }
             });
             $scope.$watch('activeQuestion.yesNoView', function (newValue) {

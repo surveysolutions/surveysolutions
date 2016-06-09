@@ -186,6 +186,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool QuestionHasEnablementCondition(IQuestion question) => !string.IsNullOrWhiteSpace(question.ConditionExpression);
 
+        public bool QuestionHasOptionsFilter(IQuestion question) => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression);
+
         public bool GroupHasEnablementCondition(IGroup group) => !string.IsNullOrWhiteSpace(@group.ConditionExpression);
 
         public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
