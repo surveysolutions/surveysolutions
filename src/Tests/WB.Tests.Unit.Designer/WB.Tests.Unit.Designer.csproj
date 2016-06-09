@@ -387,6 +387,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_text_email_question_without_validation.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachments_and_total_size_greater_50MB.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachment_with_size_more_than_5Mb.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_question_with_option_filter_expression_about_10000_chars.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_static_text_with_condition_expression_with_more_than_10000_chars_length.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_unused_attachment.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_attachment_with_empty_content.cs" />
