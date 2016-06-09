@@ -54,13 +54,14 @@ namespace WB.Tests.Unit.TestFactories
             Guid? questionnaireId = null,
             long? questionnaireVersion = null,
             Guid? userId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null)
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
             };

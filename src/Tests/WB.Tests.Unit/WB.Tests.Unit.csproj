@@ -346,8 +346,11 @@
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_500_characters.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_combobox.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_otions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_parent_group_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
