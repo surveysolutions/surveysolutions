@@ -1,4 +1,3 @@
-﻿using System.Net.Http;
 using System.Web.Http;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;

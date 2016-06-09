@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +9,6 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Api
 {
@@ -32,13 +31,13 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public HttpResponseMessage GetAllClassesForLatestVersion(Guid id, int? version)
         {
-            var questionnaire = GetQuestionnaire(id).Source;
+            var questionnaire = this.GetQuestionnaire(id).Source;
 
             var supervisorVersion = version.HasValue
                 ? new Version(version.Value, 0, 0)
                 :this.engineVersionService.GetLatestSupportedVersion();
 
-            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
             
             var resultBuilder =new StringBuilder();
             
@@ -48,7 +47,7 @@ namespace WB.UI.Designer.Api
                 resultBuilder.AppendLine(keyValuePair.Value);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, resultBuilder.ToString());
+            return this.Request.CreateResponse(HttpStatusCode.OK, resultBuilder.ToString());
         }
 
 
@@ -56,20 +55,20 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage GetCompilationResultForLatestVersion(Guid id)
         {
             //do async
-            var questionnaire = GetQuestionnaire(id).Source;
+            var questionnaire = this.GetQuestionnaire(id).Source;
             string assembly;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
                 this.engineVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, "No errors");
+                return this.Request.CreateResponse(HttpStatusCode.OK, "No errors");
             }
             else
             {
                 //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
                 var errorLocations = generated.Diagnostics.Select(x => x.Message).ToArray();
 
-                return Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+                return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
             }
         }
 
@@ -78,9 +77,9 @@ namespace WB.UI.Designer.Api
         {
             //do async
             
-            var questionnaire = GetQuestionnaire(id).Source;
+            var questionnaire = this.GetQuestionnaire(id).Source;
             string assembly;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
                 this.engineVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {

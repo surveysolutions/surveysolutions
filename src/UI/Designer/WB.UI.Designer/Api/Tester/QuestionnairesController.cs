@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,16 +8,15 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Shared.Web.Membership;
 using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Api.Tester
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v17/questionnaires")]// if you change version of the controller don't forget to mark previous version as obsolete in QuestionnairesObsoleteController
+    [RoutePrefix("questionnaires")]
     public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
@@ -27,7 +25,6 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IAttachmentService attachmentService;
         private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
@@ -36,7 +33,6 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
-            IAttachmentService attachmentService,
             IDesignerEngineVersionService engineVersionService)
         {
             this.userHelper = userHelper;
@@ -45,39 +41,17 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
-            this.attachmentService = attachmentService;
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v17/login")]
         [HttpGet]
-        public void Login()
-        {
-        }
-
-        [Route("~/api/v17/attachment/{id}")]
-        [HttpGet]
-        public HttpResponseMessage Attachment(string id)
-        {
-            var attachmentContent = this.attachmentService.GetContent(id);
-
-            if (attachmentContent == null) return Request.CreateResponse(HttpStatusCode.NotFound);
-
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(attachmentContent.Content)
-            };
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
-
-            return response;
-        }
-
         [Route("{id:Guid}")]
-        public Questionnaire Get(Guid id)
+        public Questionnaire Get(Guid id, int version)
         {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if(version < ApiVersion.Tester)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
+
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
@@ -120,9 +94,13 @@ namespace WB.UI.Designer.Api
             };
         }
 
+        [HttpGet]
         [Route("")] 
-        public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
+        public HttpResponseMessage Get(int version, [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
+            if (version < ApiVersion.Tester)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
+
             var userId = this.userHelper.WebUser.UserId;
             var isAdmin = this.userHelper.WebUser.IsAdmin;
 

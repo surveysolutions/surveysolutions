@@ -9,13 +9,12 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Api.Headquarters
 {
     public class ImportControllerBase : ApiController
     {

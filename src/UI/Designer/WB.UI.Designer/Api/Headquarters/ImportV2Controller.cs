@@ -1,38 +1,29 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
-using Main.Core.Documents;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Api.Headquarters
 {
     [ApiBasicAuth]
-    public class ImportController : ImportControllerBase
+    [RoutePrefix("import")]
+    public class ImportV2Controller : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
-        private readonly QuestionnaireDowngradeService downgradeService;
+        private readonly ISerializer serializer;
+        private readonly IAttachmentService attachmentService;
 
-        private static readonly JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
-        {
-            TypeNameHandling = TypeNameHandling.Objects,
-            NullValueHandling = NullValueHandling.Ignore,
-            FloatParseHandling = FloatParseHandling.Decimal,
-            Formatting = Formatting.None,
-            Binder = new NewToOldAssemblyRedirectSerializationBinder()
-        };
-
-        public ImportController(
+        public ImportV2Controller(
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
@@ -42,27 +33,33 @@ namespace WB.UI.Designer.Api
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper,
             IDesignerEngineVersionService engineVersionService,
-            QuestionnaireDowngradeService downgradeService)
+            ISerializer serializer,
+            IAttachmentService attachmentService)
             : base(userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
                 questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService)
         {
             this.zipUtils = zipUtils;
-            this.downgradeService = downgradeService;
+            this.serializer = serializer;
+            this.attachmentService = attachmentService;
         }
 
         [HttpGet]
-        public override void Login() 
-            => base.Login(); 
+        [Route("login")]
+        public override void Login() => base.Login(); 
 
         [HttpPost]
-        public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
-            => base.PagedQuestionnaireList(request);
+        [Route("PagedQuestionnaireList")]
+        public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request) => base.PagedQuestionnaireList(request);
         
+
         [HttpGet]
-        public override QuestionnaireListCommunicationPackage QuestionnaireList()
-            => base.QuestionnaireList();
+        [Route("QuestionnaireList")]
+        public override QuestionnaireListCommunicationPackage QuestionnaireList() => base.QuestionnaireList();
         
+
         [HttpPost]
+        [Route("Questionnaire")]
+        [LogImportAction]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -71,25 +68,40 @@ namespace WB.UI.Designer.Api
 
             this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
 
-            Version questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
 
-            QuestionnaireDocument questionnaire = questionnaireView.Source.Clone();
+            var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.SharedPersons = null;
-            questionnaire.Attachments = null;
-            this.downgradeService.Downgrade(questionnaire, questionnaireContentVersion);
-
-            var serrializedQuestionnaire = JsonConvert.SerializeObject(questionnaire, JsonSerializerSettingsNewToOld);
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(serrializedQuestionnaire), 
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion.Major
             };
+        }
+
+        [HttpGet]
+        [Route("attachments/{id}")]
+        public HttpResponseMessage AttachmentContent(string id)
+        {
+            var attachment = this.attachmentService.GetContent(id);
+
+            if (attachment == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(attachment.Content)
+            };
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.ContentId + "\"");
+
+            return response;
         }
     }
 }

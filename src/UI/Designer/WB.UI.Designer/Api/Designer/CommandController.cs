@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,8 +8,6 @@ using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -216,7 +212,7 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message);
             }
 
-            return Request.CreateResponse(new JsonQuestionnaireResult());
+            return this.Request.CreateResponse(new JsonQuestionnaireResult());
         }
     }
 }
