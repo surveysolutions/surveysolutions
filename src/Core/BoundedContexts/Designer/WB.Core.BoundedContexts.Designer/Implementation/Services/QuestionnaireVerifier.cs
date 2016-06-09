@@ -1724,6 +1724,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 case ExpressionLocationType.Expression:
                     return QuestionnaireVerificationMessage.Error("WB0027",
                         VerificationMessages.WB0027_VariableExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
+                case ExpressionLocationType.CategoricalFilter:
+                    return QuestionnaireVerificationMessage.Error("WB0062",
+                        VerificationMessages.WB0062_OptionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
             }
 
             return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
