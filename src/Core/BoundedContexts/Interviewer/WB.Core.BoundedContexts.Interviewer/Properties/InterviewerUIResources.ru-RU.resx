@@ -594,4 +594,10 @@
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Вибрировать когда дан не валидный ответ</value>
   </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Открытие...</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Открытие... {0}%</value>
+  </data>
 </root>

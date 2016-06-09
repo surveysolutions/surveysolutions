@@ -593,4 +593,10 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrate when invalid answer is given</value>
   </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Loading... {0}%</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -11,6 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
+        private readonly int waitDelay = 500;
+        private readonly int maxNumberOfWaitAttemts = 10;
 
         public BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
@@ -34,10 +38,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task WaitPendingOperationsCompletionAsync()
         {
-            if (this.HasPendingOperations)
+            int waitAttempts = 0;
+            while (this.HasPendingOperations)
             {
+                if(waitAttempts>this.maxNumberOfWaitAttemts)
+                    return;
+
                 this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
-                return;
+                await Task.Delay(waitDelay);
+                waitAttempts++;
+                
             }
 
             await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);

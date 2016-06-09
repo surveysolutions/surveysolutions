@@ -9,13 +9,8 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -25,13 +20,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewerInterviewAccessor interviewerInterviewFactory;
 
         public string QuestionnaireName { get; private set; }
@@ -45,24 +36,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
-            IStatefulInterviewRepository interviewRepository,
-            ICommandService commandService,
-            IPrincipal principal,
             IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerInterviewAccessor interviewFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.interviewRepository = interviewRepository;
-            this.commandService = commandService;
-            this.principal = principal;
             this.messenger = messenger;
             this.externalAppLauncher = externalAppLauncher;
             this.questionnaireViewRepository = questionnaireViewRepository;
-            this.interviewViewRepository = interviewViewRepository;
             this.interviewerInterviewFactory = interviewFactory;
         }
 
@@ -214,30 +197,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     {
                         return;
                     }
-
-                    this.RaiseStartingLongOperation();
-                    await Task.Run(async () =>
-                    {
-                        var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                        await this.commandService.ExecuteAsync(restartInterviewCommand);
-                    });
+                    
                 }
 
                 this.RaiseStartingLongOperation();
-                await Task.Run(async () =>
-                {
-                    var interviewIdString = this.InterviewId.FormatGuid();
-                    IStatefulInterview interview = interviewRepository.Get(interviewIdString);
 
-                    if (interview.CreatedOnClient)
-                    {
-                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
-                    }
-                    else
-                    {
-                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
-                    }
-                });
+                await
+                    this.viewModelNavigationService.NavigateToAsync<LoadingViewModel>(
+                        new {interviewId = this.InterviewId});
             }
             finally
             {

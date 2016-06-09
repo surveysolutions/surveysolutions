@@ -641,6 +641,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string Interview_Loading {
+            get {
+                return ResourceManager.GetString("Interview_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading... {0}%.
+        /// </summary>
+        public static string Interview_Loading_With_Percents {
+            get {
+                return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {
