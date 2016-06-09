@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.API
         public HttpResponseMessage Paradata(Guid id, long version)
         {
             return
-                CreateHttpResponseMessageWithFileContent(this.paraDataAccessor.GetPathToParaDataByQuestionnaire(id,
+                CreateHttpResponseMessageWithFileContent(this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(id,
                     version));
         }
 
