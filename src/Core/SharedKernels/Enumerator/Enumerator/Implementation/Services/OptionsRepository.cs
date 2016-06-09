@@ -125,9 +125,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public long OptionsCount()
+        public bool Any()
         {
-            return this.optionsStorage.Count(_ => true);
+            return this.optionsStorage.FirstOrDefault() != null;
         }
 
         private async Task StoreOptionsForQuestionAsync(string questionnaireIdAsString, string questionIdAsString, List<Answer> answers)

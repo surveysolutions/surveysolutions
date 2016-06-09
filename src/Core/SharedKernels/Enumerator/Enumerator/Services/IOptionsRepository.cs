@@ -18,6 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId);
         Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument);
-        long OptionsCount();
+        bool Any();
     }
 }
