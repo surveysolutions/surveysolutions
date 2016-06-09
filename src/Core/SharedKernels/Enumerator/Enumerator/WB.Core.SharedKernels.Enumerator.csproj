@@ -142,6 +142,7 @@
     <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TimestampQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
