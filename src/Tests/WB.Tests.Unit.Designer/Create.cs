@@ -1048,7 +1048,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
+            bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null)
         {
             return new SingleQuestion
             {
@@ -1062,7 +1062,8 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                Properties = {OptionsFilterExpression = optionsFilter}
             };
         }
 

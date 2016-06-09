@@ -305,11 +305,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Options filter expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0028_ {
+        internal static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
-                return ResourceManager.GetString("WB0028_", resourceCulture);
+                return ResourceManager.GetString("WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters", resourceCulture);
             }
         }
         
