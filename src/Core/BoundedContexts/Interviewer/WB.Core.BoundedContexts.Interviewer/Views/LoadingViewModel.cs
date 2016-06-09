@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public IMvxAsyncCommand NavigateBackToDashboardCommand => new MvxAsyncCommand(NavigateBackToDashboard);
+        public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
 
         public void Dispose()
         {
@@ -50,7 +51,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.loadingCancellationTokenSource = new CancellationTokenSource();
             var interviewIdString = this.interviewId.FormatGuid();
-
 
             var progress = new Progress<int>();
             progress.ProgressChanged += Progress_ProgressChanged;
@@ -108,12 +108,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ProgressInPercents = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
         }
 
-        public async Task NavigateBackToDashboard()
+        public void CancelLoading()
         {
             if (this.loadingCancellationTokenSource != null && !this.loadingCancellationTokenSource.IsCancellationRequested)
                 this.loadingCancellationTokenSource.Cancel();
+        }
 
-            await viewModelNavigationService.NavigateToDashboardAsync();
+        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToDashboardAsync);
+
+        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
+
+        private async Task SignOutAsync()
+        {
+            await this.principal.SignOutAsync();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
     }
 }
