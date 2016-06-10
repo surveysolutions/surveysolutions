@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
             
-            var optionsRepo = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id,
-                new List<CategoricalOption>()
+            var filteredOptionsViewModel = Mock.Of<FilteredOptionsViewModel>(vm => 
+                vm.Options == new List<CategoricalOption>()
                 {
                     new CategoricalOption() {Title = "abc", Value = 1},
                     new CategoricalOption() {Title = "bac", Value = 2},
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object,
                 interviewRepository: interviewRepository,
-                filteredOptionsViewModel: optionsRepo);
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
