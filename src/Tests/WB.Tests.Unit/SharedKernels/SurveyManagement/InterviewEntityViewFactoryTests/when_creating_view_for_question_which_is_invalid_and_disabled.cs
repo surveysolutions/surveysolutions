@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
     {
         Establish context = () =>
         {
-            question = Mock.Of<IQuestion>();
+            question = Create.Entity.Question();
 
             answeredQuestion = new InterviewQuestion {QuestionState = QuestionState.Valid | QuestionState.Valid};
             interviewEntityViewFactory = CreateInterviewEntityViewFactory();
