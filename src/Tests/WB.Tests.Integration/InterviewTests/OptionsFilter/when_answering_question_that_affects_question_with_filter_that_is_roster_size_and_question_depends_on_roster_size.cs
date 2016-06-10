@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
+    [Ignore("To be fixed in KP-7266")]
     internal class when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size : InterviewTestsContext
     {
         Establish context = () =>
