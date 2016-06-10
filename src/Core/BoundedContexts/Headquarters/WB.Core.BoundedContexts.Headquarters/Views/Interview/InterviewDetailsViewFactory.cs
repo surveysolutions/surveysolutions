@@ -5,9 +5,10 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
@@ -30,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IInterviewDataAndQuestionnaireMerger merger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService)
         {
@@ -40,11 +43,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.eventSourcedRepository = eventSourcedRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
         }
 
-        public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
+        public DetailsViewModel GetInterviewDetails(Guid interviewId,
+            Guid? currentGroupId, 
+            decimal[] currentGroupRosterVector, 
+            InterviewDetailsFilter? filter)
         {
             var interview = this.interviewStore.GetById(interviewId);
 
@@ -70,6 +77,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .Where(entity => entity is InterviewQuestionView || entity is InterviewStaticTextView)
                 .ToList();
             var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
+
+            this.FilterCategoricalQuestionOptions(interviewId, questionViews);
 
             var detailsStatisticView = new DetailsStatisticView()
             {
@@ -124,6 +133,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId)
             };
+        }
+
+        private void FilterCategoricalQuestionOptions(Guid interviewId, List<InterviewQuestionView> questionViews)
+        {
+            var eventSourcedInterview = 
+                (SharedKernels.DataCollection.Implementation.Aggregates.Interview) 
+                this.eventSourcedRepository.GetLatest(typeof(SharedKernels.DataCollection.Implementation.Aggregates.Interview), interviewId);
+            foreach (var categoricalQuestion in questionViews.Where(x => x.IsFilteredCategorical))
+            {
+                var questionIdentity = new Identity(categoricalQuestion.Id, categoricalQuestion.RosterVector);
+                IEnumerable<CategoricalOption> filteredOptions =
+                    eventSourcedInterview.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty);
+                categoricalQuestion.Options = filteredOptions.Select(x => new QuestionOptionView
+                {
+                    Label = x.Title,
+                    Value = x.Value
+                }).ToList();
+            }
         }
 
         public Guid? GetFirstChapterId(Guid interviewId)

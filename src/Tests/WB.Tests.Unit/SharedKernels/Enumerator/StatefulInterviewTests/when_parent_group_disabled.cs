@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 

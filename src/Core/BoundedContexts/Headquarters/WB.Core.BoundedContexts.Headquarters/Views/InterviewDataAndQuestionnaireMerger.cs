@@ -57,8 +57,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         }
 
 
-        public InterviewDetailsView Merge(InterviewData interview, QuestionnaireDocument questionnaire, UserLight responsible, 
-            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews)
+        public InterviewDetailsView Merge(InterviewData interview, 
+            QuestionnaireDocument questionnaire, 
+            UserLight responsible, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, 
+            IEnumerable<AttachmentInfoView> attachmentInfoViews)
         {
             questionnaire.ConnectChildrenWithParent();
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
