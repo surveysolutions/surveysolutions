@@ -18,8 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly ISubstitutionService substitutionService;
-        private readonly DynamicTextViewModel title;
+        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
         private readonly int maxNumberOfEntities = 30;
 
@@ -27,14 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IStatefulInterviewRepository interviewRepository, 
             IPlainQuestionnaireRepository questionnaireRepository, 
             IInterviewViewModelFactory interviewViewModelFactory, 
-            DynamicTextViewModel title, 
-            ISubstitutionService substitutionService)
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewViewModelFactory = interviewViewModelFactory;
-            this.title = title;
-            this.substitutionService = substitutionService;
+            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
         public IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState)
@@ -54,6 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var errorTitle = questionnaire.HasQuestion(invalidEntity.Id)
                    ? questionnaire.GetQuestionTitle(invalidEntity.Id)
                    : questionnaire.GetStaticText(invalidEntity.Id);
+
+                var title = dynamicTextViewModelFactory.CreateDynamicTextViewModel();
 
                 title.Init(interviewId, navigationIdentity.AnchoredElementIdentity, errorTitle);
 
