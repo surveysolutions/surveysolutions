@@ -6,4 +6,5 @@
   <integer name="GpsDesiredAccuracy">50</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
   <string name="DesignerEndpoint">https://solutions.worldbank.org</string>
+  <bool name="VibrateOnError">true</bool>
 </resources>

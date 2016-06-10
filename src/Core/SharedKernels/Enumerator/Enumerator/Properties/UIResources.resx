@@ -404,4 +404,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Please wait until the current operation is completed</value>
   </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>The tablet is going to vibrate when an answer didn't pass the validation</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibrate when invalid answer is given</value>
+  </data>
 </root>
