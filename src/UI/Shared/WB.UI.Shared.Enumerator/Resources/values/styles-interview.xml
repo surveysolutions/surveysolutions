@@ -45,7 +45,7 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
-  
+
   <style name ="Interview_Complete_Screen_Scroll">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
@@ -118,6 +118,8 @@
 
   <style name="Interview_Complete_Screen_Statistics_Errors_Label" parent="Interview_Complete_Screen_Statistics_Label">
     <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:ellipsize">end</item>
   </style>
 
   <style name="Interview_Complete_Screen_Button">
