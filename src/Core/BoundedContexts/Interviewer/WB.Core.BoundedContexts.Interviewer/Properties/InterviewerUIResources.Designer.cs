@@ -911,24 +911,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tablet is going to vibrate when an answer didn&apos;t pass the validation.
-        /// </summary>
-        public static string Prefs_VibrateOnErrorSummary {
-            get {
-                return ResourceManager.GetString("Prefs_VibrateOnErrorSummary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vibrate when invalid answer is given.
-        /// </summary>
-        public static string Prefs_VibrateOnErrorTitle {
-            get {
-                return ResourceManager.GetString("Prefs_VibrateOnErrorTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Request cancelled by user.
         /// </summary>
         public static string RequestCanceledByUser {

@@ -14,6 +14,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
         private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
         private const string GpsDesiredAccuracyParameterName = "GpsDesiredAccuracy";
+        internal const string VibrateOnErrorParameterName = "VibrateOnError";
 
         private static ISharedPreferences SharedPreferences => PreferenceManager.GetDefaultSharedPreferences(Application.Context);
 
@@ -62,6 +63,15 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public bool VibrateOnError
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+                return SharedPreferences.GetBoolean(VibrateOnErrorParameterName, defValue);
+            }
+        }
+
         public double GpsDesiredAccuracy
         {
             get
@@ -77,7 +87,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-        public bool VibrateOnError => true;
         public int EventChunkSize => 1000;
     }
 }
