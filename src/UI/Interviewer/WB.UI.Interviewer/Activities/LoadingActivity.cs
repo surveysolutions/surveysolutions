@@ -1,12 +1,14 @@
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Graphics.Drawables;
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.UI.Shared.Enumerator.Activities;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -24,7 +26,13 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-
+            ImageView progressImage = this.FindViewById<ImageView>(Resource.Id.progress_bar);
+            if (progressImage != null)
+            {
+                progressImage.SetBackgroundResource(Resource.Drawable.loading_animation);
+                AnimationDrawable frameAnimation = (AnimationDrawable)progressImage.Background;
+                frameAnimation.Start();
+            }
             Task.Run(async () =>
             {
                 await ViewModel.RestoreInterviewAndNavigateThere();
@@ -69,8 +77,18 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
-            
+
+            HideMenuItem(menu, Resource.Id.menu_login);
             return base.OnCreateOptionsMenu(menu);
+        }
+
+        public void HideMenuItem(IMenu menu, int menuItemId)
+        {
+            var menuItem = menu.FindItem(menuItemId);
+            if (menuItem != null)
+            {
+                menuItem.SetVisible(false);
+            }
         }
 
         private void CancelLoadingAndFinishActivity()

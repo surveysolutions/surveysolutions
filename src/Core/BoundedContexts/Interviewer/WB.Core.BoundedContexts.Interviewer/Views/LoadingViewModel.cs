@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
+            this.ProgressDescription = InterviewerUIResources.Interview_Loading;
         }
 
         public async Task RestoreInterviewAndNavigateThere()
@@ -54,8 +55,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var progress = new Progress<int>();
             progress.ProgressChanged += Progress_ProgressChanged;
-            this.IsInProgress = true;
-            this.ProgressInPercents =InterviewerUIResources.Interview_Loading;
             try
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -87,25 +86,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             }
             progress.ProgressChanged -= Progress_ProgressChanged;
-            this.IsInProgress = false;
         }
-        private string percentage;
-        public string ProgressInPercents
+        private string progressDescription;
+        public string ProgressDescription
         {
-            get { return this.percentage; }
-            set { this.RaiseAndSetIfChanged(ref this.percentage, value); }
-        }
-
-        private bool isInProgress;
-        public bool IsInProgress
-        {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; this.RaisePropertyChanged(); }
+            get { return this.progressDescription; }
+            set { this.RaiseAndSetIfChanged(ref this.progressDescription, value); }
         }
 
         private void Progress_ProgressChanged(object sender, int e)
         {
-            this.ProgressInPercents = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
+            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
         }
 
         public void CancelLoading()

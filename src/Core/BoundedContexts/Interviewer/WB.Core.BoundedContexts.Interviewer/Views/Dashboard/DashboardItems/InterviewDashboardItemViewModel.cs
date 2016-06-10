@@ -200,8 +200,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     
                 }
 
-                this.RaiseStartingLongOperation();
-
                 await
                     this.viewModelNavigationService.NavigateToAsync<LoadingViewModel>(
                         new {interviewId = this.InterviewId});
@@ -210,11 +208,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 this.isInterviewReadyToLoad = true;
             }
-        }
-
-        private void RaiseStartingLongOperation()
-        {
-            messenger.Publish(new StartingLongOperationMessage(this));
         }
 
         private void RaiseRemovedDashboardItem()
