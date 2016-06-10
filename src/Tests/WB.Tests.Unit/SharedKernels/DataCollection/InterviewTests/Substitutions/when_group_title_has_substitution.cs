@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 {
     internal class when_group_title_has_substitution : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             group1Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
