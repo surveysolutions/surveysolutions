@@ -14,15 +14,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
     {
         Establish context = () =>
         {
-            question = NSubstitute.Substitute.For<IQuestion>();
+            question = Create.Entity.Question();
             firstFailedCondition = new ValidationCondition {Message = "message 1", Expression = "expresssion 1"};
             secondFailedCondition = new ValidationCondition {Message = "message 3", Expression = "expresssion 3"};
-            question.ValidationConditions.Returns(new List<ValidationCondition>
+            question.ValidationConditions = new List<ValidationCondition>
             {
                 firstFailedCondition,
                 new ValidationCondition {Message = "message 2", Expression = "expresssion 2"},
                 secondFailedCondition
-            });
+            };
 
 
             answeredQuestion = new InterviewQuestion
