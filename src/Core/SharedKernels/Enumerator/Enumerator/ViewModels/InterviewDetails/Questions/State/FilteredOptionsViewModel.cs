@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public event EventHandler OptionsChanged;
 
+        public string Filter { get; set; } = String.Empty;
+
         private Identity questionIdentity;
         private Guid interviewId;
 
@@ -55,7 +57,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.answerNotifier.Init(interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
@@ -63,10 +64,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, null).ToList();
+            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, Filter).ToList();
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
             {
+                this.answerNotifier.Init(interviewId);
                 this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
             }
         }
@@ -74,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
             var interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, null).ToList();
+            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter).ToList();
             var currentOptions = this.Options;
 
             if (!Enumerable.SequenceEqual(currentOptions, newOptions, new CategoricalOptionEqualityComparer()))
