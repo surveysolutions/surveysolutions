@@ -12,6 +12,7 @@ using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,6 +27,19 @@ namespace WB.Tests.Unit.TestFactories
             IStatefulInterviewRepository interviewRepository,
             IAttachmentContentStorage attachmentContentStorage)
             => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
+
+        public DynamicTextViewModel DynamicTextViewModel(
+            ILiteEventRegistry eventRegistry = null, 
+            SubstitutionViewModel substitutionViewModel = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new DynamicTextViewModel(
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                substitutionViewModel ?? Create.ViewModel.SubstitutionViewModel(
+                    interviewRepository: interviewRepository,
+                    questionnaireRepository: questionnaireRepository,
+                    rosterTitleSubstitutionService: rosterTitleSubstitutionService));
 
         public EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
@@ -43,7 +57,28 @@ namespace WB.Tests.Unit.TestFactories
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
+                Create.ViewModel.DynamicTextViewModel(
+                    eventRegistry: eventRegistry,
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository),
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<IEnumeratorSettings>());
+
+        public ErrorMessagesViewModel ErrorMessagesViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null)
+        {
+            var dynamicTextViewModelFactory = Mock.Of<IDynamicTextViewModelFactory>();
+
+            Mock.Get(dynamicTextViewModelFactory)
+                .Setup(factory => factory.CreateDynamicTextViewModel())
+                .Returns(() => Create.ViewModel.DynamicTextViewModel(
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository));
+
+            return new ErrorMessagesViewModel(dynamicTextViewModelFactory);
+        }
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
@@ -61,16 +96,35 @@ namespace WB.Tests.Unit.TestFactories
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>());
 
+        public SubstitutionViewModel SubstitutionViewModel(
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new SubstitutionViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
+                Create.Service.SubstitutionService(),
+                Create.Service.AnswerToStringService(),
+                Create.Service.VariableToUIStringService(),
+                rosterTitleSubstitutionService ?? Create.Fake.RosterTitleSubstitutionService());
+
         public ValidityViewModel ValidityViewModel(
             ILiteEventRegistry eventRegistry = null,
             IStatefulInterviewRepository interviewRepository = null,
             IQuestionnaire questionnaire = null,
             Identity entityIdentity = null)
-            => new ValidityViewModel(
+        {
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+
+            return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IPlainQuestionnaireRepository>(
-                    x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Stub.MvxMainThreadDispatcher());
+                questionnaireRepository,
+                Stub.MvxMainThreadDispatcher(),
+                Create.ViewModel.ErrorMessagesViewModel(
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository));
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
             plainInterviewFileStorageMock=new Mock<IPlainInterviewFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-                .Returns(new[] {Create.Other.InterviewBinaryDataDescriptor()}.ToList());
+                .Returns(new[] {Create.Entity.InterviewBinaryDataDescriptor()}.ToList());
 
             fileSystemAccessor=new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))

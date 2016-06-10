@@ -9,6 +9,16 @@
 @font-italic: @all-not-font-faces, Arial, sans-serif;
 @font-monospace: 'lucidaconsole', "Lucida Console", Monaco, monospace;
 
+@font-size-extrasmall: 10px;
+@font-size-small: 12px;
+@font-size-medium: 16px;
+@font-size-large: 18px;
+@font-size-extralarge: 19px;
+@font-size-huge: 24px;
+@font-size-extrahuge: 48px;
+
+@link-color:#0000EE;
+
 body {
 }
 
@@ -24,14 +34,14 @@ h1, h2, h3, h4, form, p {
 }
 
 h1 {
-    font-size: 48px;
+    font-size: @font-size-extrahuge;
     line-height: 57px;
     font-weight: normal;
     margin-bottom: 30px;
 }
 
 h2 {
-    font-size: 23.5px;
+    font-size: @font-size-huge;
     line-height: 24px;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -39,7 +49,7 @@ h2 {
 
 h3 {
     border-top: 1px solid #000;
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
     text-transform: uppercase;
     padding-top: 8px;
@@ -85,7 +95,7 @@ header {
     margin: 30px 75px 38px 84px;
     display: block;
     overflow: hidden;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 14px;
     /*letter-spacing: 0.3px;*/
 }
@@ -138,7 +148,6 @@ header {
 /*Page-Break*/
 article {
     page-break-after: always;
-    margin-left: -40px;
 }
 /*Start  Questionnaire information and content*/
 .questionnaire_info {
@@ -147,17 +156,17 @@ article {
 }
 
 .questionnaire_title {
-    margin-left: 122px;
+    margin-left: 82px;
     margin-bottom: 20px;
     width: 63%;
-    font-size: 19px;
+    font-size: @font-size-extralarge;
     line-height: 22px;
 }
 
 .table_of_contents {
-    margin: 0 68px;
+    margin: 0 28px;
     margin-bottom: 50px; /*delete?*/
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
 }
 
@@ -194,7 +203,7 @@ article {
 }
 
 .table_of_contents .group-statistics {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
     margin-top: 4px;
 }
@@ -210,14 +219,14 @@ article {
 .footer {
     overflow: hidden;
     margin: 53px 69px 0 125px;
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
 }
 
 .footer-section {
     float: left;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 13px;
     font-family: @font-light;
 }
@@ -225,7 +234,7 @@ article {
 .page_path {
     float: left;
     text-transform: uppercase;
-    font-size: 10.2px;
+    font-size: @font-size-extrasmall;
     line-height: 25px;
 }
 
@@ -236,7 +245,7 @@ article {
 
 /*Start section*/
 .section {
-    padding: 35px 70px 0px 123px;
+    padding: 35px 70px 0px 83px;
     border-bottom: 1px solid #000;
 }
 
@@ -261,7 +270,7 @@ article {
 
 .question-title {
     width: 87%;
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 18px;
     margin-bottom: 10px;
 }
@@ -282,7 +291,7 @@ article {
 .type {
     float: left;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 13px;
     font-family: @font-light;
 }
@@ -293,7 +302,7 @@ article {
 
 .variable_name, .appendix_detail span > span,
 .structure_list, .splitted_variables {
-    font-size: 13px;
+    font-size: @font-size-small;
     line-height: 15px;
     font-family: @font-monospace;
 }
@@ -315,7 +324,7 @@ article {
 
 .answer-editor input + label, .yes_no-option-text {
     display: inline-block;
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 18px;
     min-height: 18px;
 }
@@ -364,12 +373,12 @@ article {
 }
 
 .option > span {
-  font-size: 16px;
+  font-size: @font-size-medium;
   line-height: 18px;
 }
 
 .option .option-value {    
-    font-size: 12px;
+    font-size: @font-size-small;
     padding: 1px 0;
     vertical-align: middle;
     display: inline-block;
@@ -424,7 +433,7 @@ article {
 
 .yes_no_multiselect span {
     display: inline-block;
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 18px;
 }
 
@@ -444,21 +453,20 @@ article {
 input[type=date] {
     line-height: 20px;
     outline: 0;
-    padding: 5px 10px;
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 20px;
     text-transform: uppercase;
 }
 
 .common-info, .container, .generated_by span a {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
     font-family: @font-monospace;
     font-weight: normal;
 }
 
 .generated_by span a {
-    color: #0000EE;
+    color: @link-color;
     text-decoration: none;
 }
 
@@ -474,7 +482,7 @@ input[type=date] {
 }
 
 .section_header .common-info {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     padding-bottom: 0;
 }
@@ -520,7 +528,7 @@ input[type=date] {
 
 .roster_container, .static-text_container, .group_container, .variable_container {
     float: left;
-    font-size: 17.7px;
+    font-size: @font-size-large;
     line-height: 24px;
     width:100%;
 }
@@ -531,12 +539,12 @@ input[type=date] {
 
 .generated_by ul li {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 18px;
 }
 
 .generated_by ul li span {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-right: 15px;
 }
@@ -544,13 +552,13 @@ input[type=date] {
     font-style: italic;
 }
 .static_text, .variable-title {
-    font-size: 16px;
+    font-size: @font-size-medium;
     line-height: 18px;
 }
 
 .breacrumbs {
     text-transform: uppercase;
-    font-size: 9.5px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-right: 3px;
 }
@@ -567,7 +575,7 @@ input[type=date] {
 }
 
 .generated_by {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
 }
 
@@ -584,7 +592,7 @@ input[type=date] {
 .gps sup {
     float: left;
     margin-right: 15px;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
 }
 
 .section .footer, .appendix_section .footer { /*Number of page*/
@@ -593,13 +601,13 @@ input[type=date] {
 }
 
 .more {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-top: 20px;
 }
 
 .more > a {
-    color: #000;
+    color: @link-color;
     display: inline-block;
     padding-bottom: 3px;
 }
@@ -624,7 +632,7 @@ figure img {
 /*Start Appendix*/
 
 .appendix_section {
-    margin: 47px 65px 0 84px;
+    margin: 7px 65px 0 84px;
 }
 
 .appendix_section h2 {
@@ -683,8 +691,7 @@ figure img {
 }
 
 .appendix_detail > a {
-    text-decoration: none;
-    border-bottom: 1px solid #000;
+    text-decoration: none;    
 }
 
 .appendix_detail > a:hover {
@@ -692,7 +699,7 @@ figure img {
 }
 
 .appendix_detail a {
-    color: #000;
+    color: @link-color;
     font-weight: normal;
 }
 

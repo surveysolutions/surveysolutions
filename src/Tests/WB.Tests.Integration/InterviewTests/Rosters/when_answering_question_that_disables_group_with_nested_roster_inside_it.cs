@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -7,7 +6,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -79,7 +77,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid rosterId = Guid.Parse("44444444444444444444444444444444");
         private static readonly Guid groupId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid parentRosterId = Guid.Parse("55555555555555555555555555555555");

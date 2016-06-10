@@ -19,7 +19,7 @@ h1 {
   margin-bottom: 30px;
 }
 h2 {
-  font-size: 23.5px;
+  font-size: 24px;
   line-height: 24px;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -118,7 +118,6 @@ header {
 /*Page-Break*/
 article {
   page-break-after: always;
-  margin-left: -40px;
 }
 /*Start  Questionnaire information and content*/
 .questionnaire_info {
@@ -126,14 +125,14 @@ article {
   margin-bottom: 54px;
 }
 .questionnaire_title {
-  margin-left: 122px;
+  margin-left: 82px;
   margin-bottom: 20px;
   width: 63%;
   font-size: 19px;
   line-height: 22px;
 }
 .table_of_contents {
-  margin: 0 68px;
+  margin: 0 28px;
   margin-bottom: 50px;
   /*delete?*/
   font-size: 18px;
@@ -205,7 +204,7 @@ article {
 /*End number of page*/
 /*Start section*/
 .section {
-  padding: 35px 70px 0px 123px;
+  padding: 35px 70px 0px 83px;
   border-bottom: 1px solid #000;
 }
 .question-container,
@@ -395,7 +394,6 @@ article {
 }
 input[type=date] {
   outline: 0;
-  padding: 5px 10px;
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
@@ -475,7 +473,7 @@ input[type=date] {
 .group_container,
 .variable_container {
   float: left;
-  font-size: 17.7px;
+  font-size: 18px;
   line-height: 24px;
   width: 100%;
 }
@@ -545,7 +543,7 @@ input[type=date] {
   margin-top: 20px;
 }
 .more > a {
-  color: #000;
+  color: #0000EE;
   display: inline-block;
   padding-bottom: 3px;
 }
@@ -568,7 +566,7 @@ figure img {
 }
 /*Start Appendix*/
 .appendix_section {
-  margin: 47px 65px 0 84px;
+  margin: 7px 65px 0 84px;
 }
 .appendix_section h2 {
   font-style: italic;
@@ -615,13 +613,12 @@ figure img {
 }
 .appendix_detail > a {
   text-decoration: none;
-  border-bottom: 1px solid #000;
 }
 .appendix_detail > a:hover {
   border: transparent;
 }
 .appendix_detail a {
-  color: #000;
+  color: #0000EE;
   font-weight: normal;
 }
 .appendix_link:hover {
@@ -710,7 +707,6 @@ input[type=date],
   }
   article + article {
     page-break-before: always;
-    margin-left: -40px;
   }
   ul,
   img,

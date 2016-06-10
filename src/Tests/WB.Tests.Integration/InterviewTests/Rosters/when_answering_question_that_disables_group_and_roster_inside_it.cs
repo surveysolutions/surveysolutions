@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_declare_question_q2_as_valid = () =>
+        It should_declare_question_q2_as_disabled = () =>
             results.QuestionsQ2Disabled.ShouldBeTrue();
 
         It should_declare_roster_as_disabled = () =>

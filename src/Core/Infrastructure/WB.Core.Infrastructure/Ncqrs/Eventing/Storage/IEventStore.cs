@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage
@@ -10,6 +11,7 @@ namespace Ncqrs.Eventing.Storage
     public interface IEventStore
     {
         IEnumerable<CommittedEvent> Read(Guid id, int minVersion);
+        IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<int> progress, CancellationToken cancellationToken);
 
         /// <summary>
         /// Persists the <paramref name="eventStream"/> in the store as a single and atomic commit.

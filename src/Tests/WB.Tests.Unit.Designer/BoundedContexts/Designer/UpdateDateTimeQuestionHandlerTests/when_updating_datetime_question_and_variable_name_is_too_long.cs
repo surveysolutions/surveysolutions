@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -29,21 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
             ));
         };
 
-        Because of = () =>
-            exception = Catch.Exception(() =>
-                questionnaire.UpdateDateTimeQuestion(
-                    questionId: questionId,
-                    title: title,
-                    variableName: longVariableName,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties(),
-                    isTimestamp: false));
+        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -64,5 +52,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
+
+        private static readonly UpdateDateTimeQuestion command = new UpdateDateTimeQuestion(
+           questionnaireId: Guid.Parse("22222222222222222222222222222222"),
+           questionId: questionId,
+           isPreFilled: isPreFilled,
+           scope: scope,
+           responsibleId: responsibleId,
+           validationConditions: new List<ValidationCondition>(),
+           commonQuestionParameters: new CommonQuestionParameters
+           {
+               Title = title,
+               VariableName = longVariableName,
+               VariableLabel = null,
+               EnablementCondition = enablementCondition,
+               HideIfDisabled = false,
+               Instructions = instructions
+           },
+           isTimestamp: false);
     }
 }

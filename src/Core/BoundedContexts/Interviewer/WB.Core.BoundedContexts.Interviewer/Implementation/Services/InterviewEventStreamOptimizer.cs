@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is LinkedOptionsChanged
             || eventPayload is VariablesDisabled
             || eventPayload is VariablesEnabled 
-            || eventPayload is VariablesChanged;
+            || eventPayload is VariablesChanged
+            || eventPayload is SubstitutionTitlesChanged;
 
         private static bool IsFromLastCompletion(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => committedEvent.CommitId == lastCompletionCommitId;

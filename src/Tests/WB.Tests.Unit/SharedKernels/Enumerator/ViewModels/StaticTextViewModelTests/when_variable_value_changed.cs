@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.StaticText.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
+        It should_change_item_title = () => viewModel.Text.PlainText.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
 
         Cleanup cleanup = () => changedCulture.Dispose();
 

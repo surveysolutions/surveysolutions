@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
@@ -24,34 +25,21 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task BackwardCompatibilityAsync()
         {
-            var settingsStorage = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            var settings = settingsStorage.FirstOrDefault();
-            if (settings != null)
-            {
-                await this.MigrateCategoricalOptionsAndSetReadSideVersionTo1(settings, settingsStorage);
-                return;
-            }
-
-            await MoveCategoricalOptionsToPlainStorage();
+            await this.MoveCategoricalOptionsToPlainStorageIfNeeded();
         }
 
-        private async Task MigrateCategoricalOptionsAndSetReadSideVersionTo1(ApplicationSettingsView settings, IAsyncPlainStorage<ApplicationSettingsView> settingsStorage)
+        [Obsolete("Released on the 1st of June. Version 5.9")]
+        private async Task MoveCategoricalOptionsToPlainStorageIfNeeded()
         {
-            var isMigrationNeeded = !settings.ReadSideVersion.HasValue;
+            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
+
+            var isMigrationNeeded = optionsRepository.Any();
 
             if (!isMigrationNeeded)
                 return;
 
-            await this.MoveCategoricalOptionsToPlainStorage();
-            settings.ReadSideVersion = 1;
-            await settingsStorage.StoreAsync(settings);
-        }
-
-        private async Task MoveCategoricalOptionsToPlainStorage()
-        {
             var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
             var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
-            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
             var questionnaires = await questionnaireViewRepository.LoadAllAsync();
             foreach (var questionnaireView in questionnaires)

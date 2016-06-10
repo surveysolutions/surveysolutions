@@ -61,6 +61,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        public static ExpressionLocation CategoricalQuestionFilter(Guid questionId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Question,
+                ExpressionType = ExpressionLocationType.CategoricalFilter,
+                Id = questionId
+            };
+        }
+
         public static ExpressionLocation Variable(Guid variableId)
         {
             return new ExpressionLocation

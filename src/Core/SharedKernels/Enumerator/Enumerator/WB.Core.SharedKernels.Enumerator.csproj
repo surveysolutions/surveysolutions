@@ -88,11 +88,14 @@
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
+    <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
+    <Compile Include="Implementation\Services\EntityWithErrorsViewModelFactory.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InMemoryAsyncPlainStorage.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\OptionsRepository.cs" />
+    <Compile Include="Implementation\Services\QuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
@@ -117,6 +120,7 @@
       <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IAttachmentContentStorage.cs" />
+    <Compile Include="Services\IEntityWithErrorsViewModelFactory.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -132,10 +136,16 @@
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
+    <Compile Include="ViewModels\InterviewDetails\CountOfInvalidEntitiesIncreasedMessage.cs" />
+    <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModelFactory.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TimestampQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\CategoricalQuestionOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>

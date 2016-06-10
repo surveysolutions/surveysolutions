@@ -14,6 +14,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         {
             this.RegisterColumnType(DbType.Object, "text[]");
             this.RegisterColumnType(DbType.Object, "numeric[]");
+            this.RegisterColumnType(DbType.Object, "integer[]");
         }
     }
 
@@ -101,7 +102,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         private static readonly Dictionary<Type, NpgsqlTypes.NpgsqlDbType> TypesMatcher = new Dictionary<Type, NpgsqlDbType>()
         {
             { typeof(string[]), NpgsqlDbType.Array | NpgsqlDbType.Text },
-            { typeof(decimal[]), NpgsqlDbType.Array | NpgsqlDbType.Numeric }
+            { typeof(decimal[]), NpgsqlDbType.Array | NpgsqlDbType.Numeric },
+            { typeof(int[]), NpgsqlDbType.Array | NpgsqlDbType.Integer }
         }; 
         protected virtual NpgsqlTypes.NpgsqlDbType NpgSqlType
         {
@@ -110,7 +112,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 var targetTypeName = this.ReturnedType;
                 if (!TypesMatcher.ContainsKey(targetTypeName))
                 {
-                    throw new KeyNotFoundException($"Add mapping of .net type {targetTypeName} to postgresql type.");
+                    throw new KeyNotFoundException($"Add mapping of .net type {targetTypeName} to postgresql type in {typeof(PostgreSQL91Dialect)}");
                 }
 
                 return TypesMatcher[targetTypeName];

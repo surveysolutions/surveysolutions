@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SetToView(DateTime answerValue)
         {
-            this.Answer = answerValue.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
+            this.Answer = answerValue.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
 
         private string answer;

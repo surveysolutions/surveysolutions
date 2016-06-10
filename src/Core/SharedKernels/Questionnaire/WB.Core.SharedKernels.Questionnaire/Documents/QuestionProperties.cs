@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 
         public bool HideInstructions { get; set; }
         public bool UseFormatting { get; set; }
+
+        public string OptionsFilterExpression { get; set; }
     }
 }

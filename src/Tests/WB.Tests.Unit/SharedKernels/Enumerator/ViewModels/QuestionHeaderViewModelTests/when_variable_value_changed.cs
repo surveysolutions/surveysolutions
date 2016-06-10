@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
+        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
 
         Cleanup cleanup = () => changedCulture.Dispose();
 

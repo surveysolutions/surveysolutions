@@ -16,5 +16,7 @@ namespace WB.Tests.Unit
         public static readonly PublishedEventFactory PublishedEvent = new PublishedEventFactory();
 
         public static readonly OtherFactory Other = new OtherFactory();
+
+        public static readonly FakeFactory Fake = new FakeFactory();
     }
 }

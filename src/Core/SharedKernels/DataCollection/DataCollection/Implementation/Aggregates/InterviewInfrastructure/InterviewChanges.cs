@@ -16,10 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerAsRosterTitle,
             IEnumerable<Identity> changedQuestionTitles,
             IEnumerable<Identity> changedStaticTextTitles,
+            IEnumerable<Identity> changedGroupTitles,
             ChangedLinkedOptions[] linkedQuestionOptionsChanges,
             VariableValueChanges variableValueChanges)
         {
             this.AnswerAsRosterTitle = answerAsRosterTitle;
+            this.ChangedGroupTitles = changedGroupTitles?.ToArray();
             this.ChangedQuestionTitles = changedQuestionTitles?.ToArray();
             this.ChangedStaticTextTitles = changedStaticTextTitles?.ToArray();
 
@@ -35,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public string AnswerAsRosterTitle { set; get; }
+        public Identity[] ChangedGroupTitles { get; set; }
         public Identity[] ChangedQuestionTitles { get; set; }
         public Identity[] ChangedStaticTextTitles { get; set; }
 

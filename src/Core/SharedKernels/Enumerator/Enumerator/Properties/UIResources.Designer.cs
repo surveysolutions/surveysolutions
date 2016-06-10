@@ -298,11 +298,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entities with errors:.
+        /// </summary>
+        public static string Interview_Complete_Entities_With_Errors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Entities_With_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error(s).
         /// </summary>
         public static string Interview_Complete_Errors {
             get {
                 return ResourceManager.GetString("Interview_Complete_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First {0} entities with errors:.
+        /// </summary>
+        public static string Interview_Complete_First_n_Entities_With_Errors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_First_n_Entities_With_Errors", resourceCulture);
             }
         }
         
@@ -735,6 +753,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string LoginTitleText {
             get {
                 return ResourceManager.GetString("LoginTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait until the current operation is completed.
+        /// </summary>
+        public static string Messages_WaitPendingOperation {
+            get {
+                return ResourceManager.GetString("Messages_WaitPendingOperation", resourceCulture);
             }
         }
         

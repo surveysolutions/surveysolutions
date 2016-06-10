@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
 			{
 #>
-				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
 <# 
 			}
 #>		
@@ -49,13 +49,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			IDictionary<string, IExpressionExecutableV10> interviewScopes, 
 			Dictionary<string, List<string>> siblingRosters, 
 			IInterviewProperties interviewProperties)
-		 :base(interviewScopes, siblingRosters, interviewProperties){		<#
-			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
-			{
+		 :base(interviewScopes, siblingRosters, interviewProperties)
+		 {		
+<#
+		foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
+		{
 #>
-				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
 <# 
-			}
+		}
 #>		}
 
 		protected override bool HasParentScropeRosterId(Guid rosterId) => IdOf.parentScopeMap.ContainsKey(rosterId);
@@ -185,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			}
 #>
 		};
-
+		
 		public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
 		{
 <#			//questions
