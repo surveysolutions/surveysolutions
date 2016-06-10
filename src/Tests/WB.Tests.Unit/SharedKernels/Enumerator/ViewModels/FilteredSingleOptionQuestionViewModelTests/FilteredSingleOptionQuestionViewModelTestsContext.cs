@@ -34,6 +34,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 );
         }
 
+        protected static FilteredOptionsViewModel SetupFilteredOptionsViewModel(List<CategoricalOption> optionList = null)
+        {
+            var options = optionList ?? new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "abc"),
+                Create.Entity.CategoricalQuestionOption(2, "bbc"),
+                Create.Entity.CategoricalQuestionOption(3, "bbc"),
+                Create.Entity.CategoricalQuestionOption(4, "bbaé"),
+                Create.Entity.CategoricalQuestionOption(5, "cccé"),
+            };
+
+            Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+
+            filteredOptionsViewModel
+                .Setup(x => x.Options)
+                .Returns(options);
+
+            return filteredOptionsViewModel.Object;
+        }
+
         protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, List<CategoricalOption> optionList = null)
         {
             var options = optionList ?? new List<CategoricalOption>
