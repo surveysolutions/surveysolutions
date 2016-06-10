@@ -3,7 +3,7 @@ using System.Net;
 using System.Web.Http;
 using Machine.Specifications;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {

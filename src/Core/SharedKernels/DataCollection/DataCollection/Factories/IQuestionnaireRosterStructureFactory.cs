@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Supervisor.Factories
+namespace WB.Core.SharedKernels.DataCollection.Factories
 {
     public interface IQuestionnaireRosterStructureFactory
     {

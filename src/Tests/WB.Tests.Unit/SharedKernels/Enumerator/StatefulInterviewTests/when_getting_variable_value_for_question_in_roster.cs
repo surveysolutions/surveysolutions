@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId);
 
             IPlainQuestionnaireRepository questionnaireRepository =
-                Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                     Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);

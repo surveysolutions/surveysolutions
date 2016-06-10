@@ -50,16 +50,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private IMvxCommand signOutCommand;
-        public IMvxCommand SignOutCommand
-        {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
-        }
+        private IMvxAsyncCommand signOutCommand;
+        public IMvxAsyncCommand SignOutCommand => this.signOutCommand ?? (this.signOutCommand = new MvxAsyncCommand(this.SignOutAsync));
 
         private async Task SignOutAsync()
         {
             await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
 
         public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)

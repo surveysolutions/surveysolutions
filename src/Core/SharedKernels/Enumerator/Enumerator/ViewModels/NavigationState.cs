@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -12,10 +11,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class NavigationState
     {
-        private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IUserInteractionService userInteractionServiceAwaiter;
-        private readonly IUserInterfaceStateService userInterfaceStateService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         protected NavigationState()
         {
@@ -23,8 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual event GroupChanged ScreenChanged;
         public virtual event BeforeGroupChanged BeforeScreenChanged;
-
-        private bool isNavigationStarted;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
@@ -32,21 +27,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
-        protected NavigationState(IUserInteractionService userInteractionServiceAwaiter)
-        {
-            this.userInteractionServiceAwaiter = userInteractionServiceAwaiter;
-        }
-
         public NavigationState(
-            ICommandService commandService, 
             IStatefulInterviewRepository interviewRepository,
-            IUserInteractionService userInteractionServiceAwaiter, 
-            IUserInterfaceStateService userInterfaceStateService)
+            IViewModelNavigationService viewModelNavigationService)
         {
-            this.commandService = commandService;
             this.interviewRepository = interviewRepository;
-            this.userInteractionServiceAwaiter = userInteractionServiceAwaiter;
-            this.userInterfaceStateService = userInterfaceStateService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public void Init(string interviewId, string questionnaireId)
@@ -60,47 +46,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
-            if (this.isNavigationStarted)
-                return;
-
-            try
-            {
-                this.isNavigationStarted = true;
-
-                await this.WaitPendingOperationsCompletion();
-
+            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
+            if (!this.viewModelNavigationService.HasPendingOperations)
                 this.NavigateTo(navigationItem);
-            }
-            finally
-            {
-                this.isNavigationStarted = false;
-            }
         }
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            if (this.isNavigationStarted)
-                return;
-
-            try
-            {
-                this.isNavigationStarted = true;
-
-                await this.WaitPendingOperationsCompletion();
-
+            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
+            if (!this.viewModelNavigationService.HasPendingOperations)
                 this.NavigateBack(navigateToIfHistoryIsEmpty);
-            }
-            finally
-            {
-                this.isNavigationStarted = false;
-            }
-        }
-
-        private async Task WaitPendingOperationsCompletion()
-        {
-            await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-            await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
-            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
         }
 
         private void NavigateTo(NavigationIdentity navigationItem)

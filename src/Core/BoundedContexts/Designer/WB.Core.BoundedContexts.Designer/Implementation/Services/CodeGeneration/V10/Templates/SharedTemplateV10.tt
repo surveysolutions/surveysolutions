@@ -8,6 +8,25 @@
 <#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model" #> 
 
 <#+
+void ConditionMethodsInLevelConstructor(List<ConditionMethodAndState> methods)
+{
+	foreach (var method in methods) 
+    {
+		if (method.IsAnswerVerifier)
+		{
+#>
+		_conditionExpressions.Add(AnswerVerifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, () => <#= method.MemberName#>, (<#= method.Type#> val) => {<#= method.MemberName#>  = val; }));
+<#+
+		}
+		else
+		{
+#>
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));
+<#+
+        }
+	}
+}
+
 void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
 {
 	foreach (var @group in groups) 
@@ -37,10 +56,10 @@ void StaticTextsStatesInLevelConstructor(List<StaticTextTemplateModel> staticTex
 <#+ 
 			}
 #>
-			ValidationExpressionDescriptions.Add(new Identity(IdOf.<#=staticText.IdName#>, rosterVector),
-				ValidationDescription.ForStaticText(
-					validations: <#=staticText.IdName#>__allValidations));		 
-<#+ 
+		ValidationExpressionDescriptions.Add(new Identity(IdOf.<#=staticText.IdName#>, rosterVector),
+		ValidationDescription.ForStaticText(
+				validations: <#=staticText.IdName#>__allValidations));		 
+<#+
 		}
 	}
 }
@@ -52,48 +71,47 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 #>
 		EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
 <#+
-							   
 		if(question.HasAnyValidation())
 		{
 #>
 			var <#= question.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
-
-<#+ 
+<#+
 			foreach (var @validationExp in question.ValidationExpressions.Where(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression))) 
 			{
 #>
-				<#= question.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);				
-<#+ 
+				<#= question.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);
+<#+
 			}
 #>
+		ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
+		ValidationDescription.ForQuestion(
+			preexecutionCheck: () => this.IsAnswerEmpty(<#=question.VariableName#>),
+			validations: <#= question.IdName#>__allValidations));
 
-			ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
-				ValidationDescription.ForQuestion(
-					preexecutionCheck: () => this.IsAnswerEmpty(<#=question.VariableName#>),
-					validations: <#= question.IdName#>__allValidations));		 
-
-<#+ 
+<#+
 		}
-
 		if (question.IsMultiOptionYesNoQuestion)
 		{
 #>
-			AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.MemberName#>.All,val); });
-<#+ 
-		}else{
+		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.MemberName#>.All,val); });
+<#+
+		}
+		else
+		{
 #>
-			AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });
-<#+ 
+		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });
+<#+
 		}
 	}
 }
 void VariablesStatesInLevelConstructor(List<VariableTemplateModel> variables)
 {
 	foreach (var variable in variables)
-	{#>
+	{
+#>
 		EnablementStates.Add(<#=variable.StateName#>.ItemId, <#=variable.StateName#>);
 		AddVariableValueGetterToMap(IdOf.<#=variable.IdName#>, ()=><#=variable.VariableName#>);
-		<#+ 
+<#+ 
 	}
 }
 void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
@@ -102,7 +120,7 @@ void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
 	{
 #>
 		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
-<#+ 
+<#+
 	}
 }
 
@@ -154,7 +172,6 @@ void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
 	public <#=question.TypeName#> <#=question.VariableName#>
 	{
 		get { return <#=question.StateName#>.State != State.Disabled ? this.<#=question.MemberName#> : null; }
-			
 	}
 <#+
 	}
@@ -173,7 +190,7 @@ void VariablesStateDefinitions(List<VariableTemplateModel> variables)
 				return null;
 			else
 				return <#=variable.ExpressionMethodName#>(); 
-		}			
+		}
 	}
 <#+
 	}
@@ -204,6 +221,16 @@ void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
 	{
 		get { return LookupTables.<#= table.TableName #>; }
 	}
+<#+
+	}
+}
+
+void CategoricalOptionsFilterMap(List<QuestionTemplateModel> questionsWithOptionsFilter)
+{
+	foreach (var question in questionsWithOptionsFilter)
+	{
+#>
+		OptionFiltersMap.Add(<#=question.StateName#>.ItemId, <#=question.OptionsFilterMethodName#>);
 <#+
 	}
 }

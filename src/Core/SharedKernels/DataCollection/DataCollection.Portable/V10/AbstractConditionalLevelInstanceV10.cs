@@ -10,7 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         where T : IExpressionExecutableV10
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
-       
+
+        protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
+
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
@@ -74,6 +76,45 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        private bool GetOptionFilterResult(Func<int, bool> optionFilter, int optionValue)
+        {
+            try
+            {
+                return optionFilter(optionValue);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
+        {
+            return () =>
+            {
+                var previousAnswer = getAnswer();
+                if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
+                {
+                    setAnswer(null);
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
+        {
+            return () =>
+            {
+                decimal[] previousAnswer = getAnswer();
+                if (previousAnswer == null || previousAnswer.Length == 0)
+                    return;
+
+                var actualAnswer = previousAnswer.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)));
+
+                setAnswer(actualAnswer.ToArray());
+            };
+        }
+
         protected new Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
         {
             return () =>
@@ -89,7 +130,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected void UpdateAllNestedItemsStateAndPropagateStateOnRosters(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
         {
-            if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
+            var hasNoStructureDependencies = !structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any();
+            
+            if (hasNoStructureDependencies) return;
 
             var stack = new Queue<Guid>(structureDependencies[itemId]);
             while (stack.Any())
@@ -133,6 +176,25 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     {
                         stack.Enqueue(dependentQuestionId);
                     }
+                }
+            }
+        }
+
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options)
+        {
+            if (!OptionFiltersMap.ContainsKey(questionId))
+            {
+                foreach (var option in options)
+                    yield return option;
+            }
+
+            var filter = OptionFiltersMap[questionId];
+            foreach (var option in options)
+            {
+                var isOptionSatisfyFilter = GetOptionFilterResult(filter, option.Value);
+                if (isOptionSatisfyFilter)
+                {
+                    yield return option;
                 }
             }
         }

@@ -120,4 +120,7 @@
   <data name="ExcessiveRequestAttemptsDetected" xml:space="preserve">
     <value>Excessive Request Attempts Detected.</value>
   </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Please try again later</value>
+  </data>
 </root>

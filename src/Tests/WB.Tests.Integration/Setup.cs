@@ -55,22 +55,26 @@ namespace WB.Tests.Integration
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
                 x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
 
-            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == interview);
+            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);
 
             var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(ServiceLocator.Current);
 
-            Func<SideBarSectionViewModel> sideBarSectionViewModel = () =>
-            {
-                var barSectionViewModel = new SideBarSectionViewModel(
+            var navigationState = Mock.Of<NavigationState>(_ => _.InterviewId == interview.Id.FormatGuid());
+
+            Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
+                => new SideBarSectionViewModel(
                     interviewsRepository,
                     questionnaireRepository,
                     new SubstitutionService(),
                     new LiteEventRegistry(),
                     sideBarSectionViewModelsFactory,
-                    Mock.Of<IMvxMessenger>());
-                barSectionViewModel.NavigationState = Mock.Of<NavigationState>();
-                return barSectionViewModel;
-            };
+                    Mock.Of<IMvxMessenger>(),
+                    Create.DynamicTextViewModel(
+                        questionnaireRepository: questionnaireRepository,
+                        interviewRepository: interviewsRepository))
+                {
+                    NavigationState = navigationState,
+                };
 
             Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
@@ -84,7 +88,7 @@ namespace WB.Tests.Integration
                 eventRegistry: new LiteEventRegistry(),
                 modelsFactory: sideBarSectionViewModelsFactory);
 
-            sidebarViewModel.Init("", "", Mock.Of<NavigationState>());
+            sidebarViewModel.Init("", "", navigationState);
 
             return sidebarViewModel;
         }

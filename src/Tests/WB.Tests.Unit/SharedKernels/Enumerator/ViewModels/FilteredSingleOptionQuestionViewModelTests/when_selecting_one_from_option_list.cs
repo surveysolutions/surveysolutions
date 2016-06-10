@@ -34,16 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+            var filteredOptionsViewModel = SetupFilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object,
                 principal: principal,
                 interviewRepository: interviewRepository,
-                optionsRepository: optionsRepository);
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
             var navigationState = Create.Other.NavigationState();
+            
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 

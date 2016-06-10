@@ -1,8 +1,12 @@
 using Android.App;
 using Android.Content;
 using Android.Views;
+using Java.Util;
+using Microsoft.Practices.ServiceLocation;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
@@ -34,22 +38,30 @@ namespace WB.UI.Tester.Activities
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected override void OnMenuItemSelected(int resourceId)
+        protected override async void OnMenuItemSelected(int resourceId)
         {
+            var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
+                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
+                    if (!viewModelNavigationService.HasPendingOperations)
+                    {
+                        Intent intent = new Intent(this, typeof(PrefsActivity));
+                        this.StartActivity(intent);
+                    }
                     break;
                 case Resource.Id.interview_signout:
-                    this.ViewModel.SignOutCommand.Execute();
-                    this.Finish();
+                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
+                    if (!viewModelNavigationService.HasPendingOperations)
+                    {
+                        this.ViewModel.SignOutCommand.Execute();
+                        this.Finish();
+                    }
                     break;
-
             }
         }
     }

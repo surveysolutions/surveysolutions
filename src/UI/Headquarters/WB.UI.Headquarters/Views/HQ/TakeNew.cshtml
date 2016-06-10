@@ -69,7 +69,7 @@
     <script type="text/html" id="SingleOptionRegular">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <!-- ko foreach: options -->
                 <div class="radio">
                     <label data-bind='attr: { "for": optionFor }'>
@@ -86,7 +86,7 @@
     <script type="text/html" id="SingleOptionFiltered">
         <div class="form-group" data-bind="validationElement: value">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="input-group">
                     <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}, shouldFitToParent: false, showLoadMore: false}, valueupdate:'afterkeydown'" type="text" />
                     <div class="input-group-btn" data-bind="click: function(){ selectedOption(undefined); }">
@@ -100,7 +100,7 @@
     <script type="text/html" id="MultyOption">
         <div class="form-group" data-bind="validationElement: selectedOptions">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <!-- ko foreach: options -->
                 <div class="checkbox">
                     <label data-bind='attr: { "for": optionFor }'>
@@ -116,7 +116,7 @@
     <script type="text/html" id="Numeric">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
                     <input class="form-control" type="text" data-bind="numericformatter: selectedOption, useFormatting: settings().UseFormatting, valueUpdate: 'afterkeydown'" />
@@ -127,22 +127,43 @@
 
     </script>
     <script type="text/html" id="DateTime">
+        <!-- ko ifnot: settings().IsTimestamp -->
+        <div data-bind="template: { name: 'DateTimeRegular' }"></div>
+        <!-- /ko -->
+        <!-- ko if: settings().IsTimestamp -->
+        <div data-bind="template: { name: 'DateTimeTimestamp' }"></div>
+    </script>
+
+    <script type="text/html" id="DateTimeRegular">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
+                    <input class="form-control" type="text" data-date-format="yyyy-mm-dd" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
         </div>
-
     </script>
-    <script type="text/html" id="AutoPropagate">
+    <script type="text/html" id="DateTimeTimestamp">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
+                <input type="text" class="form-control" disabled="disabled" data-bind="value: selectedOption">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-info" type="button" data-bind="click: $root.answerTimestampQuestion" title="@TakeNewInterview.TimestampBtnText">
+                    <i class="glyphicon glyphicon-time"></i>
+                </button>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/html" id="AutoPropagate">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
+            <div class="col-sm-3">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
                     <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
@@ -155,7 +176,7 @@
     <script type="text/html" id="Text">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="input-group">
                     <span class="input-group-addon">T</span>
                     <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask" />

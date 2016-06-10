@@ -18,12 +18,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
             Mock<IPlainQuestionnaireRepository> questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
 
-            return new SideBarSectionViewModel(interviewRepository.Object, 
+            return new SideBarSectionViewModel(
+                interviewRepository.Object, 
                 questionnaireRepository.Object, 
                 Create.Service.SubstitutionService(), 
                 Create.Service.LiteEventRegistry(), 
                 Stub.SideBarSectionViewModelsFactory(),
-                Mock.Of<IMvxMessenger>());
+                Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel(
+                    interviewRepository: interviewRepository.Object,
+                    questionnaireRepository: questionnaireRepository.Object));
         }
     }
 }

@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
-            "rowcode", "rowname", "rowindex", "roster", "id", "parentid1", "parentid2","parentid3", "parentid4", "self", "state", "quest"
+            "rowcode", "rowname", "rowindex", "roster", "id", "parentid1", "parentid2","parentid3", "parentid4", "self", "state", "quest", "optioncode"
         };
         private static string[] reservedKeywords;
 

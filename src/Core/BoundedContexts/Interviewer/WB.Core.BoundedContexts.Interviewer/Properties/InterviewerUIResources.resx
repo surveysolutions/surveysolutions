@@ -587,4 +587,16 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
     <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website</value>
   </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>The tablet is going to vibrate when an answer didn't pass the validation</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibrate when invalid answer is given</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Loading... {0}%</value>
+  </data>
 </root>

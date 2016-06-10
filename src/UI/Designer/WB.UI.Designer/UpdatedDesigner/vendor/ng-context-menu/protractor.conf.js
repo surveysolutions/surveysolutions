@@ -1,12 +1,15 @@
-var GulpSelenium = require('gulp-selenium');
-var gulpSelenium = GulpSelenium();
-
-exports.config = {
-  seleniumServerJar: gulpSelenium.path,
-  chromeDriver: gulpSelenium.chromeDriverPath,
-  //seleniumAddress: 'http://localhost:4444/wd/hub', // Using JAR instead of address
+var outputDir = 'test-result';
+var config = {
   capabilities: {
-    'browserName': 'phantomjs'
+    browserName: 'firefox'
+  },
+  onPrepare: function() {
+    require('jasmine-reporters');
+    jasmine.getEnv().addReporter(
+      new jasmine.JUnitXmlReporter(outputDir, true, true)
+    );
   },
   specs: ['test/ui/**/*.spec.js']
 };
+
+exports.config = config;

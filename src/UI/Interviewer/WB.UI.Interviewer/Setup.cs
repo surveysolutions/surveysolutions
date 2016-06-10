@@ -80,6 +80,7 @@ namespace WB.UI.Interviewer
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
+                {typeof(LoadingViewModel),typeof(LoadingActivity) },
                 {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},

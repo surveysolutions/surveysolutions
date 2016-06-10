@@ -73,6 +73,7 @@
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
+                $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
 
                 $scope.activeQuestion.validationConditions = question.validationConditions;
 
@@ -335,7 +336,9 @@
                 if (_.isUndefined($scope.questionForm.stringifiedOptions) || !$scope.questionForm.stringifiedOptions.$valid) {
                     return;
                 }
-                $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
+                if ($scope.activeQuestion.stringifiedOptions) {
+                    $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
+                }
                 $scope.activeQuestion.useListAsOptionsEditor = true;
             };
 
@@ -371,10 +374,10 @@
                 }
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
+                    $scope.activeQuestion.optionsFilterExpression = null;
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;
-                    $scope.activeQuestion.linkedFilterExpression = null;
                 }
             });
             $scope.$watch('activeQuestion.yesNoView', function (newValue) {
@@ -388,6 +391,7 @@
                     if (newValue) {
                         if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
                             $scope.activeQuestion.questionScope = 'Interviewer';
+                            $scope.activeQuestion.optionsFilterExpression = null;
                         }
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;

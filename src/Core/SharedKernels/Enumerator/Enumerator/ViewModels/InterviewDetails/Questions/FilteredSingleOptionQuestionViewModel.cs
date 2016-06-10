@@ -8,6 +8,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -32,16 +34,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private const int SuggestionsMaxCount = 15;
+
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly IOptionsRepository optionsRepository;
+        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         private Identity questionIdentity;
         private Guid interviewId;
+        protected IStatefulInterview interview;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public List<FilteredComboboxItemViewModel> Options { get; set; }
+        private List<FilteredComboboxItemViewModel> Options { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -49,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
-            IOptionsRepository optionsRepository)
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
@@ -60,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
-            this.optionsRepository = optionsRepository;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -71,33 +76,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
-
+            interview = this.interviewRepository.Get(interviewId);
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, this.questionIdentity.Id)
-                .Select(this.ToViewModel)
-                .ToList();
+            this.UpdateOptionsState();
+
+            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void UpdateOptionsState()
+        {
+            var answerModel = this.interview.GetSingleOptionAnswer(questionIdentity);
+
+            //should be removed
+            this.Options = this.filteredOptionsViewModel.Options.Select(this.ToViewModel).ToList();
 
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                FilteredComboboxItemViewModel answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
+                var answerOption = this.Options.SingleOrDefault(o => o.Value == selectedValue.Value);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
-                this.AutoCompleteSuggestions = this.Options;
+                this.UpdateAutoCompleteList();
             }
-            this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private FilteredComboboxItemViewModel ToViewModel(CategoricalQuestionOption model)
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            this.UpdateOptionsState();
+            this.RaisePropertyChanged(() => Options);
+        }
+
+        private FilteredComboboxItemViewModel ToViewModel(CategoricalOption model)
         {
             var optionViewModel = new FilteredComboboxItemViewModel
             {
@@ -170,19 +188,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set
             {
                 this.filterText = value;
+                this.filteredOptionsViewModel.Filter = value;
 
-                var list = this.GetSuggestionsList(this.filterText).ToList();
-
-                if (list.Any())
-                {
-                    this.AutoCompleteSuggestions = list;
-                }
-                else
-                {
-                    this.SetSuggestionsEmpty();
-                }
+                this.UpdateAutoCompleteList();
 
                 this.RaisePropertyChanged();
+            }
+        }
+
+        private void UpdateAutoCompleteList()
+        {
+            var list = this.GetSuggestionsList(this.filterText).ToList();
+
+            if (list.Any())
+            {
+                this.AutoCompleteSuggestions = list;
+            }
+            else
+            {
+                this.SetSuggestionsEmpty();
             }
         }
 
@@ -204,7 +228,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            foreach (var model in this.Options)
+            var options = this.filteredOptionsViewModel.Options
+                .Select(this.ToViewModel)
+                .Take(SuggestionsMaxCount)
+                .ToList();
+
+            foreach (var model in options)
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;
@@ -294,6 +323,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             this.QuestionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
         }

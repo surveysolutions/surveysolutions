@@ -957,13 +957,15 @@ namespace WB.Tests.Unit.Designer
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
-        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, 
+            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
                 variable: variable,
                 title: title,
-                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
+                fixedRosterTitles: fixedRosterTitles);
 
         public static Group Roster(
             Guid? rosterId = null,
@@ -1046,7 +1048,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
+            bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false)
         {
             return new SingleQuestion
             {
@@ -1060,7 +1062,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                Featured = isPrefilled,
+                Properties = {OptionsFilterExpression = optionsFilter}
             };
         }
 

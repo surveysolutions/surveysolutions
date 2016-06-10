@@ -72,7 +72,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
+            expressionState.CategoricalOptionsFilterModels = BuildCategoricalOptionsFilterModels(codeGenerationSettings, expressionState);
+
             return expressionState;
+        }
+
+        public static Dictionary<string, OptionsFilterConditionDescriptionModel> BuildCategoricalOptionsFilterModels(
+            CodeGenerationSettings codeGenerationSettings, 
+            QuestionnaireExpressionStateModel questionnaireTemplate)
+        {
+            var methodModels = new Dictionary<string, OptionsFilterConditionDescriptionModel>();
+            foreach (var question in questionnaireTemplate.AllQuestions)
+            {
+                if (question.HasOptionsFilter)
+                {
+                    methodModels.Add(ExpressionLocation.CategoricalQuestionFilter(question.Id).Key, new OptionsFilterConditionDescriptionModel(
+                        question.ParentScopeTypeName,
+                        question.OptionsFilterMethodName,
+                        codeGenerationSettings.Namespaces,
+                        question.OptionsFilterExpression,
+                        question.VariableName));
+                }
+            }
+            return methodModels;
         }
 
         public static Dictionary<string,ConditionDescriptionModel> BuildMethodModels(
@@ -219,6 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
             List<StaticTextTemplateModel> staticTextsWithConditions = staticTexts.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
             List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Condition)).ToList();
+            List<QuestionTemplateModel> questionsWithOptionsFilter = questions.Where(q => !string.IsNullOrWhiteSpace(q.OptionsFilterExpression)).ToList();
             List<RosterTemplateModel> rostersWithConditions = (rosters ?? new List<RosterTemplateModel>()).Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList();
 
             Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
@@ -226,6 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.ConditionMethodName, g.StateName)));
             rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.ConditionsMethodName, r.StateName)));
             questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.ConditionMethodName, q.StateName)));
+            questionsWithOptionsFilter.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.OptionsFilterMethodName, q.StateName, true, q.MemberName, q.TypeName)));
 
             var itemsSorted = new List<ConditionMethodAndState>();
 
@@ -512,19 +536,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private QuestionTemplateModel CreateQuestionTemplateModel(
             QuestionnaireDocument questionnaireDoc,
-            IQuestion childAsIQuestion,
+            IQuestion question,
             string rosterScopeName,
             string parentScopeTypeName)
         {
-            string varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption)
-                ? childAsIQuestion.StataExportCaption
-                : "__" + childAsIQuestion.PublicKey.FormatGuid();
+            string varName = !String.IsNullOrEmpty(question.StataExportCaption)
+                ? question.StataExportCaption
+                : "__" + question.PublicKey.FormatGuid();
 
-            var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
-                ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
-                : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);
+            var condition = question.CascadeFromQuestionId.HasValue
+                ? this.GetConditionForCascadingQuestion(questionnaireDoc, question.PublicKey)
+                : this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaireDoc.Macros.Values);
 
-            var validationExpressions = childAsIQuestion
+            var validationExpressions = question
                 .ValidationConditions
                 .Select((validationCondition, index)
                     => new ValidationExpressionModel(
@@ -533,27 +557,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         index))
                 .ToList();
 
-            var question = new QuestionTemplateModel
+            var optionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaireDoc.Macros.Values);
+
+            var questionModel = new QuestionTemplateModel
             {
-                Id = childAsIQuestion.PublicKey,
+                Id = question.PublicKey,
                 VariableName = varName,
                 Condition = condition,
-                TypeName = GenerateQuestionTypeName(childAsIQuestion),
+                TypeName = GenerateQuestionTypeName(question),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
-                ValidationExpressions = validationExpressions
+                ValidationExpressions = validationExpressions,
+                OptionsFilterExpression = optionsFilterExpression
             };
 
-            if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
+            if (IsMultiQuestion(question))
             {
-                var multyOptionsQuestion = childAsIQuestion as IMultyOptionsQuestion;
-                question.IsMultiOptionYesNoQuestion = multyOptionsQuestion.YesNoView;
-                if (question.IsMultiOptionYesNoQuestion)
+                var multyOptionsQuestion = question as IMultyOptionsQuestion;
+                questionModel.IsMultiOptionYesNoQuestion = multyOptionsQuestion.YesNoView;
+                if (questionModel.IsMultiOptionYesNoQuestion)
                 {
-                    question.AllMultioptionYesNoCodes = multyOptionsQuestion.Answers.Select(x => x.AnswerValue).ToList();
+                    questionModel.AllMultioptionYesNoCodes = multyOptionsQuestion.Answers.Select(x => x.AnswerValue).ToList();
                 }
             }
-            return question;
+            
+            return questionModel;
+        }
+
+        private static bool IsMultiQuestion(IQuestion question)
+        {
+            return question.QuestionType == QuestionType.MultyOption && question is IMultyOptionsQuestion;
+        }
+
+        private static bool IsSingleQuestion(IQuestion question)
+        {
+            return question.QuestionType == QuestionType.SingleOption && question is SingleQuestion;
         }
 
         private RosterTemplateModel CreateRosterTemplateModel(
@@ -684,12 +722,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
             var staticTextsWithConditions = questionnaireDocument.GetEntitiesByType<IStaticText>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
             var questionsWithCondition = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var questionsWithOptionsFilter = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.Properties.OptionsFilterExpression));
 
             Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames));
 
             staticTextsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
 
             questionsWithCondition.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
+
+            questionsWithOptionsFilter.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.Properties.OptionsFilterExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
 
             var cascadingQuestions = questionnaireDocument.GetEntitiesByType<SingleQuestion>().Where(x => x.CascadeFromQuestionId.HasValue);
 
