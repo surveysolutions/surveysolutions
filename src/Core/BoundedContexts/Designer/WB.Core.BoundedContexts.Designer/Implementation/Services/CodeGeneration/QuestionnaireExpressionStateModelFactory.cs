@@ -46,10 +46,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel(),
                 LookupTables = BuildLookupTableModels(questionnaire).ToList(),
                 StructuralDependencies = BuildStructuralDependencies(questionnaire),
-                ConditionalDependencies = BuildConditionalDependencies(questionnaire)
+                ConditionalDependencies = BuildConditionalDependencies(questionnaire),
+                RosterDependencies = BuildRosterDependencies(questionnaire),
             };
 
-            expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
+            expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(
+                expressionState.ConditionalDependencies, 
+                expressionState.StructuralDependencies,
+                expressionState.RosterDependencies);
 
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
 
@@ -76,6 +80,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return expressionState;
         }
+
+        
 
         public static Dictionary<string, OptionsFilterConditionDescriptionModel> BuildCategoricalOptionsFilterModels(
             CodeGenerationSettings codeGenerationSettings, 
@@ -266,15 +272,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         public static List<Guid> BuildConditionsPlayOrder(
-            Dictionary<Guid, List<Guid>> conditionalDependencies,
-            Dictionary<Guid, List<Guid>> structuralDependencies)
+            Dictionary<Guid, List<Guid>> conditionalDependencies, 
+            Dictionary<Guid, List<Guid>> structuralDependencies, 
+            Dictionary<Guid, List<Guid>> rosterDependencies)
         {
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
 
             IEnumerable<Guid> allIdsInvolvedInExpressions =
-                structuralDependencies.Keys.Union(conditionalDependencies.Keys)
+                structuralDependencies.Keys
+                    .Union(conditionalDependencies.Keys)
+                    .Union(rosterDependencies.Keys)
                     .Union(structuralDependencies.SelectMany(x => x.Value))
                     .Union(conditionalDependencies.SelectMany(x => x.Value))
+                    .Union(rosterDependencies.SelectMany(x => x.Value))
                     .Distinct();
 
             allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
@@ -291,6 +301,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     if (!mergedDependencies[dependency].Contains(conditionalDependency.Key))
                     {
                         mergedDependencies[dependency].Add(conditionalDependency.Key);
+                    }
+                }
+            }
+
+            foreach (var rosterDependency in rosterDependencies)
+            {
+                foreach (var dependency in rosterDependency.Value)
+                {
+                    if (!mergedDependencies[rosterDependency.Key].Contains(dependency))
+                    {
+                        mergedDependencies[rosterDependency.Key].Add(dependency);
                     }
                 }
             }
@@ -709,14 +730,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return $"!IsAnswerEmpty({parentQuestion.StataExportCaption})" + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
         }
 
+        private Dictionary<Guid, List<Guid>> BuildRosterDependencies(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
+                .Where(x => x.RosterSizeQuestionId.HasValue)
+                .GroupBy(x => x.RosterSizeQuestionId.Value)
+                .ToDictionary(x => x.Key, x => x.Select(r => r.PublicKey).ToList());
+        }
+
         public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var allGroups = questionnaireDocument.GetAllGroups().ToList();
-            Dictionary<string, Guid> variableNames = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.StataExportCaption)).ToDictionary(q => q.StataExportCaption, q => q.PublicKey);
+            Dictionary<string, Guid> variableNames = questionnaireDocument.GetEntitiesByType<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))
+                .ToDictionary(q => q.StataExportCaption, q => q.PublicKey);
 
             foreach (var roster in allGroups.Where(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName)))
             {
-                variableNames.Add(roster.VariableName, questionnaireDocument.PublicKey);
+                variableNames.Add(roster.VariableName, roster.PublicKey);
             }
 
             var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));

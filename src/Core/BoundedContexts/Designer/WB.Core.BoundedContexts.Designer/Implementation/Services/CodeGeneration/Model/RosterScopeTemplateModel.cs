@@ -55,5 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> RostersInScope { set; get; }
 
         public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
+
+        public string IdName => RostersInScope.FirstOrDefault()?.IdName;
     }
 }
