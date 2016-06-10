@@ -359,16 +359,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            bool isMultiOptionalQuestion = question is MultyOptionsQuestion;
-            bool isSingleOptionalQuestion = question is SingleQuestion;
-
-            if (isMultiOptionalQuestion || isSingleOptionalQuestion)
+            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
             }
 
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
-
         }
 
         private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
