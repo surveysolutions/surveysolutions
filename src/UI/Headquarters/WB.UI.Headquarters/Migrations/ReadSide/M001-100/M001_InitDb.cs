@@ -34,8 +34,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("variable").AsString().Nullable()
                 .WithColumn("roster").AsString().Nullable()
                 .WithColumn("rostervector").AsCustom("numeric[]").Nullable()
-                .WithColumn("comment").AsString().Nullable()
-                ;
+                .WithColumn("comment").AsString().Nullable();
 
             Create.Table("interviewdataexportrecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
@@ -67,7 +66,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("questionnaireversion").AsInt64().Nullable();
 
             Create.Table("interviewcommentedstatuses")
-                .WithColumn("interviewid").AsString(255)
+                .WithColumn("interviewid").AsString(255).PrimaryKey()
+                .WithColumn("position").AsInt32().PrimaryKey()
                 .WithColumn("id").AsGuid().Nullable()
                 .WithColumn("interviewername").AsString().Nullable()
                 .WithColumn("interviewerid").AsGuid().Nullable()
@@ -79,8 +79,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("status").AsInt32().Nullable()
                 .WithColumn("timestamp").AsDateTime().Nullable()
                 .WithColumn("timespanwithpreviousstatus").AsInt64().Nullable()
-                .WithColumn("comment").AsString().Nullable()
-                .WithColumn("position").AsInt32().NotNullable();
+                .WithColumn("comment").AsString().Nullable();
 
             Create.Table("interviewstatustimespans")
                 .WithColumn("id").AsString(255).PrimaryKey()
