@@ -28,12 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
            QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null,
            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
-            filteredOptionsViewModel = filteredOptionsViewModel ?? Setup.FilteredOptionsViewModel(new List<CategoricalOption>
-            {
-                Create.Entity.CategoricalQuestionOption(1, "item1"),
-                Create.Entity.CategoricalQuestionOption(2, "item2"),
-            });
-
             return new YesNoQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 questionnaireStorage ?? Mock.Of<IPlainQuestionnaireRepository>(),
@@ -42,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                filteredOptionsViewModel
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
             );
         }
     }
