@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
-                filteredOptionsViewModel: Mock.Of<FilteredOptionsViewModel>());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
         }
     }
 }
