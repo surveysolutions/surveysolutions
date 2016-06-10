@@ -75,7 +75,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.Scope = question.QuestionScope;
 
             var categoricalTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
-            questionView.IsFilteredCategorical = categoricalTypes.Contains(questionView.QuestionType) &&
+            questionView.IsFilteredCategorical =
+                categoricalTypes.Contains(questionView.QuestionType) &&
                 !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression);
 
             if (question.Answers != null)
