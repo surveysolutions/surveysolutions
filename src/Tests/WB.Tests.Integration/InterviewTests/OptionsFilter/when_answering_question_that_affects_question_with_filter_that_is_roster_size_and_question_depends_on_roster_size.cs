@@ -35,11 +35,11 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                    Create.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
-                        Create.Roster(roster2Id, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
-                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r.Count() < 2"),
+                        Create.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
+                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
                     })
                 });
 
@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return result;
             });
 
-        It should_disable_q3 = () =>
+        It should_enable_q3 = () =>
             results.QuestionsQ3Enabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
