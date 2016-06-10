@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                var answerOption = this.Options.Single(o => o.Value == selectedValue.Value);
+                var answerOption = this.Options.SingleOrDefault(o => o.Value == selectedValue.Value);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
@@ -188,6 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set
             {
                 this.filterText = value;
+                this.filteredOptionsViewModel.Filter = value;
 
                 this.UpdateAutoCompleteList();
 
@@ -227,7 +228,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            var options = interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, searchFor)
+            var options = this.filteredOptionsViewModel.Options
                 .Select(this.ToViewModel)
                 .Take(SuggestionsMaxCount)
                 .ToList();

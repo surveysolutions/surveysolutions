@@ -359,7 +359,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            bool isMultiOptionalQuestion = question is MultyOptionsQuestion;
+            bool isSingleOptionalQuestion = question is SingleQuestion;
+
+            if (isMultiOptionalQuestion || isSingleOptionalQuestion)
             {
                 return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
             }
@@ -814,7 +817,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
         public bool IsSupportFilteringForOptions(Guid questionId)
         {
-            return (this.GetQuestion(questionId) as SingleQuestion)?.Capital ?? false;
+            return !this.GetQuestion(questionId).Properties.OptionsFilterExpression?.Trim().IsNullOrEmpty() ?? false;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
