@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             Create.Table("commentaries")
                 .WithColumn("interviewid").AsString(255).PrimaryKey()
+                .WithColumn("position").AsInt32().PrimaryKey()
                 .WithColumn("commentsequence").AsInt32().Nullable()
                 .WithColumn("originatorname").AsString().Nullable()
                 .WithColumn("originatoruserid").AsGuid().Nullable()
@@ -34,7 +35,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("roster").AsString().Nullable()
                 .WithColumn("rostervector").AsCustom("numeric[]").Nullable()
                 .WithColumn("comment").AsString().Nullable()
-                .WithColumn("position").AsInt32().NotNullable();
+                ;
 
             Create.Table("interviewdataexportrecords")
                 .WithColumn("id").AsString(255).PrimaryKey()
