@@ -14,6 +14,8 @@ using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    using Interview = SharedKernels.DataCollection.Implementation.Aggregates.Interview;
+
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
@@ -82,14 +84,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var detailsStatisticView = new DetailsStatisticView()
             {
-                AnsweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
-                UnansweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
-                CommentedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
-                EnabledCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
-                FlaggedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
-                InvalidCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
-                SupervisorsCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
-                HiddenCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
+                AnsweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
+                UnansweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
+                CommentedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
+                EnabledCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
+                FlaggedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
+                InvalidCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
+                SupervisorsCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
+                HiddenCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
@@ -113,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     interviewGroupView.Entities = interviewGroupView.Entities
                         .Where(question =>
                         {
-                            return this.IsEntityInFilter(filter, question);
+                            return IsEntityInFilter(filter, question);
                         })
                         .ToList();
 
@@ -137,19 +139,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private void FilterCategoricalQuestionOptions(Guid interviewId, List<InterviewQuestionView> questionViews)
         {
-            var eventSourcedInterview = 
-                (SharedKernels.DataCollection.Implementation.Aggregates.Interview) 
-                this.eventSourcedRepository.GetLatest(typeof(SharedKernels.DataCollection.Implementation.Aggregates.Interview), interviewId);
+            var interviewAggregate = (Interview) this.eventSourcedRepository.GetLatest(typeof(Interview), interviewId);
+
             foreach (var categoricalQuestion in questionViews.Where(x => x.IsFilteredCategorical))
             {
                 var questionIdentity = new Identity(categoricalQuestion.Id, categoricalQuestion.RosterVector);
+
                 IEnumerable<CategoricalOption> filteredOptions =
-                    eventSourcedInterview.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty);
-                categoricalQuestion.Options = filteredOptions.Select(x => new QuestionOptionView
-                {
-                    Label = x.Title,
-                    Value = x.Value
-                }).ToList();
+                    interviewAggregate.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty);
+
+                categoricalQuestion.Options = filteredOptions
+                    .Select(x => new QuestionOptionView
+                    {
+                        Label = x.Title,
+                        Value = x.Value
+                    })
+                    .ToList();
             }
         }
 
@@ -167,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return null;
         }
 
-        private bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
+        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
         {
             var question = entity as InterviewQuestionView;
 
