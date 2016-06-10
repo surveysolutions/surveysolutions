@@ -40,12 +40,14 @@ namespace WB.Tests.Unit
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
-            var sideBarSectionViewModel = new SideBarSectionViewModel(Mock.Of<IStatefulInterviewRepository>(),
+            var sideBarSectionViewModel = new SideBarSectionViewModel(
+                Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Create.Service.SubstitutionService(),
                 Create.Service.LiteEventRegistry(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
-                Mock.Of<IMvxMessenger>());
+                Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel());
             sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;

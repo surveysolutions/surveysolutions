@@ -34,9 +34,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
 
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
 
-            var questionnaireRepository = Create.Other.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey,
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire.PublicKey,
                 Create.Entity.PlainQuestionnaire(questionnaire));
-            var interviewRepository = Create.Other.StatefulInterviewRepositoryWith(interview);
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
             viewModel.Init("interview", questionIdentity, Create.Other.NavigationState(interviewRepository));

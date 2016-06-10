@@ -24,16 +24,10 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	VariablesStatesInLevelConstructor(Model.Variables);
 	StaticTextsStatesInLevelConstructor(Model.StaticTexts); 
 	RostersStatesInLevelConstructor(Model.Rosters);
+	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
+	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
 #> 
-<# 
-	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder)
-    {
-#> 
-		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
-<#
-	} 
-#>
-	}		 
+	}
 
 	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{

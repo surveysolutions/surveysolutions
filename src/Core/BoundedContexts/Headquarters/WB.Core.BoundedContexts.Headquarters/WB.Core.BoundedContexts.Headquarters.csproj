@@ -261,6 +261,7 @@
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
+    <Compile Include="Implementation\Services\FileNameService.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
@@ -365,6 +367,7 @@
     <Compile Include="Services\IAttachmentContentService.cs" />
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
+    <Compile Include="Services\IFileNameService.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
@@ -472,13 +475,15 @@
     <Compile Include="Views\Interview\IInterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
     <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
-    <Compile Include="Views\Interview\InterviewAttachmentViewModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\IInterviewEntityViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\InterviewAttachmentViewModel.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewCommentedStatus.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\InterviewEntityViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
@@ -486,13 +491,12 @@
     <Compile Include="Views\Interview\InterviewInformation.cs" />
     <Compile Include="Views\Interview\InterviewLevel.cs" />
     <Compile Include="Views\Interview\InterviewLinkedQuestionOptions.cs" />
-    <Compile Include="Views\Interview\InterviewLinkedQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewQuestion.cs" />
     <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
-    <Compile Include="Views\Interview\InterviewQuestionView.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\InterviewQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewReferences.cs" />
     <Compile Include="Views\Interview\InterviewStaticText.cs" />
-    <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewStatuses.cs" />
     <Compile Include="Views\Interview\InterviewStatusTimeSpans.cs" />
     <Compile Include="Views\Interview\InterviewSummary.cs" />

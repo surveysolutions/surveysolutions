@@ -360,6 +360,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
             var questionnaireDocument = questionnairePackage.Document;
+            questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
+            questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
+
             var supportingAssembly = questionnairePackage.Assembly;
 
             await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly);

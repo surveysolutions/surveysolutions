@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 
-                    new InterviewDashboardItemViewModel(null, null, null, null, null, null, null, questionnaireViewRepository, null, null));
+                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, null));
             
             interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: interviewsAsyncPlainStorage,
                 questionnaireViewRepository: questionnaireViewRepository,

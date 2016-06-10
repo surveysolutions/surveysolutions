@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.Mvc;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Resources;
 
 namespace WB.UI.Shared.Web.Filters
@@ -39,11 +38,15 @@ namespace WB.UI.Shared.Web.Filters
             {
                 //Adds the Error Message to the Model and Redirect
                 filterContext.Controller.ViewData.ModelState.AddModelError("ExcessiveRequests", errorMessage);
+
+                var controller = filterContext.Controller as BaseMessageDisplayController;
+                controller?.Attention(ErrorMessages.TryLater);
             }
             else
             {
                 cache.Add(hashValue, "", null, DateTime.Now.AddSeconds(delayRequest), Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
             }
+
             base.OnActionExecuting(filterContext);
         }
 

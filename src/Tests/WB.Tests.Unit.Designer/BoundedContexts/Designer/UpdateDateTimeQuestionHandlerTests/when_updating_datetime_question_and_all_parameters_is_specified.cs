@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -29,24 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
             eventContext = new EventContext();
         };
 
-        Because of = () =>
-            questionnaire.UpdateDateTimeQuestion(
-                questionId: questionId,
-                title: title,
-                variableName: variableName,
-                variableLabel: null,
-                isPreFilled: isPreFilled,
-                scope: scope,
-                enablementCondition: enablementCondition,
-                hideIfDisabled: false,
-                instructions: instructions,
-                responsibleId: responsibleId, 
-                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
-                {
-                    new ValidationCondition { Message = validationMessage, Expression = validationExpression }
-                }, 
-                properties: Create.QuestionProperties(),
-                isTimestamp: isTimestamp);
+        Because of = () => questionnaire.UpdateDateTimeQuestion(command);
 
         Cleanup stuff = () =>
         {
@@ -84,5 +69,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static bool isTimestamp = true;
+        
+        private static readonly UpdateDateTimeQuestion command = new UpdateDateTimeQuestion(
+            questionnaireId: Guid.Parse("22222222222222222222222222222222"),
+            questionId: questionId,
+            isPreFilled: isPreFilled,
+            scope: scope,
+            responsibleId: responsibleId,
+            validationConditions:
+                new System.Collections.Generic.List<ValidationCondition>
+                {
+                    new ValidationCondition {Message = validationMessage, Expression = validationExpression}
+                },
+            commonQuestionParameters: new CommonQuestionParameters
+            {
+                Title = title,
+                VariableName = variableName,
+                VariableLabel = null,
+                EnablementCondition = enablementCondition,
+                HideIfDisabled = false,
+                Instructions = instructions
+            },
+            isTimestamp: isTimestamp);
     }
 }

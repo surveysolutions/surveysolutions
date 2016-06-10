@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
         public const string QuestionnaireScope = "@__questionnaire_scope";
         public const string EnablementPrefix = "IsEnabled__";
+        public const string OptionsFilterPrefix = "FilterOption__";
         public const string ValidationPrefix = "IsValid__";
         public const string VariablePrefix = "GetVariable__";
         public const string IdSuffix = "__id";
@@ -80,6 +81,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel.Value);
                 generatedClasses.Add(expressionMethodModel.Key, methodTemplate.TransformText());
+            }
+
+            foreach (var categoricalOptionsFilterModel in expressionStateModel.CategoricalOptionsFilterModels)
+            {
+                var methodTemplate = new OptionsFilterMethodTemplateV10(categoricalOptionsFilterModel.Value);
+                generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate.TransformText());
             }
 
             this.DumpCodeIfNeeded(generatedClasses);

@@ -37,8 +37,6 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>The initial version.</value>
         int InitialVersion { get; }
 
-        void InitializeFromHistory(CommittedEventStream history);
-
         void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history);
 
         /// <summary>

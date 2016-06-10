@@ -9,5 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void NotifyRefreshFinished();
 
         Task WaitWhileUserInterfaceIsRefreshingAsync();
+
+        bool IsUserInferfaceLocked { get; }
     }
 }

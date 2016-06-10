@@ -43,6 +43,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             public HashSet<Identity> EnablementChanged = new HashSet<Identity>();
             public HashSet<Identity> ValidityChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInQuestionsChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInGroupsChanged = new HashSet<Identity>();
+            public HashSet<Identity> SubstitutionsInStaticTextsChanged = new HashSet<Identity>();
         }
 
         private CalculatedState calculated = null;
@@ -362,6 +365,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
+            if (this.delta.SubstitutionsInGroupsChanged.Any() || 
+                this.delta.SubstitutionsInQuestionsChanged.Any() ||
+                this.delta.SubstitutionsInStaticTextsChanged.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(this.delta.SubstitutionsInQuestionsChanged.ToArray(), 
+                    this.delta.SubstitutionsInStaticTextsChanged.ToArray(),
+                    this.delta.SubstitutionsInGroupsChanged.ToArray()));
+            }
 
             this.ApplyEvent(this.HasInvalidAnswers() || this.HasInvalidStaticTexts
                 ? new InterviewDeclaredInvalid() as IEvent
@@ -396,6 +407,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
             if (this.Answers.ContainsKey(questionId))
                 this.Answers[questionId].RemoveAnswer();
+        }
+
+        public new void Apply(SubstitutionTitlesChanged @event)
+        {
+            @event.Groups.ForEach(x => this.delta.SubstitutionsInGroupsChanged.Add(new Identity(x.Id, x.RosterVector)));
+            @event.Questions.ForEach(x => this.delta.SubstitutionsInQuestionsChanged.Add(new Identity(x.Id, x.RosterVector)));
+            @event.StaticTexts.ForEach(x => this.delta.SubstitutionsInStaticTextsChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
         public new void Apply(AnswersDeclaredValid @event)
@@ -1156,6 +1174,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Count(question => !this.IsValid(question));
         }
 
+        public IEnumerable<Identity> GetInvalidEntitiesInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            foreach (var sectionInstance in sectionInstances)
+            {
+                IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(sectionInstance.Id);
+                IEnumerable<Guid> allStaticTextInGroup = questionnaire.GetAllUnderlyingStaticTexts(sectionInstance.Id);
+
+                var invalidEntitiesInSection = this
+                    .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
+                    .Union(this
+                        .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
+                    .Where(entity => !this.IsValid(entity));
+
+                foreach (var identity in invalidEntitiesInSection)
+                {
+                    yield return identity;
+                }
+            }
+        }
+
         public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
         {
             return this
@@ -1311,6 +1352,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 return this.notAnsweredQuestionsEnablementStatus[entityKey];
             }
 
+            var parentGroup = GetParentGroup(entityIdentity);
+            while (parentGroup != null)
+            {
+                if (!IsEnabled(parentGroup))
+                {
+                    return false;
+                }
+
+                parentGroup = GetParentGroup(parentGroup);
+            }
+
             return true;
         }
 
@@ -1345,6 +1397,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var interviewAnswerModel = this.Answers[questionKey];
             return interviewAnswerModel.InterviewerComment;
+        }
+
+
+        IEnumerable<CategoricalOption> IStatefulInterview.GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
+        {
+            return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)

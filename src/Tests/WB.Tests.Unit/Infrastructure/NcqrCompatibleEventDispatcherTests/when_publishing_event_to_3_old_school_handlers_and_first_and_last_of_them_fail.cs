@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         Establish context = () =>
         {
-            publishableEvent = Create.Other.PublishableEvent();
+            publishableEvent = Create.Fake.PublishableEvent();
 
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();

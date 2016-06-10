@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
            IStatefulInterviewRepository interviewRepository = null,
            IPrincipal principal = null,
            AnsweringViewModel answeringViewModel = null,
-           QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null)
+           QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null,
+           FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             return new YesNoQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
@@ -32,8 +33,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>()
-                );
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
+            );
         }
     }
 }

@@ -107,6 +107,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
         }
 
+        public bool HasPendingCommands => this.executingCommandsCount > 0;
+
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
@@ -170,7 +172,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            IEnumerable<CommittedEvent> commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
             aggregate.MarkChangesAsCommitted();
 
             try

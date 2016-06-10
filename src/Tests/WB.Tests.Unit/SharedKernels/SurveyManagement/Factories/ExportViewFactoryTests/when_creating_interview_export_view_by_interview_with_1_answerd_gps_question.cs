@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -29,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interviewData);
 
         It should_create_record__with_one_gps_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "1", "2", "3", "4", new DateTime(1984,4,18).ToString("o", CultureInfo.InvariantCulture)  });
+          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "1", "2", "3", "4", "1984-04-18T00:00:00" });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

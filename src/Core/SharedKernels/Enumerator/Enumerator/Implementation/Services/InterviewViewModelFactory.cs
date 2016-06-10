@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (!this.EntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
                 var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[InterviewEntityType.StaticTextModel].Invoke();
-                text.StaticText = entityModelType.ToString();
+                text.Text.PlainText = entityModelType.ToString();
                 return text;
             }
 
