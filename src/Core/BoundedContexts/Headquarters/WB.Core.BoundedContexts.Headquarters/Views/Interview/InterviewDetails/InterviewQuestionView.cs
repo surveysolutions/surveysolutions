@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -38,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
+        public bool IsFilteredCategorical { get; set; }
 
         public int[] PropagationVector { get; set; }
 

@@ -76,6 +76,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.IsReadOnly = !(question.QuestionScope == QuestionScope.Supervisor && interviewStatus < InterviewStatus.ApprovedByHeadquarters);
             questionView.Scope = question.QuestionScope;
 
+            var categoricalTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
+            questionView.IsFilteredCategorical = categoricalTypes.Contains(questionView.QuestionType) &&
+                !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression);
+
             if (question.Answers != null)
             {
                 questionView.Options = question.Answers.Select(a => new QuestionOptionView
