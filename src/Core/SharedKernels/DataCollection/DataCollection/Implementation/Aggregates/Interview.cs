@@ -1100,7 +1100,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
             IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid entityId, RosterVector rosterVector, IQuestionnaire questionnare)
+            Guid entityId,
+            RosterVector rosterVector, 
+            IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
             int entityRosterLevel = questionnare.GetRosterLevelForEntity(entityId);
@@ -3455,7 +3457,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionId);
 
-            var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
+            var instances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
                 substitutedGroupIds,
                 rosterVector,
                 questionnaire);
