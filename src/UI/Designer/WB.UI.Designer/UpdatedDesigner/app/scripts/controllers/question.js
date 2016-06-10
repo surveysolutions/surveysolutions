@@ -392,6 +392,7 @@
                     if (newValue) {
                         if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
                             $scope.activeQuestion.questionScope = 'Interviewer';
+                            $scope.activeQuestion.optionsFilterExpression = null;
                         }
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
