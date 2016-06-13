@@ -132,6 +132,39 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             };
         }
 
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<YesNoAnswers> getAnswer, Action<YesNoAnswers> setAnswer)
+        {
+            return () =>
+            {
+                YesNoAnswers previousAnswer = getAnswer();
+                if (previousAnswer == null || (previousAnswer.Yes.Length == 0 && previousAnswer.No.Length == 0))
+                    return;
+
+                var actualYesAnswers = previousAnswer.Yes.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)))
+                    .ToArray();
+
+                var actualNoAnswers = previousAnswer.No.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)))
+                    .ToArray();
+
+                var wereSomeYesOptionsRemoved = previousAnswer.Yes.Length > actualYesAnswers.Length;
+                var wereSomeNoOptionsRemoved = previousAnswer.No.Length > actualNoAnswers.Length;
+                if (wereSomeYesOptionsRemoved || wereSomeNoOptionsRemoved)
+                {
+                    setAnswer(new YesNoAnswers(previousAnswer.All, new YesNoAnswersOnly(actualYesAnswers, actualNoAnswers)));
+                }
+
+                if (wereSomeYesOptionsRemoved)
+                {
+                    foreach (var rowcode in previousAnswer.Yes.Except(actualYesAnswers))
+                    {
+                        RemoveRosterInstances(RosterKey, itemId, rowcode);
+                    }
+                }
+            };
+        }
+
         protected new Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
         {
             return () =>

@@ -323,6 +323,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
