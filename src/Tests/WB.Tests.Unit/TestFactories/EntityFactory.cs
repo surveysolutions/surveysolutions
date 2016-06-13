@@ -787,7 +787,8 @@ namespace WB.Tests.Unit.TestFactories
             string title = null,
             bool hideIfDisabled = false,
             string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null)
+            Guid? linkedToRosterId = null,
+            bool? isFilteredCombobox = null)
         {
             var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -810,7 +811,8 @@ namespace WB.Tests.Unit.TestFactories
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers,
-                LinkedFilterExpression = linkedFilterExpression
+                LinkedFilterExpression = linkedFilterExpression,
+                IsFilteredCombobox = isFilteredCombobox
             };
         }
 
