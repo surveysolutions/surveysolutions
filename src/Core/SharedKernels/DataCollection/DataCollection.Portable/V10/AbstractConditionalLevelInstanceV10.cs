@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
         public Action<Identity[], Guid, decimal> RemoveRosterInstances { get; private set; }
+        public AnswerAndStructureChangeNotifier AnswerAndStructureChangeNotifier { get; private set; }
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
@@ -95,6 +96,11 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             this.RemoveRosterInstances = removeRosterInstances;
         }
 
+        public virtual void SetAnswerChangeNotifier(AnswerAndStructureChangeNotifier answerAndStructureChangeNotifier)
+        {
+            this.AnswerAndStructureChangeNotifier = answerAndStructureChangeNotifier;
+        }
+
         protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
         {
             return () =>
@@ -103,6 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
                 {
                     setAnswer(null);
+                    this.AnswerAndStructureChangeNotifier.NotifySingleAnswerChange(new Identity(itemId, RosterVector), null);
                 }
             };
         }
@@ -123,6 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (wereSomeOptionsRemoved)
                 {
                     setAnswer(actualAnswer);
+                    this.AnswerAndStructureChangeNotifier.NotifyMultiAnswerChange(new Identity(itemId, RosterVector), actualAnswer.Select(Convert.ToInt32).ToArray());
 
                     foreach (var rowcode in previousAnswer.Except(actualAnswer))
                     {
@@ -152,7 +160,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 var wereSomeNoOptionsRemoved = previousAnswer.No.Length > actualNoAnswers.Length;
                 if (wereSomeYesOptionsRemoved || wereSomeNoOptionsRemoved)
                 {
-                    setAnswer(new YesNoAnswers(previousAnswer.All, new YesNoAnswersOnly(actualYesAnswers, actualNoAnswers)));
+                    var actualYesNoAnswersOnly = new YesNoAnswersOnly(actualYesAnswers, actualNoAnswers);
+                    setAnswer(new YesNoAnswers(previousAnswer.All, actualYesNoAnswersOnly));
+                    this.AnswerAndStructureChangeNotifier.NotifyMultiYesNoAnswerChange(new Identity(itemId, RosterVector), actualYesNoAnswersOnly);
                 }
 
                 if (wereSomeYesOptionsRemoved)

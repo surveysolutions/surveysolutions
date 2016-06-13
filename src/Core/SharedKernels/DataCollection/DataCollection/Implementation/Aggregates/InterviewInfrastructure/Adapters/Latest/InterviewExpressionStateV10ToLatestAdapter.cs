@@ -68,8 +68,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => 
             this.adaptee.FilterOptionsForQuestion(questionIdentity, options);
 
-        public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId) => 
-            this.adaptee.RemoveRosterAndItsDependencies(rosterKey, rosterSorceId, rosterInstanceId);
+        public StructuralChanges GetStructuralChanges() => 
+            this.adaptee.GetStructuralChanges();
 
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AbstractConditionalLevel.cs" />
     <Compile Include="AbstractInterviewExpressionState.cs" />
+    <Compile Include="AnswerChangeNotifier.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="FailedValidationCondition.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="LinkedQuestionOptionsChanges.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="CategoricalOption.cs" />
+    <Compile Include="StructuralChanges.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
     <Compile Include="V2\CustomFunctions\Extensions.cs" />
     <Compile Include="V2\CustomFunctions\LMS.cs" />

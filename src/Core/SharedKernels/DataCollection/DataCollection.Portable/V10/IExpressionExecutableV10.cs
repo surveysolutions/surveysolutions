@@ -19,5 +19,6 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         decimal[] RosterVector { get; }
 
         void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
+        void SetAnswerChangeNotifier(AnswerAndStructureChangeNotifier answerAndStructureChangeNotifier);
     }
 }

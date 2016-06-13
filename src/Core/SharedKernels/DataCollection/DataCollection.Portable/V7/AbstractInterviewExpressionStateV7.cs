@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
 
-        public new void SaveAllCurrentStatesAsPrevious()
+        public new virtual void SaveAllCurrentStatesAsPrevious()
         {
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
             {
