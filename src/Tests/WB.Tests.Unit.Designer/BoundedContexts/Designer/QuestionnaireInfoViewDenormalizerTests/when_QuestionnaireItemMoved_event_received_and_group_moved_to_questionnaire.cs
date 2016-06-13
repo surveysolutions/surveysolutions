@@ -9,12 +9,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewD
         {
             viewState = CreateQuestionnaireInfoViewWith1Chapter(chapterId);
             denormalizer = CreateDenormalizer(viewState);
-            denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: groupId, parentGroupId: chapterId, groupTitle: groupTitle));
+            denormalizer.Update(viewState, Create.Event.NewGroupAddedEvent(groupId: groupId, parentGroupId: chapterId, groupTitle: groupTitle));
         };
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.QuestionnaireItemMovedEvent(itemId: groupId));
+                denormalizer.Update(viewState, Create.Event.QuestionnaireItemMovedEvent(itemId: groupId));
 
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldNotBeNull();

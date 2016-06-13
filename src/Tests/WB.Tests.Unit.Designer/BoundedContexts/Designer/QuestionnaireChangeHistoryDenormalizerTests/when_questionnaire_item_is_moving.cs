@@ -29,10 +29,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
         Because of = () =>
         {
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(staticTextId, questionnaireId: questionnaireId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(groupId, questionnaireId: questionnaireId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(questionId, questionnaireId: questionnaireId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(rosterId, questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireItemMovedEvent(staticTextId, questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireItemMovedEvent(groupId, questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireItemMovedEvent(questionId, questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireItemMovedEvent(rosterId, questionnaireId: questionnaireId));
         };
 
         It should_store_4_changes = () =>

@@ -22,13 +22,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
         Because of = () =>
         {
-            questionnaireChangeHistoryDenormalizer.Handle(Create.NewGroupAddedEvent(groupId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupClonedEvent(groupId2));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupUpdatedEvent(groupId, groupTitle));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupBecameARosterEvent(groupId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.RosterChanged(groupId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupStoppedBeingARosterEvent(groupId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupDeletedEvent(groupId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.NewGroupAddedEvent(groupId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupClonedEvent(groupId2));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupUpdatedEvent(groupId, groupTitle));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupBecameARosterEvent(groupId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.RosterChanged(groupId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupStoppedBeingARosterEvent(groupId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupDeletedEvent(groupId));
         };
 
         It should_store_7_changes = () =>

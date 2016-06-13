@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
         Because of = () =>
             viewState =
                 denormalizer.Update(viewState,
-                    Create.StaticTextAddedEvent(entityId: entityId, parentId: chapterId, text: text));
+                    Create.Event.StaticTextAddedEvent(entityId: entityId, parentId: chapterId, text: text));
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();

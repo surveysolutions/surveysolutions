@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
         Because of = () =>
             viewState =
                 denormalizer.Update(viewState,
-                    Create.TextListQuestionChangedEvent(questionId: questionId, questionVariable: questionVariable,
+                    Create.Event.TextListQuestionChangedEvent(questionId: questionId, questionVariable: questionVariable,
                         questionTitle: questionTitle, questionConditionExpression: questionConditionExpression));
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
