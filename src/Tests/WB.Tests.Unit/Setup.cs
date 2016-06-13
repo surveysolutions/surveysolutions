@@ -10,8 +10,12 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
@@ -30,6 +34,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit
 {
@@ -106,10 +111,15 @@ namespace WB.Tests.Unit
                 => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
                 && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
 
+        private static IPlainQuestionnaireRepository QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
+            => Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
+                && repository.GetHistoricalQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
+                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
+                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
+
         public static IEventHandler FailingFunctionalEventHandler()
-        {
-            return FailingFunctionalEventHandlerHavingUniqueType<object>();
-        }
+            => FailingFunctionalEventHandlerHavingUniqueType<object>();
 
         public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
         {
@@ -272,6 +282,25 @@ namespace WB.Tests.Unit
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
 
             return filteredOptionsViewModel.Object;
+        }
+
+        public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
+            Guid interviewId, InterviewDetailsView interviewDetailsView,
+            QuestionnaireDocument questionnaireDocument, ILatestInterviewExpressionState interviewExpressionState)
+        {
+            var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
+
+            var interview = Create.AggregateRoot.Interview(
+                expressionProcessorStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
+                questionnaireRepository: questionnaireRepository);
+
+            var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
+
+            return Create.Service.InterviewDetailsViewFactory(
+                plainQuestionnaireRepository: questionnaireRepository,
+                interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
+                eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
+                merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
         }
     }
 }

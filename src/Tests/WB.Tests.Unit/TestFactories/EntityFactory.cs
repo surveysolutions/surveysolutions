@@ -277,13 +277,15 @@ namespace WB.Tests.Unit.TestFactories
             bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
             Guid? interviewId = null,
-            Guid? responsibleId = null)
+            Guid? responsibleId = null,
+            Guid? questionnaireId = null)
             => new InterviewData
             {
                 CreatedOnClient = createdOnClient,
                 Status = status,
                 InterviewId = interviewId.GetValueOrDefault(),
-                ResponsibleId = responsibleId.GetValueOrDefault()
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid()
             };
 
         public InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
@@ -605,6 +607,9 @@ namespace WB.Tests.Unit.TestFactories
         public ParaDataExportProcessDetails ParaDataExportProcess()
             => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
+            => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
+
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
 
@@ -923,6 +928,9 @@ namespace WB.Tests.Unit.TestFactories
             user.SetId(userId ?? Guid.NewGuid());
             return user;
         }
+
+        public UserDocument UserDocument()
+            => Create.Entity.UserDocument(userId: null);
 
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
         {
