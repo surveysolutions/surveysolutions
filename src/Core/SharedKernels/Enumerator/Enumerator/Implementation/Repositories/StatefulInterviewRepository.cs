@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -28,12 +29,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return GetImpl(interviewId,null, new CancellationToken());
         }
 
-        public Task<IStatefulInterview> GetAsync(string interviewId, IProgress<int> progress, CancellationToken cancellationToken)
+        public Task<IStatefulInterview> GetAsync(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(GetImpl(interviewId, progress, cancellationToken));
         }
 
-        public IStatefulInterview GetImpl(string interviewId, IProgress<int> progress, CancellationToken cancellationToken)
+        public IStatefulInterview GetImpl(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(interviewId)) throw new ArgumentNullException(nameof(interviewId));
 

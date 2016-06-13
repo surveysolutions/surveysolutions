@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             return GetLatest(aggregateType, aggregateId,null, new CancellationToken());
         }
 
-        public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<int> progress, CancellationToken cancellationToken)
+        public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 

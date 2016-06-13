@@ -41,7 +41,7 @@ namespace Ncqrs.Eventing.Storage
             => this._events.GetOrNull(id)?.Where(x => x.EventSequence >= minVersion)
             ?? Enumerable.Empty<CommittedEvent>();
 
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<int> progress, CancellationToken cancellationToken)
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             return Read(id, minVersion);
         }

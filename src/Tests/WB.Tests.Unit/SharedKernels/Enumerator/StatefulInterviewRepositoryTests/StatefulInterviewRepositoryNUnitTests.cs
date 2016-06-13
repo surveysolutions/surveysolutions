@@ -5,6 +5,7 @@ using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -87,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
                     Mock.Of<IEventSourcedAggregateRootRepository>(
                         _ =>
                             _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()) == statefulInterview &&
-                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<IProgress<int>>(),
+                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<IProgress<EventReadingProgress>>(),
                                 Moq.It.IsAny<CancellationToken>()) == statefulInterview),
                     liteEventBus ?? Mock.Of<ILiteEventBus>());
         }

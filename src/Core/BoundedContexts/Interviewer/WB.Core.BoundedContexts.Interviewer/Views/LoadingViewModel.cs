@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -53,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.loadingCancellationTokenSource = new CancellationTokenSource();
             var interviewIdString = this.interviewId.FormatGuid();
 
-            var progress = new Progress<int>();
+            var progress = new Progress<EventReadingProgress>();
             progress.ProgressChanged += Progress_ProgressChanged;
             try
             {
@@ -94,9 +95,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.progressDescription, value); }
         }
 
-        private void Progress_ProgressChanged(object sender, int e)
+        private void Progress_ProgressChanged(object sender, EventReadingProgress e)
         {
-            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
+            var percent = e.Current.PercentOf(e.Maximum);
+            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, percent);
         }
 
         public void CancelLoading()
