@@ -16,6 +16,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using NHibernate.Util;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -1033,6 +1034,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
 
+            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                text: title,
+                entityId: groupId,
+                variableName: variableName,
+                parentGroup: parentGroupId.HasValue ? this.innerDocument.Find<IGroup>(parentGroupId.Value) : this.innerDocument);
+
             this.ApplyEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
@@ -1412,6 +1419,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group, wasRosterAndBecomeAGroup: true);
             }
 
+            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                text: title,
+                entityId: groupId,
+                variableName: variableName,
+                parentGroup: group.GetParent() as IGroup);
+
             this.ApplyEvent(new GroupUpdated
             {
                 GroupPublicKey = groupId,
@@ -1514,6 +1527,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.FixedRosterTitles,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
                 rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
+
+            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                    text: sourceGroup.Title,
+                    entityId: sourceGroup.PublicKey,
+                    variableName: sourceGroup.VariableName,
+                    parentGroup: targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1673,6 +1692,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption,
                 questionId, question.Featured, targetGroup);
 
+            foreach (var validationCondition in question.ValidationConditions)
+            {
+                this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                    text: validationCondition.Message,
+                    entityId: questionId,
+                    variableName: question.StataExportCaption,
+                    parentGroup: targetGroup);
+            }
+
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
@@ -1697,7 +1725,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-               QuestionType.Text, responsibleId);
+               QuestionType.Text, responsibleId, validationCoditions);
 
             this.ApplyEvent(new QuestionChanged
             (
@@ -1743,7 +1771,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.GpsCoordinates, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.GpsCoordinates, responsibleId, validationConditions);
             
             this.ApplyEvent(new QuestionChanged
             (
@@ -1793,7 +1821,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
-                QuestionType.DateTime, command.ResponsibleId);
+                QuestionType.DateTime, command.ResponsibleId, command.ValidationConditions);
             
             this.ApplyEvent(new QuestionChanged
             (
@@ -1838,7 +1866,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId, validationConditions);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToEntityId, maxAllowedAnswers, options);
@@ -1906,7 +1934,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.SingleOption, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.SingleOption, responsibleId, validationConditions);
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
@@ -2091,7 +2119,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.Numeric, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.Numeric, responsibleId, validationConditions);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
@@ -2129,7 +2157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.TextList, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.TextList, responsibleId, validationConditions);
 
             this.ApplyEvent(new TextListQuestionChanged
             {
@@ -2159,7 +2187,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId, null);
 
             this.ApplyEvent(new MultimediaQuestionUpdated()
             {
@@ -2187,7 +2215,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, responsibleId, validationConditions);
             
 
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
@@ -2588,13 +2616,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, 
-            IGroup parentGroup, 
-            string title,
-            string alias,
-            bool isPrefilled,
-            QuestionType questionType,
-            Guid responsibleId)
+        private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
@@ -2603,9 +2625,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ? DefaultRestrictedVariableLengthLimit
                 : DefaultVariableLengthLimit;
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias, variableLengthLimit);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName, variableLengthLimit);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
 
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
@@ -2613,6 +2635,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
+
+            foreach (var validationCondition in validationCoditions)
+            {
+                this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                    text: validationCondition.Message,
+                    entityId: questionId,
+                    variableName: variableName,
+                    parentGroup: parentGroup);
             }
         }
 
@@ -3337,53 +3368,63 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias,
-            Guid questionPublicKey, bool isFeatured, IGroup group)
+        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string text, string variableName,
+            Guid questionId, bool prefilled, IGroup parentGroup)
         {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
+            if (prefilled)
+            {
+                throw new QuestionnaireException(DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question text contains substitution references. It's illegal");
+            }    
+
+            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(text, variableName, questionId, parentGroup);
+        }
+
+        private void ThrowDomainExceptionIfTextContainsIncorrectSubstitution(string text, string variableName,
+            Guid entityId, IGroup parentGroup)
+        {
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(text);
             if (substitutionReferences.Length == 0)
                 return;
 
-            if (isFeatured)
-                throw new QuestionnaireException(
-                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question text contains substitution references. It's illegal");
-
-            if (substitutionReferences.Contains(alias))
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
-                    "Question text contains illegal substitution references to self");
+            if (substitutionReferences.Contains(variableName))
+            {
+                throw new QuestionnaireException(DomainExceptionType.TextContainsSubstitutionReferenceToSelf,
+                    "Text contains illegal substitution references to self");
+            }
 
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences,
-                out unknownReferences, 
-                out questionsIncorrectTypeOfReferenced, 
-                out questionsIllegalPropagationScope, 
+            this.ValidateSubstitutionReferences(entityId, parentGroup, substitutionReferences,
+                out unknownReferences,
+                out questionsIncorrectTypeOfReferenced,
+                out questionsIllegalPropagationScope,
                 out variablesIllegalPropagationScope);
 
             if (unknownReferences.Count > 0)
                 throw new QuestionnaireException(
-                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
-                    "Question text contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
+                    DomainExceptionType.TextContainsUnknownSubstitutionReference,
+                    "Text contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
 
             if (questionsIncorrectTypeOfReferenced.Count > 0)
                 throw new QuestionnaireException(
-                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
-                    "Question text contains substitution references to questions of illegal type: " +
-                        String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
+                    DomainExceptionType.TextContainsSubstitutionReferenceQuestionOfInvalidType,
+                    "Text contains substitution references to questions of illegal type: " +
+                    String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
 
             if (questionsIllegalPropagationScope.Count > 0)
                 throw new QuestionnaireException(
-                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question text contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
+                    "Text contains illegal substitution references to questions: " +
+                    String.Join(", ", questionsIllegalPropagationScope.ToArray()));
 
             if (variablesIllegalPropagationScope.Count > 0)
                 throw new QuestionnaireException(
-                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question text contains illegal substitution references to variables: " + String.Join(", ", variablesIllegalPropagationScope.ToArray()));
+                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
+                    "Text contains illegal substitution references to variables: " +
+                    String.Join(", ", variablesIllegalPropagationScope.ToArray()));
         }
 
         private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
@@ -3775,7 +3816,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 title = title.Trim();
         }
 
-        private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
+        private void ValidateSubstitutionReferences(Guid entityId, IGroup parentGroup, string[] substitutionReferences,
             out List<string> unknownReferences, 
             out List<string> questionsIncorrectTypeOfReferenced,
             out List<string> questionsIllegalPropagationScope,
@@ -3787,24 +3828,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             variablesIllegalPropagationScope = new List<string>();
 
             var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
-                .Where(q => q.PublicKey != questionPublicKey)
+                .Where(q => q.PublicKey != entityId)
                 .Where(q => !string.IsNullOrEmpty(q.StataExportCaption))
                 .GroupBy(q => q.StataExportCaption, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
             var variables = this.innerDocument.GetEntitiesByType<Variable>()
-                .Where(v => v.PublicKey != questionPublicKey && !string.IsNullOrEmpty(v.Name))
+                .Where(v => v.PublicKey != entityId && !string.IsNullOrEmpty(v.Name))
                 .GroupBy(v => v.Name, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
 
-            var propagationQuestionsVector = GetQuestionnaireItemDepthAsVector(@group.PublicKey);
+            var rosterVectorOfEntity = GetQuestionnaireItemDepthAsVector(parentGroup.PublicKey);
 
             foreach (var substitutionReference in substitutionReferences)
             {
                 if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
                 {
-                    if (propagationQuestionsVector.Length > 0)
+                    if (rosterVectorOfEntity.Length > 0)
                         continue;
                 }
                 //extract validity of variable name to separate method and make check validity of substitutionReference  
@@ -3814,14 +3855,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     continue;
                 }
 
-                bool isQuestionReferance = questions.ContainsKey(substitutionReference);
-                bool isVariableReferance = variables.ContainsKey(substitutionReference);
+                bool isQuestionReference = questions.ContainsKey(substitutionReference);
+                bool isVariableReference = variables.ContainsKey(substitutionReference);
 
-                if (!isQuestionReferance && !isVariableReferance)
+                if (!isQuestionReference && !isVariableReference)
                 {
                     unknownReferences.Add(substitutionReference);
                 }
-                else if (isQuestionReferance)
+                else if (isQuestionReference)
                 {
                     var currentQuestion = questions[substitutionReference];
                     bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
@@ -3834,14 +3875,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), rosterVectorOfEntity))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
-                else if (isVariableReferance)
+                else if (isVariableReference)
                 {
                     var currentVariable = variables[substitutionReference];
 
-                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), propagationQuestionsVector))
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), rosterVectorOfEntity))
                         variablesIllegalPropagationScope.Add(substitutionReference);
                 }
             }

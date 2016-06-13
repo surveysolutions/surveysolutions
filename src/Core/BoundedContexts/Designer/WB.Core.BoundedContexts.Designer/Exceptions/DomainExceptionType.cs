@@ -94,9 +94,9 @@
         QuestionWithLinkedQuestionCanNotBeFeatured,
 
         AutoPropagateQuestionCantBeReal,
-        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+        TextContainsSubstitutionReferenceQuestionOfInvalidType,
 
-        QuestionTitleContainsInvalidSubstitutionReference,
+        TextContainsInvalidSubstitutionReference,
 
         QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
            
@@ -104,9 +104,9 @@
         
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
-        QuestionTitleContainsUnknownSubstitutionReference,
+        TextContainsUnknownSubstitutionReference,
 
-        QuestionTitleContainsSubstitutionReferenceToSelf,
+        TextContainsSubstitutionReferenceToSelf,
 
         FeaturedQuestionTitleContainsSubstitutionReference,
 
