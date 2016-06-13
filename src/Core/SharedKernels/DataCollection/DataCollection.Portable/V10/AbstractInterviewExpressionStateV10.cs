@@ -8,7 +8,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 {
     public abstract class AbstractInterviewExpressionStateV10 : AbstractInterviewExpressionStateV9, IInterviewExpressionStateV10
     {
-        protected AbstractInterviewExpressionStateV10() {}
+        protected AbstractInterviewExpressionStateV10()
+        {
+            this.AnswerAndStructureChangeNotifier = new AnswerAndStructureChangeNotifier(this.StructuralChanges);
+        }
 
         protected AbstractInterviewExpressionStateV10(IDictionary<string, IExpressionExecutableV10> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : this(interviewScopes.AsEnumerable(), siblingRosters, interviewProperties) {}
@@ -24,16 +27,21 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 siblingRosters,
                 interviewProperties)
         {
-            this.SetTosterRemoverForAllScopes();
+            this.AnswerAndStructureChangeNotifier = new AnswerAndStructureChangeNotifier(this.StructuralChanges);
+            this.SetRosterRemoverForAllScopes();
+            this.SetAnswerAndStructureChangeNotifierForAllScopes();
         }
 
-        private void SetTosterRemoverForAllScopes()
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+           int? sortIndex)
         {
-            foreach (var interviewScope in this.InterviewScopes.Values)
-            {
-                interviewScope.SetRostersRemover(this.RemoveRosterAndItsDependencies);
-            }
+            base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
+            this.SetRosterRemoverForAllScopes();
+            this.SetAnswerAndStructureChangeNotifierForAllScopes();
         }
+
+        public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
+        public AnswerAndStructureChangeNotifier AnswerAndStructureChangeNotifier { get; set; }
 
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
 
@@ -64,7 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new virtual IExpressionExecutableV10 GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
             => (IExpressionExecutableV10) base.GetRosterByIdAndVector(questionId, rosterVector);
 
-
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
@@ -73,11 +80,15 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
         }
 
-        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
-            int? sortIndex)
+        public override void SaveAllCurrentStatesAsPrevious()
         {
-            base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
-            this.SetTosterRemoverForAllScopes();
+            base.SaveAllCurrentStatesAsPrevious();
+            StructuralChanges.ClearAllChanges();
+        }
+
+        public virtual StructuralChanges GetStructuralChanges()
+        {
+            return this.StructuralChanges;
         }
 
         public new virtual EnablementChanges ProcessEnablementConditions()
@@ -148,6 +159,22 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             foreach (var rosterKeyToDelete in rostersKeysToDelete)
             {
                 this.RemoveRoster(rosterKeyToDelete);
+            }
+        }
+
+        private void SetRosterRemoverForAllScopes()
+        {
+            foreach (var interviewScope in this.InterviewScopes.Values)
+            {
+                interviewScope.SetRostersRemover(this.RemoveRosterAndItsDependencies);
+            }
+        }
+
+        private void SetAnswerAndStructureChangeNotifierForAllScopes()
+        {
+            foreach (var interviewScope in this.InterviewScopes.Values)
+            {
+                interviewScope.SetAnswerChangeNotifier(this.AnswerAndStructureChangeNotifier);
             }
         }
 
