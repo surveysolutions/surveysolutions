@@ -42,7 +42,7 @@
 
         var filter = { filteredBy: '@Model.Filter' };
 
-        var filteredComboboxes = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.HtmlEncode(x.Label)))))))))];
 
         var answeredYesNoQuestionsBySupervisor = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector), JsonConvert.SerializeObject(_.Answer))))))];
 
