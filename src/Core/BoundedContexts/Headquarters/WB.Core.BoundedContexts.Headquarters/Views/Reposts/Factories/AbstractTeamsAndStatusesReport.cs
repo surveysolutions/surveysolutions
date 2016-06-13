@@ -26,8 +26,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             var filter = CreateFilterExpression(input);
 
-            var rowCount = this.interviewsReader.Count(_ => _.Where(filter)
-                .Select(Projections.Distinct(Projections.Property(this.ResponsibleIdSelector))));
+            var rowCount = this.interviewsReader.CountDistinctWithRecursiveIndex(_ => _.Where(filter)
+                .Select(this.ResponsibleIdSelector));
 
             var statistics =
                 this.interviewsReader.QueryOver(
