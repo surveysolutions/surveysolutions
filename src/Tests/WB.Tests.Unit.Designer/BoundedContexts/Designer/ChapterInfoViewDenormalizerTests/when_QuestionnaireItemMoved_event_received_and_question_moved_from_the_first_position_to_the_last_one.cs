@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.QuestionnaireItemMovedEvent(itemId: question1Id, targetGroupId: chapter1Id, targetIndex:3));
+                denormalizer.Update(viewState, Create.Event.QuestionnaireItemMovedEvent(itemId: question1Id, targetGroupId: chapter1Id, targetIndex:3));
         
         It should_groupInfoView_items_count_be_equal_to_3 = () =>
             ((GroupInfoView)viewState.Items[0]).Items.Count.ShouldEqual(3);

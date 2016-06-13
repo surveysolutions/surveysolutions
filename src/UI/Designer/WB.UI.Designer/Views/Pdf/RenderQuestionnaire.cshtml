@@ -157,6 +157,14 @@
                         <a href="#variables_appendix" class="section_name appendix">Appendix @questionnaire.VariablesAppendixIndex &#8212; VARIABLES</a>
                     </dd>
                 }
+                @if (!questionnaire.IsOptionsFilterAppendixEmpty)
+                {
+                    <dt>&nbsp;</dt>
+                    <dd>
+                        <a href="#optoins_filters_appendix" class="section_name appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; OPTION FILTERS</a>
+                    </dd>
+                }
+
                 <dt>&nbsp;</dt>
                 <dd>
                     <a href="#legend_appendix" class="section_name appendix">Legend</a>
@@ -211,7 +219,7 @@
                                 <span>@item.VariableName</span>: @item.Title
                             </a>
                             @foreach (var validationCondition in item.ValidationConditions)
-                    {
+                            {
                                 <p>
                                     Validation Condition:
                                     <pre>@validationCondition.Expression.Trim()</pre>
@@ -278,7 +286,9 @@
             </ul>
         </article>
     }
-    @if (!questionnaire.IsVariablesAppendixEmpty)
+
+
+@if (!questionnaire.IsVariablesAppendixEmpty)
     {
         <article class="appendix_section">
             <h2 id="variables_appendix">Appendix @questionnaire.VariablesAppendixIndex &#8212; Variables</h2>
@@ -301,7 +311,31 @@
             </ul>
         </article>
     }
-    <article class="appendix_section legend">
+
+    @if (!questionnaire.IsOptionsFilterAppendixEmpty)
+    {
+        <article class="appendix_section">
+            <h2 id="optoins_filters_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Option filters</h2>
+            <ul class="container">
+                @for (var i = 0; i < questionnaire.QuestionsWithLongFilterExpression.Count; i++)
+                {
+                    var question = questionnaire.QuestionsWithLongFilterExpression[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsFilterRef(question.PublicKey)">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            <p>
+                                @question.Properties.OptionsFilterExpression
+                            </p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </article>
+    }
+<article class="appendix_section legend">
         <h2 id="legend_appendix">Legend</h2>
         <section>
             <h3>Legend and structure of information in this file</h3>

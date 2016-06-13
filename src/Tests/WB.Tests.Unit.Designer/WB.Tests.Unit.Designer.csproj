@@ -236,6 +236,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Tester\UsersControllerTests\UsersControllerTestsContext.cs" />
+    <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_very_old_client_has_old_app_version.cs" />
+    <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_client_has_old_app_version.cs" />
+    <Compile Include="Api\Tester\AttachmentsControllerTests\AttachmentsControllerTestsContext.cs" />
+    <Compile Include="Api\Tester\AttachmentsControllerTests\when_getting_attachment_and_client_has_old_app_version.cs" />
+    <Compile Include="Api\Tester\QuestionnairesControllerTests\QuestionnairesControllerTestsContext.cs" />
+    <Compile Include="Api\Tester\QuestionnairesControllerTests\when_getting_questionnaire_and_client_has_old_app_version.cs" />
+    <Compile Include="Api\Tester\QuestionnairesControllerTests\when_getting_list_of_questionaires_and_client_has_old_app_version.cs" />
     <Compile Include="Applications\AttributesTests\AttributesTestContext.cs" />
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved.cs" />
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
@@ -331,6 +339,7 @@
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_already_existing_attachment_content.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\AddVariableHandlerTests\when_adding_variable_to_chapter.cs" />
+    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_VariableCloned_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />
@@ -374,7 +383,12 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_shared_persons_contains_viewer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_itself.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_integer_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_negative_integer_title_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_non_integer_title_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_less_then_50_percent_questions_with_variable_labels.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_question_and_static_text_validated_by_future_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_question_statictext_and_group_conditionally_enabled_by_future_question.cs" />
@@ -382,14 +396,22 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_text_email_question_without_validation.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachments_and_total_size_greater_50MB.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachment_with_size_more_than_5Mb.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_question_with_option_filter_expression_about_10000_chars.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_static_text_with_condition_expression_with_more_than_10000_chars_length.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_unused_attachment.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_attachment_with_empty_content.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_variable_with_expression_longer_10000_chars.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_circular_reference_in_option_filter_and_enablement_condition.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_title_that_references_not_existing_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_not_existing_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_condition_expression_and_without_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_reference_in_substitutions_variable_from_deeper_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_that_references_not_existing_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_that_is_used_in_title_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_that_marked_as_prefilled.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_title_that_references_not_existing_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_validation_message_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_with_validation_expression_and_without_validation_meassage.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_variables_with_circular_references.cs" />
@@ -431,6 +453,16 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_question_with_empty_and_too_long_validation_messages_and_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_undefined_substitution.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_messagr_contains_substitution_to_variable_from_roster.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_self.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_question_from_roster.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_illegal_question_type.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_variable_from_roster.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_question_from_roster.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_self.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_illegal_question_type.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_undefined_substitution.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="Id.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_multimedia_question.cs" />
@@ -489,7 +521,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\Macros\when_updating_macro_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Macros\when_updating_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_fixed_titles_contain_one_item.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_negative_integer_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_21_rosters.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
@@ -928,7 +960,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_title_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />

@@ -31,5 +31,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 }
             }));
         }
+
+        public bool IsUserInferfaceLocked => count > 0;
     }
 }

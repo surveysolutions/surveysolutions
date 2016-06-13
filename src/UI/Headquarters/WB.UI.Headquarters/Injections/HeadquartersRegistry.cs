@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
+            this.Kernel.Bind<IInterviewEntityViewFactory>().To<InterviewEntityViewFactory>();
             this.Kernel.Bind<IInterviewDataAndQuestionnaireMerger>().To<InterviewDataAndQuestionnaireMerger>();
             this.Kernel.Bind<IUserPreloadingService>().To<UserPreloadingService>();
             this.Kernel.Bind<IAttachmentContentService>().To<AttachmentContentService>();

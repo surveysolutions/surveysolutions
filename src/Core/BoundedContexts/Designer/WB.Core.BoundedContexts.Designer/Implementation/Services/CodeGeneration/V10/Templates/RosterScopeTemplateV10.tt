@@ -16,8 +16,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties,
+        Action<Identity[], Guid, decimal> removeRosterInstances)
+		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
 	{
 		this.@_parent = parent; 
 	}
@@ -28,8 +29,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties,
+        Action<Identity[], Guid, decimal> removeRosterInstances)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
 	{	
 <#
 	GroupsStatesInLevelConstructor(Model.Groups);
@@ -39,14 +41,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	RostersStatesInLevelConstructor(Model.Rosters);
 	VariablesStatesInLevelConstructor(Model.Variables);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
-#>
-<#
-	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
-    {
-#>
-		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
-<#
-	}
+	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
 #>
 
 <#
@@ -76,6 +71,8 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	}
 #>
 
+	public Guid Id => IdOf.<#=Model.IdName#>;
+
 	public decimal @rowcode { get { return this.RosterVector.Last(); } }
 
 	public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }	
@@ -104,7 +101,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 
 	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
-		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest, this.RemoveRosterInstances)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),

@@ -100,8 +100,8 @@ namespace WB.UI.Interviewer.Activities
             this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
                 InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
 
-            this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, InterviewerUIResources.Prefs_VibrateOnErrorTitle,
-                InterviewerUIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
+            this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
+                UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
 
         }
         private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)

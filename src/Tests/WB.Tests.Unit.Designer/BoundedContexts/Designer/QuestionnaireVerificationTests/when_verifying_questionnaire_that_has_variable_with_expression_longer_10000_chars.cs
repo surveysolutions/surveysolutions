@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_message_with_one_references = () =>
             verificationMessages.GetError("WB0005").References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_question_type = () =>
+        It should_return_message_with_one_references_with_variable_type = () =>
             verificationMessages.GetError("WB0005").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Variable);
 
         It should_return_message_with_one_references_with_id_equals_questionId = () =>

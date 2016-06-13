@@ -8,20 +8,15 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
     internal class TesterSettings : IEnumeratorSettings
     {
-        internal const string DesignerEndpointParameterName = "DesignerEndpointV17";
+        internal const string DesignerEndpointParameterName = "DesignerEndpoint";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
         private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
         private const string GpsDesiredAccuracyParameterName = "GpsDesiredAccuracy";
+        internal const string VibrateOnErrorParameterName = "VibrateOnError";
 
-        private static ISharedPreferences SharedPreferences
-        {
-            get
-            {
-                return PreferenceManager.GetDefaultSharedPreferences(Application.Context);
-            }
-        }
+        private static ISharedPreferences SharedPreferences => PreferenceManager.GetDefaultSharedPreferences(Application.Context);
 
         public string Endpoint
         {
@@ -46,16 +41,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
-        public int BufferSize
-        {
-            get { return SharedPreferences.GetInt(BufferSizeParameterName, Application.Context.Resources.GetInteger(Resource.Integer.BufferSize)); }
-        }
+        public int BufferSize =>
+            SharedPreferences.GetInt(BufferSizeParameterName, Application.Context.Resources.GetInteger(Resource.Integer.BufferSize));
 
-        public bool AcceptUnsignedSslCertificate
-        {
-            get { return SharedPreferences.GetBoolean(AcceptUnsignedSslCertificateParameterName, 
-                Application.Context.Resources.GetBoolean(Resource.Boolean.AcceptUnsignedSslCertificate)); }
-        }
+        public bool AcceptUnsignedSslCertificate => SharedPreferences.GetBoolean(AcceptUnsignedSslCertificateParameterName, 
+            Application.Context.Resources.GetBoolean(Resource.Boolean.AcceptUnsignedSslCertificate));
 
         public int GpsReceiveTimeoutSec
         {
@@ -70,6 +60,15 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 }
 
                 return defValue;
+            }
+        }
+
+        public bool VibrateOnError
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+                return SharedPreferences.GetBoolean(VibrateOnErrorParameterName, defValue);
             }
         }
 
@@ -88,7 +87,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-        public bool VibrateOnError => true;
         public int EventChunkSize => 1000;
     }
 }

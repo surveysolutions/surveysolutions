@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class <#=Model.ClassName#>
 	{   
-		private <#=Model.ReturnType#> <#=Model.MethodName#>(long optioncode, string optiontext)
+		private <#=Model.ReturnType#> <#=Model.MethodName#>(int optioncode)
 		{
-			var self = <#=Model.VariableName#>;
+			var self = <#=Model.VariableName#>; 
 			return <#=Model.Expression#>;
 		}      
 	}

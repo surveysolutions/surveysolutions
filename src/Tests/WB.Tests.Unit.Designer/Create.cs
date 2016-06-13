@@ -6,17 +6,14 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
@@ -29,7 +26,6 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -49,12 +45,10 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -353,53 +347,9 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static IPublishedEvent<GroupBecameARoster> GroupBecameARosterEvent(string groupId)
-        {
-            return ToPublishedEvent(new GroupBecameARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
-        }
-
-        public static IPublishedEvent<GroupCloned> GroupClonedEvent(string groupId, string groupTitle = null,
-            string parentGroupId = null)
-        {
-            return ToPublishedEvent(new GroupCloned()
-            {
-                PublicKey = Guid.Parse(groupId),
-                ParentGroupPublicKey = GetQuestionnaireItemParentId(parentGroupId),
-                GroupText = groupTitle,
-                TargetIndex = 0
-            });
-        }
-
-        public static IPublishedEvent<GroupDeleted> GroupDeletedEvent(string groupId)
-        {
-            return ToPublishedEvent(new GroupDeleted()
-            {
-                GroupPublicKey = Guid.Parse(groupId)
-            });
-        }
-
-        public static IPublishedEvent<GroupStoppedBeingARoster> GroupStoppedBeingARosterEvent(string groupId)
-        {
-            return ToPublishedEvent(new GroupStoppedBeingARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
-        }
-
-        public static IPublishedEvent<GroupUpdated> GroupUpdatedEvent(string groupId, string groupTitle)
-        {
-            return ToPublishedEvent(new GroupUpdated()
-            {
-                GroupPublicKey = Guid.Parse(groupId),
-                GroupText = groupTitle
-            });
-        }
-
         public static KeywordsProvider KeywordsProvider()
         {
             return new KeywordsProvider(Create.SubstitutionService());
-        }
-
-        public static ILiteEventRegistry LiteEventRegistry()
-        {
-            return new LiteEventRegistry();
         }
 
         public static LookupTable LookupTable(string tableName, string fileName = null)
@@ -470,17 +420,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static IPublishedEvent<MultimediaQuestionUpdated> MultimediaQuestionUpdatedEvent(string questionId, string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new MultimediaQuestionUpdated()
-            {
-                QuestionId = Guid.Parse(questionId),
-                VariableName = questionVariable,
-                Title = questionTitle,
-                EnablementCondition = questionConditionExpression
-            });
-        }
-
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false,
             params decimal[] answers)
@@ -519,43 +458,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static IPublishedEvent<NewGroupAdded> NewGroupAddedEvent(string groupId, string parentGroupId = null,
-            string groupTitle = null)
-        {
-            return ToPublishedEvent(new NewGroupAdded()
-            {
-                PublicKey = Guid.Parse(groupId),
-                ParentGroupPublicKey = GetQuestionnaireItemParentId(parentGroupId),
-                GroupText = groupTitle
-            });
-        }
-
-        public static IPublishedEvent<NewQuestionAdded> NewQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, QuestionType questionType = QuestionType.Text, string questionVariable = null,
-            string questionTitle = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(Event.NewQuestionAdded(
-                publicKey: GetQuestionnaireItemId(questionId),
-                groupPublicKey: GetQuestionnaireItemId(parentGroupId),
-                questionType: questionType,
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                conditionExpression: questionConditionExpression
-            ));
-        }
-
-        public static IPublishedEvent<NewQuestionnaireCreated> NewQuestionnaireCreatedEvent(string questionnaireId,
-            string questionnaireTitle = null,
-            bool? isPublic = null)
-        {
-            return ToPublishedEvent(new NewQuestionnaireCreated()
-            {
-                PublicKey = new Guid(questionnaireId),
-                Title = questionnaireTitle,
-                IsPublic = isPublic ?? false
-            }, new Guid(questionnaireId));
-        }
-
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
@@ -574,32 +476,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
             };
-        }
-
-        public static IPublishedEvent<NumericQuestionChanged> NumericQuestionChangedEvent(string questionId,
-            string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(Event.NumericQuestionChanged(
-                publicKey: Guid.Parse(questionId),
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                conditionExpression: questionConditionExpression
-            ));
-        }
-
-        public static IPublishedEvent<NumericQuestionCloned> NumericQuestionClonedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null, string sourceQuestionId = null)
-        {
-            return ToPublishedEvent(Event.NumericQuestionCloned(
-                publicKey: GetQuestionnaireItemId(questionId),
-                groupPublicKey: GetQuestionnaireItemId(parentGroupId),
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                conditionExpression: questionConditionExpression,
-                sourceQuestionId: GetQuestionnaireItemId(sourceQuestionId),
-                targetIndex: 0
-            ));
         }
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
@@ -628,11 +504,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, IEvent payload = null)
-        {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<IEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
-        }
-
         public static QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
             bool hideIfDisabled = false)
@@ -650,36 +521,6 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 Featured = preFilled
             };
-        }
-
-        public static IPublishedEvent<QRBarcodeQuestionCloned> QRBarcodeQuestionClonedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null, string sourceQuestionId = null,
-            IList<ValidationCondition> validationConditions = null)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionCloned()
-            {
-                QuestionId = GetQuestionnaireItemId(questionId),
-                ParentGroupId = GetQuestionnaireItemId(parentGroupId),
-                VariableName = questionVariable,
-                Title = questionTitle,
-                EnablementCondition = questionConditionExpression,
-                SourceQuestionId = GetQuestionnaireItemId(sourceQuestionId),
-                TargetIndex = 0,
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
-            });
-        }
-
-        public static IPublishedEvent<QRBarcodeQuestionUpdated> QRBarcodeQuestionUpdatedEvent(string questionId,
-            string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionUpdated()
-            {
-                QuestionId = Guid.Parse(questionId),
-                VariableName = questionVariable,
-                Title = questionTitle,
-                EnablementCondition = questionConditionExpression
-            });
         }
 
         public static IQuestion Question(
@@ -706,69 +547,6 @@ namespace WB.Tests.Unit.Designer
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
-        }
-
-        public static IPublishedEvent<QuestionChanged> QuestionChangedEvent(string questionId, string parentGroupId = null,
-            string questionVariable = null, string questionTitle = null, QuestionType? questionType = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(Event.QuestionChanged(
-                publicKey: Guid.Parse(questionId),
-                groupPublicKey: Guid.Parse(parentGroupId ?? Guid.NewGuid().ToString()),
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                questionType: questionType ?? QuestionType.Text,
-                conditionExpression: questionConditionExpression
-            ));
-        }
-
-        public static IPublishedEvent<QuestionCloned> QuestionClonedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
-            string sourceQuestionId = null,
-            IList<ValidationCondition> validationConditions = null, bool hideIfDisabled = false)
-        {
-            return ToPublishedEvent(new QuestionCloned(
-                publicKey: GetQuestionnaireItemId(questionId),
-                groupPublicKey: GetQuestionnaireItemId(parentGroupId),
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                questionType: questionType,
-                conditionExpression: questionConditionExpression,
-                hideIfDisabled: hideIfDisabled,
-                sourceQuestionId: GetQuestionnaireItemId(sourceQuestionId),
-                targetIndex: 0,
-                featured: false,
-                instructions: null,
-                properties: Create.QuestionProperties(),
-                responsibleId: Guid.NewGuid(),
-                capital: false,
-                questionScope: QuestionScope.Interviewer,
-                variableLabel: null,
-                validationExpression: null,
-                validationMessage: null,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null,
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                mask: null,
-                maxAllowedAnswers: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                sourceQuestionnaireId: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: false
-            ));
-        }
-
-        public static IPublishedEvent<QuestionDeleted> QuestionDeletedEvent(string questionId = null)
-        {
-            return ToPublishedEvent(new QuestionDeleted(GetQuestionnaireItemId(questionId)));
         }
 
         public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
@@ -810,37 +588,6 @@ namespace WB.Tests.Unit.Designer
                 ReferenceId = referenceId ?? Guid.NewGuid(),
                 ReferenceType = referenceType ?? QuestionnaireItemType.Group
             };
-        }
-
-        public static IPublishedEvent<QuestionnaireCloned> QuestionnaireClonedEvent(string questionnaireId,
-            string chapter1Id = null, string chapter1Title = "", string chapter2Id = null, string chapter2Title = "",
-            string questionnaireTitle = null, string chapter1GroupId = null, string chapter1GroupTitle = null,
-            string chapter2QuestionId = null, string chapter2QuestionTitle = null,
-            string chapter2QuestionVariable = null,
-            string chapter2QuestionConditionExpression = null,
-            string chapter1StaticTextId = null, string chapter1StaticText = null,
-            bool? isPublic = null,
-            Guid? clonedFromQuestionnaireId = null)
-        {
-            var result = ToPublishedEvent(new QuestionnaireCloned()
-            {
-                QuestionnaireDocument =
-                    CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
-                        chapter1Id: chapter1Id ?? Guid.NewGuid().FormatGuid(), chapter1Title: chapter1Title, chapter2Id: chapter2Id ?? Guid.NewGuid().FormatGuid(),
-                        chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
-                        chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
-                        chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
-                        chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
-                        isPublic: isPublic ?? false),
-                ClonedFromQuestionnaireId = clonedFromQuestionnaireId ?? Guid.NewGuid()
-            }, new Guid(questionnaireId));
-            return result;
-        }
-
-        public static IPublishedEvent<Main.Core.Events.Questionnaire.QuestionnaireDeleted> QuestionnaireDeleted(Guid questionnaireId)
-        {
-            return ToPublishedEvent(new Main.Core.Events.Questionnaire.QuestionnaireDeleted(), eventSourceId: questionnaireId);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithSharedPersons(Guid? id = null, Guid? createdBy = null, List<Guid> sharedPersons = null)
@@ -921,17 +668,6 @@ namespace WB.Tests.Unit.Designer
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
-        public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
-            string targetGroupId = null, int? targetIndex = null, string questionnaireId = null)
-        {
-            return ToPublishedEvent(new QuestionnaireItemMoved()
-            {
-                PublicKey = Guid.Parse(itemId),
-                GroupKey = GetQuestionnaireItemParentId(targetGroupId),
-                TargetIndex = targetIndex ?? 0
-            }, Guid.Parse(questionnaireId ?? Guid.NewGuid().ToString()));
-        }
-
         public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
         {
             return new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
@@ -942,13 +678,6 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireStateTracker();
         }
 
-        public static IPublishedEvent<QuestionnaireUpdated> QuestionnaireUpdatedEvent(string questionnaireId,
-            string questionnaireTitle,
-            bool isPublic = false)
-        {
-            return ToPublishedEvent(new QuestionnaireUpdated() { Title = questionnaireTitle, IsPublic = isPublic }, new Guid(questionnaireId));
-        }
-
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid() });
 
@@ -957,13 +686,15 @@ namespace WB.Tests.Unit.Designer
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
-        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, 
+            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
                 variable: variable,
                 title: title,
-                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
+                fixedRosterTitles: fixedRosterTitles);
 
         public static Group Roster(
             Guid? rosterId = null,
@@ -1007,21 +738,6 @@ namespace WB.Tests.Unit.Designer
             return group;
         }
 
-        public static IPublishedEvent<RosterChanged> RosterChanged(string groupId)
-        {
-            return ToPublishedEvent(new RosterChanged(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
-        }
-
-
-        public static IPublishedEvent<SharedPersonFromQuestionnaireRemoved> SharedPersonFromQuestionnaireRemoved(Guid questionnaireId, Guid personId)
-        {
-            return ToPublishedEvent(new SharedPersonFromQuestionnaireRemoved() { PersonId = personId }, questionnaireId);
-        }
-
-        public static IPublishedEvent<SharedPersonToQuestionnaireAdded> SharedPersonToQuestionnaireAdded(Guid questionnaireId, Guid personId)
-        {
-            return ToPublishedEvent(new SharedPersonToQuestionnaireAdded() { PersonId = personId }, questionnaireId);
-        }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
@@ -1046,7 +762,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
+            bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false)
         {
             return new SingleQuestion
             {
@@ -1060,7 +776,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                Featured = isPrefilled,
+                Properties = {OptionsFilterExpression = optionsFilter}
             };
         }
 
@@ -1082,71 +800,9 @@ namespace WB.Tests.Unit.Designer
                 attachmentName);
         }
 
-        public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
-        {
-            return ToPublishedEvent(Create.Event.StaticTextAdded(entityId : GetQuestionnaireItemId(entityId),
-                parentId : GetQuestionnaireItemId(parentId),
-                text : text));
-        }
-
-        public static IPublishedEvent<StaticTextCloned> StaticTextClonedEvent(string entityId = null,
-            string parentId = null, string sourceEntityId = null, string text = null, int targetIndex = 0)
-        {
-            return ToPublishedEvent(Create.Event.StaticTextCloned(
-                publicKey: GetQuestionnaireItemId(entityId),
-                parentId : GetQuestionnaireItemId(parentId),
-                sourceEntityId : GetQuestionnaireItemId(sourceEntityId),
-                text : text,
-                targetIndex : targetIndex));
-        }
-
-        public static IPublishedEvent<StaticTextDeleted> StaticTextDeletedEvent(string entityId = null)
-        {
-            return ToPublishedEvent(new StaticTextDeleted()
-            {
-                EntityId = GetQuestionnaireItemId(entityId)
-            });
-        }
-
-        public static IPublishedEvent<StaticTextUpdated> StaticTextUpdatedEvent(string entityId = null, string text = null)
-        {
-            return ToPublishedEvent(Create.Event.StaticTextUpdated(entityId : GetQuestionnaireItemId(entityId),
-                text : text));
-        }
-
         public static ISubstitutionService SubstitutionService()
         {
             return new SubstitutionService();
-        }
-
-        public static IPublishedEvent<TemplateImported> TemplateImportedEvent(
-            string questionnaireId,
-            string chapter1Id = null,
-            string chapter1Title = null,
-            string chapter2Id = null,
-            string chapter2Title = null,
-            string questionnaireTitle = null,
-            string chapter1GroupId = null, string chapter1GroupTitle = null,
-            string chapter2QuestionId = null,
-            string chapter2QuestionTitle = null,
-            string chapter2QuestionVariable = null,
-            string chapter2QuestionConditionExpression = null,
-            string chapter1StaticTextId = null, string chapter1StaticText = null,
-            bool? isPublic = null)
-        {
-            return ToPublishedEvent(new TemplateImported()
-            {
-                Source =
-                    CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
-                        chapter1Id: chapter1Id ?? Guid.NewGuid().FormatGuid(), chapter1Title: chapter1Title,
-                        chapter2Id: chapter2Id ?? Guid.NewGuid().FormatGuid(),
-                        chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
-                        chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
-                        chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
-                        chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
-                        isPublic: isPublic ?? false)
-            }, new Guid(questionnaireId));
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1162,34 +818,6 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.TextList,
                 StataExportCaption = variable
             };
-        }
-
-        public static IPublishedEvent<TextListQuestionChanged> TextListQuestionChangedEvent(string questionId,
-            string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new TextListQuestionChanged()
-            {
-                PublicKey = Guid.Parse(questionId),
-                StataExportCaption = questionVariable,
-                QuestionText = questionTitle,
-                ConditionExpression = questionConditionExpression
-            });
-        }
-
-        public static IPublishedEvent<TextListQuestionCloned> TextListQuestionClonedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null, string sourceQuestionId = null)
-        {
-            return ToPublishedEvent(new TextListQuestionCloned()
-            {
-                PublicKey = GetQuestionnaireItemId(questionId),
-                GroupId = GetQuestionnaireItemId(parentGroupId),
-                StataExportCaption = questionVariable,
-                QuestionText = questionTitle,
-                ConditionExpression = questionConditionExpression,
-                SourceQuestionId = GetQuestionnaireItemId(sourceQuestionId),
-                TargetIndex = 0
-            });
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1222,25 +850,6 @@ namespace WB.Tests.Unit.Designer
                 Instructions = instruction,
                 ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
             };
-        }
-
-        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event,
-            Guid? eventSourceId = null,
-            string origin = null,
-            DateTime? eventTimeStamp = null,
-            Guid? eventId = null)
-            where T : class, IEvent
-        {
-            var mock = new Mock<IPublishedEvent<T>>();
-            var eventIdentifier = eventId ?? Guid.NewGuid();
-            mock.Setup(x => x.Payload).Returns(@event);
-            mock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
-            mock.Setup(x => x.Origin).Returns(origin);
-            mock.Setup(x => x.EventIdentifier).Returns(eventIdentifier);
-            mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
-            var publishableEventMock = mock.As<IUncommittedEvent>();
-            publishableEventMock.Setup(x => x.Payload).Returns(@event);
-            return mock.Object;
         }
 
         public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)

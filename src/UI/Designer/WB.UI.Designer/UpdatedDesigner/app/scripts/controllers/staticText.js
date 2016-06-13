@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('StaticTextCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, hotkeys) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, hotkeys) {
             "use strict";
 
             $scope.currentChapterId = $state.params.chapterId;
@@ -52,6 +52,7 @@
                     .success(function (result) {
                         $scope.initialStaticText = angular.copy(result);
                         dataBind(result);
+                        utilityService.scrollToValidationCondition($state.params.validationIndex);
                     });
             };
 

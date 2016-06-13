@@ -22,7 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 {
                     Create.Entity.StaticText(staticText1Id),
                     Create.Entity.StaticText(staticText2Id),
-                    Create.Entity.TextQuestion(questionId)
+                    Create.Entity.Group(children: new[]
+                    {
+                        Create.Entity.TextQuestion(questionId)
+                    })
                 })));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
@@ -37,6 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () =>
             invalidEntitiesInInterview = interview.GetInvalidEntitiesInInterview();
+
+        It shouldreturn_3_entities_with_error = () =>
+          invalidEntitiesInInterview.Count().ShouldEqual(3);
 
         It should_contain_first_invalid_static_text = () =>
             invalidEntitiesInInterview.ShouldContain(Create.Entity.Identity(staticText1Id));

@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Nito.AsyncEx;
 using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
+using SQLite.Net.Async;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
@@ -23,10 +29,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         static readonly Encoding TextEncoding = Encoding.UTF8;
 
-        public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
+        public SqliteEventStorage(ISQLitePlatform sqLitePlatform,
             ILogger logger,
-            ITraceListener traceListener, 
-            SqliteSettings settings, 
+            ITraceListener traceListener,
+            SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings)
         {
             string pathToDatabase = settings.PathToDatabaseDirectory;
@@ -36,15 +42,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
 
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
-                new SQLiteConnectionString(pathToDatabase, true, 
+                new SQLiteConnectionString(pathToDatabase, true,
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
-                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length),type),
+                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
                         (type) => true)))
             {
                 //TraceListener = traceListener
             };
-            this.logger = logger;            
+
+            this.logger = logger;
             this.enumeratorSettings = enumeratorSettings;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
@@ -52,12 +59,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
+            return Read(id, minVersion, null, new CancellationToken());
+        }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+        {
+            var totalEventCount = this
+                .connection
+                .Table<EventView>()
+                .Count(eventView
+                    => eventView.EventSourceId == id
+                       && eventView.EventSequence >= minVersion);
+
+            if (totalEventCount == 0)
+                yield break;
+            
             int lastReadEventSequence = Math.Max(minVersion, 0);
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var startSequenceInTheBulk = lastReadEventSequence;
                 var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
                 bulk = this
@@ -75,6 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 {
                     yield return committedEvent;
                     lastReadEventSequence = committedEvent.EventSequence + 1;
+                    progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
                 }
 
             } while (bulk.Count > 0);
@@ -212,7 +236,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
                 var oldMainCoreAssemblyName = "Main.Core";
 
-                if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal) )
+                if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal))
                 {
                     assemblyName = newCapiAssemblyName;
                 }

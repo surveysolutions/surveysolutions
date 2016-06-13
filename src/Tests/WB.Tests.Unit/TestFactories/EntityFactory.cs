@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -90,8 +91,8 @@ namespace WB.Tests.Unit.TestFactories
                 ContentType = contentType,
             };
 
-        public CategoricalQuestionOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
-            => new CategoricalQuestionOption
+        public CategoricalOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
+            => new CategoricalOption
             {
                 Value = value,
                 Title = title,
@@ -117,6 +118,14 @@ namespace WB.Tests.Unit.TestFactories
                 DataExportFormat.Tabular,
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
+
+        public DateTimeAnswer DateTimeAnswer(Identity answerIdentity, DateTime answer)
+        {
+            var model = new DateTimeAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+            model.SetAnswer(answer);
+            return model;
+        }
 
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -268,13 +277,15 @@ namespace WB.Tests.Unit.TestFactories
             bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
             Guid? interviewId = null,
-            Guid? responsibleId = null)
+            Guid? responsibleId = null,
+            Guid? questionnaireId = null)
             => new InterviewData
             {
                 CreatedOnClient = createdOnClient,
                 Status = status,
                 InterviewId = interviewId.GetValueOrDefault(),
-                ResponsibleId = responsibleId.GetValueOrDefault()
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid()
             };
 
         public InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
@@ -436,14 +447,20 @@ namespace WB.Tests.Unit.TestFactories
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false);
 
-        public InterviewView InterviewView(Guid? prefilledQuestionId = null)
-            => new InterviewView
+        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null)
+        {
+            interviewId = interviewId ?? Guid.NewGuid();
+            return new InterviewView
             {
+                Id = interviewId.FormatGuid(),
+                InterviewId = interviewId.Value,
+                QuestionnaireId = questionnaireId,
                 GpsLocation = new InterviewGpsLocationView
                 {
                     PrefilledQuestionId = prefilledQuestionId
                 }
             };
+        }
 
         public LabeledVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
             => new LabeledVariable(variableName, label, questionId, variableValueLabels);
@@ -590,6 +607,9 @@ namespace WB.Tests.Unit.TestFactories
         public ParaDataExportProcessDetails ParaDataExportProcess()
             => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
+            => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
+
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
 
@@ -616,10 +636,11 @@ namespace WB.Tests.Unit.TestFactories
             string enablementCondition = null,
             string validationExpression = null,
             string validationMessage = null,
+            string title = null,
             QuestionType questionType = QuestionType.Text,
             IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
-            => new TextQuestion("Question X")
+            => new TextQuestion(title ?? "Question X")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = questionType,
@@ -771,7 +792,8 @@ namespace WB.Tests.Unit.TestFactories
             string title = null,
             bool hideIfDisabled = false,
             string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null)
+            Guid? linkedToRosterId = null,
+            bool? isFilteredCombobox = null)
         {
             var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -794,7 +816,8 @@ namespace WB.Tests.Unit.TestFactories
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers,
-                LinkedFilterExpression = linkedFilterExpression
+                LinkedFilterExpression = linkedFilterExpression,
+                IsFilteredCombobox = isFilteredCombobox
             };
         }
 
@@ -905,6 +928,9 @@ namespace WB.Tests.Unit.TestFactories
             user.SetId(userId ?? Guid.NewGuid());
             return user;
         }
+
+        public UserDocument UserDocument()
+            => Create.Entity.UserDocument(userId: null);
 
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
         {

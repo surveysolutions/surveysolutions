@@ -130,8 +130,8 @@
     </div>
 
     <script type="text/ng-template" id="categorical-filter-expression">
-        <div class="form-group">
-            <label class="wb-label" for="optionsFilterExpression">Filter</label> <help></help>
+        <div class="form-group" ng-if="!activeQuestion.isLinked && !activeQuestion.isCascade">
+            <label class="wb-label" for="optionsFilterExpression">Filter</label>
             <div class="pseudo-form-control">
                 <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
             </div>

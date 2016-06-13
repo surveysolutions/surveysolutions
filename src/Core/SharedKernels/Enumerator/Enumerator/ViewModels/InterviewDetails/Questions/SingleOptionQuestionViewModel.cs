@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -26,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -33,7 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
@@ -46,6 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
         private Identity questionIdentity;
@@ -68,21 +73,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
-
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
-            var selectedValue = Monads.Maybe(() => answerModel.Answer);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
+            var interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
 
-            this.Options = questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+            this.UpdateQuestionOptions();
+
+            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void UpdateQuestionOptions()
+        {
+            var interview = this.interviewRepository.Get(interviewId.FormatGuid());
+            var answerModel = interview.GetSingleOptionAnswer(this.questionIdentity);
+            var selectedValue = Monads.Maybe(() => answerModel.Answer);
+
+            this.Options = this.filteredOptionsViewModel.Options
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
-            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            this.UpdateQuestionOptions();
+            this.RaisePropertyChanged(() => Options);
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
@@ -122,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, bool isSelected)
+        private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
         {
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
@@ -171,6 +188,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+
+            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             foreach (var option in Options)
             {
                 option.BeforeSelected -= this.OptionSelected;

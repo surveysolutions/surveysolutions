@@ -37,10 +37,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (answer is DateTimeAnswer)
             {
-                var dateTimeAnswer = (DateTimeAnswer)answer;
-                if (dateTimeAnswer.Answer.HasValue)
-                    return dateTimeAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-                return string.Empty;
+                var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionId);
+
+                return ((DateTimeAnswer) answer).Answer?.ToLocalTime().ToString(isTimestampQuestion
+                    ? CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern
+                    : CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern) ?? string.Empty;
             }
 
             if (answer is RealNumericAnswer)

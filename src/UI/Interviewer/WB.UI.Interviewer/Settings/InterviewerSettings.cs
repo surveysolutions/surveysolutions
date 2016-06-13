@@ -103,6 +103,7 @@ namespace WB.UI.Interviewer.Settings
                    $"CurrentDataTime:{DateTime.Now} {Environment.NewLine}" +
                    $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" + 
                    $"EventChunkSize:{this.EventChunkSize} {Environment.NewLine}" +
+                   $"VibrateOnError:{this.VibrateOnError} {Environment.NewLine}" +
                    $"InterviewsList:{interviewIds}";
         }
 

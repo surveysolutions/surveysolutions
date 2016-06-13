@@ -15,8 +15,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies,
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties,
+        Action<Identity[], Guid, decimal> removeRosterInstances)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
 	{
 <#
 	GroupsStatesInLevelConstructor(Model.Groups);
@@ -25,20 +26,13 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	StaticTextsStatesInLevelConstructor(Model.StaticTexts); 
 	RostersStatesInLevelConstructor(Model.Rosters);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
+	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
 #> 
-<# 
-	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder)
-    {
-#> 
-		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));
-<#
-	} 
-#>
 	}
 
 	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
-		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest, this.RemoveRosterInstances)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -93,6 +87,8 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 <# 
 	} 
 #>
+
+	public Guid Id => IdOf.@__questionnaire;
 		
 	private readonly IList<Action> _conditionExpressions = new List<Action>();
 

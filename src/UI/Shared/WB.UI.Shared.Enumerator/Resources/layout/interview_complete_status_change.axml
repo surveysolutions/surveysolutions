@@ -72,7 +72,7 @@
       <LinearLayout style="@style/Interview_Question_Header">
         <TextView
             style="@style/Interview_Complete_Screen_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Questions_With_Errors')" />
+            local:MvxBind="Text EntitiesWithErrorsDescription" />
       </LinearLayout>
       <MvxLinearLayout style="@style/Interview_Question_Header"
   android:orientation="vertical"
