@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.StaticTextClonedEvent(entityId: questionId, parentId: notExistingGroupId));
+                denormalizer.Update(viewState, Create.Event.StaticTextClonedEvent(entityId: questionId, parentId: notExistingGroupId));
 
         It should_groupInfoView_first_chapter_items_be_empty = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldBeEmpty();

@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewD
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.GroupClonedEvent(groupId: groupId, parentGroupId: chapterId));
+                denormalizer.Update(viewState, Create.Event.GroupClonedEvent(groupId: groupId, parentGroupId: chapterId));
 
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldNotBeNull();

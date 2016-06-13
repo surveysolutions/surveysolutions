@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.GroupBecameARosterEvent(groupId: groupId));
+                denormalizer.Update(viewState, Create.Event.GroupBecameARosterEvent(groupId: groupId));
 
         It should_questionnnaireInfoView_has_group_with_isroster_property_equal_to_true = () =>
             GetFirstGroupInFirstChapter().IsRoster.ShouldEqual(true);

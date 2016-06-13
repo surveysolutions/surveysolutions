@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             documentStorage = new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>();
             documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
 
-            @event = Create.TemplateImportedEvent(questionnaireId: questionnaireDocument.PublicKey.FormatGuid());
+            @event = Create.Event.TemplateImportedEvent(questionnaireId: questionnaireDocument.PublicKey.FormatGuid());
             @event.Payload.Source.SharedPersons.Add(Guid.NewGuid());
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
