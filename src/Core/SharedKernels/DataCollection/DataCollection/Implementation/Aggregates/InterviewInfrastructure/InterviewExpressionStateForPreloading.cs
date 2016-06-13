@@ -163,6 +163,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
+        public StructuralChanges GetStructuralChanges()
+        {
+            return new StructuralChanges();
+        }
+
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
         {
             return new InterviewExpressionStateForPreloading();
