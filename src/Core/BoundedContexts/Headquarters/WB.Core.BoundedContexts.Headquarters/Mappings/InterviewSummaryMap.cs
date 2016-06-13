@@ -8,12 +8,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
     {
         public InterviewSummaryMap()
         {
-            this.Table("InterviewSummaries");
+            this.Table("InterviewSummaries_sa");
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
-            Property(x => x.TeamLeadId);
+            Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
             Property(x => x.TeamLeadName);
             Property(x => x.ResponsibleRole);
             Property(x => x.UpdateDate);

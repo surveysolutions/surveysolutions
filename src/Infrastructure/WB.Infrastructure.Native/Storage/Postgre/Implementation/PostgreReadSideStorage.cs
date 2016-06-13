@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Engine;
 using NHibernate.Hql.Ast.ANTLR;
 using NHibernate.Impl;
@@ -104,7 +105,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             session.Delete(string.Format("from {0} e", entityName));
         }
 
-        public int Count<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult,TResult>> query)
+        public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult,TResult>> query)
         {
             var queryable= query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
 
@@ -123,15 +124,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
             var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
             var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
-            var result =session.CreateSQLQuery($"select count(*) from ({loader.SqlString}) as t");
 
+            var propertyProjection = ((PropertyProjection) criteriaImpl.Projection);
+            var columnName = propertyProjection.PropertyName;
+            var alliasName = loader.Translator.ProjectedColumnAliases[0];
+
+            var result = session.CreateSQLQuery($"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
+                                                $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{alliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{alliasName} IS NOT NULL)" +
+                                                $"SELECT count(*) FROM t WHERE {alliasName} IS NOT NULL; ");
             int position = 0;
             foreach (var collectedParameter in loader.Translator.CollectedParameters)
             {
                 result.SetParameter(position, collectedParameter.Value, collectedParameter.Type);
                 position++;
             }
-
+            foreach (var collectedParameter in loader.Translator.CollectedParameters)
+            {
+                result.SetParameter(position, collectedParameter.Value, collectedParameter.Type);
+                position++;
+            }
             return result;
         }
 
