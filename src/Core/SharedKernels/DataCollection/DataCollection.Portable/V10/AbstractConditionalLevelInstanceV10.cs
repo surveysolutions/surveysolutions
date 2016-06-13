@@ -18,21 +18,18 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
-            Dictionary<Guid, Guid[]> structuralDependencies,
-            Action<Identity[], Guid, decimal> removeRosterInstances)
+            Dictionary<Guid, Guid[]> structuralDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.RemoveRosterInstances = removeRosterInstances;
         }
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
             Dictionary<Guid, Guid[]> structuralDependencies,
-            IInterviewProperties properties,
-            Action<Identity[], Guid, decimal> removeRosterInstances)
-            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies, removeRosterInstances)
+            IInterviewProperties properties)
+            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.Quest = properties;
         }
@@ -93,7 +90,12 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
-        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        public virtual void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances)
+        {
+            this.RemoveRosterInstances = removeRosterInstances;
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
         {
             return () =>
             {
@@ -105,7 +107,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             };
         }
 
-        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
         {
             return () =>
             {
@@ -124,7 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
                     foreach (var rowcode in previousAnswer.Except(actualAnswer))
                     {
-                        removeRoster(RosterKey, itemId, rowcode);
+                        RemoveRosterInstances(RosterKey, itemId, rowcode);
                     }
                 }
             };
