@@ -133,6 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<Questionnaire>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
             this.Bind<IQuestionnaireExportStructureStorage>().To<QuestionnaireExportStructureStorage>().InSingletonScope();
+            this.Bind<IQuestionOptionsRepository>().To<QuestionnaireQuestionOptionsRepository>();
 
             CommandRegistry
                 .Setup<Questionnaire>()

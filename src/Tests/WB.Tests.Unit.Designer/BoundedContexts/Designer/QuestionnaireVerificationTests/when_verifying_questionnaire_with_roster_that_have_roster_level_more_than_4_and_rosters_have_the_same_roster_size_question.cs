@@ -83,8 +83,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_first_error_with_code__WB0055 = () =>
             verificationMessages.Single().Code.ShouldEqual("WB0055");
 
-        It should_return_message_reference_with_type_Question = () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_reference_with_type_Roster = () =>
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_reference_with_id_of_rosterGroupId = () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);

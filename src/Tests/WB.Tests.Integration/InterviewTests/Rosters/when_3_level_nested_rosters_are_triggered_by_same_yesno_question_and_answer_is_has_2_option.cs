@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, answers: new List<Answer>
+                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, options: new List<Answer>
                     {
                         Create.Option(text: "A", value: "10"),
                         Create.Option(text: "B", value: "20"),

@@ -22,21 +22,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
         Because of = () =>
         {
-            questionnaireChangeHistoryDenormalizer.Handle(Create.NewQuestionAddedEvent(questionId));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionClonedEvent(questionId2));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionChangedEvent(questionId: questionId,questionTitle: questionTitle));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionDeletedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.NewQuestionAddedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionClonedEvent(questionId2));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionChangedEvent(questionId: questionId,questionTitle: questionTitle));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionDeletedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.NumericQuestionClonedEvent(questionId2));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.NumericQuestionChangedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.NumericQuestionClonedEvent(questionId2));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.NumericQuestionChangedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.TextListQuestionClonedEvent(questionId2));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.TextListQuestionChangedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.TextListQuestionClonedEvent(questionId2));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.TextListQuestionChangedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QRBarcodeQuestionClonedEvent(questionId2));
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QRBarcodeQuestionUpdatedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QRBarcodeQuestionClonedEvent(questionId2));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QRBarcodeQuestionUpdatedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.MultimediaQuestionUpdatedEvent(questionId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.MultimediaQuestionUpdatedEvent(questionId));
         };
 
         It should_store_11_changes = () =>

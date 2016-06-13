@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public int? FailedValidationConditionIndex { get; set; }
 
         protected bool Equals(QuestionnaireVerificationReference other)
-        {
-            return this.Id.Equals(other.Id) && this.Type == other.Type;
-        }
+            => this.Id.Equals(other.Id)
+            && this.Type == other.Type
+            && this.FailedValidationConditionIndex == other.FailedValidationConditionIndex;
 
         public override bool Equals(object obj)
         {

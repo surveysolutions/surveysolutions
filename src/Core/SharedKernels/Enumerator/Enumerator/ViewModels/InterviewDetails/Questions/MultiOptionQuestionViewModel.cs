@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
         private readonly IUserInteractionService userInteraction;
+        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -49,7 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             IUserInteractionService userInteraction,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.QuestionState = questionStateViewModel;
@@ -57,6 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
             this.principal = principal;
             this.userInteraction = userInteraction;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
         }
@@ -70,6 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.userId = this.principal.CurrentUserIdentity.UserId;
@@ -81,17 +85,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
 
-            MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(
-                questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+            this.UpdateQuestionOptions();
+
+            filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+        }
+
+        private void UpdateQuestionOptions()
+        {
+            IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
+            MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
+            var optionViewModels = this.filteredOptionsViewModel.Options
                 .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
-                .ToList());
+                .ToList();
+
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(optionViewModels);
+        }
+
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            this.UpdateQuestionOptions();
+            this.RaisePropertyChanged(() => Options);
         }
 
         public void Dispose()
         {
+            filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }
@@ -103,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return true; }
         }
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {

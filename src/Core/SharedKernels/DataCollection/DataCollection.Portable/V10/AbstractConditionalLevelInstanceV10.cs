@@ -11,23 +11,28 @@ namespace WB.Core.SharedKernels.DataCollection.V10
     {
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
-        protected Dictionary<Guid, Func<long, string, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<long, string, bool>>();
+        public Action<Identity[], Guid, decimal> RemoveRosterInstances { get; private set; }
+
+        protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
-            Dictionary<Guid, Guid[]> structuralDependencies)
+            Dictionary<Guid, Guid[]> structuralDependencies,
+            Action<Identity[], Guid, decimal> removeRosterInstances)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
+            this.RemoveRosterInstances = removeRosterInstances;
         }
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
             Dictionary<Guid, Guid[]> structuralDependencies,
-            IInterviewProperties properties)
-            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
+            IInterviewProperties properties,
+            Action<Identity[], Guid, decimal> removeRosterInstances)
+            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies, removeRosterInstances)
         {
             this.Quest = properties;
         }
@@ -76,6 +81,55 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        private bool GetOptionFilterResult(Func<int, bool> optionFilter, int optionValue)
+        {
+            try
+            {
+                return optionFilter(optionValue);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        {
+            return () =>
+            {
+                var previousAnswer = getAnswer();
+                if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
+                {
+                    setAnswer(null);
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        {
+            return () =>
+            {
+                decimal[] previousAnswer = getAnswer();
+                if (previousAnswer == null || previousAnswer.Length == 0)
+                    return;
+
+                var actualAnswer = previousAnswer.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)))
+                    .ToArray();
+
+                var wereSomeOptionsRemoved = previousAnswer.Length > actualAnswer.Length;
+                if (wereSomeOptionsRemoved)
+                {
+                    setAnswer(actualAnswer);
+
+                    foreach (var rowcode in previousAnswer.Except(actualAnswer))
+                    {
+                        removeRoster(RosterKey, itemId, rowcode);
+                    }
+                }
+            };
+        }
+
         protected new Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
         {
             return () =>
@@ -91,7 +145,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected void UpdateAllNestedItemsStateAndPropagateStateOnRosters(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
         {
-            if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
+            var hasNoStructureDependencies = !structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any();
+            
+            if (hasNoStructureDependencies) return;
 
             var stack = new Queue<Guid>(structureDependencies[itemId]);
             while (stack.Any())
@@ -104,15 +160,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 }
                 else
                 {
-                    var rosterScope = GetRosterScopeIds(id);
+                    var rosterScope = this.GetRosterScopeIds(id);
 
-                    var isQuestionnaireLevel = this.RosterKey.Length == 1 && this.RosterKey[0].Id == this.GetQuestionnaireId();
+                    var rosters = this.GetNestedRostersBySourceQuestionId(rosterScope.Last());
 
-                    var rosterKey = isQuestionnaireLevel
-                        ? new Identity[0]
-                        : this.RosterKey;
-
-                    var rosters = this.GetInstances(rosterKey, rosterScope.Last());
                     if (rosters != null)
                     {
                         foreach (var roster in rosters)
@@ -139,6 +190,18 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        private IEnumerable<IExpressionExecutableV10> GetNestedRostersBySourceQuestionId(Guid rosterSorceQuestionId)
+        {
+            var isQuestionnaireLevel = this.RosterKey.Length == 1 && this.RosterKey[0].Id == this.GetQuestionnaireId();
+
+            var rosterKey = isQuestionnaireLevel
+                ? new Identity[0]
+                : this.RosterKey;
+
+            var rosters = this.GetInstances(rosterKey, rosterSorceQuestionId);
+            return rosters;
+        }
+
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options)
         {
             if (!OptionFiltersMap.ContainsKey(questionId))
@@ -150,7 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             var filter = OptionFiltersMap[questionId];
             foreach (var option in options)
             {
-                var isOptionSatisfyFilter = filter(option.Value, option.Title);
+                var isOptionSatisfyFilter = GetOptionFilterResult(filter, option.Value);
                 if (isOptionSatisfyFilter)
                 {
                     yield return option;

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using MvvmCross.Platform;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -54,6 +56,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var handler = this.AnswerRemoved;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+    }
+
+    public class SingleOptionQuestionOptionViewModelEqualityComparer : IEqualityComparer<SingleOptionQuestionOptionViewModel>
+    {
+        public bool Equals(SingleOptionQuestionOptionViewModel x, SingleOptionQuestionOptionViewModel y)
+        {
+            return (x.Title == y.Title
+                    && x.Value == y.Value
+                    && x.Selected == y.Selected);
+        }
+
+        public int GetHashCode(SingleOptionQuestionOptionViewModel obj)
+        {
+            return obj?.Value.GetHashCode() ?? 0;
         }
     }
 }

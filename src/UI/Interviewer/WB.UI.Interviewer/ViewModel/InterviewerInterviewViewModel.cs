@@ -49,11 +49,8 @@ namespace WB.UI.Interviewer.ViewModel
             get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync())); }
         }
 
-        private IMvxCommand signOutCommand;
-        public IMvxCommand SignOutCommand
-        {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
-        }
+        private IMvxAsyncCommand signOutCommand;
+        public IMvxAsyncCommand SignOutCommand => this.signOutCommand ?? (this.signOutCommand = new MvxAsyncCommand(this.SignOutAsync));
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
         {

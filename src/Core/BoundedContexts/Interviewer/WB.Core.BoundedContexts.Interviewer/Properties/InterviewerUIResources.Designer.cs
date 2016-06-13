@@ -641,6 +641,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading.
+        /// </summary>
+        public static string Interview_Loading {
+            get {
+                return ResourceManager.GetString("Interview_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading... {0}%.
+        /// </summary>
+        public static string Interview_Loading_With_Percents {
+            get {
+                return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {
@@ -889,24 +907,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_Title {
             get {
                 return ResourceManager.GetString("Prefs_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The tablet is going to vibrate when an answer didn&apos;t pass the validation.
-        /// </summary>
-        public static string Prefs_VibrateOnErrorSummary {
-            get {
-                return ResourceManager.GetString("Prefs_VibrateOnErrorSummary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vibrate when invalid answer is given.
-        /// </summary>
-        public static string Prefs_VibrateOnErrorTitle {
-            get {
-                return ResourceManager.GetString("Prefs_VibrateOnErrorTitle", resourceCulture);
             }
         }
         

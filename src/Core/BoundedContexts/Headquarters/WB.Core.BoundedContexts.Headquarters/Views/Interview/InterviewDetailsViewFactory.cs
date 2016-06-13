@@ -5,14 +5,17 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    using Interview = SharedKernels.DataCollection.Implementation.Aggregates.Interview;
+
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
@@ -23,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
@@ -30,7 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IInterviewDataAndQuestionnaireMerger merger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService)
         {
@@ -40,11 +45,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.eventSourcedRepository = eventSourcedRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
         }
 
-        public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
+        public DetailsViewModel GetInterviewDetails(Guid interviewId,
+            Guid? currentGroupId, 
+            decimal[] currentGroupRosterVector, 
+            InterviewDetailsFilter? filter)
         {
             var interview = this.interviewStore.GetById(interviewId);
 
@@ -63,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             
             var attachmentIdAndTypes = this.attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
 
-            var interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
+            InterviewDetailsView interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
             var interviewEntityViews = interviewDetailsView.Groups
                 .SelectMany(group => group.Entities)
@@ -71,16 +80,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToList();
             var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
 
-            var detailsStatisticView = new DetailsStatisticView()
+            this.FilterCategoricalQuestionOptions(interviewId, questionViews);
+
+            var detailsStatisticView = new DetailsStatisticView
             {
-                AnsweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
-                UnansweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
-                CommentedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
-                EnabledCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
-                FlaggedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
-                InvalidCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
-                SupervisorsCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
-                HiddenCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
+                AnsweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
+                UnansweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
+                CommentedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
+                EnabledCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
+                FlaggedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
+                InvalidCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
+                SupervisorsCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
+                HiddenCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
@@ -104,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     interviewGroupView.Entities = interviewGroupView.Entities
                         .Where(question =>
                         {
-                            return this.IsEntityInFilter(filter, question);
+                            return IsEntityInFilter(filter, question);
                         })
                         .ToList();
 
@@ -126,6 +137,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
+        private void FilterCategoricalQuestionOptions(Guid interviewId, List<InterviewQuestionView> questionViews)
+        {
+            var interviewAggregate = (Interview) this.eventSourcedRepository.GetLatest(typeof(Interview), interviewId);
+
+            foreach (var categoricalQuestion in questionViews.Where(x => x.IsFilteredCategorical))
+            {
+                var questionIdentity = new Identity(categoricalQuestion.Id, categoricalQuestion.RosterVector);
+
+                IEnumerable<CategoricalOption> filteredOptions =
+                    interviewAggregate.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty);
+
+                categoricalQuestion.Options = filteredOptions
+                    .Select(x => new QuestionOptionView
+                    {
+                        Label = x.Title,
+                        Value = x.Value
+                    })
+                    .ToList();
+            }
+        }
+
         public Guid? GetFirstChapterId(Guid interviewId)
         {
             var interview = this.interviewStore.GetById(interviewId);
@@ -140,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return null;
         }
 
-        private bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
+        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
         {
             var question = entity as InterviewQuestionView;
 
