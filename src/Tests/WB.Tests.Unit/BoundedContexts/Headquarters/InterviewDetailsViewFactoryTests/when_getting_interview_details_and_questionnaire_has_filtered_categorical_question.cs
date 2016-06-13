@@ -7,23 +7,16 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactoryTests
 {
-    internal class when_questionnaire_has_filtered_categorical_question : InterviewDetailsViewFactoryTestsContext
+    internal class when_getting_interview_details_and_questionnaire_has_filtered_categorical_question : InterviewDetailsViewFactoryTestsContext
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var singleOptionQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var multioptionQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
@@ -35,35 +28,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
                     questionId: multioptionQuestionId,
                     answers: new decimal[] { 1, 2 }));
 
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepository.SetReturnsDefault((IQuestionnaire)Create.Entity.PlainQuestionnaire(questionnaire));
-            questionnaireRepository.SetReturnsDefault(questionnaire);
-
-            InterviewData interview = Create.Entity.InterviewData();
-            interview.QuestionnaireId = questionnaire.PublicKey;
-
-            var interviewStore = new TestInMemoryWriter<InterviewData>();
-            interviewStore.Store(interview, interviewId);
-
-            var expressionState = new Mock<ILatestInterviewExpressionState>();
-            expressionState.Setup(x => x.FilterOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<IEnumerable<CategoricalOption>>()))
-                .Returns((Identity identity, IEnumerable<CategoricalOption> options) => options.Where(x => x.Value != 1));
-
-            var eventSourcedAggregateRootRepository = new Mock<IEventSourcedAggregateRootRepository>();
-            var prototypeProvider = new Mock<IInterviewExpressionStatePrototypeProvider>();
-            prototypeProvider.SetReturnsDefault(expressionState.Object);
-            eventSourcedAggregateRootRepository.SetReturnsDefault((IEventSourcedAggregateRoot)
-                Create.AggregateRoot.Interview(expressionProcessorStatePrototypeProvider: prototypeProvider.Object,
-                questionnaireRepository: questionnaireRepository.Object));
-
-            var merger = new Mock<IInterviewDataAndQuestionnaireMerger>();
-            merger.SetReturnsDefault(new InterviewDetailsView
+            var interviewDetailsView = new InterviewDetailsView
             {
                 Groups = new List<InterviewGroupView>
                 {
-                    new InterviewGroupView(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+                    new InterviewGroupView(singleOptionQuestionId)
                     {
-                        Entities = new List<InterviewEntityView>()
+                        Entities = new List<InterviewEntityView>
                         {
                             new InterviewQuestionView
                             {
@@ -92,12 +63,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
                         }
                     }
                 }
-            });
+            };
 
-            viewfactory = CreateViewFactory(plainQuestionnaireRepository: questionnaireRepository.Object,
-                interviewStore: interviewStore,
-                eventSourcedRepository: eventSourcedAggregateRootRepository.Object,
-                merger: merger.Object);
+            var expressionState = new Mock<ILatestInterviewExpressionState>();
+            expressionState
+                .Setup(x => x.FilterOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<IEnumerable<CategoricalOption>>()))
+                .Returns((Identity identity, IEnumerable<CategoricalOption> options) => options.Where(x => x.Value != 1));
+
+            viewfactory = Setup.InterviewDetailsViewFactory(
+                interviewId, interviewDetailsView, questionnaire, expressionState.Object);
         };
 
         Because of = () => view = viewfactory.GetInterviewDetails(interviewId, null, Empty.RosterVector, InterviewDetailsFilter.All);
@@ -113,6 +87,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
 
         static InterviewDetailsViewFactory viewfactory;
         static DetailsViewModel view;
-        static Guid interviewId;
+        static Guid interviewId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
     }
 }

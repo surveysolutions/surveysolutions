@@ -1,7 +1,6 @@
 using System;
 using Main.Core.Documents;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -33,6 +32,9 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -40,7 +42,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -90,6 +91,26 @@ namespace WB.Tests.Unit.TestFactories
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
 
+        public InterviewDetailsViewFactory InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore = null,
+            IPlainStorageAccessor<UserDocument> userStore = null,
+            IInterviewDataAndQuestionnaireMerger merger = null,
+            IChangeStatusFactory changeStatusFactory = null,
+            IInterviewPackagesService incomingSyncPackagesQueue = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IEventSourcedAggregateRootRepository eventSourcedRepository = null,
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore = null,
+            IAttachmentContentService attachmentContentService = null)
+            => new InterviewDetailsViewFactory(interviewStore ?? new TestInMemoryWriter<InterviewData>(),
+                userStore ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(_
+                    => _.GetById(It.IsAny<object>()) == Create.Entity.UserDocument()),
+                merger ?? Mock.Of<IInterviewDataAndQuestionnaireMerger>(),
+                changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
+                incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
+                attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
 
@@ -116,8 +137,8 @@ namespace WB.Tests.Unit.TestFactories
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(Moq.It.IsAny<string>()) == questionnaireQuestionsInfo));
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(It.IsAny<string>()) == questionnaireQuestionsInfo));
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
             => new NcqrCompatibleEventDispatcher(
