@@ -13,13 +13,27 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected AbstractInterviewExpressionStateV10(IDictionary<string, IExpressionExecutableV10> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : this(interviewScopes.AsEnumerable(), siblingRosters, interviewProperties) {}
 
-        protected AbstractInterviewExpressionStateV10(IEnumerable<KeyValuePair<string, IExpressionExecutableV10>> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
+        protected AbstractInterviewExpressionStateV10(
+            IEnumerable<KeyValuePair<string, IExpressionExecutableV10>> interviewScopes,
+            Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : base(
-                interviewScopes.ToDictionary<KeyValuePair<string, IExpressionExecutableV10>, string, IExpressionExecutableV9>(
-                    item => item.Key,
-                    item => item.Value),
+                interviewScopes
+                    .ToDictionary<KeyValuePair<string, IExpressionExecutableV10>, string, IExpressionExecutableV9>(
+                        item => item.Key,
+                        item => item.Value),
                 siblingRosters,
-                interviewProperties) {}
+                interviewProperties)
+        {
+            this.SetTosterRemoverForAllScopes();
+        }
+
+        private void SetTosterRemoverForAllScopes()
+        {
+            foreach (var interviewScope in this.InterviewScopes.Values)
+            {
+                interviewScope.SetRostersRemover(this.RemoveRosterAndItsDependencies);
+            }
+        }
 
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
 
@@ -57,6 +71,34 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             if (targetLevel == null) return options;
 
             return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
+        }
+
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            int? sortIndex)
+        {
+            base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
+            this.SetTosterRemoverForAllScopes();
+        }
+
+        public new virtual EnablementChanges ProcessEnablementConditions()
+        {
+            var scopeKeys = new Queue<string>(this.InterviewScopes
+                .OrderBy(x => x.Value.GetLevel())
+                .Select(x => x.Key));
+
+            List<EnablementChanges> enablementChangeses = new List<EnablementChanges>();
+            while (scopeKeys.Count > 0)
+            {
+                var keyToProcess = scopeKeys.Dequeue();
+                if (!this.InterviewScopes.ContainsKey(keyToProcess))
+                    continue;
+
+                var scope = this.InterviewScopes[keyToProcess];
+
+                enablementChangeses.Add(scope.ProcessEnablementConditions());
+            }
+
+            return EnablementChanges.Union(enablementChangeses);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)

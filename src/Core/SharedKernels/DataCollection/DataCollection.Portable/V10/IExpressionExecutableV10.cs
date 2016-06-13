@@ -17,5 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options);
 
         decimal[] RosterVector { get; }
+
+        void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
     }
 }
