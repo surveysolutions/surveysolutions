@@ -62,12 +62,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies,
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties)
-		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+		IInterviewProperties interviewProperties,
+        Action<Identity[], Guid, decimal> removeRosterInstances)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
 	{
 ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
 
 	GroupsStatesInLevelConstructor(Model.Groups);
 	QuestionsStatesInLevelConstructor(Model.Questions);
@@ -84,12 +85,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "uid, IEnumerable<IExpressionExecutableV10>> getInstances)\r\n\t{\r\n\t\tvar level = new" +
                     " ");
             
-            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 35 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName));
             
             #line default
             #line hidden
-            this.Write(@"(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+            this.Write(@"(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest, this.RemoveRosterInstances)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -97,7 +98,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 			ValidStaticTexts = new HashSet<Guid>(this.ValidStaticTexts),
 ");
             
-            #line 40 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
 
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
 
@@ -107,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\t\t};\r\n\r\n\t\tlevel.FillEnablementStates(this.EnablementStates);\r\n\t\tlevel.FillVariabl" +
                     "ePreviousStates(this.VariablePreviousStates);\r\n\t\treturn level;\r\n\t}\r\n\t\r\n");
             
-            #line 50 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 51 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
  
 	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);	
@@ -118,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\r\n");
             
-            #line 56 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 57 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
 
 	foreach (var @roster in Model.Rosters) 
     {  
@@ -128,35 +129,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\tpublic RosterRowList<");
             
-            #line 60 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 61 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 60 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 61 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
             
             #line default
             #line hidden
             this.Write("\r\n\t{\r\n\t\tget \r\n\t\t{\r\n\t\t\tvar rosters = this.GetInstances(new Identity[0], IdOf.");
             
-            #line 64 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 65 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.RosterScopeName));
             
             #line default
             #line hidden
             this.Write(".Last()); \r\n\t\t\treturn  new RosterRowList<");
             
-            #line 65 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 66 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
             
             #line default
             #line hidden
             this.Write(">(rosters); \r\n\t\t}\r\n\t}\r\n");
             
-            #line 68 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 69 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
  
 	}
 
@@ -165,7 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t// groups condition states\r\n");
             
-            #line 72 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 73 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
 
 	foreach (var @group in Model.Groups) 
 	{ 
@@ -175,21 +176,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\tprivate ConditionalState ");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.StateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.IdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n");
             
-            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
  
 	}
 
@@ -198,7 +199,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t// static texts condition states\r\n");
             
-            #line 81 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
  
 	foreach (var staticText in Model.StaticTexts) 
 	{  
@@ -208,50 +209,51 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write(" \r\n\tprivate ConditionalState ");
             
-            #line 85 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 86 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(staticText.StateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 85 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 86 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(staticText.IdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.StaticText);\r\n");
             
-            #line 86 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
+            #line 87 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt"
  
 	} 
 
             
             #line default
             #line hidden
-            this.Write("\t\t\r\n\tprivate readonly IList<Action> _conditionExpressions = new List<Action>();\r\n" +
-                    "\r\n\tprotected override IEnumerable<Action> ConditionExpressions => _conditionExpr" +
-                    "essions;\r\n\r\n\tpublic void CalculateValidationChanges(out List<Identity> questions" +
-                    "ToBeValid, out List<Identity> questionsToBeInvalid)\r\n\t{\r\n\t\tthis.Validate(out que" +
-                    "stionsToBeValid, out questionsToBeInvalid);\r\n\t}\r\n\r\n\tpublic ValidityChanges Proce" +
-                    "ssValidationExpressions() => this.ExecuteValidations();\r\n\r\n\tpublic EnablementCha" +
-                    "nges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();\r\n\r" +
-                    "\n\tprotected override Guid[] GetRosterScopeIds(Guid rosterId)\r\n\t{\r\n\t\treturn IdOf." +
-                    "parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tprotected override Guid GetQuestionnaireId()\r\n" +
-                    "\t{\r\n\t\treturn IdOf.@__questionnaire;\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExe" +
-                    "cutableV10 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV9 parent) {}" +
-                    "\r\n\tpublic void SetParent(IExpressionExecutableV8 parent) {}\r\n\tpublic void SetPar" +
-                    "ent(IExpressionExecutableV7 parent) {}\r\n\tpublic void SetParent(IExpressionExecut" +
-                    "ableV6 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV5 parent) {}\r\n\tp" +
-                    "ublic void SetParent(IExpressionExecutableV2 parent) {}\r\n\tpublic void SetParent(" +
-                    "IExpressionExecutable   parent) {}\r\n\r\n\tIExpressionExecutableV10 IExpressionExecu" +
-                    "tableV10.GetParent() => null;\r\n\tIExpressionExecutableV9 IExpressionExecutableV9." +
-                    "GetParent() => null;\r\n\tIExpressionExecutableV8 IExpressionExecutableV8.GetParent" +
-                    "() => null;\r\n\tIExpressionExecutableV7 IExpressionExecutableV7.GetParent() => nul" +
-                    "l;\r\n\tIExpressionExecutableV6 IExpressionExecutableV6.GetParent() => null;\r\n\tIExp" +
-                    "ressionExecutableV5 IExpressionExecutableV5.GetParent() => null;\r\n\tIExpressionEx" +
-                    "ecutableV2 IExpressionExecutableV2.GetParent() => null;\r\n\tIExpressionExecutable " +
-                    "  IExpressionExecutable  .GetParent() => null;\r\n}\r\n");
+            this.Write("\r\n\tpublic Guid Id => IdOf.@__questionnaire;\r\n\t\t\r\n\tprivate readonly IList<Action> " +
+                    "_conditionExpressions = new List<Action>();\r\n\r\n\tprotected override IEnumerable<A" +
+                    "ction> ConditionExpressions => _conditionExpressions;\r\n\r\n\tpublic void CalculateV" +
+                    "alidationChanges(out List<Identity> questionsToBeValid, out List<Identity> quest" +
+                    "ionsToBeInvalid)\r\n\t{\r\n\t\tthis.Validate(out questionsToBeValid, out questionsToBeI" +
+                    "nvalid);\r\n\t}\r\n\r\n\tpublic ValidityChanges ProcessValidationExpressions() => this.E" +
+                    "xecuteValidations();\r\n\r\n\tpublic EnablementChanges ProcessEnablementConditions() " +
+                    "=> this.ProcessEnablementConditionsImpl();\r\n\r\n\tprotected override Guid[] GetRost" +
+                    "erScopeIds(Guid rosterId)\r\n\t{\r\n\t\treturn IdOf.parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tp" +
+                    "rotected override Guid GetQuestionnaireId()\r\n\t{\r\n\t\treturn IdOf.@__questionnaire;" +
+                    "\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutableV10 parent) {}\r\n\tpublic void" +
+                    " SetParent(IExpressionExecutableV9 parent) {}\r\n\tpublic void SetParent(IExpressio" +
+                    "nExecutableV8 parent) {}\r\n\tpublic void SetParent(IExpressionExecutableV7 parent)" +
+                    " {}\r\n\tpublic void SetParent(IExpressionExecutableV6 parent) {}\r\n\tpublic void Set" +
+                    "Parent(IExpressionExecutableV5 parent) {}\r\n\tpublic void SetParent(IExpressionExe" +
+                    "cutableV2 parent) {}\r\n\tpublic void SetParent(IExpressionExecutable   parent) {}\r" +
+                    "\n\r\n\tIExpressionExecutableV10 IExpressionExecutableV10.GetParent() => null;\r\n\tIEx" +
+                    "pressionExecutableV9 IExpressionExecutableV9.GetParent() => null;\r\n\tIExpressionE" +
+                    "xecutableV8 IExpressionExecutableV8.GetParent() => null;\r\n\tIExpressionExecutable" +
+                    "V7 IExpressionExecutableV7.GetParent() => null;\r\n\tIExpressionExecutableV6 IExpre" +
+                    "ssionExecutableV6.GetParent() => null;\r\n\tIExpressionExecutableV5 IExpressionExec" +
+                    "utableV5.GetParent() => null;\r\n\tIExpressionExecutableV2 IExpressionExecutableV2." +
+                    "GetParent() => null;\r\n\tIExpressionExecutable   IExpressionExecutable  .GetParent" +
+                    "() => null;\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
@@ -339,7 +341,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(method.MemberName));
         #line hidden
         
         #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
-this.Write("  = val; }));\r\n");
+this.Write("  = val; }, this.RemoveRosterInstances));\r\n");
 
         
         #line default
@@ -1096,7 +1098,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
         
         #line 122 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
 this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
-        "s.StructuralDependencies, this.Quest));\r\n");
+        "s.StructuralDependencies, this.Quest, this.RemoveRosterInstances));\r\n");
 
         
         #line default

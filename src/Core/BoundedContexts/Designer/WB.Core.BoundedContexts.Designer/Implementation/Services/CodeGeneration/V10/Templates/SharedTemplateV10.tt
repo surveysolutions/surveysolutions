@@ -15,7 +15,7 @@ void ConditionMethodsInLevelConstructor(List<ConditionMethodAndState> methods)
 		if (method.IsAnswerVerifier)
 		{
 #>
-		_conditionExpressions.Add(AnswerVerifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, () => <#= method.MemberName#>, (<#= method.Type#> val) => {<#= method.MemberName#>  = val; }));
+		_conditionExpressions.Add(AnswerVerifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, () => <#= method.MemberName#>, (<#= method.Type#> val) => {<#= method.MemberName#>  = val; }, this.RemoveRosterInstances));
 <#+
 		}
 		else
@@ -119,7 +119,7 @@ void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
 	foreach (var @roster in rosters) 
 	{
 #>
-		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
+		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest, this.RemoveRosterInstances));
 <#+
 	}
 }

@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             
             var attachmentIdAndTypes = this.attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
 
-            var interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
+            InterviewDetailsView interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
             var interviewEntityViews = interviewDetailsView.Groups
                 .SelectMany(group => group.Entities)
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             this.FilterCategoricalQuestionOptions(interviewId, questionViews);
 
-            var detailsStatisticView = new DetailsStatisticView()
+            var detailsStatisticView = new DetailsStatisticView
             {
                 AnsweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
                 UnansweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),

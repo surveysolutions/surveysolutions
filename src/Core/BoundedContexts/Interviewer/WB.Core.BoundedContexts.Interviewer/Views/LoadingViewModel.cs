@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public IMvxAsyncCommand NavigateBackToDashboardCommand => new MvxAsyncCommand(NavigateBackToDashboard);
+        public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
 
         public void Dispose()
         {
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
+            this.ProgressDescription = InterviewerUIResources.Interview_Loading;
         }
 
         public async Task RestoreInterviewAndNavigateThere()
@@ -51,11 +53,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.loadingCancellationTokenSource = new CancellationTokenSource();
             var interviewIdString = this.interviewId.FormatGuid();
 
-
             var progress = new Progress<int>();
             progress.ProgressChanged += Progress_ProgressChanged;
-            this.IsInProgress = true;
-            this.ProgressInPercents =InterviewerUIResources.Interview_Loading;
             try
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -87,33 +86,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             }
             progress.ProgressChanged -= Progress_ProgressChanged;
-            this.IsInProgress = false;
         }
-        private string percentage;
-        public string ProgressInPercents
+        private string progressDescription;
+        public string ProgressDescription
         {
-            get { return this.percentage; }
-            set { this.RaiseAndSetIfChanged(ref this.percentage, value); }
-        }
-
-        private bool isInProgress;
-        public bool IsInProgress
-        {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; this.RaisePropertyChanged(); }
+            get { return this.progressDescription; }
+            set { this.RaiseAndSetIfChanged(ref this.progressDescription, value); }
         }
 
         private void Progress_ProgressChanged(object sender, int e)
         {
-            this.ProgressInPercents = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
+            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
         }
 
-        public async Task NavigateBackToDashboard()
+        public void CancelLoading()
         {
             if (this.loadingCancellationTokenSource != null && !this.loadingCancellationTokenSource.IsCancellationRequested)
                 this.loadingCancellationTokenSource.Cancel();
+        }
 
-            await viewModelNavigationService.NavigateToDashboardAsync();
+        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToDashboardAsync);
+
+        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
+
+        private async Task SignOutAsync()
+        {
+            await this.principal.SignOutAsync();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
     }
 }
