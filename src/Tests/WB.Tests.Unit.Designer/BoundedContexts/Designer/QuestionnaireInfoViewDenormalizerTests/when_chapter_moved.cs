@@ -13,14 +13,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewD
             denormalizer = CreateDenormalizer(viewState);
             movedItemId = Guid.NewGuid().FormatGuid();
 
-            viewState = denormalizer.Update(null, Create.NewQuestionnaireCreatedEvent(questionnaireId));
-            denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: groupId, parentGroupId: questionnaireId, groupTitle: "group title"));
-            denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: movedItemId, parentGroupId: questionnaireId, groupTitle: "group title to move"));
+            viewState = denormalizer.Update(null, Create.Event.NewQuestionnaireCreatedEvent(questionnaireId));
+            denormalizer.Update(viewState, Create.Event.NewGroupAddedEvent(groupId: groupId, parentGroupId: questionnaireId, groupTitle: "group title"));
+            denormalizer.Update(viewState, Create.Event.NewGroupAddedEvent(groupId: movedItemId, parentGroupId: questionnaireId, groupTitle: "group title to move"));
         };
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.QuestionnaireItemMovedEvent(itemId: movedItemId));
+                denormalizer.Update(viewState, Create.Event.QuestionnaireItemMovedEvent(itemId: movedItemId));
 
         It should_move_chapter = () => viewState.Chapters[0].ItemId.ShouldEqual(movedItemId);
 
