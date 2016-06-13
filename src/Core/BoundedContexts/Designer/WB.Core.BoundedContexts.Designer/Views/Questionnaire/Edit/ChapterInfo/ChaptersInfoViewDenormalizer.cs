@@ -371,7 +371,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.AddVariable(state,
                 @event.Payload.ParentId,
                 @event.Payload.EntityId,
-                @event.Payload.VariableData);
+                @event.Payload.VariableData,
+                @event.Payload.TargetIndex);
             return state;
         }
 
@@ -393,7 +394,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 VariableData = variableData
             };
 
-            groupView.Items.Add(variableView);
+            if (orderIndex.HasValue)
+            {
+                groupView.Items.Insert(orderIndex.Value, variableView);
+            }
+            else
+            {
+                groupView.Items.Add(variableView);
+            }
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<QuestionnaireItemMoved> @event)

@@ -54,4 +54,5 @@
   <dimen name="Relink_FormContainer_marginTop">16dp</dimen>
   <dimen name="Relink_FormContainer_marginBottom">42dp</dimen>
   <dimen name="Relink_FormContainer_Width">400dp</dimen>
+  <dimen name="Loading_Loader_Size">100dp</dimen>
 </resources>

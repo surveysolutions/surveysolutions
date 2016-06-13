@@ -4,9 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
                  style="@style/VerticalFullWidthWrappingLayout">
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress IsInProgress" />
-  <TextView android:layout_width="match_parent" android:textSize="50dp"
-    android:layout_height="match_parent" android:gravity="center"
-                 local:MvxBind="Text ProgressInPercents;"/>
+  <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:background="?attr/colorPrimary"
+                                      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <TextView style="@style/ToolbarTitle"
+              local:MvxBind="Text ProgressDescription;" />
+  </android.support.v7.widget.Toolbar>
+  <LinearLayout  android:layout_width="match_parent" 
+android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+    <ImageView android:id="@+id/progress_bar"
+     android:scaleType="centerInside"
+     android:layout_width="@dimen/Loading_Loader_Size"
+     android:layout_height="@dimen/Loading_Loader_Size"
+     android:background="@drawable/loading_animation"/>
+  </LinearLayout>
 </LinearLayout>

@@ -157,6 +157,14 @@
                         <a href="#variables_appendix" class="section_name appendix">Appendix @questionnaire.VariablesAppendixIndex &#8212; VARIABLES</a>
                     </dd>
                 }
+                @if (!questionnaire.IsOptionsFilterAppendixEmpty)
+                {
+                    <dt>&nbsp;</dt>
+                    <dd>
+                        <a href="#optoins_filters_appendix" class="section_name appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; OPTION FILTERS</a>
+                    </dd>
+                }
+
                 <dt>&nbsp;</dt>
                 <dd>
                     <a href="#legend_appendix" class="section_name appendix">Legend</a>
@@ -307,7 +315,7 @@
     @if (!questionnaire.IsOptionsFilterAppendixEmpty)
     {
         <article class="appendix_section">
-            <h2 id="instructions_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Option filters</h2>
+            <h2 id="optoins_filters_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Option filters</h2>
             <ul class="container">
                 @for (var i = 0; i < questionnaire.QuestionsWithLongFilterExpression.Count; i++)
                 {

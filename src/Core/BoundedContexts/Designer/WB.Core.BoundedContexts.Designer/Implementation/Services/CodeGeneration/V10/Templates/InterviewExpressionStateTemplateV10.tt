@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				this.GetRosterInstances, 
 				IdOf.conditionalDependencies, 
 				IdOf.structuralDependencies, 
-				this.InterviewProperties);
+				this.InterviewProperties,
+				this.RemoveRosterAndItsDependencies);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
 			
 <#
