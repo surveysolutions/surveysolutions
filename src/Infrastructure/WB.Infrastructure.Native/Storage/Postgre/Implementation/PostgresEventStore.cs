@@ -54,7 +54,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<int> progress, CancellationToken cancellationToken)
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             return Read(id, minVersion);
         }

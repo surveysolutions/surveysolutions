@@ -143,6 +143,7 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventPosition.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\EventReadingProgress.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventsSlice.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
