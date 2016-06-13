@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool reactOnAllInterviewEvents = false;
         string interviewId;
 
-        public event EventHandler QuestionAnswered;
+        public virtual event EventHandler QuestionAnswered;
 
         protected AnswerNotifier() {}
 
