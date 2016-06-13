@@ -27,12 +27,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 questionnaireStateTacker: questionnaireStateTackerStorage,
                 questionnaireChangeRecord: questionnaireChangeRecordStorage);
 
-            denormalizer.Handle(Create.Event.QuestionnaireCloned(questionnaire).ToPublishedEvent());
+            denormalizer.Handle(Create.ToPublishedEvent(Create.Event.QuestionnaireCloned(questionnaire)));
         };
 
         Because of = () =>
         {
-            var variableDeleted = Create.Event.VariableDeleted(variableId).ToPublishedEvent();
+            var variableDeleted = Create.ToPublishedEvent(Create.Event.VariableDeleted(variableId));
             denormalizer.Handle(variableDeleted);
         };
 

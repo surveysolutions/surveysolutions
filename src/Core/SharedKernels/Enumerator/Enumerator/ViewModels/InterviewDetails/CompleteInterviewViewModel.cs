@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -61,6 +60,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.EntitiesWithErrors =
                     entityWithErrorsViewModelFactory.GetEntities(interviewId, navigationState).ToList();
+
+            this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
+                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
+                    entityWithErrorsViewModelFactory.MaxNumberOfEntities)
+                : UIResources.Interview_Complete_Entities_With_Errors;
         }
 
         public int AnsweredCount { get; set; }
@@ -68,6 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public int UnansweredCount { get; set; }
 
         public int ErrorsCount { get; set; }
+
+        public string EntitiesWithErrorsDescription { get; private set; }
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 

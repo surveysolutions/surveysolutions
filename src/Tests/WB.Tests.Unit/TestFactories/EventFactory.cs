@@ -40,6 +40,9 @@ namespace WB.Tests.Unit.TestFactories
         public ChangedVariable ChangedVariable(Identity variableIdentity, object value)
             => new ChangedVariable(variableIdentity, value);
 
+        public DateTimeQuestionAnswered DateTimeQuestionAnswered(Guid interviewId, Identity question, DateTime answer)
+            => new DateTimeQuestionAnswered(interviewId, question.Id, question.RosterVector, DateTime.UtcNow, answer);
+
         public GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
             => new GeoLocationQuestionAnswered(
                 Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);

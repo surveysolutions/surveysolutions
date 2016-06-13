@@ -4,7 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests

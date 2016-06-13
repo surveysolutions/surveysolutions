@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.NewQuestionAddedEvent(questionId: questionId, parentGroupId: chapterId,
+                denormalizer.Update(viewState, Create.Event.NewQuestionAddedEvent(questionId: questionId, parentGroupId: chapterId,
                         questionVariable: questionVariable, questionTitle: questionTitle,
                         questionConditionExpression: questionConditionExpression, questionType: questionType));
 

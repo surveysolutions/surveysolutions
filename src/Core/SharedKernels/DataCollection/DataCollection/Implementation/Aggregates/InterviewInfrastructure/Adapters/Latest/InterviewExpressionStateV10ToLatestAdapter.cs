@@ -13,14 +13,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
 {
     public class InterviewExpressionStateV10ToLatestAdapter : ILatestInterviewExpressionState
     {
-        private readonly IInterviewExpressionStateV9 adaptee;
+        private readonly IInterviewExpressionStateV10 adaptee;
 
-        public InterviewExpressionStateV10ToLatestAdapter(IInterviewExpressionStateV9 adaptee)
+        public InterviewExpressionStateV10ToLatestAdapter(IInterviewExpressionStateV10 adaptee)
         {
             this.adaptee = adaptee;
         }
 
-        public static ILatestInterviewExpressionState AdaptIfNeeded(IInterviewExpressionStateV9 adaptee)
+        public static ILatestInterviewExpressionState AdaptIfNeeded(IInterviewExpressionStateV10 adaptee)
             => adaptee as ILatestInterviewExpressionState ?? new InterviewExpressionStateV10ToLatestAdapter(adaptee);
 
         public void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer) => this.adaptee.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
@@ -65,7 +65,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
 
         public void UpdateVariableValue(Identity variableIdentity, object value) => this.adaptee.UpdateVariableValue(variableIdentity,value);
 
-        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => options;
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => 
+            this.adaptee.FilterOptionsForQuestion(questionIdentity, options);
+
+        public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId) => 
+            this.adaptee.RemoveRosterAndItsDependencies(rosterKey, rosterSorceId, rosterInstanceId);
 
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();

@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Group(sectionId, "Section", children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true,
-                            answers: new List<Answer>
+                            options: new List<Answer>
                             {
                                 Create.Option(text: "A", value: "10"),
                                 Create.Option(text: "B", value: "20"),

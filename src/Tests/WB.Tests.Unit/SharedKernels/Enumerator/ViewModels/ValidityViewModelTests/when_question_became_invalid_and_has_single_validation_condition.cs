@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         It should_show_single_error_message = () => viewModel.Error.ValidationErrors.Count.ShouldEqual(1);
 
-        It should_show_error_message_without_index_postfix = () => viewModel.Error.ValidationErrors.First().ShouldEqual("message 1");
+        It should_show_error_message_without_index_postfix = () => viewModel.Error.ValidationErrors.First()?.PlainText.ShouldEqual("message 1");
 
         static ValidityViewModel viewModel;
         static Identity questionIdentity;

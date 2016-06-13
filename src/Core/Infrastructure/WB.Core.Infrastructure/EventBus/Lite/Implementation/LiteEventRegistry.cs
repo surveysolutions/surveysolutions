@@ -14,7 +14,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventRegistry : ILiteEventRegistry
     {
-        private readonly ConcurrentDictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>> handlers = new ConcurrentDictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>>();
+        private readonly Dictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>> handlers = new Dictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>>();
 
         private static readonly object LockObject = new object();
 
@@ -92,7 +92,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             lock (LockObject)
             {
                 var handlerKey = GetEventKey(eventType);
-                ICollection<LiteEventRegistryEntity> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new ConcurrentHashSet<LiteEventRegistryEntity>());
+                ICollection<LiteEventRegistryEntity> handlersForEventType = this.handlers.GetOrAdd(handlerKey, () => new ConcurrentHashSet<LiteEventRegistryEntity>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));

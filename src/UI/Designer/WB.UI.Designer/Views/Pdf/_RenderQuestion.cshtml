@@ -23,6 +23,19 @@
                     }
                 </div>
             }
+            @if (questionnaire.QuestionHasOptionsFilter(question))
+            {
+                <div class="instructions">
+                    <span>F</span>@questionnaire.GetQuestionOptionsFilterExceprt(question)
+                    @if (questionnaire.OptionsFilterIsTooLong(question))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetOptionsFilterRef(question.PublicKey)">@(question.Properties.OptionsFilterExpression.Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F")]</a>
+                        </div>
+                    }
+                </div>
+            }
+
             @if (questionnaire.QuestionHasEnablementCondition(question))
             {
                 <div class="condition"><span>E</span>@questionnaire.GetExpressionExcerpt(question.ConditionExpression)

@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewD
 
         Because of = () =>
             viewState =
-                denormalizer.Update(null, Create.QuestionnaireClonedEvent(questionnaireId: questionnaireId,
+                denormalizer.Update(null, Create.Event.QuestionnaireClonedEvent(questionnaireId: questionnaireId,
                     questionnaireTitle: questionnaireTitle, chapter1Id: chapter1Id, chapter1Title: chapter1Title,
                     chapter2Id: chapter2Id, chapter2Title: chapter2Title,
                     isPublic: true));

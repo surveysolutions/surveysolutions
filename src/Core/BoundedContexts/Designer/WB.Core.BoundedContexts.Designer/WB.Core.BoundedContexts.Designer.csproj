@@ -243,15 +243,15 @@
       <DependentUpon>OptionsFilterMethodTemplateV10.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.cs">
-      <DependentUpon>QuestionnaireLevelTemplateV10.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplateV10.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.cs">
-      <DependentUpon>RosterScopeTemplateV10.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplateV10.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.cs">

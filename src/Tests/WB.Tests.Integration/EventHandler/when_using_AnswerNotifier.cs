@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.EventHandler
 
             foreach (var answeredEventType in allQuestionAnsweredEvents)
             {
-                var eventHandlerType = typeof(ILiteEventHandler<>);
+                var eventHandlerType = typeof(ILitePublishedEventHandler<>);
                 Type[] typeArgs = { answeredEventType };
                 var genericHandlerType = eventHandlerType.MakeGenericType(typeArgs);
 

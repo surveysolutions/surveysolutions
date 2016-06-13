@@ -9,5 +9,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task AlertAsync(string message, string title = "", string okButton = "OK");
 
         Task WaitPendingUserInteractionsAsync();
+
+        void ShowToast(string message);
+
+        bool HasPendingUserInterations { get; }
     }
 }

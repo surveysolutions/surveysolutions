@@ -10,6 +10,12 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         void SetParent(IExpressionExecutableV10 parentLevel);
 
         new IExpressionExecutableV10 GetParent();
-        new IExpressionExecutableV10 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
+
+        new IExpressionExecutableV10 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector,
+            Identity[] rosterIdentityKey);
+
+        IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options);
+
+        decimal[] RosterVector { get; }
     }
 }

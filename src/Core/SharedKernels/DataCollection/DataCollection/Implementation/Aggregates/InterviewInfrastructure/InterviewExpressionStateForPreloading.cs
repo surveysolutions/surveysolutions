@@ -159,6 +159,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => options;
+        public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId)
+        {
+        }
 
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
         {

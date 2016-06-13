@@ -316,6 +316,7 @@
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
+    <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
@@ -349,13 +350,13 @@
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />
     <Compile Include="Services\SyncServiceBinder.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
@@ -416,6 +417,9 @@
     <AndroidResource Include="Resources\Layout\diagnostics__check_new_version.axml" />
     <AndroidResource Include="Resources\Layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\Layout\diagnostics__test_bandwidth_to_server.axml" />
+    <AndroidResource Include="Resources\Layout\loading.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
@@ -540,6 +544,27 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
     <AndroidResource Include="Resources\Drawable\diagnostics_section_default.xml" />
+    <AndroidResource Include="Resources\Drawable\loading_01.png" />
+    <AndroidResource Include="Resources\Drawable\loading_02.png" />
+    <AndroidResource Include="Resources\Drawable\loading_03.png" />
+    <AndroidResource Include="Resources\Drawable\loading_04.png" />
+    <AndroidResource Include="Resources\Drawable\loading_05.png" />
+    <AndroidResource Include="Resources\Drawable\loading_06.png" />
+    <AndroidResource Include="Resources\Drawable\loading_07.png" />
+    <AndroidResource Include="Resources\Drawable\loading_08.png" />
+    <AndroidResource Include="Resources\Drawable\loading_09.png" />
+    <AndroidResource Include="Resources\Drawable\loading_animation.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\loading_blur_1.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_2.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_3.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_4.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_5.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_6.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_7.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_8.png" />
+    <AndroidResource Include="Resources\Drawable\loading_blur_9.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

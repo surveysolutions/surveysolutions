@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -28,10 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == 1
                 && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == false
-                && _.GetAnswerOptionsAsValues(questionId.Id) == new decimal[] { 1, 2 }
-                && _.GetAnswerOptionTitle(questionId.Id, 1) == "item1"
-                && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
             );
+
+            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "item1"),
+                Create.Entity.CategoricalQuestionOption(2, "item2"),
+            });
 
             var multiOptionAnswer = Create.Entity.MultiOptionAnswer(questionGuid, Empty.RosterVector);
             multiOptionAnswer.SetAnswers(new[] {1m});
@@ -48,7 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object, 
                 interviewRepository: interviewRepository.Object,
-                eventRegistry: eventRegistry.Object);
+                eventRegistry: eventRegistry.Object,
+                filteredOptionsViewModel: filteredOptionsViewModel);
         };
 
         Because of = () => viewModel.Init(interviewId, questionId, navigationState);

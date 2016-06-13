@@ -65,6 +65,21 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IMvxMessenger>(),
                 Mock.Of<IEnumeratorSettings>());
 
+        public ErrorMessagesViewModel ErrorMessagesViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null)
+        {
+            var dynamicTextViewModelFactory = Mock.Of<IDynamicTextViewModelFactory>();
+
+            Mock.Get(dynamicTextViewModelFactory)
+                .Setup(factory => factory.CreateDynamicTextViewModel())
+                .Returns(() => Create.ViewModel.DynamicTextViewModel(
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository));
+
+            return new ErrorMessagesViewModel(dynamicTextViewModelFactory);
+        }
+
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
@@ -98,11 +113,18 @@ namespace WB.Tests.Unit.TestFactories
             IStatefulInterviewRepository interviewRepository = null,
             IQuestionnaire questionnaire = null,
             Identity entityIdentity = null)
-            => new ValidityViewModel(
+        {
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+
+            return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IPlainQuestionnaireRepository>(
-                    x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
-                Stub.MvxMainThreadDispatcher());
+                questionnaireRepository,
+                Stub.MvxMainThreadDispatcher(),
+                Create.ViewModel.ErrorMessagesViewModel(
+                    questionnaireRepository: questionnaireRepository,
+                    interviewRepository: interviewRepository));
+        }
     }
 }

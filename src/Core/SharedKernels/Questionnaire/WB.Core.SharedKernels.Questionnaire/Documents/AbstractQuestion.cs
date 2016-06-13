@@ -143,12 +143,6 @@ namespace Main.Core.Entities.SubEntities
 
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-        public IEnumerable<string> GetVariablesUsedInTitle()
-        {
-#warning: Slava: make nice injection here
-            return (new SubstitutionService()).GetAllSubstitutionVariableNames(QuestionText);
-        }
-
         public override string ToString()
         {
             return String.Format("Question {{{0}}} '{1}'", this.PublicKey, this.QuestionText ?? "<untitled>");

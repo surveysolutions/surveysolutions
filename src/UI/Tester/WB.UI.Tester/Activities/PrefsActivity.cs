@@ -37,7 +37,8 @@ namespace WB.UI.Tester.Activities
 
             this.SetPreferenceTitleAndSummary("GpsDesiredAccuracy", UIResources.Prefs_GpsDesiredAccuracyTitle, 
                 string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, settings.GpsDesiredAccuracy));
-
+            
+            this.SetBooleanPreferenceTitleAndSummary(TesterSettings.VibrateOnErrorParameterName, UIResources.Prefs_VibrateOnErrorTitle, UIResources.Prefs_VibrateOnErrorSummary, settings.VibrateOnError);
             this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
           
             this.SetupVersionPreference();
@@ -53,6 +54,20 @@ namespace WB.UI.Tester.Activities
                 preference.Summary = summary;
             }
         }
+
+        private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary, bool defaultValue)
+        {
+            var preference = this.FindPreference(preferenceKey);
+
+            preference.Title = title;
+            preference.Summary = summary;
+            var checkBoxPreference = preference as CheckBoxPreference;
+            if (checkBoxPreference != null)
+            {
+                checkBoxPreference.Checked = defaultValue;
+            }
+        }
+        
 
         void DevSettingsCategoryOnPreferenceChange(object sender, Preference.PreferenceChangeEventArgs preferenceChangeEventArgs)
         {

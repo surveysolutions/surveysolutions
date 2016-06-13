@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(
                 Create.SingleOptionQuestion(questionId: optionQuestionId, variable: "var",

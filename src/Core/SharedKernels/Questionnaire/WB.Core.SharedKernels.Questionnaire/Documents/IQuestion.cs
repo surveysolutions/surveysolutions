@@ -28,6 +28,5 @@ namespace Main.Core.Entities.SubEntities
         bool IsTimestamp { get; set; }
 
         void AddAnswer(Answer answer);
-        IEnumerable<string> GetVariablesUsedInTitle();
     }
 }

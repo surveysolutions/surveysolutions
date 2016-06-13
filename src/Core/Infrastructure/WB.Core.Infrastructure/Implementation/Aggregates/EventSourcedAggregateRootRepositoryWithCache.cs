@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
@@ -19,13 +20,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
+            return GetLatest(aggregateType, aggregateId, null, new CancellationToken());
+        }
+
+        public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+        {
             IEventSourcedAggregateRoot aggregateRoot;
 
             if (memoryCache.TryGetValue(aggregateType, out aggregateRoot)
                 && aggregateRoot.EventSourceId == aggregateId)
                 return aggregateRoot;
 
-            aggregateRoot = base.GetLatest(aggregateType, aggregateId);
+            aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
             if (aggregateRoot != null)
             {
