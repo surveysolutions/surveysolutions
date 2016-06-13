@@ -2637,13 +2637,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
 
-            foreach (var validationCondition in validationCoditions)
+            if (validationCoditions != null)
             {
-                this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                    text: validationCondition.Message,
-                    entityId: questionId,
-                    variableName: variableName,
-                    parentGroup: parentGroup);
+                foreach (var validationCondition in validationCoditions)
+                {
+                    this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
+                        text: validationCondition.Message,
+                        entityId: questionId,
+                        variableName: variableName,
+                        parentGroup: parentGroup);
+                }
             }
         }
 
