@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         {
             questionnaireDocument = CreateQuestionnaireDocument();
 
-            @event = Create.Event.ToPublishedEvent(Create.Event.ExpressionsMigratedToCSharpEvent());
+            @event = Create.ToPublishedEvent(Create.Event.ExpressionsMigratedToCSharpEvent());
 
             var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
