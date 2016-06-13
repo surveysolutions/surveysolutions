@@ -1228,6 +1228,17 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static IPublishedEvent<VariableCloned> VariableClonedEvent(string entityId = null,
+            string parentId = null, string sourceEntityId = null, string variableName = null, int targetIndex = 0)
+        {
+            return ToPublishedEvent(Create.Event.VariableCloned(
+                entityId: GetQuestionnaireItemId(entityId),
+                parentId: GetQuestionnaireItemId(parentId),
+                sourceEntityId: GetQuestionnaireItemId(sourceEntityId),
+                variableName: variableName,
+                targetIndex: targetIndex));
+        }
+
         public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event,
             Guid? eventSourceId = null,
             string origin = null,

@@ -121,7 +121,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(method.MemberName));
         #line hidden
         
         #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
-this.Write("  = val; }));\r\n");
+this.Write("  = val; }, this.RemoveRosterInstances));\r\n");
 
         
         #line default
@@ -878,7 +878,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(@roster.TypeName));
         
         #line 122 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
 this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
-        "s.StructuralDependencies, this.Quest));\r\n");
+        "s.StructuralDependencies, this.Quest, this.RemoveRosterInstances));\r\n");
 
         
         #line default

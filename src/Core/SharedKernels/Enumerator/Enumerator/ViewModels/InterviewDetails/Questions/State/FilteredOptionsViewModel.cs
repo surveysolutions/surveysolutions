@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public IList<CategoricalOption> Options { get; private set; }
+        public virtual IList<CategoricalOption> Options { get; private set; }
 
         public event EventHandler OptionsChanged;
 
@@ -39,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        protected FilteredOptionsViewModel() { }
+
         public FilteredOptionsViewModel (IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             AnswerNotifier answerNotifier)
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerNotifier = answerNotifier;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public virtual void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");

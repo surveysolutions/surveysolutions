@@ -4,7 +4,8 @@
 
   <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
   <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy"/>
-  
+
+  <CheckBoxPreference android:key="VibrateOnError" />
   <Preference android:key="version" />
 
   <PreferenceCategory android:key="dev_settings_category">

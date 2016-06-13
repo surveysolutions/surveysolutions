@@ -62,7 +62,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public void EnableVariables(IEnumerable<Identity> variablesToEnable) => this.adaptee.EnableVariables(variablesToEnable);
         public void UpdateVariableValue(Identity variableIdentity, object value) => this.adaptee.UpdateVariableValue(variableIdentity, value);
 
-        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => options;
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => 
+            options;
+
+        public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId) { }
 
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();

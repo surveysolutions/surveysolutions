@@ -404,4 +404,10 @@
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Пожалуйста подождите пока завершится текущая операция</value>
   </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>Таблет будет вибрировать когда ответ не проходит валидацию</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Вибрировать когда дан не валидный ответ</value>
+  </data>
 </root>

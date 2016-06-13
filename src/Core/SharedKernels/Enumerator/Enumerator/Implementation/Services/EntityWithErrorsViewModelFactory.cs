@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -16,20 +17,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly SubstitutionViewModel substitutionViewModel;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
+        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
+
         private readonly int maxNumberOfEntities = 30;
 
         public EntityWithErrorsViewModelFactory(
             IStatefulInterviewRepository interviewRepository, 
             IPlainQuestionnaireRepository questionnaireRepository, 
-            SubstitutionViewModel substitutionViewModel, 
-            IInterviewViewModelFactory interviewViewModelFactory)
+            IInterviewViewModelFactory interviewViewModelFactory, 
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
-            this.substitutionViewModel = substitutionViewModel;
             this.interviewViewModelFactory = interviewViewModelFactory;
+            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
         public IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState)
@@ -43,13 +45,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var entityWithErrorsViewModel = interviewViewModelFactory.GetNew<EntityWithErrorsViewModel>();
 
-                var errorTitle = questionnaire.HasQuestion(invalidEntity.Id)
-                    ? questionnaire.GetQuestionTitle(invalidEntity.Id)
-                    : questionnaire.GetStaticText(invalidEntity.Id);
+                var navigationIdentity = NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity),
+                    invalidEntity);
 
-                this.substitutionViewModel.Init(interviewId, invalidEntity, errorTitle);
-                entityWithErrorsViewModel.Init(NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity), invalidEntity),
-                    this.substitutionViewModel.ReplaceSubstitutions(), navigationState);
+                var errorTitle = questionnaire.HasQuestion(invalidEntity.Id)
+                   ? questionnaire.GetQuestionTitle(invalidEntity.Id)
+                   : questionnaire.GetStaticText(invalidEntity.Id);
+
+                var title = dynamicTextViewModelFactory.CreateDynamicTextViewModel();
+
+                title.Init(interviewId, navigationIdentity.AnchoredElementIdentity, errorTitle);
+
+                entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
                 entitiesWithErrors.Add(entityWithErrorsViewModel);
             }
             return entitiesWithErrors;

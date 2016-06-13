@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -254,5 +255,23 @@ namespace WB.Tests.Unit
             {
                 { id, entity },
             });
+
+        public static FilteredOptionsViewModel FilteredOptionsViewModel(List<CategoricalOption> optionList = null)
+        {
+            var options = optionList ?? new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "abc"),
+                Create.Entity.CategoricalQuestionOption(2, "bbc"),
+                Create.Entity.CategoricalQuestionOption(3, "bbc"),
+                Create.Entity.CategoricalQuestionOption(4, "bbaé"),
+                Create.Entity.CategoricalQuestionOption(5, "cccé"),
+            };
+
+            Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+            filteredOptionsViewModel.Setup(x => x.Options).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
+
+            return filteredOptionsViewModel.Object;
+        }
     }
 }

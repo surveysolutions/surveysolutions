@@ -588,14 +588,8 @@
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
     <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Supervisor</value>
   </data>
-  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
-    <value>Таблет будет вибрировать когда ответ не проходит валидацию</value>
-  </data>
-  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>Вибрировать когда дан не валидный ответ</value>
-  </data>
   <data name="Interview_Loading" xml:space="preserve">
-    <value>Открытие...</value>
+    <value>Открытие</value>
   </data>
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
     <value>Открытие... {0}%</value>

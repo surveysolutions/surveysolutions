@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -27,13 +28,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == null
                 && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == true
-                && _.GetAnswerOptionsAsValues(questionId.Id) == new decimal[] { 1, 2, 3, 4, 5 }
-                && _.GetAnswerOptionTitle(questionId.Id, 1) == "item1"
-                && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
-                && _.GetAnswerOptionTitle(questionId.Id, 3) == "item3"
-                && _.GetAnswerOptionTitle(questionId.Id, 4) == "item4"
-                && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
             );
+
+            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "item1"),
+                Create.Entity.CategoricalQuestionOption(2, "item2"),
+                Create.Entity.CategoricalQuestionOption(3, "item3"),
+                Create.Entity.CategoricalQuestionOption(4, "item4"),
+                Create.Entity.CategoricalQuestionOption(5, "item5"),
+            });
 
             var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
@@ -51,7 +55,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock = new Mock<IUserInteractionService>();
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
-                userInteractionService: userInteractionServiceMock.Object);
+                userInteractionService: userInteractionServiceMock.Object,
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.Last().Selected = false;
