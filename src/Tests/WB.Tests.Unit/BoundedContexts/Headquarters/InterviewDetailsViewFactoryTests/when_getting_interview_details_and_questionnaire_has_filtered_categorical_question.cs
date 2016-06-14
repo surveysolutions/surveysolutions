@@ -23,10 +23,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.SingleOptionQuestion(
                     questionId: singleOptionQuestionId,
-                    answerCodes: new decimal[] { 1, 2 }),
+                    answerCodes: new decimal[] { 1, 2 },
+                    optionsFilterExpression: "a"),
                 Create.Entity.MultipleOptionsQuestion(
                     questionId: multioptionQuestionId,
-                    answers: new decimal[] { 1, 2 }));
+                    answers: new decimal[] { 1, 2 },
+                    optionsFilterExpression: "a"));
 
             var interviewDetailsView = new InterviewDetailsView
             {
