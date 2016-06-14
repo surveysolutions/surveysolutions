@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
+    <value>[PL0001] 问卷模板缺失。</value>
+  </data>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
+  </data>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>列不能与问卷中的任何问题相匹配。</value>
+  </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>文件不能与问卷中的任何登记表相匹配。</value>
+  </data>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>[PL0005] N/A</value>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>发现了重复的编号。</value>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>一个或多个父编码缺失。</value>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>登记表记录没有父项。</value>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>登记表编号与登记表大小不一致。</value>
+  </data>
+  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
+    <value>数据预加载不支持链接问题。</value>
+  </data>
+  <data name="PL0011_GeneralError" xml:space="preserve">
+    <value>发生了一般错误。</value>
+  </data>
+  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
+    <value>未找到问题。</value>
+  </data>
+  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
+    <value>提供的为空值</value>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>[PL0014] 提供的问题数值不被允许。</value>
+  </data>
+  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
+    <value>[PL0015] 问题类型不正确。</value>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>无效的日期或时间数值。</value>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>无效的GPS数值。</value>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>只允许整数。</value>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>只允许实数。</value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>登记表大小问题不能有负值。</value>
+  </data>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>数据预加载不支持图片问题。</value>
+  </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>未找到预加载数据</value>
+  </data>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>没有提供负责人的名称</value>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>没有找到提供的负责人</value>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>负责人被锁定</value>
+  </data>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>提供的用户不是督导员或调查员</value>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>登记表大小问题的答案不能超过40。</value>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>GPS问题要求纬度和经度列</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>预填写的GPS问题要求设置纬度和经度。</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>发现了重复的列名。</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>纬度必须在-90°和90°之间。</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>经度必须在-180°和180°之间。</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>数值型答案中不允许","符号。请使用.作为小数点分隔符。</value>
+  </data>
+</root>
