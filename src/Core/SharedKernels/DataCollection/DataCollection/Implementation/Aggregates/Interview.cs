@@ -4731,7 +4731,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             var filteredOptions = questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter);
-            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion( question, filteredOptions);
+
+            if (questionnaire.IsSupportFilteringForOptions(question.Id))
+                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, filteredOptions);
+            else
+                return filteredOptions;
         }
 
         protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
         It should_build_options = () =>
         {
             viewModel.Options.ShouldNotBeNull();
-            viewModel.Options.Count.ShouldEqual(3);
+            viewModel.Options.Count().ShouldEqual(3);
         };
 
         It should_contains_all_options = () =>
