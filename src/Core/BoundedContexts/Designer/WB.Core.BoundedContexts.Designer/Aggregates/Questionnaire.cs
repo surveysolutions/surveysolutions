@@ -1423,7 +1423,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 text: title,
                 entityId: groupId,
                 variableName: variableName,
-                parentGroup: group.GetParent() as IGroup);
+                parentGroup: @group.GetParent() as IGroup ?? this.innerDocument);
 
             this.ApplyEvent(new GroupUpdated
             {
