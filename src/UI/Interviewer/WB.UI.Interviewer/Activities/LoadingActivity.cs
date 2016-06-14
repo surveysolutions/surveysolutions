@@ -21,7 +21,7 @@ namespace WB.UI.Interviewer.Activities
     {
         protected override int ViewResourceId => Resource.Layout.loading;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
@@ -33,11 +33,9 @@ namespace WB.UI.Interviewer.Activities
                 AnimationDrawable frameAnimation = (AnimationDrawable)progressImage.Background;
                 frameAnimation.Start();
             }
-            Task.Run(async () =>
-            {
-                await this.ViewModel.RestoreInterviewAndNavigateThere();
-                this.Finish();
-            });
+
+            await this.ViewModel.RestoreInterviewAndNavigateThere();
+            this.Finish();
         }
 
         public override async void OnBackPressed()
