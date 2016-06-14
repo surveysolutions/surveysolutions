@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -28,7 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public LoadingViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
-            IStatefulInterviewRepository interviewRepository, ICommandService commandService) : base(principal, viewModelNavigationService)
+            IStatefulInterviewRepository interviewRepository, ICommandService commandService)
+            : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
@@ -60,9 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                IStatefulInterview interview =
-                    await
-                        this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token);
+                IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token);
 
                 if (interview.Status==InterviewStatus.Completed)
                 {
@@ -88,6 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             progress.ProgressChanged -= Progress_ProgressChanged;
         }
+
         private string progressDescription;
         public string ProgressDescription
         {
@@ -104,7 +103,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void CancelLoading()
         {
             if (this.loadingCancellationTokenSource != null && !this.loadingCancellationTokenSource.IsCancellationRequested)
+            {
                 this.loadingCancellationTokenSource.Cancel();
+            }
         }
 
         public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToDashboardAsync);

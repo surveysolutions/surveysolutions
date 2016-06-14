@@ -58,9 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
-        {
-            return Read(id, minVersion, null, new CancellationToken());
-        }
+            => this.Read(id, minVersion, null, CancellationToken.None);
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
