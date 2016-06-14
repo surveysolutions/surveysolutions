@@ -42,14 +42,16 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     }),
                     Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.Roster(roster3Id, variable:"fixed__nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                        Create.Roster(roster3Id, variable:"fixed_nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
+                            fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
                         {
                             Create.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {
+                                Create.NumericRealQuestion(q5Id, variable: "q5"),
                             }),
                         })
                     }),
-                    Create.SingleQuestion(q4Id, variable: "q4", options: options, enablementCondition: "r1.Count() < 2"),
+                    Create.SingleQuestion(q4Id, variable: "q4", options: options, enablementCondition: "r1.SelectMany(x => x.fixed_nested_r.SelectMany(y=> y.num_nested2_r)).Count() > 1")
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
@@ -70,14 +72,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 2);
 
-                    result.QuestionsQ4Enabled = eventContext.AnyEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == q4Id));
+                    result.QuestionsQ4Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q4Id));
                 }
 
                 return result;
             });
 
-        It should_enable_q4 = () =>
-            results.QuestionsQ4Enabled.ShouldBeTrue();
+        It should_disable_q4 = () =>
+            results.QuestionsQ4Disabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -96,12 +98,13 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid q5Id = Guid.Parse("55555555555555555555555555555555");
         private static readonly Guid userId = Guid.Parse("07777777777777777777777777777770");
 
         [Serializable]
         internal class InvokeResults
         {
-            public bool QuestionsQ4Enabled { get; set; }
+            public bool QuestionsQ4Disabled { get; set; }
         }
     }
 }
