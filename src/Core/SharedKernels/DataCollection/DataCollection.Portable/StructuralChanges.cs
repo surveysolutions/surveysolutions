@@ -6,13 +6,40 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public void ClearAllChanges()
         {
-            AnswerChangesForSingleQuestions.Clear();
-            AnswerChangesForMultiQuestions.Clear();
-            AnswerChangesForYesNoQuestions.Clear();
+            ChangedSingleQuestions.Clear();
+            ChangedMultiQuestions.Clear();
+            ChangedYesNoQuestions.Clear();
+            RemovedRosters.Clear();
         }
 
-        public Dictionary<Identity, int?> AnswerChangesForSingleQuestions { get; set; } = new Dictionary<Identity, int?>();
-        public Dictionary<Identity, int[]> AnswerChangesForMultiQuestions { get; set; } = new Dictionary<Identity, int[]>();
-        public Dictionary<Identity, YesNoAnswersOnly> AnswerChangesForYesNoQuestions { get; set; } = new Dictionary<Identity, YesNoAnswersOnly>();
+        public Dictionary<Identity, int?> ChangedSingleQuestions { get; } = new Dictionary<Identity, int?>();
+        public Dictionary<Identity, int[]> ChangedMultiQuestions { get; } = new Dictionary<Identity, int[]>();
+        public Dictionary<Identity, YesNoAnswersOnly> ChangedYesNoQuestions { get; } = new Dictionary<Identity, YesNoAnswersOnly>();
+        public List<Identity> RemovedRosters { get; } = new List<Identity>();
+
+        public void AddChangedSingleQuestion(Identity questionIdentity, int? newAnswer)
+        {
+            ChangedSingleQuestions.Add(questionIdentity, newAnswer);
+        }
+
+        public void AddChangedMultiQuestion(Identity questionIdentity, int[] newAnswer)
+        {
+            ChangedMultiQuestions.Add(questionIdentity, newAnswer);
+        }
+
+        public void AddChangedYesNoQuestion(Identity questionIdentity, YesNoAnswersOnly newAnswer)
+        {
+            ChangedYesNoQuestions.Add(questionIdentity, newAnswer);
+        }
+
+        public void AddRemovedRoster(Identity rosterIdentity)
+        {
+            RemovedRosters.Add(rosterIdentity);
+        }
+
+        public void AddRemovedRosters(IEnumerable<Identity> rosterIdentities)
+        {
+            RemovedRosters.AddRange(rosterIdentities);
+        }
     }
 }

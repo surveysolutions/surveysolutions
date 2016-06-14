@@ -447,7 +447,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(@"	private readonly List<Action> _conditionExpressions = new List<Action>();
+            this.Write(@"
+	private readonly List<Action> _conditionExpressions = new List<Action>();
 		
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
@@ -464,31 +465,74 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 	{			
 		this.@_parent = (");
             
-            #line 173 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
+            #line 174 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
             #line hidden
-            this.Write(") parent;\r\n\t}\r\n\r\n\tprotected override Guid[] GetRosterScopeIds(Guid rosterId)\r\n\t{\r" +
-                    "\n\t\treturn IdOf.parentScopeMap[rosterId];\r\n\t}\r\n\r\n\tprotected override Guid GetQues" +
-                    "tionnaireId()\r\n\t{\r\n\t\treturn IdOf.@__questionnaire;\r\n\t}\r\n\t\r\n\tpublic void SetParen" +
-                    "t(IExpressionExecutableV10 parent) => this.SetParentImpl(parent);\r\n\tpublic void " +
-                    "SetParent(IExpressionExecutableV9 parent) => this.SetParentImpl(parent);\r\n\tpubli" +
-                    "c void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);\r" +
-                    "\n\tpublic void SetParent(IExpressionExecutableV7 parent) => this.SetParentImpl(pa" +
-                    "rent);\r\n\tpublic void SetParent(IExpressionExecutableV6 parent) => this.SetParent" +
-                    "Impl(parent);\r\n\tpublic void SetParent(IExpressionExecutableV5 parent) => this.Se" +
-                    "tParentImpl(parent);\r\n\tpublic void SetParent(IExpressionExecutableV2 parent) => " +
-                    "this.SetParentImpl(parent);\r\n\tpublic void SetParent(IExpressionExecutable   pare" +
-                    "nt) => this.SetParentImpl(parent);\r\n\t\r\n\tIExpressionExecutableV10 IExpressionExec" +
-                    "utableV10.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV9 IExpressionExe" +
-                    "cutableV9.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV8 IExpressionExe" +
-                    "cutableV8.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV7 IExpressionExe" +
-                    "cutableV7.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV6 IExpressionExe" +
-                    "cutableV6.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV5 IExpressionExe" +
-                    "cutableV5.GetParent() => this.@_parent;\r\n\tIExpressionExecutableV2 IExpressionExe" +
-                    "cutableV2.GetParent() => this.@_parent;\r\n\tIExpressionExecutable   IExpressionExe" +
-                    "cutable  .GetParent() => this.@_parent;\r\n}");
+            this.Write(@") parent;
+	}
+
+	protected override Guid[] GetRosterScopeIds(Guid rosterId)
+	{
+		return IdOf.parentScopeMap[rosterId];
+	}
+
+	protected override Guid GetQuestionnaireId()
+	{
+		return IdOf.@__questionnaire;
+	}
+
+	public override Guid[] GetRosterIdsThisScopeConsistOf()
+	{
+		return new Guid[]{
+");
+            
+            #line 190 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
+
+	foreach (var @roster in Model.RostersInScope) 
+	{
+
+            
+            #line default
+            #line hidden
+            this.Write("\tIdOf.");
+            
+            #line 194 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.IdName));
+            
+            #line default
+            #line hidden
+            this.Write(",\r\n");
+            
+            #line 195 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
+            this.Write(@"		};
+	}
+	
+	public void SetParent(IExpressionExecutableV10 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV9 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV7 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV6 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV5 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV2 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutable   parent) => this.SetParentImpl(parent);
+	
+	IExpressionExecutableV10 IExpressionExecutableV10.GetParent() => this.@_parent;
+	IExpressionExecutableV9 IExpressionExecutableV9.GetParent() => this.@_parent;
+	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.@_parent;
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => this.@_parent;
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => this.@_parent;
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => this.@_parent;
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => this.@_parent;
+	IExpressionExecutable   IExpressionExecutable  .GetParent() => this.@_parent;
+}");
             return this.GenerationEnvironment.ToString();
         }
         

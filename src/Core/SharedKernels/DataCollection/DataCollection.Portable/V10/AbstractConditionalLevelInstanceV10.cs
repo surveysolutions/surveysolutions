@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
         public Action<Identity[], Guid, decimal> RemoveRosterInstances { get; private set; }
-        public AnswerAndStructureChangeNotifier AnswerAndStructureChangeNotifier { get; private set; }
+        public StructuralChanges StructuralChangesCollector { get; private set; }
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
@@ -38,6 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected abstract Guid[] GetRosterScopeIds(Guid rosterId);
 
         protected abstract Guid GetQuestionnaireId();
+
+        public abstract Guid[] GetRosterIdsThisScopeConsistOf();
 
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV10>> rosterGenerators;
 
@@ -96,9 +98,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             this.RemoveRosterInstances = removeRosterInstances;
         }
 
-        public virtual void SetAnswerChangeNotifier(AnswerAndStructureChangeNotifier answerAndStructureChangeNotifier)
+        public virtual void SetStructuralChangesCollector(StructuralChanges structuralChangesCollector)
         {
-            this.AnswerAndStructureChangeNotifier = answerAndStructureChangeNotifier;
+            this.StructuralChangesCollector = structuralChangesCollector;
         }
 
         protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
@@ -109,7 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
                 {
                     setAnswer(null);
-                    this.AnswerAndStructureChangeNotifier.NotifySingleAnswerChange(new Identity(itemId, RosterVector), null);
+                    this.StructuralChangesCollector.AddChangedSingleQuestion(new Identity(itemId, RosterVector), null);
                 }
             };
         }
@@ -130,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (wereSomeOptionsRemoved)
                 {
                     setAnswer(actualAnswer);
-                    this.AnswerAndStructureChangeNotifier.NotifyMultiAnswerChange(new Identity(itemId, RosterVector), actualAnswer.Select(Convert.ToInt32).ToArray());
+                    this.StructuralChangesCollector.AddChangedMultiQuestion(new Identity(itemId, RosterVector), actualAnswer.Select(Convert.ToInt32).ToArray());
 
                     foreach (var rowcode in previousAnswer.Except(actualAnswer))
                     {
@@ -162,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 {
                     var actualYesNoAnswersOnly = new YesNoAnswersOnly(actualYesAnswers, actualNoAnswers);
                     setAnswer(new YesNoAnswers(previousAnswer.All, actualYesNoAnswersOnly));
-                    this.AnswerAndStructureChangeNotifier.NotifyMultiYesNoAnswerChange(new Identity(itemId, RosterVector), actualYesNoAnswersOnly);
+                    this.StructuralChangesCollector.AddChangedYesNoQuestion(new Identity(itemId, RosterVector), actualYesNoAnswersOnly);
                 }
 
                 if (wereSomeYesOptionsRemoved)

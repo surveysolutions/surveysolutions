@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
-    internal class when_answering_question_that_affects_multi_yesno_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size : InterviewTestsContext
+    internal class when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -35,12 +35,21 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNo: true),
+                    Create.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNo: true),
-                        Create.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
-                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
-                    })
+                        Create.NumericIntegerQuestion(q3Id, variable: "q3"),
+                    }),
+                    Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    {
+                        Create.Roster(roster3Id, variable:"fixed__nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                        {
+                            Create.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                            {
+                            }),
+                        })
+                    }),
+                    Create.SingleQuestion(q4Id, variable: "q4", options: options, enablementCondition: "r1.Count() < 2"),
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
@@ -48,26 +57,27 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(q2Id, Create.RosterVector(1),
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(q2Id, RosterVector.Empty,
                     Create.AnsweredYesNoOption(1m, yes: true),
                     Create.AnsweredYesNoOption(2m, yes: true),
                     Create.AnsweredYesNoOption(3m, yes: true)
-                ));
+                    ));
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 2);
 
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 2);
-                    
-                    result.QuestionsQ3Enabled = eventContext.AnyEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == q3Id));
+
+                    result.QuestionsQ4Enabled = eventContext.AnyEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == q4Id));
                 }
 
                 return result;
             });
 
-        It should_enable_q3 = () =>
-            results.QuestionsQ3Enabled.ShouldBeTrue();
+        It should_enable_q4 = () =>
+            results.QuestionsQ4Enabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -78,17 +88,20 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
-        private static readonly Guid rosterId = Guid.Parse("88888888888888888888888888888888");
-        private static readonly Guid roster2Id = Guid.Parse("77777777777777777777777777777777");
+        private static readonly Guid roster1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly Guid roster2Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        private static readonly Guid roster3Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static readonly Guid roster4Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid userId = Guid.Parse("07777777777777777777777777777770");
 
         [Serializable]
         internal class InvokeResults
         {
-            public bool QuestionsQ3Enabled { get; set; }
+            public bool QuestionsQ4Enabled { get; set; }
         }
     }
 }
