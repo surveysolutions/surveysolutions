@@ -48,6 +48,19 @@
                 </div>
             }
 
+            @if (questionnaire.LinkedQuestionHasFilter(question))
+            {
+                <div class="instructions">
+                    <span>LF</span>@questionnaire.GetLinkedQuestionFilterExceprt(question)
+                    @if (questionnaire.LinkedQuestionFilterIsTooLong(question))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetLinkedQuestionFilterRef(question.PublicKey)">@(question.LinkedFilterExpression.Length - questionnaire.Settings.LinkedQuestionFilterExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "LF")]</a>
+                        </div>
+                    }
+                </div>
+            }
+
             @for (int i = 0; i < questionnaire.GetValidationsCount(question.ValidationConditions); i++)
             {
                 var validation = question.ValidationConditions[i];

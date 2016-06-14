@@ -317,9 +317,9 @@
         <article class="appendix_section">
             <h2 id="optoins_filters_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Option filters</h2>
             <ul class="container">
-                @for (var i = 0; i < questionnaire.QuestionsWithLongFilterExpression.Count; i++)
+                @for (var i = 0; i < questionnaire.QuestionsWithLongOptionsFilterExpression.Count; i++)
                 {
-                    var question = questionnaire.QuestionsWithLongFilterExpression[i];
+                    var question = questionnaire.QuestionsWithLongOptionsFilterExpression[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
@@ -328,6 +328,30 @@
                             </a>
                             <p>
                                 @question.Properties.OptionsFilterExpression
+                            </p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </article>
+    }
+
+    @if (!questionnaire.IsLinkedQuestionsFiltersAppendixEmpty)
+    {
+        <article class="appendix_section">
+            <h2 id="optoins_filters_appendix">Appendix @questionnaire.LinkedQuestionFilterAppendixIndex &#8212; Linked questions filters</h2>
+            <ul class="container">
+                @for (var i = 0; i < questionnaire.LinkedQuestionsWithLongFilterExpression.Count; i++)
+                {
+                    var question = questionnaire.LinkedQuestionsWithLongFilterExpression[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetLinkedQuestionFilterRef(question.PublicKey)">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            <p>
+                                @question.LinkedFilterExpression
                             </p>
                         </div>
                     </li>
