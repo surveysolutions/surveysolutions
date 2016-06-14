@@ -209,7 +209,7 @@
     <value>Column name duplicates found.</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
-    <value>Latitude must be greater  then -90° and less then 90°.</value>
+    <value>Latitude must be greater than -90° and less than 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
     <value>Longitude must be greater than -180° and less than 180°.</value>
