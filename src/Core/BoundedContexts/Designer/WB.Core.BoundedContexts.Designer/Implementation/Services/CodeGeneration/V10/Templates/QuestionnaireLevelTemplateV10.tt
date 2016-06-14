@@ -112,6 +112,11 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		return IdOf.@__questionnaire;
 	}
 
+	public override Guid[] GetRosterIdsThisScopeConsistOf()
+	{
+		return new Guid[0];
+	}
+
 	public void SetParent(IExpressionExecutableV10 parent) {}
 	public void SetParent(IExpressionExecutableV9 parent) {}
 	public void SetParent(IExpressionExecutableV8 parent) {}

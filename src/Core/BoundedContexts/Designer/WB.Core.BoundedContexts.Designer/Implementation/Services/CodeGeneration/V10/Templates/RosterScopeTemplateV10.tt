@@ -155,6 +155,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 <# 
 	}
 #>
+
 	private readonly List<Action> _conditionExpressions = new List<Action>();
 		
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
@@ -181,6 +182,20 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	protected override Guid GetQuestionnaireId()
 	{
 		return IdOf.@__questionnaire;
+	}
+
+	public override Guid[] GetRosterIdsThisScopeConsistOf()
+	{
+		return new Guid[]{
+<#
+	foreach (var @roster in Model.RostersInScope) 
+	{
+#>
+	IdOf.<#=@roster.IdName#>,
+<# 
+	}
+#>
+		};
 	}
 	
 	public void SetParent(IExpressionExecutableV10 parent) => this.SetParentImpl(parent);

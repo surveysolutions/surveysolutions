@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
 
-        void SetAnswerChangeNotifier(AnswerAndStructureChangeNotifier answerAndStructureChangeNotifier);
+        void SetStructuralChangesCollector(StructuralChanges structuralChanges);
+
+        Guid[] GetRosterIdsThisScopeConsistOf();
     }
 }

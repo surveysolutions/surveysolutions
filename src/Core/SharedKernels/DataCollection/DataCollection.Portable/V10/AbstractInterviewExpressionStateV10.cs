@@ -8,10 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 {
     public abstract class AbstractInterviewExpressionStateV10 : AbstractInterviewExpressionStateV9, IInterviewExpressionStateV10
     {
-        protected AbstractInterviewExpressionStateV10()
-        {
-            this.AnswerAndStructureChangeNotifier = new AnswerAndStructureChangeNotifier(this.StructuralChanges);
-        }
+        protected AbstractInterviewExpressionStateV10() {}
 
         protected AbstractInterviewExpressionStateV10(IDictionary<string, IExpressionExecutableV10> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : this(interviewScopes.AsEnumerable(), siblingRosters, interviewProperties) {}
@@ -27,7 +24,6 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 siblingRosters,
                 interviewProperties)
         {
-            this.AnswerAndStructureChangeNotifier = new AnswerAndStructureChangeNotifier(this.StructuralChanges);
             this.SetRosterRemoverForAllScopes();
             this.SetAnswerAndStructureChangeNotifierForAllScopes();
         }
@@ -41,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         }
 
         public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
-        public AnswerAndStructureChangeNotifier AnswerAndStructureChangeNotifier { get; set; }
+      
 
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
 
@@ -133,10 +129,19 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         public virtual void RemoveRoster(Identity[] rosterIdentityKey)
         {
-            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            var dependentRosters = this.InterviewScopes.Keys
+                .Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey))))
+                .ToArray();
 
             foreach (var rosterKey in dependentRosters)
             {
+                var scope = this.InterviewScopes[rosterKey];
+                if (scope != null)
+                {
+                    var deletedRosterIdentities = scope.GetRosterIdsThisScopeConsistOf().Select(x => new Identity(x, scope.RosterVector));
+                    this.StructuralChanges.AddRemovedRosters(deletedRosterIdentities);
+                }
+
                 this.InterviewScopes.Remove(rosterKey);
                 foreach (var siblings in this.SiblingRosters.Values)
                 {
@@ -180,7 +185,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             foreach (var interviewScope in this.InterviewScopes.Values)
             {
-                interviewScope.SetAnswerChangeNotifier(this.AnswerAndStructureChangeNotifier);
+                interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
             }
         }
 
