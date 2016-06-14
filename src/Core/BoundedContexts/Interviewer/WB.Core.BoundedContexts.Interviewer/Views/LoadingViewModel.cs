@@ -60,12 +60,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token);
+                IStatefulInterview interview =
+                    await
+                        this.interviewRepository.GetAsync(interviewIdString, progress,
+                            this.loadingCancellationTokenSource.Token);
 
-                if (interview.Status==InterviewStatus.Completed)
+                if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
+                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                     await this.commandService.ExecuteAsync(restartInterviewCommand);
                 }
 
@@ -84,7 +88,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
 
             }
-            progress.ProgressChanged -= Progress_ProgressChanged;
+            finally
+            {
+                progress.ProgressChanged -= Progress_ProgressChanged;
+            }
         }
 
         private string progressDescription;
