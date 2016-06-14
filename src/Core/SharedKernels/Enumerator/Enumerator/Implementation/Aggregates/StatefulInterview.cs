@@ -1410,9 +1410,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.GetOptionForQuestionWithoutFilter(question, value);
         }
 
-        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value)
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value)
         {
-            throw new NotImplementedException();
+            return this.GetOptionForQuestionWithFilter(question, value);
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
