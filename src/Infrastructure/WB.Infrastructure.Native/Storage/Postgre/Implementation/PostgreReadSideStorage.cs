@@ -125,9 +125,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
             var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
 
-            var propertyProjection = ((PropertyProjection) criteriaImpl.Projection);
-            var columnName = propertyProjection.PropertyName;
+            if (loader.Translator.ProjectedColumnAliases.Length != 1)
+            {
+                throw new InvalidOperationException("Recursive index is avalible only for single coulmn query");
+            }
+
             var alliasName = loader.Translator.ProjectedColumnAliases[0];
+            var propertyProjection = (PropertyProjection)criteriaImpl.Projection;
+            var columnName = propertyProjection.PropertyName;
 
             var result = session.CreateSQLQuery($"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
                                                 $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{alliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{alliasName} IS NOT NULL)" +
