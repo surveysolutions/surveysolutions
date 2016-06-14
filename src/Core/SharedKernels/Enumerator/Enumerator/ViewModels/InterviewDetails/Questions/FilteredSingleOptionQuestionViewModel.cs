@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected IStatefulInterview interview;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private List<FilteredComboboxItemViewModel> Options { get; set; }
+        private IEnumerable<FilteredComboboxItemViewModel> Options { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -77,6 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+            this.filteredOptionsViewModel.IsNeedCompareOptionsonChanges = false;
 
             interview = this.interviewRepository.Get(interviewId);
             this.questionIdentity = entityIdentity;
@@ -93,12 +94,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = this.interview.GetSingleOptionAnswer(questionIdentity);
 
             //should be removed
-            this.Options = this.filteredOptionsViewModel.Options.Select(this.ToViewModel).ToList();
+            this.Options = this.filteredOptionsViewModel.Options.Select(this.ToViewModel);
 
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                var answerOption = this.Options.SingleOrDefault(o => o.Value == selectedValue.Value);
+                var answerOption = this.Options.FirstOrDefault(o => o.Value == selectedValue.Value);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
