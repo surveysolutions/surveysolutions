@@ -647,19 +647,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void RemoveAnswerFromExpressionProcessorState(ILatestInterviewExpressionState state, Guid questionId, RosterVector rosterVector)
         {
-            state.UpdateNumericIntegerAnswer(questionId, rosterVector, null);
-            state.UpdateNumericRealAnswer(questionId, rosterVector, null);
-            state.UpdateDateAnswer(questionId, rosterVector, null);
-            state.UpdateMediaAnswer(questionId, rosterVector, null);
-            state.UpdateTextAnswer(questionId, rosterVector, null);
-            state.UpdateQrBarcodeAnswer(questionId, rosterVector, null);
-            state.UpdateSingleOptionAnswer(questionId, rosterVector, null);
-            state.UpdateMultiOptionAnswer(questionId, rosterVector, null);
-            state.UpdateGeoLocationAnswer(questionId, rosterVector, 0, 0, 0, 0);
-            state.UpdateTextListAnswer(questionId, rosterVector, null);
-            state.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, null);
-            state.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, null);
-            state.UpdateYesNoAnswer(questionId, rosterVector, null);
+            state.RemoveAnswer(new Identity(questionId, rosterVector));
         }
 
         #region Dependencies

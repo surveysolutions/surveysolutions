@@ -68,6 +68,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => 
             this.adaptee.FilterOptionsForQuestion(questionIdentity, options);
 
+        public void RemoveAnswer(Identity questionIdentity)
+        {
+            this.adaptee.RemoveAnswer(questionIdentity);
+        }
+
         public StructuralChanges GetStructuralChanges() => 
             this.adaptee.GetStructuralChanges();
 
