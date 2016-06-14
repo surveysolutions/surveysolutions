@@ -40,5 +40,6 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);
         void SaveAllCurrentStatesAsPrevious();
+        void RemoveAnswer(Guid questionId);
     }
 }
