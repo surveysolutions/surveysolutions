@@ -29,15 +29,16 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         {
             try
             {
-                return XDocument
-                .Load(fullPathToResX)
-                .Root
-                .TreeToEnumerable(_ => _.Elements())
-                .Where(element => element.Name == "data")
-                .OrderBy(element => element.Attribute("name").Value)
-                .ToDictionary(
+                var doc = XDocument
+                    .Load(fullPathToResX)
+                    .Root
+                    .TreeToEnumerable(_ => _.Elements())
+                    .Where(element => element.Name == "data")
+                    .OrderBy(element => element.Attribute("name").Value);
+                
+                return doc.ToDictionary(
                     element => element.Attribute("name").Value,
-                    element => element.Elements().Single().Value
+                    element => element.Elements().Single(x => x.Name == "value").Value
                 );
             }
             catch (Exception exc)

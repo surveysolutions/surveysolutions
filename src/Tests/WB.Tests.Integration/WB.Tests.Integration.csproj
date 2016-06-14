@@ -443,6 +443,14 @@
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
+      <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
+      <Name>WB.UI.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
