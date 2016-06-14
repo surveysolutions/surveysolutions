@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         protected static Dictionary<string, string> GetStringResourcesFromResX(string fullPathToResX)
         {
-            return XDocument
+            try
+            {
+                return XDocument
                 .Load(fullPathToResX)
                 .Root
                 .TreeToEnumerable(_ => _.Elements())
@@ -36,6 +39,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                     element => element.Attribute("name").Value,
                     element => element.Elements().Single().Value
                 );
+            }
+            catch (Exception exc)
+            {
+                throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
+            }
+            
         }
 
         protected static string GetStringFormatEntriesAsString(string value)
