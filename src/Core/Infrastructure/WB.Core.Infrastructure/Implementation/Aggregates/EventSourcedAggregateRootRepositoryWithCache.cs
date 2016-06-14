@@ -19,9 +19,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
-        {
-            return GetLatest(aggregateType, aggregateId, null, new CancellationToken());
-        }
+            => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {

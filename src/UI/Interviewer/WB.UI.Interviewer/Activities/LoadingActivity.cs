@@ -35,7 +35,7 @@ namespace WB.UI.Interviewer.Activities
             }
             Task.Run(async () =>
             {
-                await ViewModel.RestoreInterviewAndNavigateThere();
+                await this.ViewModel.RestoreInterviewAndNavigateThere();
                 this.Finish();
             });
         }
@@ -43,7 +43,7 @@ namespace WB.UI.Interviewer.Activities
         public override async void OnBackPressed()
         {
             await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
-            CancelLoadingAndFinishActivity();
+            this.CancelLoadingAndFinishActivity();
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -52,19 +52,19 @@ namespace WB.UI.Interviewer.Activities
             {
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
-                    CancelLoadingAndFinishActivity();
+                    this.CancelLoadingAndFinishActivity();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
-                    CancelLoadingAndFinishActivity();
+                    this.CancelLoadingAndFinishActivity();
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
-                    CancelLoadingAndFinishActivity();
+                    this.CancelLoadingAndFinishActivity();
                     break;
                 case Android.Resource.Id.Home:
-                    CancelLoadingAndFinishActivity();
+                    this.CancelLoadingAndFinishActivity();
                     return true;
             }
             return base.OnOptionsItemSelected(item);
@@ -78,17 +78,14 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
 
-            HideMenuItem(menu, Resource.Id.menu_login);
+            this.HideMenuItem(menu, Resource.Id.menu_login);
             return base.OnCreateOptionsMenu(menu);
         }
 
         public void HideMenuItem(IMenu menu, int menuItemId)
         {
             var menuItem = menu.FindItem(menuItemId);
-            if (menuItem != null)
-            {
-                menuItem.SetVisible(false);
-            }
+            menuItem?.SetVisible(false);
         }
 
         private void CancelLoadingAndFinishActivity()

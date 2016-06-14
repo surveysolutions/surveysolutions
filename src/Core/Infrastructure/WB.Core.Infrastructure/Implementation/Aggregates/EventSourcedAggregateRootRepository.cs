@@ -24,9 +24,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         }
 
         public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
-        {
-            return GetLatest(aggregateType, aggregateId,null, new CancellationToken());
-        }
+            => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
         public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {

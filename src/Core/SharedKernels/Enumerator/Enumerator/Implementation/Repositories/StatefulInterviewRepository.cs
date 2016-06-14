@@ -25,14 +25,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         }
 
         public IStatefulInterview Get(string interviewId)
-        {
-            return GetImpl(interviewId,null, new CancellationToken());
-        }
+            => this.GetImpl(interviewId, null, CancellationToken.None);
 
         public Task<IStatefulInterview> GetAsync(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(GetImpl(interviewId, progress, cancellationToken));
-        }
+            => Task.FromResult(this.GetImpl(interviewId, progress, cancellationToken));
 
         public IStatefulInterview GetImpl(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
