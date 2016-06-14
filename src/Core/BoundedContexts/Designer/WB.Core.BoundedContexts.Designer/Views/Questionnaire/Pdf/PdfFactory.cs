@@ -96,7 +96,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
-                QuestionsWithLongFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
+                QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
+                LinkedQuestionsWithLongFilterExpression = Find<IQuestion>(allItems, x=> (x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue) && x.LinkedFilterExpression?.Length > this.pdfSettings.LinkedQuestionFilterExpressionExcerptLength).ToList(),
                 QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList()
             };
