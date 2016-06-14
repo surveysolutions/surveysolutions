@@ -200,9 +200,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     
                 }
 
-                await
-                    this.viewModelNavigationService.NavigateToAsync<LoadingViewModel>(
-                        new {interviewId = this.InterviewId});
+                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel>(new {interviewId = this.InterviewId});
             }
             finally
             {
