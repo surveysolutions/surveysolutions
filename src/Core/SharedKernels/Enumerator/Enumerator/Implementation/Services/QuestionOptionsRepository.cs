@@ -21,5 +21,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return optionsRepository.GetFilteredQuestionOptions(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, parentQuestionValue, filter);
         }
+
+        public CategoricalOption GetOptionForQuestion(IQuestionnaire questionnaire, Guid questionId, string value)
+        {
+            return optionsRepository.GetQuestionOption(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, value);
+        }
     }
 }
