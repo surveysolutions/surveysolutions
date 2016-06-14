@@ -17,11 +17,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public virtual IList<CategoricalOption> Options { get; private set; }
+        public virtual IEnumerable<CategoricalOption> Options { get; private set; }
 
         public event EventHandler OptionsChanged;
 
         public string Filter { get; set; } = String.Empty;
+        public bool IsNeedCompareOptionsonChanges { get; set; } = true;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -78,12 +79,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
             var interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter).ToList();
-            var currentOptions = this.Options;
+            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter);
 
-            if (!Enumerable.SequenceEqual(currentOptions, newOptions, new CategoricalOptionEqualityComparer()))
+            if (!IsNeedCompareOptionsonChanges)
             {
                 this.Options = newOptions;
+                this.OptionsChanged?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+
+            var currentOptions = this.Options;
+            var listOfNewOptions = newOptions.ToList();
+
+            if (!Enumerable.SequenceEqual(currentOptions, listOfNewOptions, new CategoricalOptionEqualityComparer()))
+            {
+                this.Options = listOfNewOptions;
                 this.OptionsChanged?.Invoke(this, EventArgs.Empty);
             }
         }
