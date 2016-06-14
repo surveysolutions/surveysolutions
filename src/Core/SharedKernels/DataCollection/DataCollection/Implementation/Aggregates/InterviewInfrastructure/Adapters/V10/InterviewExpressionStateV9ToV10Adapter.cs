@@ -65,6 +65,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => 
             options;
 
+        public void RemoveAnswer(Identity questionIdentity)
+        {
+            this.adaptee.UpdateNumericIntegerAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateNumericRealAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateDateAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateMediaAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateTextAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateQrBarcodeAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateSingleOptionAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateMultiOptionAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateGeoLocationAnswer(questionIdentity.Id, questionIdentity.RosterVector, 0, 0, 0, 0);
+            this.adaptee.UpdateTextListAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateLinkedSingleOptionAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateLinkedMultiOptionAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+            this.adaptee.UpdateYesNoAnswer(questionIdentity.Id, questionIdentity.RosterVector, null);
+        }
+
         public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId) { }
 
         public StructuralChanges GetStructuralChanges() => new StructuralChanges();

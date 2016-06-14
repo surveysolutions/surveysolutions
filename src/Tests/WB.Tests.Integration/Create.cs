@@ -145,6 +145,10 @@ namespace WB.Tests.Integration
                     answer);
             }
 
+            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+              => new GeoLocationQuestionAnswered(
+                  Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
+
             public static NumericRealQuestionAnswered NumericRealQuestionAnswered(
                 Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
             {

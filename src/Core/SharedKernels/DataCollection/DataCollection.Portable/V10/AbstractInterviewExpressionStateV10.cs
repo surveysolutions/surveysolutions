@@ -80,6 +80,12 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
         }
 
+        public void RemoveAnswer(Identity questionIdentity)
+        {
+            IExpressionExecutableV10 targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
+            targetLevel?.RemoveAnswer(questionIdentity.Id);
+        }
+    
         public override void SaveAllCurrentStatesAsPrevious()
         {
             base.SaveAllCurrentStatesAsPrevious();
