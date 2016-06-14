@@ -711,9 +711,9 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title = null)
         {
-            return new FixedRosterTitle(value, title);
+            return new FixedRosterTitle(value, title ?? ("Roster " + value));
         }
 
         public static LookupTable LookupTable(string tableName)
