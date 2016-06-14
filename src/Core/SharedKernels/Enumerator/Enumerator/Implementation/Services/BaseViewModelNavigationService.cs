@@ -38,21 +38,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task WaitPendingOperationsCompletionAsync()
         {
-            int waitAttempts = 0;
-            while (this.HasPendingOperations)
-            {
-                if(waitAttempts>this.maxNumberOfWaitAttemts)
-                    return;
+            await this.PendingOperationsToComplete();
 
-                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
-                await Task.Delay(waitDelay);
-                waitAttempts++;
-                
-            }
+            if (HasPendingOperations)
+                return;
 
             await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
             await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+        }
+
+        private async Task PendingOperationsToComplete(int attempt = 0)
+        {
+            if (this.HasPendingOperations && attempt < this.maxNumberOfWaitAttemts)
+            {
+                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
+                await Task.Delay(waitDelay);
+                await this.PendingOperationsToComplete(attempt + 1);
+            }
         }
     }
 }
