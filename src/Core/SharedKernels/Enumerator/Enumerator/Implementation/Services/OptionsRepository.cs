@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         }
 
-        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, int optionValue)
+        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionValue)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
@@ -92,9 +92,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var categoricalQuestionOption = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
-                            x.Value == optionValue)
+                            x.Title == optionValue)
                 .FirstOrDefault();
-            
+
+            if (categoricalQuestionOption == null)
+                return null;
+
             return new CategoricalOption
             {
                 ParentValue = categoricalQuestionOption.ParentValue.HasValue ? Convert.ToInt32(categoricalQuestionOption.ParentValue) : (int?)null,

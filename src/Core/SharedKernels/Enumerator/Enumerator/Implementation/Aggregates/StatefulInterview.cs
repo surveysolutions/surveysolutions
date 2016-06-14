@@ -1405,6 +1405,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
         }
 
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value)
+        {
+            return this.GetOptionForQuestionWithoutFilter(question, value);
+        }
+
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value)
+        {
+            throw new NotImplementedException();
+        }
+
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
         {
             return GetOrCalculate(

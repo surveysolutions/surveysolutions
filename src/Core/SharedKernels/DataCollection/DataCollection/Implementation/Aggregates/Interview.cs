@@ -4726,6 +4726,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return filteredOptions;
         }
 
+        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            return questionnaire.GetOptionsForQuestion(question.Id, null, string.Empty).SingleOrDefault(x=> x.Value == value);
+        }
+
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionValue)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            var filteredOption = questionnaire.GetOptionForQuestionByValue(question.Id, optionValue);
+
+            if (filteredOption == null)
+                return null;
+
+            if (questionnaire.IsSupportFilteringForOptions(question.Id))
+                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
+            else
+                return filteredOption;
+        }
+
         protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();
         protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any();
 

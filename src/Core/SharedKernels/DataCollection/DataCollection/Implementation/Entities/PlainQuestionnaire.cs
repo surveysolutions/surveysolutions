@@ -318,6 +318,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
+        public CategoricalOption GetOptionForQuestionFromStructure(Guid questionId, string optionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionValue).ToCategoricalOption();
+        }
+
         private static IEnumerable<CategoricalOption> GetFromQuestionCategoricalOptions(IQuestion question, int? parentQuestionValue, string filter)
         {
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
@@ -368,6 +377,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
+        }
+
+        public CategoricalOption GetOptionForQuestionByValue(Guid questionId, string value)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            {
+                return QuestionOptionsRepository.GetOptionForQuestion(this, questionId, value);
+            }
+
+            return question.Answers.SingleOrDefault(x => x.AnswerText == value).ToCategoricalOption();
         }
 
         private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
