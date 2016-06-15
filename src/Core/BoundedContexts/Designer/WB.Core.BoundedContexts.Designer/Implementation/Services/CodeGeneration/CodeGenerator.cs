@@ -89,6 +89,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate.TransformText());
             }
 
+            foreach (var categoricalOptionsFilterModel in expressionStateModel.LinkedFilterModels)
+            {
+                var methodTemplate = new LinkedFilterMethodTemplateV10(categoricalOptionsFilterModel.Value);
+                generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate.TransformText());
+            }
+
             this.DumpCodeIfNeeded(generatedClasses);
             
             return generatedClasses;

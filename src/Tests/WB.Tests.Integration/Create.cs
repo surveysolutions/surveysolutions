@@ -412,7 +412,7 @@ namespace WB.Tests.Integration
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
             string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, 
-            Guid? linkedToRosterId=null, string optionsFilter = null)
+            Guid? linkedToRosterId=null, string optionsFilter = null, string linkedFilter = null)
         {
             var singleQuestion = new SingleQuestion
             {
@@ -425,6 +425,7 @@ namespace WB.Tests.Integration
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
+                LinkedFilterExpression = linkedFilter,
                 Properties =
                 {
                     OptionsFilterExpression = optionsFilter

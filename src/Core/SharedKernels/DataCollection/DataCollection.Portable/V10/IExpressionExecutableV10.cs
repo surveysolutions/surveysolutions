@@ -23,5 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         void SetStructuralChangesCollector(StructuralChanges structuralChanges);
 
         Guid[] GetRosterIdsThisScopeConsistOf();
+
+        List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope);
     }
 }
