@@ -1829,8 +1829,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 groupPublicKey: null, //?
                 questionText: title,
                 questionType: QuestionType.DateTime,
-                stataExportCaption: command.VariableName,
-                variableLabel: variableName,
+                stataExportCaption: variableName,
+                variableLabel: command.VariableLabel,
                 featured: command.IsPreFilled,
                 questionScope: command.Scope,
                 conditionExpression: command.EnablementCondition,
