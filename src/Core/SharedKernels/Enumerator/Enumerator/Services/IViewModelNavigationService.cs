@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task NavigateToLoginAsync();
         Task NavigateToInterviewAsync(string interviewId);
         Task NavigateToPrefilledQuestionsAsync(string interviewId);
-        Task WaitPendingOperationsCompletionAsync();
-        bool HasPendingOperations { get; }
+        Task<bool> TryWaitPendingOperationsCompletionAsync();
     }
 }

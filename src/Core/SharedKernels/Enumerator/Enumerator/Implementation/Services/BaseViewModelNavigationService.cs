@@ -29,22 +29,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task NavigateToAsync<TViewModel>(object parameters) where TViewModel : IMvxViewModel
         {
-            await this.WaitPendingOperationsCompletionAsync();
-            if (!this.HasPendingOperations)
+            if (await this.TryWaitPendingOperationsCompletionAsync())
                 this.ShowViewModel<TViewModel>(parameters);
         }
 
-        public async Task WaitPendingOperationsCompletionAsync()
+        public async Task<bool> TryWaitPendingOperationsCompletionAsync()
         {
             if (this.HasPendingOperations)
             {
                 this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
-                return;
+                return false;
             }
 
             await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
             await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            return true;
         }
     }
 }

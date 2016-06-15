@@ -46,15 +46,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
-            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-            if (!this.viewModelNavigationService.HasPendingOperations)
+            if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
                 this.NavigateTo(navigationItem);
         }
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-            if (!this.viewModelNavigationService.HasPendingOperations)
+            if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
                 this.NavigateBack(navigateToIfHistoryIsEmpty);
         }
 

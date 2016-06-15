@@ -54,8 +54,7 @@ namespace WB.UI.Interviewer.Activities
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
-                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-                    if (!viewModelNavigationService.HasPendingOperations)
+                    if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
                     {
                         this.ViewModel.SignOutCommand.Execute();
                         this.Finish();

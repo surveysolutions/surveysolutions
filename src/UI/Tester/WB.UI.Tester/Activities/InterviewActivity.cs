@@ -47,16 +47,14 @@ namespace WB.UI.Tester.Activities
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
-                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-                    if (!viewModelNavigationService.HasPendingOperations)
+                    if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
                     {
                         Intent intent = new Intent(this, typeof(PrefsActivity));
                         this.StartActivity(intent);
                     }
                     break;
                 case Resource.Id.interview_signout:
-                    await viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-                    if (!viewModelNavigationService.HasPendingOperations)
+                    if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
                     {
                         this.ViewModel.SignOutCommand.Execute();
                         this.Finish();
