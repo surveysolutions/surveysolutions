@@ -73,6 +73,10 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 2);
 
                     result.QuestionsQ4Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q4Id));
+
+                    result.QuestionqQ2HasEmptyAnswer = eventContext.AnyEvent<YesNoQuestionAnswered>(x => x.QuestionId == q2Id && x.AnsweredOptions.Length == 1);
+
+                    result.RosterInstancesRemovedCount = eventContext.GetEvents<RosterInstancesRemoved>().SelectMany(x=>x.Instances).Count();
                 }
 
                 return result;
@@ -80,6 +84,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
         It should_disable_q4 = () =>
             results.QuestionsQ4Disabled.ShouldBeTrue();
+
+        It should_have_one_option_answer_q2 = () =>
+            results.QuestionqQ2HasEmptyAnswer.ShouldBeTrue();
+
+        It should_remove_rosters_8 = () =>
+            results.RosterInstancesRemovedCount.ShouldEqual(8);
 
         Cleanup stuff = () =>
         {
@@ -105,6 +115,8 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         internal class InvokeResults
         {
             public bool QuestionsQ4Disabled { get; set; }
+            public bool QuestionqQ2HasEmptyAnswer { get; set; }
+            public int RosterInstancesRemovedCount { get; set; }
         }
     }
 }
