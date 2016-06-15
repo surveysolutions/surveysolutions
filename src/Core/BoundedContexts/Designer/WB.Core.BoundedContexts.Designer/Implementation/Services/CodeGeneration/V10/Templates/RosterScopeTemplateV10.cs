@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("    LinkedQuestionFilters.Add(IdOf.");
+            this.Write("    LinkedOptionFiltersMap.Add(IdOf.");
             
             #line 49 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(linkedQuestionFilterExpression.LinkedQuestionVariableName));

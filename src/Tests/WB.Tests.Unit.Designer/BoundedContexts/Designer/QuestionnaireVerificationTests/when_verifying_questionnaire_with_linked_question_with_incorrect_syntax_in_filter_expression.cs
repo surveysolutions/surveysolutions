@@ -12,7 +12,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("KP-7266")]
     internal class when_verifying_questionnaire_with_linked_question_with_incorrect_syntax_in_filter_expression : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>

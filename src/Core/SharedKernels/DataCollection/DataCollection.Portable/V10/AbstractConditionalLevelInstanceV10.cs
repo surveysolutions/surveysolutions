@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
-        protected new Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedQuestionFilters = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
+        protected Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedOptionFiltersMap = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
@@ -279,7 +279,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             if (rosterStatesFromScope.Length > 0 && rosterStatesFromScope.All(s => s == State.Disabled))
                 return result;
 
-            foreach (var linkedQuestionFilter in this.LinkedQuestionFilters)
+            foreach (var linkedQuestionFilter in this.LinkedOptionFiltersMap)
             {
                 bool enabled = false;
                 try
