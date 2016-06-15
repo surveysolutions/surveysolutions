@@ -8,6 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     {
         IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, Guid questionId, int? parentQuestionValue, string filter);
 
-        CategoricalOption GetOptionForQuestion(IQuestionnaire questionnaire, Guid questionId, string value);
+        CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText);
     }
 }

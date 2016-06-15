@@ -13,9 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestion(IQuestionnaire questionnaire, Guid questionId, string value)
+        public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText)
         {
-            return questionnaire.GetOptionForQuestionFromStructure(questionId, value);
+            return questionnaire.GetOptionForQuestionFromStructureByOptionText(questionId, optionText);
         }
     }
 }
