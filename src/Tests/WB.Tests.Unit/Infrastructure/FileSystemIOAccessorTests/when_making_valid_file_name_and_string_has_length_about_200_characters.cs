@@ -3,11 +3,11 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
 {
-    internal class when_making_valid_file_name_and_string_has_length_about_100_characters
+    internal class when_making_valid_file_name_and_string_has_length_about_200_characters
     {
         Establish context = () =>
         {
-            fileName = "file" + new string('A', 100);
+            fileName = "file" + new string('A', 200);
             fileSystemIOAccessor = Create.Service.FileSystemIOAccessor();
         };
 
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
             newFileName = fileSystemIOAccessor.MakeValidFileName(fileName);
 
         It should_return_file_name_of_100_length = () =>
-            newFileName.ShouldEqual("file" + new string('A', 96));
+            newFileName.ShouldEqual("file" + new string('A', 196));
 
         private static FileSystemIOAccessor fileSystemIOAccessor;
         private static string fileName;
