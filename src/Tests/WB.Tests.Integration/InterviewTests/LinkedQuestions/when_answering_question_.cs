@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
+    [Ignore("KP-7266")]
     internal class when_answering_question_ : InterviewTestsContext
     {
         Establish context = () =>
