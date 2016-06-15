@@ -33,23 +33,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code__WB0018 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0018");
-
-        It should_return_message_with_1_references = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
-
-        It should_return_message_reference_with_type_Question = () =>
-            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_message_reference_with_id_of_questionWithSubstitutionToQRBarcodeId = () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionToQRBarcodeId);
-
-        It should_return_message_reference_with_id_of_qrBarcodeQuestionId = () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
+        It should_messages_be_empty = () =>
+            verificationMessages.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
