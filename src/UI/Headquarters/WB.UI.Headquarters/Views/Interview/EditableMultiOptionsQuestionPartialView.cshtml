@@ -28,7 +28,7 @@
         <span>@option.Label</span>
         @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
         {
-            <span class="badge">@(answers.Select((item, index) => new {index, item}).First(_ => _.item == (decimal) option.Value).index + 1)</span>
+            <span class="badge">@(answers.Select((item, index) => new {index, item}).First(_ => _.item ==  Convert.ToDecimal(option.Value)).index + 1)</span>
         }
     </label>
 }
