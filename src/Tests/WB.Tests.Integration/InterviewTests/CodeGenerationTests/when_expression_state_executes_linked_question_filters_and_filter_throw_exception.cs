@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
-    [Ignore("KP-7266")]
     internal class when_expression_state_executes_linked_question_filters_and_filter_throw_exception : CodeGenerationTestsContext
     {
         Establish context = () =>
