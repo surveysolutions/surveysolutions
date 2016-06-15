@@ -239,7 +239,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                     else
                     {
-                        return AnswerUtils.AnswerToString(answer, x => questionView.Options.First(o => (decimal)o.Value == x).Label);
+                        return AnswerUtils.AnswerToString(answer, x => questionView.Options.First(o => Convert.ToDecimal(o.Value) == x).Label);
                     }
 
                 case QuestionType.MultyOption:
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                     else
                     {
-                        return AnswerUtils.AnswerToString(answer, x => questionView.Options.First(o => (decimal)o.Value == x).Label);
+                        return AnswerUtils.AnswerToString(answer, x => questionView.Options.First(o => Convert.ToDecimal(o.Value) == x).Label);
                     }
                 case QuestionType.DateTime:
                     var isTimestamp = (questionView.Settings as DateTimeQuestionSettings)?.IsTimestamp ?? false;
