@@ -2600,37 +2600,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            
+            var interviewByAnswerChange = new List<AnswerChange>
+            {
+                new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
+            };
 
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            string answerString = AnswerUtils.AnswerToString(answer);
 
-            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
-            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
+            var changes = this.EmitInterviewChangesByExpressionState(expressionProcessorState, rosterCalculationData,
+                rosterInstancesWithAffectedTitles, questionnaire, interviewByAnswerChange, answerString);
 
             IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
-            };
+            changes.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToArray();
+            changes.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToArray();
+            changes.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToArray();
 
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToList();
+            return changes;
+            
+        }
+
+        private InterviewChanges EmitInterviewChangesByExpressionState(ILatestInterviewExpressionState expressionProcessorState,
+            RosterCalculationData rosterCalculationData,
+            List<RosterIdentity> rosterInstancesWithAffectedTitles,
+            IQuestionnaire questionnaire, List<AnswerChange> interviewByAnswerChange,
+            string answerString)
+        {
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
+
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+
+            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
+            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
 
             var changedLinkedOptions =
-               CreateChangedLinkedOptions(expressionProcessorState, 
-               this.interviewState, 
-               questionnaire, 
-               interviewByAnswerChange, 
-               enablementChanges, 
+               CreateChangedLinkedOptions(expressionProcessorState,
+               this.interviewState,
+               questionnaire,
+               interviewByAnswerChange,
+               enablementChanges,
                rosterCalculationData,
-               rosterInstancesWithAffectedTitles, 
-               AnswerUtils.AnswerToString(answer)).ToArray();
+               rosterInstancesWithAffectedTitles,
+               answerString).ToArray();
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
@@ -2643,10 +2659,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterCalculationData,
                 linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
-                AnswerUtils.AnswerToString(answer),
-                questionSubstitutionChanges,
-                staticTextSubstitutionChanges,
-                groupsSubstitutionChanges,
+                answerString,
+                null,
+                null,
+                null,
                 changedLinkedOptions,
                 variableValuesChanges);
         }
@@ -2704,53 +2720,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesWithAffectedTitle.RosterInstanceId, answerFormattedAsRosterTitle);
             }
 
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            var interviewByAnswerChange = new List<AnswerChange>
+            {
+                new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
+            };
 
-            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
-            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
+            var interviewChanges = this.EmitInterviewChangesByExpressionState(expressionProcessorState, rosterCalculationData,
+                rosterInstancesWithAffectedTitles, questionnaire, interviewByAnswerChange, answerFormattedAsRosterTitle);
 
             IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
-            };
+            interviewChanges.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToArray();
+            interviewChanges.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToArray();
+            interviewChanges.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToArray();
 
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToList();
-
-            var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
-               this.interviewState,
-               questionnaire,
-               interviewByAnswerChange,
-               enablementChanges,
-               rosterCalculationData,
-               rosterInstancesWithAffectedTitles,
-               answerFormattedAsRosterTitle).ToArray();
-
-            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
-
-            var variableValuesChanges = expressionProcessorState.ProcessVariables();
-
-            return new InterviewChanges(
-                interviewByAnswerChange, 
-                enablementChanges, 
-                validationChanges,
-                rosterCalculationData,
-                linkedQuestionsAnswersToRemove, 
-                rosterInstancesWithAffectedTitles, 
-                answerFormattedAsRosterTitle,
-                questionSubstitutionChanges,
-                staticTextSubstitutionChanges,
-                groupsSubstitutionChanges,
-                changedLinkedOptions,
-                variableValuesChanges);
+            return interviewChanges;
         }
 
         private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
@@ -2803,53 +2790,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesWithAffectedTitle.RosterInstanceId, answerFormattedAsRosterTitle);
             }
 
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
-            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
-
-            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
-                => isRoster(groupId, groupOuterRosterVector)
-                    ? rosterInstanceIds
-                    : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.YesNo, userId, question.Id, question.RosterVector, answerTime, answer)
             };
 
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(question.Id, question.RosterVector, questionnaire, alteredState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(question.Id, question.RosterVector, questionnaire, alteredState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(question.Id, question.RosterVector, questionnaire, alteredState).ToList();
+            var interviewChanges = this.EmitInterviewChangesByExpressionState(expressionProcessorState, rosterCalculationData,
+                rosterInstancesWithAffectedTitles, questionnaire, interviewByAnswerChange, answerFormattedAsRosterTitle);
 
-            var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
-               this.interviewState,
-               questionnaire,
-               interviewByAnswerChange,
-               enablementChanges,
-               rosterCalculationData,
-               rosterInstancesWithAffectedTitles,
-               answerFormattedAsRosterTitle).ToArray();
+            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
+               => isRoster(groupId, groupOuterRosterVector)
+                   ? rosterInstanceIds
+                   : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+            interviewChanges.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(question.Id, question.RosterVector, questionnaire, alteredState).ToArray();
+            interviewChanges.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(question.Id, question.RosterVector, questionnaire, alteredState).ToArray();
+            interviewChanges.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(question.Id, question.RosterVector, questionnaire, alteredState).ToArray();
 
-            var variableValuesChanges = expressionProcessorState.ProcessVariables();
-
-            return new InterviewChanges(
-                interviewByAnswerChange,
-                enablementChanges,
-                validationChanges,
-                rosterCalculationData,
-                linkedQuestionsAnswersToRemove,
-                rosterInstancesWithAffectedTitles,
-                answerFormattedAsRosterTitle,
-                questionSubstitutionChanges,
-                staticTextSubstitutionChanges,
-                groupsSubstitutionChanges,
-                changedLinkedOptions,
-                variableValuesChanges);
+            return interviewChanges;
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, 
@@ -2907,47 +2865,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesWithAffectedTitle.OuterRosterVector,
                     rosterInstancesWithAffectedTitle.RosterInstanceId, answerFormattedAsRosterTitle);
             }
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
-            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
-
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-
-            var answerChanges = new List<AnswerChange>()
+            var interviewByAnswerChange = new List<AnswerChange>()
             {
                 new AnswerChange(AnswerChangeType.TextList, userId, questionId, rosterVector, answerTime, answers)
             };
-            var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
-               this.interviewState,
-               questionnaire,
-               answerChanges,
-               enablementChanges,
-               rosterCalculationData,
-               rosterInstancesWithAffectedTitles,
-               answerFormattedAsRosterTitle).ToArray();
 
-            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+            var interviewChanges = this.EmitInterviewChangesByExpressionState(expressionProcessorState, rosterCalculationData,
+                rosterInstancesWithAffectedTitles, questionnaire, interviewByAnswerChange, answerFormattedAsRosterTitle);
 
-            var variableValuesChanges = expressionProcessorState.ProcessVariables();
+            interviewChanges.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, state).ToArray();
+            interviewChanges.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, state).ToArray();
+            interviewChanges.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, state).ToArray();
 
-            return new InterviewChanges(
-                answerChanges, 
-                enablementChanges,
-                validationChanges,
-                rosterCalculationData,
-                linkedQuestionsAnswersToRemove, 
-                rosterInstancesWithAffectedTitles,
-                answerFormattedAsRosterTitle,
-                questionSubstitutionChanges,
-                staticTextSubstitutionChanges,
-                groupsSubstitutionChanges,
-                changedLinkedOptions,
-                variableValuesChanges);
+            return interviewChanges;
         }
 
         // do not triggers roster
@@ -3073,26 +3003,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
-            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
-
-            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
-                => isRoster(groupId, groupOuterRosterVector)
-                    ? rosterInstanceIds
-                    : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
             };
 
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToList();
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
+            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
+            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
+
+            
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
                questionnaire,
@@ -3105,6 +3028,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
+            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
+                => isRoster(groupId, groupOuterRosterVector)
+                    ? rosterInstanceIds
+                    : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
+
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToList();
+            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToList();
 
             var interviewChanges= new InterviewChanges(
                 interviewByAnswerChange,
@@ -3198,10 +3130,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, this.interviewState).ToList();
-
             var changedLinkedOptions = CreateChangedLinkedOptions(expressionProcessorState,
                this.interviewState,
                questionnaire,
@@ -3214,6 +3142,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             var variableValuesChanges = expressionProcessorState.ProcessVariables();
+
+            var questionSubstitutionChanges = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToList();
+            var staticTextSubstitutionChanges = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToList();
+            var groupsSubstitutionChanges = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, this.interviewState).ToList();
 
             return new InterviewChanges(
                 interviewByAnswerChange,
@@ -3275,17 +3207,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStateDependentOnAnswers updatedState, 
             IQuestionnaire questionnaire)
         {
-            if (interviewExpressionState.AreLinkedQuestionsSupported())
-            {
-                var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-                if (processLinkedQuestionFilters != null)
-                    return processLinkedQuestionFilters.LinkedQuestionOptions;
-                return new Dictionary<Guid, RosterVector[]>();
-            }
-            else
-            {
+            if (!interviewExpressionState.AreLinkedQuestionsSupported())
                 return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(updatedState, questionnaire);
-            }
+            
+            var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
+            return processLinkedQuestionFilters != null 
+                ? processLinkedQuestionFilters.LinkedQuestionOptions 
+                : new Dictionary<Guid, RosterVector[]>();
         }
 
         private Dictionary<Guid, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
@@ -4732,10 +4660,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire.GetOptionsForQuestion(question.Id, null, string.Empty).SingleOrDefault(x=> x.Value == value);
         }
 
-        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionValue)
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
-            var filteredOption = questionnaire.GetOptionForQuestionByValue(question.Id, optionValue);
+            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText);
 
             if (filteredOption == null)
                 return null;

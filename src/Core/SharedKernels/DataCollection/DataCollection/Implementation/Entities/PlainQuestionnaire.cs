@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionFromStructure(Guid questionId, string optionValue)
+        public CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -379,17 +379,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByValue(Guid questionId, string value)
+        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestion(this, questionId, value);
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(this, questionId, optionText);
             }
 
-            return question.Answers.SingleOrDefault(x => x.AnswerText == value).ToCategoricalOption();
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
         }
 
         private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)

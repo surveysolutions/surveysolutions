@@ -64,9 +64,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
-        CategoricalOption GetOptionForQuestionByValue(Guid questionId, string value);
+        CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
 
-        CategoricalOption GetOptionForQuestionFromStructure(Guid questionId, string optionValue);
+        CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionText);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
