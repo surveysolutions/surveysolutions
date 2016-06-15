@@ -153,9 +153,6 @@
   <data name="DataIsValid" xml:space="preserve">
     <value>Les données sont valides</value>
   </data>
-  <data name="DataValid" xml:space="preserve">
-    <value>Les données sont valides</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
