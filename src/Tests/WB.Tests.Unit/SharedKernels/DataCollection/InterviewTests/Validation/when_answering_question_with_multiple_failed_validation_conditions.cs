@@ -10,8 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V6;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
@@ -38,6 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
                                       .ReturnsForAnyArgs(Create.Entity.EnablementChanges());
 
             interviewExpressionStateV7.Clone().Returns(interviewExpressionStateV7);
+
+            interviewExpressionStateV7.GetStructuralChanges().Returns(new StructuralChanges());
 
             IInterviewExpressionStatePrototypeProvider expressionProcessorProvider = Substitute.For<IInterviewExpressionStatePrototypeProvider>();
             expressionProcessorProvider.GetExpressionState(new Guid(), 1)
