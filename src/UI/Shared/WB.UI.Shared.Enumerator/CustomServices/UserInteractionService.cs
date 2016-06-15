@@ -218,29 +218,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private static void HandleDialogClose(Guid userInteractionId, Action callback = null)
         {
-            try
+            lock (UserInteractionsLock)
             {
-                if (callback != null)
-                {
-                    callback.Invoke();
-                }
-            }
-            finally
-            {
-                lock (UserInteractionsLock)
-                {
-                    userInteractions.Remove(userInteractionId);
+                userInteractions.Remove(userInteractionId);
 
-                    if (userInteractions.Count == 0)
+                if (userInteractions.Count == 0)
+                {
+                    if (userInteractionsAwaiter != null)
                     {
-                        if (userInteractionsAwaiter != null)
-                        {
-                            userInteractionsAwaiter.TrySetResult(new object());
-                            userInteractionsAwaiter = null;
-                        }
+                        userInteractionsAwaiter.TrySetResult(new object());
+                        userInteractionsAwaiter = null;
                     }
                 }
             }
+            callback?.Invoke();
         }
     }
 }
