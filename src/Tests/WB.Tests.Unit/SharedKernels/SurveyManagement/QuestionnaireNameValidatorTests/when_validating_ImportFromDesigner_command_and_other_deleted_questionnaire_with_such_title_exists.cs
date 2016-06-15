@@ -3,7 +3,6 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
@@ -14,10 +13,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         {
             command = Create.Command.ImportFromDesigner(title: title, questionnaireId: importedQuestionnaireId);
 
-            var questionnaireBrowseItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
+            var questionnaireBrowseItemStorage = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
 
-            questionnaireBrowseItemStorage.Store(Create.Entity.QuestionnaireBrowseItem(title: title,
-                    questionnaireId: differentQuestionnaireId, deleted: true), differentQuestionnaireId);
+            var deletedQuestionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem(title: title,
+                questionnaireId: differentQuestionnaireId, deleted: true);
+
+            questionnaireBrowseItemStorage.Store(deletedQuestionnaireBrowseItem, differentQuestionnaireId);
 
             validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         Because of = () => exception = Catch.Exception(() => validator.Validate(null, command));
 
         It should_not_throw_exception = () =>
-            exception.ShouldEqual(null);
+            exception.ShouldNotBeNull();
 
         private static QuestionnaireNameValidator validator;
         private static Exception exception;
