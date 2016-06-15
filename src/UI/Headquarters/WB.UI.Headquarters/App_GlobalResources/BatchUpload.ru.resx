@@ -321,9 +321,6 @@
   <data name="VerifySampleData" xml:space="preserve">
     <value>Проверка образца данных</value>
   </data>
-  <data name="DataValid" xml:space="preserve">
-    <value>Данные валидны</value>
-  </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
     <value>Ответственный супервизор будет присвоен автоматически</value>
   </data>

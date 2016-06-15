@@ -321,9 +321,6 @@
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>Download invalid interviews</value>
   </data>
-  <data name="DataValid" xml:space="preserve">
-    <value>Data is valid</value>
-  </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
     <value>Responsible supervisor will be assigned automatically</value>
   </data>

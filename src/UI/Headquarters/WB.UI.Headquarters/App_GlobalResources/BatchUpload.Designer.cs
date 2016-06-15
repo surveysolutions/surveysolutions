@@ -169,15 +169,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data is valid.
-        /// </summary>
-        internal static string DataValid {
-            get {
-                return ResourceManager.GetString("DataValid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         internal static string Delete {
