@@ -1433,8 +1433,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 if (questionnaire.IsRosterGroup(entity))
                 {
-                    var childInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, @group.RosterVector, questionnaire)
-                                                .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last());
+                    var childInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(
+                        this.interviewState, entity, @group.RosterVector, questionnaire)
+                        .OrderBy(x =>
+                                this.sortIndexesOfRosterInstanses.ContainsKey(x)? 
+                                this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last():
+                                x.RosterVector.Last());
                     foreach (var rosterInstance in childInstances)
                     {
                         yield return rosterInstance;
