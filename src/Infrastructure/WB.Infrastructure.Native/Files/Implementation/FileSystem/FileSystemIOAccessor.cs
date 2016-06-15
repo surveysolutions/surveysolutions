@@ -188,7 +188,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
             var fileNameWithReplaceInvalidChars = Regex.Replace(name, invalidReStr, "_");
-            return fileNameWithReplaceInvalidChars.Substring(0, Math.Min(fileNameWithReplaceInvalidChars.Length, 100));
+            return fileNameWithReplaceInvalidChars.Substring(0, Math.Min(fileNameWithReplaceInvalidChars.Length, 200));
         }
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)
