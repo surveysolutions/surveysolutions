@@ -13,8 +13,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly int waitDelay = 500;
-        private readonly int maxNumberOfWaitAttemts = 10;
 
         public BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
@@ -38,24 +36,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task WaitPendingOperationsCompletionAsync()
         {
-            await this.PendingOperationsToComplete();
-
-            if (HasPendingOperations)
+            if (this.HasPendingOperations)
+            {
+                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
                 return;
+            }
 
             await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
             await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
-        }
-
-        private async Task PendingOperationsToComplete(int attempt = 0)
-        {
-            if (this.HasPendingOperations && attempt < this.maxNumberOfWaitAttemts)
-            {
-                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
-                await Task.Delay(waitDelay);
-                await this.PendingOperationsToComplete(attempt + 1);
-            }
         }
     }
 }
