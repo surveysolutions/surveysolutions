@@ -22,9 +22,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return optionsRepository.GetFilteredQuestionOptions(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestion(IQuestionnaire questionnaire, Guid questionId, string value)
+        public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText)
         {
-            return optionsRepository.GetQuestionOption(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, value);
+            return optionsRepository.GetQuestionOption(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionText);
         }
     }
 }
