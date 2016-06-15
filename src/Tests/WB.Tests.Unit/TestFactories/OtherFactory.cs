@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using NSubstitute;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -29,9 +29,13 @@ namespace WB.Tests.Unit.TestFactories
             => new EventContext();
 
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
-            => new NavigationState(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IViewModelNavigationService>());
+        {
+            var viewModelNavigationService = Substitute.For<IViewModelNavigationService>();
+            viewModelNavigationService.TryWaitPendingOperationsCompletionAsync().ReturnsForAnyArgs(Task.FromResult(true));
+
+            return new NavigationState(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), viewModelNavigationService);
+        }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
             => new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
