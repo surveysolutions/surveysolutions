@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         #endregion
 
-        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
+        public virtual LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
             var result = new LinkedQuestionOptionsChanges();
 

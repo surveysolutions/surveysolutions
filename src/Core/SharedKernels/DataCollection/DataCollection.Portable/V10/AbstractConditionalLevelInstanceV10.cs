@@ -16,6 +16,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
+        protected new Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedQuestionFilters = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
+
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
@@ -266,6 +268,37 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     yield return option;
                 }
             }
+        }
+
+        public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope)
+        {
+            var result = new List<LinkedQuestionFilterResult>();
+
+            var rosterStatesFromScope = this.EnablementStates.Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r => r.Value.State).ToArray();
+
+            if (rosterStatesFromScope.Length > 0 && rosterStatesFromScope.All(s => s == State.Disabled))
+                return result;
+
+            foreach (var linkedQuestionFilter in this.LinkedQuestionFilters)
+            {
+                bool enabled = false;
+                try
+                {
+                    enabled = linkedQuestionFilter.Value(currentScope);
+                }
+#pragma warning disable
+                catch (Exception ex)
+                {
+                }
+#pragma warning restore
+                result.Add(new LinkedQuestionFilterResult()
+                {
+                    Enabled = enabled,
+                    LinkedQuestionId = linkedQuestionFilter.Key,
+                    RosterKey = this.RosterKey
+                });
+            }
+            return result;
         }
     }
 }

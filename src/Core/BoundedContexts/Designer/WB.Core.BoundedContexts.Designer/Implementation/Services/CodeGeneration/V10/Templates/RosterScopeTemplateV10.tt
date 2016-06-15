@@ -46,7 +46,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	foreach (var linkedQuestionFilterExpression in Model.LinkedQuestionFilterExpressions) 
     {
 #>
-    LinkedQuestionFilters.Add(IdOf.<#=linkedQuestionFilterExpression.LinkedQuestionVariableName#>, <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>);		                      
+    LinkedQuestionFilters.Add(IdOf.<#=linkedQuestionFilterExpression.LinkedQuestionVariableName#>, (scope) => { return <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>(scope); });
 <#
 	}
 #>

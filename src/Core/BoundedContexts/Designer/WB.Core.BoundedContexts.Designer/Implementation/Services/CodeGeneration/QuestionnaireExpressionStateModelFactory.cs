@@ -77,11 +77,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
             expressionState.CategoricalOptionsFilterModels = BuildCategoricalOptionsFilterModels(codeGenerationSettings, expressionState);
+            expressionState.LinkedFilterModels = BuildLinkedQuestionFilterModels(codeGenerationSettings, expressionState);
+
 
             return expressionState;
         }
-
-        
 
         public static Dictionary<string, OptionsFilterConditionDescriptionModel> BuildCategoricalOptionsFilterModels(
             CodeGenerationSettings codeGenerationSettings, 
@@ -103,6 +103,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return methodModels;
         }
 
+        public static Dictionary<string, LinkedFilterConditionDescriptionModel> BuildLinkedQuestionFilterModels(
+            CodeGenerationSettings codeGenerationSettings,
+            QuestionnaireExpressionStateModel questionnaireTemplate)
+        {
+            var methodModels = new Dictionary<string, LinkedFilterConditionDescriptionModel>();
+            foreach (var filter in questionnaireTemplate.AllLinkedQuestionFilters)
+            {
+                var linkedQuestion = questionnaireTemplate.AllQuestions.Single(x => x.Id == filter.LinkedQuestionId);
+
+                methodModels.Add(ExpressionLocation.LinkedQuestionFilter(filter.LinkedQuestionId).Key, new LinkedFilterConditionDescriptionModel(
+                    filter.ParentScopeTypeName,
+                    filter.FilterForLinkedQuestionMethodName,
+                    codeGenerationSettings.Namespaces,
+                    filter.FilterExpression,
+                    linkedQuestion.ParentScopeTypeName));
+            }
+            return methodModels;
+        }
         public static Dictionary<string,ConditionDescriptionModel> BuildMethodModels(
             CodeGenerationSettings codeGenerationSettings, 
             QuestionnaireExpressionStateModel questionnaireTemplate)
@@ -188,7 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     false,
                     roster.VariableName));
             }
-
+/*
             foreach (var filter in questionnaireTemplate.AllLinkedQuestionFilters)
             {
                 methodModels.Add(ExpressionLocation.LinkedQuestionFilter(filter.LinkedQuestionId).Key, new ConditionDescriptionModel(
@@ -199,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     filter.FilterExpression,
                     false,
                     string.Empty));
-            }
+            }*/
 
             foreach (var variable in questionnaireTemplate.AllVariables)
             {

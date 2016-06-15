@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<string, ConditionDescriptionModel> MethodModels { get; set; }
 
         public Dictionary<string, OptionsFilterConditionDescriptionModel> CategoricalOptionsFilterModels { get; set; }
+        public Dictionary<string, LinkedFilterConditionDescriptionModel> LinkedFilterModels { get; set; }
 
         public List<LinkedQuestionFilterExpressionModel> AllLinkedQuestionFilters {get;set;}
     }
