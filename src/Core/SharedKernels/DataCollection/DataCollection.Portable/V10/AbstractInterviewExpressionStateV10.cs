@@ -189,6 +189,37 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        public override LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
+        {
+            var result = new LinkedQuestionOptionsChanges();
+
+            var filterResults = new List<LinkedQuestionFilterResult>();
+
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            {
+                filterResults.AddRange(interviewScopeKvpValue.ExecuteLinkedQuestionFilters(interviewScopeKvpValue));
+            }
+            var linkedQuestionOptionsGroupedByQuestionId = filterResults.GroupBy(x => x.LinkedQuestionId);
+            foreach (var linkedQuestionOptions in linkedQuestionOptionsGroupedByQuestionId)
+            {
+                var linkedQuestionId = linkedQuestionOptions.Key;
+
+                var newOptionSet =
+                    linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.Last().RosterVector).ToArray();
+
+                result.LinkedQuestionOptions.Add(linkedQuestionId, newOptionSet);
+            }
+            var linkedQuestionsToDoubleCheck =
+                linkedQuestionIdWithSourceRosterIdPairs.Where(
+                    pair => result.LinkedQuestionOptions.All(l => l.Key != pair.Key)).ToArray();
+            foreach (var linkedQuestionIdWithSourceRosterIdPair in linkedQuestionsToDoubleCheck)
+            {
+                if (!this.InterviewScopes.Values.Any(scope => scope.GetRosterKey().Any(r => r.Id == linkedQuestionIdWithSourceRosterIdPair.Value)))
+                    result.LinkedQuestionOptions.Add(linkedQuestionIdWithSourceRosterIdPair.Key, new RosterVector[0]);
+            }
+            return result;
+        }
+
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();
     }
 }

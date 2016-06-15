@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters()
+        public virtual List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters()
         {
             var result=new List<LinkedQuestionFilterResult>();
 

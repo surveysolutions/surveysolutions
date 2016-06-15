@@ -129,14 +129,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(", ");
+            this.Write(", (scope) => { return ");
             
             #line 49 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName));
             
             #line default
             #line hidden
-            this.Write(");\t\t                      \r\n");
+            this.Write("(scope); });\r\n");
             
             #line 50 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt"
 
