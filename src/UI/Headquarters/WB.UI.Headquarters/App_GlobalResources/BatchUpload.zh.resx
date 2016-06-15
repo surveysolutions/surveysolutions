@@ -153,9 +153,6 @@
   <data name="DataIsValid" xml:space="preserve">
     <value>数据有效</value>
   </data>
-  <data name="DataValid" xml:space="preserve">
-    <value>数据有效</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>
