@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     await this.restService.SendStreamAsync(
                         stream: fileStream,
                         customHeaders: tabletInformationHeaders,
-                        url: string.Concat(interviewerApiUrl, "/tabletInfoAsFile"),
+                        url: string.Concat(interviewerApiUrl, "/tabletInfo"),
                         credentials: this.restCredentials,
                         token: token).ConfigureAwait(false);
                 }

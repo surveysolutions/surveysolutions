@@ -84,6 +84,7 @@ namespace WB.UI.Headquarters.API.Interviewer
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
 
+        [HttpPost]
         public virtual async Task<HttpResponseMessage> PostTabletInformation()
         {
             HttpRequestMessage request = this.Request;
