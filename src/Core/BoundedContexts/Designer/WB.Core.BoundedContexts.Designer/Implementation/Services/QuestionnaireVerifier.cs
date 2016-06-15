@@ -75,7 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.SingleOption,
-            QuestionType.Text
+            QuestionType.Text,
+            QuestionType.QRBarcode
         };
 
         private class VerificationState
