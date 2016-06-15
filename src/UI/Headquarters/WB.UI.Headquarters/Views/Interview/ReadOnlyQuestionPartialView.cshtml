@@ -81,7 +81,7 @@
                     if (Model.Answer != null)
                     {
                         var answers = (decimal[])Model.Answer;
-                        isChecked = answers.Contains((decimal)option.Value);
+                        isChecked = answers.Contains(Convert.ToDecimal(option.Value));
                         if (isChecked)
                         {
                             orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
