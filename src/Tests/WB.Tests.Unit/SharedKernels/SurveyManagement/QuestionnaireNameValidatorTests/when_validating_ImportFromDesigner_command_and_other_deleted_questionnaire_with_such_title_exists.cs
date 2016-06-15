@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         Because of = () => exception = Catch.Exception(() => validator.Validate(null, command));
 
         It should_not_throw_exception = () =>
-            exception.ShouldNotBeNull();
+            exception.ShouldBeNull();
 
         private static QuestionnaireNameValidator validator;
         private static Exception exception;
