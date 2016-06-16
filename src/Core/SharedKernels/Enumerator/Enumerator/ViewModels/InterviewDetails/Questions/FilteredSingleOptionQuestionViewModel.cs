@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
-            this.filteredOptionsViewModel.IsNeedCompareOptionsonChanges = false;
+            this.filteredOptionsViewModel.IsNeedCompareOptionsOnChanges = false;
 
             interview = this.interviewRepository.Get(interviewId);
             this.questionIdentity = entityIdentity;
@@ -105,16 +105,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.UpdateOptionsState();
 
-            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void UpdateOptionsState()
         {
             var answerModel = this.interview.GetSingleOptionAnswer(questionIdentity);
-
-            //should be removed
-            this.Options = this.filteredOptionsViewModel.GetOptions(FilterText).Select(this.ToViewModel);
 
             if (answerModel.IsAnswered)
             {
@@ -128,12 +124,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.UpdateAutoCompleteList();
             }
-        }
-
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
-        {
-            this.UpdateOptionsState();
-            this.RaisePropertyChanged(() => Options);
         }
 
         private FilteredComboboxItemViewModel ToViewModel(CategoricalOption model)
@@ -343,8 +333,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
-
+            this.filteredOptionsViewModel.Dispose();
             this.QuestionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
         }
