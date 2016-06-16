@@ -54,20 +54,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 interviewRepository: interviewRepository.Object,
                 answerNotifier:  answerNotifier.Object);
             viewModel.Init(interviewId, questionId);
-            viewModel.Filter = "a";
         };
 
-        Because of = () => answerNotifier.Raise(_ => _.QuestionAnswered -= null, EventArgs.Empty);
+        Because of = () => resultOptions = viewModel.GetOptions("a");
 
         It should_build_options = () =>
         {
-            viewModel.Options.ShouldNotBeNull();
-            viewModel.Options.Count().ShouldEqual(2);
+            resultOptions.ShouldNotBeNull();
+            resultOptions.Count().ShouldEqual(2);
         };
 
         private It should_contains_all_filtered_options = () =>
         {
-            viewModel.Options.ShouldEqual(filteredOptions);
+            resultOptions.ShouldEqual(filteredOptions);
         };
 
         It should_subscribe_model_in_answerNotify = () =>
@@ -86,6 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
         static Identity questionId;
         private static Guid questionGuid;
         private static IEnumerable<CategoricalOption> options;
+        private static IEnumerable<CategoricalOption> resultOptions;
         private static IEnumerable<CategoricalOption> filteredOptions;
         private static Mock<AnswerNotifier> answerNotifier;
         private static IStatefulInterview interview;
