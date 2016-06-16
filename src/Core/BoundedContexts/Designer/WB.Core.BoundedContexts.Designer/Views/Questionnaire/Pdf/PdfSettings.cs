@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.MinAmountOfDigitsInCodes = minAmountOfDigitsInCodes;
             this.AttachmentSize = attachmentSize;
             this.VariableExpressionExcerptLength = variableExpressionExcerptLength;
-            this.LinkedQuestionFilterExpressionExcerptLength = variableExpressionExcerptLength;
         }
 
         public int InstructionsExcerptLength { get; }
@@ -28,7 +27,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int AttachmentSize { get; }
         public int PdfGenerationTimeoutInMilliseconds { get; }
         public int VariableExpressionExcerptLength { get; }
-
-        public int LinkedQuestionFilterExpressionExcerptLength { get; }
     }
 }
