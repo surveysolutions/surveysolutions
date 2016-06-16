@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interviewExpressionStateMock = new Mock<ILatestInterviewExpressionState>();
             interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
-
+            var structuralChanges = new StructuralChanges();
+            interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
             IPlainQuestionnaireRepository questionnaireRepository =
                 Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
