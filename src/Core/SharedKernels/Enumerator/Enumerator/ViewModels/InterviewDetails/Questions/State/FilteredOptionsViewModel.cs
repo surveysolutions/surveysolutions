@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -17,15 +18,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public virtual IEnumerable<CategoricalOption> Options { get; private set; }
+        private IStatefulInterview interview;
+        private IEnumerable<CategoricalOption> Options { get; set; }
+        private string Filter { get; set; } = String.Empty;
 
         public event EventHandler OptionsChanged;
 
-        public string Filter { get; set; } = String.Empty;
+        private Identity questionIdentity;
+
         public bool IsNeedCompareOptionsonChanges { get; set; } = true;
 
-        private Identity questionIdentity;
-        private Guid interviewId;
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
@@ -61,13 +63,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
 
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
 
-            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, Filter).ToList();
+            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, Filter);
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
             {
@@ -76,9 +77,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public virtual IEnumerable<CategoricalOption> GetOptions(string filter = "")
+        {
+            this.Filter = filter;
+            this.Options = interview.GetFilteredOptionsForQuestion(questionIdentity, null, filter).ToList();
+            return Options;
+   ;     }
+
+
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var interview = this.interviewRepository.Get(interviewId.FormatGuid());
             var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter);
 
             if (!IsNeedCompareOptionsonChanges)

@@ -278,7 +278,7 @@ namespace WB.Tests.Unit
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.Options).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns(options);
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
 
             return filteredOptionsViewModel.Object;
