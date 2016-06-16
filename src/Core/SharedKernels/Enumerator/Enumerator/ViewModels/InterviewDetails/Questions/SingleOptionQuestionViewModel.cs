@@ -190,6 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Dispose();
 
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+            this.filteredOptionsViewModel.Dispose();
 
             foreach (var option in Options)
             {
