@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Routing;
@@ -14,6 +15,12 @@ namespace WB.UI.Designer
     {
         private readonly string _centralizedPrefix;
 
+        private static readonly string[] versionedNamespaces = new string[]
+            {
+                typeof(WB.UI.Designer.Api.Headquarters.ImportV2Controller).Namespace,
+                typeof(WB.UI.Designer.Api.Tester.QuestionnairesController).Namespace
+            };
+
         public CentralizedPrefixProvider(string centralizedPrefix)
         {
             _centralizedPrefix = centralizedPrefix;
@@ -22,9 +29,15 @@ namespace WB.UI.Designer
         protected override string GetRoutePrefix(HttpControllerDescriptor controllerDescriptor)
         {
             var existingPrefix = base.GetRoutePrefix(controllerDescriptor);
-            if (existingPrefix == null) return _centralizedPrefix;
 
-            return $"{this._centralizedPrefix}/{existingPrefix}";
+            if (versionedNamespaces.Contains(controllerDescriptor.ControllerType.Namespace))
+            {
+                if (existingPrefix == null) return _centralizedPrefix;
+
+                return $"{this._centralizedPrefix}/{existingPrefix}";
+            }
+
+            return existingPrefix;
         }
     }
 
