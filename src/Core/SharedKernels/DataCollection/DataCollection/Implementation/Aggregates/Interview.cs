@@ -3167,7 +3167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return answersToRemove;
         }
 
-        private Dictionary<Guid, RosterVector[]> GetLinkedQuestionOptionsChanges(
+        private Dictionary<Identity, RosterVector[]> GetLinkedQuestionOptionsChanges(
             ILatestInterviewExpressionState interviewExpressionState, 
             InterviewStateDependentOnAnswers updatedState, 
             IQuestionnaire questionnaire)
@@ -3177,20 +3177,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
             return processLinkedQuestionFilters != null 
-                ? processLinkedQuestionFilters.LinkedQuestionOptions 
-                : new Dictionary<Guid, RosterVector[]>();
+                ? processLinkedQuestionFilters.LinkedQuestionOptionsSet 
+                : new Dictionary<Identity, RosterVector[]>();
         }
 
-        private Dictionary<Guid, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
+        private Dictionary<Identity, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
             InterviewStateDependentOnAnswers updatedState, 
             IQuestionnaire questionnaire)
         {
             var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedToRoster();
             var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
             if(!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
-                return new Dictionary<Guid, RosterVector[]>();
+                return new Dictionary<Identity, RosterVector[]>();
 
-            var result = new Dictionary<Guid, RosterVector[]>();
+            var result = new Dictionary<Identity, RosterVector[]>();
             foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
             {
                 var rosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionLinkedOnRoster);
@@ -3205,7 +3205,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         .Select(r => r.RosterVector)
                         .ToArray();
 
-                result.Add(questionLinkedOnRoster, optionRosterVectors);
+                IEnumerable<Identity> linkedQuestionInstances =
+                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnRoster, new decimal[0], questionnaire);
+
+                foreach (var linkedQuestionInstance in linkedQuestionInstances)
+                {
+                    result.Add(linkedQuestionInstance, optionRosterVectors);
+                }
             }
 
             foreach (var questionLinkedOnQuestion in questionsLinkedOnQuestion)
@@ -3220,7 +3226,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         .Select(q => q.RosterVector)
                         .ToArray();
 
-                result.Add(questionLinkedOnQuestion, optionRosterVectors);
+                IEnumerable<Identity> linkedQuestionInstances =
+                   this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnQuestion, new decimal[0], questionnaire);
+
+                foreach (var linkedQuestionInstance in linkedQuestionInstances)
+                {
+                    result.Add(linkedQuestionInstance, optionRosterVectors);
+                }
             }
             return result;
         }
@@ -3268,40 +3280,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var linkedQuestionConditionalExecutionResult in newCurrentLinkedOptions)
             {
-                Guid linkedQuestionId = linkedQuestionConditionalExecutionResult.Key;
+                Identity instanceOfTheLinkedQuestionsQuestions = linkedQuestionConditionalExecutionResult.Key;
                 RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
 
-                IEnumerable<Identity> linkedQuestionInstances =
-                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, linkedQuestionId, new decimal[0], questionnaire);
+                var linkedQuestionId = instanceOfTheLinkedQuestionsQuestions.Id;
+                var referencedEntityId = questionnaire.IsQuestionLinkedToRoster(linkedQuestionId)
+                    ? questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
+                    : questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
 
-                foreach (var instanceOfTheLinkedQuestionsQuestions in linkedQuestionInstances)
+                var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedEntityId, instanceOfTheLinkedQuestionsQuestions, questionnaire);
+
+                var changedOptionAvaliableForInstanceOfTheQuestion = optionsForLinkedQuestion.Where( o => rosterVectorToStartFrom.SequenceEqual(o.Take(rosterVectorToStartFrom.Length))).ToArray();
+
+                var questionIdentity = new Identity(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
+                if (!currentLinkedOptions.ContainsKey(questionIdentity))
                 {
-                    var referencedEntityId = questionnaire.IsQuestionLinkedToRoster(linkedQuestionId)
-                        ? questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
-                        : questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
-
-                    var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedEntityId, instanceOfTheLinkedQuestionsQuestions, questionnaire);
-
-                    var changedOptionAvaliableForInstanceOfTheQuestion = optionsForLinkedQuestion.Where( o => rosterVectorToStartFrom.SequenceEqual(o.Take(rosterVectorToStartFrom.Length))).ToArray();
-
-                    var questionIdentity = new Identity(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
-                    if (!currentLinkedOptions.ContainsKey(questionIdentity))
-                    {
-                        yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
-                        continue;
-                    }
-
-                    var presentLinkedOptions = currentLinkedOptions[questionIdentity];
-
-                    bool hasNumberOfOptionsChanged = presentLinkedOptions.Length !=
-                                                    changedOptionAvaliableForInstanceOfTheQuestion.Length;
-
-                    bool doesNewOptionsListContainOptionsWhichWasNotPresentBefore =
-                        changedOptionAvaliableForInstanceOfTheQuestion.Any(o => !presentLinkedOptions.Contains(o));
-
-                    if (hasNumberOfOptionsChanged || doesNewOptionsListContainOptionsWhichWasNotPresentBefore)
-                        yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
+                    yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
+                    continue;
                 }
+
+                var presentLinkedOptions = currentLinkedOptions[questionIdentity];
+
+                bool hasNumberOfOptionsChanged = presentLinkedOptions.Length !=
+                                                changedOptionAvaliableForInstanceOfTheQuestion.Length;
+
+                bool doesNewOptionsListContainOptionsWhichWasNotPresentBefore =
+                    changedOptionAvaliableForInstanceOfTheQuestion.Any(o => !presentLinkedOptions.Contains(o));
+
+                if (hasNumberOfOptionsChanged || doesNewOptionsListContainOptionsWhichWasNotPresentBefore)
+                    yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
             }
         }
 

@@ -40,6 +40,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	VariablesStatesInLevelConstructor(Model.Variables);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
 	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
+	LinkedQuestionsInLevelConstructor(Model.LinkedQuestionsIdNames);
 #>
 
 <#

@@ -5,17 +5,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RosterScopeTemplateModel
     {
-        public RosterScopeTemplateModel(
-            string typeName, 
-            List<QuestionTemplateModel> questions, 
-            List<StaticTextTemplateModel> staticTexts, 
-            List<GroupTemplateModel> groups, 
-            List<RosterTemplateModel> rosters, 
-            List<RosterTemplateModel> rostersInScope, 
-            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder,
-            List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions,
-            List<VariableTemplateModel> variables)
+        public RosterScopeTemplateModel(string typeName, List<QuestionTemplateModel> questions, 
+            List<StaticTextTemplateModel> staticTexts, List<GroupTemplateModel> groups, 
+            List<RosterTemplateModel> rosters, List<RosterTemplateModel> rostersInScope, 
+            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder, 
+            List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions, 
+            List<VariableTemplateModel> variables, 
+            Dictionary<string, string> linkedQuestionsIdNames)
         {
+            this.LinkedQuestionsIdNames = linkedQuestionsIdNames;
             TypeName = typeName;
             Questions = questions;
             StaticTexts = staticTexts;
@@ -55,6 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> RostersInScope { set; get; }
 
         public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
+
+        public Dictionary<string, string> LinkedQuestionsIdNames { get; }
 
         public string IdName => RostersInScope.FirstOrDefault()?.IdName;
     }

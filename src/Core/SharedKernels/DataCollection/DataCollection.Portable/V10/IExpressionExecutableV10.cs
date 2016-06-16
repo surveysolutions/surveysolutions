@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         decimal[] RosterVector { get; }
 
+        Dictionary<Guid, Guid[]> LinkedQuestions { get; }
+
         void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
 
         void SetStructuralChangesCollector(StructuralChanges structuralChanges);
