@@ -193,8 +193,21 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             var result = new LinkedQuestionOptionsChanges();
 
-            var filterResults = new List<LinkedQuestionFilterResult>();
+            foreach (var scope in this.InterviewScopes.Values)
+            {
+                foreach (var pair  in scope.LinkedQuestions)
+                {
+                    var linkedQuestionId = pair.Key;
+                    var linkedQuestionIdentity = new Identity(linkedQuestionId, scope.RosterVector);
 
+                    var filteredResult = GetRostersWithSourceQuestionsToRunFilter(linkedQuestionIdentity, scope);
+
+                    result.LinkedQuestionOptionsSet.Add(linkedQuestionIdentity, filteredResult);
+                }
+            }
+
+            /*
+            var filterResults = new List<LinkedQuestionFilterResult>();
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
             {
                 filterResults.AddRange(interviewScopeKvpValue.ExecuteLinkedQuestionFilters(interviewScopeKvpValue));
@@ -217,7 +230,24 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (!this.InterviewScopes.Values.Any(scope => scope.GetRosterKey().Any(r => r.Id == linkedQuestionIdWithSourceRosterIdPair.Value)))
                     result.LinkedQuestionOptions.Add(linkedQuestionIdWithSourceRosterIdPair.Key, new RosterVector[0]);
             }
+            */
             return result;
+        }
+
+        private RosterVector[] GetRostersWithSourceQuestionsToRunFilter(Identity linkedQuestionIdentity, IExpressionExecutableV10 linkedQuestionRosterScope)
+        {
+            var filterResults = new List<LinkedQuestionFilterResult>();
+
+            foreach (var scope in this.InterviewScopes.Values)
+            {
+                filterResults.AddRange(scope.ExecuteLinkedQuestionFilters(linkedQuestionRosterScope));
+            }
+
+            return filterResults
+                .Where(x => x.Enabled)
+                .Where(x => x.LinkedQuestionId == linkedQuestionIdentity.Id)
+                .Select(x => new RosterVector(x.RosterKey.Last().RosterVector))
+                .ToArray();
         }
 
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();

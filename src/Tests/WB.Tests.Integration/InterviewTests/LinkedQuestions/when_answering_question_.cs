@@ -7,11 +7,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("KP-7266")]
     internal class when_answering_question_ : InterviewTestsContext
     {
         Establish context = () =>
@@ -53,15 +53,28 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
 
-                    result.QuestionsQ5Disabled = false;
-                        //eventContext.AnyEvent<LinkedOptionsChanged>(x => x.ChangedLinkedQuestions.Any(q => q. == q5Id));
+                    var optionsChangedEvent = eventContext.GetSingleEvent<LinkedOptionsChanged>();
+
+                    var optionsForLinked1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(1))));
+                    var optionsForLinked2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(2))));
+                    var optionsForLinked3 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(3))));
+
+                    result.OptionsCountForQuestion4InRoster1 = optionsForLinked1?.Options.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster2 = optionsForLinked2?.Options.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster3 = optionsForLinked3?.Options.Length ?? 0;
                 }
 
                 return result;
             });
 
-        It should_disable_q5 = () =>
-            results.QuestionsQ5Disabled.ShouldBeTrue();
+        It should_return_1_option_for_linked_question_in_1_roster = () =>
+            results.OptionsCountForQuestion4InRoster1.ShouldEqual(1);
+
+        It should_return_2_options_for_linked_question_in_2_roster = () =>
+            results.OptionsCountForQuestion4InRoster2.ShouldEqual(2);
+
+        It should_not_return_options_for_linked_question_in_3_roster = () =>
+            results.OptionsCountForQuestion4InRoster3.ShouldEqual(0);
 
         Cleanup stuff = () =>
         {
@@ -83,7 +96,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         [Serializable]
         internal class InvokeResults
         {
-            public bool QuestionsQ5Disabled { get; set; }
+            public int OptionsCountForQuestion4InRoster1 { get; set; }
+            public int OptionsCountForQuestion4InRoster2 { get; set; }
+            public int OptionsCountForQuestion4InRoster3 { get; set; }
         }
     }
 }
