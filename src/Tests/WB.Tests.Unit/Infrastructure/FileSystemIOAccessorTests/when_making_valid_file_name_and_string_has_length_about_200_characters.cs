@@ -7,15 +7,15 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
     {
         Establish context = () =>
         {
-            fileName = "file" + new string('A', 200);
+            fileName = "file" + new string('A', 132);
             fileSystemIOAccessor = Create.Service.FileSystemIOAccessor();
         };
 
         Because of = () =>
             newFileName = fileSystemIOAccessor.MakeValidFileName(fileName);
 
-        It should_return_file_name_of_100_length = () =>
-            newFileName.ShouldEqual("file" + new string('A', 196));
+        It should_return_file_name_of_128_chars_length = () =>
+            newFileName.ShouldEqual("file" + new string('A', 124));
 
         private static FileSystemIOAccessor fileSystemIOAccessor;
         private static string fileName;
