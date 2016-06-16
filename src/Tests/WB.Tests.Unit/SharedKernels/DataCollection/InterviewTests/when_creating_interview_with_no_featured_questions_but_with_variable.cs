@@ -45,8 +45,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                  new PlainQuestionnaire(questionnaire, 18));
 
+            
+
             var expressionState = Substitute.For<ILatestInterviewExpressionState>();
             expressionState.Clone().Returns(expressionState);
+            var structuralChanges = new StructuralChanges();
+            expressionState.GetStructuralChanges().Returns(structuralChanges);
             expressionState.ProcessVariables()
                 .Returns(
                     new VariableValueChanges(new Dictionary<Identity, object>()
