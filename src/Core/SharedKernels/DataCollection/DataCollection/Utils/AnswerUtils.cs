@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return ((int) answer).ToString(CultureInfo.InvariantCulture);
 
             if (answer is DateTime)
-                return ((DateTime)answer).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+                return ((DateTime)answer).ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
 
             if (answer is decimal)
             {
