@@ -2935,7 +2935,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
+            string answerFormattedAsRosterTitle = questionnaire.IsTimestampQuestion(questionId)
+                ? answer.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern)
+                : AnswerUtils.AnswerToString(answer);
 
             expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
 
@@ -3476,18 +3478,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
-            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds,                 questionnaire);
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
 
             Func<Guid, IEnumerable<decimal>> getFixedRosterInstanceIds =
                 fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList();
 
-            return fixedRosterIds
-                .Select(fixedRosterId => this.CalculateRosterData(state,
-                    new List<Guid> { fixedRosterId },
-                    outerRosterVector,
-                    getFixedRosterInstanceIds(fixedRosterId),
-                    rosterTitlesGroupedByRosterId[fixedRosterId],
-                    questionnaire, getAnswer)
+            return fixedRosterIds.Select(fixedRosterId =>
+                this.CalculateRosterData(
+                    state: state,
+                    rosterIds: new List<Guid> {fixedRosterId},
+                    nearestToOuterRosterVector: outerRosterVector,
+                    rosterInstanceIds: getFixedRosterInstanceIds(fixedRosterId),
+                    rosterTitles: rosterTitlesGroupedByRosterId[fixedRosterId],
+                    questionnaire: questionnaire,
+                    getAnswer: getAnswer)
                 ).ToList();
         }
 
@@ -3501,14 +3505,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var rosterInstanceIds = this.GetRosterInstancesById(state, questionnaire, nestedRosterId, outerRosterVector, getAnswer);
 
-                yield return
-                    this.CalculateRosterData(state, questionnaire,
-                        new List<Guid> { nestedRosterId }, outerRosterVector, rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item2),
-                        rosterInstanceIds.Any(x => !string.IsNullOrEmpty(x.Value.Item1))
-                            ? rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item1)
-                            : null,
-                        questionnaire,
-                        getAnswer);
+                var rosterTitles = rosterInstanceIds.Any(x => !string.IsNullOrEmpty(x.Value.Item1))
+                    ? rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item1)
+                    : null;
+
+                var rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item2);
+
+                yield return this.CalculateRosterData(
+                    state: state,
+                    rosterIds: new List<Guid> {nestedRosterId},
+                    nearestToOuterRosterVector: outerRosterVector,
+                    rosterInstanceIdsWithSortIndexes: rosterInstanceIdsWithSortIndexes,
+                    rosterTitles: rosterTitles,
+                    questionnaire: questionnaire,
+                    getAnswer: getAnswer);
             }
         }
 
@@ -3521,8 +3531,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer, 
             Tuple<decimal, string>[] answers, Tuple<decimal, string>[] changedAnswers)
         {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnare,
-                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
+                rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
 
             var titlesForRosterInstances = rosterCalculationData
                 .RosterInstancesToAdd
@@ -3563,8 +3573,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnaire,
-                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
+                rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
 
             var titlesForRosterInstances = rosterCalculationData
                 .RosterInstancesToAdd
@@ -3583,8 +3593,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
              Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
              IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnaire,
-                rosterIds, question.RosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
+                question.RosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
 
             var titlesForRosterInstances = rosterCalculationData
                 .RosterInstancesToAdd
@@ -3645,20 +3655,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstanceId => rosterInstanceId,
                     rosterInstanceId => (int?)null);
 
-            return this.CalculateRosterData(state, questionnaire,
-                rosterIds, nearestToOuterRosterVector, rosterInstanceIdsWithSortIndexes, rosterTitles, questionnaire, getAnswer);
+            return this.CalculateRosterData(state, rosterIds,
+                nearestToOuterRosterVector, rosterInstanceIdsWithSortIndexes, rosterTitles, questionnaire, getAnswer);
         }
 
-        private RosterCalculationData CalculateRosterData(IReadOnlyInterviewStateDependentOnAnswers state, IQuestionnaire questionnare,
-            List<Guid> rosterIds, decimal[] nearestToOuterRosterVector, Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes,
-            Dictionary<decimal, string> rosterTitles,
+        private RosterCalculationData CalculateRosterData(IReadOnlyInterviewStateDependentOnAnswers state, List<Guid> rosterIds,
+            decimal[] nearestToOuterRosterVector, Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, Dictionary<decimal, string> rosterTitles,
             IQuestionnaire questionnaire,
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
             List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange = new List<RosterIdentity>();
 
             List<RosterCalculationData> rosterInstancesFromNestedLevels;
-            this.CalculateChangesInRosterInstances(state, questionnare, rosterIds, nearestToOuterRosterVector,
+            this.CalculateChangesInRosterInstances(state, questionnaire, rosterIds, nearestToOuterRosterVector,
                 rosterInstanceIdsWithSortIndexes,
                 getAnswer,
                 out rosterInstancesToAdd, out rosterInstancesToRemove, out rosterInstancesFromNestedLevels);
