@@ -105,6 +105,45 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             this.StructuralChangesCollector = structuralChangesCollector;
         }
 
+        protected virtual Action AnswerVerifier(Guid[] rosterScope, Guid itemId, Func<decimal[][]> getAnswer, Action<decimal[][]> setAnswer)
+        {
+            return () =>
+            {
+                var previousAnswers = getAnswer();
+
+                if (previousAnswers == null)
+                    return;
+
+                if (previousAnswers.Any(rosterVector => !DoesRosterExist(rosterScope.Shrink(), rosterScope.Last(), rosterVector)))
+                {
+                    setAnswer(null);
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Guid[] rosterScope, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
+        {
+            return () =>
+            {
+                var previousAnswer = getAnswer();
+
+                if (previousAnswer == null)
+                    return;
+
+                if (DoesRosterExist(rosterScope.Shrink(), rosterScope.Last(), previousAnswer))
+                    return;
+
+                setAnswer(null);
+            };
+        }
+
+        private bool DoesRosterExist(Guid[] parentRosterScope, Guid rosterSizeQuestionId, decimal[] rosterVector)
+        {
+            var rosterKey = Util.GetRosterKey(parentRosterScope, rosterVector);
+            var rosters = this.GetInstances(rosterKey, rosterSizeQuestionId);
+            return rosters != null && rosters.Any(x => x.RosterVector.SequenceEqual(rosterVector));
+        }
+
         protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
         {
             return () =>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Main.Core.Documents;
@@ -50,18 +51,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 RosterDependencies = BuildRosterDependencies(questionnaire),
             };
 
-            expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(
-                expressionState.ConditionalDependencies, 
-                expressionState.StructuralDependencies,
-                expressionState.RosterDependencies);
-
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
+
+            expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(
+                expressionState.ConditionalDependencies,
+                expressionState.StructuralDependencies,
+                expressionState.RosterDependencies,
+                expressionState.LinkedQuestionByRosterDependencies);
 
             expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
                 expressionState.QuestionnaireLevelModel.Questions,
                 expressionState.QuestionnaireLevelModel.StaticTexts,
                 expressionState.QuestionnaireLevelModel.Groups,
                 null,
+                expressionState.QuestionnaireLevelModel.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter,
                 expressionState.ConditionsPlayOrder);
 
             var rosterGroupedByScope = expressionState.AllRosters.GroupBy(r => r.TypeName);
@@ -206,18 +209,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     false,
                     roster.VariableName));
             }
-/*
-            foreach (var filter in questionnaireTemplate.AllLinkedQuestionFilters)
-            {
-                methodModels.Add(ExpressionLocation.LinkedQuestionFilter(filter.LinkedQuestionId).Key, new ConditionDescriptionModel(
-
-                    filter.ParentScopeTypeName,
-                    filter.FilterForLinkedQuestionMethodName,
-                    codeGenerationSettings.Namespaces,
-                    filter.FilterExpression,
-                    false,
-                    string.Empty));
-            }*/
 
             foreach (var variable in questionnaireTemplate.AllVariables)
             {
@@ -245,21 +236,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var staticTexts = rostersInScope.SelectMany(r => r.StaticTexts).ToList();
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
             var variables = rostersInScope.SelectMany(r => r.Variables).ToList();
+            var linkedQuestions = rostersInScope.SelectMany(x => x.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter).ToList();
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
             var conditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
-                questions, staticTexts, groups, rostersInScope, template.ConditionsPlayOrder);
+                questions, staticTexts, groups, rostersInScope, linkedQuestions, template.ConditionsPlayOrder);
 
             return new RosterScopeTemplateModel(rosterScopeType, questions, staticTexts, groups, rosters, rostersInScope,
                 conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions, variables);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
-            List<QuestionTemplateModel> questions,
-            List<StaticTextTemplateModel> staticTexts,
-            List<GroupTemplateModel> groups,
+            List<QuestionTemplateModel> questions, 
+            List<StaticTextTemplateModel> staticTexts, 
+            List<GroupTemplateModel> groups, 
             List<RosterTemplateModel> rosters,
+            List<LinkedQuestionVerifierModel> linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter, 
             List<Guid> conditionsPlayOrder)
         {
             List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
@@ -274,7 +267,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.ConditionsMethodName, r.StateName)));
             questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.ConditionMethodName, q.StateName)));
             questionsWithOptionsFilter.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.OptionsFilterMethodName, q.StateName, true, q.MemberName, q.TypeName)));
-
+            linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter.ForEach(
+                q => itemsToSort.Add(q.Id, new ConditionMethodAndState($"IdOf.{q.RosterScopeName}", q.StateName, true, q.MemberName, q.TypeName)));
             var itemsSorted = new List<ConditionMethodAndState>();
 
             foreach (Guid id in conditionsPlayOrder)
@@ -289,10 +283,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return itemsSorted;
         }
 
-        public static List<Guid> BuildConditionsPlayOrder(
-            Dictionary<Guid, List<Guid>> conditionalDependencies, 
+        public static List<Guid> BuildConditionsPlayOrder(Dictionary<Guid, List<Guid>> conditionalDependencies, 
             Dictionary<Guid, List<Guid>> structuralDependencies, 
-            Dictionary<Guid, List<Guid>> rosterDependencies)
+            Dictionary<Guid, List<Guid>> rosterDependencies, 
+            Dictionary<Guid, Guid> linkedQuestionByRosterDependencies)
         {
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
 
@@ -300,6 +294,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 structuralDependencies.Keys
                     .Union(conditionalDependencies.Keys)
                     .Union(rosterDependencies.Keys)
+                    .Union(linkedQuestionByRosterDependencies.Keys)
+                    .Union(linkedQuestionByRosterDependencies.Values)
                     .Union(structuralDependencies.SelectMany(x => x.Value))
                     .Union(conditionalDependencies.SelectMany(x => x.Value))
                     .Union(rosterDependencies.SelectMany(x => x.Value))
@@ -334,9 +330,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 }
             }
 
+            foreach(var linkedDependency in linkedQuestionByRosterDependencies)
+            {
+                if (!mergedDependencies[linkedDependency.Value].Contains(linkedDependency.Key))
+                {
+                    mergedDependencies[linkedDependency.Value].Add(linkedDependency.Key);
+                }
+            }
+
             var sorter = new TopologicalSorter<Guid>();
-            IEnumerable<Guid> listOfOrderedContitions = sorter.Sort(mergedDependencies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
-            return listOfOrderedContitions.ToList();
+            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(mergedDependencies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+            return lisOsfOrderedConditions.ToList();
         }
 
         public static Dictionary<Guid, List<Guid>> BuildStructuralDependencies(QuestionnaireDocument questionnaire)
@@ -427,7 +431,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, expressionState.QuestionnaireLevelModel));
 
             var linkedQuestions = CreateLinkedQuestionFilterExpressionModels(questionnaireDoc);
-            
+            var soursesOfLinkedQuestionsInMultiRosters = new List<Guid>();
+            var likedQuestionToRosterMap = new Dictionary<Guid, Guid>();
             while (rostersToProcess.Count != 0)
             {
                 Tuple<IGroup, RosterScopeBaseModel> rosterScope = rostersToProcess.Dequeue();
@@ -450,6 +455,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             questionnaireDoc, (IQuestion)child, 
                             currentScope.RosterScopeName, 
                             currentScope.TypeName);
+
+                        var linkedQuestionReferencedCurrentQuestion = questionnaireDoc
+                            .Find<IQuestion>(x => x.LinkedToQuestionId == child.PublicKey)
+                            .ToList();
+
+                        var isQuestionIsSourceForLinkedQuestion = linkedQuestionReferencedCurrentQuestion.Any();
+                        if (isQuestionIsSourceForLinkedQuestion)
+                        {
+                            foreach (var linkedQuestion in linkedQuestionReferencedCurrentQuestion)
+                            {
+                                likedQuestionToRosterMap.Add(linkedQuestion.PublicKey, rosterScope.Item1.PublicKey);
+                            }
+
+                            if (IsRosterTriggeredByQuestionWithFilter(questionnaireDoc, rosterScope.Item1.RosterSizeQuestionId))
+                            {
+                                soursesOfLinkedQuestionsInMultiRosters.Add(child.PublicKey);
+                            }
+                        }
 
                         currentScope.Questions.Add(question);
 
@@ -510,6 +533,59 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+            expressionState.LinkedQuestionByRosterDependencies = likedQuestionToRosterMap;
+            var linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter = questionnaireDoc
+                .Find<IQuestion>(x => x.LinkedToQuestionId.HasValue && soursesOfLinkedQuestionsInMultiRosters.Contains(x.LinkedToQuestionId.Value))
+                .ToDictionary(x => x.PublicKey, x => x.LinkedToQuestionId);
+
+            foreach (var roster in expressionState.AllRosters)
+            {
+                foreach (var question in roster.Questions)
+                {
+                    if (linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter.ContainsKey(question.Id))
+                    {
+                        roster.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter
+                            .Add(new LinkedQuestionVerifierModel
+                            {
+                                Id = question.Id,
+                                MemberName = question.MemberName,
+                                TypeName = question.TypeName,
+                                StateName = question.StateName,
+                                RosterScopeName = expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
+                            });
+                    }
+                }
+            }
+
+            foreach (var question in expressionState.QuestionnaireLevelModel.Questions)
+            {
+                if (linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter.ContainsKey(question.Id))
+                {
+                    expressionState.QuestionnaireLevelModel.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter
+                        .Add(new LinkedQuestionVerifierModel
+                        {
+                            Id = question.Id,
+                            MemberName = question.MemberName,
+                            TypeName = question.TypeName,
+                            StateName = question.StateName,
+                            RosterScopeName = expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
+                        });
+                }
+            }
+        }
+
+        private static bool IsRosterTriggeredByQuestionWithFilter(
+            QuestionnaireDocument questionnaireDoc, 
+            Guid? rosterSizeQuestionId)
+        {
+            var isRosterTriggeredByQuestion = rosterSizeQuestionId.HasValue;
+            if (isRosterTriggeredByQuestion)
+            {
+                var rosterSizeQuestion = questionnaireDoc.Find<IQuestion>(rosterSizeQuestionId.Value);
+                return !string.IsNullOrWhiteSpace(rosterSizeQuestion.Properties.OptionsFilterExpression);
+            }
+            
+            return false;
         }
 
         private List<LinkedQuestionFilterExpressionModel> CreateLinkedQuestionFilterExpressionModels(QuestionnaireDocument questionnaireDoc)
