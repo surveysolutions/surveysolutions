@@ -26,13 +26,6 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-            ImageView progressImage = this.FindViewById<ImageView>(Resource.Id.progress_bar);
-            if (progressImage != null)
-            {
-                progressImage.SetBackgroundResource(Resource.Drawable.loading_animation);
-                AnimationDrawable frameAnimation = (AnimationDrawable)progressImage.Background;
-                frameAnimation.Start();
-            }
 
             await this.ViewModel.RestoreInterviewAndNavigateThere();
             this.Finish();
