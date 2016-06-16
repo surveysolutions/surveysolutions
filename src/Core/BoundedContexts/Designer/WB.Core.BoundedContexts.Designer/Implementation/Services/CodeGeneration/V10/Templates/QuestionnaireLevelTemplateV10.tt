@@ -26,6 +26,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	RostersStatesInLevelConstructor(Model.Rosters);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
 	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
+	LinkedQuestionsInLevelConstructor(Model.LinkedQuestionsIdNames);
 #> 
 	}
 

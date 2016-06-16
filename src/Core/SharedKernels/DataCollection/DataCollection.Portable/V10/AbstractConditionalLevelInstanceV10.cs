@@ -16,7 +16,9 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
 
-        protected Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedOptionFiltersMap = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
+        public Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedOptionFiltersMap = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
+
+        public Dictionary<Guid, Guid[]> LinkedQuestions { get; private set; } = new Dictionary<Guid, Guid[]>();
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,

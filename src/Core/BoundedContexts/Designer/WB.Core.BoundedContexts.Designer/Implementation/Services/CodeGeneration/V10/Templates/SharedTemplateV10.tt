@@ -7,7 +7,18 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 <#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model" #> 
 
+
 <#+
+void LinkedQuestionsInLevelConstructor(Dictionary<string, string> linkedQuestions)
+{
+	foreach (var linkedQuestion in linkedQuestions) 
+    {
+#>
+		LinkedQuestions.Add(IdOf.<#= linkedQuestion.Key#>, IdOf.<#= linkedQuestion.Value#>);
+<#+
+	}
+}
+
 void ConditionMethodsInLevelConstructor(List<ConditionMethodAndState> methods)
 {
 	foreach (var method in methods) 

@@ -72,6 +72,9 @@
     <FixtureTestSelector>
       <FixtureName>WB.Tests.Integration.InterviewPackagesServiceTests.when_processing_package</FixtureName>
     </FixtureTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Tests.Integration.InterviewTests.LinkedQuestions.when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.should_set_title_to_invariant_culture_formatted_value_assigned_to_corresponding_linked_to_question_in_all_RosterRowTitleChanged_events</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
   <AdditionalFilesToInclude>..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\**.*;..\..\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\**.*;..\..\Core\SharedKernels\Enumerator\Enumerator\**.*;..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\**.*;..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\**.*</AdditionalFilesToInclude>
   <HiddenWarnings>CopyReferencedAssembliesToWorkspaceIsOn;UnnecessaryFileIncludeWarning</HiddenWarnings>

@@ -237,6 +237,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
             var variables = rostersInScope.SelectMany(r => r.Variables).ToList();
             var linkedQuestions = rostersInScope.SelectMany(x => x.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter).ToList();
+            var linkedQuestionsIdNames = rostersInScope.SelectMany(x => x.LinkedQuestionsIdNames)
+                                    .ToDictionary(x => x.Key, x => x.Value);
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
@@ -244,7 +246,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 questions, staticTexts, groups, rostersInScope, linkedQuestions, template.ConditionsPlayOrder);
 
             return new RosterScopeTemplateModel(rosterScopeType, questions, staticTexts, groups, rosters, rostersInScope,
-                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions, variables);
+                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions, variables, linkedQuestionsIdNames);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
@@ -451,8 +453,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (IsQuestion(child))
                     {
+                        var childAsQuestion = ((IQuestion)child);
+
                         var question = this.CreateQuestionTemplateModel(
-                            questionnaireDoc, (IQuestion)child, 
+                            questionnaireDoc, childAsQuestion, 
                             currentScope.RosterScopeName, 
                             currentScope.TypeName);
 
@@ -475,6 +479,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         }
 
                         currentScope.Questions.Add(question);
+                        
+                        if (childAsQuestion.LinkedToQuestionId.HasValue || childAsQuestion.LinkedToRosterId.HasValue)
+                        {
+                            currentScope.LinkedQuestionsIdNames.Add(question.IdName, currentScope.RosterScopeName);
+                        }
 
                         expressionState.AllQuestions.Add(question);
 
