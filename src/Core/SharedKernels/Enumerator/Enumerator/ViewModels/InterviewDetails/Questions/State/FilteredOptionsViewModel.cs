@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
 
-        public bool IsNeedCompareOptionsonChanges { get; set; } = true;
+        public bool IsNeedCompareOptionsOnChanges { get; set; } = true;
 
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter);
 
-            if (!IsNeedCompareOptionsonChanges)
+            if (!this.IsNeedCompareOptionsOnChanges)
             {
                 this.Options = newOptions;
                 this.OptionsChanged?.Invoke(this, EventArgs.Empty);
