@@ -10,15 +10,19 @@
                                       android:background="?attr/colorPrimary"
                                       local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView style="@style/ToolbarTitle"
-              local:MvxBind="Text ProgressDescription;" />
   </android.support.v7.widget.Toolbar>
-  <LinearLayout  android:layout_width="match_parent" 
+  <LinearLayout  android:layout_width="match_parent"
 android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
-    <ImageView android:id="@+id/progress_bar"
-     android:scaleType="centerInside"
-     android:layout_width="@dimen/Loading_Loader_Size"
-     android:layout_height="@dimen/Loading_Loader_Size"
-     android:background="@drawable/loading_animation"/>
+    <TextView android:layout_width="match_parent" android:textSize="@dimen/Loading_Progress_font_size"
+     android:layout_height="wrap_content" android:gravity="center"
+               local:MvxBind="Text ProgressDescription;" />
+    <ProgressBar
+           style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+           android:layout_width="match_parent"
+           android:paddingLeft="@dimen/Loading_Progress_padding"
+           android:paddingRight="@dimen/Loading_Progress_padding"
+           android:layout_height="@dimen/Loading_Progress_height"
+           android:indeterminate="true"
+           android:visibility="visible" />
   </LinearLayout>
 </LinearLayout>
