@@ -434,12 +434,12 @@ namespace WB.Tests.Integration
             return singleQuestion;
         }
 
-        public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+        public static Answer Option(string value = null, Guid? id = null, string text = null, string parentValue = null)
         {
             return new Answer
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                AnswerText = text ?? "text",
+                AnswerText = text ?? ("Option " + value),
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };

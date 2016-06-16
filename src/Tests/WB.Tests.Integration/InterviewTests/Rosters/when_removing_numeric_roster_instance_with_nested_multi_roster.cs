@@ -48,8 +48,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         {
                             Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
                                     {
-                                        Create.Option(text: "Hello", value: "1"),
-                                        Create.Option(text: "World", value: "2")
+                                        Create.Option(value: "1", text: "Hello"),
+                                        Create.Option(value: "2", text: "World")
                                     }),
                             Create.Roster(
                                 id: nestedMultiRosterId,
