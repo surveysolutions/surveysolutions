@@ -111,6 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
 
+            this.filteredOptionsViewModel.Dispose();
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }
