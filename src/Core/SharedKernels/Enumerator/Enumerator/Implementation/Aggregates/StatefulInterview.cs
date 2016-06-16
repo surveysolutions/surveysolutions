@@ -818,7 +818,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
             {
                 var currentDepth = rosterDepth;
-                answers = answers.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth-1], new RosterVector(x.RosterVector.Take(currentDepth))));
+                answers =
+                    answers.ThenBy(
+                        x =>
+                            GetRosterSortIndex(new Identity(rostersFromTopToSpecifiedQuestion[currentDepth - 1],
+                                new RosterVector(x.RosterVector.Take(currentDepth)))));
             }
             return answers.ToArray();
         }
@@ -841,19 +845,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
             {
                 var currentDepth = rosterDepth;
-                rosters = rosters.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth - 1], new RosterVector(x.RosterVector.Take(currentDepth))));
+                rosters =
+                    rosters.ThenBy(
+                        x =>
+                            GetRosterSortIndex(new Identity(rostersFromTopToSpecifiedQuestion[currentDepth - 1],
+                                new RosterVector(x.RosterVector.Take(currentDepth)))));
             }
             return rosters.ToArray();
-        }
-
-        private int GetRosterSortIndex(Guid rosterId, RosterVector rosterVector)
-        {
-            var identity = new Identity(rosterId, rosterVector);
-            var lastValueInRosterVector = (int)(rosterVector.Last());
-            if (this.sortIndexesOfRosterInstanses.ContainsKey(identity))
-                return sortIndexesOfRosterInstanses[identity] ?? lastValueInRosterVector;
-
-            return lastValueInRosterVector;
         }
 
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
@@ -1246,7 +1244,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 {
                     foreach (var rosterInstance in
                         this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, groupIdentity.RosterVector, questionnaire)
-                            .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last()))
+                            .OrderBy(GetRosterSortIndex))
                     {
                         yield return rosterInstance;
                     }
@@ -1423,6 +1421,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.calculated.GroupsAndRostersInGroup);
         }
 
+        private int GetRosterSortIndex(Identity rosterIdentity)
+        {
+            return this.sortIndexesOfRosterInstanses.ContainsKey(rosterIdentity)
+                ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.Last()
+                : (int)rosterIdentity.RosterVector.Last();
+        }
+
         private IEnumerable<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1435,10 +1440,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 {
                     var childInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(
                         this.interviewState, entity, @group.RosterVector, questionnaire)
-                        .OrderBy(x =>
-                                this.sortIndexesOfRosterInstanses.ContainsKey(x)? 
-                                this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last():
-                                x.RosterVector.Last());
+                        .OrderBy(GetRosterSortIndex);
                     foreach (var rosterInstance in childInstances)
                     {
                         yield return rosterInstance;
