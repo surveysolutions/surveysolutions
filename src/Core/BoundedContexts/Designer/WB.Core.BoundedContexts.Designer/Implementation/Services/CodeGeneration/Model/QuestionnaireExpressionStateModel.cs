@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> RosterDependencies { get; set; }
+        public Dictionary<Guid, Guid> LinkedQuestionByRosterDependencies { get; set; }
 
         public List<Guid> ConditionsPlayOrder { get; set; }
 

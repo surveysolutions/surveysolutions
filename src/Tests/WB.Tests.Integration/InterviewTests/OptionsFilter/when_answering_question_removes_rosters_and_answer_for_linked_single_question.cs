@@ -7,12 +7,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
-namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
+namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
-    [Ignore("KP-7266")]
-    internal class when_answering_question_ : InterviewTestsContext
+    internal class when_answering_question_removes_rosters_and_answer_for_linked_single_question : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -31,30 +31,33 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
                 {
-                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
+                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
                     Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(q3Id, variable: "age"),
-                        Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.age")
-                    })
+                    }),
+                    Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id),
+                    Create.TextQuestion(q5Id, variable: "q5", enablementCondition: "q4.Length > 0")
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
 
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
+                interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1m, 2m, 3m });
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
-
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
+                interview.AnswerSingleOptionLinkedQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, new [] { 3m });
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
+                    interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 2);
 
-                    result.QuestionsQ5Disabled = false;
-                        //eventContext.AnyEvent<LinkedOptionsChanged>(x => x.ChangedLinkedQuestions.Any(q => q. == q5Id));
+                    result.QuestionsQ5Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q5Id));
                 }
 
                 return result;
