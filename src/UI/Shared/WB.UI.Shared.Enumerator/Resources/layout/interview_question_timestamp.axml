@@ -15,7 +15,7 @@
             <TableRow>
               <TextView style="@style/Interview_Question_TimestampAnswer"
                         local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
-              <include layout="@layout/interview_question__remove_button" />
+              <include layout="@layout/interview_question__remove_button_recorded" />
             </TableRow>
           </TableLayout>
           <Button style="@style/Interview_Question_InputButton"

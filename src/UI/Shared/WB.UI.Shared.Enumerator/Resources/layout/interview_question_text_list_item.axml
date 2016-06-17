@@ -5,7 +5,7 @@
   <EditText style="@style/Interview_Question_Answer_List_Editor"
     local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
   <LinearLayout local:MvxBind="Click DeleteListItemCommand;"
-          style="@style/Interview_Question_RemoveAnswerWrapper">
+          style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
   <ImageButton style="@style/Interview_Question_Answer_List_DeleteButton"  android:duplicateParentState="true"
     local:MvxBind="Click DeleteListItemCommand;"/>
   </LinearLayout>
