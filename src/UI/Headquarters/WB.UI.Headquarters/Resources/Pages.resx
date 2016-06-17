@@ -385,16 +385,16 @@
     <value>Supervisor</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Connected to device</value>
+    <value>Connected to the server</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Archive status</value>
   </data>
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
-    <value>Name</value>
+    <value>Login name</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Creation date</value>
+    <value>Account creation date</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Email</value>
@@ -563,5 +563,14 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>Date when the interviewer account was created</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>Login name of the interviewer’s supervisor</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
+    <value>Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server</value>
   </data>
 </root>
