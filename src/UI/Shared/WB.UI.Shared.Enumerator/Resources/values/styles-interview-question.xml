@@ -314,8 +314,8 @@
     <item name="android:layout_weight">1</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_TextAnswer_margin_bottom</item>
-    <item name="android:textStyle">bold|italic</item>
-    <item name="android:textColor">#2a81cb</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/recordedAnswerText</item>
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>
 
