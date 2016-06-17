@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
+        private readonly IAsyncRunner asyncRunner;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -62,7 +63,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage) : base(principal, viewModelNavigationService)
+            IAttachmentContentStorage attachmentContentStorage,
+            IAsyncRunner asyncRunner) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -74,6 +76,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.asyncRunner = asyncRunner;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -83,7 +86,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             
             if (!localQuestionnaires.Any())
             {
-                Task.Run(this.LoadServerQuestionnairesAsync);
+                this.asyncRunner.RunAsync(this.LoadServerQuestionnairesAsync);
             }
             else
             {
