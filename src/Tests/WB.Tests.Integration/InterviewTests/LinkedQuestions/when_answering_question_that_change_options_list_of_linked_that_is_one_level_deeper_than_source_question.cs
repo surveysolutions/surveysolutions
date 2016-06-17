@@ -56,15 +56,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
 
-                    var optionsChangedEvent = eventContext.GetSingleEvent<LinkedOptionsChanged>();
-
-                    var optionsForLinked1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(1, 1))));
-                    var optionsForLinked2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(2, 1))));
-                    var optionsForLinked3 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(3, 1))));
-
-                    result.OptionsCountForQuestion4InRoster1_1 = optionsForLinked1?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster2_1 = optionsForLinked2?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster3_1 = optionsForLinked3?.Options.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster1_1 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(1, 1))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster2_1 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(2, 1))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster3_1 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(3, 1))?.Length ?? 0;
                 }
 
                 return result;
