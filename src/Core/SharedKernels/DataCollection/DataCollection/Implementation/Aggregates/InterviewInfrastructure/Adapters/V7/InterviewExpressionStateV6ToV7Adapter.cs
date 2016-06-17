@@ -173,8 +173,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
 
         public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
         {
-            //map to old 
-            this.interviewExpressionState.DeclareAnswersInvalid(failedValidationConditions.Keys);
+            this.interviewExpressionState.ApplyFailedValidations(failedValidationConditions);
         }
 
         private IInterviewExpressionStateV7 Clone() => new InterviewExpressionStateV6ToV7Adapter(this.interviewExpressionState.Clone());
