@@ -363,6 +363,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_with_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_without_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_changed_answer_for_filtered_question_with_filter_on_options.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_message_contains_substitution.cs" />
