@@ -63,13 +63,11 @@
 
   <dimen name="Interview_Question_YesNo_paddingLeft">25dp</dimen>
 
-  <dimen name="Interview_Question_QR_width">410dp</dimen>
-  
   <dimen name="Interview_Question_TextAnswer_margin_top">8dp</dimen>
-  <dimen name="Interview_Question_TextAnswer_margin_bottom">28dp</dimen>
 
-  <!-- text is 2dp lesser than remove button size, so we add top margin 1dp to align them by middle line -->
-  <dimen name="Interview_Question_TimestampAnswer_margin_top">1dp</dimen>
+  <!-- text is 2.5dp lesser than remove button size, so we add top margin 1dp to align them by middle line -->
+  <dimen name="Interview_Question_RecordedAnswer_margin_top">1dp</dimen>
+  <dimen name="Interview_Question_RecordedAnswer_margin_bottom">17dp</dimen>
 
   <dimen name="Interview_Question_InputButton_padding_old">16dp</dimen>
   <dimen name="Interview_Question_InputButton_padding_horizontal">16dp</dimen>
