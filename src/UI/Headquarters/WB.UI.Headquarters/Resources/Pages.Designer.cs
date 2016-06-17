@@ -808,7 +808,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connected to device.
+        ///   Looks up a localized string similar to Connected to the server.
         /// </summary>
         public static string Interviewers_ConnectedToDeviceTitle {
             get {
@@ -817,11 +817,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creation date.
+        ///   Looks up a localized string similar to Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server.
+        /// </summary>
+        public static string Interviewers_ConnectedToDeviceTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_ConnectedToDeviceTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account creation date.
         /// </summary>
         public static string Interviewers_CreationDateTitle {
             get {
                 return ResourceManager.GetString("Interviewers_CreationDateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date when the interviewer account was created.
+        /// </summary>
+        public static string Interviewers_CreationDateTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_CreationDateTooltip", resourceCulture);
             }
         }
         
@@ -862,6 +880,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login name of the interviewer’s supervisor.
+        /// </summary>
+        public static string Interviewers_SupervisorTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_SupervisorTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         public static string Interviewers_Title {
@@ -880,7 +907,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Login name.
         /// </summary>
         public static string Interviewers_UserNameTitle {
             get {
