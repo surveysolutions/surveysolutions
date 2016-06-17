@@ -198,9 +198,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 foreach (var pair  in scope.LinkedQuestions)
                 {
                     var linkedQuestionId = pair.Key;
+                    var rosterScopesIds = pair.Value;
                     var linkedQuestionIdentity = new Identity(linkedQuestionId, scope.RosterVector);
 
-                    var filteredResult = GetRostersWithSourceQuestionsToRunFilter(linkedQuestionIdentity, scope);
+                    var filteredResult = GetRostersWithSourceQuestionsToRunFilter(linkedQuestionIdentity, scope, rosterScopesIds);
 
                     result.LinkedQuestionOptionsSet.Add(linkedQuestionIdentity, filteredResult);
                 }
@@ -234,13 +235,22 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return result;
         }
 
-        private RosterVector[] GetRostersWithSourceQuestionsToRunFilter(Identity linkedQuestionIdentity, IExpressionExecutableV10 linkedQuestionRosterScope)
+        private RosterVector[] GetRostersWithSourceQuestionsToRunFilter(
+            Identity linkedQuestionIdentity, 
+            IExpressionExecutableV10 linkedQuestionRosterScope, 
+            Guid[] rosterScopesIds)
         {
+            //var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id);
+           
             var filterResults = new List<LinkedQuestionFilterResult>();
 
             foreach (var scope in this.InterviewScopes.Values)
             {
-                filterResults.AddRange(scope.ExecuteLinkedQuestionFilters(linkedQuestionRosterScope));
+                //var sourceQuestionRosterScopeIds = scope.GetRosterKey().Select(x => x.Id);
+                //if (sourceQuestionRosterScopeIds.SequenceEqual(rosterScopesIds))
+                {
+                    filterResults.AddRange(scope.ExecuteLinkedQuestionFilters(linkedQuestionRosterScope));
+                }
             }
 
             return filterResults
