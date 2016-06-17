@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-        [Obsolete("Should be removed")]
+        [Obsolete("Since V 5.10")]
         public IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
