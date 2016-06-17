@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel.ShowPublicQuestionnairesCommand.Execute();
         };
 
-        Because of = () => viewModel.RefreshQuestionnairesCommand.Execute();
+        Because of = () => viewModel.RefreshQuestionnairesCommand.ExecuteAsync().WaitAndUnwrapException();
 
         It should_stay_on_same_tab_with_public_questionnaires = () => viewModel.IsPublicShowed.ShouldBeTrue();
         It should_Questionnaires_have_3_public_questionnaires = () => viewModel.Questionnaires.Count.ShouldEqual(3);

@@ -224,11 +224,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                                        (this.loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(
                                                                async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), (item) => !this.IsInProgress));
 
-        private IMvxCommand refreshQuestionnairesCommand;
+        private IMvxAsyncCommand refreshQuestionnairesCommand;
 
-        public IMvxCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
+        public IMvxAsyncCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
                                                            (this.refreshQuestionnairesCommand =
-                                                               new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress));
+                                                               new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress));
         
         public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
         public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
