@@ -9,12 +9,12 @@
 
 
 <#+
-void LinkedQuestionsInLevelConstructor(Dictionary<string, string> linkedQuestions)
+void LinkedQuestionsInLevelConstructor(List<string> linkedQuestions)
 {
 	foreach (var linkedQuestion in linkedQuestions) 
     {
 #>
-		LinkedQuestions.Add(IdOf.<#= linkedQuestion.Key#>, IdOf.<#= linkedQuestion.Value#>);
+		LinkedQuestions.Add(IdOf.<#= linkedQuestion#>);
 <#+
 	}
 }

@@ -54,6 +54,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<Guid> RosterScope { set; get; }
 
-        public Dictionary<string, string> LinkedQuestionsIdNames { get; set; } = new Dictionary<string, string>();
+        public List<string> LinkedQuestionsIdNames { get; set; } = new List<string>();
     }
 }

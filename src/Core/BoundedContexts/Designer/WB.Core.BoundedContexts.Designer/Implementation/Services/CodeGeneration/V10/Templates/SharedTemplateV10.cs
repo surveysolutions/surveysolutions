@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         
         #line 11 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
 
-void LinkedQuestionsInLevelConstructor(Dictionary<string, string> linkedQuestions)
+void LinkedQuestionsInLevelConstructor(List<string> linkedQuestions)
 {
 	foreach (var linkedQuestion in linkedQuestions) 
     {
@@ -56,21 +56,7 @@ this.Write("\t\tLinkedQuestions.Add(IdOf.");
         #line hidden
         
         #line 17 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
-this.Write(this.ToStringHelper.ToStringWithCulture(linkedQuestion.Key));
-
-        
-        #line default
-        #line hidden
-        
-        #line 17 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
-this.Write(", IdOf.");
-
-        
-        #line default
-        #line hidden
-        
-        #line 17 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt"
-this.Write(this.ToStringHelper.ToStringWithCulture(linkedQuestion.Value));
+this.Write(this.ToStringHelper.ToStringWithCulture(linkedQuestion));
 
         
         #line default

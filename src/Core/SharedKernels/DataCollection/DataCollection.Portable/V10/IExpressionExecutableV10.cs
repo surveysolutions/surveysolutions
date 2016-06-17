@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         decimal[] RosterVector { get; }
 
-        Dictionary<Guid, Guid[]> LinkedQuestions { get; }
+        List<Guid> LinkedQuestions { get; }
 
         void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
 
@@ -27,5 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         Guid[] GetRosterIdsThisScopeConsistOf();
 
         List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope);
+
+        LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId);
     }
 }
