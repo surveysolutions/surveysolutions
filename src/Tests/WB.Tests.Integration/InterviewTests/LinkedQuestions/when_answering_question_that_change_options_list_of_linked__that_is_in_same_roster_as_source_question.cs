@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -53,15 +51,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
 
-                    var optionsChangedEvent = eventContext.GetSingleEvent<LinkedOptionsChanged>();
-
-                    var optionsForLinked1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(1))));
-                    var optionsForLinked2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(2))));
-                    var optionsForLinked3 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, Create.RosterVector(3))));
-
-                    result.OptionsCountForQuestion4InRoster1 = optionsForLinked1?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster2 = optionsForLinked2?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster3 = optionsForLinked3?.Options.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster1 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(1))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster2 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(2))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster3 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(3))?.Length ?? 0;
                 }
 
                 return result;
@@ -86,11 +78,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid rosterId = Guid.Parse("88888888888888888888888888888888");
-        private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
-        private static readonly Guid q5Id = Guid.Parse("55555555555555555555555555555555");
         private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         [Serializable]

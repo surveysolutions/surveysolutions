@@ -53,11 +53,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
 
-                    var optionsChangedEvent = eventContext.GetSingleEvent<LinkedOptionsChanged>();
+                    var changedLinkedOptions = GetChangedOptions(eventContext, q4Id, RosterVector.Empty);
 
-                    var changedLinkedOptions = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q4Id, RosterVector.Empty)));
-
-                    result.OptionsCountForLinkedQuestion = changedLinkedOptions?.Options.Length ?? 0;
+                    result.OptionsCountForLinkedQuestion = changedLinkedOptions?.Length ?? 0;
                 }
 
                 return result;
