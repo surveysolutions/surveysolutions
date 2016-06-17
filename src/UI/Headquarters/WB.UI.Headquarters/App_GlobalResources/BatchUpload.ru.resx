@@ -285,9 +285,6 @@
   <data name="FormatNotSupported" xml:space="preserve">
     <value>Формат файла не поддерживается, данные внутри него будут игнорироваться</value>
   </data>
-  <data name="ImportInProgress" xml:space="preserve">
-    <value>В настоящее время происходит процесс создания интервью. Дождитесь выполнения операции.</value>
-  </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Пример импорта</value>
   </data>
@@ -326,5 +323,11 @@
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Проверка данных группы</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Один процесс импорта интервью уже запущен. Одновременно может выполнятся только один процесс импорта. Подождите, пока запущенный процесс будет окончен и загрузите данные снова. Проследуйте по ссылке, если вы хотите получить более детальную информацию о запущенном процессе.</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Перейти к запущенному процессу импорта интервью</value>
   </data>
 </root>
