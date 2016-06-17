@@ -53,6 +53,8 @@ namespace WB.Tests.Unit.TestFactories
         public IAnswerToStringService AnswerToStringService()
             => new AnswerToStringService();
 
+        public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
+
         public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
             => new AttachmentContentService(
                 attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
