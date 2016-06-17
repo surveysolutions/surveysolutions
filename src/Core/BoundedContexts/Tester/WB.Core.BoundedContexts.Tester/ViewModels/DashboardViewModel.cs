@@ -77,13 +77,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public override async Task StartAsync()
+        public override void Load()
         {
-            this.localQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
+            this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
             {
-                await LoadServerQuestionnairesAsync();
+                Task.Run(this.LoadServerQuestionnairesAsync);
             }
             else
             {
@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
 
-        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
+        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
 
         private IMvxCommand loadQuestionnaireCommand;
 
@@ -252,12 +252,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IsSearchVisible = false;
         }
 
-        private async Task SignOutAsync()
+        private void SignOut()
         {
             this.CancelLoadServerQuestionnaires();
-
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            
+            this.viewModelNavigationService.SignOutAndNavigateToLogin();
         }
 
         private void ShowPublicQuestionnaires()
@@ -295,7 +294,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
                     var interviewId = await this.CreateInterview(questionnaireIdentity);
 
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)

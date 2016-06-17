@@ -235,17 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.RaisePropertyChanged();
             }
         }
-
-        private MvxCommand navigateToSectionCommand;
-
-        public ICommand NavigateToSectionCommand
-        {
-            get
-            {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateToSectionAsync());
-                return this.navigateToSectionCommand;
-            }
-        }
+        public ICommand NavigateToSectionCommand => new MvxCommand(this.NavigateToSection);
 
         public ICommand Toggle
         {
@@ -259,7 +249,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async Task NavigateToSectionAsync()
+        private void NavigateToSection()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
 
@@ -267,7 +257,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 ? NavigationIdentity.CreateForCompleteScreen()
                 : NavigationIdentity.CreateForGroup(this.SectionIdentity);
 
-            await this.NavigationState.NavigateToAsync(navigationIdentity);
+             this.NavigationState.NavigateTo(navigationIdentity);
         }
 
         private List<SideBarSectionViewModel> GenerateChildNodes()

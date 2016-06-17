@@ -1,12 +1,7 @@
 using Android.App;
-using Android.Content;
 using Android.Views;
-using Java.Util;
-using Microsoft.Practices.ServiceLocation;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
@@ -16,13 +11,13 @@ namespace WB.UI.Tester.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewViewModel>
     {
-        protected override int MenuResourceId { get { return Resource.Menu.interview; } }
+        protected override int MenuResourceId => Resource.Menu.interview;
 
-        public override async void OnBackPressed()
+        public override void OnBackPressed()
         {
-            await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
+            this.ViewModel.NavigateToPreviousViewModel(() =>
             {
-                Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
+                this.ViewModel.NavigateBack();
                 this.Finish();
             });
         }
@@ -38,27 +33,18 @@ namespace WB.UI.Tester.Activities
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected override async void OnMenuItemSelected(int resourceId)
+        protected override void OnMenuItemSelected(int resourceId)
         {
-            var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
-                    if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
-                    {
-                        Intent intent = new Intent(this, typeof(PrefsActivity));
-                        this.StartActivity(intent);
-                    }
+                    this.ViewModel.NavigateToSettingsCommand.Execute();
                     break;
                 case Resource.Id.interview_signout:
-                    if (await viewModelNavigationService.TryWaitPendingOperationsCompletionAsync())
-                    {
-                        this.ViewModel.SignOutCommand.Execute();
-                        this.Finish();
-                    }
+                    this.ViewModel.SignOutCommand.Execute();
                     break;
             }
         }

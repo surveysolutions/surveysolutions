@@ -35,14 +35,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
-            viewModel.StartAsync().WaitAndUnwrapException();
+            viewModel.Load();
             viewModel.Password = newUserPassword;
         };
 
         Because of = () => viewModel.OnlineSignInCommand.Execute();
 
         It should_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Once);
 
         It should_store_entered_password = () =>
            InterviewersPlainStorageMock.Verify(x => x.StoreAsync(Moq.It.Is<InterviewerIdentity>(i => i.Password == userPasswordHash)), Times.Once);

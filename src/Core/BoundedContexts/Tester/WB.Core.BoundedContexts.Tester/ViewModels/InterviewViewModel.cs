@@ -38,41 +38,25 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        private IMvxCommand navigateToDashboardCommand;
-        public IMvxCommand NavigateToDashboardCommand
-        {
-            get
-            {
-                return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(async () =>
-                {
-                    await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
-                }));
-            }
-        }
+        public IMvxCommand NavigateToSettingsCommand
+            => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
 
-        private IMvxAsyncCommand signOutCommand;
-        public IMvxAsyncCommand SignOutCommand => this.signOutCommand ?? (this.signOutCommand = new MvxAsyncCommand(this.SignOutAsync));
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
+        
+        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
-        private async Task SignOutAsync()
-        {
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
-        }
+        public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
+            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
-        public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)
-        {
-            await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
-        }
-
-        public async Task NavigateBack()
+        public void NavigateBack()
         {
             if (this.PrefilledQuestions.Any())
             {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.interviewId);
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
 
         }

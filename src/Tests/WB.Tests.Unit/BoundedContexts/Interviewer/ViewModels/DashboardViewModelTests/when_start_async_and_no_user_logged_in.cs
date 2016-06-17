@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.DashboardViewMode
             viewModel = CreateDashboardViewModel(principal: principal, synchronization: Substitute.For<SynchronizationViewModel> (), dashboardFactory: dashboardFactory.Object);
         };
 
-        Because of = () => viewModel.StartAsync().WaitAndUnwrapException();
+        Because of = () => viewModel.Load();
 
         It should_not_call_GetInterviewerDashboardAsync = 
             () => dashboardFactory.Verify(m => m.GetInterviewerDashboardAsync(Moq.It.IsAny<Guid>()),Times.Never());

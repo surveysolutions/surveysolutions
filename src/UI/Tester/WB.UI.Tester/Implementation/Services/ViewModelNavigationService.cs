@@ -2,19 +2,17 @@ using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.UI.Interviewer.Activities;
-using WB.UI.Interviewer.ViewModel;
+using WB.UI.Tester.Activities;
 
-namespace WB.UI.Interviewer.Implementations.Services
+namespace WB.UI.Tester.Implementation.Services
 {
-    internal class ViewModelNavigationService : BaseViewModelNavigationService, IViewModelNavigationService
+    public class ViewModelNavigationService : BaseViewModelNavigationService, IViewModelNavigationService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
 
@@ -31,7 +29,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
         public void NavigateToDashboard() => this.NavigateTo<DashboardViewModel>();
-        public void NavigateToInterview(string interviewId) => this.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId });
+        public void NavigateToInterview(string interviewId) => this.NavigateTo<InterviewViewModel>(new { interviewId = interviewId });
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();

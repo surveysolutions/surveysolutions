@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.RestoreInterviewAndNavigateThere();
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
+            navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestions(null);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.RestoreInterviewAndNavigateThere();
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null);
+            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.RestoreInterviewAndNavigateThere();
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null);
+            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(Moq.It.IsAny<RestartInterviewCommand>());
         }
         protected static LoadingViewModel CreateLoadingViewModel(
