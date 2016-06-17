@@ -353,7 +353,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_timestamp_question_which_is_roster_title.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_combobox.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
-    <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\when_storing_multiple_options.cs" />
+    <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\OptionsRepositoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_otions.cs" />
