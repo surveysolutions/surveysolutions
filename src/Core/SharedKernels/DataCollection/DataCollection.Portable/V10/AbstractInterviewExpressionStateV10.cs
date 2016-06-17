@@ -201,44 +201,17 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     var rosterScopesIds = pair.Value;
                     var linkedQuestionIdentity = new Identity(linkedQuestionId, scope.RosterVector);
 
-                    var filteredResult = this.RunFiltersForLinkedQuestion(linkedQuestionIdentity, scope, rosterScopesIds);
+                    var filteredResult = this.RunFiltersForLinkedQuestion(linkedQuestionIdentity, scope);
 
                     result.LinkedQuestionOptionsSet.Add(linkedQuestionIdentity, filteredResult);
                 }
             }
-
-            /*
-            var filterResults = new List<LinkedQuestionFilterResult>();
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
-            {
-                filterResults.AddRange(interviewScopeKvpValue.ExecuteLinkedQuestionFilters(interviewScopeKvpValue));
-            }
-            var linkedQuestionOptionsGroupedByQuestionId = filterResults.GroupBy(x => x.LinkedQuestionId);
-            foreach (var linkedQuestionOptions in linkedQuestionOptionsGroupedByQuestionId)
-            {
-                var linkedQuestionId = linkedQuestionOptions.Key;
-
-                var newOptionSet =
-                    linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.Last().RosterVector).ToArray();
-
-                result.LinkedQuestionOptions.Add(linkedQuestionId, newOptionSet);
-            }
-            var linkedQuestionsToDoubleCheck =
-                linkedQuestionIdWithSourceRosterIdPairs.Where(
-                    pair => result.LinkedQuestionOptions.All(l => l.Key != pair.Key)).ToArray();
-            foreach (var linkedQuestionIdWithSourceRosterIdPair in linkedQuestionsToDoubleCheck)
-            {
-                if (!this.InterviewScopes.Values.Any(scope => scope.GetRosterKey().Any(r => r.Id == linkedQuestionIdWithSourceRosterIdPair.Value)))
-                    result.LinkedQuestionOptions.Add(linkedQuestionIdWithSourceRosterIdPair.Key, new RosterVector[0]);
-            }
-            */
             return result;
         }
 
         private RosterVector[] RunFiltersForLinkedQuestion(
             Identity linkedQuestionIdentity, 
-            IExpressionExecutableV10 linkedQuestionRosterScope, 
-            Guid[] rosterScopesIds)
+            IExpressionExecutableV10 linkedQuestionRosterScope)
         {
             var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id).ToArray();
             var linkedQuestionRosterVector = linkedQuestionRosterScope.GetRosterKey().Last().RosterVector;
@@ -272,13 +245,17 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 
                 if (linkedQuestionRosterScopeIds.Length == commonPart.Length)
                 {
-                        
+                    var sourceParentRosterVector = sourseQuestionRosterVector.Take(commonPart.Length).ToArray();
+                    if (!linkedQuestionRosterVector.SequenceEqual(sourceParentRosterVector))
+                    {
+                        linkedQuestionFilterResults.Remove(linkedQuestionFilterResults[index]);
+                    }
                 }
 
                 if (sourceRosterScopeIds.Length == commonPart.Length)
                 {
-                    var sourceParentRosterVector = linkedQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
-                    var linkedParentRosterVector = sourseQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
+                    var linkedParentRosterVector = linkedQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
+                    var sourceParentRosterVector = sourseQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
                     if (!sourceParentRosterVector.SequenceEqual(linkedParentRosterVector))
                     {
                         linkedQuestionFilterResults.Remove(linkedQuestionFilterResults[index]);

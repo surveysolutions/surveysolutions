@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -60,21 +61,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, 20);
 
-                    var optionsChangedEvent = eventContext.GetSingleEvent<LinkedOptionsChanged>();
-
-                    var optionsForLinked1_1_1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(1, 1, 1))));
-                    var optionsForLinked1_2_2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(1, 2, 2))));
-                    var optionsForLinked2_1_1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(2, 1, 1))));
-                    var optionsForLinked2_3_2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(2, 3, 2))));
-                    var optionsForLinked3_2_2 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(3, 2, 2))));
-                    var optionsForLinked3_4_1 = optionsChangedEvent.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(q3Id, Create.RosterVector(3, 4, 1))));
-
-                    result.OptionsCountForQuestion3InRoster1_1_1 = optionsForLinked1_1_1?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster1_2_2 = optionsForLinked1_2_2?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster2_1_1 = optionsForLinked2_1_1?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster2_3_2 = optionsForLinked2_3_2?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster3_2_2 = optionsForLinked3_2_2?.Options.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster3_4_1 = optionsForLinked3_4_1?.Options.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster1_1_1 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(1, 1, 1))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster1_2_2 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(1, 2, 2))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster2_1_1 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(2, 1, 1))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster2_3_2 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(2, 3, 2))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster3_2_2 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(3, 2, 2))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster3_4_1 = GetChangedOptions(eventContext, q3Id, Create.RosterVector(3, 4, 1))?.Length ?? 0;
                 }
 
                 return result;
@@ -113,7 +105,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
         private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         [Serializable]
