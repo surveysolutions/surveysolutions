@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         Because of = () => stringAnswer = service.AnswerToUIString(questionId, answer, statefulInterview, questionnaire);
 
         It should_return_formatted_according_to_local_time_string = () => 
-            stringAnswer.ShouldEqual(answer.Answer?.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern));
+            stringAnswer.ShouldEqual(answer.Answer?.ToLocalTime().ToString(CultureInfo.CurrentUICulture));
 
         static IAnswerToStringService service;
         static IQuestionnaire questionnaire;
