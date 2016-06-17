@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<RosterTemplateModel> rosters, List<RosterTemplateModel> rostersInScope, 
             List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder, 
             List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions, 
-            List<VariableTemplateModel> variables, 
-            Dictionary<string, string> linkedQuestionsIdNames)
+            List<VariableTemplateModel> variables,
+            List<string> linkedQuestionsIdNames)
         {
             this.LinkedQuestionsIdNames = linkedQuestionsIdNames;
             TypeName = typeName;
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
 
-        public Dictionary<string, string> LinkedQuestionsIdNames { get; }
+        public List<string> LinkedQuestionsIdNames { get; }
 
         public string IdName => RostersInScope.FirstOrDefault()?.IdName;
     }

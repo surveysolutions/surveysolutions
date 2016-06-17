@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -237,8 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
             var variables = rostersInScope.SelectMany(r => r.Variables).ToList();
             var linkedQuestions = rostersInScope.SelectMany(x => x.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter).ToList();
-            var linkedQuestionsIdNames = rostersInScope.SelectMany(x => x.LinkedQuestionsIdNames)
-                                    .ToDictionary(x => x.Key, x => x.Value);
+            var linkedQuestionsIdNames = rostersInScope.SelectMany(x => x.LinkedQuestionsIdNames).ToList();
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
@@ -482,7 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         
                         if (childAsQuestion.LinkedToQuestionId.HasValue || childAsQuestion.LinkedToRosterId.HasValue)
                         {
-                            currentScope.LinkedQuestionsIdNames.Add(question.IdName, currentScope.RosterScopeName);
+                            currentScope.LinkedQuestionsIdNames.Add(question.IdName);
                         }
 
                         expressionState.AllQuestions.Add(question);
