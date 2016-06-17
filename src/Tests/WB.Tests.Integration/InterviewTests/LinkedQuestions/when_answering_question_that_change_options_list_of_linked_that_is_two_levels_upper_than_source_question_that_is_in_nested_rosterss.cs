@@ -95,7 +95,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
         private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         [Serializable]
@@ -103,8 +102,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             public int OptionsCountForQuestion3InRoster1;
             public int OptionsCountForQuestion3InRoster2;
-            public int OptionsCountForQuestion3InRoster2_1;
-            public int OptionsCountForQuestion3InRoster2_2;
         }
     }
 }
