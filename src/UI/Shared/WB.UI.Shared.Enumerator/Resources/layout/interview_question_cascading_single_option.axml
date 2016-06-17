@@ -24,7 +24,7 @@
                          SelectedObject SelectedObject; 
                          ResetText ResetTextInEditor;
                          Hint Localization('FilteredComboboxQuestion_Hint');" />
-          <include layout="@layout/interview_question__remove_button" />
+          <include layout="@layout/interview_question__remove_button_input" />
         </LinearLayout>
 
       </LinearLayout>
