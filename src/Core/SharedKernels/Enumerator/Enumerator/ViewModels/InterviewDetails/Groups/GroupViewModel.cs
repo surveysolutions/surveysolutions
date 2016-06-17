@@ -63,12 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             get{ return this.groupIdentity; }
         }
-
-        private IMvxCommand navigateToGroupCommand;
-        public IMvxCommand NavigateToGroupCommand
-        {
-            get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroupAsync())); }
-        }
+        
+        public IMvxCommand NavigateToGroupCommand => new MvxCommand(this.NavigateToGroup);
 
         public GroupViewModel(
             IStatefulInterviewRepository interviewRepository,
@@ -134,10 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.RaisePropertyChanged(() => this.GroupState);
         }
 
-        private async Task NavigateToGroupAsync()
-        {
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.groupIdentity));
-        }
+        private void NavigateToGroup() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
 
         public void Handle(RosterInstancesTitleChanged @event)
         {

@@ -30,11 +30,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
-            var viewModelNavigationService = Substitute.For<IViewModelNavigationService>();
-            viewModelNavigationService.TryWaitPendingOperationsCompletionAsync().ReturnsForAnyArgs(Task.FromResult(true));
-
             return new NavigationState(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), viewModelNavigationService);
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), Substitute.For<IViewModelNavigationService>());
         }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
