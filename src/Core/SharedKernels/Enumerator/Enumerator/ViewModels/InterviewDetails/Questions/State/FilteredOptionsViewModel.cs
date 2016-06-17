@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IEnumerable<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
 
-        public event EventHandler OptionsChanged;
+        public virtual event EventHandler OptionsChanged;
 
         private Identity questionIdentity;
 

@@ -98,6 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.IsNeedCompareOptionsOnChanges = false;
+            this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
             interview = this.interviewRepository.Get(interviewId);
             this.questionIdentity = entityIdentity;
@@ -106,6 +107,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateOptionsState();
 
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            UpdateOptionsState();
         }
 
         private void UpdateOptionsState()
@@ -333,6 +339,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+
             this.filteredOptionsViewModel.Dispose();
             this.QuestionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
