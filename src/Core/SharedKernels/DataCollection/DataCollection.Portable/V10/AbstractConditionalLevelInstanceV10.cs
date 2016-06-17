@@ -97,6 +97,18 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        private bool GetLinkedFilterResult(Func<IExpressionExecutableV10, bool> linkedFilter, IExpressionExecutableV10 scope)
+        {
+            try
+            {
+                return linkedFilter(scope);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public virtual void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances)
         {
             this.RemoveRosterInstances = removeRosterInstances;
@@ -311,11 +323,14 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
+        [Obsolete("Since version 5.10. Released on 1st of July")]
         public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope)
         {
             var result = new List<LinkedQuestionFilterResult>();
 
-            var rosterStatesFromScope = this.EnablementStates.Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r => r.Value.State).ToArray();
+            var rosterStatesFromScope = this.EnablementStates
+                .Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r => r.Value.State)
+                .ToArray();
 
             if (rosterStatesFromScope.Length > 0 && rosterStatesFromScope.All(s => s == State.Disabled))
                 return result;
@@ -340,6 +355,25 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 });
             }
             return result;
+        }
+
+        public LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId)
+        {
+            if (!this.LinkedOptionFiltersMap.ContainsKey(questionId))
+                return null;
+
+            if (this.EnablementStates.ContainsKey(questionId) &&
+                this.EnablementStates[questionId].State == State.Disabled)
+                return null;
+
+            var linkedQuestionFilter = this.LinkedOptionFiltersMap[questionId];
+            var isEnabled = this.GetLinkedFilterResult(linkedQuestionFilter, currentScope);
+            return new LinkedQuestionFilterResult
+            {
+                Enabled = isEnabled,
+                LinkedQuestionId = questionId,
+                RosterKey = this.RosterKey
+            };
         }
     }
 }

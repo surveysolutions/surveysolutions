@@ -195,13 +195,11 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
             foreach (var scope in this.InterviewScopes.Values)
             {
-                foreach (var pair  in scope.LinkedQuestions)
+                foreach (var linkedQuestionId in scope.LinkedQuestions)
                 {
-                    var linkedQuestionId = pair.Key;
-                    var rosterScopesIds = pair.Value;
                     var linkedQuestionIdentity = new Identity(linkedQuestionId, scope.RosterVector);
 
-                    var filteredResult = this.RunFiltersForLinkedQuestion(linkedQuestionIdentity, scope);
+                    var filteredResult = this.RunFiltersForLinkedQuestion(linkedQuestionId, scope, scope.RosterVector);
 
                     result.LinkedQuestionOptionsSet.Add(linkedQuestionIdentity, filteredResult);
                 }
@@ -210,65 +208,65 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         }
 
         private RosterVector[] RunFiltersForLinkedQuestion(
-            Identity linkedQuestionIdentity, 
-            IExpressionExecutableV10 linkedQuestionRosterScope)
+            Guid linkedQuestionId, 
+            IExpressionExecutableV10 linkedQuestionRosterScope, 
+            RosterVector linkedQuestionRosterVector)
         {
             var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id).ToArray();
-            var linkedQuestionRosterVector = linkedQuestionRosterScope.GetRosterKey().Last().RosterVector;
-           
-            var filterResults = new List<LinkedQuestionFilterResult>();
 
-            foreach (var scope in this.InterviewScopes.Values)
-            {
-                filterResults.AddRange(scope.ExecuteLinkedQuestionFilters(linkedQuestionRosterScope));
-            }
+            var scopesWithSourceQuestionsFiltereByLocation = this.InterviewScopes
+                .Values
+                .Where(x => this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+                    x.GetRosterKey().Select(k => k.Id).ToArray(),
+                    x.GetRosterKey().Last().RosterVector,
+                    linkedQuestionRosterScopeIds, 
+                    linkedQuestionRosterVector));
 
-            var linkedQuestionFilterResults = filterResults
-                .Where(x => x.Enabled)
-                .Where(x => x.LinkedQuestionId == linkedQuestionIdentity.Id)
-                .ToList();
-
-            for (int index = linkedQuestionFilterResults.Count - 1; index >= 0; index--)
-            {
-                var filterResult = linkedQuestionFilterResults[index];
-                var sourceRosterScopeIds = filterResult.RosterKey.Select(x => x.Id).ToArray();
-                var sourseQuestionRosterVector = filterResult.RosterKey.Last().RosterVector;
-
-                if (linkedQuestionRosterScopeIds.SequenceEqual(sourceRosterScopeIds))
-                {
-                    continue;
-                }
-
-                var commonPart = GetCommonPart(linkedQuestionRosterScopeIds, sourceRosterScopeIds);
-                if (commonPart.Length == 0)
-                    continue;
-                
-                if (linkedQuestionRosterScopeIds.Length == commonPart.Length)
-                {
-                    var sourceParentRosterVector = sourseQuestionRosterVector.Take(commonPart.Length).ToArray();
-                    if (!linkedQuestionRosterVector.SequenceEqual(sourceParentRosterVector))
-                    {
-                        linkedQuestionFilterResults.Remove(linkedQuestionFilterResults[index]);
-                    }
-                }
-
-                if (sourceRosterScopeIds.Length == commonPart.Length)
-                {
-                    var linkedParentRosterVector = linkedQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
-                    var sourceParentRosterVector = sourseQuestionRosterVector.Take(commonPart.Length - 1).ToArray();
-                    if (!sourceParentRosterVector.SequenceEqual(linkedParentRosterVector))
-                    {
-                        linkedQuestionFilterResults.Remove(linkedQuestionFilterResults[index]);
-                    }
-                }
-            }
-
-            return linkedQuestionFilterResults
+            var filterResults = scopesWithSourceQuestionsFiltereByLocation
+                .Select(scope => scope.ExecuteLinkedQuestionFilter(linkedQuestionRosterScope, linkedQuestionId))
+                .Where(x => x?.Enabled ?? false)
                 .Select(x => new RosterVector(x.RosterKey.Last().RosterVector))
                 .ToArray();
+
+            return filterResults;
         }
 
-        private Guid[] GetCommonPart(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
+        private bool DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+            Guid[] sourceRosterScopeIds, RosterVector sourseRosterVector, 
+            Guid[] linkedRosterScopeIds, RosterVector linkedRosterVector)
+        {
+            var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
+            if (areLinkedAndSourceQuestionsOnSameLevel)
+                return true;
+
+            var commonPart = this.GetCommonPartFromStart(linkedRosterScopeIds, sourceRosterScopeIds);
+            var hasLinkedAndSourceQuestionsCommonParents = commonPart.Length != 0;
+            if (!hasLinkedAndSourceQuestionsCommonParents)
+                return true;
+
+            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonPart.Length;
+            if (isSourceQuestionDeeperThanLinkedQuestion)
+            {
+                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length).ToArray();
+                if (!linkedRosterVector.SequenceEqual(sourceParentRosterVector))
+                    return false;
+            }
+
+            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonPart.Length;
+            if (isLinkedQuestionDeeperThanSourceQuestion)
+            {
+                var linkedParentRosterVector = linkedRosterVector.Take(commonPart.Length - 1).ToArray();
+                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length - 1).ToArray();
+
+                var doesScopesHasTheSameParent = !sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
+                if (doesScopesHasTheSameParent)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private Guid[] GetCommonPartFromStart(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
         {
             var commonPart = new List<Guid>();
             var minLength = Math.Min(rosterScopeIds1.Count, rosterScopeIds2.Count);
