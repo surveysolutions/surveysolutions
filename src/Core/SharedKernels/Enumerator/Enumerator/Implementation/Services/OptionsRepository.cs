@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var questionIdAsString = questionId.FormatGuid();
             filter = filter ?? String.Empty;
             int pagesize = 50;
-            decimal lastLoadedValue = decimal.MinValue;
+            int lastLoadedSortIndex = -1;
 
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
@@ -58,27 +58,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             do
             {
-                loadedBatch = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                            x.QuestionId == questionIdAsString &&
-                            x.ParentValue == parentValueAsDecimal &&
-                            x.Title.Contains(filter) &&
-                            x.Value > lastLoadedValue)
-                .Select(x => new CategoricalOption
+                var optionViews = this.optionsStorage
+                    .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                x.QuestionId == questionIdAsString &&
+                                x.ParentValue == parentValueAsDecimal &&
+                                x.Title.Contains(filter) &&
+                                x.SortOrder > lastLoadedSortIndex)
+                    .OrderBy(x => x.SortOrder)
+                    .Take(pagesize)
+                    .ToList();
+
+                loadedBatch = optionViews.Select(x => new CategoricalOption
                 {
-                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
+                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?) null,
                     Value = Convert.ToInt32(x.Value),
                     Title = x.Title
-                })
-                .OrderBy(x => x.Value)
-                .Take(pagesize)
-                .ToList();
+                }).ToList();
 
                 foreach (var option in loadedBatch)
                 {
                     yield return option;
-                    lastLoadedValue = option.Value;
                 }
+                lastLoadedSortIndex = optionViews.LastOrDefault()?.SortOrder ?? 0;
 
             } while (loadedBatch.Count > 0);
 
@@ -113,7 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.optionsStorage.RemoveAsync(optionsToDelete);
         }
 
-        public async Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument)
+        public async Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, 
+            QuestionnaireDocument serializedQuestionnaireDocument)
         {
             var questionnaireIdAsString = questionnaireIdentity.ToString();
 
@@ -137,8 +139,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var optionsToSave = new List<OptionView>();
 
-            foreach (var answer in answers)
+            for (int i = 0; i < answers.Count; i++)
             {
+                var answer = answers[i];
+
                 decimal value = answer.AnswerCode ?? decimal.Parse(answer.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
                 decimal? parentValue = null;
                 if (!string.IsNullOrEmpty(answer.ParentValue))
@@ -154,7 +158,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     QuestionId = questionIdAsString,
                     Value = value,
                     ParentValue = parentValue,
-                    Title = answer.AnswerText
+                    Title = answer.AnswerText,
+                    SortOrder = i
                 };
 
                 optionsToSave.Add(optionView);
