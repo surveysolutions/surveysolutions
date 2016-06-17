@@ -17,7 +17,7 @@
               android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
               android:adjustViewBounds="true"
               android:scaleType="centerCrop"
-              style="@style/Interview_Question_Multimedia_Picture"/>
+              style="@style/Interview_Question_GPS_Map"/>
              <include layout="@layout/interview_question__remove_button_recorded" />
           </TableRow>
           <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
