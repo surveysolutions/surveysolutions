@@ -46,11 +46,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             return this.IsAuthenticated;
         }
 
-        public async Task SignOutAsync()
+        public void SignOut()
         {
-            await this.usersStorage.RemoveAsync(this.usersStorage.LoadAll()).ConfigureAwait(false);
-            await this.dashboardLastUpdateStorage.RemoveAsync(this.dashboardLastUpdateStorage.LoadAll()).ConfigureAwait(false);
-            await this.questionnairesStorage.RemoveAsync(this.questionnairesStorage.LoadAll()).ConfigureAwait(false);
+            this.usersStorage.Remove(this.usersStorage.LoadAll());
+            this.dashboardLastUpdateStorage.Remove(this.dashboardLastUpdateStorage.LoadAll());
+            this.questionnairesStorage.Remove(this.questionnairesStorage.LoadAll());
 
             this.currentUserIdentity = null;
         }

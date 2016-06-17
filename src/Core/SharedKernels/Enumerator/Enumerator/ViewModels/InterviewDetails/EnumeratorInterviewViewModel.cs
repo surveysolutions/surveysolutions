@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
         }
 
-        public override async Task StartAsync()
+        public override void Load()
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             interview = this.interviewRepository.Get(interviewId);
@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
+            this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }

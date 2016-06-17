@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.Core.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -19,20 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private NavigationIdentity entityIdentity;
 
-        private IMvxAsyncCommand navigateToSectionCommand;
-
-        public IMvxAsyncCommand NavigateToSectionCommand
-        {
-            get
-            {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxAsyncCommand(this.NavigateAsync);
-                return this.navigateToSectionCommand;
-            }
-        }
-
-        private async Task NavigateAsync()
-        {
-            await this.navigationState.NavigateToAsync(entityIdentity);
-        }
+        public IMvxCommand NavigateToSectionCommand => new MvxCommand(()=> this.navigationState.NavigateTo(this.entityIdentity));
     }
 }

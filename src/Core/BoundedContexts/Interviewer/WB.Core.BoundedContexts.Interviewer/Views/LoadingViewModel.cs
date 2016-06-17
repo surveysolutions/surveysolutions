@@ -77,11 +77,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (interview.CreatedOnClient)
                 {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
                 }
                 else
                 {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
+                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
                 }
             }
             catch (OperationCanceledException)
@@ -115,14 +115,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToDashboardAsync);
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
 
-        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
-
-        private async Task SignOutAsync()
-        {
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
-        }
+        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
     }
 }

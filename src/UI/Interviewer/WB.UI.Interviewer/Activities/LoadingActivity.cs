@@ -31,9 +31,9 @@ namespace WB.UI.Interviewer.Activities
             this.Finish();
         }
 
-        public override async void OnBackPressed()
+        public override void OnBackPressed()
         {
-            await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
+            this.ViewModel.NavigateToDashboardCommand.Execute();
             this.CancelLoadingAndFinishActivity();
         }
 

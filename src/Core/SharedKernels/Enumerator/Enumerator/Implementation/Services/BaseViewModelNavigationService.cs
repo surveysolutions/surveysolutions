@@ -1,50 +1,66 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class BaseViewModelNavigationService : MvxNavigatingObject
+    public abstract class BaseViewModelNavigationService : MvxNavigatingObject
     {
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
+        private readonly IPrincipal principal;
 
-        public BaseViewModelNavigationService(ICommandService commandService,
+        protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
-            IUserInterfaceStateService userInterfaceStateService)
+            IUserInterfaceStateService userInterfaceStateService,
+            IPrincipal principal)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
             this.userInterfaceStateService = userInterfaceStateService;
+            this.principal = principal;
         }
 
         public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
                                                     this.userInteractionService.HasPendingUserInterations ||
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
-        public virtual async Task NavigateToAsync<TViewModel>(object parameters) where TViewModel : IMvxViewModel
+        public abstract void NavigateToLogin();
+        protected abstract void DisposeViewModel();
+
+        protected abstract void NavigateToSettingsImpl();
+
+        public virtual void NavigateTo<TViewModel>(object parameters) where TViewModel : IMvxViewModel
         {
-            if (await this.TryWaitPendingOperationsCompletionAsync())
+            if (this.HasPendingOperations)
+                this.ShowWaitMessage();
+            else
                 this.ShowViewModel<TViewModel>(parameters);
         }
 
-        public async Task<bool> TryWaitPendingOperationsCompletionAsync()
+        public void SignOutAndNavigateToLogin()
         {
             if (this.HasPendingOperations)
+                this.ShowWaitMessage();
+            else
             {
-                this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
-                return false;
+                this.principal.SignOut();
+                this.NavigateToLogin();
+                this.DisposeViewModel();
             }
-
-            await this.userInteractionService.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-            await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
-            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
-            return true;
         }
+
+        public virtual void NavigateToSettings()
+        {
+            if (this.HasPendingOperations)
+                this.ShowWaitMessage();
+            else
+                this.NavigateToSettingsImpl();
+        }
+
+        public virtual void ShowWaitMessage() => this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
     }
 }

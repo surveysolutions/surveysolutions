@@ -104,12 +104,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             await this.commandService.ExecuteAsync(completeInterviewCommand);
 
-            await this.CloseInterviewAsync();
+            this.CloseInterview();
         }
 
-        protected virtual async Task CloseInterviewAsync()
+        protected virtual void CloseInterview()
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            this.viewModelNavigationService.NavigateToDashboard();
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }
