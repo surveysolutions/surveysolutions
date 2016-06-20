@@ -1,6 +1,7 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -21,6 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
+            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+
+            StatefulInterviewMock.Setup(x => x.GetFilteredOptionsForQuestion(questionIdentity, 1, "3")).Returns(Options.Where(x => x.Value == 3).ToList());
+
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == StatefulInterviewMock.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
@@ -29,8 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
@@ -63,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
         {
             var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldContain("title klo 3");
+            firstOption.Text.ShouldContain("title klo <b>3</b>");
             firstOption.Value.ShouldEqual(answerOnChildQuestion);
             firstOption.ParentValue.ShouldEqual(1);
             firstOption.OriginalText.ShouldContain("title klo 3");

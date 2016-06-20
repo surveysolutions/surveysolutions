@@ -24,27 +24,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer);
+                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
+                   && _.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1) == new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 }
+                   && _.GetFilteredOptionsForQuestion(questionIdentity, 1, string.Empty ) == Options.Where(x => x.ParentValue == 1).ToList());
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
-
+            
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>
-            cascadingModel.FilterText = null;
+            cascadingModel.FilterText = string.Empty;
 
         It should_set_null_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeNull();
+            cascadingModel.FilterText.ShouldBeEmpty();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
