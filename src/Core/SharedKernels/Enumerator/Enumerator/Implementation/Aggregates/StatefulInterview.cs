@@ -1403,14 +1403,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
         }
 
-        CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue)
         {
-            return this.GetOptionForQuestionWithoutFilter(question, value);
+            return this.GetOptionForQuestionWithoutFilter(question, value, parentQuestionValue);
         }
 
-        CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null)
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue)
         {
-            return this.GetOptionForQuestionWithFilter(question, value);
+            return this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
