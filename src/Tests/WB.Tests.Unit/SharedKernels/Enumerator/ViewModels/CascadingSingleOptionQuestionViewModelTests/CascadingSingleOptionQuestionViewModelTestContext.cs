@@ -28,8 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
             IPlainQuestionnaireRepository questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null,
-            IOptionsRepository optionsRepository = null)
+            IStatefulInterviewRepository interviewRepository = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -40,17 +39,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
-                EventRegistry.Object,
-                optionsRepository ?? Mock.Of<IOptionsRepository>());
+                EventRegistry.Object);
         }
 
-        protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithCascadingQuestion()
+        protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithCascadingQuestion(IOptionsRepository optionsRepository = null)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetRosterLevelForEntity(parentIdentity.Id) == 1
                 && _.GetCascadingQuestionParentId(questionIdentity.Id) == parentIdentity.Id
-           
+                && _.GetOptionsForQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>()) == /*(optionsRepository == null) ? Options :*/ Options//optionsRepository.GetQuestionOptions()
             );
+
             return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
         }
 

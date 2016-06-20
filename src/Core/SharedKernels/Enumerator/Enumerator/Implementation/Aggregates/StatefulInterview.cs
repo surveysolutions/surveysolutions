@@ -1403,12 +1403,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
         }
 
-        CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value)
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             return this.GetOptionForQuestionWithoutFilter(question, value);
         }
 
-        CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value)
+        CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null)
         {
             return this.GetOptionForQuestionWithFilter(question, value);
         }

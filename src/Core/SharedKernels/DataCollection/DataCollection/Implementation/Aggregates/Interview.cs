@@ -4569,19 +4569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterCalculationData.RosterInstancesToRemove.AddRange(
                     structuralChanges.RemovedRosters.Select(x => new RosterIdentity(x.Id, x.RosterVector.Shrink(), x.RosterVector.Last())));
             }
-/*
-            var changedLinkedOptions =
-               CreateChangedLinkedOptions(expressionProcessorState,
-               this.interviewState,
-               questionnaire,
-               interviewByAnswerChange,
-               enablementChanges,
-               rosterCalculationData,
-               rosterInstancesWithAffectedTitles,
-               answerString).ToArray();
 
-            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
-*/
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
@@ -4681,13 +4669,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return filteredOptions;
         }
 
-        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value)
+        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
-            return questionnaire.GetOptionsForQuestion(question.Id, null, string.Empty).SingleOrDefault(x=> x.Value == value);
+            return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, string.Empty).SingleOrDefault(x => x.Value == value);
         }
 
-        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText)
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText);
