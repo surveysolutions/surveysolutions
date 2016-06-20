@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System.Linq;
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
@@ -29,12 +30,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         It should_chapter_id_be_equal_chapterId = () =>
             view.Chapter.ItemId.ShouldEqual(chapterId);
 
-        It should_view_have_variabe_names_ = () =>
-            view.VariableNames.Length.ShouldEqual(1);
+        It should_view_have_all_variabe_names_ = () =>
+            view.VariableNames.Length.ShouldEqual(keywords.Length);
+
+        It should_contain_all_variabe_names_ = () =>
+            view.VariableNames.Select(x => x.Name).ShouldContain(keywords);
 
         private static NewChapterView view;
         private static ChapterInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";
-    }
+        private static string[] keywords =
+        {
+            "self",
+            "@optioncode",
+            "@rowindex",
+            "@rowname",
+            "@rowcode"
+        };
+}
 }
