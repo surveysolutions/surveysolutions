@@ -365,24 +365,24 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Users.zh.designer.cs</LastGenOutput>
     </Content>
-    <EmbeddedResource Include="Content\img\clear.png" />
-    <EmbeddedResource Include="Content\img\details_bg.jpg" />
-    <EmbeddedResource Include="Content\img\divider.png" />
-    <EmbeddedResource Include="Content\img\glyphicons-halflings-white.png" />
-    <EmbeddedResource Include="Content\img\glyphicons-halflings.png" />
-    <EmbeddedResource Include="Content\img\google-maps-markers\m1.png" />
-    <EmbeddedResource Include="Content\img\google-maps-markers\m2.png" />
-    <EmbeddedResource Include="Content\img\google-maps-markers\m3.png" />
-    <EmbeddedResource Include="Content\img\google-maps-markers\m4.png" />
-    <EmbeddedResource Include="Content\img\google-maps-markers\m5.png" />
-    <EmbeddedResource Include="Content\img\loader.gif" />
-    <EmbeddedResource Include="Content\img\loading.gif" />
-    <EmbeddedResource Include="Content\img\no_image_found.jpg" />
-    <EmbeddedResource Include="Content\img\sort_asc.png" />
-    <EmbeddedResource Include="Content\img\sort_asc_disabled.png" />
-    <EmbeddedResource Include="Content\img\sort_both.png" />
-    <EmbeddedResource Include="Content\img\sort_desc.png" />
-    <EmbeddedResource Include="Content\img\sort_desc_disabled.png" />
+    <Content Include="Content\img\clear.png" />
+    <Content Include="Content\img\details_bg.jpg" />
+    <Content Include="Content\img\divider.png" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\google-maps-markers\m1.png" />
+    <Content Include="Content\img\google-maps-markers\m2.png" />
+    <Content Include="Content\img\google-maps-markers\m3.png" />
+    <Content Include="Content\img\google-maps-markers\m4.png" />
+    <Content Include="Content\img\google-maps-markers\m5.png" />
+    <Content Include="Content\img\loader.gif" />
+    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\no_image_found.jpg" />
+    <Content Include="Content\img\sort_asc.png" />
+    <Content Include="Content\img\sort_asc_disabled.png" />
+    <Content Include="Content\img\sort_both.png" />
+    <Content Include="Content\img\sort_desc.png" />
+    <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
