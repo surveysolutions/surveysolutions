@@ -159,6 +159,11 @@ namespace WB.Tests.Unit.TestFactories
                 new List<Identity>(),
                 new List<Identity>());
 
+        public ValidityChanges ValidityChanges()
+        {
+            return new ValidityChanges(new List<Identity>(), new List<Identity>());
+        }
+
         public EventBusSettings EventBusSettings()
             => new EventBusSettings
             {

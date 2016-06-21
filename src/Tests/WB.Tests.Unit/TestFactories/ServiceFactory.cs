@@ -41,9 +41,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Tests.Unit.SharedKernels.DataCollection;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
 namespace WB.Tests.Unit.TestFactories
@@ -203,5 +206,14 @@ namespace WB.Tests.Unit.TestFactories
 
         public VariableToUIStringService VariableToUIStringService()
             => new VariableToUIStringService();
+
+        public IInterviewExpressionStatePrototypeProvider ExpressionStatePrototypeProvider(ILatestInterviewExpressionState expressionState = null)
+        {
+            var expressionStatePrototypeProvider = new Mock<IInterviewExpressionStatePrototypeProvider>();
+            ILatestInterviewExpressionState latestInterviewExpressionState = expressionState ?? new InterviewExpressionStateStub();
+            expressionStatePrototypeProvider.SetReturnsDefault(latestInterviewExpressionState);
+
+            return expressionStatePrototypeProvider.Object;
+        }
     }
 }
