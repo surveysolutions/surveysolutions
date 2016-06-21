@@ -145,6 +145,10 @@ namespace WB.Tests.Integration
                     answer);
             }
 
+            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+              => new GeoLocationQuestionAnswered(
+                  Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
+
             public static NumericRealQuestionAnswered NumericRealQuestionAnswered(
                 Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
             {
@@ -408,7 +412,7 @@ namespace WB.Tests.Integration
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
             string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, 
-            Guid? linkedToRosterId=null, string optionsFilter = null)
+            Guid? linkedToRosterId=null, string optionsFilter = null, string linkedFilter = null)
         {
             var singleQuestion = new SingleQuestion
             {
@@ -421,6 +425,7 @@ namespace WB.Tests.Integration
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
+                LinkedFilterExpression = linkedFilter,
                 Properties =
                 {
                     OptionsFilterExpression = optionsFilter
@@ -429,12 +434,12 @@ namespace WB.Tests.Integration
             return singleQuestion;
         }
 
-        public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+        public static Answer Option(string value = null, Guid? id = null, string text = null, string parentValue = null)
         {
             return new Answer
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                AnswerText = text ?? "text",
+                AnswerText = text ?? ("Option " + value),
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };
@@ -707,9 +712,9 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title = null)
         {
-            return new FixedRosterTitle(value, title);
+            return new FixedRosterTitle(value, title ?? ("Roster " + value));
         }
 
         public static LookupTable LookupTable(string tableName)

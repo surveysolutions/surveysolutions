@@ -53,5 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> Rosters { get;}
 
         public List<Guid> RosterScope { set; get; }
+
+        public List<string> LinkedQuestionsIdNames { get; set; } = new List<string>();
     }
 }

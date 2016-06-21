@@ -331,7 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Latitude must be greater  then -90° and less then 90°..
+        ///   Looks up a localized string similar to Latitude must be greater than -90° and less than 90°..
         /// </summary>
         public static string PL0032_LatitudeMustBeGeaterThenN90AndLessThen90 {
             get {

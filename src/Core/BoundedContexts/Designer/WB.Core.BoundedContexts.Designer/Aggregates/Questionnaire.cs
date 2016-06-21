@@ -1423,7 +1423,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 text: title,
                 entityId: groupId,
                 variableName: variableName,
-                parentGroup: group.GetParent() as IGroup);
+                parentGroup: @group.GetParent() as IGroup ?? this.innerDocument);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -1829,8 +1829,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 groupPublicKey: null, //?
                 questionText: title,
                 questionType: QuestionType.DateTime,
-                stataExportCaption: command.VariableName,
-                variableLabel: variableName,
+                stataExportCaption: variableName,
+                variableLabel: command.VariableLabel,
                 featured: command.IsPreFilled,
                 questionScope: command.Scope,
                 conditionExpression: command.EnablementCondition,

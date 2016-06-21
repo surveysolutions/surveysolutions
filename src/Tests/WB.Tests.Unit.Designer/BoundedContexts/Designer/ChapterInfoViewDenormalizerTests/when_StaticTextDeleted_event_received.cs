@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
         };
 
         Because of = () =>
-            viewState = denormalizer.Update(viewState, Create.StaticTextDeletedEvent(staticTextId));
+            viewState = denormalizer.Update(viewState, Create.Event.StaticTextDeletedEvent(staticTextId));
 
         It should_groupInfoView_first_chapter_items_be_empty = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldBeEmpty();

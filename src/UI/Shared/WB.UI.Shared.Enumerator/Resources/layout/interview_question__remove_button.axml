@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto" local:MvxBind="Click RemoveAnswerCommand; Visible QuestionState.IsAnswered;"
-                  style="@style/Interview_Question_RemoveAnswerWrapper">
-  <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                      android:layout_gravity="right" android:duplicateParentState="true"
-                      local:MvxBind="HideKeyboardOnClick .;
-                                      Click RemoveAnswerCommand; " />
-</LinearLayout>

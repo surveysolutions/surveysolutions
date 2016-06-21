@@ -127,5 +127,9 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
         IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter);
+
+        CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
+
+        CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
     }
 }

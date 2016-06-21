@@ -15,14 +15,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class PrefilledQuestionsActivity : BaseActivity<PrefilledQuestionsViewModel>
     {
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.prefilled_questions; }
-        }
-        public async override void OnBackPressed()
-        {
-            await this.ViewModel.NavigateToPreviousViewModelAsync();
-        }
+        protected override int ViewResourceId => Resource.Layout.prefilled_questions;
+
+        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModel();
 
         protected override void OnCreate(Bundle bundle)
         {

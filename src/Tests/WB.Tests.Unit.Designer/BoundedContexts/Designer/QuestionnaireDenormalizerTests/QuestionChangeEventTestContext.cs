@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         internal static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
             where T: IEvent
         {
-            return new PublishedEvent<T>(Create.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
+            return new PublishedEvent<T>(Create.Event.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
         }
     }
 }

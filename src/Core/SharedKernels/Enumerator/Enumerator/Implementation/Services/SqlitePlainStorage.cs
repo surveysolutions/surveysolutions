@@ -90,6 +90,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                foreach (var entity in entities.Where(entity => entity != null))
+                    this.storage.Delete(entity);
+            }
+            catch (SQLiteException ex)
+            {
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                throw;
+            }
+        }
+
         public async Task StoreAsync(TEntity entity)
         {
             await this.StoreAsync(new[] { entity }).ConfigureAwait(false);

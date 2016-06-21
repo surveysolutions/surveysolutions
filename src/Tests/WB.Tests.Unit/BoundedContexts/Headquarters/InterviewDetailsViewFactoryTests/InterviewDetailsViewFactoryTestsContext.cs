@@ -16,28 +16,5 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
     [Subject(typeof(InterviewDetailsViewFactory))]
     internal class InterviewDetailsViewFactoryTestsContext
     {
-        protected static InterviewDetailsViewFactory CreateViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore = null,
-            IPlainStorageAccessor<UserDocument> userStore = null,
-            IInterviewDataAndQuestionnaireMerger merger = null,
-            IChangeStatusFactory changeStatusFactory = null,
-            IInterviewPackagesService incomingSyncPackagesQueue = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IEventSourcedAggregateRootRepository eventSourcedRepository = null,
-            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore = null,
-            IAttachmentContentService attachmentContentService = null)
-        {
-            var users = new Mock<IPlainStorageAccessor<UserDocument>>();
-            users.SetReturnsDefault(Create.Entity.UserDocument());
-
-            return new InterviewDetailsViewFactory(interviewStore ?? new TestInMemoryWriter<InterviewData>(),
-                userStore ?? users.Object,
-                merger ?? Mock.Of<IInterviewDataAndQuestionnaireMerger>(),
-                changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
-                incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
-                attachmentContentService ?? Mock.Of<IAttachmentContentService>());
-        }
     }
 }

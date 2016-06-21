@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl) {
+﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl, processUrl) {
     Supervisor.VM.ImportInterviews.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -43,6 +43,10 @@
 
     self.isRunningProcessExists = ko.computed(function () {
         return self.isStatusLoaded() && self.status.isInProgress() && interviewImportProcessId !== self.status.interviewImportProcessId();
+    });
+
+    self.getOtherProcessUrl = ko.computed(function () {
+        return processUrl +"/" +self.status.interviewImportProcessId() +"?questionnaireId=" +self.status.questionnaireId() +"&version=" +self.status.questionnaireVersion();
     });
 
     self.importCompleted = ko.computed(function () {

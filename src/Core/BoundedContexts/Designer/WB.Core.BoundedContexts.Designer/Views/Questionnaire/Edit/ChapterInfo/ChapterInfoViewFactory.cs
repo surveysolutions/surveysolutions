@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
-        private readonly string[] predefinedVariables = {"self"};
+        private readonly string[] predefinedVariables = {"self", "@optioncode", "@rowindex", "@rowname", "@rowcode" };
 
         private readonly IReadSideKeyValueStorage<GroupInfoView> readSideReader;
 

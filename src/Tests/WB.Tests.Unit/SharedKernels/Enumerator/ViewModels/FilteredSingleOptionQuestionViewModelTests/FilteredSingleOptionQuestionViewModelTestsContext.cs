@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 .Returns(options);
 
             optionsRepository
-                .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<int>()))
+                .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<string>()))
                 .Returns((QuestionnaireIdentity a, Guid b, int c) => options.First(x => x.Value == c));
 
             optionsRepository

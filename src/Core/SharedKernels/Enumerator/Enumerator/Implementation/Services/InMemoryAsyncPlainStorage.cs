@@ -57,6 +57,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities.Where(entity => entity != null))
+            {
+                if (this.inMemroyStorage.ContainsKey(entity.Id))
+                    this.inMemroyStorage.Remove(entity.Id);
+            }
+        }
+
         public async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
             foreach (var entity in entities.Where(entity => entity != null))

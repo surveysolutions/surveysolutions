@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         };
 
         Because of = () =>
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireDeleted(questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireDeleted(questionnaireId: questionnaireId));
 
         It should_store_change_record_with_target_action_equal_to_delete = () =>
             GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Delete);

@@ -89,6 +89,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate.TransformText());
             }
 
+            foreach (var categoricalOptionsFilterModel in expressionStateModel.LinkedFilterModels)
+            {
+                var methodTemplate = codeGenerationSettings.LinkedFilterMethodGenerator(categoricalOptionsFilterModel.Value);
+                generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate);
+            }
+
             this.DumpCodeIfNeeded(generatedClasses);
             
             return generatedClasses;
@@ -264,7 +270,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             "WB.Core.SharedKernels.DataCollection.V10",
                         },
                         isLookupTablesFeatureSupported: true,
-                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText());
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText(),
+                        linkedFilterMethodGenerator: model => new LinkedFilterMethodTemplateV10(model).TransformText());
             }
 
             throw new VersionNotFoundException($"Version '{version}' is not supported.");

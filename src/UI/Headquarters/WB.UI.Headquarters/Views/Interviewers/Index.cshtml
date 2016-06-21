@@ -121,13 +121,13 @@
                     </th>
                 }
                 <th data-bind='sortby : "UserName"'>@Pages.Interviewers_UserNameTitle</th>
-                <th data-bind='sortby : "CreationDate"'>@Pages.Interviewers_CreationDateTitle</th>
+                <th data-bind='sortby : "CreationDate"' title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
                 <th data-bind='sortby : "Email"'>@Pages.Interviewers_EmailTitle</th>
                 @if (isVisibleSupervisorColumn)
                 {
-                    <th>@Pages.Interviewers_SupervisorTitle</th>
+                    <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
                 } 
-                <th>@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
                 @if (User.IsInRole("Administrator"))
                 {
                     <th></th>

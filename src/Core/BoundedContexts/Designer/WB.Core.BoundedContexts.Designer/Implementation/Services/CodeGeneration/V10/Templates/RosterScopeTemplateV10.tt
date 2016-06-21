@@ -16,9 +16,8 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties,
-        Action<Identity[], Guid, decimal> removeRosterInstances)
-		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
+		IInterviewProperties interviewProperties)
+		: this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
 	{
 		this.@_parent = parent; 
 	}
@@ -29,9 +28,8 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 
-		IInterviewProperties interviewProperties,
-        Action<Identity[], Guid, decimal> removeRosterInstances)
-		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties, removeRosterInstances)
+		IInterviewProperties interviewProperties)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
 	{	
 <#
 	GroupsStatesInLevelConstructor(Model.Groups);
@@ -42,13 +40,14 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	VariablesStatesInLevelConstructor(Model.Variables);
 	CategoricalOptionsFilterMap(Model.QuestionsWithOptionsFilter);
 	ConditionMethodsInLevelConstructor(Model.ConditionMethodsSortedByExecutionOrder);
+	LinkedQuestionsInLevelConstructor(Model.LinkedQuestionsIdNames);
 #>
 
 <#
 	foreach (var linkedQuestionFilterExpression in Model.LinkedQuestionFilterExpressions) 
     {
 #>
-    LinkedQuestionFilters.Add(IdOf.<#=linkedQuestionFilterExpression.LinkedQuestionVariableName#>, <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>);		                      
+    LinkedOptionFiltersMap.Add(IdOf.<#=linkedQuestionFilterExpression.LinkedQuestionVariableName#>, (scope) => { return <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>(scope); });
 <#
 	}
 #>
@@ -101,7 +100,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 
 	public override IExpressionExecutableV10 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances)
 	{
-		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest, this.RemoveRosterInstances)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -157,6 +156,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 <# 
 	}
 #>
+
 	private readonly List<Action> _conditionExpressions = new List<Action>();
 		
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
@@ -183,6 +183,20 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV10
 	protected override Guid GetQuestionnaireId()
 	{
 		return IdOf.@__questionnaire;
+	}
+
+	public override Guid[] GetRosterIdsThisScopeConsistOf()
+	{
+		return new Guid[]{
+<#
+	foreach (var @roster in Model.RostersInScope) 
+	{
+#>
+	IdOf.<#=@roster.IdName#>,
+<# 
+	}
+#>
+		};
 	}
 	
 	public void SetParent(IExpressionExecutableV10 parent) => this.SetParentImpl(parent);

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
         Because of = () =>
             viewState =
                 denormalizer.Update(viewState,
-                    Create.TextListQuestionClonedEvent(questionId: questionId, parentGroupId: chapterId,
+                    Create.Event.TextListQuestionClonedEvent(questionId: questionId, parentGroupId: chapterId,
                         questionVariable: questionVariable, questionTitle: questionTitle,
                         questionConditionExpression: questionConditionExpression, sourceQuestionId: sourceQuestionId));
 

@@ -61,6 +61,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     interview.AnswerSingleOptionQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 1);
 
                     result.QuestionsQ5Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q5Id));
+
+                    result.QuestionqQ4HasEmptyAnswer = eventContext.GetEvents<MultipleOptionsQuestionAnswered>().Count(x => x.QuestionId == q4Id && x.SelectedValues.Length == 0) == 1;
+                    result.QuestionqQ2HasEmptyAnswer = eventContext.AnyEvent<MultipleOptionsQuestionAnswered>(x => x.QuestionId == q2Id && x.SelectedValues.Length == 0);
                 }
 
                 return result;
@@ -68,6 +71,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
         It should_disable_q5 = () =>
             results.QuestionsQ5Disabled.ShouldBeTrue();
+
+        It should_have_empty_answer_q2 = () =>
+            results.QuestionqQ2HasEmptyAnswer.ShouldBeTrue();
+
+        It should_have_empty_answer_q4 = () =>
+            results.QuestionqQ4HasEmptyAnswer.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -90,6 +99,8 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         internal class InvokeResults
         {
             public bool QuestionsQ5Disabled { get; set; }
+            public bool QuestionqQ4HasEmptyAnswer { get; set; }
+            public bool QuestionqQ2HasEmptyAnswer { get; set; }
         }
     }
 }

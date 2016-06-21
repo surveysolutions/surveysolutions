@@ -23,10 +23,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
         Because of = () =>
         {
-            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.VariableAdded(variableId).ToPublishedEvent());
-            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.VariableUpdated(variableId).ToPublishedEvent());
-            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.VariableCloned(variableId2).ToPublishedEvent());
-            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.VariableDeleted(variableId).ToPublishedEvent());
+            questionnaireChangeHistoryDenormalizer.Handle(Create.ToPublishedEvent(Create.Event.VariableAdded(variableId)));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.ToPublishedEvent(Create.Event.VariableUpdated(variableId)));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.ToPublishedEvent(Create.Event.VariableCloned(variableId2)));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.ToPublishedEvent(Create.Event.VariableDeleted(variableId)));
         };
 
         It should_store_4_changes = () =>

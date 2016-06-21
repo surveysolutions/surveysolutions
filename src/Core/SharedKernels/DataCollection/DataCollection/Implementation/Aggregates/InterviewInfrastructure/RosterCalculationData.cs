@@ -5,10 +5,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class RosterCalculationData
     {
+        public RosterCalculationData():this(new List<RosterIdentity>(), new Dictionary<decimal, string>()){}
+
         public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd,
             Dictionary<decimal, string> titlesForRosterInstancesByInstanceId)
-            : this(
-                rosterInstancesToAdd: rosterInstancesToAdd,
+            : this(rosterInstancesToAdd: rosterInstancesToAdd,
                 titlesForRosterInstancesByInstanceId: titlesForRosterInstancesByInstanceId,
                 rosterInstancesToRemove: new List<RosterIdentity>(),
                 rosterInstancesToChange: new List<RosterIdentity>(),

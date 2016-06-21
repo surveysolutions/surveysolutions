@@ -433,9 +433,9 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\pdf-question-legend.png" />
+    <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
-    <Content Include="Content\images\pdf-question-legend.jpg" />
-    <Content Include="Content\images\pdf-roster-legend.jpg" />
     <Content Include="Content\pdf-inline-fonts.css" />
     <Content Include="Content\pdf-fonts.css" />
     <Content Include="Content\pdf.css">

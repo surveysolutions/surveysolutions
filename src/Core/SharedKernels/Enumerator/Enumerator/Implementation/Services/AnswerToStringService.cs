@@ -39,9 +39,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionId);
 
-                return ((DateTimeAnswer) answer).Answer?.ToLocalTime().ToString(isTimestampQuestion
-                    ? CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern
-                    : CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern) ?? string.Empty;
+                var localTime = ((DateTimeAnswer)answer).Answer?.ToLocalTime();
+                if (!localTime.HasValue)
+                    return string.Empty;
+
+                return isTimestampQuestion
+                    ? localTime.Value.ToString(CultureInfo.CurrentUICulture)
+                    : localTime.Value.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
             }
 
             if (answer is RealNumericAnswer)

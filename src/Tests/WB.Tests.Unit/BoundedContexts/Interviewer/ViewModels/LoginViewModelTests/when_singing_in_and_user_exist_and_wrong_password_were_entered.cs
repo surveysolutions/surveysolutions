@@ -38,14 +38,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
-            viewModel.StartAsync().WaitAndUnwrapException();
+            viewModel.Load();
             viewModel.Password = wrongPassword;
         };
 
         Because of = () => viewModel.SignInCommand.Execute();
 
         It should_not_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(), Times.Never);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Never);
 
         It should_not_show_online_login_button = () =>
             viewModel.IsOnlineLoginButtonVisible.ShouldBeFalse();

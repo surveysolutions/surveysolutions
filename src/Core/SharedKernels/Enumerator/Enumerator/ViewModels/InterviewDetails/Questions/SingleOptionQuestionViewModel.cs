@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetSingleOptionAnswer(this.questionIdentity);
             var selectedValue = Monads.Maybe(() => answerModel.Answer);
 
-            this.Options = this.filteredOptionsViewModel.Options
+            this.Options = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
         }
@@ -190,6 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Dispose();
 
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+            this.filteredOptionsViewModel.Dispose();
 
             foreach (var option in Options)
             {

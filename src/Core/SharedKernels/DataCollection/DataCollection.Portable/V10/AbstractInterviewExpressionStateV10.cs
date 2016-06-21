@@ -13,13 +13,31 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected AbstractInterviewExpressionStateV10(IDictionary<string, IExpressionExecutableV10> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : this(interviewScopes.AsEnumerable(), siblingRosters, interviewProperties) {}
 
-        protected AbstractInterviewExpressionStateV10(IEnumerable<KeyValuePair<string, IExpressionExecutableV10>> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
+        protected AbstractInterviewExpressionStateV10(
+            IEnumerable<KeyValuePair<string, IExpressionExecutableV10>> interviewScopes,
+            Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
             : base(
-                interviewScopes.ToDictionary<KeyValuePair<string, IExpressionExecutableV10>, string, IExpressionExecutableV9>(
-                    item => item.Key,
-                    item => item.Value),
+                interviewScopes
+                    .ToDictionary<KeyValuePair<string, IExpressionExecutableV10>, string, IExpressionExecutableV9>(
+                        item => item.Key,
+                        item => item.Value),
                 siblingRosters,
-                interviewProperties) {}
+                interviewProperties)
+        {
+            this.SetRosterRemoverForAllScopes();
+            this.SetAnswerAndStructureChangeNotifierForAllScopes();
+        }
+
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+           int? sortIndex)
+        {
+            base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
+            this.SetRosterRemoverForAllScopes();
+            this.SetAnswerAndStructureChangeNotifierForAllScopes();
+        }
+
+        public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
+      
 
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
 
@@ -50,13 +68,50 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new virtual IExpressionExecutableV10 GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
             => (IExpressionExecutableV10) base.GetRosterByIdAndVector(questionId, rosterVector);
 
-
         public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
             if (targetLevel == null) return options;
 
             return targetLevel.FilterOptionsForQuestion(questionIdentity.Id, options);
+        }
+
+        public void RemoveAnswer(Identity questionIdentity)
+        {
+            IExpressionExecutableV10 targetLevel = this.GetRosterByIdAndVector(questionIdentity.Id, questionIdentity.RosterVector);
+            targetLevel?.RemoveAnswer(questionIdentity.Id);
+        }
+    
+        public override void SaveAllCurrentStatesAsPrevious()
+        {
+            base.SaveAllCurrentStatesAsPrevious();
+            StructuralChanges.ClearAllChanges();
+        }
+
+        public virtual StructuralChanges GetStructuralChanges()
+        {
+            return this.StructuralChanges;
+        }
+
+        public new virtual EnablementChanges ProcessEnablementConditions()
+        {
+            var scopeKeys = new Queue<string>(this.InterviewScopes
+                .OrderBy(x => x.Value.GetLevel())
+                .Select(x => x.Key));
+
+            List<EnablementChanges> enablementChangeses = new List<EnablementChanges>();
+            while (scopeKeys.Count > 0)
+            {
+                var keyToProcess = scopeKeys.Dequeue();
+                if (!this.InterviewScopes.ContainsKey(keyToProcess))
+                    continue;
+
+                var scope = this.InterviewScopes[keyToProcess];
+
+                enablementChangeses.Add(scope.ProcessEnablementConditions());
+            }
+
+            return EnablementChanges.Union(enablementChangeses);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -74,10 +129,19 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         public virtual void RemoveRoster(Identity[] rosterIdentityKey)
         {
-            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            var dependentRosters = this.InterviewScopes.Keys
+                .Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey))))
+                .ToArray();
 
             foreach (var rosterKey in dependentRosters)
             {
+                var scope = this.InterviewScopes[rosterKey];
+                if (scope != null)
+                {
+                    var deletedRosterIdentities = scope.GetRosterIdsThisScopeConsistOf().Select(x => new Identity(x, scope.RosterVector));
+                    this.StructuralChanges.AddRemovedRosters(deletedRosterIdentities);
+                }
+
                 this.InterviewScopes.Remove(rosterKey);
                 foreach (var siblings in this.SiblingRosters.Values)
                 {
@@ -107,6 +171,117 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             {
                 this.RemoveRoster(rosterKeyToDelete);
             }
+        }
+
+        private void SetRosterRemoverForAllScopes()
+        {
+            foreach (var interviewScope in this.InterviewScopes.Values)
+            {
+                interviewScope.SetRostersRemover(this.RemoveRosterAndItsDependencies);
+            }
+        }
+
+        private void SetAnswerAndStructureChangeNotifierForAllScopes()
+        {
+            foreach (var interviewScope in this.InterviewScopes.Values)
+            {
+                interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
+            }
+        }
+
+        public override LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
+        {
+            var result = new LinkedQuestionOptionsChanges();
+
+            foreach (var scope in this.InterviewScopes.Values)
+            {
+                foreach (var linkedQuestionId in scope.LinkedQuestions)
+                {
+                    var linkedQuestionIdentity = new Identity(linkedQuestionId, scope.RosterVector);
+
+                    var filteredResult = this.RunFiltersForLinkedQuestion(linkedQuestionId, scope, scope.RosterVector);
+
+                    result.LinkedQuestionOptionsSet.Add(linkedQuestionIdentity, filteredResult);
+                }
+            }
+            return result;
+        }
+
+        private RosterVector[] RunFiltersForLinkedQuestion(
+            Guid linkedQuestionId, 
+            IExpressionExecutableV10 linkedQuestionRosterScope, 
+            RosterVector linkedQuestionRosterVector)
+        {
+            var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id).ToArray();
+
+            var scopesWithSourceQuestionsFiltereByLocation = this.InterviewScopes
+                .Values
+                .Where(x => this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+                    x.GetRosterKey().Select(k => k.Id).ToArray(),
+                    x.GetRosterKey().Last().RosterVector,
+                    linkedQuestionRosterScopeIds, 
+                    linkedQuestionRosterVector));
+
+            var filterResults = scopesWithSourceQuestionsFiltereByLocation
+                .Select(scope => scope.ExecuteLinkedQuestionFilter(linkedQuestionRosterScope, linkedQuestionId))
+                .Where(x => x?.Enabled ?? false)
+                .Select(x => new RosterVector(x.RosterKey.Last().RosterVector))
+                .ToArray();
+
+            return filterResults;
+        }
+
+        private bool DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+            Guid[] sourceRosterScopeIds, RosterVector sourseRosterVector, 
+            Guid[] linkedRosterScopeIds, RosterVector linkedRosterVector)
+        {
+            var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
+            if (areLinkedAndSourceQuestionsOnSameLevel)
+                return true;
+
+            var commonPart = this.GetCommonPartFromStart(linkedRosterScopeIds, sourceRosterScopeIds);
+            var hasLinkedAndSourceQuestionsCommonParents = commonPart.Length != 0;
+            if (!hasLinkedAndSourceQuestionsCommonParents)
+                return true;
+
+            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonPart.Length;
+            if (isSourceQuestionDeeperThanLinkedQuestion)
+            {
+                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length).ToArray();
+                if (!linkedRosterVector.SequenceEqual(sourceParentRosterVector))
+                    return false;
+            }
+
+            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonPart.Length;
+            if (isLinkedQuestionDeeperThanSourceQuestion)
+            {
+                var linkedParentRosterVector = linkedRosterVector.Take(commonPart.Length - 1).ToArray();
+                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length - 1).ToArray();
+
+                var doesScopesHasTheSameParent = !sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
+                if (doesScopesHasTheSameParent)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private Guid[] GetCommonPartFromStart(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
+        {
+            var commonPart = new List<Guid>();
+            var minLength = Math.Min(rosterScopeIds1.Count, rosterScopeIds2.Count);
+            for (int i = 0; i < minLength; i++)
+            {
+                if (rosterScopeIds1[i] == rosterScopeIds2[i])
+                {
+                    commonPart.Add(rosterScopeIds1[i]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return commonPart.ToArray();
         }
 
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();

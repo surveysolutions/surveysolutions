@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -27,7 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public LoadingViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
-            IStatefulInterviewRepository interviewRepository, ICommandService commandService) : base(principal, viewModelNavigationService)
+            IStatefulInterviewRepository interviewRepository, ICommandService commandService)
+            : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
@@ -53,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.loadingCancellationTokenSource = new CancellationTokenSource();
             var interviewIdString = this.interviewId.FormatGuid();
 
-            var progress = new Progress<int>();
+            var progress = new Progress<EventReadingProgress>();
             progress.ProgressChanged += Progress_ProgressChanged;
             try
             {
@@ -61,12 +62,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 IStatefulInterview interview =
                     await
-                        this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token);
+                        this.interviewRepository.GetAsync(interviewIdString, progress,
+                            this.loadingCancellationTokenSource.Token);
 
-                if (interview.Status==InterviewStatus.Completed)
+                if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
+                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                     await this.commandService.ExecuteAsync(restartInterviewCommand);
                 }
 
@@ -74,19 +77,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (interview.CreatedOnClient)
                 {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
                 }
                 else
                 {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
+                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
                 }
             }
             catch (OperationCanceledException)
             {
 
             }
-            progress.ProgressChanged -= Progress_ProgressChanged;
+            finally
+            {
+                progress.ProgressChanged -= Progress_ProgressChanged;
+            }
         }
+
         private string progressDescription;
         public string ProgressDescription
         {
@@ -94,25 +101,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.progressDescription, value); }
         }
 
-        private void Progress_ProgressChanged(object sender, int e)
+        private void Progress_ProgressChanged(object sender, EventReadingProgress e)
         {
-            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, e);
+            var percent = e.Current.PercentOf(e.Maximum);
+            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, percent);
         }
 
         public void CancelLoading()
         {
             if (this.loadingCancellationTokenSource != null && !this.loadingCancellationTokenSource.IsCancellationRequested)
+            {
                 this.loadingCancellationTokenSource.Cancel();
+            }
         }
 
-        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToDashboardAsync);
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
 
-        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
-
-        private async Task SignOutAsync()
-        {
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
-        }
+        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
     }
 }
