@@ -260,9 +260,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message, e);
+                Logger.Error($"Error on getting data from file {fileInDirectory}. " + e.Message, e);
                 return null;
             }
+
             return new PreloadedDataByFile(id, this.fileSystemAccessor.GetFileName(fileInDirectory), header?? new string[0], records.ToArray());
         }
     }
