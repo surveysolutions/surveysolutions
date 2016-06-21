@@ -80,8 +80,15 @@ namespace WB.UI.Headquarters.Implementation.Services
             try
             {
                 var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
-                if(interviewsToImport == null)
+                if (interviewsToImport == null)
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError()
+                    {
+                        ErrorMessage = $"Datafile is incorrect"
+                    });
+
                     return;
+                }
 
                 this.Status.TotalInterviewsCount = interviewsToImport.Length;
 
