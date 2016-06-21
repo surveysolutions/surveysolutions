@@ -44,8 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return string.Empty;
 
                 return isTimestampQuestion
-                    ? localTime.Value.ToString(CultureInfo.CurrentUICulture)
-                    : localTime.Value.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
+                    ? localTime.Value.ToString(CultureInfo.CurrentCulture)
+                    : localTime.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
             }
 
             if (answer is RealNumericAnswer)
