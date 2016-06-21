@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -80,9 +77,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual IEnumerable<CategoricalOption> GetOptions(string filter = "")
         {
             this.Filter = filter;
-            this.Options = interview.GetFilteredOptionsForQuestion(questionIdentity, null, filter).ToList();
+            var filteredOptionsForQuestion = this.interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, filter);
+            this.Options = this.IsNeedCompareOptionsOnChanges ? filteredOptionsForQuestion.ToList() : filteredOptionsForQuestion;
             return Options;
-   ;     }
+        }
 
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
@@ -108,6 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.answerNotifier.QuestionAnswered -= AnswerNotifierOnQuestionAnswered;
             this.answerNotifier.Dispose();
         }
     }
