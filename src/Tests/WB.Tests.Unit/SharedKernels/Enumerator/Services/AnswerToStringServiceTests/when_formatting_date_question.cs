@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         Because of = () => stringAnswer = service.AnswerToUIString(questionId, answer, statefulInterview, questionnaire);
 
         It should_return_date_as_string_in_specified_format = () => 
-            stringAnswer.ShouldEqual(answer.Answer?.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern));
+            stringAnswer.ShouldEqual(answer.Answer?.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern));
 
         static IAnswerToStringService service;
         static IQuestionnaire questionnaire;
