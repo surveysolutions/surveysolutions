@@ -232,31 +232,31 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         }
 
         private bool DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-            Guid[] sourceRosterScopeIds, RosterVector sourseRosterVector, 
+            Guid[] sourceRosterScopeIds, RosterVector sourceRosterVector, 
             Guid[] linkedRosterScopeIds, RosterVector linkedRosterVector)
         {
             var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
             if (areLinkedAndSourceQuestionsOnSameLevel)
                 return true;
 
-            var commonPart = this.GetCommonPartFromStart(linkedRosterScopeIds, sourceRosterScopeIds);
-            var hasLinkedAndSourceQuestionsCommonParents = commonPart.Length != 0;
+            var commonParentRosterScopeIds = this.GetCommonParentRosterScopeIds(linkedRosterScopeIds, sourceRosterScopeIds);
+            var hasLinkedAndSourceQuestionsCommonParents = commonParentRosterScopeIds.Length != 0;
             if (!hasLinkedAndSourceQuestionsCommonParents)
                 return true;
 
-            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonPart.Length;
+            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonParentRosterScopeIds.Length;
             if (isSourceQuestionDeeperThanLinkedQuestion)
             {
-                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length).ToArray();
+                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length).ToArray();
                 if (!linkedRosterVector.SequenceEqual(sourceParentRosterVector))
                     return false;
             }
 
-            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonPart.Length;
+            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonParentRosterScopeIds.Length;
             if (isLinkedQuestionDeeperThanSourceQuestion)
             {
-                var linkedParentRosterVector = linkedRosterVector.Take(commonPart.Length - 1).ToArray();
-                var sourceParentRosterVector = sourseRosterVector.Take(commonPart.Length - 1).ToArray();
+                var linkedParentRosterVector = linkedRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
+                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
 
                 var doesScopesHasTheSameParent = !sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
                 if (doesScopesHasTheSameParent)
@@ -266,7 +266,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return true;
         }
 
-        private Guid[] GetCommonPartFromStart(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
+        private Guid[] GetCommonParentRosterScopeIds(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
         {
             var commonPart = new List<Guid>();
             var minLength = Math.Min(rosterScopeIds1.Count, rosterScopeIds2.Count);
