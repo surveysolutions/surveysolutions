@@ -339,6 +339,7 @@
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answer_is_roster_title_and_removed_because_of_filtering.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_multi_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_single_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
