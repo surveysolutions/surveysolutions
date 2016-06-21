@@ -1184,7 +1184,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
                 var invalidEntitiesInSection = this
                     .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
-                    .Union(this
+                    .Concat(this
                         .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
                     .Where(entity => !this.IsValid(entity));
 
