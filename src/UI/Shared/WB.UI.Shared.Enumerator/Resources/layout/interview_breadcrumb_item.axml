@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:local="http://schemas.android.com/apk/res-auto"
-          style="@style/Interview_BreadCrumbs"
-          local:MvxBind="HideKeyboardOnClick .; Text Text.PlainText; Click NavigateCommand"/>
-
+<LinearLayout xmlns:local="http://schemas.android.com/apk/res-auto"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+  <TextView
+            style="@style/Interview_BreadCrumbs"
+            android:ellipsize="end"
+            android:maxEms="20"
+            android:singleLine="true"
+            local:MvxBind="HideKeyboardOnClick .;Text Text.PlainText; Click NavigateCommand" />
+  <TextView
+            style="@style/Interview_BreadCrumbs"
+            android:text=" / "/>
+</LinearLayout>

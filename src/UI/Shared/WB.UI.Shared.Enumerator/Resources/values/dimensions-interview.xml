@@ -45,6 +45,10 @@
 
   <dimen name="Interview_Question_Answer_Option_padding_left">9dp</dimen>
 
+  <!-- vertical space under remove button near text should be equal to space to red border on top which so it will be vertically in the middle -->
+  <dimen name="Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_input">@dimen/Interview_Question_Answer_background_padding</dimen>
+  <dimen name="Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_record">12dp</dimen>
+
 
   <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
   <dimen name="Interview_Question_Errors_Details_margin_top">10dp</dimen>
@@ -59,15 +63,17 @@
 
   <dimen name="Interview_Question_YesNo_paddingLeft">25dp</dimen>
 
-  <dimen name="Interview_Question_QR_width">410dp</dimen>
-  
   <dimen name="Interview_Question_TextAnswer_margin_top">8dp</dimen>
-  <dimen name="Interview_Question_TimestampAnswer_margin_top">15dp</dimen>
-  <dimen name="Interview_Question_TextAnswer_margin_bottom">28dp</dimen>
 
-  <dimen name="Interview_Question_InputButton_padding">16dp</dimen>
+  <!-- text is 2.5dp lesser than remove button size, so we add top margin 1dp to align them by middle line -->
+  <dimen name="Interview_Question_RecordedAnswer_margin_top">1dp</dimen>
+  <dimen name="Interview_Question_RecordedAnswer_margin_bottom">17dp</dimen>
+
+  <dimen name="Interview_Question_InputButton_padding_old">16dp</dimen>
+  <dimen name="Interview_Question_InputButton_padding_horizontal">16dp</dimen>
+  <dimen name="Interview_Question_InputButton_padding_vertical">10dp</dimen>
   <dimen name="Interview_Question_InputButton_DoublePadding">32dp</dimen>
-  <dimen name="Interview_Question_InputButton_margin_LeftRight">2dp</dimen>
+  <dimen name="Interview_Question_InputButton_margin_LeftRight">0dp</dimen>
   <dimen name="Interview_Question_InputButton_margin_Bottom">8dp</dimen>
 
   <dimen name="Interview_Previous_Group_Navigation_Layout_margin_top">28dp</dimen>

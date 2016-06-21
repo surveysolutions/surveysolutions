@@ -1016,13 +1016,14 @@
     <AndroidResource Include="Resources\layout\interview_disabled_static_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__remove_button.axml" />
+    <AndroidResource Include="Resources\layout\interview_question__remove_button_recorded.axml" />
     <AndroidResource Include="Resources\layout\interview_question_timestamp.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_complete_entity_with_error.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__remove_button_input.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

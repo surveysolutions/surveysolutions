@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
-        private InterviewData SaveAnswer<T>(InterviewData interview, decimal[] vector, Guid questionId, T answer)
+        private InterviewData SaveAnswer<T>(InterviewData interview, decimal[] vector, Guid questionId, T answer, bool treatAsAnswered)
         {
             return PreformActionOnLevel(interview, vector, (level) =>
             {
@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 
                 answeredQuestion.Answer = answer;
 
-                answeredQuestion.QuestionState = answeredQuestion.QuestionState | QuestionState.Answered;
+                answeredQuestion.QuestionState = answeredQuestion.QuestionState | (treatAsAnswered ? QuestionState.Answered : ~QuestionState.Answered);
             });
         }
 
@@ -444,79 +444,80 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                @event.Payload.SelectedValues);
+                @event.Payload.SelectedValues, @event.Payload.SelectedValues?.Length > 0);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                @event.Payload.Answer);
+                @event.Payload.Answer, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                    @event.Payload.Answer);
+                    @event.Payload.Answer, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<TextQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                    @event.Payload.Answer);
+                    @event.Payload.Answer, @event.Payload.Answer != null);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<TextListQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                  new InterviewTextListAnswers(@event.Payload.Answers));
+                  new InterviewTextListAnswers(@event.Payload.Answers), true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                     @event.Payload.SelectedValue);
+                @event.Payload.SelectedValue, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                    @event.Payload.SelectedRosterVector);
+                @event.Payload.SelectedRosterVector, @event.Payload.SelectedRosterVector?.Length > 0);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-            @event.Payload.SelectedRosterVectors);
+                @event.Payload.SelectedRosterVectors, @event.Payload.SelectedRosterVectors?.Length > 0);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-         @event.Payload.Answer);
+                @event.Payload.Answer, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
                 new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude,
-                    @event.Payload.Timestamp));
+                    @event.Payload.Timestamp), true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-       @event.Payload.Answer);
+                @event.Payload.Answer, @event.Payload.Answer != null);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<PictureQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-       @event.Payload.PictureFileName);
+                @event.Payload.PictureFileName, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<YesNoQuestionAnswered> @event)
         {
-            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId, @event.Payload.AnsweredOptions);
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId, @event.Payload.AnsweredOptions,
+                @event.Payload.AnsweredOptions?.Length > 0);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswersRemoved> @event)

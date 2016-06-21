@@ -36,6 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         callOrder++;
                     });
             interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
+            var structuralChanges = new StructuralChanges();
+            interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => 

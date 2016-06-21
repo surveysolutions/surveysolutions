@@ -315,11 +315,11 @@
     @if (!questionnaire.IsOptionsFilterAppendixEmpty)
     {
         <article class="appendix_section">
-            <h2 id="optoins_filters_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Option filters</h2>
+            <h2 id="optoins_filters_appendix">Appendix @questionnaire.OptionsFilterAppendixIndex &#8212; Options filters</h2>
             <ul class="container">
-                @for (var i = 0; i < questionnaire.QuestionsWithLongFilterExpression.Count; i++)
+                @for (var i = 0; i < questionnaire.QuestionsWithLongOptionsFilterExpression.Count; i++)
                 {
-                    var question = questionnaire.QuestionsWithLongFilterExpression[i];
+                    var question = questionnaire.QuestionsWithLongOptionsFilterExpression[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
@@ -327,7 +327,7 @@
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>
-                                @question.Properties.OptionsFilterExpression
+                                @questionnaire.GetQuestionOptionsFilter(question)
                             </p>
                         </div>
                     </li>
@@ -335,12 +335,13 @@
             </ul>
         </article>
     }
+    
 <article class="appendix_section legend">
         <h2 id="legend_appendix">Legend</h2>
         <section>
             <h3>Legend and structure of information in this file</h3>
-            <img src="~/Content/images/pdf-question-legend.jpg" />
-            <img src="~/Content/images/pdf-roster-legend.jpg" />
+            <img src="~/Content/images/pdf-question-legend.png" />
+            <img src="~/Content/images/pdf-roster-legend.png" />
         </section>
     </article>
 </body>

@@ -19,8 +19,8 @@ namespace WB.UI.Interviewer.Activities
 
         protected override async void TriggerFirstNavigate()
         {
-            await this.BackwardCompatibilityAsync();
-            await Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync();
+            await this.BackwardCompatibilityAsync().ConfigureAwait(false);
+            Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
 
         private async Task BackwardCompatibilityAsync()

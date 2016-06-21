@@ -29,7 +29,7 @@
             var templates = [
                 @foreach (var item in Model.Questionnaires)
                 {
-                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
+                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
                 }
             ];
             var exportFromats = [];
@@ -46,12 +46,12 @@
                 }
             ];
 
-            var model = new Supervisor.VM.ExportData(templates, 
-                statuses, 
-                $ExportedDataReferencesForQuestionnaireUrl, 
-                $UpdateHistoryUrl, 
-                exportFromats, 
-                $DeleteDataExportProcessUrl, 
+            var model = new Supervisor.VM.ExportData(templates,
+                statuses,
+                $ExportedDataReferencesForQuestionnaireUrl,
+                $UpdateHistoryUrl,
+                exportFromats,
+                $DeleteDataExportProcessUrl,
                 $UpdateTabularDataUrl);
             ko.applyBindings(model);
         });

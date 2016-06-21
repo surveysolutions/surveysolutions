@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private bool DoesOtherQuestionnaireWithSameTitleExist(Guid questionnaireId, string questionnaireTitle)
         {
             var questionairesWithSameTitle = this.questionnaireBrowseItemStorage.Query(_ => _
+                .Where(questionnaire => !questionnaire.IsDeleted)
                 .Where(questionnaire => questionnaire.Title.ToLower() == questionnaireTitle.ToLower())
                 .ToList());
 

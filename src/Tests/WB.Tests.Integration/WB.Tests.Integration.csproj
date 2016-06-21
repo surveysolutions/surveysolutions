@@ -308,6 +308,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_regex.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_gps_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
@@ -315,6 +316,14 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_two_levels_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_two_levels_upper_than_source_question_that_is_in_nested_rosterss.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked__that_is_in_same_roster_as_source_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_outside_roster_with_source_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
@@ -323,6 +332,10 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_multi_question.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_single_question.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
@@ -439,6 +452,14 @@
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
+      <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
+      <Name>WB.UI.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

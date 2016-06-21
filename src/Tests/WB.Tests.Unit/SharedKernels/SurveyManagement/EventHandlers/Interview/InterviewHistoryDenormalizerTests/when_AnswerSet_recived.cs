@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.Records[5].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
 
         It should_answer_on_DateTimeQuestionAnswered_be_4_18_1984 = () =>
-            interviewHistoryView.Records[5].Parameters["answer"].ShouldEqual("4/18/1984");
+            interviewHistoryView.Records[5].Parameters["answer"].ShouldEqual("04/18/1984");
 
         It should_action_of_GeoLocationQuestionAnswered_be_AnswerSet = () =>
             interviewHistoryView.Records[6].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);

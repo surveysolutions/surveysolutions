@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
             errors.AddRange(
-                this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
+                this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
 
@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             {
                 return new[]
                 {
-                    this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
+                    this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
                         PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
                         PreloadedDataVerificationReferenceType.Column),
                     this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private IEnumerable<string> CoulmnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData,
+        private IEnumerable<string> ColumnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);

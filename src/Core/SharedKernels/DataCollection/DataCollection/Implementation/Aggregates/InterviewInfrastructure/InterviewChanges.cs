@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges, 
             ValidityChanges validityChanges,
             RosterCalculationData rosterCalculationData, 
-            List<Identity> answersForLinkedQuestionsToRemove,
+            List<Identity> answersToRemove,
             List<RosterIdentity> rosterInstancesWithAffectedTitles, 
             string answerAsRosterTitle,
             IEnumerable<Identity> changedQuestionTitles,
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.EnablementChanges = enablementChanges;
             this.ValidityChanges = validityChanges;
             this.RosterCalculationData = rosterCalculationData;
-            this.AnswersForLinkedQuestionsToRemove = answersForLinkedQuestionsToRemove;
+            this.AnswersToRemove = answersToRemove;
             this.RosterInstancesWithAffectedTitles = rosterInstancesWithAffectedTitles;
             this.LinkedQuestionOptionsChanges = linkedQuestionOptionsChanges;
             this.VariableValueChanges = variableValueChanges;
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ValidityChanges ValidityChanges { set; get; }
         public ChangedLinkedOptions[] LinkedQuestionOptionsChanges { set; get; }
         public RosterCalculationData RosterCalculationData { set; get; }
-        public List<Identity> AnswersForLinkedQuestionsToRemove { set; get; }
+        public List<Identity> AnswersToRemove { set; get; }
         public List<RosterIdentity> RosterInstancesWithAffectedTitles { set; get; }
         public VariableValueChanges VariableValueChanges { get; set; }
     }

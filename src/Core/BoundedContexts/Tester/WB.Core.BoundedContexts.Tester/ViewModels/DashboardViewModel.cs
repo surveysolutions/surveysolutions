@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
+        private readonly IAsyncRunner asyncRunner;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -62,7 +63,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage) : base(principal, viewModelNavigationService)
+            IAttachmentContentStorage attachmentContentStorage,
+            IAsyncRunner asyncRunner) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -74,16 +76,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.asyncRunner = asyncRunner;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public override async Task StartAsync()
+        public override void Load()
         {
-            this.localQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
+            this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
             {
-                await LoadServerQuestionnairesAsync();
+                this.asyncRunner.RunAsync(this.LoadServerQuestionnairesAsync);
             }
             else
             {
@@ -213,7 +216,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
 
-        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
+        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
 
         private IMvxCommand loadQuestionnaireCommand;
 
@@ -221,11 +224,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                                        (this.loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(
                                                                async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), (item) => !this.IsInProgress));
 
-        private IMvxCommand refreshQuestionnairesCommand;
+        private IMvxAsyncCommand refreshQuestionnairesCommand;
 
-        public IMvxCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
+        public IMvxAsyncCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
                                                            (this.refreshQuestionnairesCommand =
-                                                               new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress));
+                                                               new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress));
         
         public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
         public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
@@ -252,12 +255,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IsSearchVisible = false;
         }
 
-        private async Task SignOutAsync()
+        private void SignOut()
         {
             this.CancelLoadServerQuestionnaires();
-
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            
+            this.viewModelNavigationService.SignOutAndNavigateToLogin();
         }
 
         private void ShowPublicQuestionnaires()
@@ -295,7 +297,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
                     var interviewId = await this.CreateInterview(questionnaireIdentity);
 
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)

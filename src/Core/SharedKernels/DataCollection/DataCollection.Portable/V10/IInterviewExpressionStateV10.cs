@@ -7,7 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
     public interface IInterviewExpressionStateV10 : IInterviewExpressionStateV9
     {
         IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options);
-        void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId);
+        void RemoveAnswer(Identity questionIdentity);
+        StructuralChanges GetStructuralChanges();
         new IInterviewExpressionStateV10 Clone();
     }
 }

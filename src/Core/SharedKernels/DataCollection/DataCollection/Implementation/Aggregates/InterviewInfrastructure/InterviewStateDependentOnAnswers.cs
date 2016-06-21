@@ -137,9 +137,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyRosterData(changes.RosterCalculationData);
             }
 
-            if (changes.AnswersForLinkedQuestionsToRemove != null)
+            if (changes.AnswersToRemove != null)
             {
-                this.RemoveAnswers(changes.AnswersForLinkedQuestionsToRemove);
+                this.RemoveAnswers(changes.AnswersToRemove);
             }
 
             if (changes.RosterInstancesWithAffectedTitles != null)

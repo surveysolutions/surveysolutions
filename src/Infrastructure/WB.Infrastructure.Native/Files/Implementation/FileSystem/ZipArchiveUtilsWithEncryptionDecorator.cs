@@ -72,18 +72,25 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             if (this.fileSystemAccessor.IsFileExists(archiveFile))
                 throw new InvalidOperationException("zip file exists");
 
-            using (var zipFile = new ZipFile()
+            using (var outputSteam = this.fileSystemAccessor.OpenOrCreateFile(archiveFile, false))
             {
-                ParallelDeflateThreshold = -1,
-                AlternateEncoding = System.Text.Encoding.UTF8,
-                AlternateEncodingUsage = ZipOption.Always
-            })
-            {
-                if (this.exportSettings!= null && this.exportSettings.EncryptionEnforced())
-                    zipFile.Password = this.exportSettings.GetPassword();
-
-                zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
-                zipFile.Save(archiveFile);
+                using (var zipFile = new ZipFile()
+                {
+                    ParallelDeflateThreshold = -1,
+                    AlternateEncoding = System.Text.Encoding.UTF8,
+                    AlternateEncodingUsage = ZipOption.Always
+                })
+                {
+                    if (this.exportSettings != null && this.exportSettings.EncryptionEnforced())
+                        zipFile.Password = this.exportSettings.GetPassword();
+                    
+                    foreach (var filePath in this.fileSystemAccessor.GetFilesInDirectory(directory))
+                    {
+                        var filePathInZip = $"{this.fileSystemAccessor.GetFileName(directory)}\\{filePath.Substring(directory.Length).TrimStart('\\')}";
+                        zipFile.AddEntry(filePathInZip, this.fileSystemAccessor.ReadFile(filePath));
+                    }
+                    zipFile.Save(outputSteam);
+                }
             }
         }
 

@@ -48,15 +48,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand CancelCommand
-        {
-            get { return new MvxCommand(async () => await this.ReturnBackAsync(), () => !this.IsInProgress); }
-        }
+        public IMvxCommand CancelCommand => new MvxCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(), () => !this.IsInProgress); }
-        }
+            => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>(),
+                () => !this.IsInProgress);
 
         private IMvxCommand relinkCommand;
         public IMvxCommand RelinkCommand
@@ -77,12 +73,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userIdentityToRelink = userIdentity;
         }
 
-        private async Task ReturnBackAsync()
-        {
-            this.cancellationTokenSource.Cancel();
-            await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>(this.userIdentityToRelink);
-        }
-
         private async Task RelinkCurrentInterviewerToDeviceAsync()
         {
             this.IsInProgress = true;
@@ -99,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
                 await this.principal.SignInAsync(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)
             {
@@ -115,9 +105,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public async Task NavigateToPreviousViewModelAsync()
+        public void NavigateToPreviousViewModel()
         {
-            await this.ReturnBackAsync();
+            this.cancellationTokenSource.Cancel();
+            this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
         }
     }
 }

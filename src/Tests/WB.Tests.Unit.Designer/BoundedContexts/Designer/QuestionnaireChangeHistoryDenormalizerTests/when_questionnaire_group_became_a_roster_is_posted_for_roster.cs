@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         };
 
         Because of = () =>
-            questionnaireChangeHistoryDenormalizer.Handle(Create.GroupBecameARosterEvent(rosterId.FormatGuid()));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.GroupBecameARosterEvent(rosterId.FormatGuid()));
 
         It should_store_0_changes = () =>
             GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(0);

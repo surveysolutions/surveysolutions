@@ -318,6 +318,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
+        public CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionValue).ToCategoricalOption();
+        }
+
         private static IEnumerable<CategoricalOption> GetFromQuestionCategoricalOptions(IQuestion question, int? parentQuestionValue, string filter)
         {
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
@@ -359,15 +368,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            bool isMultiOptionalQuestion = question is MultyOptionsQuestion;
-            bool isSingleOptionalQuestion = question is SingleQuestion;
-
-            if (isMultiOptionalQuestion || isSingleOptionalQuestion)
+            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return QuestionOptionsRepository.GetOptionsForQuestion(this, questionId, parentQuestionValue, filter);
             }
 
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
+        }
+
+        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            {
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(this, questionId, optionText);
+            }
+
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
         }
 
         private ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)

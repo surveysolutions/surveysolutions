@@ -83,6 +83,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
+            interviewExpressionState.Setup(x => x.GetStructuralChanges()).Returns(new StructuralChanges());
+
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
                 => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionState.Object);
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -18,11 +17,12 @@ namespace WB.Core.GenericSubdomains.Portable
             var mantissaFormat = new string('#', presigion);
             var groupSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyGroupSeparator;
             var decimalSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator;
-            string format = $"#{groupSeparator}#{decimalSeparator}{mantissaFormat}";
+            string format = $"#{groupSeparator}0{decimalSeparator}{mantissaFormat}";
 
             var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
 
             valueAsString = FixLeadingZeroes(valueAsString);
+
             return valueAsString;
         }
 

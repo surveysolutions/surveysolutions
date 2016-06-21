@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
@@ -50,7 +51,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<ISampleUploadViewFactory>(),
                 new InterviewDataExportSettings("", false,10000,100,1,100),
                 Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                Mock.Of<IInterviewImportService>());
+                Mock.Of<IInterviewImportService>(),
+                Mock.Of<IFileSystemAccessor>());
         }
     }
 }

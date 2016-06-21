@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
-            var optionViewModels = this.filteredOptionsViewModel.Options
+            var optionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
                 .ToList();
 
@@ -111,6 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
 
+            this.filteredOptionsViewModel.Dispose();
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }

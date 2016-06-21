@@ -20,7 +20,7 @@
         </tr>
         @foreach (var option in Model.Options)
         {
-            var selectedAnswer = answers.FirstOrDefault(answer => answer.OptionValue == (decimal)option.Value);
+            var selectedAnswer = answers.FirstOrDefault(answer => answer.OptionValue == Convert.ToDecimal(option.Value));
 
             <tr>
                 <td>

@@ -12,27 +12,29 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> GetInstances { get; private set; }
 
         public Action<Identity[], Guid, decimal> RemoveRosterInstances { get; private set; }
+        public StructuralChanges StructuralChangesCollector { get; private set; }
 
         protected Dictionary<Guid, Func<int, bool>> OptionFiltersMap { get; } = new Dictionary<Guid, Func<int, bool>>();
+
+        public Dictionary<Guid, Func<IExpressionExecutableV10, bool>> LinkedOptionFiltersMap = new Dictionary<Guid, Func<IExpressionExecutableV10, bool>>();
+
+        public List<Guid> LinkedQuestions { get; private set; } = new List<Guid>();
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
-            Dictionary<Guid, Guid[]> structuralDependencies,
-            Action<Identity[], Guid, decimal> removeRosterInstances)
+            Dictionary<Guid, Guid[]> structuralDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.GetInstances = getInstances;
-            this.RemoveRosterInstances = removeRosterInstances;
         }
 
         protected AbstractConditionalLevelInstanceV10(decimal[] rosterVector, Identity[] rosterKey,
             Func<Identity[], Guid, IEnumerable<IExpressionExecutableV10>> getInstances,
             Dictionary<Guid, Guid[]> conditionalDependencies,
             Dictionary<Guid, Guid[]> structuralDependencies,
-            IInterviewProperties properties,
-            Action<Identity[], Guid, decimal> removeRosterInstances)
-            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies, removeRosterInstances)
+            IInterviewProperties properties)
+            : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
             this.Quest = properties;
         }
@@ -40,6 +42,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         protected abstract Guid[] GetRosterScopeIds(Guid rosterId);
 
         protected abstract Guid GetQuestionnaireId();
+
+        public abstract Guid[] GetRosterIdsThisScopeConsistOf();
 
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV10>> rosterGenerators;
 
@@ -93,7 +97,68 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
-        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        private bool GetLinkedFilterResult(Func<IExpressionExecutableV10, bool> linkedFilter, IExpressionExecutableV10 scope)
+        {
+            try
+            {
+                return linkedFilter(scope);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public virtual void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances)
+        {
+            this.RemoveRosterInstances = removeRosterInstances;
+        }
+
+        public virtual void SetStructuralChangesCollector(StructuralChanges structuralChangesCollector)
+        {
+            this.StructuralChangesCollector = structuralChangesCollector;
+        }
+
+        protected virtual Action AnswerVerifier(Guid[] rosterScope, Guid itemId, Func<decimal[][]> getAnswer, Action<decimal[][]> setAnswer)
+        {
+            return () =>
+            {
+                var previousAnswers = getAnswer();
+
+                if (previousAnswers == null)
+                    return;
+
+                if (previousAnswers.Any(rosterVector => !DoesRosterExist(rosterScope.Shrink(), rosterScope.Last(), rosterVector)))
+                {
+                    setAnswer(null);
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Guid[] rosterScope, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
+        {
+            return () =>
+            {
+                var previousAnswer = getAnswer();
+
+                if (previousAnswer == null)
+                    return;
+
+                if (DoesRosterExist(rosterScope.Shrink(), rosterScope.Last(), previousAnswer))
+                    return;
+
+                setAnswer(null);
+            };
+        }
+
+        private bool DoesRosterExist(Guid[] parentRosterScope, Guid rosterSizeQuestionId, decimal[] rosterVector)
+        {
+            var rosterKey = Util.GetRosterKey(parentRosterScope, rosterVector);
+            var rosters = this.GetInstances(rosterKey, rosterSizeQuestionId);
+            return rosters != null && rosters.Any(x => x.RosterVector.SequenceEqual(rosterVector));
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal?> getAnswer, Action<decimal?> setAnswer)
         {
             return () =>
             {
@@ -101,11 +166,12 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (previousAnswer.HasValue && GetOptionFilterResult(optionFilter, Convert.ToInt32(previousAnswer.Value)) == false)
                 {
                     setAnswer(null);
+                    this.StructuralChangesCollector.AddChangedSingleQuestion(new Identity(itemId, RosterVector), null);
                 }
             };
         }
 
-        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer, Action<Identity[], Guid, decimal> removeRoster)
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<decimal[]> getAnswer, Action<decimal[]> setAnswer)
         {
             return () =>
             {
@@ -121,10 +187,46 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 if (wereSomeOptionsRemoved)
                 {
                     setAnswer(actualAnswer);
+                    this.StructuralChangesCollector.AddChangedMultiQuestion(new Identity(itemId, RosterVector), actualAnswer.Select(Convert.ToInt32).ToArray());
 
                     foreach (var rowcode in previousAnswer.Except(actualAnswer))
                     {
-                        removeRoster(RosterKey, itemId, rowcode);
+                        RemoveRosterInstances(RosterKey, itemId, rowcode);
+                    }
+                }
+            };
+        }
+
+        protected virtual Action AnswerVerifier(Func<int, bool> optionFilter, Guid itemId, Func<YesNoAnswers> getAnswer, Action<YesNoAnswers> setAnswer)
+        {
+            return () =>
+            {
+                YesNoAnswers previousAnswer = getAnswer();
+                if (previousAnswer == null || (previousAnswer.Yes.Length == 0 && previousAnswer.No.Length == 0))
+                    return;
+
+                var actualYesAnswers = previousAnswer.Yes.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)))
+                    .ToArray();
+
+                var actualNoAnswers = previousAnswer.No.Where(selectedOption =>
+                    GetOptionFilterResult(optionFilter, Convert.ToInt32(selectedOption)))
+                    .ToArray();
+
+                var wereSomeYesOptionsRemoved = previousAnswer.Yes.Length > actualYesAnswers.Length;
+                var wereSomeNoOptionsRemoved = previousAnswer.No.Length > actualNoAnswers.Length;
+                if (wereSomeYesOptionsRemoved || wereSomeNoOptionsRemoved)
+                {
+                    var actualYesNoAnswersOnly = new YesNoAnswersOnly(actualYesAnswers, actualNoAnswers);
+                    setAnswer(new YesNoAnswers(previousAnswer.All, actualYesNoAnswersOnly));
+                    this.StructuralChangesCollector.AddChangedYesNoQuestion(new Identity(itemId, RosterVector), actualYesNoAnswersOnly);
+                }
+
+                if (wereSomeYesOptionsRemoved)
+                {
+                    foreach (var rowcode in previousAnswer.Yes.Except(actualYesAnswers))
+                    {
+                        RemoveRosterInstances(RosterKey, itemId, rowcode);
                     }
                 }
             };
@@ -219,6 +321,59 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     yield return option;
                 }
             }
+        }
+
+        [Obsolete("Since version 5.10. Released on 1st of July")]
+        public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope)
+        {
+            var result = new List<LinkedQuestionFilterResult>();
+
+            var rosterStatesFromScope = this.EnablementStates
+                .Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r => r.Value.State)
+                .ToArray();
+
+            if (rosterStatesFromScope.Length > 0 && rosterStatesFromScope.All(s => s == State.Disabled))
+                return result;
+
+            foreach (var linkedQuestionFilter in this.LinkedOptionFiltersMap)
+            {
+                bool enabled = false;
+                try
+                {
+                    enabled = linkedQuestionFilter.Value(currentScope);
+                }
+#pragma warning disable
+                catch (Exception ex)
+                {
+                }
+#pragma warning restore
+                result.Add(new LinkedQuestionFilterResult()
+                {
+                    Enabled = enabled,
+                    LinkedQuestionId = linkedQuestionFilter.Key,
+                    RosterKey = this.RosterKey
+                });
+            }
+            return result;
+        }
+
+        public LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId)
+        {
+            if (!this.LinkedOptionFiltersMap.ContainsKey(questionId))
+                return null;
+
+            if (this.EnablementStates.ContainsKey(questionId) &&
+                this.EnablementStates[questionId].State == State.Disabled)
+                return null;
+
+            var linkedQuestionFilter = this.LinkedOptionFiltersMap[questionId];
+            var isEnabled = this.GetLinkedFilterResult(linkedQuestionFilter, currentScope);
+            return new LinkedQuestionFilterResult
+            {
+                Enabled = isEnabled,
+                LinkedQuestionId = questionId,
+                RosterKey = this.RosterKey
+            };
         }
     }
 }

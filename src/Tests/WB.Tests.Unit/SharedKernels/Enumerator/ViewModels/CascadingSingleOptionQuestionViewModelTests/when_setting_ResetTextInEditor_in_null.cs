@@ -27,7 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer);
+                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
+                   &&_.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1) == new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 }
+                   && _.GetFilteredOptionsForQuestion(questionIdentity, 1, string.Empty) == Options.Where(x => x.ParentValue == 1).ToList());
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
@@ -37,8 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.SelectedObject.ShouldBeNull();
 
         It should_set_filter_text_in_null = () =>
-            cascadingModel.FilterText.ShouldBeNull();
+            cascadingModel.FilterText.ShouldBeEmpty();
 
         It should_set_3_items_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);

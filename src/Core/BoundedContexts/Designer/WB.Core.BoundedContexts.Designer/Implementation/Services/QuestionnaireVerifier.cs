@@ -75,14 +75,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.SingleOption,
-            QuestionType.Text
+            QuestionType.Text,
+            QuestionType.QRBarcode
         };
 
         private class VerificationState
         {
-            public bool HasExceededLimitByValidationExpresssionCharactersLength { get; set; }
-            public bool HasExceededLimitByConditionExpresssionCharactersLength { get; set; }
-            public bool HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength { get; set; }
+            public bool HasAnyExpressionExceededLimitByCharactersLength { get; set; }
         }
 
         private struct EntityVerificationResult<TReferencedEntity>
@@ -317,44 +316,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var customEnablementCondition = GetCustomEnablementCondition(entity);
 
-            if (string.IsNullOrEmpty(customEnablementCondition))
-                return false;
-
-            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(customEnablementCondition, questionnaire.Macros.Values);
-
-            var exceeded = substituteMacroses.Length > MaxExpressionLength;
-
-            state.HasExceededLimitByConditionExpresssionCharactersLength |= exceeded;
-
-            return exceeded;
+            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, customEnablementCondition);
         }
 
         private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            if (string.IsNullOrEmpty(question.Properties.OptionsFilterExpression))
-                return false;
-
-            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
-
-            var exceeded = substituteMacroses.Length > MaxExpressionLength;
-
-            state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength |= exceeded;
-
-            return exceeded;
+            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.Properties.OptionsFilterExpression);
         }
 
         private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            if (string.IsNullOrEmpty(variable.Expression))
-                return false;
-
-            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values);
-
-            var exceeded = substituteMacroses.Length > MaxExpressionLength;
-
-            state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength |= exceeded;
-
-            return exceeded;
+            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, variable.Expression);
         }
 
         private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
@@ -362,16 +334,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 return false;
 
-            if (string.IsNullOrEmpty(question.LinkedFilterExpression))
+            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.LinkedFilterExpression);
+        }
+
+        private bool DoesExpressionExceed1000CharsLimit(VerificationState state, ReadOnlyQuestionnaireDocument questionnaire,
+            string expression)
+        {
+            if (string.IsNullOrEmpty(expression))
                 return false;
 
-            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(question.LinkedFilterExpression, questionnaire.Macros.Values);
+            var expressionWithInlinedMacroses = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
 
-            var exceeded = substituteMacroses.Length > MaxExpressionLength;
+            var doesExceed = expressionWithInlinedMacroses.Length > MaxExpressionLength;
 
-            state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength |= exceeded;
+            state.HasAnyExpressionExceededLimitByCharactersLength |= doesExceed;
 
-            return exceeded;
+            return doesExceed;
         }
 
         private static bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -387,9 +365,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
-            if (state.HasExceededLimitByConditionExpresssionCharactersLength ||
-                state.HasExceededLimitByValidationExpresssionCharactersLength ||
-                state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength)
+            if (state.HasAnyExpressionExceededLimitByCharactersLength)
                 yield break;
 
             var compilationResult = GetCompilationResult(questionnaire);
@@ -1004,7 +980,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var isValidationConditionTooLong = validationCondition.Expression?.Length > 10000;
 
-            state.HasExceededLimitByValidationExpresssionCharactersLength |= isValidationConditionTooLong;
+            state.HasAnyExpressionExceededLimitByCharactersLength |= isValidationConditionTooLong;
 
             return isValidationConditionTooLong;
         }

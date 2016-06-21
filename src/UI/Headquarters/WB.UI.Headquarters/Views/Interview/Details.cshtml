@@ -41,10 +41,11 @@
         settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
 
         var filter = { filteredBy: '@Model.Filter' };
-
-        var filteredComboboxes = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
-
-        var answeredYesNoQuestionsBySupervisor = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector), JsonConvert.SerializeObject(_.Answer))))))];
+        var filteredComboboxes = [
+            @Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.HtmlEncode(x.Label))))))))
+        ];
+        var answeredYesNoQuestionsBySupervisor = [
+            @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
 
         $(function () {
             window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
@@ -67,7 +68,7 @@
                 @foreach (var group in Model.InterviewDetails.Groups)
                 {
                     <li class="list-group-item @SetGroupLevelClass(group.Depth) @css("active", group.Id == Model.SelectedGroupId && group.RosterVector.SequenceEqual(Model.SelectedGroupRosterVector))">
-                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Stringify(group.RosterVector)})">@group.Title</a>
+                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Html.Stringify(@group.RosterVector)})">@group.Title</a>
                     </li>
                 }
             </ul>
@@ -180,16 +181,6 @@
 
 @functions
     {
-
-    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
-    {
-        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
-    }
-
-    public string Stringify(decimal[] array)
-    {
-        return string.Join("_", array.Select(x => x.ToString("N0", CultureInfo.InvariantCulture)));
-    }
 
     private static bool IsFilteredCombobox(InterviewQuestionView entityView)
     {

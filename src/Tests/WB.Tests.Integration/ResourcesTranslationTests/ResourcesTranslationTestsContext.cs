@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,16 +27,25 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         protected static Dictionary<string, string> GetStringResourcesFromResX(string fullPathToResX)
         {
-            return XDocument
-                .Load(fullPathToResX)
-                .Root
-                .TreeToEnumerable(_ => _.Elements())
-                .Where(element => element.Name == "data")
-                .OrderBy(element => element.Attribute("name").Value)
-                .ToDictionary(
+            try
+            {
+                var doc = XDocument
+                    .Load(fullPathToResX)
+                    .Root
+                    .TreeToEnumerable(_ => _.Elements())
+                    .Where(element => element.Name == "data")
+                    .OrderBy(element => element.Attribute("name").Value);
+                
+                return doc.ToDictionary(
                     element => element.Attribute("name").Value,
-                    element => element.Elements().Single().Value
+                    element => element.Elements().Single(x => x.Name == "value").Value
                 );
+            }
+            catch (Exception exc)
+            {
+                throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
+            }
+            
         }
 
         protected static string GetStringFormatEntriesAsString(string value)
