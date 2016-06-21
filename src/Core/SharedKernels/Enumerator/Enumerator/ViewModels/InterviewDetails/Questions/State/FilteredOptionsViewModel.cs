@@ -18,13 +18,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private IEnumerable<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
+        private int Count { get; set; } = int.MaxValue;
 
         public virtual event EventHandler OptionsChanged;
 
         private Identity questionIdentity;
-
-        public bool IsNeedCompareOptionsOnChanges { get; set; } = true;
-
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
@@ -74,25 +72,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual IEnumerable<CategoricalOption> GetOptions(string filter = "")
+        public virtual IEnumerable<CategoricalOption> GetOptions(string filter = "",  int count = int.MaxValue)
         {
             this.Filter = filter;
-            var filteredOptionsForQuestion = this.interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, filter);
-            this.Options = this.IsNeedCompareOptionsOnChanges ? filteredOptionsForQuestion.ToList() : filteredOptionsForQuestion;
+            this.Count = count;
+            this.Options = this.interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, filter)
+                                .Take(count)
+                                .ToList();
             return Options;
         }
 
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter);
-
-            if (!this.IsNeedCompareOptionsOnChanges)
-            {
-                this.Options = newOptions;
-                this.OptionsChanged?.Invoke(this, EventArgs.Empty);
-                return;
-            }
+            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter)
+                                .Take(Count)
+                                .ToList();
 
             var currentOptions = this.Options;
             var listOfNewOptions = newOptions.ToList();
