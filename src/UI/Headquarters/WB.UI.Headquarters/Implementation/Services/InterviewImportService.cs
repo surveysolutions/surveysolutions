@@ -77,12 +77,11 @@ namespace WB.UI.Headquarters.Implementation.Services
             };
             this.Status.IsInProgress = true;
 
-            var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId,
-                questionnaireIdentity);
-
-            this.Status.TotalInterviewsCount = interviewsToImport.Length;
             try
             {
+                var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
+
+                this.Status.TotalInterviewsCount = interviewsToImport.Length;
 
                 int createdInterviewsCount = 0;
                 Stopwatch elapsedTime = Stopwatch.StartNew();
