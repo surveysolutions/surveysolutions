@@ -80,6 +80,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             try
             {
                 var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
+                if(interviewsToImport == null)
+                    return;
 
                 this.Status.TotalInterviewsCount = interviewsToImport.Length;
 
