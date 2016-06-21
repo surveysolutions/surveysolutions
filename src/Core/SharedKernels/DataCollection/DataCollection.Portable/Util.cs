@@ -28,13 +28,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
         {
-            return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
+            return rosterScopeIds.Select((t, i) => new Identity(t, rosterVector.Take(i + 1).ToArray())).ToArray();
         }
-
 
         public static string GetSiblingsKey(Identity[] rosterKey)
         {
-            var parentRosterKey = rosterKey.Shrink().Select(x => new Identity(x.Id, x.RosterVector.Shrink())).ToArray();
+            var parentRosterKey = rosterKey.Shrink();//.Select(x => new Identity(x.Id, x.RosterVector.Shrink())).ToArray();
             return GetSiblingsKey(parentRosterKey, rosterKey.Last().Id);
         }
 

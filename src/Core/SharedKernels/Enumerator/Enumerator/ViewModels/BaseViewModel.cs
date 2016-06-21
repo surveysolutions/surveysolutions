@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -19,22 +17,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual bool IsAuthenticationRequired => true;
 
-        public virtual Task StartAsync()
-        {
-            return Task.FromResult(true);
-        }
+        public virtual void Load() { }
 
-        public override async void Start()
+        public override void Start()
         {
             base.Start();
 
             if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
             {
-                await this.viewModelNavigationService.NavigateToLoginAsync();
+                this.viewModelNavigationService.NavigateToLogin();
                 return;
             }
 
-            await this.StartAsync();
+            this.Load();
         }
     }
 }

@@ -29,7 +29,7 @@
                          HidePopupOnDone .;
                          Hint Localization('FilteredComboboxQuestion_Hint');" />
           <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText);"
-                          style="@style/Interview_Question_RemoveAnswerWrapper">
+                          style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
             <ImageButton style="@style/Interview_Question_RemoveAnswer"
                          android:layout_gravity="right"
                          android:layout_weight="0" android:duplicateParentState="true"

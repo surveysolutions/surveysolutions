@@ -5,6 +5,7 @@ using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: null);
             statefulInterview.Apply(Create.Event.LinkedOptionsChanged());
 
-            var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
+            var statefulInterviewRepository = CreateStatefulInterviewRepository(statefulInterview,
                 liteEventBusMock.Object);
 
             var result = statefulInterviewRepository.Get(Guid.NewGuid().FormatGuid());
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
 
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire);
 
-            var statefulInterviewRepository = CreteStatefulInterviewRepository(statefulInterview,
+            var statefulInterviewRepository = CreateStatefulInterviewRepository(statefulInterview,
                 liteEventBusMock.Object);
 
             var result = statefulInterviewRepository.Get(Guid.NewGuid().FormatGuid());
@@ -58,9 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         }
 
         [Test]
-        public void
-            When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview
-            ()
+        public void When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview()
         {
             var aggregateRootId = Guid.Parse("11111111111111111111111111111111");
             AssemblyContext.SetupServiceLocator();
@@ -80,16 +79,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             Assert.That(result, Is.EqualTo(null));
         }
 
-        private StatefulInterviewRepository CreteStatefulInterviewRepository(StatefulInterview statefulInterview = null, ILiteEventBus liteEventBus=null)
-        {
-            return
-                new StatefulInterviewRepository(
-                    Mock.Of<IEventSourcedAggregateRootRepository>(
-                        _ =>
-                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()) == statefulInterview &&
-                            _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<IProgress<int>>(),
-                                Moq.It.IsAny<CancellationToken>()) == statefulInterview),
-                    liteEventBus ?? Mock.Of<ILiteEventBus>());
-        }
+        private static StatefulInterviewRepository CreateStatefulInterviewRepository(StatefulInterview statefulInterview = null, ILiteEventBus liteEventBus = null)
+            => new StatefulInterviewRepository(
+                Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(statefulInterview),
+                liteEventBus ?? Mock.Of<ILiteEventBus>());
     }
 }

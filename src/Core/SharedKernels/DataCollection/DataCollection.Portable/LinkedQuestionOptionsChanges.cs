@@ -11,11 +11,15 @@ namespace WB.Core.SharedKernels.DataCollection
             this.LinkedQuestionOptions = linkedQuestionOptions;
         }
 
+        [Obsolete]
         public Dictionary<Guid, RosterVector[]> LinkedQuestionOptions { get; private set; }
+
+        public Dictionary<Identity, RosterVector[]> LinkedQuestionOptionsSet { get; private set; } = new Dictionary<Identity, RosterVector[]>();
 
         public void Clear()
         {
             this.LinkedQuestionOptions.Clear();
+            this.LinkedQuestionOptionsSet.Clear();
         }
     }
 }

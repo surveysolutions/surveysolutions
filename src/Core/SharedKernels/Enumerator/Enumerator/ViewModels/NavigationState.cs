@@ -44,21 +44,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireId = questionnaireId;
         }
 
-        public async Task NavigateToAsync(NavigationIdentity navigationItem)
+        public void NavigateTo(NavigationIdentity navigationItem)
         {
-            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-            if (!this.viewModelNavigationService.HasPendingOperations)
-                this.NavigateTo(navigationItem);
+            if (this.viewModelNavigationService.HasPendingOperations)
+                this.viewModelNavigationService.ShowWaitMessage();
+            else
+                this.NavigateToImpl(navigationItem);
         }
 
-        public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
+        public void NavigateBack(Action navigateToIfHistoryIsEmpty)
         {
-            await this.viewModelNavigationService.WaitPendingOperationsCompletionAsync();
-            if (!this.viewModelNavigationService.HasPendingOperations)
-                this.NavigateBack(navigateToIfHistoryIsEmpty);
+            if (this.viewModelNavigationService.HasPendingOperations)
+                this.viewModelNavigationService.ShowWaitMessage();
+            else
+                this.NavigateBackImpl(navigateToIfHistoryIsEmpty);
         }
 
-        private void NavigateTo(NavigationIdentity navigationItem)
+        private void NavigateToImpl(NavigationIdentity navigationItem)
         {
             if (navigationItem.TargetScreen == ScreenType.Group)
             {
@@ -85,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);
         }
 
-        private void NavigateBack(Action navigateToIfHistoryIsEmpty)
+        private void NavigateBackImpl(Action navigateToIfHistoryIsEmpty)
         {
             if (navigateToIfHistoryIsEmpty == null) 
                 throw new ArgumentNullException(nameof(navigateToIfHistoryIsEmpty));

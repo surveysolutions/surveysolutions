@@ -18,5 +18,6 @@ namespace WB.Tests.Unit
         public static readonly OtherFactory Other = new OtherFactory();
 
         public static readonly FakeFactory Fake = new FakeFactory();
+        public static readonly StorageFactory Storage = new StorageFactory();
     }
 }

@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -48,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewImportService interviewImportService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
@@ -59,7 +61,8 @@ namespace WB.UI.Headquarters.Controllers
             ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IInterviewImportService interviewImportService)
+            IInterviewImportService interviewImportService,
+            IFileSystemAccessor fileSystemAccessor)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -70,6 +73,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewImportService = interviewImportService;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
@@ -217,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult TemplateDownload(Guid id, long version)
         {
             var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
-            return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
+            return this.File(this.fileSystemAccessor.ReadFile(pathToFile), "application/zip", fileDownloadName: this.fileSystemAccessor.GetFileName(pathToFile));
         }
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)

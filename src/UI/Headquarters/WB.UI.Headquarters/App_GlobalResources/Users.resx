@@ -181,7 +181,7 @@
     <value>Create and try login</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
+    <value>Account creation date</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -208,12 +208,33 @@
     <value>Total Interviewers</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>Name</value>
+    <value>Login name</value>
   </data>
   <data name="AddObserver" xml:space="preserve">
     <value>Add observer</value>
   </data>
   <data name="TryLater" xml:space="preserve">
     <value>Please try again later</value>
+  </data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
+    <value>Date when the headquarter account was created</value>
+  </data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>Date when the supervisor account was created</value>
+  </data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve">
+    <value>Number of interviewers who has not successfully synchronized their tablets to the server yet</value>
+  </data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve">
+    <value>Number of interviewers in the team</value>
+  </data>
+  <data name="ObserverAccountCreationDateTooltip" xml:space="preserve">
+    <value>Date when the observer account was created</value>
+  </data>
+  <data name="ObserversEmail" xml:space="preserve">
+    <value>Observers email</value>
+  </data>
+  <data name="SupervisorEmail" xml:space="preserve">
+    <value>Supervisor email</value>
   </data>
 </root>

@@ -86,10 +86,8 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             } while (!currentSlice.IsEndOfStream);
         }
 
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<int> progress, CancellationToken cancellationToken)
-        {
-            return Read(id, minVersion);
-        }
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {

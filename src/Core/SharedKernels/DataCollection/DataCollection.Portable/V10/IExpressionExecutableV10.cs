@@ -17,5 +17,17 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         IEnumerable<CategoricalOption> FilterOptionsForQuestion(Guid questionId, IEnumerable<CategoricalOption> options);
 
         decimal[] RosterVector { get; }
+
+        List<Guid> LinkedQuestions { get; }
+
+        void SetRostersRemover(Action<Identity[], Guid, decimal> removeRosterInstances);
+
+        void SetStructuralChangesCollector(StructuralChanges structuralChanges);
+
+        Guid[] GetRosterIdsThisScopeConsistOf();
+
+        List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope);
+
+        LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId);
     }
 }

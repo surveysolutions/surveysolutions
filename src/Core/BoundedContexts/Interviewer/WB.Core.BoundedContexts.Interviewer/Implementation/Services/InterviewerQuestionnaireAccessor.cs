@@ -55,8 +55,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
            
             await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireIdentity, serializedQuestionnaireDocument);
 
-            await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
-                        questionnaireIdentity.Version, serializedQuestionnaireDocument));
+            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, 
+                questionnaireIdentity.Version, 
+                serializedQuestionnaireDocument);
 
             await this.questionnaireViewRepository.StoreAsync(new QuestionnaireView
             {

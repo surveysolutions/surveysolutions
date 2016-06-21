@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
@@ -57,11 +58,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
-        {
-            return Read(id, minVersion, null, new CancellationToken());
-        }
+            => this.Read(id, minVersion, null, CancellationToken.None);
 
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<int> progress, CancellationToken cancellationToken)
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             var totalEventCount = this
                 .connection
@@ -72,9 +71,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
             if (totalEventCount == 0)
                 yield break;
-
-            int onePercent = Math.Max(1, totalEventCount / 100);
-            int progressInPercents = 0;
+            
             int lastReadEventSequence = Math.Max(minVersion, 0);
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
@@ -99,12 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 {
                     yield return committedEvent;
                     lastReadEventSequence = committedEvent.EventSequence + 1;
-
-                    if (progress != null && (committedEvent.EventSequence - minVersion) % onePercent == 0 && progressInPercents < 100)
-                    {
-                        progressInPercents++;
-                        progress.Report(progressInPercents);
-                    }
+                    progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
                 }
 
             } while (bulk.Count > 0);

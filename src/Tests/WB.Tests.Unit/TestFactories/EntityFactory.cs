@@ -277,13 +277,15 @@ namespace WB.Tests.Unit.TestFactories
             bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
             Guid? interviewId = null,
-            Guid? responsibleId = null)
+            Guid? responsibleId = null,
+            Guid? questionnaireId = null)
             => new InterviewData
             {
                 CreatedOnClient = createdOnClient,
                 Status = status,
                 InterviewId = interviewId.GetValueOrDefault(),
-                ResponsibleId = responsibleId.GetValueOrDefault()
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid()
             };
 
         public InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
@@ -502,7 +504,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
-            bool isYesNo = false, bool hideIfDisabled = false, params decimal[] answers)
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, params decimal[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -515,7 +517,11 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList()
+                Answers = answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
+                Properties = new QuestionProperties(false, false)
+                {
+                    OptionsFilterExpression = optionsFilterExpression
+                }
             };
 
         public MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
@@ -605,6 +611,9 @@ namespace WB.Tests.Unit.TestFactories
         public ParaDataExportProcessDetails ParaDataExportProcess()
             => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
+            => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
+
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
 
@@ -649,13 +658,14 @@ namespace WB.Tests.Unit.TestFactories
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
-            string title = "Questionnaire Browse Item X", bool disabled = false)
+            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false)
             => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 Version = questionnaireIdentity?.Version ?? version ?? 1,
                 Title = title,
                 Disabled = disabled,
+                IsDeleted = deleted
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
@@ -788,7 +798,8 @@ namespace WB.Tests.Unit.TestFactories
             bool hideIfDisabled = false,
             string linkedFilterExpression = null,
             Guid? linkedToRosterId = null,
-            bool? isFilteredCombobox = null)
+            bool? isFilteredCombobox = null,
+            string optionsFilterExpression = null)
         {
             var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -812,7 +823,11 @@ namespace WB.Tests.Unit.TestFactories
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers,
                 LinkedFilterExpression = linkedFilterExpression,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                Properties = new QuestionProperties(false, false)
+                {
+                    OptionsFilterExpression = optionsFilterExpression
+                }
             };
         }
 
@@ -923,6 +938,9 @@ namespace WB.Tests.Unit.TestFactories
             user.SetId(userId ?? Guid.NewGuid());
             return user;
         }
+
+        public UserDocument UserDocument()
+            => Create.Entity.UserDocument(userId: null);
 
         public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
         {

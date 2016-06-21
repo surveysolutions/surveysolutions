@@ -36,4 +36,17 @@
         {
         }
     }
+
+    public class LinkedFilterConditionDescriptionModel : ConditionDescriptionModel
+    {
+        public string LinkedQuestionScopeName { get; }
+
+        public bool IsSourceAndLinkedQuestionOnSameLevel => LinkedQuestionScopeName == this.ClassName;
+
+        public LinkedFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string linkedQuestionScopeName)
+            : base(className, methodName, namespaces, expression, false, string.Empty, "bool")
+        {
+            this.LinkedQuestionScopeName = linkedQuestionScopeName;
+        }
+    }
 }

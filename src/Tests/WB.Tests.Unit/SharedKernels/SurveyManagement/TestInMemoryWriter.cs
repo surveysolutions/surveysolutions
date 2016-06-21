@@ -15,15 +15,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();
 
-        public IReadOnlyDictionary<string, T> Dictionary
+        public TestInMemoryWriter(){}
+
+        public TestInMemoryWriter(string id, T view)
         {
-            get { return new ReadOnlyDictionary<string, T>(this.storage); }
+            this.Store(view, id);
         }
 
-        public int Count()
-        {
-            return this.Dictionary.Count;
-        }
+        public IReadOnlyDictionary<string, T> Dictionary => new ReadOnlyDictionary<string, T>(this.storage);
+
+        public int Count() => this.Dictionary.Count;
 
         public T GetById(string id)
         {

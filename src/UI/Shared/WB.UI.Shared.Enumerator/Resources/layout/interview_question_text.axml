@@ -16,7 +16,7 @@
                          Text Answer; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
                          FocusValueChanged ValueChangeCommand; " />
-          <include layout="@layout/interview_question__remove_button" />
+          <include layout="@layout/interview_question__remove_button_input" />
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />

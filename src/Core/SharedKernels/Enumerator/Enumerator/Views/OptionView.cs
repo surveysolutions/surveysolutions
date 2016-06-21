@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string Title { get; set; }
 
         public decimal? ParentValue { get; set; }
+
+        public int SortOrder { get; set; }
     }
 }

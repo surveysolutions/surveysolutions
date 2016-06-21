@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewIdAsString);
             var answerModel = interview.GetYesNoAnswer(Identity);
 
-            this.Options = this.filteredOptionsViewModel.Options
+            this.Options = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
         }
@@ -269,6 +269,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
+            this.filteredOptionsViewModel.Dispose();
 
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();

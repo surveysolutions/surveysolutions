@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> RosterDependencies { get; set; }
+        public Dictionary<Guid, Guid> LinkedQuestionByRosterDependencies { get; set; }
 
         public List<Guid> ConditionsPlayOrder { get; set; }
 
@@ -37,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<string, ConditionDescriptionModel> MethodModels { get; set; }
 
         public Dictionary<string, OptionsFilterConditionDescriptionModel> CategoricalOptionsFilterModels { get; set; }
+        public Dictionary<string, LinkedFilterConditionDescriptionModel> LinkedFilterModels { get; set; }
 
         public List<LinkedQuestionFilterExpressionModel> AllLinkedQuestionFilters {get;set;}
     }

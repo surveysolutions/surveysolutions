@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState = denormalizer.Update(viewState, 
-                    Create.VariableClonedEvent(entityId: variableId, targetIndex:1, parentId: chapterId, variableName: variableName));
+                    Create.Event.VariableClonedEvent(entityId: variableId, targetIndex:1, parentId: chapterId, variableName: variableName));
 
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>

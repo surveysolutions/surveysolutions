@@ -12,5 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
         }
+
+        public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText)
+        {
+            return questionnaire.GetOptionForQuestionFromStructureByOptionText(questionId, optionText);
+        }
     }
 }

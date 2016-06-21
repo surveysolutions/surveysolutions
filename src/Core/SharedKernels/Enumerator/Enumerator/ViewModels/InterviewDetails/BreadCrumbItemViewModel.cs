@@ -23,8 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
         }
 
-        public IMvxCommand NavigateCommand => new MvxCommand(
-            async () => await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.ItemId)));
+        public IMvxCommand NavigateCommand => new MvxCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.ItemId)));
 
         public void ChangeText(string newText) => this.Text.ChangeText(newText);
     }

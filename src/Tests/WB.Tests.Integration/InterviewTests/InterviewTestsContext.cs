@@ -9,10 +9,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -180,6 +182,13 @@ namespace WB.Tests.Integration.InterviewTests
         {
             return events.Select(evnt => evnt.Payload).OfType<T>();
         }
+
+        protected static RosterVector[] GetChangedOptions(EventContext eventContext, Guid questionId, RosterVector rosterVector) => 
+            eventContext
+                .GetSingleEvent<LinkedOptionsChanged>()
+                .ChangedLinkedQuestions
+                .SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(questionId, rosterVector)))
+                ?.Options;
 
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
             where T : class
