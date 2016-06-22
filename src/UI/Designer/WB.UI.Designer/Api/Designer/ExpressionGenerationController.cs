@@ -33,9 +33,7 @@ namespace WB.UI.Designer.Api
         {
             var questionnaire = this.GetQuestionnaire(id).Source;
 
-            var supervisorVersion = version.HasValue
-                ? new Version(version.Value, 0, 0)
-                :this.engineVersionService.GetLatestSupportedVersion();
+            var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
 
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
             
@@ -58,7 +56,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = this.GetQuestionnaire(id).Source;
             string assembly;
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                this.engineVersionService.GetLatestSupportedVersion(), out assembly);
+                this.engineVersionService.LatestSupportedVersion, out assembly);
             if (generated.Success)
             {
                 return this.Request.CreateResponse(HttpStatusCode.OK, "No errors");
@@ -80,7 +78,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = this.GetQuestionnaire(id).Source;
             string assembly;
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                this.engineVersionService.GetLatestSupportedVersion(), out assembly);
+                this.engineVersionService.LatestSupportedVersion, out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

@@ -15,15 +15,15 @@ namespace WB.Tests.Integration.Versions
 
         Because of = () =>
         {
-            designerLatestSupportedVersion = designerEngineVersionService.GetLatestSupportedVersion();
-            hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion();
+            designerLatestSupportedVersion = designerEngineVersionService.LatestSupportedVersion;
+            hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion().Major;
         };
 
         It should_return_same_versions_for_headquarters_version_and_designer_latest_supported_version = () =>
             hqVersion.ShouldEqual(designerLatestSupportedVersion);
 
-        private static Version designerLatestSupportedVersion;
-        private static Version hqVersion;
+        private static int designerLatestSupportedVersion;
+        private static int hqVersion;
 
         private static DesignerEngineVersionService designerEngineVersionService;
         private static SupportedVersionProvider hqSupportedVersionProvider;

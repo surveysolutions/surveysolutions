@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
             var expressionsEngineVersionService = Mock.Of<IDesignerEngineVersionService>(
-                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == true);
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == true && 
+                _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == new string[0]);
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) ==

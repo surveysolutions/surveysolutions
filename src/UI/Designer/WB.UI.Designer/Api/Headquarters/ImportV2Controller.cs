@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireView = this.GetQuestionnaireViewOrThrow(request);
 
-            this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
+            this.CheckInvariantsAndThrowIfInvalid(request.SupportedVersion.Major, questionnaireView);
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion.Major
+                QuestionnaireContentVersion = questionnaireContentVersion
             };
         }
 

@@ -69,9 +69,9 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireView = this.GetQuestionnaireViewOrThrow(request);
 
-            this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
+            this.CheckInvariantsAndThrowIfInvalid(request.SupportedVersion.Major, questionnaireView);
 
-            Version questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
 
@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 Questionnaire = this.zipUtils.CompressString(serrializedQuestionnaire), 
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion.Major
+                QuestionnaireContentVersion = questionnaireContentVersion
             };
         }
     }

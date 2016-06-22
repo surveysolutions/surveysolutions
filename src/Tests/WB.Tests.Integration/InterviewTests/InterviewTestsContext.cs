@@ -202,9 +202,9 @@ namespace WB.Tests.Integration.InterviewTests
             => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
 
         protected static Assembly CompileAssemblyUsingLatestEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetLatestSupportedVersion());
+            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().LatestSupportedVersion);
 
-        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, Version engineVersion)
+        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, int engineVersion)
         {
             var fileSystemAccessor = new FileSystemIOAccessor();
 
