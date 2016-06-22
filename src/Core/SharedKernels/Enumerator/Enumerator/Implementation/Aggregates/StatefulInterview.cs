@@ -1103,11 +1103,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-            var linkedQuestionOptionsChanges = CreateChangedLinkedOptions(
+            var linkedQuestionOptionsChanges = this.CreateChangedLinkedOptions(
                 expressionProcessorState, 
                 this.interviewState, 
                 questionnaire, null,
-                null, null, null, null).ToArray();
+                null, null, null).ToArray();
 
             this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionOptionsChanges));
         }

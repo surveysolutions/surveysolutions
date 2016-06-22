@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
-    [Ignore("KP-7362")]
     internal class when_answer_is_roster_title_and_removed_because_of_filtering : InterviewTestsContext
     {
         Establish context = () =>
