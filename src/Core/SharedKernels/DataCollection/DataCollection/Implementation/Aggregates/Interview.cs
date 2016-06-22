@@ -2618,7 +2618,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid userId, DateTime answerTime,
             Guid questionId)
         {
-            this.UpdateRosterTitles(expressionProcessorState, questionnaire, interviewByAnswerChange, questionId);
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
 
             if (rosterCalculationData != null)
@@ -2772,9 +2771,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
 
                         rostersWithTitles[rosterInstancesWithAffectedTitle] = changedAnswerString;
-                        expressionProcessorState.UpdateRosterTitle(rosterInstancesWithAffectedTitle.Id,
-                            rosterInstancesWithAffectedTitle.RosterVector.WithoutLast().ToArray(),
-                            rosterInstancesWithAffectedTitle.RosterVector.Last(), changedAnswerString);
                     }
                 }
             }
