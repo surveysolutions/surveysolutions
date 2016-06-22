@@ -33,7 +33,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private readonly Func<long> getVersion;
-        private readonly Guid? responsibleId;
 
         private Dictionary<Guid, IVariable> variableCache = null;
         private Dictionary<Guid, IStaticText> staticTextCache = null;
@@ -65,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
-        public Guid? ResponsibleId => this.responsibleId;
+        public Guid? ResponsibleId => null;
 
         private Dictionary<Guid, IComposite> EntityCache
         {
@@ -175,27 +174,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
+        public PlainQuestionnaire(QuestionnaireDocument document, long version)
         {
             InitializeQuestionnaireDocument(document);
 
             this.innerDocument = document;
-            this.getVersion = getVersion;
-            this.responsibleId = responsibleId;
+            this.getVersion = () => version;
         }
 
-        public  PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version, null) {}
-
-        public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
-            : this(document, () => version, responsibleId) {}
-
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
-            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
-            : this(document, getVersion, responsibleId)
+        public void WarmUpPriorityCaches()
         {
-            this.groupCache = groupCache.ToDictionary(x => x.Key.FormatGuid(), x => x.Value);
-            this.questionCache = questionCache;
+            var sections = this.SectionCache;
+            var entities = this.EntityCache;
+            var groups = this.GroupCache;
+            var questions = this.QuestionCache;
+            var staticTexts = this.StaticTextCache;
+            var variables = this.VariableCache;
         }
 
         public long Version => this.getVersion();
