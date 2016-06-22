@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IExpressionProcessorGenerator
     {
-        GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, Version targetVersion,
+        GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion,
           out string generatedAssembly);
-        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, Version targetVersion);
+        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion);
     }
 }

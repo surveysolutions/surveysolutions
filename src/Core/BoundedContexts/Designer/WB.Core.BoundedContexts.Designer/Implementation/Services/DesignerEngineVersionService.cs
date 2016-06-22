@@ -1,125 +1,157 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
-        /// <summary>
-        /// New Era of c# conditions
-        /// </summary>
-        private readonly Version version_5 = new Version(5, 0, 0);
-
-        /// <summary>
-        /// New service variables which could be used in C# conditions - @rowname, @rowindex, @rowcode, @roster
-        /// Custom functions from ZScore( anthropocentric ) and general shortcuts like - InRange, InList ect.
-        /// </summary>
-        private readonly Version version_6 = new Version(6, 0, 0);
-
-        /// <summary>Functions were extended with IsAnswered function</summary>
-        private readonly Version version_7 = new Version(7, 0, 0);
-
-        /// <summary>API used for first release of new Tester (used new RoslynCompile profile)</summary>
-        private readonly Version version_8 = new Version(8, 0, 0);
-        
-        /// <summary>Potatoid release (introduced RosterVector)</summary>
-        private readonly Version version_9 = new Version(9, 0, 0);
-
-        /// <summary>Hidden questions and random value release</summary>
-        private readonly Version version_10 = new Version(10, 0, 0);
-
-        /// <summary>Yes/No questions</summary>
-        private readonly Version version_11 = new Version(11, 0, 0);
-
-        /// <summary>Multiple validation, linked on roster title question, hide questions by condition</summary>
-        private readonly Version version_12 = new Version(12, 0, 0);
-
-        /// <summary>
-        /// Attachments: Images in static texts.
-        /// Filtered linked questions
-        /// </summary>
-        private readonly Version version_13 = new Version(13, 0, 0);
-
-        /// <summary>Static texts: enablement conditions and validations</summary>
-        private readonly Version version_14 = new Version(14, 0, 0);
-
-        /// <summary>Variables</summary>
-        private readonly Version version_15 = new Version(15, 0, 0);
-
-        /// <summary>
-        /// Timestamp questions
-        /// Filtered options for categorical questions (except cascading)
-        /// </summary>
-        private readonly Version version_16 = new Version(16, 0, 0);
-
-
-        public Version GetLatestSupportedVersion() => this.version_16;
-
-        public bool IsClientVersionSupported(Version clientVersion)
-        { 
-            var engineVersion = this.GetLatestSupportedVersion();
-            return (clientVersion >= this.version_10 && engineVersion >= clientVersion);
+        private const int OldestQuestionnaireContentVersion = 10;
+        private class QuestionnaireContentVersion
+        {
+            public int Version { get; set; }
+            public IEnumerable<QuestionnaireFeature> NewFeatures { get; set; } 
         }
 
-        public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
+        private class QuestionnaireFeature
         {
-            Version questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
-
-            if (clientVersion < questionnaireContentVersion)
-                return false;
-
-            return true;
+            public string Description { get; set; }
+            public Func<QuestionnaireDocument, bool> HasQuestionnaire { get; set; }
         }
 
-        public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
+        private readonly List<QuestionnaireContentVersion> questionnaireContentVersions = new List<QuestionnaireContentVersion>
         {
-            bool hasQuestionsWithOptionsFilter = questionnaireDocument.Find<AbstractQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression)).Any();
-            if (hasQuestionsWithOptionsFilter)
-                return this.version_16;
+            new QuestionnaireContentVersion
+            {
+                Version = 11,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.LookupTables.Count > 0,
+                        Description = "Lookup tables"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IMultyOptionsQuestion>(q => q.YesNoView).Any(),
+                        Description = "Yes/No questions"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 12,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Any(),
+                        Description = "Linked on roster title question"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Any(),
+                        Description = "Multiple validations"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 13,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)).Any(),
+                        Description = "Filtered linked questions"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Any(),
+                        Description = "Attachments: Images in static texts"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 14,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any(),
+                        Description = "Static texts: enablement conditions and validations"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 15,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<Variable>().Any(),
+                        Description = "Variables"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.QuestionnaireContent /*When will be added new version, it should be changed to previous value of ApiVersion.QuestionnaireContent*/,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any(),
+                        Description = "Current time questions"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<AbstractQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression)).Any(),
+                        Description = "Filtered options for categorical questions"
+                    }
+                }
+            }
+        };
 
-            bool hasTimestampQuestions = questionnaireDocument.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any();
-            if (hasTimestampQuestions)
-                return this.version_16;
+        public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;
 
-            bool hasVariables = questionnaireDocument.Find<Variable>().Any();
-            if (hasVariables)
-                return version_15;
+        public bool IsClientVersionSupported(int clientVersion)
+            => (clientVersion >= OldestQuestionnaireContentVersion && this.LatestSupportedVersion >= clientVersion);
 
-            bool hasStaticTextsWithConditions = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
-            if (hasStaticTextsWithConditions)
-                return version_14;
+        public IEnumerable<string> GetListOfNewFeaturesForClient(QuestionnaireDocument questionnaire, int clientVersion)
+        {
+            for (int nextClientVersion = clientVersion + 1; nextClientVersion <= this.LatestSupportedVersion; nextClientVersion++)
+            {
+                var questionnaireVersion = this.questionnaireContentVersions.FirstOrDefault(
+                    contentVersion => contentVersion.Version == nextClientVersion);
 
-            var countOfStaticTextsWithAttachment = questionnaireDocument.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Count();
-            if (countOfStaticTextsWithAttachment > 0)
-                return version_13;
+                if(questionnaireVersion == null) continue;
 
-            var countOfQuestionsWithFilteredLinkedQuestions =
-                questionnaireDocument.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)).Count();
-            if (countOfQuestionsWithFilteredLinkedQuestions > 0)
-                return version_13;
+                foreach (var newFeature in questionnaireVersion.NewFeatures)
+                {
+                    if (newFeature.HasQuestionnaire(questionnaire))
+                        yield return newFeature.Description;
+                }
+            }
+        }
 
-            var countOfQuestionsWithMultipleValidations = questionnaireDocument.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Count();
-            if (countOfQuestionsWithMultipleValidations > 0)
-                return version_12;
+        public int GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
+        {
+            foreach (var questionnaireContentVersion in this.questionnaireContentVersions.OrderByDescending(contentVersion => contentVersion.Version))
+            {
+                if (questionnaireContentVersion.NewFeatures.Any(newFeature => newFeature.HasQuestionnaire(questionnaireDocument)))
+                    return questionnaireContentVersion.Version;
+            }
 
-            var countOfLinkedOnRosterQuestions = questionnaireDocument.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Count();
-            if (countOfLinkedOnRosterQuestions > 0)
-                return version_12;
-           
-            var countOfYesNoQuestions = questionnaireDocument.Find<IMultyOptionsQuestion>(q => q.YesNoView).Count();
-            if (countOfYesNoQuestions > 0)
-                return version_11;
-
-            var countOfLookupTables = questionnaireDocument.LookupTables.Count;
-            if (countOfLookupTables > 0)
-                return version_11;
-
-            return this.version_10;
+            return OldestQuestionnaireContentVersion;
         }
     }
 }

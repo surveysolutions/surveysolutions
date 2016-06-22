@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Create.Variable(id: variableId, expression: "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
-                    GetInterviewExpressionState(questionnaireDocument, version: new Version(15, 0, 0)) as
+                    GetInterviewExpressionState(questionnaireDocument, version: 15) as
                         IInterviewExpressionStateV9;
 
                 state.SetInterviewProperties(new InterviewProperties(Guid.NewGuid()));
