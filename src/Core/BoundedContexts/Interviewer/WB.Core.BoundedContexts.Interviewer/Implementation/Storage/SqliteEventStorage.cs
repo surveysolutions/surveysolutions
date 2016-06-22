@@ -76,6 +76,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
+            progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
+
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();

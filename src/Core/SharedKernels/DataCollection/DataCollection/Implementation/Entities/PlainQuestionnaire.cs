@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.responsibleId = responsibleId;
         }
 
-        public PlainQuestionnaire(QuestionnaireDocument document, long version)
+        public  PlainQuestionnaire(QuestionnaireDocument document, long version)
             : this(document, () => version, null) {}
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
