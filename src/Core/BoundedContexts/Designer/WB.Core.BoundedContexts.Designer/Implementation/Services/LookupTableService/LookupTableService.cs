@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
-        private readonly ILogger logger;
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
@@ -28,12 +27,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private const int MAX_COLS_COUNT = 11;
 
         public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
-            ILogger logger)
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
-            this.logger = logger;
         }
 
         public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent)
