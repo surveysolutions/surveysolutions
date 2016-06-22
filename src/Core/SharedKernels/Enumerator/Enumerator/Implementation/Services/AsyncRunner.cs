@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class AsyncRunner : IAsyncRunner
     {
-        public void RunAsync(Func<Task> runTask) => runTask.Invoke();
+        public void RunAsync(Func<Task> runTask) => runTask();
     }
 }
