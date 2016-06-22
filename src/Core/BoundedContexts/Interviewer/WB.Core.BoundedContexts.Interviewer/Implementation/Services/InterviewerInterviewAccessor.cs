@@ -85,16 +85,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.interviewMultimediaViewRepository.RemoveAsync(imageViews);
         }
 
-        public async Task<InterviewPackageApiView> GetPackageByCompletedInterviewAsync(Guid interviewId)
+        public async Task<InterviewPackageApiView> GetInteviewEventsPackageOrNullAsync(Guid interviewId)
         {
             InterviewView interview = await Task.FromResult(this.interviewViewRepository.GetById(interviewId.FormatGuid()));
 
-            return await Task.Run(() => this.CreateSyncItem(interview));
+            return await Task.Run(() => this.BuildInterviewPackageOrNull(interview));
         }
 
-        private InterviewPackageApiView CreateSyncItem(InterviewView interview)
+        private InterviewPackageApiView BuildInterviewPackageOrNull(InterviewView interview)
         {
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interview.InterviewId);
+
+            if (eventsToSend.Length == 0)
+                return null;
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 

@@ -15,6 +15,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public IReadOnlyCollection<CommittedEvent> RemoveEventsNotNeededToBeSent(
             IReadOnlyCollection<CommittedEvent> interviewEvents)
         {
+            if (interviewEvents.Count == 0)
+                return interviewEvents;
+
             CommittedEvent lastCompletionCommittedEvent = interviewEvents.Last(@event => @event.Payload is InterviewCompleted);
             Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
 
