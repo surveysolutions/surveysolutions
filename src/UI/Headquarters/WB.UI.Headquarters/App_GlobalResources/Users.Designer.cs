@@ -349,7 +349,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observers email.
+        ///   Looks up a localized string similar to Observer email.
         /// </summary>
         internal static string ObserversEmail {
             get {
