@@ -7,6 +7,6 @@ namespace WB.Tests.Unit
 {
     public class SyncAsyncRunner : IAsyncRunner
     {
-        public void RunAsync(Func<Task> runTask) => runTask.Invoke().WaitAndUnwrapException();
+        public void RunAsync(Func<Task> runTask) => runTask().WaitAndUnwrapException();
     }
 }
