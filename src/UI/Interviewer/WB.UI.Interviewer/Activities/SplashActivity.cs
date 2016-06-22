@@ -33,7 +33,7 @@ namespace WB.UI.Interviewer.Activities
         {
             var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
-            var isMigrationNeeded = optionsRepository.Any();
+            var isMigrationNeeded = optionsRepository.IsEmpty();
 
             if (!isMigrationNeeded)
                 return;
