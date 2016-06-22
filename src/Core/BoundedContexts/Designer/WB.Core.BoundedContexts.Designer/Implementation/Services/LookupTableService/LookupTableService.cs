@@ -145,27 +145,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTableContent == null)
                 return null;
 
-            var memoryStream = new MemoryStream();
-            using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
+            using (var memoryStream = new MemoryStream())
             {
-                csvWriter.WriteField(ROWCODE);
-                foreach (var variableName in lookupTableContent.VariableNames)
+                using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
                 {
-                    csvWriter.WriteField(variableName);
-                }
-                csvWriter.NextRecord();
-                foreach (var lookupTableRow in lookupTableContent.Rows)
-                {
-                    csvWriter.WriteField(lookupTableRow.RowCode);
-                    foreach (var variable in lookupTableRow.Variables)
+                    csvWriter.WriteField(ROWCODE);
+                    foreach (var variableName in lookupTableContent.VariableNames)
                     {
-                        csvWriter.WriteField(variable);
+                        csvWriter.WriteField(variableName);
                     }
                     csvWriter.NextRecord();
+                    foreach (var lookupTableRow in lookupTableContent.Rows)
+                    {
+                        csvWriter.WriteField(lookupTableRow.RowCode);
+                        foreach (var variable in lookupTableRow.Variables)
+                        {
+                            csvWriter.WriteField(variable);
+                        }
+                        csvWriter.NextRecord();
+                    }
                 }
-            }
 
-            return new LookupTableContentFile() { Content = memoryStream.ToArray(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
+                return new LookupTableContentFile()
+                {
+                    Content = memoryStream.ToArray(),
+                    FileName = questionnaire.LookupTables[lookupTableId].FileName
+                };
+            }
         }
 
         private string GetLookupTableStorageId(Guid questionnaireId, Guid lookupTableId)
@@ -288,7 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private CsvConfiguration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
+            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = false, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
         }
     }
 }
