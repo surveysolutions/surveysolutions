@@ -10,6 +10,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -25,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private const int MAX_ROWS_COUNT = 5000;
         private const int MAX_COLS_COUNT = 11;
 
-        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
+        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
@@ -155,12 +157,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         csvWriter.WriteField(variableName);
                     }
                     csvWriter.NextRecord();
+
+
                     foreach (var lookupTableRow in lookupTableContent.Rows)
                     {
                         csvWriter.WriteField(lookupTableRow.RowCode);
                         foreach (var variable in lookupTableRow.Variables)
                         {
-                            csvWriter.WriteField(variable);
+                            if (variable.HasValue)
+                                csvWriter.WriteField(variable.Value);
+                            else
+                                csvWriter.WriteField(string.Empty);
                         }
                         csvWriter.NextRecord();
                     }
@@ -294,7 +301,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private CsvConfiguration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = false, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
+            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
         }
     }
 }
