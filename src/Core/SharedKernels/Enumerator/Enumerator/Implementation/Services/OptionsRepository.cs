@@ -130,10 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public bool Any()
-        {
-            return this.optionsStorage.FirstOrDefault() != null;
-        }
+        public bool IsEmpty() => this.optionsStorage.FirstOrDefault() == null;
 
         private async Task StoreOptionsForQuestionAsync(string questionnaireIdAsString, string questionIdAsString, List<Answer> answers)
         {
