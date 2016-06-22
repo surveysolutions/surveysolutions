@@ -273,7 +273,6 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_static_texts_in_and_out_of_roster_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_2nd_level_of_nested_roster_with_multiple_conditions.cs" />
