@@ -385,7 +385,8 @@ namespace WB.Tests.Unit.Designer
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
+                Mock.Of<ILogger>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)

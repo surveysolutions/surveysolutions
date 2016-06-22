@@ -10,6 +10,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -19,16 +20,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
+        private readonly ILogger logger;
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
         private const int MAX_ROWS_COUNT = 5000;
         private const int MAX_COLS_COUNT = 11;
 
-        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
+        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
+            ILogger logger)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
+            this.logger = logger;
         }
 
         public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent)
@@ -149,20 +154,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
                 {
-                    csvWriter.WriteField(ROWCODE);
-                    foreach (var variableName in lookupTableContent.VariableNames)
+                    string tempVariableName = String.Empty;
+                    try
                     {
-                        csvWriter.WriteField(variableName);
-                    }
-                    csvWriter.NextRecord();
-                    foreach (var lookupTableRow in lookupTableContent.Rows)
-                    {
-                        csvWriter.WriteField(lookupTableRow.RowCode);
-                        foreach (var variable in lookupTableRow.Variables)
+                        csvWriter.WriteField(ROWCODE);
+                        foreach (var variableName in lookupTableContent.VariableNames)
                         {
-                            csvWriter.WriteField(variable);
+                            tempVariableName = variableName;
+                            csvWriter.WriteField(tempVariableName);
                         }
                         csvWriter.NextRecord();
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error("Fail to write header. tempVariableName=" + tempVariableName, e);
+                        throw;
+                    }
+
+                    foreach (var lookupTableRow in lookupTableContent.Rows)
+                    {
+                        decimal? tempVariable = null;
+                        try
+                        {
+                            csvWriter.WriteField(lookupTableRow.RowCode);
+                            foreach (var variable in lookupTableRow.Variables)
+                            {
+                                tempVariable = variable;
+                                csvWriter.WriteField(tempVariable);
+                            }
+                            csvWriter.NextRecord();
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error("Fail to write row. tempVariable=" + tempVariable, e);
+                            throw;
+                        }
                     }
                 }
 
@@ -294,7 +320,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private CsvConfiguration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = false, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
+            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
         }
     }
 }
