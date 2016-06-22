@@ -154,41 +154,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
                 {
-                    string tempVariableName = String.Empty;
-                    try
+                    csvWriter.WriteField(ROWCODE);
+                    foreach (var variableName in lookupTableContent.VariableNames)
                     {
-                        csvWriter.WriteField(ROWCODE);
-                        foreach (var variableName in lookupTableContent.VariableNames)
-                        {
-                            tempVariableName = variableName;
-                            csvWriter.WriteField(tempVariableName);
-                        }
-                        csvWriter.NextRecord();
+                        csvWriter.WriteField(variableName);
                     }
-                    catch (Exception e)
-                    {
-                        logger.Error("Fail to write header. tempVariableName=" + tempVariableName, e);
-                        throw;
-                    }
+                    csvWriter.NextRecord();
+
 
                     foreach (var lookupTableRow in lookupTableContent.Rows)
                     {
-                        decimal? tempVariable = null;
-                        try
+                        csvWriter.WriteField(lookupTableRow.RowCode);
+                        foreach (var variable in lookupTableRow.Variables)
                         {
-                            csvWriter.WriteField(lookupTableRow.RowCode);
-                            foreach (var variable in lookupTableRow.Variables)
-                            {
-                                tempVariable = variable;
-                                csvWriter.WriteField(tempVariable);
-                            }
-                            csvWriter.NextRecord();
+                            if (variable.HasValue)
+                                csvWriter.WriteField(variable.Value);
+                            else
+                                csvWriter.WriteField(string.Empty);
                         }
-                        catch (Exception e)
-                        {
-                            logger.Error("Fail to write row. tempVariable=" + tempVariable, e);
-                            throw;
-                        }
+                        csvWriter.NextRecord();
                     }
                 }
 
