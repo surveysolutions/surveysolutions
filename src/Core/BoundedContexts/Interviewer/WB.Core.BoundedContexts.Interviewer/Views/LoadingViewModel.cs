@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -20,6 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         protected Guid interviewId;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
@@ -27,13 +29,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public LoadingViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
-            IStatefulInterviewRepository interviewRepository, ICommandService commandService)
+            IStatefulInterviewRepository interviewRepository,
+            ICommandService commandService,
+            IPlainQuestionnaireRepository questionnaireRepository)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
@@ -49,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ProgressDescription = InterviewerUIResources.Interview_Loading;
         }
 
-        public async Task RestoreInterviewAndNavigateThere()
+        public async Task RestoreInterviewAndNavigateThereAsync()
         {
             this.loadingCancellationTokenSource = new CancellationTokenSource();
             var interviewIdString = this.interviewId.FormatGuid();
@@ -59,18 +64,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
+                
                 IStatefulInterview interview =
-                    await
-                        this.interviewRepository.GetAsync(interviewIdString, progress,
-                            this.loadingCancellationTokenSource.Token);
+                    await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
+         
+                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
-                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                    await this.commandService.ExecuteAsync(restartInterviewCommand);
+                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                 }
 
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();

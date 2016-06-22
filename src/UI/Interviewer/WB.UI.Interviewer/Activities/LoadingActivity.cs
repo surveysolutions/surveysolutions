@@ -27,7 +27,7 @@ namespace WB.UI.Interviewer.Activities
 
             Task.Run(async () =>
             {
-                await this.ViewModel.RestoreInterviewAndNavigateThere();
+                await this.ViewModel.RestoreInterviewAndNavigateThereAsync();
                 this.Finish();
             });
         }
