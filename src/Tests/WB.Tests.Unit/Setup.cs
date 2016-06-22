@@ -190,12 +190,9 @@ namespace WB.Tests.Unit
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
         {
-            var version = new Version(questionnaireContentVersion, 0, 0);
-
             return Mock.Of<IDesignerEngineVersionService>(_ 
-                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
-                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
-                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+                => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == isClientVersionSupported
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
         }
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -20,12 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         };
 
         Because of = () =>
-            result = designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaire, new Version(11, 0, 0));
+            result = designerEngineVersionService.GetListOfNewFeaturesForClient(questionnaire, 11);
 
         It should_return_false = () =>
-            result.ShouldBeFalse();
+            result.ShouldNotBeEmpty();
 
-        private static bool result;
+        private static IEnumerable<string> result;
         private static IDesignerEngineVersionService designerEngineVersionService;
         private static QuestionnaireDocument questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

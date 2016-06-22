@@ -1,16 +1,16 @@
-using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IDesignerEngineVersionService
     {
-        Version GetLatestSupportedVersion();
+        int LatestSupportedVersion { get; }
 
-        Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument);
+        int GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument);
 
-        bool IsClientVersionSupported(Version clientVersion);
+        bool IsClientVersionSupported(int clientVersion);
 
-        bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion);
+        IEnumerable<string> GetListOfNewFeaturesForClient(QuestionnaireDocument questionnaire, int clientVersion);
     }
 }

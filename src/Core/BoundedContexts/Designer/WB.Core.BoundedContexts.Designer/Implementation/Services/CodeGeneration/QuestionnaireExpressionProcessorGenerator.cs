@@ -24,8 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.compilerSettingsProvider = compilerSettingsProvider;
         }
 
-        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
-            Version targetVersion, out string generatedAssembly)
+        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.Generate(questionnaire, targetVersion);
             var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference(targetVersion);
@@ -39,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
-        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, Version targetVersion)
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion)
         {
             return this.codeGenerator.Generate(questionnaire, targetVersion);
         }
