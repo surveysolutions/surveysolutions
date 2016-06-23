@@ -397,7 +397,7 @@
     <value>Account creation date</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
-    <value>Email</value>
+    <value>Interviewer's Email</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
     <value>interviewer(s) will be archived.</value>
