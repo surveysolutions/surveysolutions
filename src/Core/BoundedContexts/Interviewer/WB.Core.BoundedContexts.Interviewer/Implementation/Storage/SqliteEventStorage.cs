@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
                         (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
-                        (type) => true)))
+                        (type) => true), 
+                    openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = traceListener
             };
