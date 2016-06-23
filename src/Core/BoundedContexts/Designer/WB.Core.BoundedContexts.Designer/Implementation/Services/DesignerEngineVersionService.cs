@@ -109,6 +109,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     new QuestionnaireFeature
                     {
+                          HasQuestionnaire = (questionnaire) =>  questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)&& q.LinkedFilterExpression.Contains("current")).Any(),
+                          Description = "Filtered linked questions that uses @current variable"
+                    },
+                    new QuestionnaireFeature
+                    {
                         HasQuestionnaire = (questionnaire) => questionnaire.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any(),
                         Description = "Current time questions"
                     },
