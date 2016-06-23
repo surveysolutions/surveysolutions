@@ -2435,6 +2435,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
 
+            if (questionnaire.IsQuestionYesNo(questionId))
+            {
+                throw new InterviewException($"Question {questionId} has Yes/No type, but command is sent to Multiopions type. questionnaireId: {this.questionnaireId}, interviewId {this.EventSourceId}");
+            }
+
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
