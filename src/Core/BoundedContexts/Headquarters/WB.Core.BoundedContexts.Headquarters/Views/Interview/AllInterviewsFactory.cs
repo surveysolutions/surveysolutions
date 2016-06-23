@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -46,36 +47,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Page = input.Page,
                 PageSize = input.PageSize,
                 TotalCount = totalCount,
-                Items = interviews.Select(x => new AllInterviewsViewItem
-                {
-                    FeaturedQuestions = featuredQuestionAnswers.Where(f => f.InterviewSummary.SummaryId == x.SummaryId)
-                    .Select(a => new InterviewFeaturedQuestion()
-                    {
-                        Id = a.Questionid,
-                        Answer = a.Answer,
-                        Question = a.Title,
-                        Type = a.Type
-                    }).OrderBy(question => question.Id).ToList(),
-                    InterviewId = x.InterviewId,
-                    LastEntryDate = x.UpdateDate.ToShortDateString(),
-                    ResponsibleId = x.ResponsibleId,
-                    ResponsibleName = x.ResponsibleName,
-                    ResponsibleRole = x.ResponsibleRole,
-                    HasErrors = x.HasErrors,
-                    Status = x.Status.ToString(),
-                    CanDelete =    x.Status == InterviewStatus.Created
-                        || x.Status == InterviewStatus.SupervisorAssigned
-                        || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.SentToCapi,
-                    CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
-                    CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
-                    QuestionnaireId = x.QuestionnaireId,
-                    QuestionnaireVersion = x.QuestionnaireVersion,
-                    CreatedOnClient = x.WasCreatedOnClient,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer
-                }).ToList()
+                Items = interviews.Select(x => ToAllInterviewsViewItem(x, featuredQuestionAnswers)).ToList()
             };
             return result;
+        }
+
+        private static AllInterviewsViewItem ToAllInterviewsViewItem(InterviewSummary interviewSummary, IReadOnlyCollection<QuestionAnswer> allFeaturedQuestionAnswers)
+        {
+            var interviewFeaturedQuestionAnswers = allFeaturedQuestionAnswers
+                .Where(f => f.InterviewSummary.SummaryId == interviewSummary.SummaryId)
+                .Select(a => new InterviewFeaturedQuestion()
+                {
+                    Id = a.Questionid,
+                    Answer = a.Answer,
+                    Question = a.Title,
+                    Type = a.Type
+                })
+                .GroupBy(question => question.Id) // group to remove duplicates (sometimes appearing on read side)
+                .Select(grouping => grouping.First()) // remove duplicates (this was added because we do not have STR and therefore I cannot fix actual reason)
+                .OrderBy(question => question.Id)
+                .ToList();
+
+            return new AllInterviewsViewItem
+            {
+                FeaturedQuestions = interviewFeaturedQuestionAnswers,
+                InterviewId = interviewSummary.InterviewId,
+                LastEntryDate = interviewSummary.UpdateDate.ToShortDateString(),
+                ResponsibleId = interviewSummary.ResponsibleId,
+                ResponsibleName = interviewSummary.ResponsibleName,
+                ResponsibleRole = interviewSummary.ResponsibleRole,
+                HasErrors = interviewSummary.HasErrors,
+                Status = interviewSummary.Status.ToString(),
+                CanDelete =    interviewSummary.Status == InterviewStatus.Created
+                               || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                               || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                               || interviewSummary.Status == InterviewStatus.SentToCapi,
+                CanApproveOrReject = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor,
+                CanUnapprove = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters,
+                QuestionnaireId = interviewSummary.QuestionnaireId,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
+                CreatedOnClient = interviewSummary.WasCreatedOnClient,
+                ReceivedByInterviewer = interviewSummary.ReceivedByInterviewer
+            };
         }
 
         private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
