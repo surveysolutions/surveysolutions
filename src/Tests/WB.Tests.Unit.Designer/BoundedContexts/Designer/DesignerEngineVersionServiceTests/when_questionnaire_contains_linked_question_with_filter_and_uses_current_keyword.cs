@@ -24,11 +24,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             calculatedVersion = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
         It should_return_version_16 = () => 
-            calculatedVersion.ShouldEqual(new Version(16, 0, 0));
+            calculatedVersion.ShouldEqual(16);
 
         static QuestionnaireDocument questionnaire;
         static IDesignerEngineVersionService designerEngineVersionService;
-        static Version calculatedVersion;
+        static int calculatedVersion;
         private static readonly Guid questionId = Id.g1;
         private static readonly Guid rosterId = Id.g2;
     }
