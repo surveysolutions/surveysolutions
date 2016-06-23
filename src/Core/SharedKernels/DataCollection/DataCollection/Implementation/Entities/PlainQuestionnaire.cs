@@ -32,7 +32,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         #region State
 
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-        private readonly Func<long> getVersion;
 
         private Dictionary<Guid, IVariable> variableCache = null;
         private Dictionary<Guid, IStaticText> staticTextCache = null;
@@ -179,7 +178,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             InitializeQuestionnaireDocument(document);
 
             this.innerDocument = document;
-            this.getVersion = () => version;
+            this.Version = version;
         }
 
         public void WarmUpPriorityCaches()
@@ -192,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var variables = this.VariableCache;
         }
 
-        public long Version => this.getVersion();
+        public long Version { get; }
 
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
