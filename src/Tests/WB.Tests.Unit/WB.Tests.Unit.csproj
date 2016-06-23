@@ -351,6 +351,7 @@
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_timestamp_question_which_is_roster_title.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_questionnaire_contains_yes_no_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_combobox.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
     <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\OptionsRepositoryTests.cs" />
