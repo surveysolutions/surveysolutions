@@ -595,48 +595,53 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private List<LinkedQuestionFilterExpressionModel> CreateLinkedQuestionFilterExpressionModels(QuestionnaireDocument questionnaireDoc)
         {
-            var linkedQuestions = questionnaireDoc.Find<IQuestion>(q => q.LinkedToQuestionId.HasValue).Select(
-                q =>
+            var linkedQuestions = questionnaireDoc.Find<IQuestion>(q => q.LinkedToQuestionId.HasValue);
+            var linkedQuestionsFilterModels = new List<LinkedQuestionFilterExpressionModel>();
+            foreach (var linkedQuestion in linkedQuestions)
+            {
+                var linkedQuestionSource = questionnaireDoc.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
+                if (linkedQuestionSource == null)
+                    continue;
+
+                var parent = linkedQuestionSource.GetParent();
+                while (parent != null)
                 {
-                    var linkedQuestionSource = questionnaireDoc.Find<IQuestion>(q.LinkedToQuestionId.Value);
-                    if (linkedQuestionSource == null)
-                        return null;
-                    var parent = linkedQuestionSource.GetParent();
-                    while (parent != null)
+                    var parentGroup = parent as IGroup;
+                    if (parentGroup != null && parentGroup.IsRoster)
                     {
-                        var parentGroup = parent as IGroup;
-                        if (parentGroup != null && parentGroup.IsRoster)
-                        {
-                            var filterExpression = string.IsNullOrWhiteSpace(q.LinkedFilterExpression)? "true" :this.macrosSubstitutionService.InlineMacros(
-                                q.LinkedFilterExpression, questionnaireDoc.Macros.Values);
+                        var filterExpression = string.IsNullOrWhiteSpace(linkedQuestion.LinkedFilterExpression) ? "true" : this.macrosSubstitutionService.InlineMacros(
+                            linkedQuestion.LinkedFilterExpression, questionnaireDoc.Macros.Values);
 
-                            return
-                                new LinkedQuestionFilterExpressionModel(
-                                    $"IsAnswered({linkedQuestionSource.StataExportCaption})&&({filterExpression})",
-                                    $"FilterForLinkedQuestion__{q.StataExportCaption}",
-                                    CodeGenerator.GetQuestionIdName(q.StataExportCaption), parentGroup.PublicKey, q.PublicKey);
-                        }
-                        parent = parent.GetParent();
+                        linkedQuestionsFilterModels.Add(
+                            new LinkedQuestionFilterExpressionModel(
+                                $"IsAnswered({linkedQuestionSource.StataExportCaption})&&({filterExpression})",
+                                $"FilterForLinkedQuestion__{linkedQuestion.StataExportCaption}",
+                                CodeGenerator.GetQuestionIdName(linkedQuestion.StataExportCaption), parentGroup.PublicKey, linkedQuestion.PublicKey));
+                        break;
                     }
-                    return null;
-                }).Where(q => q != null).ToList();
+                    parent = parent.GetParent();
+                }
+            }
+           
+            var linkedToRosterQuestions = questionnaireDoc.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).ToList();
+            foreach (var linkedToRosterQuestion in linkedToRosterQuestions)
+            {
+                var sourceRoster = questionnaireDoc.Find<IGroup>(linkedToRosterQuestion.LinkedToRosterId.Value);
+                if (sourceRoster == null)
+                    continue;
 
-            linkedQuestions.AddRange(questionnaireDoc.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Select(
-                q =>
-                {
-                    var linkedQuestionRosterSource = questionnaireDoc.Find<IGroup>(q.LinkedToRosterId.Value);
-                    if (linkedQuestionRosterSource == null)
-                        return null;
+                var filterExpression = string.IsNullOrWhiteSpace(linkedToRosterQuestion.LinkedFilterExpression) ? "true" : this.macrosSubstitutionService.InlineMacros(
+                            linkedToRosterQuestion.LinkedFilterExpression, questionnaireDoc.Macros.Values);
 
-                    var filterExpression = string.IsNullOrWhiteSpace(q.LinkedFilterExpression) ? "true" : this.macrosSubstitutionService.InlineMacros(
-                                q.LinkedFilterExpression, questionnaireDoc.Macros.Values);
-                    return
-                        new LinkedQuestionFilterExpressionModel($"!string.IsNullOrEmpty(@rowname)&&({filterExpression})",
-                            $"FilterForLinkedQuestion__{q.StataExportCaption}",
-                            CodeGenerator.GetQuestionIdName(q.StataExportCaption), linkedQuestionRosterSource.PublicKey, q.PublicKey);
-                }).Where(q => q != null));
+                var rosterState = CodeGenerator.PrivateFieldsPrefix + sourceRoster.VariableName + CodeGenerator.StateSuffix;
 
-            return linkedQuestions.ToList();
+                linkedQuestionsFilterModels.Add(
+                    new LinkedQuestionFilterExpressionModel($"{rosterState}.State != State.Disabled &&({filterExpression})",
+                        $"FilterForLinkedQuestion__{linkedToRosterQuestion.StataExportCaption}",
+                        CodeGenerator.GetQuestionIdName(linkedToRosterQuestion.StataExportCaption), sourceRoster.PublicKey, linkedToRosterQuestion.PublicKey));
+            }
+
+            return linkedQuestionsFilterModels.ToList();
         }
 
         private static bool IsRoster(IGroup item)
@@ -707,11 +712,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static bool IsMultiQuestion(IQuestion question)
         {
             return question.QuestionType == QuestionType.MultyOption && question is IMultyOptionsQuestion;
-        }
-
-        private static bool IsSingleQuestion(IQuestion question)
-        {
-            return question.QuestionType == QuestionType.SingleOption && question is SingleQuestion;
         }
 
         private RosterTemplateModel CreateRosterTemplateModel(
