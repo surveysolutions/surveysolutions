@@ -28,11 +28,5 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			var current = scope as <#=Model.LinkedQuestionScopeName#>;
 			return <#=Model.Expression#>;
 		}   
-		/*
-		private <#=Model.ReturnType#> <#=Model.MethodName#>()
-		{
-			<#=Model.LinkedQuestionScopeName#> current = null;
-			return <#=Model.Expression#>;
-		}    */
 	}
 }
