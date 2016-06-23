@@ -844,7 +844,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email.
+        ///   Looks up a localized string similar to Interviewer&apos;s Email.
         /// </summary>
         public static string Interviewers_EmailTitle {
             get {
