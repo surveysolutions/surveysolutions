@@ -53,6 +53,13 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class ServiceFactory
     {
+        public AllInterviewsFactory AllInterviewsFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> answersReader = null)
+            => new AllInterviewsFactory(
+                interviewSummaryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                answersReader ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
+
         public IAnswerToStringService AnswerToStringService()
             => new AnswerToStringService();
 

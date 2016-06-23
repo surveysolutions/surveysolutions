@@ -32,6 +32,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_be_unanswered = () =>
             IsAnswered().ShouldBeFalse();
 
+        It should_not_mark_question_as_flagged = () => 
+            viewState.Levels["#"].QuestionsSearchCache[questionId].IsFlagged().ShouldBeFalse();
+
         private static object GetAnswer()
         {
             return viewState.Levels["#"].QuestionsSearchCache[questionId].Answer;

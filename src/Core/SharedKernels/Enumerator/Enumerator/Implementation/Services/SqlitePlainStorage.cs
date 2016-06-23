@@ -33,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true)))
+                    (type) => true),
+                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
             };
