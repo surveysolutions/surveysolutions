@@ -762,7 +762,8 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false)
+            bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false,
+            string linkedFilter = null)
         {
             return new SingleQuestion
             {
@@ -775,6 +776,7 @@ namespace WB.Tests.Unit.Designer
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
+                LinkedFilterExpression = linkedFilter,
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox,
                 Featured = isPrefilled,

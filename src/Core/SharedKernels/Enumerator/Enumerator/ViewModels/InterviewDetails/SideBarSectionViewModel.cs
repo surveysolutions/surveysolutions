@@ -77,7 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             this.questionnaireId = interview.QuestionnaireIdentity;
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            
 
             groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
             this.root = root;
