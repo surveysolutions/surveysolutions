@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("Fix in KP-7359")]
+    //[Ignore("Fix in KP-7359")]
     internal class when_creating_interview_with_fixed_rosters_and_question_linked_on_them : InterviewTestsContext
     {
         Establish context = () =>
@@ -24,13 +24,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                
                 var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
                 {
-                    Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: roster2Id, variable: "linked"),
+                    Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
                         fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
                         children: new IComposite[]
                         {
                             Create.Roster(id: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                variable: "r2",
+                                variable: "r2", enablementCondition: "@rowcode == 1",
                                 fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)})
                         }),
                 });

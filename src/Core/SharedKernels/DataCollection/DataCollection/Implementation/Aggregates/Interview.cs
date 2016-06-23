@@ -723,8 +723,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures,
                 fixedRosterCalculationDatas,
                 questionnaire,
-                answersTime, 
-                null,
+                answersTime,
                 headquartersId);
 
             //apply events
@@ -792,8 +791,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures,
                 fixedRosterCalculationDatas,
                 questionnaire,
-                answersTime, 
-                null,
+                answersTime,
                 userId);
 
             //apply events
@@ -839,12 +837,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                this.ExpressionProcessorStatePrototype.Clone(),
+                expressionProcessorStatePrototypeLocal,
                 interviewChangeStructures,
                 fixedRosterCalculationDatas,
                 questionnaire,
                 answersTime,
-                null,
                 userId);
 
             //apply events
@@ -871,8 +868,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures,
                 fixedRosterCalculationDatas,
                 questionnaire,
-                answersTime, 
-                null,
+                answersTime,
                 userId);
 
             //apply events
@@ -4487,21 +4483,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewChangeStructures interviewChanges,
             IEnumerable<RosterCalculationData> rosterDatas,
             IQuestionnaire questionnaire,
-            DateTime answerTime, 
-            string answerString,
+            DateTime answerTime,
             Guid userId)
         {
             foreach (var changes in interviewChanges.Changes)
             {
-                if (changes.ValidityChanges != null)
-                {
-                    changes.ValidityChanges.Clear();
-                }
+                changes.ValidityChanges?.Clear();
 
-                if (changes.EnablementChanges != null)
-                {
-                    changes.EnablementChanges.Clear();
-                }
+                changes.EnablementChanges?.Clear();
 
                 if (changes.InterviewByAnswerChanges != null)
                 {
@@ -4515,39 +4504,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     foreach (var r in changes.RosterCalculationData.RosterInstancesToAdd)
                     {
-                        expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId,
-                            r.SortIndex);
-
-                        var rosterInstanceTitle = changes.RosterCalculationData.GetRosterInstanceTitle(r.GroupId, r.RosterInstanceId);
-
-                        if (rosterInstanceTitle != null)
-                        {
-                            expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
-                                r.RosterInstanceId,
-                                rosterInstanceTitle);
-                        }
+                        expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex);
                     }
                     changes.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
                 }
             }
 
-            foreach (var rosterData in rosterDatas)
-            {
-                foreach (var r in rosterData.RosterInstancesToAdd)
-                {
-                    expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex);
+            var rosterInstancesToAdd = GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas.ToArray());
+            var rosterInstancesToRemove = GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToRemove, new RosterIdentityComparer(), rosterDatas.ToArray());
 
-                    var rosterInstanceTitle = rosterData.GetRosterInstanceTitle(r.GroupId, r.RosterInstanceId);
-
-                    if (rosterInstanceTitle != null)
-                    {
-                        expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
-                            r.RosterInstanceId,
-                            rosterInstanceTitle);
-                    }
-                }
-                rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-            }
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
@@ -4597,6 +4564,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     structuralChanges.RemovedRosters.Select(x => new RosterIdentity(x.Id, x.RosterVector.Shrink(), x.RosterVector.Last())));
             }
 
+            var rostersWithTitles = new Dictionary<Identity, string>();
+            // this.GetUpdatedRosterTitles(questionnaire, interviewByAnswerChange, questionId);
+
+            var changedLinkedOptions =
+              this.CreateChangedLinkedOptions(expressionProcessorState,
+              this.interviewState,
+              questionnaire,
+              interviewByAnswerChange,
+              enablementChanges,
+              rosterCalculationData,
+              rostersWithTitles).ToArray();
+
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
@@ -4606,12 +4587,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
+                linkedQuestionsAnswersToRemove,
                 null,
                 null,
                 null,
                 null,
-                null,
-                null,
+                changedLinkedOptions,
                 variableValueChanges);
 
             return enablementAndValidityChanges;
