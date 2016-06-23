@@ -2649,7 +2649,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         x => new AnswerChange(AnswerChangeType.YesNo, userId, x.Key.Id, x.Key.RosterVector, answerTime, ConvertToAnsweredYesNoOptionArray(x.Value))));
             }
 
-            var rostersWithTitles = this.UpdateRosterTitles(expressionProcessorState, questionnaire, interviewByAnswerChange, questionId);
+            var rostersWithTitles = this.GetUpdatedRosterTitles(questionnaire, interviewByAnswerChange, questionId);
 
             if (structuralChanges.RemovedRosters != null && structuralChanges.RemovedRosters.Count > 0)
             {
@@ -2690,8 +2690,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 variableValuesChanges);
         }
 
-        private Dictionary<Identity, string> UpdateRosterTitles(ILatestInterviewExpressionState expressionProcessorState,
-            IQuestionnaire questionnaire, List<AnswerChange> interviewByAnswerChange, Guid questionId)
+        private Dictionary<Identity, string> GetUpdatedRosterTitles(IQuestionnaire questionnaire, List<AnswerChange> interviewByAnswerChange, Guid questionId)
         {
             Dictionary<Identity, string> rostersWithTitles = new Dictionary<Identity, string>();
 
@@ -2709,7 +2708,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     List<Identity> changedRosterTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                         answerChange.QuestionId, answerChange.RosterVector, questionnaire);
 
-                    foreach (var rosterInstancesWithAffectedTitle in changedRosterTitles)
+                    foreach (var rosterInstanceWithAffectedTitle in changedRosterTitles)
                     {
                         string changedAnswerString = null;
 
@@ -2770,7 +2769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             changedAnswerString = AnswerUtils.AnswerToString(answerChange.Answer);
                         }
 
-                        rostersWithTitles[rosterInstancesWithAffectedTitle] = changedAnswerString;
+                        rostersWithTitles[rosterInstanceWithAffectedTitle] = changedAnswerString;
                     }
                 }
             }
@@ -2971,10 +2970,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = questionnaire.IsTimestampQuestion(questionId)
-                ? answer.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern)
-                : AnswerUtils.AnswerToString(answer);
-
             expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector, answer, AnswerChangeType.DateTime, answerTime, questionnaire, expressionProcessorState);
@@ -2984,8 +2979,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, RosterVector rosterVector,
             DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
-
             expressionProcessorState.UpdateNumericRealAnswer(questionId, rosterVector, (double)answer);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector, answer, AnswerChangeType.NumericReal, answerTime, questionnaire, expressionProcessorState);
@@ -2999,8 +2992,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal selectedValue,
             IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
-
             var questionIdentity = new Identity(questionId, rosterVector);
             var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity, questionnaire);
             bool answerChanged = state.WasQuestionAnswered(questionIdentity) && (decimal?)previsousAnswer != (decimal?)selectedValue;
@@ -3033,8 +3024,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
             IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
-
             expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy, altitude);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector,
