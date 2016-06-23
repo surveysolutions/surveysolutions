@@ -93,35 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t}   \r\n\t\t/*\r\n\t\tprivate ");
-            
-            #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
-            
-            #line default
-            #line hidden
-            this.Write("()\r\n\t\t{\r\n\t\t\t");
-            
-            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.LinkedQuestionScopeName));
-            
-            #line default
-            #line hidden
-            this.Write(" current = null;\r\n\t\t\treturn ");
-            
-            #line 35 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n\t\t}    */\r\n\t}\r\n}");
+            this.Write(";\r\n\t\t}   \r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
