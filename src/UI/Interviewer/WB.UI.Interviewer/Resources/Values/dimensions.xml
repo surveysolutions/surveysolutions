@@ -56,5 +56,4 @@
   <dimen name="Relink_FormContainer_Width">400dp</dimen>
   <dimen name="Loading_Progress_padding">50dp</dimen>
   <dimen name="Loading_Progress_font_size">50dp</dimen>
-  <dimen name="Loading_Progress_height">15dp</dimen>
 </resources>
