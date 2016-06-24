@@ -237,10 +237,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     answeredQuestion = new InterviewQuestion(questionId);
                     level.QuestionsSearchCache.Add(questionId, answeredQuestion);
                 }
-                
+
                 answeredQuestion.Answer = answer;
 
-                answeredQuestion.QuestionState = answeredQuestion.QuestionState | (treatAsAnswered ? QuestionState.Answered : ~QuestionState.Answered);
+                if (!treatAsAnswered)
+                {
+                    answeredQuestion.QuestionState = answeredQuestion.QuestionState.Without(QuestionState.Answered);
+                }
+                else
+                {
+                    answeredQuestion.QuestionState = answeredQuestion.QuestionState.With(QuestionState.Answered);
+                }
             });
         }
 

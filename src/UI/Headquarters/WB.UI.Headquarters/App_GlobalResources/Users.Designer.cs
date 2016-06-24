@@ -250,6 +250,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headquarter&apos;s email.
+        /// </summary>
+        internal static string HeadquartersEmail {
+            get {
+                return ResourceManager.GetString("HeadquartersEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Impersonate as this user in read only mode.
         /// </summary>
         internal static string ImpersonateAsUser {
@@ -349,7 +358,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observers email.
+        ///   Looks up a localized string similar to Observer&apos;s email.
         /// </summary>
         internal static string ObserversEmail {
             get {
@@ -376,7 +385,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor email.
+        ///   Looks up a localized string similar to Supervisor&apos;s email.
         /// </summary>
         internal static string SupervisorEmail {
             get {

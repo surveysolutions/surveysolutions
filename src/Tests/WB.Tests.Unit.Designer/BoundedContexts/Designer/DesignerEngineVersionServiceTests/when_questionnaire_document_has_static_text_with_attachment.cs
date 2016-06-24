@@ -23,9 +23,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             version = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
         It should_return_13_version = () =>
-            version.ShouldEqual(new Version(13, 0, 0));
+            version.ShouldEqual(13);
 
-        private static Version version;
+        private static int version;
         private static IDesignerEngineVersionService designerEngineVersionService;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

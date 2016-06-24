@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
-            viewModel.Init("", "", navigationState);
+            viewModel.Init("", Create.Entity.QuestionnaireIdentity(), navigationState);
 
             viewModel.Handle(Create.Event.GroupsDisabled(sectionBId, Empty.RosterVector));
             viewModel.Handle(Create.Event.GroupsDisabled(sectionCId, Empty.RosterVector));

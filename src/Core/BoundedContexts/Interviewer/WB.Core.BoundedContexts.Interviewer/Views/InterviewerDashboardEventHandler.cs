@@ -194,8 +194,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         var isTimestamp = (prefilledQuestion as DateTimeQuestion)?.IsTimestamp ?? false;
                         var localTime = dateTimeAnswer.ToLocalTime();
                         answer = isTimestamp 
-                            ? localTime.ToString(CultureInfo.CurrentUICulture)
-                            : localTime.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
+                            ? localTime.ToString(CultureInfo.CurrentCulture)
+                            : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
                         break;
                     case QuestionType.MultyOption:
                     case QuestionType.SingleOption:

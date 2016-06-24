@@ -1,10 +1,8 @@
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
-using Android.Widget;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.UI.Shared.Enumerator.Activities;
@@ -21,22 +19,25 @@ namespace WB.UI.Interviewer.Activities
     {
         protected override int ViewResourceId => Resource.Layout.loading;
 
-        protected override async void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
 
-            await this.ViewModel.RestoreInterviewAndNavigateThere();
-            this.Finish();
+            Task.Run(async () =>
+            {
+                await this.ViewModel.RestoreInterviewAndNavigateThereAsync();
+                this.Finish();
+            });
         }
-
+        
         public override void OnBackPressed()
         {
             this.ViewModel.NavigateToDashboardCommand.Execute();
             this.CancelLoadingAndFinishActivity();
         }
-
+         
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)

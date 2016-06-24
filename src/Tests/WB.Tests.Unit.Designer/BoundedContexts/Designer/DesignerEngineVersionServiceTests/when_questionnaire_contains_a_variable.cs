@@ -21,10 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
         Because of = () => calculatedVersion = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
-        It should_return_version_15 = () => calculatedVersion.ShouldEqual(new Version(15, 0, 0));
+        It should_return_version_15 = () => calculatedVersion.ShouldEqual(15);
 
         static QuestionnaireDocument questionnaire;
         static IDesignerEngineVersionService designerEngineVersionService;
-        static Version calculatedVersion;
+        static int calculatedVersion;
     }
 }

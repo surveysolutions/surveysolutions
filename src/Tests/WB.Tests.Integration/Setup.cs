@@ -88,7 +88,7 @@ namespace WB.Tests.Integration
                 eventRegistry: new LiteEventRegistry(),
                 modelsFactory: sideBarSectionViewModelsFactory);
 
-            sidebarViewModel.Init("", "", navigationState);
+            sidebarViewModel.Init("", new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), navigationState);
 
             return sidebarViewModel;
         }

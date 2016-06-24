@@ -1103,11 +1103,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-            var linkedQuestionOptionsChanges = CreateChangedLinkedOptions(
+            var linkedQuestionOptionsChanges = this.CreateChangedLinkedOptions(
                 expressionProcessorState, 
                 this.interviewState, 
                 questionnaire, null,
-                null, null, null, null).ToArray();
+                null, null, null).ToArray();
 
             this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionOptionsChanges));
         }
@@ -1184,7 +1184,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
                 var invalidEntitiesInSection = this
                     .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
-                    .Union(this
+                    .Concat(this
                         .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
                     .Where(entity => !this.IsValid(entity));
 

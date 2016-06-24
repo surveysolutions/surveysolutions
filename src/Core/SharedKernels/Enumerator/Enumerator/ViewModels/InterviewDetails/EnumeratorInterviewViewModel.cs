@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .ToList();
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
-            this.Sections.Init(interview.QuestionnaireId, interviewId, this.navigationState);
+            this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;

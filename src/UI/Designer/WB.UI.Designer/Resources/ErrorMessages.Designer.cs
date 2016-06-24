@@ -296,7 +296,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; contains new functionality which is not supported by your installation. Please update..
+        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; contains new functionality: {1}. New feature(s) is not supported by your installation. Please update..
         /// </summary>
         internal static string YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate {
             get {
