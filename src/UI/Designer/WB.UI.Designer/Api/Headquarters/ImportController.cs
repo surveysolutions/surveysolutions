@@ -18,6 +18,7 @@ namespace WB.UI.Designer.Api.Headquarters
 {
     [Obsolete("Since v5.7")]
     [ApiBasicAuth]
+    [RoutePrefix("api/import")]
     public class ImportController : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
@@ -57,10 +58,6 @@ namespace WB.UI.Designer.Api.Headquarters
         [HttpPost]
         public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
             => base.PagedQuestionnaireList(request);
-        
-        [HttpGet]
-        public override QuestionnaireListCommunicationPackage QuestionnaireList()
-            => base.QuestionnaireList();
         
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)

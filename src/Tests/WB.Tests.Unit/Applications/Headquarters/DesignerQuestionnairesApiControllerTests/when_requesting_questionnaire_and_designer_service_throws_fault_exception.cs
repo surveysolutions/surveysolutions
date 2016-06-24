@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
     {
         Establish context = () =>
         {
-            var supportedVerstion = new Version(1, 2, 3);
+            var supportedVerstion = 1;
 
             request = new ImportQuestionnaireRequest
             {

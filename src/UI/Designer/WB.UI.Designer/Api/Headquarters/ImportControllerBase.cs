@@ -159,9 +159,6 @@ namespace WB.UI.Designer.Api.Headquarters
             return new PagedQuestionnaireCommunicationPackage()
             {
                 TotalCount = questionnaireListView.TotalCount,
-                Order = questionnaireListView.Order,
-                Page = questionnaireListView.Page,
-                PageSize = questionnaireListView.PageSize,
                 Items = questionnaireListView.Items.Select(questionnaireListItem =>
                     new QuestionnaireListItem()
                     {
@@ -169,29 +166,6 @@ namespace WB.UI.Designer.Api.Headquarters
                         Title = questionnaireListItem.Title
                     }).ToList()
             };
-        }
-
-        public virtual QuestionnaireListCommunicationPackage QuestionnaireList()
-        {
-            var questionnaireItemList = new List<QuestionnaireListItem>();
-            int pageIndex = 1;
-            while (true)
-            {
-                var questionnaireList =
-                    this.questionnaireHelper.GetQuestionnaires(
-                        viewerId: this.userHelper.WebUser.UserId,
-                        isAdmin: this.userHelper.WebUser.IsAdmin,
-                        pageIndex: pageIndex);
-
-                questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
-
-                pageIndex++;
-                if (pageIndex > questionnaireList.TotalPages)
-                    break;
-            }
-
-            return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
