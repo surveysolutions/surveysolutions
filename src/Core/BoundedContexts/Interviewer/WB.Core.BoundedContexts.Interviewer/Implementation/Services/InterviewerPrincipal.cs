@@ -37,5 +37,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public void SignOut()=> this.currentUserIdentity = null;
+
+        public void CleanUpAllPrincipals()
+        {
+            this.interviewersPlainStorage.Remove(this.interviewersPlainStorage.LoadAll());
+        }
     }
 }
