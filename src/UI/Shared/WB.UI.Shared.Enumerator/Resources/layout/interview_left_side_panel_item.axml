@@ -9,6 +9,9 @@
               local:MvxBind="Click Toggle; Text If(Expanded, '–','+'); Transparent Not(HasChildren); TextColor GroupStateToColor(SideBarGroupState.SimpleStatus)"/>
       <TextView
             style="@style/Interview_Sidebar_Sections_Section_Title"
+            android:singleLine="false"
+            android:maxLines="3"
+            android:ellipsize="end"
             local:MvxBind="Text Title.PlainText; Bold IsCurrent; TextColor GroupStateToColor(SideBarGroupState.SimpleStatus)" />
     </TableRow>
   </TableLayout>

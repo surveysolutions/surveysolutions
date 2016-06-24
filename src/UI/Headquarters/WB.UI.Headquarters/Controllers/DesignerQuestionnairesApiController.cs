@@ -14,7 +14,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -27,6 +26,9 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
+        private readonly string apiPrefix = @"/api/hq";
+        private readonly string apiVersion = @"v3";
+
         private readonly IAttachmentContentService attachmentContentService;
 
         internal RestCredentials designerUserCredentials
@@ -74,10 +76,10 @@ namespace WB.UI.Headquarters.Controllers
 
         public async Task<DesignerQuestionnairesView> QuestionnairesList(DesignerQuestionnairesListViewModel data)
         {
-            var list = await this.restService.PostAsync<PagedQuestionnaireCommunicationPackage>(
-                url: "pagedquestionnairelist",
-                credentials: this.designerUserCredentials, 
-                request: new QuestionnaireListRequest()
+            var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
+                url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
+                credentials: this.designerUserCredentials,
+                queryString: new
                 {
                     Filter = data.Filter,
                     PageIndex = data.PageIndex,
@@ -99,19 +101,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var questionnairePackage = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
-                    url: "questionnaire",
+                var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
+                    url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{request.Questionnaire.Id}",
                     credentials: designerUserCredentials,
-                    request: new DownloadQuestionnaireRequest()
-                    {
-                        QuestionnaireId = request.Questionnaire.Id,
-                        SupportedVersion = new QuestionnaireVersion()
-                        {
-                            Major = supportedVersion.Major,
-                            Minor = supportedVersion.Minor,
-                            Patch = supportedVersion.Build
-                        }
-                    });
+                    queryString: new { clientQuestionnaireContentVersion = supportedVersion });
 
                 var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
@@ -125,7 +118,7 @@ namespace WB.UI.Headquarters.Controllers
                             continue;
 
                         var attachmentContent = await this.restService.DownloadFileAsync(
-                            url: $"attachments/{questionnaireAttachment.ContentId}",
+                            url: $"{this.apiPrefix}/attachment/{questionnaireAttachment.ContentId}",
                             credentials: designerUserCredentials);
 
                         this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
@@ -151,6 +144,7 @@ namespace WB.UI.Headquarters.Controllers
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.Forbidden:
                     case HttpStatusCode.UpgradeRequired:
+                    case HttpStatusCode.ExpectationFailed:
                         questionnaireVerificationResponse.ImportError = ex.Message;
                         break;
                     case HttpStatusCode.PreconditionFailed:

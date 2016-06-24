@@ -1,10 +1,10 @@
-﻿namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
+﻿using System.Collections.Generic;
+
+namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    public class PagedQuestionnaireCommunicationPackage : QuestionnaireListCommunicationPackage
+    public class PagedQuestionnaireCommunicationPackage
     {
-        public string Order { get; set; }
-        public int Page { get; set; }
-        public int PageSize { get; set; }
+        public IEnumerable<QuestionnaireListItem> Items { get; set; }
         public int TotalCount { get; set; }
     }
 }

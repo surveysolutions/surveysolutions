@@ -34,31 +34,13 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				IdOf.structuralDependencies, 
 				this.InterviewProperties);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
-			
-<#
-			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
-			{
-#>
-			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
-<# 
-			}
-#>		
 		}
 
 		public <#=QuestionnaireStructure.ClassName#>(
 			IDictionary<string, IExpressionExecutableV10> interviewScopes, 
 			Dictionary<string, List<string>> siblingRosters, 
 			IInterviewProperties interviewProperties)
-		 :base(interviewScopes, siblingRosters, interviewProperties)
-		 {		
-<#
-		foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
-		{
-#>
-			linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
-<# 
-		}
-#>		}
+		 :base(interviewScopes, siblingRosters, interviewProperties) {}
 
 		protected override bool HasParentScropeRosterId(Guid rosterId) => IdOf.parentScopeMap.ContainsKey(rosterId);
 

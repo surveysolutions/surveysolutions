@@ -408,7 +408,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var completedInterview in completedInterviews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var completedInterviewApiView = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
+                var interviewPackage = await this.interviewFactory.GetInteviewEventsPackageOrNullAsync(completedInterview.InterviewId);
+
                 progress.Report(new SyncProgressInfo
                 {
                     Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format, InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
@@ -420,11 +421,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 await this.UploadImagesByCompletedInterview(completedInterview.InterviewId, progress, cancellationToken);
 
-                await this.synchronizationService.UploadInterviewAsync(
-                    interviewId: completedInterview.InterviewId,
-                    completedInterview: completedInterviewApiView,
-                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                if (interviewPackage != null)
+                {
+                    await this.synchronizationService.UploadInterviewAsync(
+                        interviewId: completedInterview.InterviewId,
+                        completedInterview: interviewPackage,
+                        onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                        token: cancellationToken);
+                }
+                else
+                {
+                    this.logger.Warn($"Interview event stream is missing. No package was sent to server. Interview ID: {completedInterview.InterviewId}.");
+                }
 
                 await this.interviewFactory.RemoveInterviewAsync(completedInterview.InterviewId);
 

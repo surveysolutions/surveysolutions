@@ -60,14 +60,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
-        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
-
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
-
-        CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionText);
-
+        
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
         decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);

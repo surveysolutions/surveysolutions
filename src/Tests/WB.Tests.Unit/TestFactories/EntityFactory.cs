@@ -43,6 +43,9 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class EntityFactory
     {
+        public AllInterviewsInputModel AllInterviewsInputModel()
+            => new AllInterviewsInputModel();
+
         public Answer Answer(string answer, decimal value, decimal? parentValue = null)
             => new Answer
             {
@@ -158,6 +161,11 @@ namespace WB.Tests.Unit.TestFactories
                 questionsToBeEnabled ?? new List<Identity>(),
                 new List<Identity>(),
                 new List<Identity>());
+
+        public ValidityChanges ValidityChanges()
+        {
+            return new ValidityChanges(new List<Identity>(), new List<Identity>());
+        }
 
         public EventBusSettings EventBusSettings()
             => new EventBusSettings
@@ -654,6 +662,13 @@ namespace WB.Tests.Unit.TestFactories
                 ValidationMessage = validationMessage,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
+            };
+
+        public QuestionAnswer QuestionAnswer(Guid? interviewId = null, Guid? questionId = null)
+            => new QuestionAnswer
+            {
+                Questionid = questionId ?? Guid.NewGuid(),
+                InterviewSummary = Create.Entity.InterviewSummary(interviewId: interviewId),
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(

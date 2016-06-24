@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
                         (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
-                        (type) => true)))
+                        (type) => true), 
+                    openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = traceListener
             };
@@ -62,12 +63,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            var totalEventCount = this
-                .connection
-                .Table<EventView>()
-                .Count(eventView
-                    => eventView.EventSourceId == id
-                       && eventView.EventSequence >= minVersion);
+            int totalEventCount;
+
+            using (connection.Lock())
+                totalEventCount = this
+                    .connection
+                    .Table<EventView>()
+                    .Count(eventView
+                        => eventView.EventSourceId == id
+                           && eventView.EventSequence >= minVersion);
 
             if (totalEventCount == 0)
                 yield break;
@@ -76,21 +80,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
+            progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
+
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var startSequenceInTheBulk = lastReadEventSequence;
                 var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
-                bulk = this
-                    .connection
-                    .Table<EventView>()
-                    .Where(eventView
-                        => eventView.EventSourceId == id
-                        && eventView.EventSequence >= startSequenceInTheBulk
-                        && eventView.EventSequence < endSequenceInTheBulk)
-                    .OrderBy(x => x.EventSequence)
-                    .Select(ToCommitedEvent)
-                    .ToList();
+
+                using (connection.Lock())
+                    bulk = this
+                        .connection
+                        .Table<EventView>()
+                        .Where(eventView
+                            => eventView.EventSourceId == id
+                            && eventView.EventSequence >= startSequenceInTheBulk
+                            && eventView.EventSequence < endSequenceInTheBulk)
+                        .OrderBy(x => x.EventSequence)
+                        .Select(ToCommitedEvent)
+                        .ToList();
 
                 foreach (var committedEvent in bulk)
                 {
@@ -104,25 +112,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            try
+            using (connection.Lock())
             {
-                this.connection.BeginTransaction();
-
-                this.ValidateStreamVersion(eventStream);
-
-                List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
-                foreach (var @event in storedEvents)
+                try
                 {
-                    connection.Insert(@event);
-                }
+                    this.connection.BeginTransaction();
 
-                this.connection.Commit();
-                return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
-            }
-            catch
-            {
-                this.connection.Rollback();
-                throw;
+                    this.ValidateStreamVersion(eventStream);
+
+                    List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
+                    foreach (var @event in storedEvents)
+                    {
+                        connection.Insert(@event);
+                    }
+
+                    this.connection.Commit();
+                    return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
+                }
+                catch
+                {
+                    this.connection.Rollback();
+                    throw;
+                }
             }
         }
 
@@ -131,7 +142,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var expectedVersion = eventStream.InitialVersion;
             if (expectedVersion == 0)
             {
-                var viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                bool viewExists;
+
+                using (connection.Lock())
+                    viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+
                 if (viewExists)
                 {
                     var errorMessage = $"Wrong version number. Expected to store new event stream, but it already exists. EventStream Id: {eventStream.SourceId}";
@@ -141,9 +156,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             else
             {
+                int currentStreamVersion;
                 var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-                var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
-                int currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+
+                using (connection.Lock())
+                {
+                    var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
+                    currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+                }
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
@@ -157,18 +177,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public void RemoveEventSourceById(Guid interviewId)
         {
-            try
+            using (connection.Lock())
             {
-                this.connection.BeginTransaction();
-                var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-                var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
-                sqLiteCommand.ExecuteNonQuery();
-                this.connection.Commit();
-            }
-            catch
-            {
-                this.connection.Rollback();
-                throw;
+                try
+                {
+                    this.connection.BeginTransaction();
+                    var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+                    var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
+                    sqLiteCommand.ExecuteNonQuery();
+                    this.connection.Commit();
+                }
+                catch
+                {
+                    this.connection.Rollback();
+                    throw;
+                }
             }
         }
 

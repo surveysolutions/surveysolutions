@@ -273,7 +273,6 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_static_texts_in_and_out_of_roster_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_2nd_level_of_nested_roster_with_multiple_conditions.cs" />
@@ -327,6 +326,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
@@ -339,6 +339,7 @@
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answer_is_roster_title_and_removed_because_of_filtering.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_multi_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_single_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
