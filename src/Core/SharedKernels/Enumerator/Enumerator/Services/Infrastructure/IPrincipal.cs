@@ -8,5 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         IUserIdentity CurrentUserIdentity { get; }
         Task<bool> SignInAsync(string userName, string password, bool staySignedIn);
         void SignOut();
+
+        void CleanUpAllPrincipals();
     }
 }
