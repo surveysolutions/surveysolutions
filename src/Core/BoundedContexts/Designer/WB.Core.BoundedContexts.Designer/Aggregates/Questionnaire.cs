@@ -1403,6 +1403,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
 
+            this.innerDocument.ConnectChildrenWithParent();
             var group = this.GetGroupById(groupId);
 
             var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
