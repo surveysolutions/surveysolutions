@@ -49,10 +49,6 @@ namespace WB.UI.Headquarters.API
             {
                 return this.request.CreateErrorResponse(ibr);
             }
-            catch (Exception e)
-            {
-                return this.request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
-            }
         }
     }
 }
