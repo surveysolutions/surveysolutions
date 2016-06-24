@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        public Version GetSupportedQuestionnaireVersion() => new Version(ApiVersion.QuestionnaireContent, 0, 0);
+        public int GetSupportedQuestionnaireVersion() => ApiVersion.QuestionnaireContent;
     }
 }

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         {
             importRequest = new ImportQuestionnaireRequest(){ Questionnaire = new DesignerQuestionnaireListViewItem()};
 
-            var versionProvider = Setup.SupportedVersionProvider(new Version(1, 2, 3));
+            var versionProvider = Setup.SupportedVersionProvider(1);
 
             var zipUtils = Setup.StringCompressor_Decompress(new QuestionnaireDocument() {Attachments = questionnaireAttachments});
 

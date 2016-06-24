@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.Versions
         Because of = () =>
         {
             designerLatestSupportedVersion = designerEngineVersionService.LatestSupportedVersion;
-            hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion().Major;
+            hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion();
         };
 
         It should_return_same_versions_for_headquarters_version_and_designer_latest_supported_version = () =>

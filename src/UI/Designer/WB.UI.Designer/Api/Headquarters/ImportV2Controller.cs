@@ -15,8 +15,9 @@ using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
+    [Obsolete("Since v5.11")]
     [ApiBasicAuth]
-    [RoutePrefix("import")]
+    [RoutePrefix("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
@@ -50,12 +51,6 @@ namespace WB.UI.Designer.Api.Headquarters
         [HttpPost]
         [Route("PagedQuestionnaireList")]
         public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request) => base.PagedQuestionnaireList(request);
-        
-
-        [HttpGet]
-        [Route("QuestionnaireList")]
-        public override QuestionnaireListCommunicationPackage QuestionnaireList() => base.QuestionnaireList();
-        
 
         [HttpPost]
         [Route("Questionnaire")]
