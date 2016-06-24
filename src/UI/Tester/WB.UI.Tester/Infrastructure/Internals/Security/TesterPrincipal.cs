@@ -48,11 +48,12 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 
         public void SignOut()
         {
-            this.usersStorage.Remove(this.usersStorage.LoadAll());
-            this.dashboardLastUpdateStorage.Remove(this.dashboardLastUpdateStorage.LoadAll());
-            this.questionnairesStorage.Remove(this.questionnairesStorage.LoadAll());
-
             this.currentUserIdentity = null;
+        }
+
+        public void CleanUpAllPrincipals()
+        {
+            this.usersStorage.Remove(this.usersStorage.LoadAll());
         }
     }
 }
