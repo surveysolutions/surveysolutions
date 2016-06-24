@@ -141,13 +141,11 @@ namespace WB.UI.Headquarters.API
             if (!fileSystemAccessor.IsFileExists(filePath))
                 throw new HttpException(404, "file is absent");
 
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(filePath, FileMode.Open);
+            var result = new ProgressiveDownload(this.Request).ResultMessage(stream, "application/zip");
 
-            result.Content = new StreamContent(stream);
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
             result.Content.Headers.ContentDisposition.FileName = HttpUtility.UrlEncode(fileSystemAccessor.GetFileName(filePath));
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
 
             return result;
         }
