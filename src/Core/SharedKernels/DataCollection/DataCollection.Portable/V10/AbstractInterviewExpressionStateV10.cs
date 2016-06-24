@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             targetLevel?.RemoveAnswer(questionIdentity.Id);
         }
     
-        public override void SaveAllCurrentStatesAsPrevious()
+        public new void SaveAllCurrentStatesAsPrevious()
         {
             base.SaveAllCurrentStatesAsPrevious();
             StructuralChanges.ClearAllChanges();
