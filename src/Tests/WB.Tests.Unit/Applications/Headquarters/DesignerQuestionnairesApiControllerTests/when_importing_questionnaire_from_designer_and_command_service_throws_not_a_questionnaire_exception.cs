@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         {
             importRequest = new ImportQuestionnaireRequest(){ Questionnaire = new DesignerQuestionnaireListViewItem()};
 
-            var supportedVerstion = new Version(1,2,3);
+            var supportedVerstion = 1;
 
             var versionProvider = new Mock<ISupportedVersionProvider>();
             versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);

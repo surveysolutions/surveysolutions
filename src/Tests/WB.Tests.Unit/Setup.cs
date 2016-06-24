@@ -233,7 +233,7 @@ namespace WB.Tests.Unit
             return questionnaireEntityFactoryMock;
         }
 
-        public static ISupportedVersionProvider SupportedVersionProvider(Version supportedVerstion)
+        public static ISupportedVersionProvider SupportedVersionProvider(int supportedVerstion)
         {
             var versionProvider = new Mock<ISupportedVersionProvider>();
             versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
