@@ -752,6 +752,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
     <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\ExportSettingsApiController.cs" />
