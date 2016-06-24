@@ -736,7 +736,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active users.
+        ///   Looks up a localized string similar to Active interviewers.
         /// </summary>
         public static string Interviewers_ActiveUsers {
             get {
@@ -754,7 +754,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archived users.
+        ///   Looks up a localized string similar to Archived interviewers.
         /// </summary>
         public static string Interviewers_ArchivedUsers {
             get {
