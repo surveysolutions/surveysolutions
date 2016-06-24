@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -38,8 +39,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();
 
-        It should_call_execute_command_service_once = () =>
+        It should_have_one_error = () =>
             interviewImportService.Status.State.Errors.Count.ShouldEqual(1);
+
+        It should_have_one_error_with_expected_message = () =>
+            interviewImportService.Status.State.Errors.Single().ErrorMessage.ShouldEqual("Datafile is incorrect");
 
         private static InterviewImportService interviewImportService;
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
