@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters.API
             if (!fileSystemAccessor.IsFileExists(filePath))
                 throw new HttpException(404, "file is absent");
 
-            var stream = new FileStream(filePath, FileMode.Open);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             var result = new ProgressiveDownload(this.Request).ResultMessage(stream, "application/zip");
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
