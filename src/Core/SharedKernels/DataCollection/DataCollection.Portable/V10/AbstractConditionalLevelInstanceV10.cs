@@ -323,40 +323,6 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
-        [Obsolete("Since version 5.10. Released on 1st of July")]
-        public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters(IExpressionExecutableV10 currentScope)
-        {
-            var result = new List<LinkedQuestionFilterResult>();
-
-            var rosterStatesFromScope = this.EnablementStates
-                .Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r => r.Value.State)
-                .ToArray();
-
-            if (rosterStatesFromScope.Length > 0 && rosterStatesFromScope.All(s => s == State.Disabled))
-                return result;
-
-            foreach (var linkedQuestionFilter in this.LinkedOptionFiltersMap)
-            {
-                bool enabled = false;
-                try
-                {
-                    enabled = linkedQuestionFilter.Value(currentScope);
-                }
-#pragma warning disable
-                catch (Exception ex)
-                {
-                }
-#pragma warning restore
-                result.Add(new LinkedQuestionFilterResult()
-                {
-                    Enabled = enabled,
-                    LinkedQuestionId = linkedQuestionFilter.Key,
-                    RosterKey = this.RosterKey
-                });
-            }
-            return result;
-        }
-
         public LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId)
         {
             if (!this.LinkedOptionFiltersMap.ContainsKey(questionId))
