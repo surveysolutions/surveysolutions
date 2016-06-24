@@ -38,7 +38,6 @@
                 var command = {
                     type: "CreateInterviewCommand",
                     command: ko.toJSON({
-                        interviewId: self.questionnaire().id,
                         supervisorId: self.responsible().UserId,
                         questionnaireId: self.questionnaire().templateId,
                         questionnaireVersion: self.questionnaire().templateVersion,

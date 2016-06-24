@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.Tests.Unit.TestFactories
 {

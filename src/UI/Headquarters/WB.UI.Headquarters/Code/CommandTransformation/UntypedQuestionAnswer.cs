@@ -1,7 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
+namespace WB.UI.Headquarters.Code.CommandTransformation
 {
     internal class UntypedQuestionAnswer
     {
