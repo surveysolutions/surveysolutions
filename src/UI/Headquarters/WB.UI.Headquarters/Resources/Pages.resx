@@ -511,10 +511,10 @@
     <value>Unarchive</value>
   </data>
   <data name="Interviewers_ActiveUsers" xml:space="preserve">
-    <value>Active users</value>
+    <value>Active interviewers</value>
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
-    <value>Archived users</value>
+    <value>Archived interviewers</value>
   </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connected</value>
