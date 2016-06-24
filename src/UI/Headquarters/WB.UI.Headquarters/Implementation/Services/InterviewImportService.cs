@@ -156,8 +156,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private string FormatInterviewImportData(InterviewImportData importedInterview)
         {
-            return string.Join(", ",
-                importedInterview.Answers.Values.Where(x => x != null));
+            return string.Join(", ", importedInterview.Answers.Values.Where(x => x != null));
         }
 
         public bool HasResponsibleColumn(string sampleId)
