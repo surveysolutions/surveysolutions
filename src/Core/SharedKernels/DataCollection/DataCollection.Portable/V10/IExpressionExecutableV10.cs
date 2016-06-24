@@ -27,5 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         Guid[] GetRosterIdsThisScopeConsistOf();
         
         LinkedQuestionFilterResult ExecuteLinkedQuestionFilter(IExpressionExecutableV10 currentScope, Guid questionId);
+
+        void RemoveAnswer(Guid questionId);
     }
 }
