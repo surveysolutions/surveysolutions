@@ -17,12 +17,11 @@ android:layout_height="match_parent" android:orientation="vertical" android:grav
      android:layout_height="wrap_content" android:gravity="center"
                local:MvxBind="Text ProgressDescription;" />
     <ProgressBar
-           style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+           style="@style/Interview_Question_Progress_Indicator"
            android:layout_width="match_parent"
            android:paddingLeft="@dimen/Loading_Progress_padding"
            android:paddingRight="@dimen/Loading_Progress_padding"
-           android:layout_height="@dimen/Loading_Progress_height"
-           android:indeterminate="true"
-           android:visibility="visible" />
+           android:indeterminateOnly="true"
+           android:visibility="visible"/>
   </LinearLayout>
 </LinearLayout>

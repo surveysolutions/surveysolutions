@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    await this.designerQuestionnaireApiRestService.GetAsync(url: "login", credentials: designerUserCredentials);
+                    await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login", credentials: designerUserCredentials);
 
                     this.designerUserCredentials = designerUserCredentials;
 

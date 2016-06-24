@@ -190,12 +190,9 @@ namespace WB.Tests.Unit
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
         {
-            var version = new Version(questionnaireContentVersion, 0, 0);
-
             return Mock.Of<IDesignerEngineVersionService>(_ 
-                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
-                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
-                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+                => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == isClientVersionSupported
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
         }
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
@@ -236,7 +233,7 @@ namespace WB.Tests.Unit
             return questionnaireEntityFactoryMock;
         }
 
-        public static ISupportedVersionProvider SupportedVersionProvider(Version supportedVerstion)
+        public static ISupportedVersionProvider SupportedVersionProvider(int supportedVerstion)
         {
             var versionProvider = new Mock<ISupportedVersionProvider>();
             versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
@@ -278,7 +275,7 @@ namespace WB.Tests.Unit
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int>())).Returns(options);
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
 
             return filteredOptionsViewModel.Object;

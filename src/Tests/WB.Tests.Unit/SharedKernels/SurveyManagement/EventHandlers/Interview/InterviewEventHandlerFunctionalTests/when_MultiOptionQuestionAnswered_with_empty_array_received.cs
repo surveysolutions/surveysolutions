@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
 {
-    internal class when_QRBarcodeQuestionAnswerwhen_MultiOptionQuestionAnswered_with_empty_array_receiveded_received : InterviewEventHandlerFunctionalTestContext
+    internal class when_MultiOptionQuestionAnswered_with_empty_array_received : InterviewEventHandlerFunctionalTestContext
     {
         Establish context = () =>
         {
@@ -31,6 +31,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         It should_be_unanswered = () =>
             IsAnswered().ShouldBeFalse();
+
+        It should_not_mark_question_as_flagged = () => 
+            viewState.Levels["#"].QuestionsSearchCache[questionId].IsFlagged().ShouldBeFalse();
 
         private static object GetAnswer()
         {

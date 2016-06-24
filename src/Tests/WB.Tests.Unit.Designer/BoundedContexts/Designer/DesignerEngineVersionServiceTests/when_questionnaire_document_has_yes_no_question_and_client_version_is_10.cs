@@ -28,12 +28,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         };
 
         Because of = () =>
-            result = designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaire, new Version(10, 0, 0));
+            result = designerEngineVersionService.GetListOfNewFeaturesForClient(questionnaire, 10);
 
         It should_return_false = () =>
-            result.ShouldBeFalse();
+            result.ShouldNotBeEmpty();
 
-        private static bool result;
+        private static IEnumerable<string> result;
         private static IDesignerEngineVersionService designerEngineVersionService;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

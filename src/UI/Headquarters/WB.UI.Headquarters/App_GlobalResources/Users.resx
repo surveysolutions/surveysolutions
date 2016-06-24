@@ -232,9 +232,12 @@
     <value>Date when the observer account was created</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
-    <value>Observers email</value>
+    <value>Observer's email</value>
   </data>
   <data name="SupervisorEmail" xml:space="preserve">
-    <value>Supervisor email</value>
+    <value>Supervisor's email</value>
+  </data>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>Headquarter's email</value>
   </data>
 </root>

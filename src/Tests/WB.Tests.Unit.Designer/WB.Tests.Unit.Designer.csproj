@@ -56,7 +56,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\CsvHelper.2.14.2\lib\net45\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\packages\CsvHelper.2.15.0.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.6.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -236,6 +236,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Headquarters\QuestionnairesControllerTests\QuestionnairesControllerTestContext.cs" />
+    <Compile Include="Api\Headquarters\QuestionnairesControllerTests\when_getting_Questionaire_but_client_version_lower_than_serrver_one.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\UsersControllerTestsContext.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_very_old_client_has_old_app_version.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_client_has_old_app_version.cs" />
@@ -363,6 +365,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteVariableHandlerTests\when_deleting_variable_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_a_variable.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_linked_question_with_filter_and_uses_current_keyword.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_a_variable_and_client_version_is_14.cs" />

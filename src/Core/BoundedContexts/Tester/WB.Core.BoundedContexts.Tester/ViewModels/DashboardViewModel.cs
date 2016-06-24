@@ -456,7 +456,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void HumanizeLastUpdateDate(DateTime? lastUpdate)
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
-                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: true, dateToCompareAgainst: DateTime.UtcNow))
+                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 

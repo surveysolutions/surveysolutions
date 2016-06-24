@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             filteredOptionsViewModel.Raise(_ => _.OptionsChanged -= null, EventArgs.Empty);
 
         It should_update_suggestions_list = () =>
-            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>()), Times.Once);
+            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>(), 15), Times.Once);
 
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
     {
         Establish context = () =>
         {
-            var supportedVerstion = new Version(1, 2, 3);
+            var supportedVerstion = 1;
 
             request = new ImportQuestionnaireRequest
             {
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             var service = new Mock<IRestService>();
 
             service
-                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
+                .Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
                 .Throws(new RestException(someFaultReason, HttpStatusCode.Unauthorized));
 
             controller = CreateDesignerQuestionnairesApiController(

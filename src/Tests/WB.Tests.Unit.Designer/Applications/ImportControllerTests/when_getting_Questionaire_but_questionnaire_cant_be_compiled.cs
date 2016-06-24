@@ -30,14 +30,15 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
             var expressionsEngineVersionService = Mock.Of<IDesignerEngineVersionService>(
-                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == true &&
+                     _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == new[] { "New questionnaire feature" });
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationMessage[0]);
 
             string generatedAssembly;
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(),
                     out generatedAssembly) == Create.GenerationResult(false));
 
             importController = CreateImportController(membershipUserService: membershipUserService,
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             exception.ShouldNotBeNull();
 
         It should_throw_HttpResponseException_with_StatusCode_UpgradeRequired = () =>
-            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
+            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
             exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "contains", "functionality", "not", "supported", "update");

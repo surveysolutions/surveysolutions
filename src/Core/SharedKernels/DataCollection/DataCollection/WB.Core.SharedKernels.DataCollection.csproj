@@ -280,6 +280,7 @@
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
+    <Compile Include="Implementation\Providers\ICategoricalOptionsProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Interview\QuestionState.cs" />
+    <Compile Include="ValueObjects\Interview\QuestionStateExtensions.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
