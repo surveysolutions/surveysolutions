@@ -1,5 +1,8 @@
-﻿namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
+﻿using System;
+
+namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
+    [Obsolete("Since v5.11")]
     public class QuestionnaireListRequest
     {
         public string Filter { get; set; }
