@@ -519,6 +519,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
+    <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
