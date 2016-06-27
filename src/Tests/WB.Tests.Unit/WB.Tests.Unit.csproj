@@ -312,7 +312,6 @@
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content_and_headers_contains_etag.cs" />
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
-    <Compile Include="BoundedContexts\Headquarters\AllInterviewsFactoryTests\when_getting_all_interviews_and_prefilled_questions_answers_are_duplicated_for_one_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\InterviewDetailsViewFactoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\when_getting_interview_details_and_questionnaire_has_filtered_categorical_question.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewsExportDenormalizerTests\InterviewsExportDenormalizerNunitTests.cs" />
