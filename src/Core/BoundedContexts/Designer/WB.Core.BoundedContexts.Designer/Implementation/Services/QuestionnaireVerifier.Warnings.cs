@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
         {
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
@@ -232,46 +232,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsNumeric(IQuestion question)
             => question.QuestionType == QuestionType.Numeric;
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Warning(getSubEnitites, (subEntity, state) => hasError(subEntity), code, getMessageBySubEntityIndex);
+            return Warning(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
-          Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
-          where TEntity : class, IComposite
-        {
-            return Warning(getSubEnitites, (entity, subEntity, questionnaire, state) => hasError(subEntity, state), code, getMessageBySubEntityIndex);
-        }
-
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
-                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire, state))
+                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire))
                     .Select(descriptor => QuestionnaireVerificationMessage.Warning(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
             Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                questionnaire
                    .Find<TEntity>(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                questionnaire
                    .Attachments
                    .Where(x => hasError(x, questionnaire))
@@ -279,37 +272,37 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>
+        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
             Warning(
             Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
                 validationConditionRefersToAFutureQuestion)
         {
-            return (questionnaire, state) => validationConditionRefersToAFutureQuestion(questionnaire);
+            return (questionnaire) => validationConditionRefersToAFutureQuestion(questionnaire);
         }
 
-        private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<AttachmentSize, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                    this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Where(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
            Func<TEntity, bool> hasError, string code, string message)
            where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(hasError)
                     .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 hasError(questionnaire)
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
