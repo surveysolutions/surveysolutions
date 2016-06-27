@@ -38,6 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
         }
 
+        public async Task RemoveAllAsync() => await Task.Run(() => this.inMemroyStorage.Clear());
+
         public async Task<TEntity> GetByIdAsync(string id) => await Task.Run(() => this.GetById(id));
 
         public async Task StoreAsync(TEntity entity) => await Task.Run(() => this.inMemroyStorage[entity.Id] = entity);
