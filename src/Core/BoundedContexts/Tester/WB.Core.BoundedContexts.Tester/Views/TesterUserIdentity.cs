@@ -3,9 +3,10 @@ using SQLite.Net.Attributes;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
+//namespace preserved for compatibility
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
-    internal class TesterUserIdentity : IUserIdentity, IPlainStorageEntity
+    public class TesterUserIdentity : IUserIdentity, IPlainStorageEntity
     {
         [PrimaryKey]
         public string Id  { get; set; }

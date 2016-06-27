@@ -52,7 +52,7 @@ namespace WB.UI.Tester.Infrastructure
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });
-            this.Bind(typeof(IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
             this.Unbind<IAsyncPlainStorage<OptionView>>();
             this.Bind<IAsyncPlainStorage<OptionView>>().To<InMemoryAsyncPlainStorage<OptionView>>().InSingletonScope();

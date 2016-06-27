@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
                     checkOverflow: true, 
                     optimizationLevel: OptimizationLevel.Release, 
+                    warningLevel: 1,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
                 references: metadataReferences);

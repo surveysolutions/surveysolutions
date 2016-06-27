@@ -302,7 +302,6 @@
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
-    <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
     <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
     <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />

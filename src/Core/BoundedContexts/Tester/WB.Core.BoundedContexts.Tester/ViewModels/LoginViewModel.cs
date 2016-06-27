@@ -3,10 +3,13 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Tester.Infrastructure.Internals.Security;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -18,14 +21,29 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
-        public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService,
-            IUserInteractionService userInteractionService, IFriendlyErrorMessageService friendlyErrorMessageService) : base(principal, viewModelNavigationService)
+        private readonly IAsyncPlainStorage<TesterUserIdentity> userStorage;
+        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
+        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+
+        public LoginViewModel(
+            IPrincipal principal, 
+            IDesignerApiService designerApiService, 
+            IViewModelNavigationService viewModelNavigationService,
+            IUserInteractionService userInteractionService, 
+            IFriendlyErrorMessageService friendlyErrorMessageService,
+            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage, 
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            IAsyncPlainStorage<TesterUserIdentity> userStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
+
+            this.questionnairesStorage = questionnairesStorage;
+            this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
+            this.userStorage = userStorage;
         }
 
         public override bool IsAuthenticationRequired => false;
@@ -73,6 +91,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
+                    await this.userStorage.RemoveAllAsync();
+                    await this.dashboardLastUpdateStorage.RemoveAllAsync();
+                    await this.questionnairesStorage.RemoveAllAsync();
+
                     await this.principal.SignInAsync(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
                     this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
                 }

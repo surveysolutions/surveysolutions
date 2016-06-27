@@ -73,8 +73,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
+            try
+            {
+                await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+                    url: string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
+                            this.syncProtocolVersionProvider.GetProtocolVersion()),
+                    credentials: credentials ?? this.restCredentials, token: token));
+            }
+            catch (SynchronizationException ex)
+            {
+                if ((ex.InnerException as RestException)?.StatusCode == HttpStatusCode.NotFound)
+                    await this.OldCanSynchronizeAsync(credentials, token);
+                else throw;
+            }
+        }
+
+        [Obsolete("Since v5.10")]
+        private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
-                url: string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
+                url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 

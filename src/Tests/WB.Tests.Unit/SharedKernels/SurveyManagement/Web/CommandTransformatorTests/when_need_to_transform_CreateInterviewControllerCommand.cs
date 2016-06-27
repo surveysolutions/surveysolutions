@@ -2,7 +2,7 @@
 using Ncqrs.Commanding;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorTests
