@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+﻿using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorTests
 {

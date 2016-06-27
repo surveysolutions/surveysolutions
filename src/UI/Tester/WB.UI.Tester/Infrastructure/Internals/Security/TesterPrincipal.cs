@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -9,22 +8,14 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
     internal class TesterPrincipal : IPrincipal
     {
         private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
-        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
-        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
-
         private TesterUserIdentity currentUserIdentity;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage,
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
+        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage)
         {
             this.usersStorage = usersStorage;
-            this.questionnairesStorage = questionnairesStorage;
-            this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
-
             this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
@@ -48,10 +39,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 
         public void SignOut()
         {
-            this.usersStorage.Remove(this.usersStorage.LoadAll());
-            this.dashboardLastUpdateStorage.Remove(this.dashboardLastUpdateStorage.LoadAll());
-            this.questionnairesStorage.Remove(this.questionnairesStorage.LoadAll());
-
             this.currentUserIdentity = null;
         }
     }
