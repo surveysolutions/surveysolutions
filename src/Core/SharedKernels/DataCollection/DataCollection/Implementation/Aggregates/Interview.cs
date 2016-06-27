@@ -152,7 +152,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (RosterSynchronizationDto roster in orderedRosterInstances)
             {
                 this.ExpressionProcessorStatePrototype.AddRoster(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId, roster.SortIndex);
-                this.ExpressionProcessorStatePrototype.UpdateRosterTitle(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId, roster.RosterTitle);
             }
            
             if (@event.InterviewData.Answers != null)
@@ -553,10 +552,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(RosterInstancesTitleChanged @event)
         {
             this.interviewState.ChangeRosterTitles(@event.ChangedInstances);
-            foreach (var instance in @event.ChangedInstances)
-            {
-                this.ExpressionProcessorStatePrototype.UpdateRosterTitle(instance.RosterInstance.GroupId, instance.RosterInstance.OuterRosterVector, instance.RosterInstance.RosterInstanceId, instance.Title);
-            }
         }
 
         public virtual void Apply(RosterInstancesAdded @event)
@@ -2583,9 +2578,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 expressionProcessorState.AddRoster(rosterIdentityToAdd.Key.GroupId, rosterIdentityToAdd.Key.OuterRosterVector,
                     rosterIdentityToAdd.Key.RosterInstanceId, rosterIdentityToAdd.Key.SortIndex);
-                expressionProcessorState.UpdateRosterTitle(rosterIdentityToAdd.Key.GroupId,
-                    rosterIdentityToAdd.Key.OuterRosterVector, rosterIdentityToAdd.Key.RosterInstanceId,
-                    rosterIdentityToAdd.Value);
             }
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
@@ -2810,9 +2802,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorState.AddRoster(rosterInstanceToAdd.Key.GroupId,
                     rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
                     rosterInstanceToAdd.Key.SortIndex);
-                expressionProcessorState.UpdateRosterTitle(rosterInstanceToAdd.Key.GroupId,
-                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
-                    rosterInstanceToAdd.Value);
             }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
@@ -2869,9 +2858,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorState.AddRoster(rosterInstanceToAdd.Key.GroupId,
                     rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
                     rosterInstanceToAdd.Key.SortIndex);
-                expressionProcessorState.UpdateRosterTitle(rosterInstanceToAdd.Key.GroupId,
-                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
-                    rosterInstanceToAdd.Value);
             }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
@@ -2936,9 +2922,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorState.AddRoster(rosterInstanceToAdd.Key.GroupId,
                     rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
                     rosterInstanceToAdd.Key.SortIndex);
-                expressionProcessorState.UpdateRosterTitle(rosterInstanceToAdd.Key.GroupId,
-                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
-                    rosterInstanceToAdd.Value);
             }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 

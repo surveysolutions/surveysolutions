@@ -95,7 +95,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone() => this.Clone();
         IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone() => this.Clone();
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => this.Clone();
-        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle) => this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
+        {
+        }
+
         public void SetInterviewProperties(IInterviewProperties properties) => this.adaptee.SetInterviewProperties(properties);
 
         public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) => this.adaptee.ApplyFailedValidations(failedValidationConditions);
