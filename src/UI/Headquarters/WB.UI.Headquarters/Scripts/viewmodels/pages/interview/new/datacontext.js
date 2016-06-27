@@ -93,7 +93,6 @@
     var parseData = function (q) {
         status = q.Status;
 
-        questionnaire.id = Math.uuid();
         questionnaire.templateVersion = q.QuestionnaireVersion;
         questionnaire.templateId = q.QuestionnaireId;
         questionnaire.title = q.QuestionnaireTitle;

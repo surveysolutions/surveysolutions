@@ -19,8 +19,6 @@ android:layout_height="match_parent" android:orientation="vertical" android:grav
     <ProgressBar
            style="@style/Interview_Question_Progress_Indicator"
            android:layout_width="match_parent"
-           android:paddingLeft="@dimen/Loading_Progress_padding"
-           android:paddingRight="@dimen/Loading_Progress_padding"
            android:indeterminateOnly="true"
            android:visibility="visible"/>
   </LinearLayout>
