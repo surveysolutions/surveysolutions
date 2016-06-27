@@ -37,12 +37,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             });
                 IInterviewExpressionStateV7 state = GetInterviewExpressionState(questionnaireDocument,version: 13) as IInterviewExpressionStateV7;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
-                state.UpdateRosterTitle(rosterId, new decimal[0], 1, "1");
                 state.AddRoster(rosterId, new decimal[0], 2, null);
-                state.UpdateRosterTitle(rosterId, new decimal[0], 2, "2");
                 state.DisableGroups(new[] { new Identity(rosterId, new decimal[] {2}) });
                 state.AddRoster(rosterId, new decimal[0], 3, null);
-                state.UpdateRosterTitle(rosterId, new decimal[0], 3, "3");
 
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()

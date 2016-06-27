@@ -79,11 +79,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.QRBarcode
         };
 
-        private class VerificationState
-        {
-            public bool HasAnyExpressionExceededLimitByCharactersLength { get; set; }
-        }
-
         private struct EntityVerificationResult<TReferencedEntity>
             where TReferencedEntity : class, IComposite
         {
@@ -129,10 +124,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.topologicalSorter = topologicalSorter;
         }
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
             => this.ErrorsVerifiers.Concat(this.WarningsVerifiers);
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
@@ -237,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
         };
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
@@ -296,7 +291,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(ReadOnlyQuestionnaireDocument document, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(ReadOnlyQuestionnaireDocument document)
         {
             var gpsPrefilledQuestions = document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
             if (gpsPrefilledQuestions.Length < 2)
@@ -312,44 +307,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            var customEnablementCondition = GetCustomEnablementCondition(entity);
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, ReadOnlyQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, GetCustomEnablementCondition(entity));
 
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, customEnablementCondition);
-        }
+        private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties.OptionsFilterExpression);
 
-        private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.Properties.OptionsFilterExpression);
-        }
+        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, ReadOnlyQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
 
-        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, variable.Expression);
-        }
-
-        private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 return false;
 
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.LinkedFilterExpression);
+            return this.DoesExpressionExceed1000CharsLimit(questionnaire, question.LinkedFilterExpression);
         }
 
-        private bool DoesExpressionExceed1000CharsLimit(VerificationState state, ReadOnlyQuestionnaireDocument questionnaire,
-            string expression)
+        private bool DoesExpressionExceed1000CharsLimit(ReadOnlyQuestionnaireDocument questionnaire, string expression)
         {
             if (string.IsNullOrEmpty(expression))
                 return false;
 
             var expressionWithInlinedMacroses = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
 
-            var doesExceed = expressionWithInlinedMacroses.Length > MaxExpressionLength;
-
-            state.HasAnyExpressionExceededLimitByCharactersLength |= doesExceed;
-
-            return doesExceed;
+            return expressionWithInlinedMacroses.Length > MaxExpressionLength;
         }
 
         private static bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -362,12 +344,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(
-            QuestionnaireDocument questionnaire, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCompiler(QuestionnaireDocument questionnaire)
         {
-            if (state.HasAnyExpressionExceededLimitByCharactersLength)
-                yield break;
-
             var compilationResult = GetCompilationResult(questionnaire);
 
             if (compilationResult.Success)
@@ -591,51 +569,54 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
 
-            var state = new VerificationState();
-
-            var verificationMessages =
+            var verificationMessagesByQuestionnaire =
                 (from verifier in this.AtomicVerifiers
-                 let errors = verifier.Invoke(readOnlyQuestionnaireDocument, state)
+                 let errors = verifier.Invoke(readOnlyQuestionnaireDocument)
                  from error in errors
                  select error).ToList();
 
-            if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
-                return verificationMessages;
+            if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
+                return verificationMessagesByQuestionnaire;
 
-            return verificationMessages.Concat(ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(questionnaire, state));
+            if (HasQuestionnaireExpressionsWithExceedLength(readOnlyQuestionnaireDocument))
+                return verificationMessagesByQuestionnaire;
+
+            var verificationMessagesByCompiler = this.ErrorsByCompiler(questionnaire).ToList();
+
+            return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
             Func<Macro, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForMacro(entity.Key)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
             Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
                     .Attachments
                     .Where(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
             Func<Guid, LookupTable, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
                     .LookupTables
                     .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(entity.Key)));
         }
 
-        private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
             Func<LookupTable, LookupTableContent, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 from lookupTable in questionnaire.LookupTables
                 let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
                 where lookupTableContent != null
@@ -643,19 +624,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(lookupTable.Key));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
             Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 hasError(questionnaire)
                     ? new[] { QuestionnaireVerificationMessage.Error(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
             Func<ReadOnlyQuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
             {
                 var errorCheckResult = hasError(questionnaire);
                 return errorCheckResult.Item1
@@ -664,10 +645,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(hasError)
                     .Select(entity => level == VerificationMessageLevel.General 
@@ -675,58 +656,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Verifier(getSubEnitites, (subEntity, state) => hasError(subEntity), code, getMessageBySubEntityIndex);
+            return Verifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Verifier(getSubEnitites, (entity, subEntity, questionnaire, state) => hasError(subEntity, state), code, getMessageBySubEntityIndex);
-        }
-
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
-            where TEntity : class, IComposite
-        {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
-                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire, state))
+                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire))
                     .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
-            Func<TEntity, VerificationState, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
-            where TEntity : class, IComposite
-        {
-            return (questionnaire, state) =>
-                questionnaire
-                    .Find<TEntity>(entity => hasError(entity, state, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
-        }
-
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
             Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
+        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
             Func<TEntity, ReadOnlyQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
             where TReferencedEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
@@ -976,14 +940,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
-        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition, VerificationState state)
-        {
-            var isValidationConditionTooLong = validationCondition.Expression?.Length > 10000;
-
-            state.HasAnyExpressionExceededLimitByCharactersLength |= isValidationConditionTooLong;
-
-            return isValidationConditionTooLong;
-        }
+        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition)
+            => validationCondition.Expression?.Length > MaxExpressionLength;
 
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
             => validationCondition.Message?.Length > 250;
@@ -1285,7 +1243,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             var dependencies = new Dictionary<string, string[]>();
             var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
@@ -1325,7 +1283,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             var linkedQuestions = questionnaire.Find<IQuestion>(
                 question => question.LinkedToQuestionId.HasValue);
@@ -1377,7 +1335,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByMacrosWithDuplicateName(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByMacrosWithDuplicateName(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .Macros
@@ -1393,7 +1351,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByAttachmentsWithDuplicateName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .Attachments
@@ -1408,7 +1366,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateVariableName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             var rosterVariableNameMappedOnRosters = questionnaire
                 .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
@@ -1450,7 +1408,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsBySubstitutions(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
@@ -1824,6 +1782,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue &&
                    question.IsFilteredCombobox.Value;
+        }
+
+        private bool HasQuestionnaireExpressionsWithExceedLength(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            Func<IComposite, bool> isValidationExpressionLengthExeeded =
+                entity => GetValidationConditionsOrEmpty(entity).Any(ValidationConditionIsTooLong);
+
+            Func<IComposite, bool> isConditionExpressionLengthExeeded =
+                entity => this.DoesExpressionExceed1000CharsLimit(questionnaire, GetCustomEnablementCondition(entity));
+
+            Func<IQuestion, bool> isLinkedFilterExpressionLengthExeeded =
+                question => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.LinkedFilterExpression);
+
+            Func<IQuestion, bool> isOptionsFilterExpressionLengthExeeded =
+                question => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties.OptionsFilterExpression);
+
+            Func<IVariable, bool> isVariableExpressionLengthExeeded =
+                variable => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
+
+            return questionnaire.Find<IComposite>(entity =>
+                isValidationExpressionLengthExeeded(entity) ||
+                isConditionExpressionLengthExeeded(entity) ||
+                ((entity is IQuestion) && isLinkedFilterExpressionLengthExeeded((IQuestion)entity)) ||
+                ((entity is IQuestion) && isOptionsFilterExpressionLengthExeeded((IQuestion)entity)) ||
+                ((entity is IVariable) && isVariableExpressionLengthExeeded((IVariable)entity))).Any();
         }
     }
 }
