@@ -7,6 +7,7 @@ using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -33,7 +34,19 @@ namespace WB.UI.Interviewer.Activities
         {
             var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
-            var isMigrationNeeded = optionsRepository.IsEmpty();
+            var isMigrationNeeded = optionsRepository.IsEmpty(); //version less 5.9
+
+            if (!isMigrationNeeded)
+            {
+                var isUpgradeNeeded = optionsRepository.IsAnyNonSortedOptionPresent(); //version 5.10 upgrade
+
+                if (isUpgradeNeeded)
+                {
+                    isMigrationNeeded = true;
+                    var optionViewRemover = Mvx.Resolve<IAsyncPlainStorageRemover<OptionView>>();
+                    await optionViewRemover.DeleteAllAsync();
+                }
+            }
 
             if (!isMigrationNeeded)
                 return;

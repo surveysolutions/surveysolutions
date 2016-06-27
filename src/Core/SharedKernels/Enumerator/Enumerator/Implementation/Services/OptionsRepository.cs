@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     internal class OptionsRepository : IOptionsRepository
     {
         private readonly IAsyncPlainStorage<OptionView> optionsStorage;
-
+        
         public OptionsRepository(IAsyncPlainStorage<OptionView> optionsStorage)
         {
             this.optionsStorage = optionsStorage;
@@ -42,6 +42,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .ToList().ToReadOnlyCollection();
 
             return categoricalQuestionOptions;
+        }
+
+        [Obsolete("Since V 5.10")]
+        public bool IsAnyNonSortedOptionPresent()
+        {
+            return this.optionsStorage.Where(x => x.SortOrder == null).Any();
         }
 
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, int? parentValue, string filter)
