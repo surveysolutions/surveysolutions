@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId);
         Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument);
         bool IsEmpty();
+
+        bool IsAnyNonSortedOptionPresent();
     }
 }
