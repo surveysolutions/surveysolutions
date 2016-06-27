@@ -13,20 +13,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
     public class AllInterviewsFactory : IAllInterviewsFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> answersReader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
+        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions;
 
-        public AllInterviewsFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IQueryableReadSideRepositoryReader<QuestionAnswer> answersReader)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions)
         {
-            this.interviewSummaryReader = interviewSummaryReader;
-            this.answersReader = answersReader;
+            this.reader = reader;
+            this.featuredQuestions = featuredQuestions;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
         {
-            var interviews = this.interviewSummaryReader.Query(_ =>
+
+            var interviews = this.reader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
@@ -36,9 +36,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     .ToList();
             });
 
-            var totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
+
+            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
             var requiredInterviews = interviews.Select(y => y.SummaryId).ToList();
-            var featuredQuestionAnswers = this.answersReader.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).ToList());
+            var featuredQuestionAnswers = this.featuredQuestions.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).ToList());
+
 
             var result = new AllInterviewsView
             {
@@ -47,7 +49,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 TotalCount = totalCount,
                 Items = interviews.Select(x => ToAllInterviewsViewItem(x, featuredQuestionAnswers)).ToList()
             };
-
             return result;
         }
 
@@ -55,15 +56,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var interviewFeaturedQuestionAnswers = allFeaturedQuestionAnswers
                 .Where(f => f.InterviewSummary.SummaryId == interviewSummary.SummaryId)
-                .Select(a => new InterviewFeaturedQuestion
+                .Select(a => new InterviewFeaturedQuestion()
                 {
                     Id = a.Questionid,
                     Answer = a.Answer,
                     Question = a.Title,
                     Type = a.Type
                 })
-                .GroupBy(question => question.Id)
-                .Select(grouping => grouping.First())
+                .GroupBy(question => question.Id) // group to remove duplicates (sometimes appearing on read side)
+                .Select(grouping => grouping.First()) // remove duplicates (this was added because we do not have STR and therefore I cannot fix actual reason)
                 .OrderBy(question => question.Id)
                 .ToList();
 
