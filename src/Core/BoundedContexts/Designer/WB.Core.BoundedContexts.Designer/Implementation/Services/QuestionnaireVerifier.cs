@@ -569,21 +569,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
 
-            var verificationMessages =
+            var verificationMessagesByQuestionnaire =
                 (from verifier in this.AtomicVerifiers
                  let errors = verifier.Invoke(readOnlyQuestionnaireDocument)
                  from error in errors
                  select error).ToList();
 
-            if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
-                return verificationMessages;
+            if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
+                return verificationMessagesByQuestionnaire;
 
-            if (!HasQuestionnaireExpressionsWithExceedLength(readOnlyQuestionnaireDocument))
-            {
-                verificationMessages.Concat(ErrorsByCompiler(questionnaire));
-            }
+            if (HasQuestionnaireExpressionsWithExceedLength(readOnlyQuestionnaireDocument))
+                return verificationMessagesByQuestionnaire;
 
-            return verificationMessages;
+            var verificationMessagesByCompiler = this.ErrorsByCompiler(questionnaire).ToList();
+
+            return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
