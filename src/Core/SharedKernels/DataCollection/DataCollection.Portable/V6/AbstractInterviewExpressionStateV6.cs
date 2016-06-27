@@ -121,18 +121,6 @@ namespace WB.Core.SharedKernels.DataCollection.V6
         public new void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
            string rosterTitle)
         {
-            if (!HasParentScropeRosterId(rosterId))
-            {
-                return;
-            }
-
-            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            var rosterIdentityKey = Util.GetRosterKey(GetParentRosterScopeIds(rosterId), rosterVector);
-            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
-
-            var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
-            if (rosterLevel != null)
-                rosterLevel.SetRowName(rosterTitle);
         }
 
 
