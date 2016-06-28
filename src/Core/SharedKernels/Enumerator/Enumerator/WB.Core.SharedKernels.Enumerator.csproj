@@ -105,6 +105,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.id-ID.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\UIResources.km.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.km.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\UIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -303,13 +308,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\UIResources.es-ES.resx" />
-    <EmbeddedResource Include="Properties\UIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\UIResources.es.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.es1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.fr1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.id-ID.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UIResources.id-ID.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\UIResources.pt-PT.resx" />
+    <EmbeddedResource Include="Properties\UIResources.km.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.km.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.pt.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.pt1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
