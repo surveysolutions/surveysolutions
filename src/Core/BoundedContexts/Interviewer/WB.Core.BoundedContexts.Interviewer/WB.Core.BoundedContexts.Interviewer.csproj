@@ -134,6 +134,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.id-ID.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.km.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.km.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\InterviewerUIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -238,13 +243,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.es-ES.resx" />
-    <EmbeddedResource Include="Properties\InterviewerUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.es.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.es1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.fr1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.id-ID.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.pt-PT.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.km.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.km.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.pt.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.pt1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
