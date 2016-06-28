@@ -3200,9 +3200,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(updatedState, questionnaire);
             
             var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-            return processLinkedQuestionFilters != null 
-                ? processLinkedQuestionFilters.LinkedQuestionOptionsSet 
-                : new Dictionary<Identity, RosterVector[]>();
+
+            if (processLinkedQuestionFilters == null)
+                return new Dictionary<Identity, RosterVector[]>();
+
+            if (processLinkedQuestionFilters.LinkedQuestionOptions.Count == 0)
+                return processLinkedQuestionFilters.LinkedQuestionOptionsSet;
+
+            //old v7 options handling 
+            var linkedOptions = new Dictionary<Identity, RosterVector[]>();
+
+            foreach (var linkedQuestionOption in processLinkedQuestionFilters.LinkedQuestionOptions)
+            {
+                IEnumerable<Identity> linkedQuestionInstances =
+                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, linkedQuestionOption.Key, new decimal[0], questionnaire);
+                linkedQuestionInstances.ForEach(x => linkedOptions.Add(x, linkedQuestionOption.Value));
+            }
+
+            return linkedOptions;
         }
 
         private Dictionary<Identity, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
