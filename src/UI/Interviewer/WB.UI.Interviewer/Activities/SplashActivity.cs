@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
@@ -40,7 +41,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var optionsStorage = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
 #pragma warning disable 472
-                var isUpgradeNeeded = this.optionsStorage.Where(x => x.SortOrder == null).Any(); //version 5.10 upgrade
+                var isUpgradeNeeded = optionsStorage.Where(x => x.SortOrder == null).Any(); //version 5.10 upgrade
 #pragma warning restore 472
 
                 if (isUpgradeNeeded)
