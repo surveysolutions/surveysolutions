@@ -230,7 +230,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings())
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings()),
+                EventType = evt.Payload.GetType().Name
             };
         }
 
