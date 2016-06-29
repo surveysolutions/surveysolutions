@@ -44,14 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return categoricalQuestionOptions;
         }
 
-        [Obsolete("Since V 5.10")]
-        public bool IsAnyNonSortedOptionPresent()
-        {
-#pragma warning disable 472
-            return this.optionsStorage.Where(x => x.SortOrder == null).Any();
-#pragma warning restore 472
-        }
-
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, int? parentValue, string filter)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
