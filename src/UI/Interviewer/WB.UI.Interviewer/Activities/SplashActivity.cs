@@ -38,7 +38,10 @@ namespace WB.UI.Interviewer.Activities
 
             if (!isMigrationNeeded)
             {
-                var isUpgradeNeeded = optionsRepository.IsAnyNonSortedOptionPresent(); //version 5.10 upgrade
+                var optionsStorage = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
+#pragma warning disable 472
+                var isUpgradeNeeded = this.optionsStorage.Where(x => x.SortOrder == null).Any(); //version 5.10 upgrade
+#pragma warning restore 472
 
                 if (isUpgradeNeeded)
                 {
