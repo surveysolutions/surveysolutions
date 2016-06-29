@@ -19,7 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
 {
-    internal class when_creating_interview : InterviewerInterviewAccessorTestsContext
+    internal class when_creating_interview
     {
         Establish context = () =>
         {
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             var quetstionnaireRepository = Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(x=>x.GetById(questionnaireId.ToString()) == questionnaireInfo);
 
-            interviewerInterviewAccessor = CreateInterviewerInterviewAccessor(
+            interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
                 questionnaireRepository: quetstionnaireRepository,
                 principal: principal,
