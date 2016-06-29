@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>លុបចោល</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>មិនមានកម្រងសំនូរទេ​
+អ្នកអាចបង្កើត ឬពិនិត្យកែ កម្រងសំនួររបស់អ្នក ក្នុង រៀបការបង្កើត Survey Solutions </value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>មិនអាចស្វែងរកកម្រងសំនួរ</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>កម្រងសំនួររបស់ខ្ញុំ</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>បង្ហាញកម្រងសំនួរ</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>កម្រងសំនួរ </value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>វាយបញ្ចូលកាលបរិច្ចេទ</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>ចំនុចចុងក្រោយសំរាប់គ្រប់គ្រងរូម</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>ចំនុចបញ្ចប់ សេវាweb</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>គណនីអ្នកប្រើបានចាក់សោរ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions</value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>គណនីរបស់អ្នកមិនដំណើរការ។ សូមបញ្ជាក់គណនីដំបូងរបស់អ្នក</value>
+  </data>
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Server មិនដំណើរការ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions</value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>Survey Solutions Designer URL មិនមានដំណើរការ។ សូមពិនិត្យទៅ ស៊ីតធីង</value>
+  </data>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>គេហទំព័រ របស់ Survey Solutions Designer ឥឡូវកំពុងរៀបចំ។ សូមអាធ្យាស្រ័យសំរាប់ការរអាក់រអួល</value>
+  </data>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>មិនអាចដំណើរការ ពេលភ្ជាប់ទៅ​គេហទំព័រ Survey Solutions Designer ។ សូមពិនិត្យការភ្ជាប់អ៊ិនធឺណែតរបស់អ្នក។</value>
+  </data>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>មិនអាចភ្ជាប់ទៅនឹងSurvey Solutions Designer។ សូមប្រាកដាថា ឈ្មោះគេហទំព័រត្រឹមត្រូវ</value>
+  </data>
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>ចុះឈ្មោះចូល ឬ លេខកូដរបស់អ្នកមិនត្រឹមត្រូវ</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>កំណែថ្មីនៃឯកសារត្រូវបានជំនួស។ សូមធ្វើបច្ចប្បន្នភាពឯកសារ។​</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>វាយបញ្ចូលកាលបរិច្ចេទ</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>ជីភីអេស មិនអាចកំណត់ទីតាំងរបស់អ្នកបានទេ។ មានការរំខានខ្លះ សូមព្យាយាមដូចខាងក្រោម៖ ប្រាកដថា អ្នកនៅខាងក្រៅផ្ទះ។ បញ្ជាក់ថា ជី ភី អេស របស់អ្នកដំណើរការ ឬផ្លាស់ប្តូរGPS's timeout setting។​ </value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>វាយបញ្ចូលលេខ</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>មតិយោបល់របស់អ្នក</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>ចំលើយ</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>បញ្ចប់</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>បន្ទាប់ពីអ្នកសម្ភាសន៍ចប់ វានឹងកំណត់ថា​បានបញ្ចប់ និង បន្តuploaded ទៅប្រធានក្រុម កំឡុងពេល អ្នករៀបចំគ្រប់គ្រងរូម(synchronization)</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>ខុស</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>ទេ</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>កំណត់សំគាល់របស់ប្រធានក្រុម</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>ស្ថានភាពសំនួរ</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>អ្នកបំពេញការសម្ភាសន៍នេះ</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>បញ្ចប់</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>មិនឆ្លើយ</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>បំពេញក្រុមមុខ</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} ចំលើយ</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>ចំលើយមួយ</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} ខុស</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>ខុសមួយ</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>បំពេញផ្នែក {0}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>ផ្នែកនេះមិនទាន់ចាប់ផ្តើម</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>ផ្នែកនេះចាប់ផ្តើម  {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value> {0} ផ្នែកតូចបន្ទាប់</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>ផ្នែកតូចបន្ទាប់មួយ</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>មិនមានផ្នែកតូចបន្ទាប់ទេ</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>បង្ហាញការណែនាំ</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>ការណែនាំ</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>ជំរើសនឹងមានបន្ទាប់ពីឆ្លើយសំនួរយោង</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>ផ្នែកបន្ទាប់</value>
+  </data>
+  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
+    <value>ទៅ ឪពុកម្តាយ</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>គ្រប់សំនួរចំលើយ {0}</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>កំណត់សំគាល់{0} សំនួរគឺមិនបានឆ្លើយ</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>ចំលើយ{0} មិនត្រូវនឹងជំរើសណាខ្លះទេ</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>ចំលើយ{0} មិនត្រូវនឹងជំរើសណាខ្លះទេ</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>អត់មានតំលៃលេខ មិនអាចរក្សាទុកបាន។ </value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>ចំលើយ  '{0}'  គឺមិនត្រឹមត្រូវ ពីព្រោះ សំនួរប្រើទំហំចំនួន បញ្ជីរាយនាម និង បញ្ជាក់ពីចំលើយអវិជ្ជមាន។​</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>វាយលេខ មិនអាចដកឃ្លាពីលេខគត់</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>ចំលើយ'{0}' មិនត្រឹមត្រូវ ពីព្រោះ ចំលើយធំជាង បញ្ជីរាយនាម តំឡើង '{1}'។​  </value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>មិនមានលេខមិនអាចបន្តទៅទៀតបានទេ</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>វាយលេខមិនអាចដកឃ្លា ដូចតំលៃលេខទសភាគ </value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>សូម បំពេញគ្រប់លេខតំរូវអោយវាយ</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>កត់ជី ភីអេស</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>សូមថតរូប</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>យករូបbarcode</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>តើអ្នកប្រាកដទេដែលអ្នកចង់លុប {0} ជួរដេកពីបញ្ជីរាយនាម?</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>អ្នកសម្ភាសន៍ Survey Solutions</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>អ្នកវិនិច្ឆ័យរោគ</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>លុបចោល</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>អ្នករួចរាល់សំរាប់កំណត់ការបែងចែកផ្សេងទៀត</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>ភ្ជាប់ម្តងទៀត</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>ប្រសិនបើអ្នក រីលីង សំរាប់ការបែងចែកនេះ &lt;br/&gt; គ្រប់ទិន្នន័យទាំងអស់ចាស់នឹងបាត់</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>ព្យាយាមចុះឈ្មោះតាមOnline</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>ការចុះឈ្មោះចូលរបស់អ្នក</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>ការចុះឈ្មោះចូល​</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>កម្រងសំនួរ សាកល្បង Survey Solutios</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>ទេ</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>លេខកូដ</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>សេវា Google play មិនដំំណើរការ</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>ទីតាំងនៃអតិថិជនមិនចាប់ផ្តើម</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>អ្នកមិនអាចចាប់ផ្តើម សេវាទីតាំងMvxច្រើនជាងមួយ</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>ចាប់ផ្តើម</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>ចំងាយគិតជាម៉ែត្រដើម្បីកំណត់ភាពជាក់លាក់</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>សំនួរ ជី ភី អេស ចង់បានភាពជាក់លាក់</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>វាយបញ្ចូលទសភាគ</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>នៅរក្សាក្នុង ការចុះឈ្មោះ</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>អ្នកមិនអាចមានការស្នើសុំមួយណា សំរាប់ការបែងចែកនេះ។ ផ្ញើរពត៌មានអំពី ធេប សំរាប់សំអាតទិន្នន័យ និង ចុះឈ្មោះចូលដោយគណនីមួយទៀត</value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>វាយបញ្ចុលសំភារៈថ្មី</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>វាយជាអត្ថបទ</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>វាយជាអត្ថបទ ({0})</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>ចំលើយមិនត្រូវ</value>
+  </data>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>ចំលើយមិនបានរក្សាទុក</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>មាន</value>
+  </data>
+</root>
