@@ -245,9 +245,9 @@ namespace WB.Tests.Integration.InterviewTests
             return compiledAssembly;
         }
 
-        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)
         {
-            var compiledAssembly = CompileAssemblyUsingLatestEngine(questionnaireDocument);
+            var compiledAssembly = useLatestEngine ? CompileAssemblyUsingLatestEngine(questionnaireDocument) : CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
 
             Type interviewExpressionStateType =
                 compiledAssembly.GetTypes()
