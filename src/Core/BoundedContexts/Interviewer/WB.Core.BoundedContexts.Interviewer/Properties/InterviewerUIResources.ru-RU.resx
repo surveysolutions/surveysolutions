@@ -588,10 +588,13 @@
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
     <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Supervisor</value>
   </data>
-    <data name="Interview_Loading" xml:space="preserve">
+  <data name="Interview_Loading" xml:space="preserve">
     <value>Открытие</value>
   </data>
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
     <value>Открытие... {0}%</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} интервью не синхронизировано из-за ошибки</value>
   </data>
 </root>
