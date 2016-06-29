@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -253,30 +254,55 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<LinkedQuestionVerifierModel> linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter, 
             List<Guid> conditionsPlayOrder)
         {
-            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
-            List<StaticTextTemplateModel> staticTextsWithConditions = staticTexts.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
-            List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Condition)).ToList();
-            List<QuestionTemplateModel> questionsWithOptionsFilter = questions.Where(q => !string.IsNullOrWhiteSpace(q.OptionsFilterExpression)).ToList();
-            List<RosterTemplateModel> rostersWithConditions = (rosters ?? new List<RosterTemplateModel>()).Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList();
+            var groupsWithConditions = groups
+                .Where(x => !string.IsNullOrWhiteSpace(x.Condition))
+                .Reverse()
+                .Select(x => new {x.Id, Condition = new ConditionMethodAndState(x.ConditionMethodName, x.StateName)});
 
-            Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
+            var rostersWithConditions = (rosters ?? new List<RosterTemplateModel>())
+                .Where(x => !string.IsNullOrWhiteSpace(x.Conditions))
+                .Reverse()
+                .Select(x => new {x.Id, Condition = new ConditionMethodAndState(x.ConditionsMethodName, x.StateName)});
 
-            groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.ConditionMethodName, g.StateName)));
-            rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.ConditionsMethodName, r.StateName)));
-            questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.ConditionMethodName, q.StateName)));
-            questionsWithOptionsFilter.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.OptionsFilterMethodName, q.StateName, true, q.MemberName, q.TypeName)));
-            linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter.ForEach(
-                q => itemsToSort.Add(q.Id, new ConditionMethodAndState($"IdOf.{q.RosterScopeName}", q.StateName, true, q.MemberName, q.TypeName)));
+            var staticTextsWithConditions = staticTexts
+                .Where(x => !string.IsNullOrWhiteSpace(x.Condition))
+                .Reverse()
+                .Select(x => new {x.Id, Condition = new ConditionMethodAndState(x.ConditionMethodName, x.StateName)});
+
+            var questionsWithConditions = questions
+                .Where(x => !string.IsNullOrWhiteSpace(x.Condition))
+                .Select(x => new {x.Id, Condition = new ConditionMethodAndState(x.ConditionMethodName, x.StateName)});
+
+            var questionsWithOptionsFilter = questions
+                .Where(x => !string.IsNullOrWhiteSpace(x.OptionsFilterExpression))
+                .Select(x => new
+                {
+                    x.Id,
+                    Condition = new ConditionMethodAndState(x.OptionsFilterMethodName, x.StateName, true, x.MemberName, x.TypeName)
+                });
+
+            var linkedQuestionsWithConditions = linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter
+                .Select(x => new
+                {
+                    x.Id,
+                    Condition = new ConditionMethodAndState($"IdOf.{x.RosterScopeName}", x.StateName, true, x.MemberName, x.TypeName)
+                });
+
+            var itemsToSort = groupsWithConditions
+                .Union(rostersWithConditions)
+                .Union(questionsWithConditions)
+                .Union(questionsWithOptionsFilter)
+                .Union(linkedQuestionsWithConditions)
+                .ToList();
+            
             var itemsSorted = new List<ConditionMethodAndState>();
 
             foreach (Guid id in conditionsPlayOrder)
             {
-                if (itemsToSort.ContainsKey(id))
-                    itemsSorted.Add(itemsToSort[id]);
+                itemsSorted.AddRange(itemsToSort.Where(x => x.Id == id).Select(x => x.Condition));
             }
 
-            staticTextsWithConditions.ForEach(
-                st => itemsSorted.Add(new ConditionMethodAndState(st.ConditionMethodName, st.StateName)));
+            itemsSorted.AddRange(staticTextsWithConditions.Select(st => st.Condition));
 
             return itemsSorted;
         }
@@ -839,46 +865,66 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
-            var allGroups = questionnaireDocument.GetAllGroups().ToList();
-            Dictionary<string, Guid> variableNames = questionnaireDocument.GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))
-                .ToDictionary(q => q.StataExportCaption, q => q.PublicKey);
+            var dependencies = new Dictionary<Guid, List<Guid>>();
 
-            foreach (var roster in allGroups.Where(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName)))
+            var allMacroses = questionnaireDocument.Macros.Values;
+            var allVariables = GetAllVariableNames(questionnaireDocument);
+
+            Action<Guid, string> fillDependencies = (entityId, expression) => this.FillDependencies(dependencies, entityId, expression,
+                    allMacroses, allVariables);
+
+            questionnaireDocument.Find<IConditional>().ForEach(x => fillDependencies(((IComposite) x).PublicKey, x.ConditionExpression));
+            questionnaireDocument.Find<IQuestion>().ForEach(x => fillDependencies(x.PublicKey, x.Properties.OptionsFilterExpression));
+
+            questionnaireDocument.Find<SingleQuestion>(x => x.CascadeFromQuestionId.HasValue).ForEach(x =>
             {
-                variableNames.Add(roster.VariableName, roster.PublicKey);
-            }
-
-            var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var staticTextsWithConditions = questionnaireDocument.GetEntitiesByType<IStaticText>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var questionsWithCondition = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var questionsWithOptionsFilter = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.Properties.OptionsFilterExpression));
-
-            Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames));
-
-            staticTextsWithConditions.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
-
-            questionsWithCondition.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
-
-            questionsWithOptionsFilter.ToDictionary(x => x.PublicKey, x => this.GetIdsOfQuestionsInvolvedInExpression(this.macrosSubstitutionService.InlineMacros(x.Properties.OptionsFilterExpression, questionnaireDocument.Macros.Values), variableNames)).ToList().ForEach(x => dependencies.Add(x.Key, x.Value));
-
-            var cascadingQuestions = questionnaireDocument.GetEntitiesByType<SingleQuestion>().Where(x => x.CascadeFromQuestionId.HasValue);
-
-            foreach (var cascadingQuestion in cascadingQuestions)
-            {
-                if (dependencies.ContainsKey(cascadingQuestion.PublicKey))
+                if (dependencies.ContainsKey(x.PublicKey))
                 {
-                    dependencies[cascadingQuestion.PublicKey].Add(cascadingQuestion.CascadeFromQuestionId.Value);
+                    dependencies[x.PublicKey].Add(x.CascadeFromQuestionId.Value);
                 }
                 else
                 {
-                    dependencies.Add(cascadingQuestion.PublicKey, new List<Guid> {cascadingQuestion.CascadeFromQuestionId.Value});
+                    dependencies.Add(x.PublicKey, new List<Guid> { x.CascadeFromQuestionId.Value });
                 }
-            }
+            });
 
             return dependencies;
         }
 
+        private static Dictionary<string, Guid> GetAllVariableNames(QuestionnaireDocument questionnaireDocument)
+        {
+            var variablesByQuestions = questionnaireDocument
+                .Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))
+                .Select(x => new {VariableName = x.StataExportCaption, EntityId = x.PublicKey});
+
+            var variablesByRosters = questionnaireDocument
+                .Find<IGroup>(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName))
+                .Select(x => new {x.VariableName, EntityId = x.PublicKey});
+
+            return variablesByQuestions.Union(variablesByRosters).ToDictionary(x => x.VariableName, x => x.EntityId);
+        }
+
+        private void FillDependencies(Dictionary<Guid, List<Guid>> dependencies, Guid entityId, string expression,
+            IEnumerable<Macro> macroses, Dictionary<string, Guid> varById)
+        {
+            if (string.IsNullOrWhiteSpace(expression)) return;
+
+            var idsOfEntitesInvolvedInExpression = this.GetIdsOfQuestionsInvolvedInExpression(
+                this.macrosSubstitutionService.InlineMacros(expression, macroses), varById);
+
+            if (!idsOfEntitesInvolvedInExpression.Any()) return;
+
+            if (!dependencies.ContainsKey(entityId))
+            {
+                dependencies[entityId] = new List<Guid>();
+            }
+
+            foreach (var dependentEntityId in idsOfEntitesInvolvedInExpression)
+            {
+                if (!dependencies[entityId].Contains(dependentEntityId))
+                    dependencies[entityId].Add(dependentEntityId);
+            }
+        }
 
         static string GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(IEnumerable<string> parentOptionsThatHaveNoChildOptions, string stataExportCaption)
         {
