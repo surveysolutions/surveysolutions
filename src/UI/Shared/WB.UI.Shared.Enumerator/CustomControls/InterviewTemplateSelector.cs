@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
-    public class InterviewTemplateSelector : IItemTemplateSelector
+    public class InterviewTemplateSelector : IMvxTemplateSelector
     {
         private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>();
         private const int UnknownViewType = -1;
