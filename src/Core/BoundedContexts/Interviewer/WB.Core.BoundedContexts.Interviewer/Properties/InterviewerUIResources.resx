@@ -593,4 +593,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
     <value>Loading... {0}%</value>
   </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} interview(s) failed to synchronize</value>
+  </data>
 </root>

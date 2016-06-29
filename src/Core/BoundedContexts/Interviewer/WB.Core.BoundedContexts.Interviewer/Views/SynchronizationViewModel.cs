@@ -111,7 +111,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.ProcessOperation = syncProgressInfo.Title;
                 this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.Statistics = syncProgressInfo.Statistics;
-                this.Status = syncProgressInfo.Status;
+
+                this.Status = syncProgressInfo.HasErrors ? SynchronizationStatus.Fail : syncProgressInfo.Status;
+
                 this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
                 if (!syncProgressInfo.IsRunning)
