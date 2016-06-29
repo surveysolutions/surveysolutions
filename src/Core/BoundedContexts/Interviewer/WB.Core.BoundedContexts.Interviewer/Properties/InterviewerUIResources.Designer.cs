@@ -1010,6 +1010,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) failed to synchronize.
+        /// </summary>
+        public static string Synchronization_Fail_State_FailedToProcess_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_FailedToProcess_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} new interviews downloaded.
         /// </summary>
         public static string Synchronization_Fail_State_NewInterviews_Format {
