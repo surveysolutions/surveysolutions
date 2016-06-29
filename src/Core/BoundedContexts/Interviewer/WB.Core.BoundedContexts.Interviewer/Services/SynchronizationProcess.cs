@@ -370,29 +370,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var interview in interviews)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                progress.Report(new SyncProgressInfo
+                try
                 {
-                    Title = InterviewerUIResources.Synchronization_Download_Title,
-                    Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
-                        statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
-                        InterviewerUIResources.Synchronization_Interviews)
-                });
+                    cancellationToken.ThrowIfCancellationRequested();
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = InterviewerUIResources.Synchronization_Download_Title,
+                        Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                            statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
+                            InterviewerUIResources.Synchronization_Interviews)
+                    });
 
-                await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken);
+                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken);
 
-                var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
-                    interviewId: interview.Id,
-                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
+                        interviewId: interview.Id,
+                        onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                        token: cancellationToken);
 
-                await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
-                await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
+                    await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
+                    await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
-                if (interview.IsRejected)
-                    statistics.RejectedInterviewsCount++;
-                else
-                    statistics.NewInterviewsCount++;
+                    if (interview.IsRejected)
+                        statistics.RejectedInterviewsCount++;
+                    else
+                        statistics.NewInterviewsCount++;
+                }
+                catch (Exception exception)
+                {
+                    statistics.FailedToCreateInterviewsCount++;
+                    this.logger.Error($"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}", exception);
+                }
             }
         }
 
@@ -405,35 +413,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var completedInterview in completedInterviews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var interviewPackage = await this.interviewFactory.GetInteviewEventsPackageOrNullAsync(completedInterview.InterviewId);
-
-                progress.Report(new SyncProgressInfo
+                try
                 {
-                    Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format, InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
-                    Description = string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
-                        statistics.CompletedInterviewsCount, statistics.TotalCompletedInterviewsCount,
-                        InterviewerUIResources.Synchronization_Upload_Interviews_Text),
-                    Status = SynchronizationStatus.Upload
-                });
+                    var interviewPackage = await this.interviewFactory.GetInteviewEventsPackageOrNullAsync(completedInterview.InterviewId);
 
-                await this.UploadImagesByCompletedInterview(completedInterview.InterviewId, progress, cancellationToken);
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format, InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
+                        Description = string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
+                            statistics.SuccessfullyUploadedInterviewsCount, statistics.TotalCompletedInterviewsCount,
+                            InterviewerUIResources.Synchronization_Upload_Interviews_Text),
+                        Status = SynchronizationStatus.Upload
+                    });
 
-                if (interviewPackage != null)
-                {
-                    await this.synchronizationService.UploadInterviewAsync(
-                        interviewId: completedInterview.InterviewId,
-                        completedInterview: interviewPackage,
-                        onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                        token: cancellationToken);
+                    await this.UploadImagesByCompletedInterview(completedInterview.InterviewId, progress, cancellationToken);
+
+                    if (interviewPackage != null)
+                    {
+                        await this.synchronizationService.UploadInterviewAsync(
+                            interviewId: completedInterview.InterviewId,
+                            completedInterview: interviewPackage,
+                            onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            token: cancellationToken);
+                    }
+                    else
+                    {
+                        this.logger.Warn($"Interview event stream is missing. No package was sent to server. Interview ID: {completedInterview.InterviewId}");
+                    }
+
+                    await this.interviewFactory.RemoveInterviewAsync(completedInterview.InterviewId);
+
+                    statistics.SuccessfullyUploadedInterviewsCount++;
                 }
-                else
+                catch (Exception syncException)
                 {
-                    this.logger.Warn($"Interview event stream is missing. No package was sent to server. Interview ID: {completedInterview.InterviewId}.");
+                    statistics.FailedToUploadInterviwesCount++;
+                    this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
-
-                await this.interviewFactory.RemoveInterviewAsync(completedInterview.InterviewId);
-
-                statistics.CompletedInterviewsCount++;
             }
         }
 
