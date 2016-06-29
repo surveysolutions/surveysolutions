@@ -36,7 +36,11 @@
                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_DeletedInterviews_Format'), Synchronization.Statistics.DeletedInterviewsCount, Synchronization.Statistics.TotalDeletedInterviewsCount)" />
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.CompletedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                      local:MvxBind="Text Format(Localization('Synchronization_Fail_State_FailedToProcess_Format'), FailedInterviewsCount);" />
+          
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
@@ -51,6 +55,7 @@
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount)" />
+
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
