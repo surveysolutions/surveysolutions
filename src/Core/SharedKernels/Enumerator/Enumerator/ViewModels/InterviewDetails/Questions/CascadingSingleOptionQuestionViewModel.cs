@@ -110,11 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, (int)selectedValue.Value, (int)parentAnswerModel.Answer.Value);
-                if (answerOption == null)
-                {
-
-                }
+                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, (int)selectedValue.Value, (int?)parentAnswerModel.Answer);
                 this.selectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
                 this.FilterText = this.selectedObject.OriginalText;
