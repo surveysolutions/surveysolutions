@@ -18,6 +18,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public Guid? CommitId { get; set; }
 
         public DateTime DateTimeUtc { get; set; }
+
         public string JsonEvent { get; set; }
+
+        public string EventType { get; set; }
     }
 }
