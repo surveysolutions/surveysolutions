@@ -662,7 +662,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var rosterState = CodeGenerator.PrivateFieldsPrefix + sourceRoster.VariableName + CodeGenerator.StateSuffix;
 
                 linkedQuestionsFilterModels.Add(
-                    new LinkedQuestionFilterExpressionModel($"{rosterState}.State != State.Disabled && IsAnswered({linkedToRosterQuestion.StataExportCaption}) && ({filterExpression})",
+                    new LinkedQuestionFilterExpressionModel($"{rosterState}.State != State.Disabled &&({filterExpression})",
                         $"FilterForLinkedQuestion__{linkedToRosterQuestion.StataExportCaption}",
                         CodeGenerator.GetQuestionIdName(linkedToRosterQuestion.StataExportCaption), sourceRoster.PublicKey, linkedToRosterQuestion.PublicKey));
             }
