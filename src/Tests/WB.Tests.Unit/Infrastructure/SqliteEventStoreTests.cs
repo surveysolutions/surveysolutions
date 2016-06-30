@@ -10,6 +10,7 @@ using SQLite.Net;
 using SQLite.Net.Platform.Win32;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -82,6 +83,43 @@ namespace WB.Tests.Unit.Infrastructure
             Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
             Assert.That(payload.Text, Is.EqualTo("text 301"));
             
+        }
+
+        [Test]
+        public void Should_be_able_to_read_events_if_events_in_the_middle_are_missing()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var missingEventIds = new List<Guid>();
+            var uncommittedEvents = new List<UncommittedEvent>();
+
+            for (int i = 1; i <= 1000; i++)
+            {
+                var uncommittedEvent = Create.Other.UncommittedEvent(eventSourceId, sequence: i,
+                    payload: Create.Event.StaticTextUpdated(text: $"text {i}"));
+
+                if (101 <= i && i <= 900)
+                {
+                    missingEventIds.Add(uncommittedEvent.EventIdentifier);
+                }
+
+                uncommittedEvents.Add(uncommittedEvent);
+            }
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null, uncommittedEvents));
+
+            // manually removing events from the middle of store event stream
+            foreach (var missingEventId in missingEventIds)
+            {
+                this.sqliteEventStorage.connection.Delete<EventView>(missingEventId);
+            }
+
+            var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
+            Assert.That(committedEvents.Count, Is.EqualTo(200));
+
+            var payload = committedEvents.Last().Payload as StaticTextUpdated;
+            Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
+            Assert.That(payload.Text, Is.EqualTo("text 1000"));
         }
 
         [TestCase(1)]
