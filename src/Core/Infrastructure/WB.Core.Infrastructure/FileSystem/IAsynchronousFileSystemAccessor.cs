@@ -14,5 +14,6 @@ namespace WB.Core.Infrastructure.FileSystem
 
         string CombinePath(string path1, string path2);
         Task DeleteFileAsync(string pathTofile);
+        Task RemoveDirectoryAsync(string path);
     }
 }
