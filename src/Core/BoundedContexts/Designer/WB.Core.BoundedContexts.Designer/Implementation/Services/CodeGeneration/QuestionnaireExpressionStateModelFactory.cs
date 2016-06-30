@@ -868,40 +868,42 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var dependencies = new Dictionary<Guid, List<Guid>>();
 
             var allMacroses = questionnaireDocument.Macros.Values;
-            var allVariables = GetAllVariableNames(questionnaireDocument);
-
-            Action<Guid, string> fillDependencies = (entityId, expression) => this.FillDependencies(dependencies, entityId, expression,
-                    allMacroses, allVariables);
-
-            questionnaireDocument.Find<IConditional>().ForEach(x => fillDependencies(((IComposite) x).PublicKey, x.ConditionExpression));
-            questionnaireDocument.Find<IQuestion>().ForEach(x => fillDependencies(x.PublicKey, x.Properties.OptionsFilterExpression));
-
-            questionnaireDocument.Find<SingleQuestion>(x => x.CascadeFromQuestionId.HasValue).ForEach(x =>
+            var variableNamesByEntitiyIds = GetAllVariableNames(questionnaireDocument);
+            
+            foreach (var entity in questionnaireDocument.Find<IComposite>())
             {
-                if (dependencies.ContainsKey(x.PublicKey))
+                var conditionalEntity = entity as IConditional;
+                if(conditionalEntity != null)
+                    this.FillDependencies(dependencies, entity.PublicKey, conditionalEntity.ConditionExpression, allMacroses, variableNamesByEntitiyIds);
+
+                var question = entity as IQuestion;
+                if (question != null)
                 {
-                    dependencies[x.PublicKey].Add(x.CascadeFromQuestionId.Value);
+                    this.FillDependencies(dependencies, question.PublicKey, question.Properties.OptionsFilterExpression, allMacroses, variableNamesByEntitiyIds);
+                    if (question.CascadeFromQuestionId != null)
+                    {
+                        if (dependencies.ContainsKey(entity.PublicKey))
+                            dependencies[entity.PublicKey].Add(question.CascadeFromQuestionId.Value);
+                        else
+                            dependencies.Add(entity.PublicKey, new List<Guid> { question.CascadeFromQuestionId.Value });
+                    }
                 }
-                else
-                {
-                    dependencies.Add(x.PublicKey, new List<Guid> { x.CascadeFromQuestionId.Value });
-                }
-            });
+            }
 
             return dependencies;
         }
 
         private static Dictionary<string, Guid> GetAllVariableNames(QuestionnaireDocument questionnaireDocument)
         {
-            var variablesByQuestions = questionnaireDocument
+            var variablesOfQuestions = questionnaireDocument
                 .Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))
                 .Select(x => new {VariableName = x.StataExportCaption, EntityId = x.PublicKey});
 
-            var variablesByRosters = questionnaireDocument
+            var variablesOfRosters = questionnaireDocument
                 .Find<IGroup>(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName))
                 .Select(x => new {x.VariableName, EntityId = x.PublicKey});
 
-            return variablesByQuestions.Union(variablesByRosters).ToDictionary(x => x.VariableName, x => x.EntityId);
+            return variablesOfQuestions.Union(variablesOfRosters).ToDictionary(x => x.VariableName, x => x.EntityId);
         }
 
         private void FillDependencies(Dictionary<Guid, List<Guid>> dependencies, Guid entityId, string expression,
@@ -909,7 +911,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             if (string.IsNullOrWhiteSpace(expression)) return;
 
-            var idsOfEntitesInvolvedInExpression = this.GetIdsOfQuestionsInvolvedInExpression(
+            var idsOfEntitesInvolvedInExpression = this.GetIdsOfEntitiesInvolvedInExpression(
                 this.macrosSubstitutionService.InlineMacros(expression, macroses), varById);
 
             if (!idsOfEntitesInvolvedInExpression.Any()) return;
@@ -974,7 +976,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression, Dictionary<string, Guid> variableNames)
+        private List<Guid> GetIdsOfEntitiesInvolvedInExpression(string conditionExpression, Dictionary<string, Guid> variableNames)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 

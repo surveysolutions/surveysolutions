@@ -353,6 +353,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_numeric_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_qr_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_cascading_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_question_with_options_filter_and_condition.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_combo_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
