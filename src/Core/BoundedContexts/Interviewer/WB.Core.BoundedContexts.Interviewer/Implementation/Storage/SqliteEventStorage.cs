@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
         private IEnumeratorSettings enumeratorSettings;
-        private readonly SQLiteConnectionWithLock connection;
+        internal readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
 
         static readonly Encoding TextEncoding = Encoding.UTF8;
@@ -63,51 +63,59 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
+            var startEventSequence = Math.Max(minVersion, 0);
             int totalEventCount;
+            int readEventCount = 0;
 
             using (connection.Lock())
+            {
                 totalEventCount = this
                     .connection
                     .Table<EventView>()
                     .Count(eventView
                         => eventView.EventSourceId == id
-                           && eventView.EventSequence >= minVersion);
+                        && eventView.EventSequence >= startEventSequence);
+            }
 
             if (totalEventCount == 0)
                 yield break;
-            
-            int lastReadEventSequence = Math.Max(minVersion, 0);
+
+            int nextStartEventSequence = startEventSequence;
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
-            progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
+            progress?.Report(new EventReadingProgress(nextStartEventSequence, totalEventCount));
 
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var startSequenceInTheBulk = lastReadEventSequence;
-                var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
+                var startSequenceInTheBulk = nextStartEventSequence;
+                var exclusiveEndSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
 
                 using (connection.Lock())
+                {
                     bulk = this
                         .connection
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == id
                             && eventView.EventSequence >= startSequenceInTheBulk
-                            && eventView.EventSequence < endSequenceInTheBulk)
+                            && eventView.EventSequence < exclusiveEndSequenceInTheBulk)
                         .OrderBy(x => x.EventSequence)
                         .Select(ToCommitedEvent)
                         .ToList();
+                }
 
                 foreach (var committedEvent in bulk)
                 {
                     yield return committedEvent;
-                    lastReadEventSequence = committedEvent.EventSequence + 1;
-                    progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
+                    readEventCount++;
+                    progress?.Report(new EventReadingProgress(nextStartEventSequence, totalEventCount));
                 }
 
-            } while (bulk.Count > 0);
+                nextStartEventSequence = exclusiveEndSequenceInTheBulk;
+
+            } while (readEventCount < totalEventCount);
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
@@ -120,14 +128,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
                     this.ValidateStreamVersion(eventStream);
 
-                    List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
+                    List<EventView> storedEvents = eventStream.Select(ToStoredEvent).ToList();
                     foreach (var @event in storedEvents)
                     {
                         connection.Insert(@event);
                     }
 
                     this.connection.Commit();
-                    return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
+                    return new CommittedEventStream(eventStream.SourceId, eventStream.Select(ToCommitedEvent));
                 }
                 catch
                 {
@@ -196,8 +204,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         }
 
         private static CommittedEvent ToCommitedEvent(EventView storedEvent)
-        {
-            return new CommittedEvent(
+            => new CommittedEvent(
                 commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
                 origin: string.Empty,
                 eventIdentifier: storedEvent.EventId,
@@ -206,11 +213,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
                 payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings()));
-        }
 
-        private CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
-        {
-            return new CommittedEvent(
+        private static CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
+            => new CommittedEvent(
                 commitId: storedEvent.EventSourceId,
                 origin: string.Empty,
                 eventIdentifier: storedEvent.EventIdentifier,
@@ -219,20 +224,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventTimeStamp: storedEvent.EventTimeStamp,
                 globalSequence: -1,
                 payload: storedEvent.Payload);
-        }
 
-        private EventView ToStoredEvent(UncommittedEvent evt)
-        {
-            return new EventView
+        private static EventView ToStoredEvent(UncommittedEvent evt)
+            => new EventView
             {
                 EventId = evt.EventIdentifier,
                 EventSourceId = evt.EventSourceId,
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings())
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings()),
+                EventType = evt.Payload.GetType().Name
             };
-        }
 
         public void Dispose()
         {
