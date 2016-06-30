@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -75,10 +77,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             try
             {
-                await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
-                    url: string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
-                            this.syncProtocolVersionProvider.GetProtocolVersion()),
+                string url = string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
+                    this.syncProtocolVersionProvider.GetProtocolVersion());
+                var respose = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+                    url: url,
                     credentials: credentials ?? this.restCredentials, token: token));
+                string response = await respose.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (response == null || response.Trim('"') != "449634775")
+                {
+                    throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
+                }
             }
             catch (SynchronizationException ex)
             {
