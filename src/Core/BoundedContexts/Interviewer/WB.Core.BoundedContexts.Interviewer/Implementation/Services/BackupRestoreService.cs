@@ -51,6 +51,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             if (await this.fileSystemAccessor.IsFileExistsAsync(backupFilePath))
             {
+                if (await this.fileSystemAccessor.IsDirectoryExistsAsync(this.privateStorage))
+                {
+                    await this.fileSystemAccessor.RemoveDirectoryAsync(this.privateStorage);
+                    await this.fileSystemAccessor.CreateDirectoryAsync(this.privateStorage);
+                }
+
                 await this.archiver.UnzipAsync(backupFilePath, privateStorage, true);
             }
         }
