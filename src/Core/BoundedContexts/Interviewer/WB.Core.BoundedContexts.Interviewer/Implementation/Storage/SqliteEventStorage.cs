@@ -98,54 +98,60 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             var startEventSequence = Math.Max(minVersion, 0);
-            int totalEventCount;
-            int readEventCount = 0;
 
-            var currentConnection = GetOrCreateConnection(id);
+            var totalEvents = this.CountTotalEvents(id, startEventSequence);
 
-            using (currentConnection.Lock())
-                totalEventCount = currentConnection
-                    .Table<EventView>()
-                    .Count(eventView
-                        => eventView.EventSourceId == id
-                        && eventView.EventSequence >= startEventSequence);
-
-            if (totalEventCount == 0)
+            if (totalEvents == 0)
                 yield break;
 
-            int nextStartEventSequence = startEventSequence;
+            int readEventCount = 0;
+
+            var connection = GetOrCreateConnection(id);
+
             var bulkSize = this.enumeratorSettings.EventChunkSize;
-            List<CommittedEvent> bulk;
 
-            progress?.Report(new EventReadingProgress(nextStartEventSequence, totalEventCount));
+            progress?.Report(new EventReadingProgress(readEventCount, totalEvents));
 
-            do
+            for (int skipEvents = 0; skipEvents < totalEvents; skipEvents += bulkSize)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var startSequenceInTheBulk = nextStartEventSequence;
-                var exclusiveEndSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
 
-                using (currentConnection.Lock())
-                    bulk = currentConnection
+                List<CommittedEvent> bulk;
+                using (connection.Lock())
+                {
+                    bulk = connection
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == id
-                            && eventView.EventSequence >= startSequenceInTheBulk
-                            && eventView.EventSequence < exclusiveEndSequenceInTheBulk)
+                            && eventView.EventSequence >= startEventSequence)
                         .OrderBy(x => x.EventSequence)
+                        .Skip(skipEvents)
+                        .Take(bulkSize)
                         .Select(ToCommitedEvent)
                         .ToList();
+                }
 
                 foreach (var committedEvent in bulk)
                 {
                     yield return committedEvent;
                     readEventCount++;
-                    progress?.Report(new EventReadingProgress(nextStartEventSequence, totalEventCount));
+                    progress?.Report(new EventReadingProgress(readEventCount, totalEvents));
                 }
+            }
+        }
 
-                nextStartEventSequence = exclusiveEndSequenceInTheBulk;
+        private int CountTotalEvents(Guid eventSourceId, int startEventSequence)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
 
-            } while (readEventCount < totalEventCount);
+            using (connection.Lock())
+            {
+                return connection
+                    .Table<EventView>()
+                    .Count(eventView
+                        => eventView.EventSourceId == eventSourceId
+                        && eventView.EventSequence >= startEventSequence);
+            }
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
