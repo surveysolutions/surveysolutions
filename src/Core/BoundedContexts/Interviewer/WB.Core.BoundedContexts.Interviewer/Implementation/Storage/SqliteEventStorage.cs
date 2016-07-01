@@ -4,19 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Nito.AsyncEx;
 using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
-using SQLite.Net.Async;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
@@ -24,9 +20,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
         private IEnumeratorSettings enumeratorSettings;
-        internal readonly SQLiteConnectionWithLock connection;
-        private ILogger logger;
+        
 
+        private Dictionary<Guid, SQLiteConnectionWithLock> connections = new Dictionary<Guid, SQLiteConnectionWithLock>();
+        private ILogger logger;
+        private SqliteSettings settings;
+        private ISQLitePlatform sqLitePlatform;
+        private ITraceListener traceListener;
+
+        private const string eventStoreDBNameFormat = "{0}-events.sqlite3";
+        private static readonly Object creatorLock = new Object();
+        
         static readonly Encoding TextEncoding = Encoding.UTF8;
 
         public SqliteEventStorage(ISQLitePlatform sqLitePlatform,
@@ -35,27 +39,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings)
         {
-            string pathToDatabase = settings.PathToDatabaseDirectory;
+            this.logger = logger;
+            this.enumeratorSettings = enumeratorSettings;
+            this.settings = settings;
+            this.sqLitePlatform = sqLitePlatform;
+            this.traceListener = traceListener;
+        }
+
+        private SQLiteConnectionWithLock InitConnection(string DBPath)
+        {
+            string pathToDatabase = this.settings.PathToDatabaseDirectory;
             if (pathToDatabase != ":memory:")
             {
-                pathToDatabase = Path.Combine(settings.PathToDatabaseDirectory, "events-data.sqlite3");
+                pathToDatabase = DBPath;
             }
 
-            this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
+            var connection = new SQLiteConnectionWithLock(this.sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true,
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
                         (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
-                        (type) => true), 
+                        (type) => true),
                     openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = traceListener
             };
 
-            this.logger = logger;
-            this.enumeratorSettings = enumeratorSettings;
-            this.connection.CreateTable<EventView>();
-            this.connection.CreateIndex<EventView>(entity => entity.EventId);
+            connection.CreateTable<EventView>();
+            connection.CreateIndex<EventView>(entity => entity.EventId);
+
+            return connection;
+        }
+
+        private string GetDBPath(Guid eventSourceId)
+        {
+            return Path.Combine(this.settings.PathToDatabaseDirectory, string.Format(eventStoreDBNameFormat, eventSourceId));
+        }
+
+        private SQLiteConnectionWithLock GetOrCreateConnection(Guid eventSourceId)
+        {
+            SQLiteConnectionWithLock connection;
+
+            if (!connections.TryGetValue(eventSourceId, out connection))
+            {
+                lock (creatorLock)
+                {
+                    connection = InitConnection(GetDBPath( eventSourceId));
+                    connections.Add(eventSourceId, connection);
+                }
+            }
+
+            return connection;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -67,15 +101,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             int totalEventCount;
             int readEventCount = 0;
 
-            using (connection.Lock())
-            {
-                totalEventCount = this
-                    .connection
+            var currentConnection = GetOrCreateConnection(id);
+
+            using (currentConnection.Lock())
+                totalEventCount = currentConnection
                     .Table<EventView>()
                     .Count(eventView
                         => eventView.EventSourceId == id
                         && eventView.EventSequence >= startEventSequence);
-            }
 
             if (totalEventCount == 0)
                 yield break;
@@ -92,10 +125,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 var startSequenceInTheBulk = nextStartEventSequence;
                 var exclusiveEndSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
 
-                using (connection.Lock())
-                {
-                    bulk = this
-                        .connection
+                using (currentConnection.Lock())
+                    bulk = currentConnection
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == id
@@ -104,7 +135,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                         .OrderBy(x => x.EventSequence)
                         .Select(ToCommitedEvent)
                         .ToList();
-                }
 
                 foreach (var committedEvent in bulk)
                 {
@@ -120,26 +150,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            using (connection.Lock())
+            var id = eventStream.SourceId;
+            var currentConnection = GetOrCreateConnection(id);
+            using (currentConnection.Lock())
             {
                 try
                 {
-                    this.connection.BeginTransaction();
+                    currentConnection.BeginTransaction();
 
                     this.ValidateStreamVersion(eventStream);
 
                     List<EventView> storedEvents = eventStream.Select(ToStoredEvent).ToList();
                     foreach (var @event in storedEvents)
                     {
-                        connection.Insert(@event);
+                        currentConnection.Insert(@event);
                     }
 
-                    this.connection.Commit();
+                    currentConnection.Commit();
                     return new CommittedEventStream(eventStream.SourceId, eventStream.Select(ToCommitedEvent));
                 }
                 catch
                 {
-                    this.connection.Rollback();
+                    currentConnection.Rollback();
                     throw;
                 }
             }
@@ -148,12 +180,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private void ValidateStreamVersion(UncommittedEventStream eventStream)
         {
             var expectedVersion = eventStream.InitialVersion;
+            var currentConnection = GetOrCreateConnection(eventStream.SourceId);
             if (expectedVersion == 0)
             {
                 bool viewExists;
-
-                using (connection.Lock())
-                    viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                
+                using (currentConnection.Lock())
+                    viewExists = currentConnection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
 
                 if (viewExists)
                 {
@@ -164,14 +197,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             else
             {
-                int currentStreamVersion;
-                var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-
-                using (connection.Lock())
-                {
-                    var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
-                    currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
-                }
+                int currentStreamVersion = GetMaxEventSequenceByIdImpl(eventStream.SourceId, currentConnection);
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
@@ -185,22 +211,44 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public void RemoveEventSourceById(Guid interviewId)
         {
-            using (connection.Lock())
+            var currentConnection = GetOrCreateConnection(interviewId);
+            
+            using (currentConnection.Lock())
             {
                 try
                 {
-                    this.connection.BeginTransaction();
+                    currentConnection.BeginTransaction();
                     var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-                    var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
+                    var sqLiteCommand = currentConnection.CreateCommand(commandText, interviewId);
                     sqLiteCommand.ExecuteNonQuery();
-                    this.connection.Commit();
+                    currentConnection.Commit();
                 }
                 catch
                 {
-                    this.connection.Rollback();
+                    currentConnection.Rollback();
                     throw;
                 }
             }
+        }
+
+        public int GetMaxEventSequenceById(Guid interviewId)
+        {
+            var currentConnection = GetOrCreateConnection(interviewId);
+            return this.GetMaxEventSequenceByIdImpl(interviewId, currentConnection);
+        }
+
+        public int GetMaxEventSequenceByIdImpl(Guid interviewId, SQLiteConnectionWithLock currentConnection)
+        {
+            int currentStreamVersion;
+            var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+
+            using (currentConnection.Lock())
+            {
+                var sqLiteCommand = currentConnection.CreateCommand(commandText, interviewId);
+                currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+            }
+
+            return currentStreamVersion;
         }
 
         private static CommittedEvent ToCommitedEvent(EventView storedEvent)
@@ -239,7 +287,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public void Dispose()
         {
-            this.connection.Dispose();
+            foreach (var sqLiteConnectionWithLock in this.connections.Values)
+            {
+                sqLiteConnectionWithLock.Dispose();
+            }
         }
 
         internal static Func<JsonSerializerSettings> JsonSerializerSettings = () => new JsonSerializerSettings
