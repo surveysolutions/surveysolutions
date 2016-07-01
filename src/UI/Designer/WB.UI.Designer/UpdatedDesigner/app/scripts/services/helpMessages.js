@@ -2,7 +2,7 @@
     .factory('helpService', [
         function() {
             var helpService = {
-                instruction: 'Instruction button will be attached to the question that will show this text',
+                instruction: 'Instruction text that will be attached to the question.',
                 mask: 'Formatted entry for alpha-numerical values: phone numbers, ID codes, etc.\n' +
                     'Examples:"~" - Represents an alpha character (A-Z,a-z), ' +
                     '"#" - Represents a numeric character (0-9), ' +
