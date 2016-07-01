@@ -180,9 +180,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
             Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
             Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
-            Verifier<IQuestion, IComposite>(this.MultimediaQuestionsCannotBeUsedInValidationExpression, "WB0080", VerificationMessages.WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression),
-            Verifier<IGroup, IComposite>(this.MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
-            Verifier<IQuestion, IComposite>(this.MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
             Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
             Verifier<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
             Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
@@ -1173,20 +1170,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
-        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ValidationExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedEntity => referencedEntity is IQuestion && ((IQuestion)referencedEntity).QuestionType == QuestionType.Multimedia);
-        }
-
-        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-               question, question.ConditionExpression, questionnaire,
-               isReferencedQuestionIncorrect: referencedEntity => referencedEntity is IQuestion && ((IQuestion)referencedEntity).QuestionType == QuestionType.Multimedia);
-        }
-
         private static EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
         {
             var noErrors = new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -1206,13 +1189,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 HasErrors = true,
                 ReferencedEntities = new IComposite[] { group, rosterTitleQuestion }
             };
-        }
-
-        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-               group, group.ConditionExpression, questionnaire,
-               isReferencedQuestionIncorrect: referencedEntity => referencedEntity is IQuestion && ((IQuestion)referencedEntity).QuestionType == QuestionType.Multimedia);
         }
 
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
