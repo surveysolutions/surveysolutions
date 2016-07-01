@@ -18,7 +18,6 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IStatefulInterviewRepository interviewRepository;
         readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IPrincipal principal;
 
         public InterviewerInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -39,7 +38,6 @@ namespace WB.UI.Interviewer.ViewModel
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
-            this.principal = principal;
         }
         
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
