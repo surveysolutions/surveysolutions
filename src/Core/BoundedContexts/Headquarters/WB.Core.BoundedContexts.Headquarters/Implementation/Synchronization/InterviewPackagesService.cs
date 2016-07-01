@@ -87,6 +87,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             } while (chunkOfBrokenInterviewPackages.Any());
         }
 
+        public void ReprocessSelectedBrokenPackages(int[] packageIds)
+        {
+            packageIds.ForEach(packageId =>
+            {
+                var brokenInterviewPackage = this.brokenInterviewPackageStorage.GetById(packageId);
+                this.interviewPackageStorage.Store(new InterviewPackage
+                {
+                    ResponsibleId = brokenInterviewPackage.ResponsibleId,
+                    InterviewId = brokenInterviewPackage.InterviewId,
+                    IncomingDate = brokenInterviewPackage.IncomingDate,
+                    InterviewStatus = brokenInterviewPackage.InterviewStatus,
+                    IsCensusInterview = brokenInterviewPackage.IsCensusInterview,
+                    QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
+                    QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
+                    Events = brokenInterviewPackage.Events
+                }, null);
+                this.brokenInterviewPackageStorage.Remove(packageId);
+            });
+        }
+
         public virtual IReadOnlyCollection<string> GetAllPackagesInterviewIds()
         {
             var count = int.MaxValue;
