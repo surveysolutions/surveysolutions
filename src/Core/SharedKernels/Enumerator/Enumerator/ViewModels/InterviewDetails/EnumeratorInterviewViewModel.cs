@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -25,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         protected string interviewId;
         private IStatefulInterview interview;
@@ -51,6 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerToStringService = answerToStringService;
             this.groupState = groupState;
             this.interviewState = interviewState;
+            this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
 
             this.BreadCrumbs = breadCrumbsViewModel;
@@ -67,29 +68,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             interview = this.interviewRepository.Get(interviewId);
-            if (interview == null) throw new Exception("Interview is null.");
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            if (questionnaire == null) throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
-            this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
-                .Select(questionId => new SideBarPrefillQuestion
-                {
-                    Question = questionnaire.GetQuestionTitle(questionId),
-                    Answer = this.GetAnswer(questionnaire, questionId),
-                    StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
-                })
-                .ToList();
+            if (interview == null)
+            {
+                this.viewModelNavigationService.NavigateToDashboard();
+            }
+            else
+            {
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+                if (questionnaire == null)
+                    throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
-            this.BreadCrumbs.Init(interviewId, this.navigationState);
-            this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
+                this.QuestionnaireTitle = questionnaire.Title;
+                this.PrefilledQuestions = questionnaire
+                    .GetPrefilledQuestions()
+                    .Select(questionId => new SideBarPrefillQuestion
+                    {
+                        Question = questionnaire.GetQuestionTitle(questionId),
+                        Answer = this.GetAnswer(questionnaire, questionId),
+                        StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
+                    })
+                    .ToList();
 
-            this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.ScreenChanged += this.OnScreenChanged;
-            this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
+                this.BreadCrumbs.Init(interviewId, this.navigationState);
+                this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
 
-            this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
+                this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
+                this.navigationState.ScreenChanged += this.OnScreenChanged;
+                this.navigationState.NavigateTo(
+                    NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(),
+                        new decimal[0])));
+
+                this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
+            }
         }
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
