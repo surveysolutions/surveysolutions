@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.Infrastructure
             // manually removing events from the middle of store event stream
             foreach (var missingEventId in missingEventIds)
             {
-                this.sqliteEventStorage.connection.Delete<EventView>(missingEventId);
+                this.sqliteEventStorage.connections.Values.Single().Delete<EventView>(missingEventId);
             }
 
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();

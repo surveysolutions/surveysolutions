@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private IEnumeratorSettings enumeratorSettings;
         
 
-        private Dictionary<Guid, SQLiteConnectionWithLock> connections = new Dictionary<Guid, SQLiteConnectionWithLock>();
+        internal Dictionary<Guid, SQLiteConnectionWithLock> connections = new Dictionary<Guid, SQLiteConnectionWithLock>();
         private ILogger logger;
         private SqliteSettings settings;
         private ISQLitePlatform sqLitePlatform;
