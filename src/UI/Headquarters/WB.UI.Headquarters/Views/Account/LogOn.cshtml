@@ -17,7 +17,7 @@
 </div>
 
 <div class="well form-signin">
-    @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
     {
         <fieldset>
             <legend>

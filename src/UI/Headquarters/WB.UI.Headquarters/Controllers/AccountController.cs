@@ -33,9 +33,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        public ActionResult LogOn()
+        public ActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.ReturnUrl = returnUrl;
             return this.View();
         }
 
@@ -57,7 +58,10 @@ namespace WB.UI.Headquarters.Controllers
                     if (isHeadquarter || isSupervisor || isAdmin || isObserver)
                     {
                         this.authentication.SignIn(model.UserName, false);
-                        
+
+                        if (!string.IsNullOrWhiteSpace(returnUrl))
+                            return this.RedirectToLocal(returnUrl);
+
                         if (isSupervisor)
                         {
                             return this.RedirectToAction("Index", "Survey");
