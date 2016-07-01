@@ -104,39 +104,41 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             if (totalEvents == 0)
                 yield break;
 
-            int readEventCount = 0;
-
-            var connection = GetOrCreateConnection(id);
-
             var bulkSize = this.enumeratorSettings.EventChunkSize;
 
-            progress?.Report(new EventReadingProgress(readEventCount, totalEvents));
+            progress?.Report(new EventReadingProgress(0, totalEvents));
 
-            for (int skipEvents = 0; skipEvents < totalEvents; skipEvents += bulkSize)
+            for (int loadedEvents = 0; loadedEvents < totalEvents; loadedEvents += bulkSize)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                List<CommittedEvent> bulk;
-                using (connection.Lock())
-                {
-                    bulk = connection
-                        .Table<EventView>()
-                        .Where(eventView
-                            => eventView.EventSourceId == id
-                            && eventView.EventSequence >= startEventSequence)
-                        .OrderBy(x => x.EventSequence)
-                        .Skip(skipEvents)
-                        .Take(bulkSize)
-                        .Select(ToCommitedEvent)
-                        .ToList();
-                }
+                var bulk = this.LoadEvents(id, startEventSequence, skip: loadedEvents, take: bulkSize);
 
-                foreach (var committedEvent in bulk)
+                for (int eventIndexInBulk = 0; eventIndexInBulk < bulk.Count; eventIndexInBulk++)
                 {
-                    yield return committedEvent;
-                    readEventCount++;
-                    progress?.Report(new EventReadingProgress(readEventCount, totalEvents));
+                    yield return bulk[eventIndexInBulk];
+
+                    progress?.Report(new EventReadingProgress(loadedEvents + eventIndexInBulk + 1, totalEvents));
                 }
+            }
+        }
+
+        private List<CommittedEvent> LoadEvents(Guid eventSourceId, int startEventSequence, int skip, int take)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+
+            using (connection.Lock())
+            {
+                return connection
+                    .Table<EventView>()
+                    .Where(eventView
+                        => eventView.EventSourceId == eventSourceId
+                        && eventView.EventSequence >= startEventSequence)
+                    .OrderBy(x => x.EventSequence)
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(ToCommitedEvent)
+                    .ToList();
             }
         }
 
