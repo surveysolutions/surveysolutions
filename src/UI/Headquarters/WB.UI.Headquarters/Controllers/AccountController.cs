@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
@@ -33,6 +32,35 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        public ActionResult Index()
+        {
+            var userRoles = Roles.GetRolesForUser(this.authentication.GetCurrentUser().Name);
+
+            bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
+            bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+            bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
+            bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
+
+            if (isSupervisor)
+            {
+                return this.RedirectToAction("Index", "Survey");
+            }
+
+            if (isHeadquarter)
+            {
+                return this.RedirectToAction("SurveysAndStatuses", "HQ");
+            }
+
+            if (isObserver || isAdmin)
+            {
+                return this.RedirectToAction("Index", "Headquarters");
+            }
+
+            return this.RedirectToAction("NotFound", "Error");
+        }
+
+        [HttpGet]
         public ActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
@@ -44,43 +72,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            if (this.ModelState.IsValid)
+            if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
             {
-                if (Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
-                {
-                    var userRoles = Roles.GetRolesForUser(model.UserName);
-
-                    bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
-                    bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
-                    bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
-                    bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
-
-                    if (isHeadquarter || isSupervisor || isAdmin || isObserver)
-                    {
-                        this.authentication.SignIn(model.UserName, false);
-
-                        if (!string.IsNullOrWhiteSpace(returnUrl))
-                            return this.RedirectToLocal(returnUrl);
-
-                        if (isSupervisor)
-                        {
-                            return this.RedirectToAction("Index", "Survey");
-                        }
-                        if (isHeadquarter)
-                        {
-                            return this.RedirectToAction("SurveysAndStatuses", "HQ");
-                        }
-                        if (isObserver || isAdmin)
-                        {
-                            return this.RedirectToAction("Index", "Headquarters");
-                        }
-                    }
-
-                    this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
-                }
-                else
-                    this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
+                this.authentication.SignIn(model.UserName, false);
+                return this.RedirectToLocal(returnUrl);
             }
+            else this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
 
             return this.View(model);
         }
