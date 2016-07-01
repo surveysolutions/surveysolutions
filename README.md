@@ -1,3 +1,10 @@
+5.11
+- Changed Designer endpoint for Headquartes. Should be updated DesignerAddress app settings parameter in all hearduarters build stripts. 
+  New urls should be:
+-- For prodaction: https://solutions.worldbank.org
+-- For rc: https://design-rc.mysurvey.solutions
+-- For dev: https://design-dev.mysurvey.solutions 
+-- For local dev: http://localhost/designer
 5.10
 - Compatible with EventStore 3.6.2
 - When upgading any previous version before 5.10 dbup tool needs to be executed. Following parameters should be used:
