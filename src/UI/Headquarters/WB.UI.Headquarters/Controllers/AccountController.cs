@@ -168,14 +168,11 @@ namespace WB.UI.Headquarters.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("NotFound", "Error");
-            }
+            if (string.IsNullOrWhiteSpace(returnUrl)) return RedirectToAction("Index");
+
+            if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
+
+            return RedirectToAction("NotFound", "Error");
         }
     }
 }
