@@ -165,5 +165,17 @@ namespace WB.UI.Headquarters.Controllers
             this.authentication.SignIn(currentUserIdentity.ObserverName, false);
             return this.RedirectToAction("Index", "Headquarters");
         }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+        }
     }
 }
