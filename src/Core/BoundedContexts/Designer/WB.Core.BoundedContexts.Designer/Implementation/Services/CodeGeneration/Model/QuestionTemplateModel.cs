@@ -13,7 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string TypeName { set; get; }
         public string ConditionMethodName => CodeGenerator.EnablementPrefix + this.VariableName;
-
+        public string OptionsFilterMethodName => CodeGenerator.OptionsFilterPrefix + this.VariableName;
+        
         public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
         public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
@@ -23,6 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string RosterScopeName { set; get; }
         public string ParentScopeTypeName { get; set; }
+        public string OptionsFilterExpression { get; set; }
 
+        public bool HasOptionsFilter => !string.IsNullOrWhiteSpace(this.OptionsFilterExpression);
     }
 }

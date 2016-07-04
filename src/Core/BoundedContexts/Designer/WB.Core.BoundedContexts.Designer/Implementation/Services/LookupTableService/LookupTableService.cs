@@ -10,6 +10,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -25,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private const int MAX_ROWS_COUNT = 5000;
         private const int MAX_COLS_COUNT = 11;
 
-        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
+        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
@@ -145,27 +147,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTableContent == null)
                 return null;
 
-            var memoryStream = new MemoryStream();
-            using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
+            using (var memoryStream = new MemoryStream())
             {
-                csvWriter.WriteField(ROWCODE);
-                foreach (var variableName in lookupTableContent.VariableNames)
+                using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
                 {
-                    csvWriter.WriteField(variableName);
-                }
-                csvWriter.NextRecord();
-                foreach (var lookupTableRow in lookupTableContent.Rows)
-                {
-                    csvWriter.WriteField(lookupTableRow.RowCode);
-                    foreach (var variable in lookupTableRow.Variables)
+                    csvWriter.WriteField(ROWCODE);
+                    foreach (var variableName in lookupTableContent.VariableNames)
                     {
-                        csvWriter.WriteField(variable);
+                        csvWriter.WriteField(variableName);
                     }
                     csvWriter.NextRecord();
-                }
-            }
 
-            return new LookupTableContentFile() { Content = memoryStream.ToArray(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
+
+                    foreach (var lookupTableRow in lookupTableContent.Rows)
+                    {
+                        csvWriter.WriteField(lookupTableRow.RowCode);
+                        foreach (var variable in lookupTableRow.Variables)
+                        {
+                            if (variable.HasValue)
+                                csvWriter.WriteField(variable.Value);
+                            else
+                                csvWriter.WriteField(string.Empty);
+                        }
+                        csvWriter.NextRecord();
+                    }
+                }
+
+                return new LookupTableContentFile()
+                {
+                    Content = memoryStream.ToArray(),
+                    FileName = questionnaire.LookupTables[lookupTableId].FileName
+                };
+            }
         }
 
         private string GetLookupTableStorageId(Guid questionnaireId, Guid lookupTableId)

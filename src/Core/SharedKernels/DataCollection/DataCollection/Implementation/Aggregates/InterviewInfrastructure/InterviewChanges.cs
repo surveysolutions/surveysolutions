@@ -11,15 +11,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges, 
             ValidityChanges validityChanges,
             RosterCalculationData rosterCalculationData, 
-            List<Identity> answersForLinkedQuestionsToRemove,
-            List<RosterIdentity> rosterInstancesWithAffectedTitles, 
-            string answerAsRosterTitle,
+            List<Identity> answersToRemove,
+            Dictionary<Identity, string> rosterInstancesWithAffectedTitles, 
             IEnumerable<Identity> changedQuestionTitles,
             IEnumerable<Identity> changedStaticTextTitles,
+            IEnumerable<Identity> changedGroupTitles,
             ChangedLinkedOptions[] linkedQuestionOptionsChanges,
             VariableValueChanges variableValueChanges)
         {
-            this.AnswerAsRosterTitle = answerAsRosterTitle;
+            this.ChangedGroupTitles = changedGroupTitles?.ToArray();
             this.ChangedQuestionTitles = changedQuestionTitles?.ToArray();
             this.ChangedStaticTextTitles = changedStaticTextTitles?.ToArray();
 
@@ -28,13 +28,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.EnablementChanges = enablementChanges;
             this.ValidityChanges = validityChanges;
             this.RosterCalculationData = rosterCalculationData;
-            this.AnswersForLinkedQuestionsToRemove = answersForLinkedQuestionsToRemove;
+            this.AnswersToRemove = answersToRemove;
             this.RosterInstancesWithAffectedTitles = rosterInstancesWithAffectedTitles;
             this.LinkedQuestionOptionsChanges = linkedQuestionOptionsChanges;
             this.VariableValueChanges = variableValueChanges;
         }
 
-        public string AnswerAsRosterTitle { set; get; }
+        public Identity[] ChangedGroupTitles { get; set; }
         public Identity[] ChangedQuestionTitles { get; set; }
         public Identity[] ChangedStaticTextTitles { get; set; }
 
@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ValidityChanges ValidityChanges { set; get; }
         public ChangedLinkedOptions[] LinkedQuestionOptionsChanges { set; get; }
         public RosterCalculationData RosterCalculationData { set; get; }
-        public List<Identity> AnswersForLinkedQuestionsToRemove { set; get; }
-        public List<RosterIdentity> RosterInstancesWithAffectedTitles { set; get; }
+        public List<Identity> AnswersToRemove { set; get; }
+        public Dictionary<Identity, string> RosterInstancesWithAffectedTitles { set; get; }
         public VariableValueChanges VariableValueChanges { get; set; }
     }
 }

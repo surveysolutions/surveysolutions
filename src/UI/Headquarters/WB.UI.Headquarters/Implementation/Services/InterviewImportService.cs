@@ -7,6 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -14,10 +17,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.UI.Headquarters.Services;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
@@ -77,12 +77,20 @@ namespace WB.UI.Headquarters.Implementation.Services
             };
             this.Status.IsInProgress = true;
 
-            var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId,
-                questionnaireIdentity);
-
-            this.Status.TotalInterviewsCount = interviewsToImport.Length;
             try
             {
+                var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
+                if (interviewsToImport == null)
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError()
+                    {
+                        ErrorMessage = $"Datafile is incorrect"
+                    });
+
+                    return;
+                }
+
+                this.Status.TotalInterviewsCount = interviewsToImport.Length;
 
                 int createdInterviewsCount = 0;
                 Stopwatch elapsedTime = Stopwatch.StartNew();
@@ -179,8 +187,6 @@ namespace WB.UI.Headquarters.Implementation.Services
             csvReader.Configuration.TrimFields = true;
             csvReader.Configuration.TrimHeaders = true;
             csvReader.Configuration.WillThrowOnMissingField = false;
-            csvReader.Configuration.PrefixReferenceHeaders = true;
-            csvReader.Configuration.UseNewObjectForNullReferenceProperties = false;
         }
         public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
     }

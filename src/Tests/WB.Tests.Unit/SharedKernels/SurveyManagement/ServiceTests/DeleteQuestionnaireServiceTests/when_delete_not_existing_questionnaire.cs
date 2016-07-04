@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests

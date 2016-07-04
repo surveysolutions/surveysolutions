@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     internal class SideBarSectionViewModelFactory : ISideBarSectionViewModelsFactory
     {
-        readonly IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
 
         public SideBarSectionViewModelFactory(IServiceLocator serviceLocator)
         {

@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            questionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
+            questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var interview = Mock.Of<IStatefulInterview>(x =>
                 x.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[] 
                 {
-                    Create.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
-                    Create.TextAnswer("answer2", linkedToQuestionId, new []{2m})
+                    Create.Entity.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
+                    Create.Entity.TextAnswer("answer2", linkedToQuestionId, new []{2m})
                 } &&
                 x.Answers == new Dictionary<string, BaseInterviewAnswer>()
                 );
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             answering = new Mock<AnsweringViewModel>();
 
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object, answering:answering.Object);
-            questionViewModel.Init("interviewId", questionId, Create.NavigationState());
+            questionViewModel.Init("interviewId", questionId, Create.Other.NavigationState());
         };
 
         Because of = () =>

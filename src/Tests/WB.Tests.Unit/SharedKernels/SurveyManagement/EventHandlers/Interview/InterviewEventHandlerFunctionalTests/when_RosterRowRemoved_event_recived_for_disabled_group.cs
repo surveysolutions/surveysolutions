@@ -1,10 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
 {
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(Create.RosterInstancesRemoved(disabledGroupId)));
+                CreatePublishableEvent(Create.Event.RosterInstancesRemoved(disabledGroupId)));
 
         It should_interview_levels_count_be_equal_to_2_top_level_and_roster_row = () =>
             viewState.Levels.Keys.Count.ShouldEqual(2);

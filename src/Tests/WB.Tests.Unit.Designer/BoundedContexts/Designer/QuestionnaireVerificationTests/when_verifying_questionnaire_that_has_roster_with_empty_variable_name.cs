@@ -17,14 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new Group
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>() { new TextListQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var" } }
-                }
+                Create.FixedRoster(rosterId: rosterId, variable:null,
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
+                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var"}})
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -42,8 +38,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_message_with_one_references = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_Group_type = () =>
-            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_with_one_references_with_Roster_type = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         It should_return_message_with_one_references_with_id_equals_rosterId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(rosterId);

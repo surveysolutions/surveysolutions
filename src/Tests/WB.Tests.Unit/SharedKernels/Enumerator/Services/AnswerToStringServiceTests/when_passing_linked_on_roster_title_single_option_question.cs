@@ -18,19 +18,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         {
             answerToStringService = CreateAnswerToStringService();
 
-            var rosterSourceOfLinking = CreateInterviewRoster("nastya", Create.RosterVector(3));
+            var rosterSourceOfLinking = CreateInterviewRoster("nastya", Create.Entity.RosterVector(3));
             statefulInterviewMock = Substitute.For<IStatefulInterview>();
             statefulInterviewMock.FindReferencedRostersForLinkedQuestion(rosterId, Arg.Any<Identity>())
                 .Returns(new[] { rosterSourceOfLinking });
 
-            singleOptionAnswer = CreateLinkedSingleOptionAnswer(Create.RosterVector(3), linkedId);
+            singleOptionAnswer = CreateLinkedSingleOptionAnswer(Create.Entity.RosterVector(3), linkedId);
 
-            questionnaire = Create.PlainQuestionnaire(
-                Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(rosterId: rosterId, children: new IComposite[]
+            questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Roster(rosterId: rosterId, children: new IComposite[]
                     {
-                        Create.SingleOptionQuestion(questionId: linkedId, linkedToRosterId:rosterId, variable:"link"),
-                        Create.TextQuestion(questionId:questionWithSubstitutionId, text:"test %link%")
+                        Create.Entity.SingleOptionQuestion(questionId: linkedId, linkedToRosterId:rosterId, variable:"link"),
+                        Create.Entity.TextQuestion(questionId:questionWithSubstitutionId, text:"test %link%")
                     })));
         };
 

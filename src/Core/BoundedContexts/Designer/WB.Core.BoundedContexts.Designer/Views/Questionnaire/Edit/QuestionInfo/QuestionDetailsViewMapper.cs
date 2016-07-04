@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.HideInstructions = question.Properties?.HideInstructions ?? false;
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];
-
+            
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {
@@ -51,6 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 multioptionQuestionView.YesNoView = multioptionQuestion.YesNoView;
                 multioptionQuestionView.MaxAllowedAnswers = multioptionQuestion.MaxAllowedAnswers;
                 multioptionQuestionView.Options = this.CreateCategoricalOptions(multioptionQuestion.Answers);
+                multioptionQuestionView.OptionsFilterExpression = multioptionQuestion.Properties.OptionsFilterExpression;
+                
                 return multioptionQuestionView;
             }
 
@@ -64,6 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 singleoptionQuestionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                 singleoptionQuestionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);
+                singleoptionQuestionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
+
                 return singleoptionQuestionView;
             }
 
@@ -83,6 +87,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 {
                     textQuestionView.Mask = textQuestion.Mask;
                     return textQuestionView;
+                }
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                var dateTimeQuestionView = questionView as DateTimeDetailsView;
+                if (dateTimeQuestionView != null)
+                {
+                    dateTimeQuestionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
+                    return dateTimeQuestionView;
                 }
             }
 

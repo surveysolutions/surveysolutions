@@ -29,7 +29,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         public async Task CopyFileAsync(string sourceFile, string targetDir)
         {
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetDir);
-
             var copyOfTheFile = await parentFolder.CreateFileAsync(Path.GetFileName(sourceFile), CreationCollisionOption.ReplaceExisting);
             var originalFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourceFile);
 
@@ -39,6 +38,25 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 {
                     await originalStream.CopyToAsync(copyStream);
                 }
+            }
+        }
+
+        public async Task CopyDirectoryAsync(string sourceDirectory, string targetDir)
+        {
+            var sourceFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(sourceDirectory);
+            var filesInSourceFolder = await sourceFolder.GetFilesAsync();
+
+            var targetFolderPath = Path.Combine(targetDir, sourceFolder.Name);
+            var targetFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetFolderPath);
+
+            if (targetFolder == null)
+            {
+                await CreateDirectoryAsync(targetFolderPath);
+            }
+
+            foreach (var file in filesInSourceFolder)
+            {
+                await CopyFileAsync(file.Path, targetFolderPath);
             }
         }
 

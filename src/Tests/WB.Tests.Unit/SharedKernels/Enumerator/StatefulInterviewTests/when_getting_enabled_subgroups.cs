@@ -17,23 +17,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireDocument(
+            var questionnaire = Create.Entity.QuestionnaireDocument(
                 id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Group(
+                    Create.Entity.Group(
                         groupId: selectedGroupIdentity.Id,
                         children: new IComposite[]
                         {
-                            Create.Roster(rosterId: rosterId),
-                            Create.Group(groupId: groupId)
+                            Create.Entity.Roster(rosterId: rosterId),
+                            Create.Entity.Group(groupId: groupId)
                         })
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
 
-            statefulInterview = Create.StatefulInterview(questionnaireId: questionnaireId,
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository);
 
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId,

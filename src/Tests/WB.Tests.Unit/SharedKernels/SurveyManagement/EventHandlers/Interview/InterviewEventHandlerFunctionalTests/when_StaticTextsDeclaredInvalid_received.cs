@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
             viewState = CreateViewWithSequenceOfInterviewData();
 
-            var identity = Create.Identity(staticTextId, new decimal[0]);
+            var identity = Create.Entity.Identity(staticTextId, new decimal[0]);
             var failedValidationConditions = new List<FailedValidationCondition>()
             {
-                Create.FailedValidationCondition(1)
+                Create.Entity.FailedValidationCondition(1)
             };
             var listOfFailedValidationConditions = new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>()
             {

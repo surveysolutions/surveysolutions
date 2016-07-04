@@ -80,16 +80,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return this.lazyCommandSession.Value;
         }
 
-        public string GetEntityIdentifierColumnName(Type entityType)
-        {
-            var persister = this.sessionFactory.GetClassMetadata(entityType);
-
-            if (persister == null)
-                return null;
-
-            return persister.IdentifierPropertyName;
-        }
-
         public bool IsQueryTransactionStarted
         {
             get { return false; }

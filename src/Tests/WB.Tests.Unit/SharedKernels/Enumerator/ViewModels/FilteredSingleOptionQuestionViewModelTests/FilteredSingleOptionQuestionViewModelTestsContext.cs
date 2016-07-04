@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             AnsweringViewModel answering,
             IPrincipal principal = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IOptionsRepository optionsRepository = null)
+            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             return new FilteredSingleOptionQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
@@ -30,18 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 Mock.Of<ILiteEventRegistry>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                optionsRepository ?? Mock.Of<IOptionsRepository>());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
+                );
         }
 
-        protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId)
+        protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, List<CategoricalOption> optionList = null)
         {
-            var options = new List<CategoricalQuestionOption>
+            var options = optionList ?? new List<CategoricalOption>
             {
-                Create.CategoricalQuestionOption(1, "abc"),
-                Create.CategoricalQuestionOption(2, "bbc"),
-                Create.CategoricalQuestionOption(3, "bbc"),
-                Create.CategoricalQuestionOption(4, "bbaé"),
-                Create.CategoricalQuestionOption(5, "cccé"),
+                Create.Entity.CategoricalQuestionOption(1, "abc"),
+                Create.Entity.CategoricalQuestionOption(2, "bbc"),
+                Create.Entity.CategoricalQuestionOption(3, "bbc"),
+                Create.Entity.CategoricalQuestionOption(4, "bbaé"),
+                Create.Entity.CategoricalQuestionOption(5, "cccé"),
             };
 
             Mock<IOptionsRepository> optionsRepository = new Mock<IOptionsRepository>();
@@ -50,11 +51,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 .Setup(x => x.GetQuestionOptions(questionnaireId, questionId))
                 .Returns(options);
 
+            optionsRepository
+                .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<string>()))
+                .Returns((QuestionnaireIdentity a, Guid b, int c) => options.First(x => x.Value == c));
+
+            optionsRepository
+                .Setup(x => x.GetFilteredQuestionOptions(questionnaireId, questionId, It.IsAny<int?>(), It.IsAny<string>()))
+                .Returns((QuestionnaireIdentity a, Guid b, int? c, string d) => 
+                        options.Where(x => x.Title.IndexOf(d ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0).Select(x => x));
+            
             return optionsRepository.Object;
         }
 
-        protected static readonly Identity questionIdentity = Create.Identity(Id.g6, Create.RosterVector());
+        protected static readonly Identity questionIdentity = Create.Entity.Identity(Id.g6, Create.Entity.RosterVector());
 
-        protected static readonly QuestionnaireIdentity questionnaireId = Create.QuestionnaireIdentity(Id.g9, 1);
+        protected static readonly QuestionnaireIdentity questionnaireId = Create.Entity.QuestionnaireIdentity(Id.g9, 1);
     }
 }

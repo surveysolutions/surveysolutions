@@ -104,10 +104,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.signInCommand ?? (this.signInCommand = new MvxCommand(async () => await this.SignInAsync(), () => !IsInProgress)); }
         }
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
-        }
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
 
         private InterviewerIdentity userIdentity;
         public void Init(InterviewerIdentity userIdentity)
@@ -115,7 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userIdentity = userIdentity;
         }
 
-        public override Task StartAsync()
+        public override void Load()
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
@@ -123,12 +120,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = this.userIdentity.Name;
 
 #if DEBUG
-            this.Endpoint = "https://superhq-dev.mysurvey.solutions";
-            this.UserName = "ank";
-            this.Password = "P@$$w0rd";
+            this.Endpoint = "http://192.168.88.48/Headquarters";
+            this.UserName = "int";
+            this.Password = "q";
 #endif
-
-            return Task.FromResult(true);
         }
 
         public async Task RefreshEndpoint()
@@ -182,7 +177,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
                 await this.principal.SignInAsync(restCredentials.Login, restCredentials.Password, true);
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)
             {
@@ -217,7 +212,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             if (isNeedNavigateToRelinkPage)
-                await this.viewModelNavigationService.NavigateToAsync<RelinkDeviceViewModel>(interviewerIdentity);
+                this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
         }
 
         public void CancellInProgressTask()

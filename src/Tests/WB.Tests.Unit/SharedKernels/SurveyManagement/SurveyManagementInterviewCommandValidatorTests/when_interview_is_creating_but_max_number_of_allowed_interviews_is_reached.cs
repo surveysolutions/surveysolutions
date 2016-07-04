@@ -2,10 +2,10 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterviewCommandValidatorTests
@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         private Establish context = () =>
         {
             var summaries = new TestInMemoryWriter<InterviewSummary>();
-            summaries.Store(Create.InterviewSummary(), "id1");
-            summaries.Store(Create.InterviewSummary(), "id2");
+            summaries.Store(Create.Entity.InterviewSummary(), "id1");
+            summaries.Store(Create.Entity.InterviewSummary(), "id2");
 
             surveyManagementInterviewCommandValidator =
                 CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.CreateInterviewCommand()));
+            exception = Catch.Only<InterviewException>(() =>surveyManagementInterviewCommandValidator.Validate(null, Create.Command.CreateInterviewCommand()));
 
         It should_raise_InterviewException = () =>
             exception.ShouldNotBeNull();

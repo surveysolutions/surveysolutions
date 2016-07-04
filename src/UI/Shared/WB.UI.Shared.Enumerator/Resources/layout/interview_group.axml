@@ -13,7 +13,7 @@
               local:MvxBind="
                 HideKeyboardOnClick .; 
                 Click NavigateToGroupCommand; 
-                Text ToSpannableGroupTitle(RosterTitle, .);
+                TextFormatted SpannableGroupTitle(IsRoster, GroupTitle.PlainText, RosterInstanceTitle);
                 ButtonGroupStyle GroupState; 
                 Enabled Enablement.Enabled;
               "/>

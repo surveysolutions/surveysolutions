@@ -7,13 +7,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            var questionnaire = Create.DataCollectionQuestionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
+            var questionnaire = Create.AggregateRoot.Questionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1));
 
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire()
         {
-            return Create.DataCollectionQuestionnaire();
+            return Create.AggregateRoot.Questionnaire();
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

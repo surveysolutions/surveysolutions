@@ -5,14 +5,13 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
@@ -39,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Because of = () =>
             viewModel =
                 denormalizer.Update(viewModel,
-                    Create.SynchronizationMetadataAppliedEvent(status: interviewStatus));
+                    Create.PublishedEvent.SynchronizationMetadataApplied(status: interviewStatus));
 
         It should_teamLeadId_be_equal_to_specified_supervisorId = () =>
             viewModel.TeamLeadId.ShouldEqual(supervisorId);

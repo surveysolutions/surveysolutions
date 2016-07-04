@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.QuestionnaireKeyValueStorage
             mockOfAsyncPlainStorage = new Mock<IAsyncPlainStorage<QuestionnaireDocumentView>>();
             mockOfAsyncPlainStorage.Setup(x => x.GetById(QuestionnaireId))
                 .Returns(new QuestionnaireDocumentView {Document = new QuestionnaireDocument()});
-            questionnaireKeyValueStorage = Create.QuestionnaireKeyValueStorage(mockOfAsyncPlainStorage.Object);
+            questionnaireKeyValueStorage = Create.Service.QuestionnaireKeyValueStorage(mockOfAsyncPlainStorage.Object);
         };
 
         Because of = () =>

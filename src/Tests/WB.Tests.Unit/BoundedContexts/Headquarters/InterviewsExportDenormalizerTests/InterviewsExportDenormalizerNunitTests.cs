@@ -4,14 +4,14 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalizerTests
@@ -25,17 +25,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             ()
         {
             Guid interviewId=Guid.NewGuid();
-            var interviewDataExportView = Create.InterviewDataExportView(interviewId,
+            var interviewDataExportView = Create.Entity.InterviewDataExportView(interviewId,
                 levels:
                     new[]
                     {
-                        Create.InterviewDataExportLevelView(interviewId,
+                        Create.Entity.InterviewDataExportLevelView(interviewId,
                             records:
                                 new []
                                 {
-                                    Create.InterviewDataExportRecord(interviewId),
-                                    Create.InterviewDataExportRecord(interviewId),
-                                    Create.InterviewDataExportRecord(interviewId)
+                                    Create.Entity.InterviewDataExportRecord(interviewId),
+                                    Create.Entity.InterviewDataExportRecord(interviewId),
+                                    Create.Entity.InterviewDataExportRecord(interviewId)
                                 })
                     });
             var exportViewFactoryMock=new Mock<IExportViewFactory>();
@@ -48,23 +48,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, exportViewFactoryMock.Object, exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed,
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Completed,
                 interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
 
             Assert.That(countInterviewRecords, Is.EqualTo(3));
 
-            var newInterviewDataExportView = Create.InterviewDataExportView(interviewId,
+            var newInterviewDataExportView = Create.Entity.InterviewDataExportView(interviewId,
             levels:
                 new[]
                 {
-                        Create.InterviewDataExportLevelView(interviewId,
+                        Create.Entity.InterviewDataExportLevelView(interviewId,
                             records:
                                 new []
                                 {
-                                    Create.InterviewDataExportRecord(interviewId),
-                                    Create.InterviewDataExportRecord(interviewId)
+                                    Create.Entity.InterviewDataExportRecord(interviewId),
+                                    Create.Entity.InterviewDataExportRecord(interviewId)
                                 })
                 });
             exportViewFactoryMock.Setup(
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
                     x.CreateInterviewDataExportView(Moq.It.IsAny<QuestionnaireExportStructure>(),
                         Moq.It.IsAny<InterviewData>())).Returns(newInterviewDataExportView);
 
-            interviewsExportDenormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed,
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Completed,
                interviewId: interviewId));
 
             countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
@@ -89,13 +89,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
 
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId),$"{interviewId}1");
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId),$"{interviewId}1");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId), $"{interviewId}3");
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.InterviewDeletedEvent(interviewId: interviewId));
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewDeleted(interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
 
@@ -111,13 +111,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
 
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}1");
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
-            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId), $"{interviewId}1");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.Entity.InterviewDataExportRecord(interviewId), $"{interviewId}3");
 
             var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
 
-            interviewsExportDenormalizer.Handle(Create.InterviewHardDeletedEvent(interviewId: interviewId));
+            interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewHardDeleted(interviewId: interviewId));
 
             var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
 
@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
         private InterviewsExportDenormalizer CreateInterviewsExportDenormalizer(
             Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
         {
-            var interviewData = Create.InterviewData();
+            var interviewData = Create.Entity.InterviewData();
             var interviewReferenceStorage = new TestInMemoryWriter<InterviewReferences>();
             interviewReferenceStorage.Store(new InterviewReferences(interviewId, Guid.NewGuid(), 1),
                 interviewId);

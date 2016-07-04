@@ -7,9 +7,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
 using Ninject;
-using Ninject.Activation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,7 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
             this.settings = settings;
         }
 
@@ -36,7 +34,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             
             try
             {
-                DatabaseManagement.CreateDatabase(this.settings.ConnectionString);
+                DatabaseManagement.InitDatabase(this.settings.ConnectionString);
             }
             catch (Exception exc)
             {
@@ -70,6 +68,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<IPlainTransactionManagerProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+
+            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.DbUpgradeSettings);
         }
 
         private ISessionFactory BuildSessionFactory()
@@ -83,9 +83,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
 
             cfg.AddDeserializedMapping(this.GetMappings(), "Plain");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-
             return cfg.BuildSessionFactory();
         }
 

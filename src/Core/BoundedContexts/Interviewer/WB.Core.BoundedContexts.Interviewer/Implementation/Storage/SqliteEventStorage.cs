@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Nito.AsyncEx;
 using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
+using SQLite.Net.Async;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
@@ -24,63 +29,82 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         static readonly Encoding TextEncoding = Encoding.UTF8;
 
-        public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
+        public SqliteEventStorage(ISQLitePlatform sqLitePlatform,
             ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor,
-            ITraceListener traceListener, 
-            SqliteSettings settings, 
+            ITraceListener traceListener,
+            SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
+            string pathToDatabase = settings.PathToDatabaseDirectory;
+            if (pathToDatabase != ":memory:")
+            {
+                pathToDatabase = Path.Combine(settings.PathToDatabaseDirectory, "events-data.sqlite3");
+            }
+
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
-                new SQLiteConnectionString(pathToDatabase, true, 
+                new SQLiteConnectionString(pathToDatabase, true,
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
-                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length),type),
-                        (type) => true)))
+                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
+                        (type) => true), 
+                    openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = traceListener
             };
-            this.logger = logger;            
+
+            this.logger = logger;
             this.enumeratorSettings = enumeratorSettings;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
 
-        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-        {
-            var events = this.connection.Table<EventView>().Where(eventView => eventView.EventSourceId == id &&
-                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
-                                                            .OrderBy(x => x.EventSequence);
-            
-            return new CommittedEventStream(id, events.Select(ToCommitedEvent));
-        }
-
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+            => this.Read(id, minVersion, null, CancellationToken.None);
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
+            int totalEventCount;
+
+            using (connection.Lock())
+                totalEventCount = this
+                    .connection
+                    .Table<EventView>()
+                    .Count(eventView
+                        => eventView.EventSourceId == id
+                           && eventView.EventSequence >= minVersion);
+
+            if (totalEventCount == 0)
+                yield break;
+            
             int lastReadEventSequence = Math.Max(minVersion, 0);
             var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
+            progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
+
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var startSequenceInTheBulk = lastReadEventSequence;
                 var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
-                bulk = this
-                    .connection
-                    .Table<EventView>()
-                    .Where(eventView
-                        => eventView.EventSourceId == id
-                        && eventView.EventSequence >= startSequenceInTheBulk
-                        && eventView.EventSequence < endSequenceInTheBulk)
-                    .OrderBy(x => x.EventSequence)
-                    .Select(ToCommitedEvent)
-                    .ToList();
+
+                using (connection.Lock())
+                    bulk = this
+                        .connection
+                        .Table<EventView>()
+                        .Where(eventView
+                            => eventView.EventSourceId == id
+                            && eventView.EventSequence >= startSequenceInTheBulk
+                            && eventView.EventSequence < endSequenceInTheBulk)
+                        .OrderBy(x => x.EventSequence)
+                        .Select(ToCommitedEvent)
+                        .ToList();
 
                 foreach (var committedEvent in bulk)
                 {
                     yield return committedEvent;
                     lastReadEventSequence = committedEvent.EventSequence + 1;
+                    progress?.Report(new EventReadingProgress(lastReadEventSequence, totalEventCount));
                 }
 
             } while (bulk.Count > 0);
@@ -88,25 +112,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            try
+            using (connection.Lock())
             {
-                this.connection.BeginTransaction();
-
-                this.ValidateStreamVersion(eventStream);
-
-                List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
-                foreach (var @event in storedEvents)
+                try
                 {
-                    connection.Insert(@event);
-                }
+                    this.connection.BeginTransaction();
 
-                this.connection.Commit();
-                return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
-            }
-            catch
-            {
-                this.connection.Rollback();
-                throw;
+                    this.ValidateStreamVersion(eventStream);
+
+                    List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
+                    foreach (var @event in storedEvents)
+                    {
+                        connection.Insert(@event);
+                    }
+
+                    this.connection.Commit();
+                    return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
+                }
+                catch
+                {
+                    this.connection.Rollback();
+                    throw;
+                }
             }
         }
 
@@ -115,8 +142,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var expectedVersion = eventStream.InitialVersion;
             if (expectedVersion == 0)
             {
-                var views = this.connection.Table<EventView>().Where(x => x.EventSourceId == eventStream.SourceId).ToList();
-                if (views.Count > 0)
+                bool viewExists;
+
+                using (connection.Lock())
+                    viewExists = this.connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+
+                if (viewExists)
                 {
                     var errorMessage = $"Wrong version number. Expected to store new event stream, but it already exists. EventStream Id: {eventStream.SourceId}";
                     this.logger.Error(errorMessage);
@@ -125,9 +156,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             else
             {
-                var commandText = string.Format("SELECT MAX({0}) FROM {1} WHERE {2} = ?", nameof(EventView.EventSequence), nameof(EventView), nameof(EventView.EventSourceId));
-                var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
-                int currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+                int currentStreamVersion;
+                var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+
+                using (connection.Lock())
+                {
+                    var sqLiteCommand = this.connection.CreateCommand(commandText, eventStream.SourceId);
+                    currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+                }
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
@@ -141,27 +177,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public void RemoveEventSourceById(Guid interviewId)
         {
-            try
+            using (connection.Lock())
             {
-                this.connection.BeginTransaction();
-                var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-                var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
-                sqLiteCommand.ExecuteNonQuery();
-                this.connection.Commit();
-            }
-            catch
-            {
-                this.connection.Rollback();
-                throw;
-            }
-        }
-
-        [Obsolete("Remove when all clients are upgraded to 5.5")]
-        public void MigrateOldEvents(IEnumerable<EventView> eventViews)
-        {
-            foreach (var eventView in eventViews)
-            {
-                this.connection.Insert(eventView);
+                try
+                {
+                    this.connection.BeginTransaction();
+                    var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+                    var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
+                    sqLiteCommand.ExecuteNonQuery();
+                    this.connection.Commit();
+                }
+                catch
+                {
+                    this.connection.Rollback();
+                    throw;
+                }
             }
         }
 
@@ -175,7 +205,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings));
+                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings()));
         }
 
         private CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
@@ -200,7 +230,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings)
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings())
             };
         }
 
@@ -209,7 +239,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.connection.Dispose();
         }
 
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        internal static Func<JsonSerializerSettings> JsonSerializerSettings = () => new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All,
             NullValueHandling = NullValueHandling.Ignore,
@@ -218,7 +248,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         };
 
         [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
-        private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
+        internal class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)
             {
@@ -227,7 +257,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
                 var oldMainCoreAssemblyName = "Main.Core";
 
-                if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal) )
+                if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal))
                 {
                     assemblyName = newCapiAssemblyName;
                 }

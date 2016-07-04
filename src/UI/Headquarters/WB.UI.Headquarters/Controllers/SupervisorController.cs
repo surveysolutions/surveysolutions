@@ -4,10 +4,10 @@ using System.Web;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -67,8 +67,6 @@ namespace WB.UI.Headquarters.Controllers
                
             this.Success(HQ.SuccessfullyCreated);
             return this.RedirectToAction("Index");
-            
-
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]

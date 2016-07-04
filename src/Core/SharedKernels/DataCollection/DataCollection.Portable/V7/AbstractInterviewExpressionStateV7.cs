@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         #endregion
 
-        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
+        public virtual LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
             var result = new LinkedQuestionOptionsChanges();
 
@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
                 var linkedQuestionId = linkedQuestionOptions.Key;
 
                 var newOptionSet =
-                    linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.First().RosterVector).ToArray();
+                    linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.Last().RosterVector).ToArray();
                 
                 result.LinkedQuestionOptions.Add(linkedQuestionId, newOptionSet);
             }

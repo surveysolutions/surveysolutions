@@ -6,12 +6,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -30,18 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = groupId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a", "b", "c" },
-                    Children = new List<IComposite>()
+                Create.Entity.FixedRoster(rosterId: groupId,
+                    fixedTitles: new[] {"a", "b", "c"},
+                    children: new IComposite[]
                     {
                         new StaticText(staticTextWithSubstitutionId, "test %v1%", null, false, null),
                         new Variable(variableId, new VariableData(VariableType.LongInteger, "v1", "5"))
-                    }
-                });
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

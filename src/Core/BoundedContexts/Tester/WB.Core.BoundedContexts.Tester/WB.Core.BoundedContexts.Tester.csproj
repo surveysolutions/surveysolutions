@@ -39,11 +39,15 @@
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
-    <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TesterUIResources.id-ID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.km.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.km.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\TesterUIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -73,6 +77,7 @@
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="Views\DashboardLastUpdate.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
+    <Compile Include="Views\TesterUserIdentity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -98,15 +103,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.1.4\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -167,15 +172,27 @@
     <Folder Include="Services\Infrastructure\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx">
+    <EmbeddedResource Include="Properties\TesterUIResources.es.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.es1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.fr1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.id-ID.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.id-ID.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.pt-PT.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.km.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.km.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.pt.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.pt1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>

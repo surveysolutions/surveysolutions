@@ -108,7 +108,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
-                return await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token);
+                return await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException ex)
             {

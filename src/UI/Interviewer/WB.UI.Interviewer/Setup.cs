@@ -22,7 +22,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -81,6 +80,7 @@ namespace WB.UI.Interviewer
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
+                {typeof(LoadingViewModel),typeof(LoadingActivity) },
                 {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
@@ -147,49 +147,13 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
-            var liteEventBus = kernel.Get<ILiteEventBus>();
-            kernel.Unbind<ILiteEventBus>();
-
-            var cqrsEventBus = new InProcessEventBus(kernel.Get<IEventStore>(), new EventBusSettings(),
-                kernel.Get<ILogger>());
-
-            var hybridEventBus = new HybridEventBus(liteEventBus, cqrsEventBus);
-
-            kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
-            kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
-
             kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
             kernel.Bind<AttachmentsCleanupService>().ToSelf();
 
-            this.InitDashboard(kernel, cqrsEventBus);
+            kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
+            kernel.Get<InterviewerDashboardEventHandler>();
+
             return kernel;
-        }
-         
-        private void InitDashboard(IKernel kernel, InProcessEventBus bus)
-        {
-            var dashboardeventHandler = new InterviewEventHandler(
-                kernel.Get<IAsyncPlainStorage<InterviewView>>(),
-                kernel.Get<IPlainQuestionnaireRepository>());
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewHardDeleted));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(NumericRealQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(YesNoQuestionAnswered));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies

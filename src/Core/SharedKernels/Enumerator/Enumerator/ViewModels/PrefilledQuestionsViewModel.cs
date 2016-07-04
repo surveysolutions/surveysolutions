@@ -53,14 +53,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewId = interviewId;   
         }
 
-        public override async Task StartAsync()
+        public override void Load()
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             var interview = this.interviewRepository.Get(this.interviewId);
             if (interview == null)
             {
                 logger.Error("Interview is null. interviewId: " + interviewId);
-                await viewModelNavigationService.NavigateToDashboardAsync();
+                viewModelNavigationService.NavigateToDashboard();
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (questionnaire.GetPrefilledQuestions().Count == 0)
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId);
+                this.viewModelNavigationService.NavigateToInterview(interviewId);
                 return;
             }
 
@@ -84,9 +84,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.PrefilledQuestions.Add(startButton);
         }
 
-        public async Task NavigateToPreviousViewModelAsync()
-        {
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
-        }
+        public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();
     }
 }

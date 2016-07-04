@@ -1,7 +1,7 @@
 ﻿using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 using WB.Core.GenericSubdomains.Portable;

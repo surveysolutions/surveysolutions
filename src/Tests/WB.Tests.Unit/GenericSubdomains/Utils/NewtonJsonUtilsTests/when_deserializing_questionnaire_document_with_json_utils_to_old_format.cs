@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
-                Create.TextQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variable: "Prov", preFilled: true)
+            questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
+                Create.Entity.TextQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variable: "Prov", preFilled: true)
             );
             questionnaire.Id = "questionnaireId";
             questionnaire.CreationDate = new DateTime(2015, 03, 22, 12, 55, 30);

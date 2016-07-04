@@ -61,7 +61,7 @@
       style="@style/Dashboard_InterviewsList"
       android:id="@+id/interviewsList"
       android:scrollbars="vertical"
-      local:MvxItemTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
+      local:MvxTemplateSelector ="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
       local:MvxBind="ItemsSource DashboardItems" />
 
     <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 

@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            var questionnaireIdentity = Create.QuestionnaireIdentity();
+            questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllSections() == listOfSections);
             var interview = Mock.Of<IStatefulInterview>(_ 
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         };
 
         Because of = () => 
-            sectionsModel.Init(questionnaireId, interviewId, navigationState);
+            sectionsModel.Init(interviewId, questionnaireIdentity, navigationState);
 
         It should_initialize_section_list = () =>
             sectionsModel.Sections.ShouldNotBeEmpty();
@@ -50,5 +51,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         private static readonly Mock<IPlainQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
         private static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
         private static readonly List<Guid> listOfSections = new List<Guid> { Id.g1, Id.g2, Id.g3, Id.g4};
+        private static QuestionnaireIdentity questionnaireIdentity;
     }
 }

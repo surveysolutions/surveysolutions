@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             ncqrCompatibleEventDispatcher.Register(secondEventHandlerMock.Object);
         };
 
-        Because of = () => ncqrCompatibleEventDispatcher.Publish(new[] { Create.PublishableEvent(eventSourceId:ignoredEvenetSource) });
+        Because of = () => ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId:ignoredEvenetSource) });
 
         It should_not_call_registred_event_handler = () =>
          secondOldSchoolEventHandlerMock.Verify(x => x.Handle(

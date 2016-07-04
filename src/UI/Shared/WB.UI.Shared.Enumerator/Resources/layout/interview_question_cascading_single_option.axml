@@ -24,14 +24,7 @@
                          SelectedObject SelectedObject; 
                          ResetText ResetTextInEditor;
                          Hint Localization('FilteredComboboxQuestion_Hint');" />
-          <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible QuestionState.IsAnswered;"
-          style="@style/Interview_Question_RemoveAnswerWrapper">
-          <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                    android:layout_gravity="right"
-                    android:layout_weight="0" android:duplicateParentState="true"
-                    local:MvxBind="Click RemoveAnswerCommand; 
-                                      HideKeyboardOnClick .;" />
-          </LinearLayout>
+          <include layout="@layout/interview_question__remove_button_input" />
         </LinearLayout>
 
       </LinearLayout>

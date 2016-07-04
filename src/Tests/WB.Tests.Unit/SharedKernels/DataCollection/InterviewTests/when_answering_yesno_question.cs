@@ -14,19 +14,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             command = Create.Command.AnswerYesNoQuestion(
                 userId: Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"),
                 questionId: Guid.Parse("11111111111111111111111111111111"),
-                rosterVector: Create.RosterVector(1.1m),
+                rosterVector: Create.Entity.RosterVector(1.1m),
                 answeredOptions: new []
                 {
-                    Create.AnsweredYesNoOption(value: 1.1m, answer: true),
-                    Create.AnsweredYesNoOption(value: 3.333m, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: 1.1m, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: 3.333m, answer: false),
                 },
                 answerTime: new DateTime(2015, 11, 19, 18, 04, 53));
 
-            var questionnaireDocument = Create.QuestionnaireDocument(children: new[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
             {
-                Create.Roster(rosterId: rosterId, children: new[]
+                Create.Entity.Roster(rosterId: rosterId, children: new[]
                 {
-                    Create.YesNoQuestion(questionId: command.QuestionId, answers: new[]
+                    Create.Entity.YesNoQuestion(questionId: command.QuestionId, answers: new[]
                     {
                         1.1m,
                         2.22m,

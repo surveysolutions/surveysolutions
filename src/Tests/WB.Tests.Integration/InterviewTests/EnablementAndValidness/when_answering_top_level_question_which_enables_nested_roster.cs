@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -30,42 +30,25 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericRealQuestion(rosterSizeQuestionId, "a"),
-                    Create.Roster(rosterId, null, children: new IComposite[] {
-                        Create.Roster(nestedRosterId, enablementCondition: "a > 0")  
+                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(0) }, children: new IComposite[] {
+                        Create.Roster(nestedRosterId, enablementCondition: "a > 0", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(0) })  
                     })
                 );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
-                {
-                    Create.Event.RosterInstancesAdded(new []
-                    {
-                        Create.AddedRosterInstance(rosterId),
-                        Create.AddedRosterInstance(nestedRosterId, new decimal[] { 0 })
-                    }),
-                    Create.Event.GroupsEnabled(new []
-                    {
-                        Create.Identity(nestedRosterId)
-                    }),
-                });
+                var interview = SetupInterview(questionnaireDocument);
+                interview.AnswerNumericRealQuestion(userId, rosterSizeQuestionId, new decimal[] { }, DateTime.Now, 10);
 
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericRealQuestion(userId, rosterSizeQuestionId, new decimal[] { }, DateTime.Now, 0);
 
-                    return new InvokeResults()
+                    return new InvokeResults
                     {
-                        NestedRosterDisabled =
-                            HasEvent<GroupsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Groups.Any(
-                                        group =>
-                                            group.Id == nestedRosterId && group.RosterVector.Length == 2 &&
-                                            group.RosterVector[0] == 0 && group.RosterVector[1] == 0)),
-                        NestedRosterEnabled = HasEvent<GroupsEnabled>(eventContext.Events, where =>
-                            where.Groups.Any(
-                                group =>
-                                    group.Id == nestedRosterId && group.RosterVector.Length == 2 &&
-                                    group.RosterVector[0] == 0 && group.RosterVector[1] == 0))
+                        NestedRosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups
+                                .Any(g  => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Create.RosterVector(0, 0)))),
+                        
+                        NestedRosterEnabled = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups
+                                .Any(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Create.RosterVector(0, 0)))),
                     };
                 }
             });
@@ -83,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

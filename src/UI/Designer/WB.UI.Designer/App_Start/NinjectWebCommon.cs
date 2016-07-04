@@ -37,6 +37,8 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Migrations;
+using WB.UI.Designer.Migrations.ReadSide;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
@@ -106,6 +108,7 @@ namespace WB.UI.Designer.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                DbUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
                     typeof(DesignerBoundedContextModule).Assembly,
@@ -123,7 +126,11 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
+                new PostgresReadSideModule(
+                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
+                    cacheSettings, 
+                    mappingAssemblies),
                 new DesignerRegistry(pdfSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),

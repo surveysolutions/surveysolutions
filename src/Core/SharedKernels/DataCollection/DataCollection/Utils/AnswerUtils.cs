@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return ((int) answer).ToString(CultureInfo.InvariantCulture);
 
             if (answer is DateTime)
-                return ((DateTime)answer).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+                return ((DateTime)answer).ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
 
             if (answer is decimal)
             {
@@ -58,9 +59,21 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             {
                 return ((GeoPosition) answer).ToString();
             }
+
+            if (answer is GeoLocationPoint)
+            {
+                var geoAnswer = answer as GeoLocationPoint;
+                return string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", geoAnswer.Latitude, geoAnswer.Longitude);
+            }
             if (answer is InterviewTextListAnswers)
             {
                 return string.Join("|", ((InterviewTextListAnswers) answer).Answers.Select(x => x.Answer));
+            }
+            if (answer is Tuple<decimal, string>[])
+            {
+                var answers = answer as Tuple<decimal, string>[];
+                var selectedValues = answers.Select(x => x.Item1).ToArray();
+                return AnswerToString(selectedValues, answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
             }
 
             return answer.ToString();

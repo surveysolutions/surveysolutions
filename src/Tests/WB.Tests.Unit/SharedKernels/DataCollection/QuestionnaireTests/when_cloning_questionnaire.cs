@@ -2,12 +2,12 @@ using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
+                    id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
 
             plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IPlainQuestionnaireRepository>(_
                 => _.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaireDocumentFromRepository));
 
-            questionnaire = Create.DataCollectionQuestionnaire(
+            questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object);
 
@@ -52,9 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string newQuestionnaireTitle = "New Questionnaire Title";
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
-        private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.QuestionnaireDocument();
+        private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
     }
 }

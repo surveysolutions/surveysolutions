@@ -59,8 +59,7 @@ namespace WB.Tests.Integration.EventStoreTests
 
         It should_read_stored_events = () =>
         {
-            var eventStream = WriteSideEventStorage.ReadFrom(eventSourceId, 0, int.MaxValue);
-            eventStream.IsEmpty.ShouldBeFalse();
+            var eventStream = WriteSideEventStorage.Read(eventSourceId, 0);
             eventStream.Count().ShouldEqual(3);
 
             var firstEvent = eventStream.First();

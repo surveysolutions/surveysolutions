@@ -36,6 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         callOrder++;
                     });
             interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
+            var structuralChanges = new StructuralChanges();
+            interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => 
@@ -57,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
-                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     status: InterviewStatus.RejectedBySupervisor,
                     userId: userId,
                     questionnaireId: questionnaireId,

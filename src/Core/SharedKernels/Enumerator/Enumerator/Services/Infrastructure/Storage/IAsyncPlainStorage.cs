@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         Task<TEntity> GetByIdAsync(string id);
         Task RemoveAsync(string id);
         Task RemoveAsync(IEnumerable<TEntity> entities);
+        void Remove(IEnumerable<TEntity> entities);
 
         Task StoreAsync(TEntity entity);
         Task StoreAsync(IEnumerable<TEntity> entities);

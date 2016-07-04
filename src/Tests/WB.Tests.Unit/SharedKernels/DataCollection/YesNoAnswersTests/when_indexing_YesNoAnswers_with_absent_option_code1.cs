@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
     {
         Establish context = () =>
         {
-            answers = Create.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
+            answers = Create.Entity.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
         };
 
         Because of = () =>

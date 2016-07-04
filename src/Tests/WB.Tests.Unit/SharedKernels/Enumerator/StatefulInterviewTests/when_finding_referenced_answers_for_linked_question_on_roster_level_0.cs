@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionRosterVector = new decimal[] { };
             var linkedQuestionRosters = new Guid[] { };
-            linkedQuestionIdentity = Create.Identity(linkedQuestionId, linkedQuestionRosterVector);
+            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
 
             var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2 };
 
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
                 && _.GetRosterSizeSourcesForEntity(referencedQuestionId) == referencedQuestionRosters);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(interview,
                 referencedRoster1, 

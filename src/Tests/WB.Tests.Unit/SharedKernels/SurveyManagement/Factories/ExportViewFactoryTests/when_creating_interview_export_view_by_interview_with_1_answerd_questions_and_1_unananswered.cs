@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {

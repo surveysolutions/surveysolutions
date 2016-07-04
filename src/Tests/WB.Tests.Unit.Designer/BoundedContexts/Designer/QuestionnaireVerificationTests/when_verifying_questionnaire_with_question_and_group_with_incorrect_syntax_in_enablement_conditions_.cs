@@ -23,11 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     ConditionExpression = incorrectConditionExpression,
                     StataExportCaption = "var1"
                 },
-                new Group()
-                {
-                    PublicKey = groupId,
-                    ConditionExpression = incorrectConditionExpression,
-                });
+                Create.Group(groupId: groupId, enablementCondition: incorrectConditionExpression)
+            );
             
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };

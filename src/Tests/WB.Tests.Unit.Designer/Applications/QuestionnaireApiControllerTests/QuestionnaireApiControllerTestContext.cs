@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
     {
         public static QuestionnaireController CreateQuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory = null,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory = null,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
+            IQuestionnaireViewFactory questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
-                questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
+                questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),

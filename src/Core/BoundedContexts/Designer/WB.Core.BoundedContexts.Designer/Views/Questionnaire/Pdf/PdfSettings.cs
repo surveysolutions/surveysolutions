@@ -27,6 +27,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int AttachmentSize { get; }
         public int PdfGenerationTimeoutInMilliseconds { get; }
         public int VariableExpressionExcerptLength { get; }
-
     }
 }

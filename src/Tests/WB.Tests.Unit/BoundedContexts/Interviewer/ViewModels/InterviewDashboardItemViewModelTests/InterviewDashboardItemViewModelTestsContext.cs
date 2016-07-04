@@ -25,13 +25,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
         {
             return new InterviewDashboardItemViewModel(viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(),
                 userInteractionService ?? Substitute.For<IUserInteractionService>(),
-                interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
-                commandService ?? Substitute.For<ICommandService>(),
-                principal ?? Substitute.For<IPrincipal>(),
                 messenger ?? Substitute.For<IMvxMessenger>(),
                 Substitute.For<IExternalAppLauncher>(),
                 Substitute.For<IAsyncPlainStorage<QuestionnaireView>>(),
-                Substitute.For<IAsyncPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewerInterviewAccessor>());
         }
     }

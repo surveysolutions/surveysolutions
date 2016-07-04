@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {

@@ -28,11 +28,11 @@ namespace WB.UI.Tester.Activities
 
             if (principal.IsAuthenticated)
             {
-                await viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
+                viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
             else
             {
-                await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+                viewModelNavigationService.NavigateTo<LoginViewModel>();
             }
         }
 

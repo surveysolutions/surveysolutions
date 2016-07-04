@@ -2,9 +2,9 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
-            var gpsQuestion = Create.GpsCoordinateQuestion(gpsQuestionId, "gps");
+            var gpsQuestion = Create.Entity.GpsCoordinateQuestion(gpsQuestionId, "gps");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 "questionnaire.csv");
 
             var preloadedDataService =
-                Create.PreloadedDataService(questionnaire);
+                Create.Service.PreloadedDataService(questionnaire);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, new QuestionDataParser(), preloadedDataService);
         };
@@ -41,14 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             result.Errors.First().References.Count().ShouldEqual(1);
 
         It should_return_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
-        It should_return_error_with_single_reference_pointing_on_first_row= () =>
+        It should_return_error_with_single_reference_pointing_on_first_row = () =>
             result.Errors.First().References.First().PositionY.ShouldEqual(0);
-
-        It should_return_error_with_single_reference_pointing_on_second_column = () =>
-            result.Errors.First().References.First().PositionX.ShouldEqual(1);
-
 
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static VerificationStatus result;

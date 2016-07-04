@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -22,16 +24,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(singleOptionAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
+            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+
+            StatefulInterviewMock.Setup(x => x.GetFilteredOptionsForQuestion(questionIdentity, 1, string.Empty)).Returns(Options.Where(x => x.ParentValue == 1).ToList());
+
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == StatefulInterviewMock.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
-
+            
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
@@ -53,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.SelectedObject.ShouldBeNull();
 
         It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeNull();
+            cascadingModel.FilterText.ShouldBeEmpty();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
@@ -68,14 +71,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
 
         It should_create_option_models_with_specified_values = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.Value)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
 
         It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.ParentValue)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
 
-        private static readonly List<CategoricalQuestionOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
+        private static readonly List<CategoricalOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }

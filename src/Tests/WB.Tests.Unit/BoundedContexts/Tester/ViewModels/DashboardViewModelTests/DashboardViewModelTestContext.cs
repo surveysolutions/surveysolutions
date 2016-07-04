@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using MvvmCross.Test.Core;
 
 using Moq;
-
+using NSubstitute;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -39,7 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IUserInteractionService userInteractionService = null,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
-            IAttachmentContentStorage attachmentContentStorage = null)
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IAsyncRunner asyncRunner = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
@@ -63,7 +64,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: questionnaireListStorage,
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
                 logger: logger ?? Mock.Of<ILogger>(),
-                attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
+                attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                asyncRunner: asyncRunner ?? Create.Service.AsyncRunner());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

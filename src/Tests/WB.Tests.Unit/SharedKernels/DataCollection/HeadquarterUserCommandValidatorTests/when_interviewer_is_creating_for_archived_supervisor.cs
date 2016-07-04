@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
     {
         Establish context = () =>
         {
-            supervisor = Create.UserDocument(isArchived: true);
+            supervisor = Create.Entity.UserDocument(isArchived: true);
 
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidatorWithUsers(supervisor);
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         Because of = () =>
             exception =
                 Catch.Only<UserException>(
-                    () => headquarterUserCommandValidatorser.Validate(null, Create.CreateUserCommand(userName:"inter", supervisorId: supervisor.PublicKey)));
+                    () => headquarterUserCommandValidatorser.Validate(null, Create.Command.CreateUserCommand(userName:"inter", supervisorId: supervisor.PublicKey)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();

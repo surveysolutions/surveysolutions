@@ -46,10 +46,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         variable: "numRoster",
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", answers: new List<Answer>
+                            Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
                                     {
-                                        Create.Option(text: "Hello", value: "1"),
-                                        Create.Option(text: "World", value: "2")
+                                        Create.Option(value: "1", text: "Hello"),
+                                        Create.Option(value: "2", text: "World")
                                     }),
                             Create.Roster(
                                 id: nestedMultiRosterId,
@@ -109,7 +109,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

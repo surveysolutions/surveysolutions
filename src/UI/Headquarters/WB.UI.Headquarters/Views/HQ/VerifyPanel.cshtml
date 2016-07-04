@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
-@model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
+@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = BatchUpload.VerifyPanelData;
@@ -79,7 +79,7 @@
             <div class="form-horizontal">
                 <fieldset>
                     <legend>
-                        @BatchUpload.DataValid
+                        @BatchUpload.DataIsValid
                     </legend>
                     <div class="form-group">
                         <label class="control-label col-sm-4">@Common.Responsible</label>

@@ -29,8 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
@@ -46,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.SelectedObject.ShouldBeNull();
 
         It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeNull();
+            cascadingModel.FilterText.ShouldBeEmpty();
 
         It should_set_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldBeEmpty();

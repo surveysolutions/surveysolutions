@@ -208,20 +208,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task NavigateAsync()
         {
-            await this.commandService.WaitPendingCommandsAsync();
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    await this.navigationState.NavigateToAsync(
+                    this.navigationState.NavigateTo(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
                             anchoredElementIdentity: this.Identity));
                     break;
                 case NavigationGroupType.Section:
-                    await this.navigationState.NavigateToAsync(
+                    this.navigationState.NavigateTo(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity));
                     break;
                 case NavigationGroupType.LastSection:
-                    await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForCompleteScreen());
+                    this.navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
                     break;
             }
         }
@@ -235,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, this.interviewId);
+            this.eventRegistry.Unsubscribe(this);
 
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
             this.answerNotifier.Dispose();

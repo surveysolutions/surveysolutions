@@ -4,7 +4,7 @@ using System.Linq;
 using Dapper;
 using NHibernate;
 using Ninject;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters

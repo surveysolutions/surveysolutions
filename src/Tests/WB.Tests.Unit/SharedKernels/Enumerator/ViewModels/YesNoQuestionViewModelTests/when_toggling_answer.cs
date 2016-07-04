@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Machine.Specifications;
 using Moq;
@@ -21,21 +22,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         Establish context = () =>
         {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Create.Identity(questionGuid, Empty.RosterVector);
+            questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == null
                 && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == false
-                && _.GetAnswerOptionsAsValues(questionId.Id) == new decimal[] { 1, 2, 3, 4, 5 }
-                && _.GetAnswerOptionTitle(questionId.Id, 1) == "item1"
-                && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
-                && _.GetAnswerOptionTitle(questionId.Id, 3) == "item3"
-                && _.GetAnswerOptionTitle(questionId.Id, 4) == "item4"
-                && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
             );
-            
-            var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
+
+            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "item1"),
+                Create.Entity.CategoricalQuestionOption(2, "item2"),
+                Create.Entity.CategoricalQuestionOption(3, "item3"),
+                Create.Entity.CategoricalQuestionOption(4, "item4"),
+                Create.Entity.CategoricalQuestionOption(5, "item5"),
+            });
+
+            var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
             {
                 new AnsweredYesNoOption(5, true),
@@ -54,9 +58,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
-                answeringViewModel: answeringMock.Object);
+                answeringViewModel: answeringMock.Object,
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
-            viewModel.Init("blah", questionId, Create.NavigationState());
+            viewModel.Init("blah", questionId, Create.Other.NavigationState());
         };
 
         Because of = () =>

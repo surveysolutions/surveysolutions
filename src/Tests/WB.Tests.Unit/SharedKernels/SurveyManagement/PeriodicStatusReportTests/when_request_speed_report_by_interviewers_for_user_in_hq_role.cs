@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;

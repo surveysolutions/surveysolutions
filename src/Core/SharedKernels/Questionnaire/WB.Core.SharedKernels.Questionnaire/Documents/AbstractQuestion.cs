@@ -97,6 +97,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool? IsFilteredCombobox { get; set; }
 
+        public bool IsTimestamp { get; set; }
+
         public IList<ValidationCondition> ValidationConditions
         {
             get
@@ -140,12 +142,6 @@ namespace Main.Core.Entities.SubEntities
         public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
 
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
-
-        public IEnumerable<string> GetVariablesUsedInTitle()
-        {
-#warning: Slava: make nice injection here
-            return (new SubstitutionService()).GetAllSubstitutionVariableNames(QuestionText);
-        }
 
         public override string ToString()
         {

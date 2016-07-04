@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public bool UseFormatting { get; set; }
+        public string OptionsFilterExpression { get; set; }
         public QuestionScope QuestionScope { get; set; }
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }
@@ -43,6 +44,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? MaxAnswerCount { get; set; }
         public bool YesNoView { get; set; }
         public bool? IsFilteredCombobox { get; set; }
+
+        public bool IsTimestamp { get; set; }
+
         public string CascadeFromQuestionId { get; set; }
 
         public List<DropdownQuestionView> SourceOfLinkedEntities { get; set; }

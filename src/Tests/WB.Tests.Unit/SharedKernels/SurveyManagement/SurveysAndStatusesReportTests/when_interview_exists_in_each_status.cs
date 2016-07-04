@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportTests
 {
@@ -18,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters)
             };
 
             var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();

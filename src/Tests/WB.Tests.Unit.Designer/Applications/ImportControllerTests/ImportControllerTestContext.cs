@@ -5,8 +5,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 
@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     internal class ImportControllerTestContext
     {
         protected static ImportV2Controller CreateImportController(
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
+            IQuestionnaireViewFactory questionnaireViewFactory = null,
+            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             IMembershipUserService membershipUserService = null,
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
@@ -29,9 +29,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             return new ImportV2Controller(zipUtils ?? Mock.Of<IStringCompressor>(),
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 Mock.Of<IQuestionnaireListViewFactory>(),
-                questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
+                questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 sharedPersonsViewFactory ??
-                Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(),
+                Mock.Of<IQuestionnaireSharedPersonsFactory>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 Mock.Of<IQuestionnaireHelper>(),

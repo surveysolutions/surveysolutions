@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
             gpsVariableName = "gps";
 
             var interviews = new TestInMemoryWriter<InterviewReferences>();
-            interviews.Store(Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
+            interviews.Store(Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
             var questionnaireQuestionsInfo = new QuestionnaireQuestionsInfo
@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 }
             };
 
-            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
-            gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
+            denormalizer = Create.Service.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
+            gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Entity.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
         };
 
         Because of = () => denormalizer.Handle(gpsQuestionAnswered);

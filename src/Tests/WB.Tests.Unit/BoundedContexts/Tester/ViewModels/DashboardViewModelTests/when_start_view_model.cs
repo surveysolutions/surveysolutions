@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: storageAccessor);
         };
 
-        Because of = () => viewModel.StartAsync().WaitAndUnwrapException();
+        Because of = () => viewModel.Load();
 
         It should_set_ShowEmptyQuestionnaireListText_to_true = () => viewModel.ShowEmptyQuestionnaireListText.ShouldBeTrue();
         It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();

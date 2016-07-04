@@ -41,32 +41,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
 
-            var questionnaireMock = Create.PlainQuestionnaire(Create.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireMock = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextWithSubstitutionId, text: $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"),
-                Create.NumericRealQuestion(variable: substitutedVariable1Name, id: substitutedQuestionId),
-                Create.Variable(variableName: substitutedVariable2Name, id: substitutedVariableIdentity.Id)
+                Create.Entity.StaticText(publicKey: staticTextWithSubstitutionId, text: $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"),
+                Create.Entity.NumericRealQuestion(variable: substitutedVariable1Name, id: substitutedQuestionId),
+                Create.Entity.Variable(variableName: substitutedVariable2Name, id: substitutedVariableIdentity.Id)
             }));
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
 
-            ILiteEventRegistry registry = Create.LiteEventRegistry();
-            liteEventBus = Create.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
             Identity id = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
             viewModel.Init(interviewId, id, null);
 
-            fakeInterview = Create.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
-            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
+            Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
+            Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
 
-        It should_change_item_title = () => viewModel.StaticText.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
+        It should_change_item_title = () => viewModel.Text.PlainText.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
 
         static StaticTextViewModel viewModel;
         static ILiteEventBus liteEventBus;

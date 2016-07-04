@@ -19,7 +19,7 @@
   <MvxRecyclerView
     style="@style/PrefilledQuestions_List"
     android:id="@+id/questionnaireEntitiesList"
-    local:MvxItemTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
+    local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
     local:MvxBind="ItemsSource PrefilledQuestions" />
 
 

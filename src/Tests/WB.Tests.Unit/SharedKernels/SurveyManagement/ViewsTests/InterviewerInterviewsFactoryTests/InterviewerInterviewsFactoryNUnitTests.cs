@@ -2,13 +2,13 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInterviewsFactoryTests
 {
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             var interviewerInterviewsFactory =
                 this.CreateInterviewerInterviewsFactory(
                     synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
-                    statusHistory: new[] {Create.CommentedStatusHistroyView()});
+                    statusHistory: new[] {Create.Entity.CommentedStatusHistroyView()});
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
 
@@ -48,9 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.CommentedStatusHistroyView(status: InterviewStatus.SupervisorAssigned,
+                            Create.Entity.CommentedStatusHistroyView(status: InterviewStatus.SupervisorAssigned,
                                 timestamp: new DateTime(1984, 4, 18)),
-                            Create.CommentedStatusHistroyView(status: InterviewStatus.InterviewerAssigned,
+                            Create.Entity.CommentedStatusHistroyView(status: InterviewStatus.InterviewerAssigned,
                                 timestamp: new DateTime(1984, 4, 17))
                         });
 
@@ -75,9 +75,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.CommentedStatusHistroyView(),
-                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment")
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment")
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -102,10 +102,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.CommentedStatusHistroyView(),
-                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
-                            Create.CommentedStatusHistroyView()
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
+                            Create.Entity.CommentedStatusHistroyView()
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -131,10 +131,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.CommentedStatusHistroyView(InterviewStatus.Created),
-                            Create.CommentedStatusHistroyView(InterviewStatus.SupervisorAssigned),
-                            Create.CommentedStatusHistroyView(InterviewStatus.InterviewerAssigned),
-                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Created),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.SupervisorAssigned),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.InterviewerAssigned),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
                         });
 
             var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -155,11 +155,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     statusHistory:
                         new[]
                         {
-                            Create.CommentedStatusHistroyView(),
-                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
-                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
-                            Create.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor)
+                            Create.Entity.CommentedStatusHistroyView(),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment"),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
+                            Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor)
                         });
 
             interviewerInterviewsFactory.GetInterviewDetails(interviewId);
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             params CommentedStatusHistroyView[] statusHistory)
         {
-            interviewData = interviewData ?? Create.InterviewData();
+            interviewData = interviewData ?? Create.Entity.InterviewData();
             var changeStatusView = new ChangeStatusView() {StatusHistory = statusHistory.ToList()};
             return
                 new InterviewerInterviewsFactory(
@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>(),
                     Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == interviewData),
-                    Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(
+                    Mock.Of<IChangeStatusFactory>(
                         _ => _.Load(Moq.It.IsAny<ChangeStatusInputModel>()) == changeStatusView),
                     incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>());
         }

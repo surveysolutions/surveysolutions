@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -18,11 +18,11 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportController: BaseController
     {
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public DataExportController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
+            IAllUsersAndQuestionnairesFactory
                 allUsersAndQuestionnairesFactory, InterviewDataExportSettings interviewDataExportSettings)
             : base(commandService, globalInfo, logger)
         {

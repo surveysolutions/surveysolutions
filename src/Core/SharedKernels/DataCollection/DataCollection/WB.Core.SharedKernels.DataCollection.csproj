@@ -118,7 +118,8 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV9ToLatestAdapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V4\InterviewExpressionStateV2ToV4Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V5\InterviewExpressionStateV4ToV5Adapter.cs" />
@@ -201,7 +202,6 @@
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
@@ -280,6 +280,7 @@
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
+    <Compile Include="Implementation\Providers\ICategoricalOptionsProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Repositories\IInterviewSynchronizationFileStorage.cs" />
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\IQuestionOptionsRepository.cs" />
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Services\IVariableToUIStringService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
@@ -304,6 +306,7 @@
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Interview\QuestionState.cs" />
+    <Compile Include="ValueObjects\Interview\QuestionStateExtensions.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
@@ -326,7 +329,6 @@
     <Compile Include="WebApi\InterviewDetailsApiView.cs" />
     <Compile Include="WebApi\InterviewApiView.cs" />
     <Compile Include="WebApi\IdentityApiView.cs" />
-    <Compile Include="WebApi\InterviewPackageApiView.cs" />
     <Compile Include="WebApi\QuestionnaireApiView.cs" />
     <Compile Include="WebApi\InterviewerApiView.cs" />
     <Compile Include="WebApi\RosterApiView.cs" />

@@ -137,9 +137,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyRosterData(changes.RosterCalculationData);
             }
 
-            if (changes.AnswersForLinkedQuestionsToRemove != null)
+            if (changes.AnswersToRemove != null)
             {
-                this.RemoveAnswers(changes.AnswersForLinkedQuestionsToRemove);
+                this.RemoveAnswers(changes.AnswersToRemove);
             }
 
             if (changes.RosterInstancesWithAffectedTitles != null)
@@ -148,8 +148,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     changes.RosterInstancesWithAffectedTitles.Select(
                         r =>
                             new ChangedRosterInstanceTitleDto(
-                                new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId),
-                                changes.AnswerAsRosterTitle)).ToArray());
+                                new RosterInstance(r.Key.Id, r.Key.RosterVector.WithoutLast().ToArray(), r.Key.RosterVector.Last()),
+                                r.Value)).ToArray());
             }
             if (changes.LinkedQuestionOptionsChanges != null)
             {

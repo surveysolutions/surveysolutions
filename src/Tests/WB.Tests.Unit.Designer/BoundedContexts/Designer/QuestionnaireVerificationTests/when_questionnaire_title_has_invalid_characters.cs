@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_WB0097_message = () => verificationMessages.ShouldContain(x => x.Code == "WB0097");
 
         It should_return_WB0097_message_with_appropriate_message = () =>
-            verificationMessages.ShouldContain(x => x.Message == "Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
+            verificationMessages.ShouldContain(x => x.Message == VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

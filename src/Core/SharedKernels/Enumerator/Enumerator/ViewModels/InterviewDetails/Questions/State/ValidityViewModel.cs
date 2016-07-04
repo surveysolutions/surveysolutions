@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -25,29 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<QuestionsEnabled>,
         IDisposable
     {
-        public class ErrorMessage : MvxNotifyPropertyChanged
-        {
-            private string caption;
-
-            public ErrorMessage(string caption, IEnumerable<string> messages)
-            {
-                this.ValidationErrors = new ObservableCollection<string>(messages);
-                this.caption = caption;
-            }
-
-            public ObservableCollection<string> ValidationErrors { get; private set; }
-
-            public string Caption
-            {
-                get { return this.caption; }
-                set
-                {
-                    this.caption = value;
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
-
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
@@ -58,13 +34,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadDispatcher mainThreadDispatcher,
+            ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.error = new ErrorMessage(null, new List<string>());
+            this.Error = errorMessagesViewModel;
         }
 
         private string interviewId;
@@ -78,6 +55,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.questionIdentity = entityIdentity;
 
+            this.Error.Init(interviewId, entityIdentity);
+
             this.liteEventRegistry.Subscribe(this, interviewId);
             this.UpdateValidState();
         }
@@ -88,15 +67,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool IsInvalid
         {
             get { return this.isInvalid; }
-            private set { this.isInvalid = value; this.RaisePropertyChanged(); }
+            private set { this.RaiseAndSetIfChanged(ref this.isInvalid, value); }
         }
 
-        private ErrorMessage error;
-        public ErrorMessage Error
-        {
-            get { return this.error; }
-            private set { this.error = value; this.RaisePropertyChanged(); }
-        }
+        public ErrorMessagesViewModel Error { get; }
 
         private void UpdateValidState()
         {
@@ -112,14 +86,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var validationMessages = this.GetValidationMessages(interview).ToList();
 
                     this.Error.Caption = UIResources.Validity_Answered_Invalid_ErrorCaption;
-                    this.Error.ValidationErrors.Clear();
-                    validationMessages.ForEach(this.Error.ValidationErrors.Add);
+                    this.Error.ChangeValidationErrors(validationMessages);
                 }
                 else if (wasError)
                 {
                     this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
-                    this.Error.ValidationErrors.Clear();
-                    this.Error.ValidationErrors.Add(this.exceptionErrorMessageFromViewModel);
+                    this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable());
                 }
 
                 this.IsInvalid = isInvalidAnswer || wasError;
@@ -209,7 +181,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.liteEventRegistry.Unsubscribe(this, this.interviewId);
+            this.liteEventRegistry.Unsubscribe(this);
         }
     }
 }

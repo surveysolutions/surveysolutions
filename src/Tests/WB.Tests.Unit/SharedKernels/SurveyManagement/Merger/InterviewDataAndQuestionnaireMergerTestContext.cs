@@ -4,17 +4,13 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
@@ -127,13 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         PublicKey = groupId,
                         IsRoster = false
                     },
-                    new Group(fixedRosterTitle)
-                    {
-                        PublicKey = fixedRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = rosterFixedTitles
-                    }
+                    Create.Entity.FixedRoster(rosterId: fixedRosterId, fixedTitles: rosterFixedTitles, title:fixedRosterTitle)
                 }
             };
         }
@@ -196,9 +186,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
+            var substitutionService = new SubstitutionService();
             return new InterviewDataAndQuestionnaireMerger(
-                substitutionService: new SubstitutionService(),
-                variableToUiStringService: new VariableToUIStringService());
+                substitutionService: substitutionService,
+                variableToUiStringService: new VariableToUIStringService(),
+                interviewEntityViewFactory: new InterviewEntityViewFactory(substitutionService));
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

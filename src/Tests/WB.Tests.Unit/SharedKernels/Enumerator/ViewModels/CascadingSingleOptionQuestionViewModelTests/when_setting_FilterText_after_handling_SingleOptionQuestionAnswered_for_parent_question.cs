@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -29,6 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
+            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() {Title = "3", Value = 3, ParentValue = 1});
+
+            StatefulInterviewMock.Setup(x => x.GetFilteredOptionsForQuestion(questionIdentity, 2, "c")).Returns(Options.Where(x => x.Value == 5 || x.Value == 6).ToList());
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
 
@@ -38,8 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
@@ -76,14 +76,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
-        protected static readonly List<CategoricalQuestionOption> options = new List<CategoricalQuestionOption>
+        protected static readonly List<CategoricalOption> options = new List<CategoricalOption>
         {
-            Create.CategoricalQuestionOption(1, "title abc 1", 1),
-            Create.CategoricalQuestionOption(2, "title def 2", 1),
-            Create.CategoricalQuestionOption(3, "title klo 3", 1),
-            Create.CategoricalQuestionOption(4, "title gha 4", 2),
-            Create.CategoricalQuestionOption(5, "title ccc 5", 2),
-            Create.CategoricalQuestionOption(6, "title bcw 6", 2)
+            Create.Entity.CategoricalQuestionOption(1, "title abc 1", 1),
+            Create.Entity.CategoricalQuestionOption(2, "title def 2", 1),
+            Create.Entity.CategoricalQuestionOption(3, "title klo 3", 1),
+            Create.Entity.CategoricalQuestionOption(4, "title gha 4", 2),
+            Create.Entity.CategoricalQuestionOption(5, "title ccc 5", 2),
+            Create.Entity.CategoricalQuestionOption(6, "title bcw 6", 2)
         };
 
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

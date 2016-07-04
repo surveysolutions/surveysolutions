@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Plugins.Network.Rest;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -22,12 +19,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class SynchronizationService : ISynchronizationService
     {
-        private const string interviewerApiUrl = "api/interviewer/v2";
-        private readonly string devicesController = string.Concat(interviewerApiUrl, "/devices");
-        private readonly string usersController = string.Concat(interviewerApiUrl, "/users");
-        private readonly string interviewsController = string.Concat(interviewerApiUrl, "/interviews");
-        private readonly string questionnairesController = string.Concat(interviewerApiUrl, "/questionnaires");
-        private readonly string attachmentContentController = string.Concat(interviewerApiUrl, "/attachments");
+        private const string apiVersion = "v2";
+        private const string interviewerApiUrl = "api/interviewer/";
+        private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
+        private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
+        private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
+        private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
+        private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -60,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
-                credentials: credentials ?? this.restCredentials, token: token));
+                credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
 
         }
         #endregion
@@ -74,6 +72,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            try
+            {
+                await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+                    url: string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
+                            this.syncProtocolVersionProvider.GetProtocolVersion()),
+                    credentials: credentials ?? this.restCredentials, token: token));
+            }
+            catch (SynchronizationException ex)
+            {
+                if ((ex.InnerException as RestException)?.StatusCode == HttpStatusCode.NotFound)
+                    await this.OldCanSynchronizeAsync(credentials, token);
+                else throw;
+            }
+        }
+
+        [Obsolete("Since v5.10")]
+        private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
                 url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
@@ -103,7 +119,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
                 return restFile.Content;
-            });
+            }).ConfigureAwait(false);
         }
 
 
@@ -115,35 +131,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/{questionnaireContentVersion}",
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token,
-                credentials: this.restCredentials));
+                credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
         public async Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.questionnairesController, "/census"),
-                credentials: this.restCredentials, token: token));
+                credentials: this.restCredentials, token: token)).ConfigureAwait(false);
         }
 
         public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
               url: string.Concat(this.questionnairesController, "/list"),
-              credentials: this.restCredentials, token: cancellationToken));
+              credentials: this.restCredentials, token: cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/logstate"),
-                credentials: this.restCredentials));
+                credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
         public async Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
-                credentials: this.restCredentials));
+                credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
         #endregion
@@ -154,14 +170,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return await this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController,
-                    credentials: this.restCredentials, token: token));
+                    credentials: this.restCredentials, token: token)).ConfigureAwait(false);
         }
 
         public async Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/", interviewId, "/logstate"),
-                credentials: this.restCredentials));
+                credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
         public async Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
@@ -170,7 +186,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: string.Concat(this.interviewsController, "/", interviewId),
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
-                token: token));
+                token: token)).ConfigureAwait(false);
             return interviewDetailsApiView;
         }
 
@@ -180,7 +196,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: string.Concat(this.interviewsController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
-                token: token));
+                token: token)).ConfigureAwait(false);
         }
 
         public async Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
@@ -194,7 +210,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Data = Convert.ToBase64String(fileData)
                 },
                 credentials: this.restCredentials,
-                token: token));
+                token: token)).ConfigureAwait(false);
         }
 
 
@@ -210,7 +226,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 await this.restService.GetAsync<List<string>>(
                     url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/attachments",
                     credentials: this.restCredentials,
-                    token: token));
+                    token: token)).ConfigureAwait(false);
         }
 
         public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
@@ -233,7 +249,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Size = restFile.ContentLength ?? restFile.Content.Length
                 };
                 return attachmentContent;
-            });
+            }).ConfigureAwait(false);
         } 
         #endregion
 
@@ -255,7 +271,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return await this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
                     url: string.Concat(interviewerApiUrl, "/latestversion"),
-                    credentials: this.restCredentials, token: token));
+                    credentials: this.restCredentials, token: token).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         public async Task SendTabletInformationAsync(string filePath, CancellationToken token)
@@ -272,11 +288,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     await this.restService.SendStreamAsync(
                         stream: fileStream,
                         customHeaders: tabletInformationHeaders,
-                        url: string.Concat(interviewerApiUrl, "/tabletInfoAsFile"),
+                        url: string.Concat(interviewerApiUrl, "/tabletInfo"),
                         credentials: this.restCredentials,
-                        token: token);
+                        token: token).ConfigureAwait(false);
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         #endregion
@@ -287,7 +303,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             try
             {
-                await restRequestTask();
+                await restRequestTask().ConfigureAwait(false);
             }
             catch (RestException ex)
             {
@@ -301,7 +317,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             try
             {
-                return await restRequestTask();
+                return await restRequestTask().ConfigureAwait(false);
             }
             catch (RestException ex)
             {
@@ -375,6 +391,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                                 exceptionMessage = InterviewerUIResources.ServiceUnavailable;
                                 exceptionType = SynchronizationExceptionType.ServiceUnavailable;
                             }
+                            break;
+                        case HttpStatusCode.NotAcceptable:
+                            exceptionMessage = InterviewerUIResources.NotSupportedServerSyncProtocolVersion;
+                            exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
                             break;
                         case HttpStatusCode.UpgradeRequired:
                             exceptionMessage = InterviewerUIResources.UpgradeRequired;

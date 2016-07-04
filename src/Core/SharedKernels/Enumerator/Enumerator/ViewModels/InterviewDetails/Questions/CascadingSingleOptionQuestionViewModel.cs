@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -43,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IOptionsRepository optionsRepository;
+        protected IStatefulInterview interview;
 
         private Identity questionIdentity;
         private Identity parentQuestionIdentity;
@@ -52,10 +51,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private IReadOnlyList<CategoricalQuestionOption> Options;
         private readonly ILiteEventRegistry eventRegistry;
 
         public Identity Identities => this.questionIdentity;
+
+        private const int SuggestionsMaxCount = 15;
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -63,8 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
-            ILiteEventRegistry eventRegistry, 
-            IOptionsRepository optionsRepository)
+            ILiteEventRegistry eventRegistry)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
@@ -77,7 +76,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.eventRegistry = eventRegistry;
-            this.optionsRepository = optionsRepository;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -89,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
@@ -99,7 +97,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
-            //entityIdentity.Id
             var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
 
             this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
@@ -110,18 +107,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id);
-
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                this.selectedObject = this.CreateFormattedOptionModel(this.Options.SingleOrDefault(i => i.Value == selectedValue));
+                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, (int)selectedValue.Value, (int?)parentAnswerModel.Answer);
+                this.selectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
                 this.FilterText = this.selectedObject.OriginalText;
             }
             else
             {
-                this.FilterText = null;
+                this.FilterText = string.Empty;
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -137,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     this.SelectedObject = null;
-                    this.FilterText = null;
+                    this.FilterText = string.Empty;
                 }
                 this.RaisePropertyChanged(); 
             }
@@ -202,7 +198,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private bool isInitialized = false;
-        private string filterText;
+        private string filterText = string.Empty;
         public string FilterText
         {
             get { return this.filterText; }
@@ -259,28 +255,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!this.answerOnParentQuestion.HasValue) 
                 yield break;
 
-            if (textHint.IsNullOrEmpty())
-            {
-                var options = this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value)
-                                          .Select(x => this.CreateFormattedOptionModel(x));
-                foreach (var option in options)
-                {
-                    yield return option;
-                }
-                yield break;
-            }
+            var options = this.interview.GetFilteredOptionsForQuestion(questionIdentity, (int)this.answerOnParentQuestion.Value, textHint)   
+                .Select(x => x)
+                .Take(SuggestionsMaxCount)
+                .ToList();
 
-            foreach (CategoricalQuestionOption model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
+            foreach (var cascadingComboboxItemViewModel in options)
             {
-                var index = model.Title.IndexOf(textHint, StringComparison.OrdinalIgnoreCase);
-                if (index >= 0)
-                {
-                    yield return this.CreateFormattedOptionModel(model, textHint);
-                }
+                yield return CreateFormattedOptionModel(cascadingComboboxItemViewModel, textHint);
             }
         }
 
-        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalQuestionOption model, string hint = null)
+        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalOption model, string hint = null)
         {
             var text = !string.IsNullOrEmpty(hint) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
@@ -312,8 +298,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task FindMatchOptionAndSendAnswerQuestionCommandAsync(string enteredText)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText && i.ParentValue == answerOnParentQuestion);
+            if (!this.answerOnParentQuestion.HasValue)
+                return;
 
+            var answerViewModel = this.interview.GetOptionForQuestionWithFilter(this.questionIdentity, enteredText, (int)answerOnParentQuestion.Value); 
+                
             if (answerViewModel == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
@@ -358,8 +347,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-                var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
+                var parentAnswerModel = this.interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
                 if (parentAnswerModel.IsAnswered)
                 {
                     this.answerOnParentQuestion = parentAnswerModel.Answer;
@@ -387,7 +375,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
         }
 

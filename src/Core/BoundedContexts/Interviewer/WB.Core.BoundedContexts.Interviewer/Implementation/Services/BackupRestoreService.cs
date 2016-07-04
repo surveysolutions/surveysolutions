@@ -11,18 +11,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IArchiveUtils archiver;
         private readonly IAsynchronousFileSystemAccessor fileSystemAccessor;
         private readonly string privateStorage;
-        private readonly string logFilePath;
+        private readonly string logDirectoryPath;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
             IAsynchronousFileSystemAccessor fileSystemAccessor, 
             string privateStorage,
-            string logFilePath)
+            string logDirectoryPath)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.privateStorage = privateStorage;
-            this.logFilePath = logFilePath;
+            this.logDirectoryPath = logDirectoryPath;
         }
 
         public async Task<string> BackupAsync()
@@ -36,8 +36,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             if (!isBackupFolderExists)
                 await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath);
 
-            if (await this.fileSystemAccessor.IsFileExistsAsync(this.logFilePath))
-                await this.fileSystemAccessor.CopyFileAsync(this.logFilePath, privateStorage);
+            if (await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath))
+                await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, privateStorage);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);

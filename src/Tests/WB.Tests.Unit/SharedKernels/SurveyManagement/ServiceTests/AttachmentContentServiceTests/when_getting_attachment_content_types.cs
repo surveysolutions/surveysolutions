@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentContentServiceTests
@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, contentHash);
-            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentService = Create.Service.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>

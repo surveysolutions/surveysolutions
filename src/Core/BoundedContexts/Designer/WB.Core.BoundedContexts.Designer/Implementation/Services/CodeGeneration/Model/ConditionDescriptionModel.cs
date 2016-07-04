@@ -28,4 +28,25 @@
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
     }
+
+    public class OptionsFilterConditionDescriptionModel : ConditionDescriptionModel
+    {
+        public OptionsFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string variableName) 
+            : base(className, methodName, namespaces, expression, true, variableName, "bool")
+        {
+        }
+    }
+
+    public class LinkedFilterConditionDescriptionModel : ConditionDescriptionModel
+    {
+        public string LinkedQuestionScopeName { get; }
+
+        public bool IsSourceAndLinkedQuestionOnSameLevel => LinkedQuestionScopeName == this.ClassName;
+
+        public LinkedFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string linkedQuestionScopeName)
+            : base(className, methodName, namespaces, expression, false, string.Empty, "bool")
+        {
+            this.LinkedQuestionScopeName = linkedQuestionScopeName;
+        }
+    }
 }

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
-            viewModel.Init("", "", navigationState);
+            viewModel.Init("", Create.Entity.QuestionnaireIdentity(), navigationState);
 
             viewModel.Handle(Create.Event.GroupsDisabled(sectionBId, Empty.RosterVector));
             viewModel.Handle(Create.Event.GroupsDisabled(sectionCId, Empty.RosterVector));
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         {
             viewModel.Sections.ElementAt(1).SectionIdentity.Id.Equals(sectionDId);
             viewModel.Sections.ElementAt(1).SectionIdentity.RosterVector.Equals(Empty.RosterVector);
-            viewModel.Sections.ElementAt(1).Title.ShouldEqual("D");
+            viewModel.Sections.ElementAt(1).Title.PlainText.ShouldEqual("D");
         };
 
         static SideBarSectionsViewModel viewModel;

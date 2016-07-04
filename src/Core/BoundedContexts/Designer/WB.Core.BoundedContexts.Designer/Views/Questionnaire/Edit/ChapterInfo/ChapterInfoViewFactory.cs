@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
-        private readonly string[] predefinedVariables = {"self"};
+        private readonly string[] predefinedVariables = {"self", "@optioncode", "@rowindex", "@rowname", "@rowcode" };
 
         private readonly IReadSideKeyValueStorage<GroupInfoView> readSideReader;
 
@@ -32,14 +32,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             };
         }
 
-        private string[] CollectVariableNames(GroupInfoView questionnaire)
+        private VariableName[] CollectVariableNames(GroupInfoView questionnaire)
         {
-            List<string> variables = new List<string>(predefinedVariables);
+            List<VariableName> variables = predefinedVariables.Select(x => new VariableName(null, x)).ToList();
 
             variables.AddRange(questionnaire.TreeToEnumerable<IQuestionnaireItem>(x => x.Items)
-                .OfType<INameable>().Where(z => !string.IsNullOrEmpty(z.Variable)).Select(y => y.Variable).ToList());
+                .Where(z => !string.IsNullOrEmpty((z as INameable)?.Variable))
+                .Select(y => new VariableName(y.ItemId, ((INameable)y).Variable))
+                .ToList());
 
-            return variables.Distinct().ToArray();
+            return variables.ToArray();
         }
     }
 }

@@ -1,8 +1,8 @@
-using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.DataCollection.V10;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public interface ILatestInterviewExpressionState : IInterviewExpressionStateV9
+    public interface ILatestInterviewExpressionState : IInterviewExpressionStateV10
     {
         new ILatestInterviewExpressionState Clone();
     }

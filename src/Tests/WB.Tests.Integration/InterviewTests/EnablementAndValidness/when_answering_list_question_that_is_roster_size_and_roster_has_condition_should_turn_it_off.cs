@@ -31,8 +31,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.SingleQuestion(rosterSwitcherQuestionId, variable: "hwrkyn", options: new List<Answer>
                     {
-                        Create.Option(text: "Yes", value: "1"),
-                        Create.Option(text: "No", value: "2")
+                        Create.Option(value: "1", text: "Yes"),
+                        Create.Option(value: "2", text: "No")
                     }),
                     Create.ListQuestion(rosterSizeQuestionId, variable: "jobs", enablementCondition: "hwrkyn == 1"),
                     Create.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 2", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

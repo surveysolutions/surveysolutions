@@ -15,22 +15,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
     {
         Establish context = () =>
         {
-            linkedQuestionIdentity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkedQuestionIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.PlainQuestionnaire(Create.QuestionnaireDocument(questionnaireId,
-                Create.Group(children: new List<IComposite>()
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
+                Create.Entity.Group(children: new List<IComposite>()
                 {
-                    Create.SingleOptionQuestion(linkedQuestionIdentity.Id)
+                    Create.Entity.SingleOptionQuestion(linkedQuestionIdentity.Id)
                 })));
 
             var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-            statefulInterview = Create.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
 
             statefulInterview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
-            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] {Create.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0])}));
-            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] { Create.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0]) }));
-            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] { Create.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0]) }));
+            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] {Create.Entity.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0])}));
+            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] { Create.Entity.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0]) }));
+            statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] { Create.Entity.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new RosterVector[0]) }));
 
             eventContext = new EventContext();
         };

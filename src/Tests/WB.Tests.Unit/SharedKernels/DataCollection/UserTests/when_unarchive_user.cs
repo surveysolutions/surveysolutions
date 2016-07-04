@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = Create.User();
+            user = Create.Entity.User();
             user.SetId(userId);
             user.Roles = new UserRoles[] { UserRoles.Supervisor };
             user.IsArchived = true;

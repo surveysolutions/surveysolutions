@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Ncqrs.Eventing.Storage;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories
@@ -6,5 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
     public interface IStatefulInterviewRepository
     {
         IStatefulInterview Get(string interviewId);
+        Task<IStatefulInterview> GetAsync(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken);
     }
 }

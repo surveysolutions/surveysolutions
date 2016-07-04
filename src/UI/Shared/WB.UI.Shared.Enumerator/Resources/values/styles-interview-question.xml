@@ -42,10 +42,10 @@
   </style>
   
   <style name="Interview_Question_Instruction_ShowInstruction" parent="Interview_Question_Instruction_Title">
-    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_padding_old</item>
     <item name="android:textColor">@color/show_instructions</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_old</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_old</item>
   </style>
   
   <style name="Interview_Question_Instruction_Details">
@@ -107,12 +107,20 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="android:background">@drawable/question_list_item_editor_background</item>
   </style>
-  <style name="Interview_Question_RemoveAnswerWrapper">
+  <style name="Interview_Question_Answer_Input_RemoveAnswerWrapper">
     <item name="android:layout_height">fill_parent</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:orientation">horizontal</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+  </style>
+  <style name="Interview_Question_Answer_Recorded_RemoveAnswerWrapper">
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_record</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_input</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_input</item>
   </style>
    <style name="Interview_Question_Border" parent="Interview_Question_Answer_Editor">
      <item name="android:layout_width">match_parent</item>
@@ -295,19 +303,27 @@
     <item name="android:background">@drawable/media_question_white_border</item>
   </style>
 
+  <style name="Interview_Question_GPS_Map">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_Media_height</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_InputButton_margin_Bottom</item>
+    <item name="android:padding">2dp</item>
+    <item name="android:background">@drawable/media_question_white_border</item>
+  </style>
+
   <style name="Interview_Attachment_Picture">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Question_TextAnswer" parent="Interview_Question_Instruction_Details">
+  <style name="Interview_Question_RecordedAnswer" parent="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_TextAnswer_margin_bottom</item>
-    <item name="android:textStyle">bold|italic</item>
-    <item name="android:textColor">#2a81cb</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_RecordedAnswer_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_RecordedAnswer_margin_bottom</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/recordedAnswerText</item>
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>
 
@@ -323,8 +339,10 @@
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>
     <item name="android:stateListAnimator">@null</item>
-    <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding</item>
-    <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_vertical</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_vertical</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>

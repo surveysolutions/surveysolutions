@@ -9,6 +9,16 @@
 @font-italic: @all-not-font-faces, Arial, sans-serif;
 @font-monospace: 'lucidaconsole', "Lucida Console", Monaco, monospace;
 
+@font-size-extrasmall: 10px;
+@font-size-small: 12px;
+@font-size-medium: 16px;
+@font-size-large: 18px;
+@font-size-extralarge: 19px;
+@font-size-huge: 24px;
+@font-size-extrahuge: 48px;
+
+@link-color:#0000EE;
+
 body {
 }
 
@@ -24,14 +34,14 @@ h1, h2, h3, h4, form, p {
 }
 
 h1 {
-    font-size: 48px;
+    font-size: @font-size-extrahuge;
     line-height: 57px;
     font-weight: normal;
     margin-bottom: 30px;
 }
 
 h2 {
-    font-size: 23.5px;
+    font-size: @font-size-huge;
     line-height: 24px;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -39,7 +49,7 @@ h2 {
 
 h3 {
     border-top: 1px solid #000;
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
     text-transform: uppercase;
     padding-top: 8px;
@@ -82,10 +92,10 @@ pre {
 }
 /*Start header*/
 header {
-    margin: 30px 75px 38px 124px;
+    margin: 30px 75px 38px 84px;
     display: block;
     overflow: hidden;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 14px;
     /*letter-spacing: 0.3px;*/
 }
@@ -146,17 +156,17 @@ article {
 }
 
 .questionnaire_title {
-    margin-left: 122px;
+    margin-left: 82px;
     margin-bottom: 20px;
     width: 63%;
-    font-size: 19px;
+    font-size: @font-size-extralarge;
     line-height: 22px;
 }
 
 .table_of_contents {
-    margin: 0 68px;
+    margin: 0 28px;
     margin-bottom: 50px; /*delete?*/
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
 }
 
@@ -193,7 +203,7 @@ article {
 }
 
 .table_of_contents .group-statistics {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
     margin-top: 4px;
 }
@@ -209,14 +219,14 @@ article {
 .footer {
     overflow: hidden;
     margin: 53px 69px 0 125px;
-    font-size: 18px;
+    font-size: @font-size-large;
     line-height: 20px;
 }
 
 .footer-section {
     float: left;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 13px;
     font-family: @font-light;
 }
@@ -224,7 +234,7 @@ article {
 .page_path {
     float: left;
     text-transform: uppercase;
-    font-size: 10.2px;
+    font-size: @font-size-extrasmall;
     line-height: 25px;
 }
 
@@ -235,7 +245,7 @@ article {
 
 /*Start section*/
 .section {
-    padding: 35px 70px 0px 123px;
+    padding: 35px 70px 0px 83px;
     border-bottom: 1px solid #000;
 }
 
@@ -254,34 +264,34 @@ article {
 .question {
     vertical-align: top;
     width: 47.5%;
-    padding: 13px 0 10px 0;
+    padding: 13px 0 5px 0;
     display: table-cell;
 }
 
 .question-title {
     width: 87%;
-    font-size: 18px;
-    line-height: 21px;
-    margin-bottom: 15px;
+    font-size: @font-size-medium;
+    line-height: 18px;
+    margin-bottom: 10px;
 }
 
 .answer {
     display: table-cell;
     width: 49%;
     border-left: 1px solid #000;
-    padding: 15px 0 20px 15px;
+    padding: 15px 0 9px 15px;
 }
 
 .question-meta {
     overflow: hidden;
-    margin-bottom: 13px;
+    margin-bottom: 5px;
     word-break: break-all;
 }
 
 .type {
     float: left;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
     line-height: 13px;
     font-family: @font-light;
 }
@@ -292,7 +302,7 @@ article {
 
 .variable_name, .appendix_detail span > span,
 .structure_list, .splitted_variables {
-    font-size: 13px;
+    font-size: @font-size-small;
     line-height: 15px;
     font-family: @font-monospace;
 }
@@ -314,26 +324,26 @@ article {
 
 .answer-editor input + label, .yes_no-option-text {
     display: inline-block;
-    font-size: 18px;
-    line-height: 24px;
-    min-height: 20px;
+    font-size: @font-size-medium;
+    line-height: 18px;
+    min-height: 18px;
 }
 
 .answer-editor input + label {
     cursor: pointer;
     position: relative;
     padding-left: 28px;
-    display: flex;
+    
 }
 
 .answer-editor input + label::before {
     content: "";
     display: block;
     position: absolute;
-    top: 3px;
+    top: 1px;
     left: 0;
-    height: 16px;
-    width: 16px;
+    height: 12px;
+    width: 12px;
     border-radius: 100%;
     border: 2px solid #000;
 }
@@ -345,8 +355,8 @@ article {
     height: 10px;
     border-radius: 100%;
     display: none;
-    top: 8px;
-    left: 5px;
+    top: 4px;
+    left: 2px;
     background-color: #000;
 }
 
@@ -355,48 +365,51 @@ article {
 }
 
 .option {
-    margin-top: 12px;
+    margin-top: 2px;
 }
 
 .option:first-of-type {
     margin-top: 0;
 }
 
-.option b {
-    font-size: 11px;
-    line-height: 24px;
-    margin-right: 10px;
-    vertical-align: top;
-    text-align: right;
-    float:left
+.option > span {
+  font-size: @font-size-medium;
+  line-height: 18px;
 }
 
-.option > span {
+.option .option-value {    
+    font-size: @font-size-small;
+    padding: 1px 0;
+    vertical-align: middle;
     display: inline-block;
-    margin-left: 18px;
-    font-size: 18px;
-    line-height: 20px;
+    float:left;
+    line-height: 18px;
 }
 
 .points {
     width: 95%;
     border: none;
-    border-bottom: 1px dotted #000;
+    border-bottom: 2px dotted #000;
 }
 
+.dashes {
+    width: 95%;
+    border: none;
+    border-bottom: 2px dashed #000;
+}
 .section_header {
     border-bottom: 3px solid #000;
     margin-bottom: 3px;
     padding-bottom: 22px;
 }
 
-.multi-option input + label:before {
+.multi-option  input + label:before {
     border-radius: 0;
-    width: 13px;
-    height: 13px;
+    width: 12px;
+    height: 12px;
 }
 
-.multi-option input + label:after {
+.multi-option  input + label:after {
     content: '\2713';
     font-weight: bold;
     background-color: transparent;
@@ -406,9 +419,11 @@ article {
 }
 
 .yes_no_multiselect {
-    display: inline-block;
-    width: 53px;
-    vertical-align: top;
+  display: inline-block;
+  width: 53px;
+  vertical-align: top;
+  margin-left: 10px;
+  line-height: 18px;
 }
 
 .answer-editor .yes_no_multiselect label {
@@ -418,39 +433,45 @@ article {
 
 .yes_no_multiselect span {
     display: inline-block;
-    font-size: 24px;
-    line-height: 24px;
+    font-size: @font-size-medium;
+    line-height: 18px;
 }
 
 .option .yes_no-option-text {
-    margin-left: 9px;
-    line-height: 24px;
-    width: 64%;
+  margin-left: 5px;
+  width: 65%;
+  vertical-align: top;
+}
+.option .option-text {
+  width: 65%;
+  display: inline-block;
+  margin-left: 10px;
+  line-height: 18px;
+  vertical-align: top; 
 }
 
 input[type=date] {
     line-height: 20px;
     outline: 0;
-    padding: 5px 10px;
-    font-size: 18px;
+    font-size: @font-size-medium;
     line-height: 20px;
     text-transform: uppercase;
 }
 
 .common-info, .container, .generated_by span a {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
     font-family: @font-monospace;
     font-weight: normal;
 }
 
 .generated_by span a {
-    color: #000;
+    color: @link-color;
     text-decoration: none;
 }
 
 .common-info {
-    padding: 8px 20px 8px 0;
+    padding: 8px 20px 4px 0;
     position: relative;
     word-break: break-all;
     text-transform: none;
@@ -461,7 +482,7 @@ input[type=date] {
 }
 
 .section_header .common-info {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     padding-bottom: 0;
 }
@@ -491,11 +512,12 @@ input[type=date] {
 
 
 .roster, .group {
-    padding: 40px 0 15px 1px;
+    padding: 40px 0 7px 1px;
+    margin-bottom: 1px;
 }
 
 .static-text, .variable {
-    padding: 15px 0 15px 1px;
+    padding: 15px 0 7px 1px;
 }
 
 .roster:after, .static-text:after, .variable:after, .group:after {
@@ -506,22 +528,23 @@ input[type=date] {
 
 .roster_container, .static-text_container, .group_container, .variable_container {
     float: left;
-    font-size: 17.7px;
+    font-size: @font-size-large;
     line-height: 24px;
+    width:100%;
 }
 
 .generated_by ul {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .generated_by ul li {
-    margin-top: 17px;
-    font-size: 18px;
-    line-height: 20px;
+    margin-top: 10px;
+    font-size: @font-size-medium;
+    line-height: 18px;
 }
 
 .generated_by ul li span {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-right: 15px;
 }
@@ -529,13 +552,13 @@ input[type=date] {
     font-style: italic;
 }
 .static_text, .variable-title {
-    font-size: 18px;
-    line-height: 20px;
+    font-size: @font-size-medium;
+    line-height: 18px;
 }
 
 .breacrumbs {
     text-transform: uppercase;
-    font-size: 9.5px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-right: 3px;
 }
@@ -552,12 +575,11 @@ input[type=date] {
 }
 
 .generated_by {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 14px;
 }
 
 .roster .variable_name {
-    margin-top: 21px;
     text-align: right;
 }
 
@@ -570,7 +592,7 @@ input[type=date] {
 .gps sup {
     float: left;
     margin-right: 15px;
-    font-size: 10px;
+    font-size: @font-size-extrasmall;
 }
 
 .section .footer, .appendix_section .footer { /*Number of page*/
@@ -579,13 +601,13 @@ input[type=date] {
 }
 
 .more {
-    font-size: 12px;
+    font-size: @font-size-small;
     line-height: 12px;
     margin-top: 20px;
 }
 
 .more > a {
-    color: #000;
+    color: @link-color;
     display: inline-block;
     padding-bottom: 3px;
 }
@@ -610,7 +632,7 @@ figure img {
 /*Start Appendix*/
 
 .appendix_section {
-    margin: 47px 65px 0 124px;
+    margin: 7px 65px 0 84px;
 }
 
 .appendix_section h2 {
@@ -669,8 +691,7 @@ figure img {
 }
 
 .appendix_detail > a {
-    text-decoration: none;
-    border-bottom: 1px solid #000;
+    text-decoration: none;    
 }
 
 .appendix_detail > a:hover {
@@ -678,7 +699,7 @@ figure img {
 }
 
 .appendix_detail a {
-    color: #000;
+    color: @link-color;
     font-weight: normal;
 }
 
@@ -767,6 +788,7 @@ h3, h4, b, .table_of_contents dl dd, .question-title, .answer-editor input + lab
 
     article + article {
         page-break-before: always;
+        margin-left: -40px;
     }
 
     ul, img, .question-container, h1, h2, h3, h4, h5 {

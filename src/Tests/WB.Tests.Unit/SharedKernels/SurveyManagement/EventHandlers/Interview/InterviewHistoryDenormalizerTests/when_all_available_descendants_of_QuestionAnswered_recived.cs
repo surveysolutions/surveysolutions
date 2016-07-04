@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {

@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
             => this.CopyMembers(ConvertGetInstancesV8ToV9(getInstancesV9));
 
         private static Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> ConvertGetInstancesV8ToV9(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> getInstancesV8)
-            => (x, y) => getInstancesV8(x, y).Cast<IExpressionExecutableV9>();
+            => (x, y) => getInstancesV8(x, y)?.Cast<IExpressionExecutableV9>();
 
         public abstract IExpressionExecutableV9 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV9>> getInstances);
 
@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.V9
                 {
                 }
 #pragma warning restore
-               
+
                 if (IsVariableValueChanged(variableValueGetterPair.Key, newVariableValue))
                     result.ChangedVariableValues.Add(new Identity(variableValueGetterPair.Key, RosterVector),
                         newVariableValue);

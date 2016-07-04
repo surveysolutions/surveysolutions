@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
            
-            ILiteEventRegistry registry = Create.LiteEventRegistry();
-            liteEventBus = Create.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
@@ -54,13 +54,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 {
                     new Identity(substitutionTargetQuestionId, Empty.RosterVector)
                 };
-            fakeInterview = Create.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
+            Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
+        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Old title new value");
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;

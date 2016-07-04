@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 Create.VerificationMessage("eee","eeeee", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "ccccccccccccccccc"))
             };
 
-            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
+            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock

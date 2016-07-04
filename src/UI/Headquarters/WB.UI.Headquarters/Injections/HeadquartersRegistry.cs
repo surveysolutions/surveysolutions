@@ -7,70 +7,49 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
-using Ninject.Extensions.Conventions;
-using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
-using Ninject.Syntax;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Infrastructure.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization.Implementation.ImportManager;
+using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Implementation.Services;
+using WB.UI.Headquarters.Models.User;
+using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Attributes;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Headquarters.Injections
 {
-    public class RegisterFirstInstanceOfInterface : IBindingGenerator
-    {
-        public RegisterFirstInstanceOfInterface(IEnumerable<Assembly> assemblyes)
-        {
-            this._assemblyes = assemblyes;
-        }
-
-        private readonly IEnumerable<Assembly> _assemblyes;
-
-        public IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> CreateBindings(
-            Type type, IBindingRoot bindingRoot)
-        {
-            IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> y =
-                Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
-
-            if (!type.IsInterface)
-            {
-                return y;
-            }
-
-
-            if (type.IsGenericType)
-            {
-                return y;
-            }
-
-            Type matchedType = this._assemblyes
-                .SelectMany(a => a.GetTypes().Where(t => t.IsVisible))
-                .FirstOrDefault(
-                    x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
-            if (matchedType == null)
-            {
-                return y;
-            }
-
-            return new[] { bindingRoot.Bind(new[] { type }).To(matchedType) };
-        }
-    }
-
     public abstract class CoreRegistry : NinjectModule
     {
         protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()
@@ -78,39 +57,34 @@ namespace WB.UI.Headquarters.Injections
             return new[] { (typeof(CoreRegistry)).Assembly };
         }
 
-        /// <summary>
-        /// Gets pairs of interface/type which should be registered.
-        /// Usually is used to return implementation of interfaces declared not in assemblies returned by GetAssemblies method.
-        /// </summary>
-        /// <returns>Pairs of interface/implementation.</returns>
-        protected virtual IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
-        {
-            return Enumerable.Empty<KeyValuePair<Type, Type>>();
-        }
-
         public override void Load()
         {
             RegisterDenormalizers();
             RegisterEventHandlers();
-            RegisterAdditionalElements();
-        }
 
-        protected virtual void RegisterAdditionalElements()
-        {
-            this.Kernel.Bind(
-                x =>
-                x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().BindWith(
-                    new RegisterFirstInstanceOfInterface(this.GetAssembliesForRegistration())));
+            this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
+            this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
+            this.Kernel.Bind<IIdentityManager>().To<IdentityManager>();
+            this.Kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
+            this.Kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
+            this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
+            this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
+            this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
+            this.Kernel.Bind<IInterviewEntityViewFactory>().To<InterviewEntityViewFactory>();
+            this.Kernel.Bind<IInterviewDataAndQuestionnaireMerger>().To<InterviewDataAndQuestionnaireMerger>();
+            this.Kernel.Bind<IUserPreloadingService>().To<UserPreloadingService>();
+            this.Kernel.Bind<IAttachmentContentService>().To<AttachmentContentService>();
+            this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
+            this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
+            this.Kernel.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
+            this.Kernel.Bind<IUserWebViewFactory>().To<UserWebViewFactory>();
 
-            foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
-            {
-                this.Kernel.Bind(customBindType.Key).To(customBindType.Value);
-            }
-        }
+            this.Kernel.Bind<ILatestInterviewExpressionState>().To<InterviewExpressionStateForPreloading>();
+            this.Kernel.Bind<IReadOnlyInterviewStateDependentOnAnswers>().To<InterviewStateDependentOnAnswers>();
+            this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
+            this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
 
-        protected virtual void RegisterViewFactories()
-        {
-            BindInterface(this.GetAssembliesForRegistration(), typeof(IViewFactory<,>), (c) => Guid.NewGuid());
+            this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -142,20 +116,7 @@ namespace WB.UI.Headquarters.Injections
              assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
-                if (interfaceType != typeof(IViewFactory<,>))
-                {
-                    this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
-                }
-                if (interfaceType.IsGenericType)
-                {
-                    var interfaceImplementations =
-                        implementation.GetInterfaces().Where(i => IsInterfaceInterface(i, interfaceType));
-                    foreach (Type interfaceImplementation in interfaceImplementations)
-                    {
-                        this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
-                            To(implementation).InScope(scope);
-                    }
-                }
+                this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
             }
         }
 
@@ -172,13 +133,13 @@ namespace WB.UI.Headquarters.Injections
                     || (!type.IsGenericType && !interfaceType.IsGenericType && type == interfaceType));
         }
     }
+
     public class HeadquartersRegistry : CoreRegistry
     {
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(QuestionnaireItemInputModel).Assembly,
                 typeof(HeadquartersBoundedContextModule).Assembly
@@ -186,16 +147,7 @@ namespace WB.UI.Headquarters.Injections
         }
 
         protected override void RegisterDenormalizers() { }
-
-        protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
-        {
-            var supervisorSpecificTypes = new Dictionary<Type, Type>
-            {
-                { typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute) }
-            };
-
-            return base.GetTypesForRegistration().Concat(supervisorSpecificTypes);
-        }
+        
         protected override void RegisterEventHandlers()
         {
             base.RegisterEventHandlers();
@@ -206,8 +158,6 @@ namespace WB.UI.Headquarters.Injections
         public override void Load()
         {
             base.Load();
-
-            this.RegisterViewFactories();
 
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
 
@@ -223,6 +173,21 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
+
+            this.BindFilter<TransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+
+            this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+
+            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+
+            //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
+            this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
+            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
         }
     }
 }

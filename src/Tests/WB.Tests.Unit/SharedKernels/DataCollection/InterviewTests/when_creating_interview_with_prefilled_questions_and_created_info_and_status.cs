@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

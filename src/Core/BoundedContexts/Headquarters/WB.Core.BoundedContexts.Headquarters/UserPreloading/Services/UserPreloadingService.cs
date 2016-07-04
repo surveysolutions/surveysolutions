@@ -4,14 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {

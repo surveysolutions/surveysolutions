@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             viewModel.Init(notExistedInterviewId);
         };
 
-        Because of = async () => await viewModel.StartAsync();
+        Because of = () => viewModel.Load();
 
         It should_check_interview_in_repository = () =>
             interviewRepositoryMock.Verify(ns => ns.Get(notExistedInterviewId), Times.Once());
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             loggerMock.Verify(ns => ns.Error(Moq.It.IsAny<string>(), null), Times.Once());
 
         It should_navigate_to_dashboard = () =>
-            navigationServiceMock.Verify(ns => ns.NavigateToDashboardAsync(), Times.Once());
+            navigationServiceMock.Verify(ns => ns.NavigateToDashboard(), Times.Once());
 
 
         private static string notExistedInterviewId = "same id";

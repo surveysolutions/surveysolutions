@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        Because of = () => interview.SynchronizeInterviewFromHeadquarters(interview.EventSourceId, Guid.NewGuid(), Guid.NewGuid(), Create.InterviewSynchronizationDto(), DateTime.Now);
+        Because of = () => interview.SynchronizeInterviewFromHeadquarters(interview.EventSourceId, Guid.NewGuid(), Guid.NewGuid(), Create.Entity.InterviewSynchronizationDto(), DateTime.Now);
 
         It should_raise_InterviewCreated_event = () =>
            eventContext.ShouldContainEvent<InterviewCreated>();

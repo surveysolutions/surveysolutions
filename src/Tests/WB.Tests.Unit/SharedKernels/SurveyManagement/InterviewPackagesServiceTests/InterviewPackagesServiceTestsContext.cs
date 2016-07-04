@@ -1,11 +1,12 @@
 ﻿using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests

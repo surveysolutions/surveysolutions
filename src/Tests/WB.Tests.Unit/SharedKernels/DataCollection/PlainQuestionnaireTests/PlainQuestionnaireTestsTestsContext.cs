@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     null,
                 new List<ValidationCondition>(),
-                null
+                null,
+                false
             ));
         }
 
@@ -79,7 +80,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     null,
                     new List<ValidationCondition>(),
-                null
+                null,
+                false
             ));
         }
     }

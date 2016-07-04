@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;

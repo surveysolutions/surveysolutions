@@ -2,11 +2,10 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement
 {
+    [Obsolete ("v5.10")]
     public class HandshakePackageRequest
     {
-        public Guid ClientId { get; set; }
         public string AndroidId { get; set; }
-        public Guid? ClientRegistrationId { get; set; }
         public int Version { get; set; }
         public bool ShouldDeviceBeLinkedToUser { get; set; }
     }

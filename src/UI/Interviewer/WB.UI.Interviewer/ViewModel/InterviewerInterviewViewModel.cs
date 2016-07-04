@@ -41,46 +41,26 @@ namespace WB.UI.Interviewer.ViewModel
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
         }
+        
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
 
+        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
-        private IMvxCommand navigateToDashboardCommand;
-        public IMvxCommand NavigateToDashboardCommand
-        {
-            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync())); }
-        }
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
 
-        private IMvxCommand signOutCommand;
-        public IMvxCommand SignOutCommand
-        {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
-        }
+        public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
+            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
-        }
-
-        private async Task SignOutAsync()
-        {
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
-        }
-
-        public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)
-        {
-            await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
-        }
-
-        public async Task NavigateBack()
+        public void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
             {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.interviewId);
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
         }
 
@@ -89,7 +69,7 @@ namespace WB.UI.Interviewer.ViewModel
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
                 var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId);
+                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
                 return completeInterviewViewModel;
             }
             else

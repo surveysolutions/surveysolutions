@@ -19,20 +19,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.InterviewView(prefilledGpsQuestionId);
+            dashboardItem = Create.Entity.InterviewView(prefilledGpsQuestionId);
 
             @event = Create.Event
                 .InterviewSynchronized(
-                    Create.InterviewSynchronizationDto(
+                    Create.Entity.InterviewSynchronizationDto(
                         questionnaireId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                         questionnaireVersion: 33,
-                        answers: new[] { Create.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
+                        answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(questionId: prefilledGpsQuestionId, answer: geoPositionAnswer) }))
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
             var questionnaire = 
-                    Create.QuestionnaireDocumentWithOneChapter(
-                        Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
+                    Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_store_longitude_from_answer_to_prefilled_GPS_question_to_result_dashboard_item = () =>
             dashboardItem.GpsLocation.Coordinates.Longitude.ShouldEqual(prefilledGpsQuestionLongitude);
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<InterviewSynchronized> @event;
         private static InterviewView dashboardItem;
         private static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");

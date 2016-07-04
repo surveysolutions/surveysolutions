@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_QuestionsDisabled_event_with_question_C_only = () =>
             result.QuestionsDisabledQuestionIds.ShouldContainOnly(Guid.Parse("cccccccccccccccccccccccccccccccc"));
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

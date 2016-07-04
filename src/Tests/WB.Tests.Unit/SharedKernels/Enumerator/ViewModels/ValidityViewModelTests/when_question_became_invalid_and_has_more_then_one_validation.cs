@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
     { 
         Establish context = () =>
         {
-            questionIdentity = Create.Identity(Guid.NewGuid(), RosterVector.Empty);
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(Create.Question(questionId: questionIdentity.Id,
+            questionIdentity = Create.Entity.Identity(Guid.NewGuid(), RosterVector.Empty);
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionIdentity.Id,
                 validationConditions: new List<ValidationCondition>
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 new FailedValidationCondition(0)
             };
 
-            var plainQuestionnaire = Create.PlainQuestionnaire(questionnaire);
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var interview = Substitute.For<IStatefulInterview>();
             interview.GetFailedValidationConditions(questionIdentity)
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
             statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
 
-            viewModel = Create.ViewModels.ValidityViewModel(questionnaire: plainQuestionnaire,
+            viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
             viewModel.Init("interviewid", questionIdentity);
@@ -64,8 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         It should_show_error_messages_according_to_failed_validation_indexes_with_postfix_added = () =>
         {
-            viewModel.Error.ValidationErrors.First().ShouldEqual("message 2 [2]");
-            viewModel.Error.ValidationErrors.Second().ShouldEqual("message 1 [1]");
+            viewModel.Error.ValidationErrors.First()?.PlainText.ShouldEqual("message 2 [2]");
+            viewModel.Error.ValidationErrors.Second()?.PlainText.ShouldEqual("message 1 [1]");
         };
 
         static ValidityViewModel viewModel;
