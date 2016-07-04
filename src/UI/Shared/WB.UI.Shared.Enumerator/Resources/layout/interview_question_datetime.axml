@@ -17,7 +17,7 @@
           local:MvxBind="
             HideKeyboardOnClick .; 
             Text Answer; 
-            Hint Localization('DateQuestion_Hint'); 
+            Watermark Localization('DateQuestion_Hint'); 
             DateChange AnswerCommand;" />
 
           <include layout="@layout/interview_question__remove_button_input" />
