@@ -247,7 +247,7 @@
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHintBinding.cs" />
+    <Compile Include="CustomBindings\TextViewWatermarkBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
