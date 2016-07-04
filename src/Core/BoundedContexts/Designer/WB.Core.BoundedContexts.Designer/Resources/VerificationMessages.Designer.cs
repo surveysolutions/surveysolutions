@@ -783,33 +783,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in validation condition..
-        /// </summary>
-        internal static string WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in sub-section&apos;s enabling condition..
-        /// </summary>
-        internal static string WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in question&apos;s enabling condition..
-        /// </summary>
-        internal static string WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
         internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
