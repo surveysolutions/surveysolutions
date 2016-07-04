@@ -300,15 +300,6 @@
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Picture question cannot have a validation condition.</value>
   </data>
-  <data name="WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
-    <value>Picture questions cannot be used in validation condition.</value>
-  </data>
-  <data name="WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition" xml:space="preserve">
-    <value>Picture questions cannot be used in sub-section's enabling condition.</value>
-  </data>
-  <data name="WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition" xml:space="preserve">
-    <value>Picture questions cannot be used in question's enabling condition.</value>
-  </data>
   <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
     <value>Question with current type can not be used as roster title.</value>
   </data>
