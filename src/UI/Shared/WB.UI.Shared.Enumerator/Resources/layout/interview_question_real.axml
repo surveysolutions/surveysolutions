@@ -15,7 +15,7 @@
                                           MaxDigitsAfterDecimal CountOfDecimalPlaces; 
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
-                                          Hint Localization('RealQuestion_Hint');" />
+                                          Watermark Localization('RealQuestion_Hint');" />
 
           <include layout="@layout/interview_question__remove_button_input" />
         </LinearLayout>

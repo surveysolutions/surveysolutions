@@ -7,11 +7,11 @@ using MvvmCross.Binding;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class TextViewHintBinding : BaseBinding<TextView, string>
+    public class TextViewWatermarkBinding : BaseBinding<TextView, string>
     {
         private bool subscribed;
 
-        public TextViewHintBinding(TextView target)
+        public TextViewWatermarkBinding(TextView target)
             : base(target)
         {
             this.Target.TextChanged += this.TextChangedHandler;

@@ -59,7 +59,7 @@
             android:singleLine="true"
             android:inputType="textPassword"
             local:MvxBind="Text Password; 
-                Hint Localization('PasswordHint'); 
+                Watermark Localization('PasswordHint'); 
                 BackgroundStyle ValidationStyleBackground(IsUserValid);
                 FocusValueChanged SignInCommand; " />
           <LinearLayout android:layout_width="wrap_content"
