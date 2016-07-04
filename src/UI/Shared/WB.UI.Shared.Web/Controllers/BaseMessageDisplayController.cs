@@ -29,17 +29,5 @@ namespace WB.UI.Shared.Web.Controllers
                 this.TempData.Add(key, message);
             }
         }
-
-        protected ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("NotFound", "Error");
-            }
-        }
     }
 }
