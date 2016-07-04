@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFactoryTests
 {
@@ -16,24 +16,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         {
             input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
 
-            var user = Create.UserDocument(supervisorId: supervisorId);
+            var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
                             status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddHours(1), 
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             status: InterviewExportedAction.Completed,
                             supervisorId:supervisorId,
                             timestamp: input.From.Date.AddDays(1)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
                             status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddDays(-15))

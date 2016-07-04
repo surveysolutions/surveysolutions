@@ -6,13 +6,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -28,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children =
                         new List<IComposite>()
                         {
-                            Create.StaticText(publicKey: staticTextId, text: staticText, 
+                            Create.Entity.StaticText(publicKey: staticTextId, text: staticText, 
                             validationConditions: new List<ValidationCondition>()
                             {
-                                Create.ValidationCondition("n1 != 1"),
-                                Create.ValidationCondition("n1 != 2"),
+                                Create.Entity.ValidationCondition("n1 != 1"),
+                                Create.Entity.ValidationCondition("n1 != 2"),
                             })
                         }
                 });
@@ -43,8 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 IsInvalid = true,
                 FailedValidationConditions = new List<FailedValidationCondition>()
                 {
-                    Create.FailedValidationCondition(0),
-                    Create.FailedValidationCondition(1),
+                    Create.Entity.FailedValidationCondition(0),
+                    Create.Entity.FailedValidationCondition(1),
                 }
             });
 

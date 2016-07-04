@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
@@ -16,17 +16,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
-                Create.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
+                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.InterviewApprovedByHQEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId));
 
         It should_record_ApprovedByHeadquarter_as_end_status =
             () =>

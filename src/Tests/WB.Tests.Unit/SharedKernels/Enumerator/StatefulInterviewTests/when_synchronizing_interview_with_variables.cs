@@ -16,16 +16,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid variableId = Guid.Parse("00000000000000000000000000000001");
-            RosterVector rosterVector = Create.RosterVector(1m, 0m);
+            RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.QuestionnaireIdentity(questionnaireId, 1), Create.QuestionnaireDocument(id: questionnaireId));
+            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1), Create.Entity.QuestionnaireDocument(id: questionnaireId));
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             variableIdentity = new Identity(variableId, rosterVector);
-            synchronizationDto = Create.InterviewSynchronizationDto(questionnaireId: questionnaireId,
-                variables: new Dictionary<InterviewItemId, object>() {{ Create.InterviewItemId(variableIdentity.Id, variableIdentity.RosterVector), "test"}},
-                disabledVariables:new HashSet<InterviewItemId>() {Create.InterviewItemId(Guid.NewGuid(), RosterVector.Empty) });
+            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
+                variables: new Dictionary<InterviewItemId, object>() {{ Create.Entity.InterviewItemId(variableIdentity.Id, variableIdentity.RosterVector), "test"}},
+                disabledVariables:new HashSet<InterviewItemId>() {Create.Entity.InterviewItemId(Guid.NewGuid(), RosterVector.Empty) });
         };
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);

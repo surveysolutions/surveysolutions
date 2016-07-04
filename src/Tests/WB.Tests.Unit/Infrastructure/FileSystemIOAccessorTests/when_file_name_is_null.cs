@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
@@ -13,14 +7,14 @@ namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
     {
         Establish context = () =>
         {
-            fileSystemIOAccessor = Create.FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.Service.FileSystemIOAccessor();
         };
 
         Because of = () =>
-            newFileName = fileSystemIOAccessor.MakeValidFileName(null);
+            newFileName = fileSystemIOAccessor.MakeStataCompatibleFileName(null);
 
-        It should_return_empty_string = () =>
-            newFileName.ShouldEqual("");
+        It should_return_string_with_underscore = () =>
+            newFileName.ShouldEqual("_");
 
         private static FileSystemIOAccessor fileSystemIOAccessor;
         private static string newFileName;

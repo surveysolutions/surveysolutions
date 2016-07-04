@@ -7,11 +7,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventRegistry
     {
-        void Subscribe(ILiteEventHandler handler, string aggregateRootId);
+        void Subscribe(ILiteEventHandler handler, string aggregateRootId = null);
 
-        void Unsubscribe(ILiteEventHandler handler, string aggregateRootId);
+        void Unsubscribe(ILiteEventHandler handler);
 
-        bool IsSubscribed(ILiteEventHandler handler, string eventSourceId);
+        bool IsSubscribed(ILiteEventHandler handler);
 
         IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event);
     }

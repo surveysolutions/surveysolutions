@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -27,7 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer);
+                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
+                   && _.GetOptionForQuestionWithoutFilter(questionIdentity, 2, 1) == GetOption()
+                   && _.GetOptionForQuestionWithFilter(questionIdentity, "title klo 3", 1) == Options.Single(x => x.Value == 3));
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
@@ -35,12 +35,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
-
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
@@ -55,6 +52,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
+
+        private static CategoricalOption GetOption()
+        {
+            return new CategoricalOption() {Title = "2", Value = 2, ParentValue = 1};
+        }
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 

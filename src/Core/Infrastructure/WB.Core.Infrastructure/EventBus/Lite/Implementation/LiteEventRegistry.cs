@@ -3,143 +3,163 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Ncqrs;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation.RaiseFilters;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventRegistry : ILiteEventRegistry
     {
-        private readonly ConcurrentDictionary<string, ConcurrentHashSet<WeakReference<ILiteEventHandler>>> handlers = new ConcurrentDictionary<string, ConcurrentHashSet<WeakReference<ILiteEventHandler>>>();
+        private readonly Dictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>> handlers = new Dictionary<string, ConcurrentHashSet<LiteEventRegistryEntity>>();
 
         private static readonly object LockObject = new object();
 
-        public void Subscribe(ILiteEventHandler handler, string aggregateRootId)
+        public void Subscribe(ILiteEventHandler handler, string aggregateRootId = null)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                RegisterHandlerForEvent(handler, eventType, aggregateRootId);
+                RegisterHandlerForEvent(
+                    handler, 
+                    eventType, 
+                    aggregateRootId != null ? new AggregateRootRaiseFilter(aggregateRootId) : null);
             }
         }
 
-        public void Unsubscribe(ILiteEventHandler handler, string aggregateRootId)
+        public void Unsubscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                UnregisterHandlerForEvent(eventType, handler, aggregateRootId);
+                UnregisterHandlerForEvent(eventType, handler);
             }
         }
 
-        public bool IsSubscribed(ILiteEventHandler handler, string eventSourceId)
+        public bool IsSubscribed(ILiteEventHandler handler)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             return handlers.Values.Any(x => x.Any(handlerRef =>
             {
-                ILiteEventHandler subsribedHandler;
-                handlerRef.TryGetTarget(out subsribedHandler);
-                return ReferenceEquals(subsribedHandler, handler);
+                ILiteEventHandler subscribedHandler;
+                handlerRef.EventHandler.TryGetTarget(out subscribedHandler);
+                if (subscribedHandler == null)
+                    return false;
+                return ReferenceEquals(subscribedHandler, handler);
             }));
         }
 
         public IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event)
         {
             Type eventType = @event.Payload.GetType();
-            string eventKey = GetEventKey(eventType, @event.EventSourceId.FormatGuid());
+            string eventKey = GetEventKey(eventType);
 
             lock (LockObject)
             {
-                ConcurrentHashSet<WeakReference<ILiteEventHandler>> handlersForEventType;
+                ConcurrentHashSet<LiteEventRegistryEntity> handlersForEventType;
                 if (!this.handlers.TryGetValue(eventKey, out handlersForEventType))
                 {
                     return new List<Action<object>>();
                 }
 
-                var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
-
-                return actualHandlers.Select(GetActionHandler).ToList();
+                return handlersForEventType
+                    .ToReadOnlyCollection()
+                    .Where(entity => entity.Filter == null || entity.Filter.IsNeedRaise(@event))
+                    .Select(entity => GetEventHandler(eventKey, entity))
+                    .Where(handler => handler != null)
+                    .Select(GetActionHandler)
+                    .ToList();
             }
         }
 
-        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string aggregateRootId)
+        private ILiteEventHandler GetEventHandler(string eventKey, LiteEventRegistryEntity liteEventRegistryEntity)
+        {
+            ILiteEventHandler handler;
+            if (liteEventRegistryEntity.EventHandler.TryGetTarget(out handler))
+                return handler;
+
+            this.handlers[eventKey].Remove(liteEventRegistryEntity);
+            return null;
+        }
+
+        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, ILiteEventRaiseFilter raiseFilter)
         {
             lock (LockObject)
             {
-                var handlerKey = GetEventKey(eventType, aggregateRootId);
-                ICollection<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new ConcurrentHashSet<WeakReference<ILiteEventHandler>>());
+                var handlerKey = GetEventKey(eventType);
+                ICollection<LiteEventRegistryEntity> handlersForEventType = this.handlers.GetOrAdd(handlerKey, () => new ConcurrentHashSet<LiteEventRegistryEntity>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
 
-                handlersForEventType.Add(new WeakReference<ILiteEventHandler>(handler));
+                handlersForEventType.Add(new LiteEventRegistryEntity(handler, raiseFilter));
             }
         }
 
-        static string GetEventKey(Type eventType, string aggregateRootId)
+        static string GetEventKey(Type eventType)
         {
-            return eventType.Name + "$" + aggregateRootId;
+            return eventType.Name;
         }
 
-        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler, string aggregateRootId)
+        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler)
         {
             lock (LockObject)
             {
-                var eventName = GetEventKey(eventType, aggregateRootId);
+                var eventName = GetEventKey(eventType);
                 if (this.handlers.ContainsKey(eventName))
                 {
-                    ICollection<WeakReference<ILiteEventHandler>> subsribedRefences = this.handlers[eventName];
-                    foreach (var weakReference in subsribedRefences)
+                    ICollection<LiteEventRegistryEntity> subscribedRefences = this.handlers[eventName];
+                    foreach (var weakReference in subscribedRefences)
                     {
                         if (ShouldRemoveHandler(weakReference, handler))
                         {
-                            subsribedRefences.Remove(weakReference);
+                            subscribedRefences.Remove(weakReference);
                         }
                     }
                 }
             }
         }
 
-        private static bool ShouldRemoveHandler(WeakReference<ILiteEventHandler> handlerWeakReference, ILiteEventHandler unregisteringHandler)
+        private static bool ShouldRemoveHandler(LiteEventRegistryEntity handlerWeakReference, ILiteEventHandler unregisteringHandler)
         {
             ILiteEventHandler handlerFromWeakReference;
-            var handlerNoLongerExists = !handlerWeakReference.TryGetTarget(out handlerFromWeakReference);
+            var handlerNoLongerExists = !handlerWeakReference.EventHandler.TryGetTarget(out handlerFromWeakReference);
 
             return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
         }
 
-        private IEnumerable<ILiteEventHandler> GetExistingHandlers(string eventKey, ICollection<WeakReference<ILiteEventHandler>> handlersForEventType)
+        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, IEnumerable<LiteEventRegistryEntity> handlersForEventType)
         {
-            var registeredHandlers = handlersForEventType.ToList();
+            ILiteEventHandler handlerFromWeakReference;
 
-            foreach (var weakReference in registeredHandlers)
-            {
-                ILiteEventHandler handlerFromWeakReferance;
-
-                if (weakReference.TryGetTarget(out handlerFromWeakReferance))
-                {
-                    yield return handlerFromWeakReferance;
-                }
-                else
-                {
-                    this.handlers[eventKey].Remove(weakReference);
-                }
-            }
-        }
-
-        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, IEnumerable<WeakReference<ILiteEventHandler>> handlersForEventType)
-        {
-            ILiteEventHandler handlerFromWeakReferance;
-
-            return handlersForEventType.Any(h => h.TryGetTarget(out handlerFromWeakReferance) && handlerFromWeakReferance == handler);
+            return handlersForEventType.Any(h => h.EventHandler.TryGetTarget(out handlerFromWeakReference) && handlerFromWeakReference == handler);
         }
 
         private static Action<object> GetActionHandler(ILiteEventHandler handler)
         {
-            return @event => ((dynamic)handler).Handle((dynamic)@event);
+            return @event =>
+            {
+                var payload = ((CommittedEvent)@event).Payload;
+                var eventType = payload.GetType();
+                var handlerType = handler.GetType();
+
+                if (handlerType.GetMethod("Handle", new[] {eventType}) != null)
+                    ((dynamic) handler).Handle((dynamic) payload);
+
+                var publishedEventInterfaceType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
+                var methodInfoForPublishedEvent = handlerType.GetMethod("Handle", new[] { publishedEventInterfaceType });
+                if (methodInfoForPublishedEvent != null)
+                {
+                    var publishedEventType = typeof(PublishedEvent<>).MakeGenericType(eventType);
+                    var publishedEvent = Activator.CreateInstance(publishedEventType, @event);
+                    methodInfoForPublishedEvent.Invoke(handler, new [] { publishedEvent });
+                }
+            };
         }
 
         private static Type[] GetHandledEventTypes(ILiteEventHandler handler)
@@ -148,7 +168,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 .GetType()
                 .GetTypeInfo()
                 .ImplementedInterfaces
-                .Where(IsEventHandlerInterface)
+                .Where(type => IsEventHandlerInterface(type) || IsPublishedEventHandlerInterface(type))
                 .Select(GetEventType)
                 .ToArray();
         }
@@ -161,6 +181,10 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         private static bool IsEventHandlerInterface(Type type)
         {
             return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(ILiteEventHandler<>);
+        }
+        private static bool IsPublishedEventHandlerInterface(Type type)
+        {
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(ILitePublishedEventHandler<>);
         }
     }
 }

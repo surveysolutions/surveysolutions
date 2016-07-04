@@ -27,13 +27,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interviewExpressionStateMock = new Mock<ILatestInterviewExpressionState>();
             interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
-
+            var structuralChanges = new StructuralChanges();
+            interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
             IPlainQuestionnaireRepository questionnaireRepository =
-                Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.QuestionnaireIdentity(questionnaireId, 1),
-                    Create.QuestionnaireDocument(id: questionnaireId, children: new[]
+                Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
+                    Create.Entity.QuestionnaireDocument(id: questionnaireId, children: new[]
                     {
-                        Create.StaticText(publicKey: staticTextId)
+                        Create.Entity.StaticText(publicKey: staticTextId)
                     }));
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
@@ -43,11 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
-                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
-                    disabledStaticTexts: new List<Identity>() {Create.Identity(staticTextId, RosterVector.Empty)}
+                    disabledStaticTexts: new List<Identity>() {Create.Entity.Identity(staticTextId, RosterVector.Empty)}
                     );
 
             eventContext = new EventContext();
@@ -70,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 x =>
                     x.DisableStaticTexts(
                         Moq.It.Is<IEnumerable<Identity>>(
-                            s => s.Count() == 1 && s.First() == Create.Identity(staticTextId, RosterVector.Empty))),
+                            s => s.Count() == 1 && s.First() == Create.Entity.Identity(staticTextId, RosterVector.Empty))),
                 Times.Once);
 
 

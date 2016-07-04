@@ -33,28 +33,28 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Create.Option(text: "parent option 1", value: "1"),
-                        Create.Option(text: "parent option 2", value: "2")
+                        Create.Option(value: "1", text: "parent option 1"),
+                        Create.Option(value: "2", text: "parent option 2")
                     }),
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                                  {
-                                     Create.Option(text: "child 1 for parent option 1", value: "1.1", parentValue: "1"),
-                                     Create.Option(text: "child 2 for parent option 1", value: "1.2", parentValue: "1"),
-                                     Create.Option(text: "child 1 for parent option 2", value: "2.1", parentValue: "2"),
-                                     Create.Option(text: "child 2 for parent option 2", value: "2.1", parentValue: "2"),
+                                     Create.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
+                                     Create.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
+                                     Create.Option(value: "2.1", text: "child 1 for parent option 2", parentValue: "2"),
+                                     Create.Option(value: "2.1", text: "child 2 for parent option 2", parentValue: "2"),
                                  }),
                     Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                                  {
-                                     Create.Option(text: "grand child 1 for parent option 1.1", value: "11.1", parentValue: "1.1"),
-                                     Create.Option(text: "grand child 2 for parent option 1.1", value: "11.2", parentValue: "1.1"),
-                                     Create.Option(text: "grand child 3 for parent option 1.2", value: "12.1", parentValue: "1.2"),
-                                     Create.Option(text: "grand child 4 for parent option 1.2", value: "12.2", parentValue: "1.2"),
-                                     Create.Option(text: "grand child 1 for parent option 2.1", value: "21.1", parentValue: "2.1"),
-                                     Create.Option(text: "grand child 2 for parent option 2.1", value: "21.2", parentValue: "2.1"),
-                                     Create.Option(text: "grand child 3 for parent option 2.2", value: "22.1", parentValue: "2.2"),
-                                     Create.Option(text: "grand child 4 for parent option 2.2", value: "22.2", parentValue: "2.2"),
+                                     Create.Option(value: "11.1", text: "grand child 1 for parent option 1.1", parentValue: "1.1"),
+                                     Create.Option(value: "11.2", text: "grand child 2 for parent option 1.1", parentValue: "1.1"),
+                                     Create.Option(value: "12.1", text: "grand child 3 for parent option 1.2", parentValue: "1.2"),
+                                     Create.Option(value: "12.2", text: "grand child 4 for parent option 1.2", parentValue: "1.2"),
+                                     Create.Option(value: "21.1", text: "grand child 1 for parent option 2.1", parentValue: "2.1"),
+                                     Create.Option(value: "21.2", text: "grand child 2 for parent option 2.1", parentValue: "2.1"),
+                                     Create.Option(value: "22.1", text: "grand child 3 for parent option 2.2", parentValue: "2.2"),
+                                     Create.Option(value: "22.2", text: "grand child 4 for parent option 2.2", parentValue: "2.2"),
                                  })
                     );
 
@@ -99,7 +99,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

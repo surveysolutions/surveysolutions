@@ -41,10 +41,15 @@
       <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Documents\AbstractQuestion.cs" />
     <Compile Include="Documents\Answer.cs" />
+    <Compile Include="Documents\AnswerExtentions.cs" />
     <Compile Include="Documents\Attachment.cs" />
     <Compile Include="Documents\CompositeException.cs" />
     <Compile Include="Documents\Constants.cs" />
@@ -52,6 +57,7 @@
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
     <Compile Include="Documents\IComposite.cs" />
+    <Compile Include="Documents\ICompositeExtensions.cs" />
     <Compile Include="Documents\IValidatable.cs" />
     <Compile Include="Documents\IConditional.cs" />
     <Compile Include="Documents\IGroup.cs" />

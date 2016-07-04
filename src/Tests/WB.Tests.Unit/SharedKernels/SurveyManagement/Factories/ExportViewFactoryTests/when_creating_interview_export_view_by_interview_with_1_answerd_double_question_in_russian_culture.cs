@@ -3,9 +3,9 @@ using System.Globalization;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using System.Threading;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -16,11 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             dateTimeQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             interviewData =
-                Create.InterviewData(Create.InterviewQuestion(questionId: dateTimeQuestionId,
+                Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId: dateTimeQuestionId,
                     answer: value));
 
             questionnaireDocument =
-                Create.QuestionnaireDocument(children: Create.NumericRealQuestion(id: dateTimeQuestionId, variable: "real"));
+                Create.Entity.QuestionnaireDocument(children: Create.Entity.NumericRealQuestion(id: dateTimeQuestionId, variable: "real"));
 
             exportViewFactory = CreateExportViewFactory();
         };

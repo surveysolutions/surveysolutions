@@ -25,14 +25,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-            dashboardItem = Create.InterviewView();
+            dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
             dashboardItem.GpsLocation = new InterviewGpsLocationView
             {
               PrefilledQuestionId  = gpsQuestionId
             };
 
-            @event = Create.Event.GeoLocationQuestionAnswered(Create.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
+            @event = Create.Event.GeoLocationQuestionAnswered(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
 
             var storeAsyncTask = new Task(()=> {});
             storeAsyncTask.Start();
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
                 r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_set_GPS_location_longitude_to_answered_value = () =>
             dashboardItem.GpsLocation.Coordinates.Longitude.ShouldEqual(answerLongitude);
 
-        private static InterviewEventHandler denormalizer;
+        private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;
         private static InterviewView dashboardItem;
         private static double answerLatitude = 10;

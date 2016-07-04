@@ -36,12 +36,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Group(sectionId, "Section", children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true,
-                            answers: new List<Answer>
+                            options: new List<Answer>
                             {
-                                Create.Option(text: "A", value: "10"),
-                                Create.Option(text: "B", value: "20"),
-                                Create.Option(text: "C", value: "30"),
-                                Create.Option(text: "D", value: "40")
+                                Create.Option(value: "10", text: "A"),
+                                Create.Option(value: "20", text: "B"),
+                                Create.Option(value: "30", text: "C"),
+                                Create.Option(value: "40", text: "D")
                             }),
                         Create.Roster(
                             id: roster1Id,
@@ -102,7 +102,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

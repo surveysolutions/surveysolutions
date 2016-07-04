@@ -9,12 +9,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -33,21 +32,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
-            var variable = Create.Variable(variableName: "va", type: VariableType.String);
+            var variable = Create.Entity.Variable(variableName: "va", type: VariableType.String);
             //interviewVariables = new InterviewVariables();
 
-            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(0))] =
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(0))] =
             //    "nastya0";
-            //interviewVariables.VariableValues[Create.InterviewItemId(variable.PublicKey, Create.RosterVector(1))] =
+            //interviewVariables.VariableValues[Create.Other.InterviewItemId(variable.PublicKey, Create.Other.RosterVector(1))] =
             //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = parentRosterId,
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "1", "2" },
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.Entity.FixedRoster(rosterId: parentRosterId,
+                    fixedTitles: new[] {"1", "2"},
+                    children: new IComposite[]
                     {
                         variable,
                         new NumericQuestion()
@@ -56,13 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "var_source"
                         },
-                        new Group()
-                        {
-                            PublicKey = nestedRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" },
-                            Children = new List<IComposite>()
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId,
+                            fixedTitles: new[] {"a", "b"},
+                            children: new IComposite[]
                             {
                                 new NumericQuestion()
                                 {
@@ -71,10 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                     QuestionText = "test %var_source% %va%",
                                     StataExportCaption = "var"
                                 }
-                            }
-                        }
-                    }
-                });
+                            })
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

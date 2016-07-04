@@ -3,10 +3,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -73,6 +74,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(new UserEditModel
             {
+                UserName = user.UserName,
                 Id = user.PublicKey,
                 Email = user.Email,
                 IsLocked = user.IsLockedByHQ

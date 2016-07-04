@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             var questionnaire = Mock.Of<IQuestionnaire>(_ => _.GetAllSections() == listOfSections);
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
-            viewModel.Init("", "", navigationState);
+            viewModel.Init("", Create.Entity.QuestionnaireIdentity(), navigationState);
 
             firstSelectedSection = viewModel.Sections[0];
             secondSection = viewModel.Sections[1];

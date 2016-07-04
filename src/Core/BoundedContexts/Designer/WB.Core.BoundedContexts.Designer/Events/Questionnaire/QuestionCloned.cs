@@ -45,10 +45,11 @@ namespace Main.Core.Events.Questionnaire
             int? maxAnswerCount,
             int? countOfDecimalPlaces,
             IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression) 
+            string linkedFilterExpression,
+            bool isTimestamp) 
             : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox,
-                  cascadeFromQuestionId, validationConditions, linkedFilterExpression) 
+                  cascadeFromQuestionId, validationConditions, linkedFilterExpression, isTimestamp) 
         {
             this.SourceQuestionnaireId = sourceQuestionnaireId;
             this.SourceQuestionId = sourceQuestionId;

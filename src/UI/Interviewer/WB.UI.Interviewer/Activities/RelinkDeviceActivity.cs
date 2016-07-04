@@ -13,14 +13,8 @@ namespace WB.UI.Interviewer.Activities
         NoHistory = true)]
     public class RelinkDeviceActivity : BaseActivity<RelinkDeviceViewModel>
     {
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.relink; }
-        }
-        public override async void OnBackPressed()
-        {
-            await this.ViewModel.NavigateToPreviousViewModelAsync();
-        }
+        protected override int ViewResourceId => Resource.Layout.relink;
+        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModel();
 
         protected override void OnCreate(Bundle bundle)
         {

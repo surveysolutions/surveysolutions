@@ -1,5 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
+using System.Web.Http.Controllers;
 using System.Web.Http.ExceptionHandling;
+using System.Web.Http.Routing;
 using Elmah.Contrib.WebApi;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.UI.Designer.Code;
@@ -8,6 +11,36 @@ using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer
 {
+    public class CentralizedPrefixProvider : DefaultDirectRouteProvider
+    {
+        private readonly string _centralizedPrefix;
+
+        private static readonly string[] versionedNamespaces = new string[]
+            {
+                typeof(WB.UI.Designer.Api.Headquarters.ImportV2Controller).Namespace,
+                typeof(WB.UI.Designer.Api.Tester.QuestionnairesController).Namespace
+            };
+
+        public CentralizedPrefixProvider(string centralizedPrefix)
+        {
+            _centralizedPrefix = centralizedPrefix;
+        }
+
+        protected override string GetRoutePrefix(HttpControllerDescriptor controllerDescriptor)
+        {
+            var existingPrefix = base.GetRoutePrefix(controllerDescriptor);
+
+            if (versionedNamespaces.Contains(controllerDescriptor.ControllerType.Namespace))
+            {
+                if (existingPrefix == null) return _centralizedPrefix;
+
+                return $"{this._centralizedPrefix}/{existingPrefix}";
+            }
+
+            return existingPrefix;
+        }
+    }
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -24,7 +57,7 @@ namespace WB.UI.Designer
 
             config.MessageHandlers.Add(new DecompressionHandler());
 
-            config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes(new CentralizedPrefixProvider("api/v{version:int}"));
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",

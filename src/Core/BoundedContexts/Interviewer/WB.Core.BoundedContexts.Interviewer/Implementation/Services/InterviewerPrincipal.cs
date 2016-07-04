@@ -36,10 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.IsAuthenticated;
         }
 
-        public Task SignOutAsync()
-        {
-            this.currentUserIdentity = null;
-            return Task.FromResult(true);
-        }
+        public void SignOut()=> this.currentUserIdentity = null;
     }
 }

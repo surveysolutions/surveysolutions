@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         {
             downloadedQuestionnaire = new Questionnaire
             {
-                Document = Create.QuestionnaireDocumentWithAttachments(attachments: new[]
+                Document = Create.Entity.QuestionnaireDocumentWithAttachments(attachments: new[]
                 {
-                    Create.Attachment("1"),
-                    Create.Attachment("5"),
-                    Create.Attachment("2"),
+                    Create.Entity.Attachment("1"),
+                    Create.Entity.Attachment("5"),
+                    Create.Entity.Attachment("2"),
                 }),
                 Assembly = "assembly"
             };
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 .Returns(Task.FromResult(downloadedQuestionnaire));
             mockOfDesignerApiService
                 .Setup(_ => _.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(Create.Enumerator_AttachmentContent("1")));
+                .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1")));
             mockOfDesignerApiService
                 .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(Create.Enumerator_AttachmentContent("2")));
+                .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("2")));
 
 
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,
@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<ICommand>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         It should_be_navigated_to_prefilled_questions_view_model = () => 
-            mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestionsAsync(Moq.It.IsAny<string>()), Times.Once);
+            mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
         
         private static DashboardViewModel viewModel;
         private static Questionnaire downloadedQuestionnaire;

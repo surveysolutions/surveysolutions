@@ -124,11 +124,8 @@
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
 
-                @if (LegacyOptions.SupervisorFunctionsEnabled)
-                {
-                    <text>|</text>
-                    <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
-                }
+                <text>|</text>
+                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
 
             </div>
         </footer>

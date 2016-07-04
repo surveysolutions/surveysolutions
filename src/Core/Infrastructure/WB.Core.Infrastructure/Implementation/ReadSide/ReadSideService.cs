@@ -455,9 +455,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         this.transactionManagerProviderManager.UnpinTransactionManager();
                         this.DisableWritersCacheForHandlers(handlers);
                         this.plainTransactionManagerProvider.UnpinTransactionManager();
-
-                        if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
-                            this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
                     }
 
                     if (!isPartialRebuild)

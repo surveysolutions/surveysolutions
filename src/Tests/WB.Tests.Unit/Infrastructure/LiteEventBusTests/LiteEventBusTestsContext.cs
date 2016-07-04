@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         protected static CommittedEventStream BuildReadyToBePublishedStream(Guid eventSourceId, IEvent @event)
         {
             return new CommittedEventStream(eventSourceId,
-                Create.CommittedEvent(eventSourceId: eventSourceId, payload: @event));
+                Create.Other.CommittedEvent(eventSourceId: eventSourceId, payload: @event));
         }
     }
 }

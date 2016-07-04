@@ -22,20 +22,20 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
             linkedQuestionId = Guid.Parse("33222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
-                children: new IComposite[]
-                {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            {
+                Create.ListQuestion(id: rosterSizeQuestionId, variable: "txt"),
+                Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
+                Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
+            });
 
-                    Create.ListQuestion(id: rosterSizeQuestionId, variable: "txt"),
-                    Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
-                    Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
-                });
-
-            interview = SetupInterview(questionnaireDocument: questionnaire);
-            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0],
-                DateTime.Now, new[] {new Tuple<decimal, string>(0, "a"), new Tuple<decimal, string>(1, "b") });
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
-                new decimal[] { 0 });
+            interview = SetupInterview(questionnaire);
+            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[]
+            {
+                new Tuple<decimal, string>(0, "a"),
+                new Tuple<decimal, string>(1, "b")
+            });
+            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] { 0 });
             eventContext = new EventContext();
         };
 

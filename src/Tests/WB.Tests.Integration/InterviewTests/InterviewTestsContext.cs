@@ -9,19 +9,17 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V6;
-using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
@@ -117,7 +115,10 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
+        protected static Interview SetupInterview(
+            QuestionnaireDocument questionnaireDocument, 
+            IEnumerable<object> events = null, 
+            ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -125,7 +126,7 @@ namespace WB.Tests.Integration.InterviewTests
                 =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
                     repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -137,6 +138,14 @@ namespace WB.Tests.Integration.InterviewTests
             ApplyAllEvents(interview, events);
 
             return interview;
+        }
+
+        private static ILatestInterviewExpressionState GetLatestInterviewExpressionState(
+            QuestionnaireDocument questionnaireDocument, 
+            ILatestInterviewExpressionState precompiledState = null)
+        {
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+            return state;
         }
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
@@ -173,6 +182,13 @@ namespace WB.Tests.Integration.InterviewTests
         {
             return events.Select(evnt => evnt.Payload).OfType<T>();
         }
+
+        protected static RosterVector[] GetChangedOptions(EventContext eventContext, Guid questionId, RosterVector rosterVector) => 
+            eventContext
+                .GetSingleEvent<LinkedOptionsChanged>()
+                .ChangedLinkedQuestions
+                .SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(questionId, rosterVector)))
+                ?.Options;
 
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
             where T : class

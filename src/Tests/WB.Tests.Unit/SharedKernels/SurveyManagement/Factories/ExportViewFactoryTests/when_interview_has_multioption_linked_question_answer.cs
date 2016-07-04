@@ -4,8 +4,8 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -16,21 +16,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             linkedSourceQuestionId = Guid.NewGuid();
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), 
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.Roster(rosterId: Guid.NewGuid(), 
                               variable: "row", 
                               fixedTitles: new[] { "1", "2" },
                               children: new[] {
-                                  Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                                  Create.Entity.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
                               }),
-                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.Entity.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.InterviewData(Create.InterviewQuestion(multyOptionLinkedQuestionId, new[] { 2 }));
+            interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(multyOptionLinkedQuestionId, new[] { 2 }));
         };
 
         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);

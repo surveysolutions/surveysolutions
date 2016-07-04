@@ -91,11 +91,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     UserId = person.Id,
                     Name = accountsDocumentReader.GetById(person.Id)?.UserName,
                     Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.Id)?.Date
-                }),
+                }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
+                QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList()
             };
@@ -103,7 +104,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             pdfView.FillStatistics(allItems, pdfView.Statistics);
             pdfView.Statistics.SectionsCount = questionnaire.Children.Count;
             pdfView.Statistics.GroupsCount -= pdfView.Statistics.SectionsCount;
-            pdfView.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
+            pdfView.Statistics.QuestionsWithEnablingConditionsCount = Find<IQuestion>(allItems, x => !string.IsNullOrWhiteSpace(x.ConditionExpression)).Count();
+            pdfView.Statistics.QuestionsWithValidationConditionsCount = Find<IQuestion>(allItems, x => x.ValidationConditions.Any()).Count();
+            
             return pdfView;
         }
 

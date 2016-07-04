@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
         }
 
-        public override async Task StartAsync()
+        public override void Load()
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             interview = this.interviewRepository.Get(interviewId);
@@ -83,11 +83,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .ToList();
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
-            this.Sections.Init(interview.QuestionnaireId, interviewId, this.navigationState);
+            this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
+            this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
                 var completeInterviewViewModel = interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId);
+                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
                 return completeInterviewViewModel;
             }
             else

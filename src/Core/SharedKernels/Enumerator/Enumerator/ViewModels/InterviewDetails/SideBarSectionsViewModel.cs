@@ -51,8 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
-        public void Init(string questionnaireId,
-            string interviewId,
+        public void Init(string interviewId,
+            QuestionnaireIdentity questionnaireId,
             NavigationState navigationState)
         {
             if (navigationState == null) throw new ArgumentNullException("navigationState");
@@ -61,14 +61,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
 
             this.interviewId = interviewId;
-
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            this.questionnaireId = interview.QuestionnaireIdentity;
-            this.interviewId = interviewId;
-
+            this.questionnaireId = questionnaireId;
+            
             this.BuildSectionsList();
         }
 
@@ -287,7 +284,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
         }
     }

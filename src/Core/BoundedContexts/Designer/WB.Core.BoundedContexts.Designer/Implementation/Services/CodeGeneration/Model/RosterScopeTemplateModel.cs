@@ -1,20 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public class RosterScopeTemplateModel
     {
-        public RosterScopeTemplateModel(
-            string typeName, 
-            List<QuestionTemplateModel> questions, 
-            List<StaticTextTemplateModel> staticTexts, 
-            List<GroupTemplateModel> groups, 
-            List<RosterTemplateModel> rosters, 
-            List<RosterTemplateModel> rostersInScope, 
-            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder,
-            List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions,
-            List<VariableTemplateModel> variables)
+        public RosterScopeTemplateModel(string typeName, List<QuestionTemplateModel> questions, 
+            List<StaticTextTemplateModel> staticTexts, List<GroupTemplateModel> groups, 
+            List<RosterTemplateModel> rosters, List<RosterTemplateModel> rostersInScope, 
+            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder, 
+            List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions, 
+            List<VariableTemplateModel> variables,
+            List<string> linkedQuestionsIdNames)
         {
+            this.LinkedQuestionsIdNames = linkedQuestionsIdNames;
             TypeName = typeName;
             Questions = questions;
             StaticTexts = staticTexts;
@@ -30,6 +29,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string TypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
+
+        public List<QuestionTemplateModel> QuestionsWithOptionsFilter => Questions.Where(x => x.HasOptionsFilter).ToList();
 
         public List<StaticTextTemplateModel> StaticTexts { get; set; }
 
@@ -52,5 +53,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> RostersInScope { set; get; }
 
         public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
+
+        public List<string> LinkedQuestionsIdNames { get; }
+
+        public string IdName => RostersInScope.FirstOrDefault()?.IdName;
     }
 }

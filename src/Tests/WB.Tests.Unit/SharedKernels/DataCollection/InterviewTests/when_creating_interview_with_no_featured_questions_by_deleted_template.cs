@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            interview = Create.Interview();
+            interview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => exception = Catch.Exception(() =>

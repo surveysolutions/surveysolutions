@@ -2,7 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
 
 namespace WB.Tests.Integration
 {

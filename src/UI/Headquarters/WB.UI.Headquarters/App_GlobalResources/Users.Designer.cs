@@ -187,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creation date.
+        ///   Looks up a localized string similar to Account creation date.
         /// </summary>
         internal static string CreationDate {
             get {
@@ -232,11 +232,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date when the headquarter account was created.
+        /// </summary>
+        internal static string HeadquarterAccountCreationDate {
+            get {
+                return ResourceManager.GetString("HeadquarterAccountCreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         internal static string Headquarters {
             get {
                 return ResourceManager.GetString("Headquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headquarter&apos;s email.
+        /// </summary>
+        internal static string HeadquartersEmail {
+            get {
+                return ResourceManager.GetString("HeadquartersEmail", resourceCulture);
             }
         }
         
@@ -286,11 +304,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of interviewers who has not successfully synchronized their tablets to the server yet.
+        /// </summary>
+        internal static string NotLinkedToDeviceTitle {
+            get {
+                return ResourceManager.GetString("NotLinkedToDeviceTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviewers in the team.
+        /// </summary>
+        internal static string NumberOfInterviewersInTeam {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewersInTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Observer.
         /// </summary>
         internal static string Observer {
             get {
                 return ResourceManager.GetString("Observer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date when the observer account was created.
+        /// </summary>
+        internal static string ObserverAccountCreationDateTooltip {
+            get {
+                return ResourceManager.GetString("ObserverAccountCreationDateTooltip", resourceCulture);
             }
         }
         
@@ -313,11 +358,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observer&apos;s email.
+        /// </summary>
+        internal static string ObserversEmail {
+            get {
+                return ResourceManager.GetString("ObserversEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         internal static string Supervisor {
             get {
                 return ResourceManager.GetString("Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date when the supervisor account was created.
+        /// </summary>
+        internal static string SupervisorAccountCreationDate {
+            get {
+                return ResourceManager.GetString("SupervisorAccountCreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor&apos;s email.
+        /// </summary>
+        internal static string SupervisorEmail {
+            get {
+                return ResourceManager.GetString("SupervisorEmail", resourceCulture);
             }
         }
         
@@ -340,7 +412,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Please try again later.
+        /// </summary>
+        internal static string TryLater {
+            get {
+                return ResourceManager.GetString("TryLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login name.
         /// </summary>
         internal static string UserName {
             get {

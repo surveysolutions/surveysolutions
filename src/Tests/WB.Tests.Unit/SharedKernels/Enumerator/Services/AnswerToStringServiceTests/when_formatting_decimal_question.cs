@@ -17,13 +17,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             cultureChange = new ChangeCurrentCulture(cultureInfo);
 
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionnaire = Create.PlainQuestionnaire(
-                Create.QuestionnaireDocumentWithOneChapter(Create.NumericRealQuestion(id: questionId, useFomatting: true)));
+            questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.NumericRealQuestion(id: questionId, useFomatting: true)));
             service = CreateAnswerToStringService();
 
-            answer = Create.Answers.RealNumericAnswer(Create.Identity(questionId, RosterVector.Empty), answer: 1234.42256m);
+            answer = Create.Entity.RealNumericAnswer(Create.Entity.Identity(questionId, RosterVector.Empty), answer: 1234.42256m);
 
-            statefulInterview = Create.StatefulInterview(questionnaire: questionnaire);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
         };
 
         Because of = () => stringAnswer = service.AnswerToUIString(questionId, answer, statefulInterview, questionnaire);

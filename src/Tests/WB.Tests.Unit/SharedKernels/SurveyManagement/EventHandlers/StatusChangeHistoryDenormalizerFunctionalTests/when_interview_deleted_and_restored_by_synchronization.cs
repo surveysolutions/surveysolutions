@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -25,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         Because of = () =>
         {
             viewModel = denormalizerFunctional.Update(viewModel,
-                Create.InterviewDeletedEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
+                Create.PublishedEvent.InterviewDeleted(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
             viewModel = denormalizerFunctional.Update(viewModel,
-                Create.InterviewRestoredEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
+                Create.PublishedEvent.InterviewRestored(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
         };
 
         It should_not_add_sync_related_status_to_history = () => viewModel.InterviewCommentedStatuses.ShouldBeEmpty();

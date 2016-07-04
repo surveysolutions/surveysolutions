@@ -18,6 +18,8 @@
 
   <color name="emptyOptionsText">#a5a5a5</color>
   
+  <color name="recordedAnswerText">#000000</color>
+  
   <color name="editorTextColor">#FF3F3F3F</color>
   <color name="editorAnsweredBorder">#D0D0D0</color>
   <color name="editorHintTextColor">#FFB2B2B2</color>

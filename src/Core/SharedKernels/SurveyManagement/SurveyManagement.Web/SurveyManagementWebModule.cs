@@ -15,19 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
     {
         public override void Load()
         {
-            this.BindFilter<TransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
-                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-
-            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-
-            //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
-            this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
-            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
+           
         }
     }
 }

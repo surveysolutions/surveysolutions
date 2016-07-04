@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public class QuestionnaireStatistics : GroupStatistics
         {
             public int SectionsCount { get; set; } = 0;
-            public int QuestionsWithConditionsCount { get; set; } = 0;
+            public int QuestionsWithEnablingConditionsCount { get; set; } = 0;
+            public int QuestionsWithValidationConditionsCount { get; set; } = 0;
         }
 
         public class EntityWithLongCondition
@@ -75,6 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; }
+
+        public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; }
 
         public List<EntityWithLongValidation> ItemsWithLongValidations { get; internal set; }
 
@@ -185,6 +188,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool QuestionHasEnablementCondition(IQuestion question) => !string.IsNullOrWhiteSpace(question.ConditionExpression);
 
+        public bool QuestionHasOptionsFilter(IQuestion question) => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) || !string.IsNullOrWhiteSpace(question.LinkedFilterExpression);
+
         public bool GroupHasEnablementCondition(IGroup group) => !string.IsNullOrWhiteSpace(@group.ConditionExpression);
 
         public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
@@ -268,7 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     var isInteger = (question as NumericQuestion)?.IsInteger ?? false;
                     return "numeric: " + (isInteger ? "integer" : "decimal");
                 case QuestionType.DateTime:
-                    return "date: MM/DD/YYYY";
+                    var isTimestamp = (question as DateTimeQuestion)?.IsTimestamp ?? false;
+                    return isTimestamp ? "date: current time" : "date";
                 case QuestionType.GpsCoordinates:
                     return "GPS";
                 case QuestionType.Text:
@@ -284,6 +290,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
+        public string GetFormattedVariableType(IVariable variable)
+        {
+            switch (variable.Type)
+            {
+                case VariableType.String:
+                    return "string";
+                case VariableType.Boolean:
+                    return "boolean";
+                case VariableType.DateTime:
+                    return "datetime";
+                case VariableType.Double:
+                    return "double";
+                case VariableType.LongInteger:
+                    return "long";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public string GetQuestionOptionsFilter(IQuestion question)
+        {
+            return string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) ? question.LinkedFilterExpression : question.Properties.OptionsFilterExpression;
+        }
+
         private string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
         {
             var maxValue = values.Select(x => Math.Floor(Math.Log10(Math.Abs(x)) + 1)).Max();
@@ -294,11 +324,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public string GetQuestionInstructionExcerpt(IQuestion question) =>
             question.Instructions.Substring(0, Math.Min(this.Settings.InstructionsExcerptLength, question.Instructions.Length));
 
+        public string GetQuestionOptionsFilterExcerpt(IQuestion question) =>
+            GetQuestionOptionsFilter(question).Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, GetQuestionOptionsFilter(question).Length));
+
+        public string GetLinkedQuestionFilterExcerpt(IQuestion question) =>
+            question.LinkedFilterExpression.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, question.LinkedFilterExpression.Length));
+
         public string GetVariableExpressionExcerpt(IVariable variable) =>
             variable.Expression?.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, variable.Expression.Length));
 
         public bool InstructionIsTooLong(IQuestion question) =>
             question.Instructions?.Length > this.Settings.InstructionsExcerptLength;
+
+        public bool OptionsFilterIsTooLong(IQuestion question) =>
+            question.Properties.OptionsFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength || question.LinkedFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength;
 
         public bool VariableExpressionIsTooLong(IVariable variable) =>
             variable.Expression?.Length > this.Settings.VariableExpressionExcerptLength;
@@ -316,6 +355,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     var question = Find<IQuestion>(entityId);
                     return  QuestionsWithLongInstructions.IndexOf(question) + 1;
                 }
+                case "F":
+                    {
+                        var question = Find<IQuestion>(entityId);
+                        return QuestionsWithLongOptionsFilterExpression.IndexOf(question) + 1;
+                    }
                 case "O":
                 {
                     var question = Find<IQuestion>(entityId);
@@ -332,7 +376,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool ExpressionIsTooLong(string expression) => expression?.Length > this.Settings.ExpressionExcerptLength;
 
         public string GetExpressionExcerpt(string expression) => expression?.Substring(0, Math.Min(this.Settings.ExpressionExcerptLength, expression.Length)) ?? string.Empty;
+
         public string GetInstructionsRef(Guid id) => $"instructions-{id.FormatGuid()}";
+
+        public string GetOptionsFilterRef(Guid id) => $"options-filter-{id.FormatGuid()}";
 
         public string GetConditionRef(Guid id) => $"condition-{id.FormatGuid()}";
 
@@ -367,6 +414,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
         public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;
+        public bool IsOptionsFilterAppendixEmpty => QuestionsWithLongOptionsFilterExpression.Count == 0;
         public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
 
@@ -375,5 +423,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char InstructionsAppendixIndex => IsValidationsAppendixEmpty ? ValidationsAppendixIndex : (char)(ValidationsAppendixIndex + 1);
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
+        public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
     }
 }

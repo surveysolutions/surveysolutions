@@ -13,10 +13,17 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit
 {
-    internal static class Stub<T>
-        where T : class
+    internal static class Stub<TInterface>
+        where TInterface : class
     {
-        public static T WithNotEmptyValues => new Mock<T> { DefaultValue = DefaultValue.Mock }.Object;
+        public static TInterface WithNotEmptyValues => new Mock<TInterface> { DefaultValue = DefaultValue.Mock }.Object;
+
+        public static TInterface Returning<TValue>(TValue value)
+        {
+            var mock = new Mock<TInterface>();
+            mock.SetReturnsDefault(value);
+            return mock.Object;
+        }
     }
 
     internal class Stub
@@ -40,13 +47,15 @@ namespace WB.Tests.Unit
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
-            var sideBarSectionViewModel = new SideBarSectionViewModel(Mock.Of<IStatefulInterviewRepository>(),
+            var sideBarSectionViewModel = new SideBarSectionViewModel(
+                Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Create.SubstitutionService(),
-                Create.LiteEventRegistry(),
+                Create.Service.SubstitutionService(),
+                Create.Service.LiteEventRegistry(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
-                Mock.Of<IMvxMessenger>());
-            sideBarSectionViewModel.NavigationState = Create.NavigationState();
+                Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel());
+            sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;
         }

@@ -22,13 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
             linkedQuestionId = Guid.Parse("33222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
 
-                    Create.TextListQuestion(questionId: rosterSizeQuestionId, variable: "txt"),
-                    Create.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
-                    Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
+                    Create.Entity.TextListQuestion(questionId: rosterSizeQuestionId, variable: "txt"),
+                    Create.Entity.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
+                    Create.Entity.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

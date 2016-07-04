@@ -56,10 +56,12 @@
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\EventBusSettings.cs" />
-    <Compile Include="EventBus\Hybrid\Implementation\HybridEventBus.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEvent.cs" />
+    <Compile Include="EventBus\Lite\ILiteEventRaiseFilter.cs" />
+    <Compile Include="EventBus\Lite\Implementation\LiteEventRegistryEntity.cs" />
+    <Compile Include="EventBus\Lite\Implementation\RaiseFilters\AggregateRootRaiseFilter.cs" />
     <Compile Include="FileSystem\IAsynchronousFileSystemAccessor.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithCache.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventPosition.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\EventReadingProgress.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventsSlice.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />

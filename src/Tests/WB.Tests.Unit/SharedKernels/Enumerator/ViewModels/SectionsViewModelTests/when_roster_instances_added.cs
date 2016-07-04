@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
                 => _.GetAllSections() == listOfSections);
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
-            viewModel.Init("", "", Create.NavigationState());
+            viewModel.Init("", Create.Entity.QuestionnaireIdentity(), Create.Other.NavigationState());
             viewModel.Sections[0].SectionIdentity = new Identity(sectionId, Empty.RosterVector);
         };
 

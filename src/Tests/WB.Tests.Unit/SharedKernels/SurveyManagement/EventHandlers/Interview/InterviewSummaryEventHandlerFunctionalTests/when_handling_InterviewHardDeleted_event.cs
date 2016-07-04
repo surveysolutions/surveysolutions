@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            updatedModel = denormalizer.Update(viewModel, Create.InterviewHardDeletedEvent(userId: responsibleId));
+            updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewHardDeleted(userId: responsibleId));
 
         It should_updatedModel_be_marked_as_deleted = () =>
             updatedModel.IsDeleted.ShouldEqual(true);

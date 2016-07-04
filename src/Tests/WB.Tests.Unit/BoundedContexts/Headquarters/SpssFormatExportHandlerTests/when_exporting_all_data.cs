@@ -3,9 +3,9 @@ using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTests
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
             spssFormatExportHandler = CreateSpssFormatExportHandler(tabularFormatExportService: tabularFormatExportServiceMock.Object);
         };
 
-        Because of = () => spssFormatExportHandler.ExportData(Create.AllDataExportProcess());
+        Because of = () => spssFormatExportHandler.ExportData(Create.Entity.DataExportProcessDetails());
 
         It should_export_all_data =
             () =>

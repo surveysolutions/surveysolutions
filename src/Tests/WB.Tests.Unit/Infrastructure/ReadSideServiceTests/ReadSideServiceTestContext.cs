@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
                 postgresReadSideBootstraper ?? Mock.Of<IPostgresReadSideBootstraper>(),
                 transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                Create.ReadSideSettings(),
+                Create.Entity.ReadSideSettings(),
                 Mock.Of<IReadSideKeyValueStorage<ReadSideVersion>>());
         }
 

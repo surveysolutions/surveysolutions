@@ -2,11 +2,11 @@ using System;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.CumulativeChartDenormalizerTests
@@ -15,18 +15,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
     {
         Establish context = () =>
         {
-            @event = Create.Event.Published.InterviewStatusChanged(
+            @event = Create.PublishedEvent.InterviewStatusChanged(
                 interviewId: Guid.Parse(interviewStringId),
                 status: newStatus);
 
             var lastStatusesStorage = Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(_ =>
-                _.GetById(interviewStringId) == Create.LastInterviewStatus(lastStatus));
+                _.GetById(interviewStringId) == Create.Entity.LastInterviewStatus(lastStatus));
 
-            var interviewReferences = Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            var interviewReferences = Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
             var interviewReferencesStorage = Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(_ =>
                 _.GetById(interviewStringId) == interviewReferences);
 
-            denormalizer = Create.CumulativeChartDenormalizer(
+            denormalizer = Create.Service.CumulativeChartDenormalizer(
                 lastStatusesStorage: lastStatusesStorage,
                 cumulativeReportStatusChangeStorage: cumulativeReportStatusChangeStorageMock.Object,
                 interviewReferencesStorage: interviewReferencesStorage);

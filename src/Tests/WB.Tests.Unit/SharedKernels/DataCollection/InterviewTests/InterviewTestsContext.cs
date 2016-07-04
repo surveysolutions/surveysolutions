@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IPlainQuestionnaireRepository questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = Create.Interview(
+            var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider);
 
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             HashSet<InterviewItemId> validAnsweredQuestions = null, HashSet<InterviewItemId> invalidAnsweredQuestions = null,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null, bool? wasCompleted = false)
         {
-            return Create.InterviewSynchronizationDto(
+            return Create.Entity.InterviewSynchronizationDto(
                 interviewId: interviewId ?? new Guid("A1A1A1A1B1B1B1B1A1A1A1A1B1B1B1B1"),
                 status: status ?? InterviewStatus.RejectedBySupervisor,
                 userId: userId ?? new Guid("F111F111F111F111F111F111F111F111"),
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
-            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            return Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionaire);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)

@@ -15,6 +15,7 @@
         <locale>pt-PT</locale>
         <locale>ar</locale>
         <locale>zh-CN</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Properties\TesterUIResources.resx" nm="Dashboard_HaveNotBeenUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -29,6 +30,7 @@
             <li lc="ar" tx="لم يتم تحديث قائمة" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="la liste n'a pas été mise à jour" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="列表还未更新" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="តារាងមិនអាចធ្វើបច្ចុប្បន្នភាពបាន" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Dashboard_LastUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -43,6 +45,7 @@
             <li lc="ar" tx="قائمة تم تحديث {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="la liste a été mise à jour {0}" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="列表已更新{0}" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="តារាងបានធ្វើបច្ចុប្បន្នភាព {0}" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CheckConnectionToServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -57,6 +60,7 @@
             <li lc="ar" tx="الاتصال بالخادم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="En cours de se connecter au serveur" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="正在连接到服务器" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កំពង់ភ្ជាប់ទៅនឹងServer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CreateInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -71,6 +75,7 @@
             <li lc="ar" tx="إنشاء المقابلة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="En train de créer un entretien" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="正在创建调查" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កំពង់បង្កើតសម្ភាសន៍" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -85,6 +90,7 @@
             <li lc="ar" tx="تحميل الاستبيان-{0} %" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Téléchargement du questionnaire en cours - {0} %" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="正在下载调查问卷 - {0}%" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កម្រងសំនួរកំពង់ទាញយកបាន  {0}%" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_Forbidden" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -99,6 +105,7 @@
             <li lc="ar" tx="لا يمكن فتح الاستبيان &quot;{0}&quot;. حساب المستخدم الخاص بك مصمم غير مخول. الرجاء التحقق من اسم تسجيل الدخول وكلمة المرور." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="fr-FR" tx="Impossible d'ouvrir le questionnaire « {0} ». Votre compte d'utilisateur de Designer n'est pas autorisé à accéder à ce questionnaire. Veuillez vérifier votre login et mot de passe." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。您的Designer账户未获授权。请检查用户名和密码。" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="មិនអាចបើកកម្រងសំនួរ &quot;{0}&quot;។ គណនេយ្យរបស់អ្នកប្រើមិនអនុញ្ញាតិ។ សូមពិនិត្យការចុះឈ្មោះចូល និងលេខកូដ។​" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -113,6 +120,7 @@
             <li lc="ar" tx="لا يمكن فتح الاستبيان &quot;{0}&quot;. لا يمكن العثور على الاستبيان. الرجاء تحديث قائمة الاستبيانات." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire ne peut pas être retrouvé. Veuillez actualiser la liste des questionnaires." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。无法找到调查问卷。请刷新调查问卷列表。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="km" tx="មិនអាចបើកកម្រងសំនួរ &quot;{0}&quot;។ កម្រងសំនួរមិនអាចរកបាន។ សូមចុច Refresh ក្នុងតារាងកម្រងសំនួរ។​" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_PreconditionFailed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -127,6 +135,7 @@
             <li lc="ar" tx="لا يمكن فتح الاستبيان &quot;{0}&quot;. الاستبيان الذي يحتوي على أخطاء. الرجاء حل هذه المشكلة في &quot;مصمم&quot;." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire comporte des erreurs. Veuillez faire des corrections au questionnaire sur le site Designer." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。调查问卷有错误。请在Designer中修正。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="km" tx="មិនអាចបើកកម្រងសំនួរ  &quot;{0}&quot;។ កម្រងសំនួរមានខុស។ សូមកែនេះក្នុង Designer" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_StoreQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -141,6 +150,7 @@
             <li lc="ar" tx="حفظ الاستبيان للتخزين المحلي" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="En train de sauvegarder le questionnaire au stockage local" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="正在将调查问卷保存到本地" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="រក្សាទុកកម្រងសំនួរក្នុងកន្លែងstorage" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaireAttachments_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -148,6 +158,7 @@
             <li lc="nn-nn" tx="Downloading questionnaire attachments -  {0}%" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Скачиваем аттачмент - {0}%" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Đang tải bảng hỏi đính kèm - {0}%" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កំពង់ទាញយកកម្រងសំនួរឯកសារភ្ចាប់បាន  {0}%" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Login_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -162,6 +173,7 @@
             <li lc="ar" tx="تطبيق ويب مصمم ليس موجوداً في هذه اللحظة. التحقق من إعداد اتصال أو حاول مرة أخرى لاحقاً" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Le site Designer n'est pas accessible en ce moment. Veuillez vérifiez votre connexion ou réessayez plus tard" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="现在无法访问Designer网络应用程序。请检查连接设置或稍后再试。" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="គេហទំព័រស្មើសុំDesigner មិនអាចប្រើបានទេនៅពេលនេះ។ សូមពិនិត្យការភ្ជាប់ក្នុង ស៊ីងធីង ឬព្យាយាមម្តងទៀត" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Dashboard" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -176,6 +188,7 @@
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Questionnaires" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កម្រងសំនួរ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Settings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -190,6 +203,7 @@
             <li lc="ar" tx="إعدادات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Paramètres" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="设置" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ស៊ីតធីង" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_SignOut" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -204,6 +218,7 @@
             <li lc="ar" tx="قم بتسجيل الخروج" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Se déconnecter" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="注销" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ចាក់ចេញ" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -218,6 +233,7 @@
             <li lc="ar" tx="تعطيل التحقق من صحة شهادة SSL" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Désactiver la validation de certificat SSL" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="禁用SSL证书验证" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="មិនអាចបញ្ជាក់ដំណើរការSSL" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -232,6 +248,7 @@
             <li lc="ar" tx="قبول جميع شهادات SSL" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Accepter tous les certificats SSL" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="接受所有SSL证书" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ទទួលគ្រប់ការបញ្ជាក់ពីSSL" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_ConnectionSettings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -246,6 +263,7 @@
             <li lc="ar" tx="إعدادات الاتصال" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Paramètres de connexion" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="连接设置" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ស៊ីតធីង ការតភ្ជាប់" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -260,6 +278,7 @@
             <li lc="ar" tx="عنوان URL الذي يتم استخدامه للاتصال مع تطبيق مصمم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="URL utilisé pour communiquer avec application de Designer" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="与Designer应用程序通讯使用的网址" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="URL ប្រើដើម្បីទំនាក់ទំនងជាមួយអ្នកស្មើសុំdesigner" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -274,6 +293,7 @@
             <li lc="ar" tx="عنوان المصمم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="URL du site Designer" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="Designer网址" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="អ្នកdesign URL" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -288,6 +308,7 @@
             <li lc="ar" tx="عدد الثواني الانتظار للإحداثيات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Délai de réponse, en secondes, pour les coordonnées GPS" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="等待坐标的时间（秒）" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ចំនួនវិនាទីដើម្បីរង់ចាំការសម្របសម្រួល" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -302,6 +323,7 @@
             <li lc="ar" tx="مهلة &quot;الحصول على نظام تحديد المواقع&quot;" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Le délai de réponse du GPS a expiré" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="GPS接收超时" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ហួសពេលទទួល ជី ភី អេស" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -316,6 +338,7 @@
             <li lc="ar" tx="عدد الثواني الانتظار حتى استجابة الملقم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Délai de réponse, en secondes, pour le serveur" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="等待服务器响应的时间（秒）" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ចំនួនវិនាទីដើម្បីរង់ចាំការឆ្លើយតបទៅ Server" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -330,6 +353,7 @@
             <li lc="ar" tx="مهلة استجابة الملقم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Le délai de réponse du serveur a expiré" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="服务器响应超时" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="ហួសពេលឆ្លើយតបទៅ server" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionSummaryFormat" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -344,6 +368,7 @@
             <li lc="ar" tx="الإصدار: {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Version : {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="版本：{0}" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កំណែ {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -358,6 +383,7 @@
             <li lc="ar" tx="إصدار التطبيق" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Version de l'application" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="应用程序版本" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="កំណែការស្មើសុំ" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>

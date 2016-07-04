@@ -1,5 +1,4 @@
 using Android.App;
-using Android.Content;
 using Android.Views;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -12,13 +11,13 @@ namespace WB.UI.Tester.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewViewModel>
     {
-        protected override int MenuResourceId { get { return Resource.Menu.interview; } }
+        protected override int MenuResourceId => Resource.Menu.interview;
 
-        public override async void OnBackPressed()
+        public override void OnBackPressed()
         {
-            await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
+            this.ViewModel.NavigateToPreviousViewModel(() =>
             {
-                Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
+                this.ViewModel.NavigateBack();
                 this.Finish();
             });
         }
@@ -42,14 +41,11 @@ namespace WB.UI.Tester.Activities
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
+                    this.ViewModel.NavigateToSettingsCommand.Execute();
                     break;
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();
-                    this.Finish();
                     break;
-
             }
         }
     }

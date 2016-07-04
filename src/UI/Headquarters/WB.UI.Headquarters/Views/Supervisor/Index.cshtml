@@ -65,10 +65,10 @@
         <thead>
         <tr>
             <th data-bind='sortby : "UserName"'>@Users.UserName</th>
-            <th data-bind='sortby : "CreationDate"'>@Users.CreationDate</th>
-            <th data-bind='sortby : "Email"'>@Users.Email</th>
-            <th data-bind='sortby : "NotConnectedToDeviceInterviewersCount"'>@Users.NotLinkedToDevice</th>
-            <th data-bind='sortby : "InterviewersCount"'>@Users.TotalInterviewers</th>
+            <th data-bind='sortby : "CreationDate"' title="@Users.SupervisorAccountCreationDate">@Users.CreationDate</th>
+            <th data-bind='sortby : "Email"'>@Users.SupervisorEmail</th>
+            <th data-bind='sortby : "NotConnectedToDeviceInterviewersCount"' title="@Users.NotLinkedToDeviceTitle">@Users.NotLinkedToDevice</th>
+            <th data-bind='sortby : "InterviewersCount"' title="@Users.NumberOfInterviewersInTeam">@Users.TotalInterviewers</th>
             <th></th>
 
         </tr>
@@ -111,7 +111,7 @@
                 }
             </td>
             <td>
-                @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
+                @if ((User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
                 {
                     <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="Impersonate as this user in read only mode">
                         <i class="glyphicon glyphicon-eye-open"></i>

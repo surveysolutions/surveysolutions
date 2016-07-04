@@ -16,7 +16,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel,
+    public class GroupViewModel : MvxNotifyPropertyChanged,
+        ILiteEventHandler<RosterInstancesTitleChanged>,
+        IInterviewEntityViewModel,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -28,17 +30,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private NavigationState navigationState;
         private Identity groupIdentity;
 
-        public EnablementViewModel Enablement { get; private set; }
-        public string Title { get; private set; }
+        public EnablementViewModel Enablement { get; }
         public bool IsRoster { get; private set; }
 
-        private string rosterTitle;
-        public string RosterTitle
+        public DynamicTextViewModel GroupTitle { get; }
+
+        private string rosterInstanceTitle;
+        public string RosterInstanceTitle
         {
-            get { return rosterTitle; }
+            get { return this.rosterInstanceTitle; }
             set
             {
-                this.rosterTitle = value;
+                this.rosterInstanceTitle = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -60,12 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             get{ return this.groupIdentity; }
         }
-
-        private IMvxCommand navigateToGroupCommand;
-        public IMvxCommand NavigateToGroupCommand
-        {
-            get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroupAsync())); }
-        }
+        
+        public IMvxCommand NavigateToGroupCommand => new MvxCommand(this.NavigateToGroup);
 
         public GroupViewModel(
             IStatefulInterviewRepository interviewRepository,
@@ -73,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,
+            DynamicTextViewModel dynamicTextViewModel,
             ILiteEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
@@ -80,6 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
+            this.GroupTitle = dynamicTextViewModel;
             this.eventRegistry = eventRegistry;
         }
 
@@ -109,8 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Enablement.Init(interviewId, groupIdentity);
             this.GroupState.Init(interviewId, groupIdentity);
 
-            this.Title = questionnaire.GetGroupTitle(groupIdentity.Id);
-            this.RosterTitle = interview.GetRosterTitle(groupIdentity);
+            this.GroupTitle.Init(interviewId, groupIdentity, questionnaire.GetGroupTitle(groupIdentity.Id));
+            this.RosterInstanceTitle = interview.GetRosterTitle(groupIdentity);
             this.IsRoster = questionnaire.IsRosterGroup(groupIdentity.Id);
             
             if (groupWithAnswersToMonitor != null)
@@ -129,10 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.RaisePropertyChanged(() => this.GroupState);
         }
 
-        private async Task NavigateToGroupAsync()
-        {
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.groupIdentity));
-        }
+        private void NavigateToGroup() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
@@ -140,13 +138,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.Identity.Equals(changedInstance.RosterInstance.GetIdentity())))
             {
-                this.RosterTitle = changedInstance.Title;
+                this.RosterInstanceTitle = changedInstance.Title;
             }
         }
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
 
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
         }

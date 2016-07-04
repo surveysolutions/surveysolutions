@@ -12,7 +12,7 @@ var templateCache = require("gulp-angular-templatecache");
 var paths = {
   scripts: ['app/scripts/**/*.js'],
   styles: ['content/markup.css.less'],
-  htmls: ['app/views/*.html']
+  htmls: ['app/views/**/*.html']
 };
 
 gulp.task('clean', function	(){

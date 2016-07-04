@@ -39,9 +39,10 @@ namespace Main.Core.Events.Questionnaire
             Guid? cascadeFromQuestionId, 
             Guid targetGroupKey, 
             IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression) : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, 
+            string linkedFilterExpression,
+            bool isTimestamp) : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, 
                 questionText, questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, questionType, answerOrder, answers, groupPublicKey, 
-                linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions, linkedFilterExpression)
+                linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions, linkedFilterExpression, isTimestamp)
         {
             this.TargetGroupKey = targetGroupKey;
         }

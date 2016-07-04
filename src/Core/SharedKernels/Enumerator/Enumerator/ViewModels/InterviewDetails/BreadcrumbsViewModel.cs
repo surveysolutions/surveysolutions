@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -38,8 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId, NavigationState navigationState)
         {
-            if (navigationState == null) throw new ArgumentNullException("navigationState");
-            if (this.navigationState != null) throw new Exception("ViewModel already initialized");
+            if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
+            if (this.navigationState != null) throw new Exception($"ViewModel {typeof(BreadCrumbsViewModel)} already initialized");
 
             this.navigationState = navigationState;
             this.interviewId = interviewId;
@@ -63,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (breadCrumb != null)
                 {
                     var groupTitle = questionnaire.GetGroupTitle(changedRosterInstance.RosterInstance.GroupId);
-                    breadCrumb.Text = this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
+                    breadCrumb.ChangeText(this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title));
                 }
             }
         }
@@ -110,20 +111,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var rosterInstance = interview.GetRoster(itemIdentity);
                         
                     var title = this.GenerateRosterTitle(groupTitle, rosterInstance.Title);
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
-                    {
-                        Text = title,
-                        ItemId = itemIdentity
-                    });
+                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    breadCrumb.Init(this.interviewId, itemIdentity, title, this.navigationState);
+                    breadCrumbs.Add(breadCrumb);
                 }
                 else
                 {
-                    var itemId = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
-                    {
-                        ItemId = itemId,
-                        Text = groupTitle + " / "
-                    });
+                    var itemIdentity = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
+                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    breadCrumb.Init(this.interviewId, itemIdentity, groupTitle, this.navigationState);
+                    breadCrumbs.Add(breadCrumb);
                 }
             }
 
@@ -133,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string GenerateRosterTitle(string groupTitle, string rosterInstanceTitle)
         {
             var rosterTitle = this.substitutionService.GenerateRosterName(groupTitle, rosterInstanceTitle);
-            return rosterTitle + " / ";
+            return rosterTitle;
         }
 
         private ReadOnlyCollection<BreadCrumbItemViewModel> items;
@@ -146,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
-            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.eventRegistry.Unsubscribe(this);
         }
     }
 }

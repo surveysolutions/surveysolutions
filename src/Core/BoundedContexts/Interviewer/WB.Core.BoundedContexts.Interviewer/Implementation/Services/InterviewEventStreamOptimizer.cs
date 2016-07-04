@@ -15,6 +15,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public IReadOnlyCollection<CommittedEvent> RemoveEventsNotNeededToBeSent(
             IReadOnlyCollection<CommittedEvent> interviewEvents)
         {
+            if (interviewEvents.Count == 0)
+                return interviewEvents;
+
             CommittedEvent lastCompletionCommittedEvent = interviewEvents.Last(@event => @event.Payload is InterviewCompleted);
             Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
 
@@ -48,7 +51,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is LinkedOptionsChanged
             || eventPayload is VariablesDisabled
             || eventPayload is VariablesEnabled 
-            || eventPayload is VariablesChanged;
+            || eventPayload is VariablesChanged
+            || eventPayload is SubstitutionTitlesChanged;
 
         private static bool IsFromLastCompletion(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => committedEvent.CommitId == lastCompletionCommitId;

@@ -33,11 +33,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Create.TextQuestion(variable: "txt", id: txtSourceOfLinkId)}),
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
-                        answers:
+                        options:
                             new List<Answer>
                             {
-                                Create.Option(text: "Hello", value: "1"),
-                                Create.Option(text: "World", value: "2")
+                                Create.Option(value: "1", text: "Hello"),
+                                Create.Option(value: "2", text: "World")
                             }),
                     Create.Roster(rosterId,
                         rosterSizeQuestionId: multiOptionQuestionId,
@@ -81,7 +81,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

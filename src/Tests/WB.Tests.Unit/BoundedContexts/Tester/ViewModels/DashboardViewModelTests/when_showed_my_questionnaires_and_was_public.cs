@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(
                 questionnaireListStorage: storageAccessor);
 
-            viewModel.StartAsync().WaitAndUnwrapException();
+            viewModel.Load();
             viewModel.ShowPublicQuestionnairesCommand.Execute();
         };
 

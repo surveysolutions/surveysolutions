@@ -30,8 +30,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(id, version);
                 if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                     return null;
-                
-                this.plainQuestionnaireCache[identity] = new PlainQuestionnaire(questionnaireDocument, version);
+
+                var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, version);
+                plainQuestionnaire.WarmUpPriorityCaches();
+
+                this.plainQuestionnaireCache[identity] = plainQuestionnaire;
             }
 
             return this.plainQuestionnaireCache[identity];

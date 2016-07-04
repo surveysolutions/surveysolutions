@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             
             interviewStatusTimeSpansStorage.Store(
-                Create.InterviewStatusTimeSpans(
+                Create.Entity.InterviewStatusTimeSpans(
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
                     interviewId : interviewId.FormatGuid(),
                     timeSpans: new[]
                     {
-                        Create.TimeSpanBetweenStatuses(interviewerId: userId,
+                        Create.Entity.TimeSpanBetweenStatuses(interviewerId: userId,
                             timestamp: DateTime.Now.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     })
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             denormalizer = CreateInterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
-        Because of = () => denormalizer.Handle(Create.UnapprovedByHeadquartersEvent(interviewId: interviewId));
+        Because of = () => denormalizer.Handle(Create.PublishedEvent.UnapprovedByHeadquarters(interviewId: interviewId));
 
         It should_remove_ApprovedByHeadquarter_as_end_status =
             () =>

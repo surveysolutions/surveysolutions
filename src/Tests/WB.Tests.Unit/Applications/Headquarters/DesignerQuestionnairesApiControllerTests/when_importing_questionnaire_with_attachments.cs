@@ -6,11 +6,11 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Controllers;
@@ -62,9 +62,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         private static readonly List<Attachment> questionnaireAttachments =
             new List<Attachment>(new[]
             {
-                Create.Attachment("Content 1"),
-                Create.Attachment("Content 2"),
-                Create.Attachment("Content 3")
+                Create.Entity.Attachment("Content 1"),
+                Create.Entity.Attachment("Content 2"),
+                Create.Entity.Attachment("Content 3")
             });
     }
 }

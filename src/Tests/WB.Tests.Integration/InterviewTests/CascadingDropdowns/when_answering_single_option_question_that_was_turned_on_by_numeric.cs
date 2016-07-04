@@ -36,20 +36,20 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",
                         options: new List<Answer>
                         {
-                            Create.Option(text: "parent option 1", value: "1"),
-                            Create.Option(text: "parent option 2", value: "2")
+                            Create.Option(value: "1", text: "parent option 1"),
+                            Create.Option(value: "2", text: "parent option 2")
                         }),
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
-                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                            Create.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
                         }),
                     Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                         {
-                            Create.Option(text: "grand child 1 for parent option 1", value: "1", parentValue: "1"),
-                            Create.Option(text: "grand child 1 for parent option 2", value: "2", parentValue: "2"),
+                            Create.Option(value: "1", text: "grand child 1 for parent option 1", parentValue: "1"),
+                            Create.Option(value: "2", text: "grand child 1 for parent option 2", parentValue: "2"),
                         })
                     );
 
@@ -94,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

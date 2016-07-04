@@ -20,20 +20,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         {
             Setup.InstanceToMockedServiceLocator(userDocumentStorage);
 
-            var supervisor = Create.UserDocument(isArchived: true);
+            var supervisor = Create.Entity.UserDocument(isArchived: true);
             userDocumentStorage.Store(supervisor, supervisor.PublicKey.FormatGuid());
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidator(userDocumentStorage);
 
-            user = Create.User();
-            var userDocument = Create.UserDocument(userId: Guid.NewGuid(), isArchived: true, supervisorId: supervisor.PublicKey);
+            user = Create.Entity.User();
+            var userDocument = Create.Entity.UserDocument(userId: Guid.NewGuid(), isArchived: true, supervisorId: supervisor.PublicKey);
             userDocument.Roles.Add(UserRoles.Operator);
             userDocumentStorage.Store(userDocument, userDocument.PublicKey.FormatGuid());
             user.SetId(userDocument.PublicKey);
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(user, Create.UnarchiveUserCommand(user.Id)));
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(user, Create.Command.UnarchiveUserCommand(user.Id)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();

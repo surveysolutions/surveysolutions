@@ -27,13 +27,22 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -43,28 +52,27 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -136,6 +144,10 @@ namespace WB.Tests.Integration
                     answerTime ?? Default.AnswerTime,
                     answer);
             }
+
+            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+              => new GeoLocationQuestionAnswered(
+                  Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
 
             public static NumericRealQuestionAnswered NumericRealQuestionAnswered(
                 Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
@@ -323,18 +335,23 @@ namespace WB.Tests.Integration
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null, bool yesNo = false)
+            IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, 
+            Guid? linkedToRosterId=null, 
+            bool yesNo = false,
+            string optionsFilter = null)
         {
-            return new MultyOptionsQuestion
+            var multyOptionsQuestion = new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
-                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable,
                 LinkedToRosterId = linkedToRosterId,
-                YesNoView = yesNo
+                YesNoView = yesNo,
+                Properties = {OptionsFilterExpression = optionsFilter}
             };
+            return multyOptionsQuestion;
         }
 
         public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
@@ -394,9 +411,10 @@ namespace WB.Tests.Integration
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId=null)
+            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, 
+            Guid? linkedToRosterId=null, string optionsFilter = null, string linkedFilter = null)
         {
-            return new SingleQuestion
+            var singleQuestion = new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
@@ -406,16 +424,22 @@ namespace WB.Tests.Integration
                 Answers = options ?? new List<Answer>(),
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
-                LinkedToRosterId = linkedToRosterId
+                LinkedToRosterId = linkedToRosterId,
+                LinkedFilterExpression = linkedFilter,
+                Properties =
+                {
+                    OptionsFilterExpression = optionsFilter
+                }
             };
+            return singleQuestion;
         }
 
-        public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+        public static Answer Option(string value = null, Guid? id = null, string text = null, string parentValue = null)
         {
             return new Answer
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                AnswerText = text ?? "text",
+                AnswerText = text ?? ("Option " + value),
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };
@@ -482,7 +506,9 @@ namespace WB.Tests.Integration
             {
                 if (fixedRosterTitles == null)
                 {
-                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                    group.FixedRosterTitles =
+                        (fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
+                            (x, i) => Create.FixedRosterTitle(i, x)).ToArray();
                 }
                 else
                 {
@@ -686,9 +712,9 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title = null)
         {
-            return new FixedRosterTitle(value, title);
+            return new FixedRosterTitle(value, title ?? ("Roster " + value));
         }
 
         public static LookupTable LookupTable(string tableName)
@@ -813,12 +839,12 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null)
+            ISessionProvider sessionProvider = null, string idColumnName = "Id")
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(), idColumnName);
         }
 
         public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
@@ -830,6 +856,80 @@ namespace WB.Tests.Integration
         public static ChangedVariable ChangedVariableValueDto(Guid? variableId=null, RosterVector vector=null, object value=null)
         {
             return new ChangedVariable(Create.Identity(variableId ?? Guid.NewGuid(), vector?? new RosterVector(new decimal[0])), value);
+        }
+
+        public static InterviewSummary InterviewSummary(
+         Guid? interviewId = null,
+         Guid? questionnaireId = null,
+         long? questionnaireVersion = null,
+         InterviewStatus? status = null,
+         Guid? responsibleId = null,
+         Guid? teamLeadId = null,
+         string responsibleName = null,
+         string teamLeadName = null,
+         UserRoles role = UserRoles.Operator)
+        {
+            return new InterviewSummary()
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Status = status.GetValueOrDefault(),
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
+                TeamLeadId = teamLeadId.GetValueOrDefault(),
+                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                ResponsibleRole = role
+            };
+        }
+
+        public static SubstitutionViewModel SubstitutionViewModel(
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new SubstitutionViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                new SubstitutionService(),
+                new AnswerToStringService(),
+                new VariableToUIStringService(),
+                rosterTitleSubstitutionService ?? Create.FakeRosterTitleSubstitutionService());
+
+        private static IRosterTitleSubstitutionService FakeRosterTitleSubstitutionService()
+        {
+            var rosterTitleSubstitutionService = Mock.Of<IRosterTitleSubstitutionService>();
+
+            Mock.Get(rosterTitleSubstitutionService)
+                .Setup(x => x.Substitute(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<string>()))
+                .Returns<string, Identity, string>((title, id, interviewId) => title);
+
+            return rosterTitleSubstitutionService;
+        }
+
+        public static LiteEventRegistry LiteEventRegistry()
+            => new LiteEventRegistry();
+
+        public static DynamicTextViewModel DynamicTextViewModel(
+            ILiteEventRegistry registry = null,
+            SubstitutionViewModel substitutionViewModel = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            => new DynamicTextViewModel(
+                registry ?? Create.LiteEventRegistry(),
+                substitutionViewModel ?? Create.SubstitutionViewModel(
+                    interviewRepository: interviewRepository,
+                    questionnaireRepository: questionnaireRepository,
+                    rosterTitleSubstitutionService: rosterTitleSubstitutionService));
+
+        public static CategoricalOption CategoricalOption(int value, string title, int? parentValue = null)
+        {
+            return new CategoricalOption
+            {
+                Value = value,
+                Title = title,
+                ParentValue = parentValue
+            };
         }
     }
 }

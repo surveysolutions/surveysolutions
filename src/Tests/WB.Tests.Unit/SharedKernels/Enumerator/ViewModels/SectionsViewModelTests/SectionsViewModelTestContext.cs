@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Create.LiteEventRegistry(),
+                Create.Service.LiteEventRegistry(),
                 sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
         }
 
@@ -43,11 +43,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             {
                 var barSectionViewModel = new SideBarSectionViewModel(interviewsRepository.Object,
                     questionnaireRepository.Object,
-                    Create.SubstitutionService(),
-                    Create.LiteEventRegistry(),
+                    Create.Service.SubstitutionService(),
+                    Create.Service.LiteEventRegistry(),
                     Stub.SideBarSectionViewModelsFactory(),
-                    Mock.Of<IMvxMessenger>());
-                barSectionViewModel.NavigationState = Create.NavigationState(); 
+                    Mock.Of<IMvxMessenger>(),
+                    Create.ViewModel.DynamicTextViewModel(
+                        interviewRepository: interviewsRepository.Object,
+                        questionnaireRepository: questionnaireRepository.Object));
+                barSectionViewModel.NavigationState = Create.Other.NavigationState(); 
                 return barSectionViewModel;
             };
 

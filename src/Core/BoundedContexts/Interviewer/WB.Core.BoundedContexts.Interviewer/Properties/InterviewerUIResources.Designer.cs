@@ -641,6 +641,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading.
+        /// </summary>
+        public static string Interview_Loading {
+            get {
+                return ResourceManager.GetString("Interview_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading... {0}%.
+        /// </summary>
+        public static string Interview_Loading_With_Percents {
+            get {
+                return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {
@@ -745,6 +763,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string NoNetwork {
             get {
                 return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website.
+        /// </summary>
+        public static string NotSupportedServerSyncProtocolVersion {
+            get {
+                return ResourceManager.GetString("NotSupportedServerSyncProtocolVersion", resourceCulture);
             }
         }
         

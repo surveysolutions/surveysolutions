@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -25,16 +27,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
+            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+
+            StatefulInterviewMock.Setup(x => x.GetFilteredOptionsForQuestion(questionIdentity, 2, string.Empty)).Returns(Options.Where(x => x.ParentValue == 2).ToList());
+
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
 
+            
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository,
-                optionsRepository: optionsRepository);
+                questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
@@ -57,12 +61,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Title));
 
         It should_create_option_models_with_specified_values = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.Value)).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Value));
 
         It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.ParentValue.Value));
+            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.ParentValue)).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.ParentValue.Value));
 
-        private static readonly List<CategoricalQuestionOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
+        private static readonly List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 

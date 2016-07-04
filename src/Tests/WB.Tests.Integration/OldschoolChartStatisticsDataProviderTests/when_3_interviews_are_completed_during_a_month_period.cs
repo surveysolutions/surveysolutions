@@ -3,12 +3,12 @@ using Machine.Specifications;
 using Moq;
 using NHibernate;
 using Npgsql;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Mappings;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             pgSqlConnection.Open();
 
             cumulativeReportStatusChangeStorage =
-                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>());
+                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>(), "EntryId");
 
             var cumulativeReportStatusChangeBegin = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
             var cumulativeReportStatusChangeInBetween = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);

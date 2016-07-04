@@ -1,10 +1,14 @@
 ﻿using System.Linq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    public class AccountViewFactory : IViewFactory<AccountViewInputModel, AccountView>
+    public interface IAccountViewFactory
+    {
+        AccountView Load(AccountViewInputModel input);
+    }
+
+    public class AccountViewFactory : IAccountViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 

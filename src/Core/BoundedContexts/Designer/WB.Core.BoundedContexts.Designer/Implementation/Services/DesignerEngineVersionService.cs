@@ -51,8 +51,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Variables</summary>
         private readonly Version version_15 = new Version(15, 0, 0);
 
+        /// <summary>
+        /// Timestamp questions
+        /// Filtered options for categorical questions (except cascading)
+        /// Current roster in filtered linked questions
+        /// </summary>
+        private readonly Version version_16 = new Version(16, 0, 0);
 
-        public Version GetLatestSupportedVersion() => this.version_15;
+
+        public Version GetLatestSupportedVersion() => this.version_16;
 
         public bool IsClientVersionSupported(Version clientVersion)
         { 
@@ -72,6 +79,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            var countOfQuestionsWithFilteredLinkedQuestionsThatUsesCurrentKeyword = 
+                questionnaireDocument.Find<IQuestion>(q 
+                    => !string.IsNullOrEmpty(q.LinkedFilterExpression) 
+                    && q.LinkedFilterExpression.Contains("current"))
+                    .Count();
+            if (countOfQuestionsWithFilteredLinkedQuestionsThatUsesCurrentKeyword > 0)
+                return version_16;
+
+            bool hasQuestionsWithOptionsFilter = questionnaireDocument.Find<AbstractQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression)).Any();
+            if (hasQuestionsWithOptionsFilter)
+                return this.version_16;
+
+            bool hasTimestampQuestions = questionnaireDocument.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any();
+            if (hasTimestampQuestions)
+                return this.version_16;
+
             bool hasVariables = questionnaireDocument.Find<Variable>().Any();
             if (hasVariables)
                 return version_15;

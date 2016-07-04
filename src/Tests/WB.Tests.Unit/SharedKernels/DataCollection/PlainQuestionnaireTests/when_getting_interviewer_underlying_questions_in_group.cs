@@ -14,28 +14,28 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireDocument(
+            var questionnaire = Create.Entity.QuestionnaireDocument(
                 children: new List<IComposite>
                 {
-                    Create.Group(groupId: chapterId, children: new List<IComposite>
+                    Create.Entity.Group(groupId: chapterId, children: new List<IComposite>
                     {
-                        Create.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Headquarter),
-                        Create.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Supervisor),
-                        Create.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Interviewer, isPrefilled: true),
-                        Create.NumericIntegerQuestion(question1Id),
-                        Create.Roster(rosterSizeQuestionId: question1Id,
+                        Create.Entity.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Headquarter),
+                        Create.Entity.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Supervisor),
+                        Create.Entity.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Interviewer, isPrefilled: true),
+                        Create.Entity.NumericIntegerQuestion(question1Id),
+                        Create.Entity.Roster(rosterSizeQuestionId: question1Id,
                                 rosterTitleQuestionId: question2Id,
                                 children: new List<IComposite>
                                 {
-                                    Create.TextQuestion(questionId: question2Id),
-                                    Create.TextQuestion(questionId: question3Id),
-                                    Create.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Supervisor)
+                                    Create.Entity.TextQuestion(questionId: question2Id),
+                                    Create.Entity.TextQuestion(questionId: question3Id),
+                                    Create.Entity.NumericIntegerQuestion(Guid.NewGuid(), scope: QuestionScope.Supervisor)
                                 })
                         }),
 
                 });
 
-            plainQuestionnaire = Create.PlainQuestionnaire(document: questionnaire);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
         };
 
         Because of = () =>

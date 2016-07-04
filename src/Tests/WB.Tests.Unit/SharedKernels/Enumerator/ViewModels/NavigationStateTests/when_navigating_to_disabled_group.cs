@@ -17,20 +17,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 => _.HasGroup(disabledGroup) == true
                    && _.IsEnabled(disabledGroup) == false);
 
-            navigationState = Create.NavigationState(
+            navigationState = Create.Other.NavigationState(
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
         };
 
         Because of = () =>
-            navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(disabledGroup)).WaitAndUnwrapException();
+            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(disabledGroup));
 
         It should_not_navigate = () =>
             navigatedTo.ShouldBeNull();
 
         private static NavigationState navigationState;
-        private static Identity disabledGroup = Create.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
+        private static Identity disabledGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);
         private static Identity navigatedTo;
     }
 }

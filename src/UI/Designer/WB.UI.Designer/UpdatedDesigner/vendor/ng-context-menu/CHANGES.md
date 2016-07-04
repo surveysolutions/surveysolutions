@@ -1,5 +1,15 @@
 # Changes to ng-context-menu
 
+## v1.0.1
+1. Added #30: Add callback for when the context menu is closed. Thanks @andrewburgess!
+2. Added #31: Use flat-github-ribbon.
+3. Added #32: Add browser flag to gulp commands for testing, reconfigure Codeship.
+4. Added #33: Add JS style guide .jshintrc file.
+
+# v1.0.0
+1. Added #11: Add Protractor tests.
+2. Added #28: Add project to Codeship.
+
 ## v0.1.7
 
 1. Added #26: Separately apply callback before opening menu. Thanks @hupfis!

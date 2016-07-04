@@ -19,24 +19,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(
-                new Group()
-                {
-                    PublicKey = Guid.NewGuid(),
-                    IsRoster = true,
-                    RosterFixedTitles = new[] { "a", "b" },
-                    VariableName = "a",
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    Children = new List<IComposite>
+                Create.FixedRoster(variable: "a",
+                    fixedTitles: new[] {"a", "b"},
+                    children: new IComposite[]
                     {
                         new SingleQuestion()
                         {
                             PublicKey = questionId,
                             StataExportCaption = "var",
                             QuestionText = "hello %rostertitle%",
-                            Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
+                            Answers =
+                            {
+                                new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                                new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
+                            }
                         }
-                    }
-                }
+                    })
                 );
 
             verifier = CreateQuestionnaireVerifier();

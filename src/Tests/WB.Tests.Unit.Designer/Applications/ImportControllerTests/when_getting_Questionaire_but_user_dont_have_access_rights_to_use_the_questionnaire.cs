@@ -5,9 +5,8 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api;
+using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
@@ -23,11 +22,11 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == userId));
 
-            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
                      Create.QuestionnaireView(questionnaireOwnerId));
 
-            var sharedPersonsViewFactory = Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(
+            var sharedPersonsViewFactory = Mock.Of<IQuestionnaireSharedPersonsFactory>(
                     _ => _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) ==
                          Create.QuestionnaireSharedPersons(questionnaireId));
 

@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         };
 
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
-        private static string TestConnectionString;
+        protected static string TestConnectionString;
         private static string databaseName;
     }
 }
