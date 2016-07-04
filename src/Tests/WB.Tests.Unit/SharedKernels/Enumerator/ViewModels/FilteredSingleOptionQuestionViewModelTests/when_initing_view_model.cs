@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -25,7 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer);
+                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer
+                   && _.GetOptionForQuestionWithoutFilter(questionIdentity, 3, null) == new CategoricalOption() { Title = "3", Value = 3});
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -35,16 +37,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
             
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answeringViewModelMock.Object,
                 principal: principal,
                 interviewRepository: interviewRepository,
-                optionsRepository: optionsRepository);
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
-            navigationState = Create.NavigationState();
+            navigationState = Create.Other.NavigationState();
         };
 
         Because of = () =>
@@ -55,16 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
         It should_set_to_answer_backend_value = () =>
             viewModel.SelectedObject.Value.ShouldEqual(3);
-
-        It should_set_to_options_all_values = () =>
-        {
-            viewModel.Options.Count.ShouldEqual(5);
-            viewModel.Options.ShouldContain(i => i.Value == 1);
-            viewModel.Options.ShouldContain(i => i.Value == 2);
-            viewModel.Options.ShouldContain(i => i.Value == 3);
-            viewModel.Options.ShouldContain(i => i.Value == 4);
-            viewModel.Options.ShouldContain(i => i.Value == 5);
-        };
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static NavigationState navigationState;

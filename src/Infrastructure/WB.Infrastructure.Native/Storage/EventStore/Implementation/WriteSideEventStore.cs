@@ -63,14 +63,6 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             GC.SuppressFinalize(this);
         }
 
-        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-            => minVersion > maxVersion
-                ? new CommittedEventStream(id)
-                : new CommittedEventStream(id,
-                    maxVersion == int.MaxValue
-                        ? this.Read(id, minVersion)
-                        : this.Read(id, minVersion).Take(maxVersion - Math.Max(0, minVersion) + 1));
-
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
             int normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
@@ -93,6 +85,9 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 
             } while (!currentSlice.IsEndOfStream);
         }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {

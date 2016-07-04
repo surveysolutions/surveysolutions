@@ -35,29 +35,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
 
-                    Create.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
+                    Create.Entity.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                  new PlainQuestionnaire(questionnaire, 18));
 
+            
+
             var expressionState = Substitute.For<ILatestInterviewExpressionState>();
             expressionState.Clone().Returns(expressionState);
+            var structuralChanges = new StructuralChanges();
+            expressionState.GetStructuralChanges().Returns(structuralChanges);
             expressionState.ProcessVariables()
                 .Returns(
                     new VariableValueChanges(new Dictionary<Identity, object>()
                     {
-                        {Create.Identity(variableId, RosterVector.Empty), true}
+                        {Create.Entity.Identity(variableId, RosterVector.Empty), true}
                     }));
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
-            interview = Create.Interview(questionnaireRepository: questionnaireRepository,
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         };
 

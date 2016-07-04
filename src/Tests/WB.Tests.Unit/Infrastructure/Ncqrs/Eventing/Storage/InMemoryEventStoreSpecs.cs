@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
 using Ncqrs.Eventing.Storage;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Tests.Unit;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing.Storage
@@ -36,7 +29,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             var eventSourceId = Guid.NewGuid();
             var store = new InMemoryEventStore();
 
-            var events = store.ReadFrom(eventSourceId, int.MinValue, int.MaxValue);
+            var events = store.Read(eventSourceId, int.MinValue);
 
             events.Should().NotBeNull();
             events.Should().BeEmpty();
@@ -61,7 +54,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             store.Store(stream1);
             store.Store(stream2);
 
-            var events = store.ReadFrom(eventSourceId, int.MinValue, int.MaxValue);
+            var events = store.Read(eventSourceId, int.MinValue);
 
             events.Count().Should().Be(5);
         }

@@ -5,7 +5,7 @@ using System.Web.Http.Controllers;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using It = Machine.Specifications.It;
 

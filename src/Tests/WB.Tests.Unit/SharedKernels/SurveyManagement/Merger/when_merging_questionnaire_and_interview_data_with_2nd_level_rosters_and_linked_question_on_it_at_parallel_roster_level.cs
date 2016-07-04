@@ -10,14 +10,13 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -34,39 +33,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             parallelLevelRosterId = Guid.Parse("20000000000000000000000000000000");
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
-            {
-                PublicKey = firstLevelRosterId,
-                IsRoster = true,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                RosterFixedTitles = new[] { "roster1", "roster2" },
-                Children = new List<IComposite>()
-                {
-                    new Group()
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(rosterId: firstLevelRosterId,
+                    fixedTitles: new[] {"roster1", "roster2"},
+                    children: new IComposite[]
                     {
-                        PublicKey = secondLevelRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = new[] { "t1", "t2" },
-                        Children = new List<IComposite>()
-                        {
-                            new NumericQuestion()
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId,
+                            fixedTitles: new[] {"t1", "t2"},
+                            children: new IComposite[]
                             {
-                                PublicKey = sourceForLinkedQuestionId,
-                                QuestionType = QuestionType.Numeric,
-                                StataExportCaption = "sourceForLinkedQuestionId"
-                            }
-                        }
-                    }
-                }
-            },
-                new Group()
-                {
-                    PublicKey = parallelLevelRosterId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "parallel roster1", "parallel roster1" },
-                    Children = new List<IComposite>()
+                                new NumericQuestion()
+                                {
+                                    PublicKey = sourceForLinkedQuestionId,
+                                    QuestionType = QuestionType.Numeric,
+                                    StataExportCaption = "sourceForLinkedQuestionId"
+                                }
+                            })
+                    }),
+                Create.Entity.FixedRoster(rosterId: parallelLevelRosterId,
+                    fixedTitles: new[] {"parallel roster1", "parallel roster1"},
+                    children: new IComposite[]
                     {
                         new SingleQuestion()
                         {
@@ -74,8 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             LinkedToQuestionId = sourceForLinkedQuestionId,
                             StataExportCaption = "linkedQuestionId"
                         }
-                    }
-                });
+                    }));
 
             interview = CreateInterviewData(interviewId);
 

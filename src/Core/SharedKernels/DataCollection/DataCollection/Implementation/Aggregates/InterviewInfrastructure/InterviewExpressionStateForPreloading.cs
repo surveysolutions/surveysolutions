@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
@@ -115,12 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
 
         }
-
-        IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone()
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public bool AreLinkedQuestionsSupported()
         {
             return true;
@@ -144,21 +140,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void UpdateVariableValue(Identity variableIdentity, object value) { }
 
-        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
-        {
-            return new InterviewExpressionStateForPreloading();
-        }
-
-        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
-        {
-            return new InterviewExpressionStateForPreloading();
-        }
-
-        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
-        {
-            return new InterviewExpressionStateForPreloading();
-        }
-
         public void SetInterviewProperties(IInterviewProperties properties)
         {
         }
@@ -175,6 +156,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
             return new LinkedQuestionOptionsChanges(new Dictionary<Guid, RosterVector[]>());
+        }
+
+        public IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options) => options;
+        public void RemoveAnswer(Identity questionIdentity)
+        {
+            
+        }
+
+        public void RemoveRosterAndItsDependencies(Identity[] rosterKey, Guid rosterSorceId, decimal rosterInstanceId)
+        {
+        }
+
+        public StructuralChanges GetStructuralChanges()
+        {
+            return new StructuralChanges();
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV9 IInterviewExpressionStateV9.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
         }
 
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()

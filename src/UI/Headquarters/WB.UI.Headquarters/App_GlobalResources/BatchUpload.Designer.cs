@@ -169,15 +169,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data is valid.
-        /// </summary>
-        internal static string DataValid {
-            get {
-                return ResourceManager.GetString("DataValid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         internal static string Delete {
@@ -295,7 +286,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import of interviews is in progress. Wait until running operation is finished..
+        ///   Looks up a localized string similar to Other interview import process is running. Only one interview import process at a time is allowed.Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process..
         /// </summary>
         internal static string ImportInProgress {
             get {
@@ -480,6 +471,15 @@ namespace Resources {
         internal static string Row {
             get {
                 return ResourceManager.GetString("Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to running interview import process.
+        /// </summary>
+        internal static string RunningInterviewImportProcess {
+            get {
+                return ResourceManager.GetString("RunningInterviewImportProcess", resourceCulture);
             }
         }
         

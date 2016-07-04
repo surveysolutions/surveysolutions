@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
@@ -17,8 +18,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             new List<VariableTemplateModel>(), 
             null)
         {
+            LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter = new List<LinkedQuestionVerifierModel>();
         }
 
+        public List<QuestionTemplateModel> QuestionsWithOptionsFilter => Questions.Where(x => x.HasOptionsFilter).ToList();
+
         public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
+        public List<LinkedQuestionVerifierModel> LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter { get; set; }
     }
 }

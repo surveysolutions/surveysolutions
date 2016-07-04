@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
         public const string QuestionnaireScope = "@__questionnaire_scope";
         public const string EnablementPrefix = "IsEnabled__";
+        public const string OptionsFilterPrefix = "FilterOption__";
         public const string ValidationPrefix = "IsValid__";
         public const string VariablePrefix = "GetVariable__";
         public const string IdSuffix = "__id";
@@ -81,6 +83,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 generatedClasses.Add(expressionMethodModel.Key, methodTemplate.TransformText());
             }
 
+            foreach (var categoricalOptionsFilterModel in expressionStateModel.CategoricalOptionsFilterModels)
+            {
+                var methodTemplate = new OptionsFilterMethodTemplateV10(categoricalOptionsFilterModel.Value);
+                generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate.TransformText());
+            }
+
+            foreach (var categoricalOptionsFilterModel in expressionStateModel.LinkedFilterModels)
+            {
+                var methodTemplate = codeGenerationSettings.LinkedFilterMethodGenerator(categoricalOptionsFilterModel.Value);
+                generatedClasses.Add(categoricalOptionsFilterModel.Key, methodTemplate);
+            }
+
             this.DumpCodeIfNeeded(generatedClasses);
             
             return generatedClasses;
@@ -112,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var generatedClass in generatedClasses)
             {
-                string fileName = this.fileSystemAccessor.MakeValidFileName($"{generatedClass.Key}.cs");
+                string fileName = this.fileSystemAccessor.MakeStataCompatibleFileName($"{generatedClass.Key}.cs");
                 string filePath = this.fileSystemAccessor.CombinePath(this.settings.DumpFolder, fileName);
 
                 this.fileSystemAccessor.WriteAllText(filePath, generatedClass.Value);
@@ -237,6 +251,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         },
                         isLookupTablesFeatureSupported: true,
                         expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV9(expressionStateModel).TransformText());
+                case 16:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV10" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7",
+                            "WB.Core.SharedKernels.DataCollection.V8",
+                            "WB.Core.SharedKernels.DataCollection.V9",
+                            "WB.Core.SharedKernels.DataCollection.V10",
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText(),
+                        linkedFilterMethodGenerator: model => new LinkedFilterMethodTemplateV10(model).TransformText());
             }
 
             throw new VersionNotFoundException($"Version '{version}' is not supported.");

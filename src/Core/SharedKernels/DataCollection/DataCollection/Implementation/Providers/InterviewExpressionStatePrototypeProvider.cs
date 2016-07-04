@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
@@ -44,9 +45,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             {
                 //path is cached
                 //if assembly was loaded from this path it won't be loaded again 
-                var compiledAssembly = fileSystemAccessor.LoadAssembly(assemblyFile);
+                var compiledAssembly = this.fileSystemAccessor.LoadAssembly(assemblyFile);
 
-                TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
+                TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.ToList().
                     SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)) && x.IsPublic);
 
                 if (interviewExpressionStateTypeInfo == null)
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                         Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
                     ILatestInterviewExpressionState upgradedExpressionState =
-                        interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
+                        this.interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
 
                     return upgradedExpressionState;
                 }
@@ -71,7 +72,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             }
             catch (Exception exception)
             {
-                Logger.Error(String.Format("Error on assembly loading for id={0} version={1}", questionnaireId, questionnaireVersion), exception);
+                Logger.Error($"Error on assembly loading for id={questionnaireId} version={questionnaireVersion}", exception);
+
+                if (exception is ReflectionTypeLoadException)
+                {
+                    var typeLoadException = exception as ReflectionTypeLoadException;
+                    var loaderExceptions = typeLoadException.LoaderExceptions;
+                    foreach (var loaderException in loaderExceptions)
+                    {
+                        Logger.Error("LoaderEcxeption found", loaderException);
+                    }
+                }
+                
                 if (exception.InnerException != null)
                     Logger.Error("Error on assembly loading (inner)", exception.InnerException);
 

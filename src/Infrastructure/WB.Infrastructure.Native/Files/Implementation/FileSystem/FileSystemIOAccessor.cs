@@ -147,12 +147,13 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public Stream OpenOrCreateFile(string pathToFile, bool append)
         {
-            var stream = new FileStream(
-                ZlpIOHelper.CreateFileHandle(pathToFile,
-                                             this.IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
-                                             ZetaLongPaths.Native.FileAccess.GenericWrite,
-                                             FileShare.Write),
-                FileAccess.Write);
+            var creationDisposition = this.IsFileExists(pathToFile) 
+                ? CreationDisposition.OpenExisting 
+                : CreationDisposition.New;
+
+            var fileHandle = ZlpIOHelper.CreateFileHandle(pathToFile, creationDisposition, ZetaLongPaths.Native.FileAccess.GenericWrite, FileShare.Write);
+
+            var stream = new FileStream(fileHandle, FileAccess.Write);
 
             if (append && stream.CanSeek)
             {
@@ -172,16 +173,22 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 FileAccess.Read);
         }
 
+        public string MakeStataCompatibleFileName(string name)
+        {
+            var result = this.RemoveNonAscii(MakeValidFileName(name)).Trim();
+            var clippedResult = result.Length < 128 ? result : result.Substring(0, 128);
+            return string.IsNullOrWhiteSpace(clippedResult) ? "_" : clippedResult;
+        }
+
         public string MakeValidFileName(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
+
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            var result = this.RemoveNonAscii(Regex.Replace(name, invalidReStr, "_")).Trim();
-            if (result.Length < 128)
-                return result;
-            return result.Substring(0, 128);
+            var fileNameWithReplaceInvalidChars = Regex.Replace(name, invalidReStr, "_");
+            return fileNameWithReplaceInvalidChars.Substring(0, Math.Min(fileNameWithReplaceInvalidChars.Length, 128));
         }
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)

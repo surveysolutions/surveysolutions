@@ -5,25 +5,26 @@ using System.Linq;
 using System.Web.Mvc;
 using Resources;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
-using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
-using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -38,28 +39,30 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {
-        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
-        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
+        private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
+        private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewImportService interviewImportService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
+            ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             Func<ISampleImportService> sampleImportServiceFactory,
-            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
+            ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IInterviewImportService interviewImportService)
+            IInterviewImportService interviewImportService,
+            IFileSystemAccessor fileSystemAccessor)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -70,6 +73,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewImportService = interviewImportService;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
@@ -132,8 +136,9 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
         {
             if (!this.ModelState.IsValid)
+            {
                 return this.View(model);
-
+            }
             try
             {
                 this.CommandService.Execute(new CloneQuestionnaire(
@@ -216,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult TemplateDownload(Guid id, long version)
         {
             var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
-            return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
+            return this.File(this.fileSystemAccessor.ReadFile(pathToFile), "application/zip", fileDownloadName: this.fileSystemAccessor.GetFileName(pathToFile));
         }
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)

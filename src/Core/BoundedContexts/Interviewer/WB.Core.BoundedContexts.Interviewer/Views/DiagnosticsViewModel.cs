@@ -47,20 +47,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 
-        public IMvxCommand NavigateToDashboardCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>()); }
-        }
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DashboardViewModel>());
 
         public IMvxCommand SignOutCommand
-        {
-            get { return new MvxCommand(async () => await this.SignOutAsync()); }
-        }
+            => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
         public IMvxCommand NavigateToLoginCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToLoginAsync()); }
-        }
+            => new MvxCommand(this.viewModelNavigationService.NavigateToLogin);
 
         public bool IsAuthenticated => this.principal.IsAuthenticated;
 
@@ -68,12 +61,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.tabletDiagnosticService.LaunchShareAction(InterviewerUIResources.Share_to_Title,
                 this.interviewerSettings.GetDeviceTechnicalInformation());
-        }
-
-        private async Task SignOutAsync()
-        {
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
     }
 }

@@ -36,28 +36,19 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Roster(
-                        id: commonRosterId, variable: "common_roster",
+                    Create.Roster(commonRosterId, variable: "common_roster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new FixedRosterTitle[] {
-                            Create.FixedRosterTitle(1, "Common 1"),
-                            Create.FixedRosterTitle(2, "Common 2") },
+                        fixedRosterTitles: new [] { Create.FixedRosterTitle(1), Create.FixedRosterTitle(2) },
                         children: new IComposite[] {
-                            Create.Roster(
-                                id: parentLinkedSourceRosterId,
+                            Create.Roster(parentLinkedSourceRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedRosterTitle(3, "Roster 1"),
-                                    Create.FixedRosterTitle(4, "Roster 2") },
+                                fixedRosterTitles: new [] { Create.FixedRosterTitle(3), Create.FixedRosterTitle(4) },
                                 variable: "parent_linked_source_roster",
                                 children: new IComposite[]
                                 {
-                                    Create.Roster(
-                                        id: linkedSourceRosterId,
+                                    Create.Roster(linkedSourceRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new FixedRosterTitle[] {
-                                            Create.FixedRosterTitle(5, "Roster 1"),
-                                            Create.FixedRosterTitle(6, "Roster 2") },
+                                        fixedRosterTitles: new [] { Create.FixedRosterTitle(5),  Create.FixedRosterTitle(6) },
                                         variable: "linked_source_roster",
                                         children: new IComposite[]
                                         {
@@ -65,21 +56,15 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                         }),
                                 }),
 
-                             Create.Roster(
-                                id: parentLinkedRosterId,
+                             Create.Roster(parentLinkedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedRosterTitle(7, "Item 1"),
-                                    Create.FixedRosterTitle(8, "Item 2") },
+                                fixedRosterTitles: new [] { Create.FixedRosterTitle(7), Create.FixedRosterTitle(8) },
                                 variable: "parent_linked_roster",
                                 children: new IComposite[]
                                 {
-                                    Create.Roster(
-                                        id: linkedRosterId,
+                                    Create.Roster(linkedRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new FixedRosterTitle[] {
-                                            Create.FixedRosterTitle(9, "Item 1"),
-                                            Create.FixedRosterTitle(10, "Item 2") },
+                                        fixedRosterTitles: new [] { Create.FixedRosterTitle(9), Create.FixedRosterTitle(10) },
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {
@@ -98,8 +83,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 5 }, DateTime.Now, 66);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 6 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 7, 9 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3, 5 }, new decimal[] { 1, 3, 5 }, new decimal[] { 1, 4, 5 }, new decimal[] { 1, 4, 6 } });
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1, 7 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3, 5 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 7, 9 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3, 5 }, new decimal[] { 1, 3, 5 }, new decimal[] { 1, 4, 5 }, new decimal[] { 1, 4, 6 } });
 
                 using (var eventContext = new EventContext())
                 {
@@ -125,7 +110,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

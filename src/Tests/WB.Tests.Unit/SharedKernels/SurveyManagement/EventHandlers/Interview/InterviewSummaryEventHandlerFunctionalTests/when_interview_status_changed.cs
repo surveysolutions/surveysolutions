@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             denormalizer = CreateDenormalizer();
         };
 
-        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.InterviewStatusChangedEvent(InterviewStatus.InterviewerAssigned));
+        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
 
         It should_change_interview_status = () => updatedModel.Status.ShouldEqual(InterviewStatus.InterviewerAssigned);
 

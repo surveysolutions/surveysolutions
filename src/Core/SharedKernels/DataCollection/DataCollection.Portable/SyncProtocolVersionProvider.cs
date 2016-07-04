@@ -1,23 +1,10 @@
-﻿using System;
-
-namespace WB.Core.SharedKernels.DataCollection
+﻿namespace WB.Core.SharedKernels.DataCollection
 {
     public class SyncProtocolVersionProvider : ISyncProtocolVersionProvider
     {
         //previous values: 5962, 7018, 7034
-        private const int SyncProtocolVersionNumber = 7050;
+        public int GetProtocolVersion() => 7050;
 
-
-        private const int NonUpdatableShiftVersionNumber = 7000;
-
-        public int GetProtocolVersion()
-        {
-            return SyncProtocolVersionNumber;
-        }
-
-        public int GetLastNonUpdatableVersion()
-        {
-            return NonUpdatableShiftVersionNumber;
-        }
+        public int GetLastNonUpdatableVersion() => 7000;
     }
 }

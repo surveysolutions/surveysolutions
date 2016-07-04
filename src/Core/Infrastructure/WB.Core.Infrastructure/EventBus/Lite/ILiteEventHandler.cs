@@ -1,4 +1,6 @@
-﻿namespace WB.Core.Infrastructure.EventBus.Lite
+﻿using Ncqrs.Eventing.ServiceModel.Bus;
+
+namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventHandler { }
 
@@ -6,5 +8,11 @@
         where TEvent : IEvent
     {
         void Handle(TEvent @event);
+    }
+
+    public interface ILitePublishedEventHandler<TEvent> : ILiteEventHandler 
+        where TEvent : IEvent
+    {
+        void Handle(IPublishedEvent<TEvent> @event);
     }
 }

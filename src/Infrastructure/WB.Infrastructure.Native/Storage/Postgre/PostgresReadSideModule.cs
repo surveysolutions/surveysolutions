@@ -12,13 +12,15 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Planning.Targets;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -29,12 +31,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
+        private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings, IEnumerable<Assembly> mappingAssemblies)
+        public PostgresReadSideModule(string connectionString,
+            DbUpgradeSettings dbUpgradeSettings,
+            ReadSideCacheSettings cacheSettings,
+            IEnumerable<Assembly> mappingAssemblies)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
+            this.dbUpgradeSettings = dbUpgradeSettings;
             this.mappingAssemblies = mappingAssemblies;
         }
 
@@ -45,11 +52,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load();
 
-            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = this.connectionString });
+            try
+            {
+                DatabaseManagement.InitDatabase(this.connectionString);
+            }
+            catch (Exception exc)
+            {
+                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                throw;
+            }
 
-            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
+            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
+            {
+                ConnectionString = this.connectionString
+            });
 
-            this.Kernel.Bind(typeof(PostgreReadSideStorage<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
+                                                            .WithConstructorArgument("dbUpgradeSettings", this.dbUpgradeSettings);
+
+            this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
+                typeof(IReadSideRepositoryReader<>), typeof(INativeReadSideStorage<>))
+                .ToSelf()
+                .InSingletonScope()
+                .WithConstructorArgument("entityIdentifierColumnName", GetEntityIdentifierColumnName);
+
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideStorageWrappedWithCache).InSingletonScope(); 
             
             this.Kernel.Bind<ISessionFactory>()
@@ -81,25 +107,24 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+            
+             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.dbUpgradeSettings);
+        }
 
-            this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
-            this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
-            this.Kernel.Bind(typeof(INaviteReadSideStorage<>)).To(typeof(PostgreReadSideStorage<>));
+        private object GetEntityIdentifierColumnName(IContext context, ITarget target)
+        {
+            var entityType = context.GenericArguments[0];
+
+            var sessionFactory = context.Kernel.Get<ISessionFactory>(ReadSideSessionFactoryName);
+
+            var persister = sessionFactory.GetClassMetadata(entityType);
+
+            return persister?.IdentifierPropertyName;
         }
 
         private ISessionFactory BuildSessionFactory()
         {
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
-            try
-            {
-                DatabaseManagement.CreateDatabase(this.connectionString);
-            }
-            catch (Exception exc)
-            {
-                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
-                throw;
-            }
-            
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
@@ -109,9 +134,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-            this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();
 
             return cfg.BuildSessionFactory();
         }
@@ -141,7 +163,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             var mapper = new ModelMapper();
             var mappingTypes = this.mappingAssemblies.SelectMany(x => x.GetExportedTypes())
-                                                     .Where(x => x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+                                                     .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null && 
+                                                                 x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {

@@ -2,7 +2,7 @@
 @using System.Web.Optimization
 @using Newtonsoft.Json
 
-@model WB.Core.SharedKernels.SurveyManagement.Views.TakeNew.TakeNewInterviewView
+@model WB.Core.BoundedContexts.Headquarters.Views.TakeNew.TakeNewInterviewView
 
 @{
     ViewBag.Title = Common.CreateNewInterview;
@@ -127,18 +127,39 @@
 
     </script>
     <script type="text/html" id="DateTime">
+        <!-- ko ifnot: settings().IsTimestamp -->
+        <div data-bind="template: { name: 'DateTimeRegular' }"></div>
+        <!-- /ko -->
+        <!-- ko if: settings().IsTimestamp -->
+        <div data-bind="template: { name: 'DateTimeTimestamp' }"></div>
+    </script>
+
+    <script type="text/html" id="DateTimeRegular">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
+                    <input class="form-control" type="text" data-date-format="yyyy-mm-dd" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
         </div>
-
     </script>
+    <script type="text/html" id="DateTimeTimestamp">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" disabled="disabled" data-bind="value: selectedOption">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-info" type="button" data-bind="click: $root.answerTimestampQuestion" title="@TakeNewInterview.TimestampBtnText">
+                    <i class="glyphicon glyphicon-time"></i>
+                </button>
+            </div>
+        </div>
+    </script>
+
     <script type="text/html" id="AutoPropagate">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>

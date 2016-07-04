@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
@@ -22,15 +22,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.InterviewCommentedStatus(supervisorId: user,
+                        Create.Entity.InterviewCommentedStatus(supervisorId: user,
                             timestamp: input.From.Date.AddHours(1)),
-                        Create.InterviewCommentedStatus(supervisorId: user,
+                        Create.Entity.InterviewCommentedStatus(supervisorId: user,
                             timestamp: input.From.Date.AddMonths(2)),
-                        Create.InterviewCommentedStatus(supervisorId: user,
+                        Create.Entity.InterviewCommentedStatus(supervisorId: user,
                             timestamp: input.From.Date.AddMonths(-2))
                     }), "2");
 

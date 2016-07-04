@@ -9,8 +9,13 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,9 +31,10 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit
 {
@@ -84,14 +90,14 @@ namespace WB.Tests.Unit
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
-            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            return Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity,
-                Create.PlainQuestionnaire(questionnaireDocument));
+                Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
@@ -105,10 +111,15 @@ namespace WB.Tests.Unit
                 => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
                 && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
 
+        private static IPlainQuestionnaireRepository QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
+            => Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
+                && repository.GetHistoricalQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
+                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
+                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
+
         public static IEventHandler FailingFunctionalEventHandler()
-        {
-            return FailingFunctionalEventHandlerHavingUniqueType<object>();
-        }
+            => FailingFunctionalEventHandlerHavingUniqueType<object>();
 
         public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
         {
@@ -158,12 +169,12 @@ namespace WB.Tests.Unit
             Guid questionnaireId = Guid.NewGuid();
             long questionnaireVersion = 777;
 
-            IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
+            IPlainQuestionnaireRepository questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
                 questionnaire: questionnaire);
 
-            Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+            Interview interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.InterviewCreated(
                 questionnaireId: questionnaireId,
@@ -174,7 +185,7 @@ namespace WB.Tests.Unit
 
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
+            return Setup.InterviewForQuestionnaire(Create.Entity.PlainQuestionnaire(document: questionnaireDocument));
         }
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
@@ -189,11 +200,11 @@ namespace WB.Tests.Unit
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireIdentity = Create.QuestionnaireIdentity();
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
-            return Create.StatefulInterview(
+            return Create.AggregateRoot.StatefulInterview(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
                 questionnaireRepository: questionnaireRepository);
@@ -201,13 +212,13 @@ namespace WB.Tests.Unit
 
         public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
         {
-            var staticText = Create.StaticText(entityId, text, attachmentName);
+            var staticText = Create.Entity.StaticText(entityId, text, attachmentName);
             var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             if (!entityId.HasValue)
             {
                 questionnaireEntityFactoryMock
                    .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
+                   .Returns((Guid id, string t, string a) => Create.Entity.StaticText(id, t, a));
             }
             else if (string.IsNullOrWhiteSpace(attachmentName))
             {
@@ -254,5 +265,42 @@ namespace WB.Tests.Unit
             {
                 { id, entity },
             });
+
+        public static FilteredOptionsViewModel FilteredOptionsViewModel(List<CategoricalOption> optionList = null)
+        {
+            var options = optionList ?? new List<CategoricalOption>
+            {
+                Create.Entity.CategoricalQuestionOption(1, "abc"),
+                Create.Entity.CategoricalQuestionOption(2, "bbc"),
+                Create.Entity.CategoricalQuestionOption(3, "bbc"),
+                Create.Entity.CategoricalQuestionOption(4, "bbaé"),
+                Create.Entity.CategoricalQuestionOption(5, "cccé"),
+            };
+
+            Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int>())).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
+
+            return filteredOptionsViewModel.Object;
+        }
+
+        public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
+            Guid interviewId, InterviewDetailsView interviewDetailsView,
+            QuestionnaireDocument questionnaireDocument, ILatestInterviewExpressionState interviewExpressionState)
+        {
+            var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
+
+            var interview = Create.AggregateRoot.Interview(
+                expressionProcessorStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
+                questionnaireRepository: questionnaireRepository);
+
+            var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
+
+            return Create.Service.InterviewDetailsViewFactory(
+                plainQuestionnaireRepository: questionnaireRepository,
+                interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
+                eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
+                merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
+        }
     }
 }

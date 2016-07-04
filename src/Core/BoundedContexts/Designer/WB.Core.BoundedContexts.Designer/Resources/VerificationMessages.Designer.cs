@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi option yes/no question can&apos;t be linked.
+        ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
         /// </summary>
         internal static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi option question supports only integer positive values.
+        ///   Looks up a localized string similar to Multi select question supports only integer values.
         /// </summary>
         internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -205,30 +205,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question or static text with title substitution references a nonexistent question or variable..
+        ///   Looks up a localized string similar to Substitution references a nonexistent question or variable..
         /// </summary>
-        internal static string WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable {
+        internal static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
             get {
-                return ResourceManager.GetString("WB0017_EntityWithTitleSubstitutionReferencesNotExistingQuestionOrVariable", resourceCulture);
+                return ResourceManager.GetString("WB0017_SubstitutionReferencesNotExistingQuestionOrVariable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question or static text with title substitution references an entity that is not supported in substitutions..
+        ///   Looks up a localized string similar to Substitution references an item that is not supported in substitutions..
         /// </summary>
-        internal static string WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity {
+        internal static string WB0018_SubstitutionReferencesUnsupportedEntity {
             get {
-                return ResourceManager.GetString("WB0018_EntityWithTitleSubstitutionReferencesUnsupportedEntity", resourceCulture);
+                return ResourceManager.GetString("WB0018_SubstitutionReferencesUnsupportedEntity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question or static text with title substitution cannot reference items from a deeper roster level..
+        ///   Looks up a localized string similar to Substitution cannot reference items from a deeper roster level..
         /// </summary>
-        internal static string WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
+        internal static string WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel {
             get {
-                return ResourceManager.GetString("WB0019_EntityWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLeve" +
-                        "l", resourceCulture);
+                return ResourceManager.GetString("WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel", resourceCulture);
             }
         }
         
@@ -306,20 +305,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Options filter expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0028_ {
+        internal static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
-                return ResourceManager.GetString("WB0028_", resourceCulture);
+                return ResourceManager.GetString("WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Question with options filter expression cannot be prefilled..
         /// </summary>
-        internal static string WB0029_ {
+        internal static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
-                return ResourceManager.GetString("WB0029_", resourceCulture);
+                return ResourceManager.GetString("WB0029_QuestionWithOptionsFilterCannotBePrefilled", resourceCulture);
             }
         }
         
@@ -586,11 +585,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If question or static text uses %rostertitle% in title it need to be placed inside roster..
+        ///   Looks up a localized string similar to If item uses %rostertitle% substitution it needs to be placed inside roster..
         /// </summary>
-        internal static string WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster {
+        internal static string WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster {
             get {
-                return ResourceManager.GetString("WB0059_EntityUsesRostertitleInTitleItNeedToBePlacedInsideRoster", resourceCulture);
+                return ResourceManager.GetString("WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster", resourceCulture);
             }
         }
         
@@ -613,11 +612,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Option filter expression has a syntax error..
         /// </summary>
-        internal static string WB0062_ {
+        internal static string WB0062_OptionFilterExpresssionHasIncorrectSyntax {
             get {
-                return ResourceManager.GetString("WB0062_", resourceCulture);
+                return ResourceManager.GetString("WB0062_OptionFilterExpresssionHasIncorrectSyntax", resourceCulture);
             }
         }
         
@@ -784,33 +783,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in validation condition..
-        /// </summary>
-        internal static string WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in sub-section&apos;s enabling condition..
-        /// </summary>
-        internal static string WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Picture questions cannot be used in question&apos;s enabling condition..
-        /// </summary>
-        internal static string WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
         internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
@@ -937,7 +909,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed..
+        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed..
         /// </summary>
         internal static string WB0097_QuestionnaireTitleHasInvalidCharacters {
             get {
@@ -1091,6 +1063,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single select question supports only integer values.
+        /// </summary>
+        internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
+            get {
+                return ResourceManager.GetString("WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix roster supports only integer title values.
+        /// </summary>
+        internal static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
+            get {
+                return ResourceManager.GetString("WB0115_FixRosterSupportsOnlyIntegerTitleValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
@@ -1231,6 +1221,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0215_UnusedAttachments {
             get {
                 return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
+        /// </summary>
+        internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
+            get {
+                return ResourceManager.GetString("WB0250_ValidationConditionRefersToAFutureQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enablement condition refers to a future question. Consider reversing the order..
+        /// </summary>
+        internal static string WB0251_EnablementConditionRefersToAFutureQuestion {
+            get {
+                return ResourceManager.GetString("WB0251_EnablementConditionRefersToAFutureQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format..
+        /// </summary>
+        internal static string WB0253_TooFewVariableLabelsAreDefined {
+            get {
+                return ResourceManager.GetString("WB0253_TooFewVariableLabelsAreDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use function IsValidEmail() to validate email address..
+        /// </summary>
+        internal static string WB0254_UseFunctionIsValidEmailToValidateEmailAddress {
+            get {
+                return ResourceManager.GetString("WB0254_UseFunctionIsValidEmailToValidateEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question is too short. This might be an incomplete question..
+        /// </summary>
+        internal static string WB0255_QuestionIsTooShort {
+            get {
+                return ResourceManager.GetString("WB0255_QuestionIsTooShort", resourceCulture);
             }
         }
     }

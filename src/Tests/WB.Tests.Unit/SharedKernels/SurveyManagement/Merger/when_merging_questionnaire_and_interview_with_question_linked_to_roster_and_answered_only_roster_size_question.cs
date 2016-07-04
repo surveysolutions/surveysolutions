@@ -7,10 +7,10 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire =
-                Create.QuestionnaireDocumentWithOneChapter(children:
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children:
                     new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "roster_size", linkedToRosterId: rosterId),
-                        Create.Roster(rosterId: rosterId, variable: "ros", 
+                        Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "roster_size", linkedToRosterId: rosterId),
+                        Create.Entity.Roster(rosterId: rosterId, variable: "ros", 
                             children: new[]
                             {
-                                Create.TextListQuestion(questionId: rosterTitleQuestionId, variable: "roster_title")
+                                Create.Entity.TextListQuestion(questionId: rosterTitleQuestionId, variable: "roster_title")
                             },
                             rosterSizeSourceType: RosterSizeSourceType.Question, 
                             rosterSizeQuestionId: rosterSizeQuestionId,
@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, Create.InterviewQuestion(rosterSizeQuestionId, 2));
+            interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, Create.Entity.InterviewQuestion(rosterSizeQuestionId, 2));
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.RosterVector(0).ToArray());
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.RosterVector(1).ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(0).ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(1).ToArray());
 
             user = Mock.Of<UserDocument>();
             merger = CreateMerger(questionnaire);

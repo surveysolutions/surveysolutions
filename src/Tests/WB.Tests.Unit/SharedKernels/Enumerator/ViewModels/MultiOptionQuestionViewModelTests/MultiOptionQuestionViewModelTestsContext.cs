@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             IStatefulInterviewRepository interviewRepository = null, 
             IPrincipal principal = null, 
             AnsweringViewModel answeringViewModel = null, 
-            QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null)
+            QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null,
+            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             return new MultiOptionQuestionViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
@@ -32,7 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                answeringViewModel ?? Mock.Of<AnsweringViewModel>());
+                answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
         }
     }
 }

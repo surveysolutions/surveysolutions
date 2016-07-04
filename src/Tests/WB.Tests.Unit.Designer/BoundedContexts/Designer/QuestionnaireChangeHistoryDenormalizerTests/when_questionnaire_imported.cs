@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         };
 
         Because of = () =>
-            questionnaireChangeHistoryDenormalizer.Handle(Create.TemplateImportedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.TemplateImportedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle));
 
         It should_store_change_record_with_target_action_equal_to_import = () =>
             GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Import);

@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_not_raise_GroupsEnabled_events = () =>
             result.GroupsEnabledEventCount.ShouldEqual(0);
 
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

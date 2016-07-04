@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Children = new List<IComposite>
                 {
-                    Create.TextQuestion(questionId: substitutedQuestionId, variable: "subst"),
+                    Create.Entity.TextQuestion(questionId: substitutedQuestionId, variable: "subst"),
 
-                    Create.TextQuestion(questionId: questionA, text: "question A %subst%"),
-                    Create.TextQuestion(questionId: questionB, text: "question B %subst%"),
-                    Create.StaticText(publicKey: staticTextId, text: "static text %subst%"),
+                    Create.Entity.TextQuestion(questionId: questionA, text: "question A %subst%"),
+                    Create.Entity.TextQuestion(questionId: questionB, text: "question B %subst%"),
+                    Create.Entity.StaticText(publicKey: staticTextId, text: "static text %subst%"),
                 }
             });
 

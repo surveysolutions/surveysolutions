@@ -5,28 +5,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class BreadCrumbItemViewModel : MvxNotifyPropertyChanged
     {
-        private readonly NavigationState navigationState;
-        private string text;
+        public DynamicTextViewModel Text { get; }
 
-        public BreadCrumbItemViewModel(NavigationState navigationState)
+        public BreadCrumbItemViewModel(DynamicTextViewModel dynamicTextViewModel)
         {
+            this.Text = dynamicTextViewModel;
+        }
+
+        private NavigationState navigationState;
+
+        public Identity ItemId { get; private set; }
+
+        public void Init(string interviewId, Identity itemIdentity, string text, NavigationState navigationState)
+        {
+            this.ItemId = itemIdentity;
+            this.Text.Init(interviewId, itemIdentity, text);
             this.navigationState = navigationState;
         }
 
-        public string Text
-        {
-            get { return this.text; }
-            set { this.text = value; this.RaisePropertyChanged(); }
-        }
+        public IMvxCommand NavigateCommand => new MvxCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.ItemId)));
 
-        public Identity ItemId { get; set; }
-
-        public IMvxCommand NavigateCommand
-        {
-            get
-            {
-                return new MvxCommand(async () => await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.ItemId)));
-            }
-        }
+        public void ChangeText(string newText) => this.Text.ChangeText(newText);
     }
 }

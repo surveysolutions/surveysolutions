@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         }
 
         public new IEnumerable<IExpressionExecutableV8> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
-            => base.GetRosterInstances(rosterKey, scopeId).Cast<IExpressionExecutableV8>();
+            => base.GetRosterInstances(rosterKey, scopeId)?.Cast<IExpressionExecutableV8>();
 
         public new virtual EnablementChanges ProcessEnablementConditions()
             => EnablementChanges.Union(

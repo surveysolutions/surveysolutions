@@ -55,8 +55,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper">
-      <HintPath>..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.15.0.0\lib\net45\CsvHelper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -65,12 +66,13 @@
       <HintPath>..\..\..\..\packages\Elmah.Contrib.WebApi.1.0.10.25\lib\net45\Elmah.Contrib.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Elmah.Mvc, Version=2.0.0.29988, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI.Embedded">
-      <HintPath>..\..\..\..\packages\EventStore.Client.Embedded.3.4.0\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -80,18 +82,10 @@
       <HintPath>..\..\..\..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.Data.Edm.5.6.1\lib\net40\Microsoft.Data.Edm.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.Data.OData.5.6.1\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -109,17 +103,13 @@
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Helpers">
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebHelpers.3.2.0-rc\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+    <Reference Include="Microsoft.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebHelpers.3.2.3\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="MultipartDataMediaFormatter, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MultipartDataMediaFormatter.1.1.0.0\lib\net45\MultipartDataMediaFormatter.dll</HintPath>
@@ -144,16 +134,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Wcf">
-      <HintPath>..\..\..\..\packages\Ninject.Extensions.Wcf.3.2.0.0\lib\net45-full\Ninject.Extensions.Wcf.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Ninject.MVC5.3.2.0.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
@@ -167,7 +154,7 @@
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.3.1\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.3.4\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
@@ -205,8 +192,8 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers">
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -217,29 +204,29 @@
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Web" />
@@ -260,28 +247,29 @@
       <HintPath>..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.Data.3.1.1\lib\net45\WebMatrix.Data.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="WebMatrix.WebData">
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.0-rc\lib\net45\WebMatrix.WebData.dll</HintPath>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\AttachmentsController.cs" />
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
-    <Compile Include="Api\CommandController.cs" />
-    <Compile Include="Api\ControlPanelApiController.cs" />
-    <Compile Include="Api\ExpressionGenerationController.cs" />
-    <Compile Include="Api\ImportControllerBase.cs" />
-    <Compile Include="Api\V2\ImportV2Controller.cs" />
-    <Compile Include="Api\QuestionnairesController.cs" />
-    <Compile Include="Api\QuestionnairesObsoleteController.cs" />
-    <Compile Include="Api\TesterController.cs" />
-    <Compile Include="Api\ImportController.cs" />
-    <Compile Include="Api\QuestionnaireController.cs" />
-    <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Api\Attributes\LogImportActionAttribute.cs" />
+    <Compile Include="Api\Designer\AttachmentsController.cs" />
+    <Compile Include="Api\Designer\CommandController.cs" />
+    <Compile Include="Api\Designer\ControlPanelApiController.cs" />
+    <Compile Include="Api\Designer\ExpressionGenerationController.cs" />
+    <Compile Include="Api\Designer\QuestionnaireController.cs" />
+    <Compile Include="Api\Designer\UsersController.cs" />
+    <Compile Include="Api\Headquarters\ImportController.cs" />
+    <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
+    <Compile Include="Api\Tester\AttachmentController.cs" />
+    <Compile Include="Api\Tester\QuestionnairesController.cs" />
+    <Compile Include="Api\Tester\UserController.cs" />
+    <Compile Include="Api\Headquarters\ImportV2Controller.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
     <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
@@ -297,6 +285,9 @@
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
@@ -424,7 +415,6 @@
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
-    <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
@@ -443,9 +433,9 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\pdf-question-legend.png" />
+    <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
-    <Content Include="Content\images\pdf-question-legend.jpg" />
-    <Content Include="Content\images\pdf-roster-legend.jpg" />
     <Content Include="Content\pdf-inline-fonts.css" />
     <Content Include="Content\pdf-fonts.css" />
     <Content Include="Content\pdf.css">
@@ -513,6 +503,16 @@
     <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\userService.js" />
     <Content Include="UpdatedDesigner\app\scripts\ui-js.js" />
+    <Content Include="UpdatedDesigner\app\views\question-details\CascadingComboBox-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\DateTime-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\GpsCoordinates-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\Multimedia-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\MultyOption-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\Numeric-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\QRBarcode-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\SingleOption-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\Text-template.html" />
+    <Content Include="UpdatedDesigner\app\views\question-details\TextList-template.html" />
     <Content Include="UpdatedDesigner\app\views\treevariable.html" />
     <Content Include="UpdatedDesigner\app\views\variable.html" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
@@ -1480,8 +1480,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\json2.js" />
-    <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
@@ -1774,7 +1772,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8011</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/designer</IISUrl>
+          <IISUrl>http://localhost/Designer</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

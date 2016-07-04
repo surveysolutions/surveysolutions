@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -17,13 +16,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Establish context = () =>
         {
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(new Group("Roster Group")
-                {
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1" },
-                    PublicKey = rosterGroupId
-                });
+                CreateQuestionnaireDocumentWithOneChapter(
+                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
+                        fixedTitles: new[] {"1"}, title: "Roster Group"));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

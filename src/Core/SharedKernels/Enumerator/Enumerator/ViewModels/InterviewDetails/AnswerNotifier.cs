@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -9,28 +10,28 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class AnswerNotifier :
-        ILiteEventHandler<TextQuestionAnswered>,
-        ILiteEventHandler<DateTimeQuestionAnswered>,
-        ILiteEventHandler<GeoLocationQuestionAnswered>,
-        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
-        ILiteEventHandler<NumericIntegerQuestionAnswered>,
-        ILiteEventHandler<NumericRealQuestionAnswered>,
-        ILiteEventHandler<PictureQuestionAnswered>,
-        ILiteEventHandler<QRBarcodeQuestionAnswered>,
-        ILiteEventHandler<SingleOptionLinkedQuestionAnswered>,
-        ILiteEventHandler<SingleOptionQuestionAnswered>,
-        ILiteEventHandler<TextListQuestionAnswered>,
-        ILiteEventHandler<AnswerRemoved>,
-        ILiteEventHandler<YesNoQuestionAnswered>,
+        ILitePublishedEventHandler<TextQuestionAnswered>,
+        ILitePublishedEventHandler<DateTimeQuestionAnswered>,
+        ILitePublishedEventHandler<GeoLocationQuestionAnswered>,
+        ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
+        ILitePublishedEventHandler<NumericIntegerQuestionAnswered>,
+        ILitePublishedEventHandler<NumericRealQuestionAnswered>,
+        ILitePublishedEventHandler<PictureQuestionAnswered>,
+        ILitePublishedEventHandler<QRBarcodeQuestionAnswered>,
+        ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
+        ILitePublishedEventHandler<SingleOptionQuestionAnswered>,
+        ILitePublishedEventHandler<TextListQuestionAnswered>,
+        ILitePublishedEventHandler<AnswerRemoved>,
+        ILitePublishedEventHandler<YesNoQuestionAnswered>,
         IDisposable
     {
         private readonly ILiteEventRegistry registry;
-        private Guid? questionId;
         private Identity[] questions = { };
+        private bool reactOnAllInterviewEvents = false;
         string interviewId;
 
-        public event EventHandler QuestionAnswered;
+        public virtual event EventHandler QuestionAnswered;
 
         protected AnswerNotifier() {}
 
@@ -39,17 +40,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry = registry;
         }
 
-        public virtual void Init(string interviewId, Guid questionId)
+        public virtual void Init(string interviewId) 
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
 
             if (this.interviewId != null)
             {
-                this.registry.Unsubscribe(this, this.interviewId);
+                this.registry.Unsubscribe(this);
             }
 
             this.interviewId = interviewId;
-            this.questionId = questionId;
+            this.reactOnAllInterviewEvents = true;
             this.registry.Subscribe(this, interviewId);
         }
 
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (this.interviewId != null)
             {
-                this.registry.Unsubscribe(this, this.interviewId);
+                this.registry.Unsubscribe(this);
             }
 
             this.interviewId = interviewId;
@@ -68,13 +69,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        private void RaiseEventIfNeeded(QuestionActiveEvent @event)
+        private void RaiseEventIfNeeded(IPublishedEvent<QuestionActiveEvent> @event)
         {
-            var shouldNotifyAboutSingleAnswer = this.questionId.HasValue && @event.QuestionId == this.questionId;
+            var shouldNotifyAboutInterviewAnswer = this.reactOnAllInterviewEvents && @event.EventSourceId.FormatGuid() == this.interviewId;
             var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
-                                                 this.questions.Any(x => @event.QuestionId == x.Id && @event.RosterVector.Identical(x.RosterVector));
+                                                 this.questions.Any(x => @event.Payload.QuestionId == x.Id && @event.Payload.RosterVector.Identical(x.RosterVector));
 
-            var shouldRaiseEvent = shouldNotifyAboutSingleAnswer || shouldNotifyAboutListOfAnswers;
+            var shouldRaiseEvent = shouldNotifyAboutInterviewAnswer || shouldNotifyAboutListOfAnswers;
 
             if (shouldRaiseEvent)
             {
@@ -82,67 +83,67 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public void Handle(TextQuestionAnswered @event)
+        public void Handle(IPublishedEvent<TextQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(DateTimeQuestionAnswered @event)
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(GeoLocationQuestionAnswered @event)
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(MultipleOptionsQuestionAnswered @event)
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(NumericIntegerQuestionAnswered @event)
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(NumericRealQuestionAnswered @event)
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(PictureQuestionAnswered @event)
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(QRBarcodeQuestionAnswered @event)
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(SingleOptionLinkedQuestionAnswered @event)
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(SingleOptionQuestionAnswered @event)
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(TextListQuestionAnswered @event)
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
-        public void Handle(YesNoQuestionAnswered @event)
+        public void Handle(IPublishedEvent<YesNoQuestionAnswered> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
@@ -153,14 +154,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             handler?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(IPublishedEvent<AnswerRemoved> @event)
         {
             this.RaiseEventIfNeeded(@event);
         }
 
         public void Dispose()
         {
-            this.registry.Unsubscribe(this, interviewId);
+            this.registry.Unsubscribe(this);
         }
     }
 }

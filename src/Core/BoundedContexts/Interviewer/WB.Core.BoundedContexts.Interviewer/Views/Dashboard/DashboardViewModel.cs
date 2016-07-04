@@ -61,8 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand ShowStartedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.InProgress));
         public IMvxCommand ShowCompletedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.Completed));
         public IMvxCommand ShowRejectedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.Rejected));
-        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(async () => await this.NavigateToDiagnosticsAsync());
+        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
             
         public bool IsNewInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.New;
         public bool IsStartedInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress;
@@ -159,18 +159,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public override Task StartAsync()
+        public override void Load()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             removedDashboardItemMessageSubscriptionToken = this.messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
             this.Synchronization.Init();
             this.RefreshDashboard();
-            return Task.FromResult(true);
         }
 
         private void RefreshDashboard()
         {
+            if(this.principal.CurrentUserIdentity == null)
+                return;
+
             this.DashboardInformation = this.dashboardFactory.GetInterviewerDashboardAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
@@ -221,18 +223,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RefreshTab();
         }
 
-        private async Task NavigateToDiagnosticsAsync()
+        private void NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>();
         }
 
-        private async Task SignOutAsync()
+        private void SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-
-            await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToLoginAsync();
+            
+            this.viewModelNavigationService.SignOutAndNavigateToLogin();
         }
 
         private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)

@@ -21,7 +21,6 @@ namespace WB.Core.GenericSubdomains.Portable
             MethodCallExpression resultExp = GenerateMethodCall(source, "OrderByDescending", fieldName);
             return source.Provider.CreateQuery<TEntity>(resultExp) as IOrderedQueryable<TEntity>;
         }
-
         public static IQueryable<TEntity> OrderUsingSortExpression<TEntity>(
             this IQueryable<TEntity> source, string sortExpression) where TEntity : class
         {
@@ -53,7 +52,7 @@ namespace WB.Core.GenericSubdomains.Portable
         }
 
 
-        private static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)
+        public static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)
         {
             string[] orderFields = sortExpression.Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!orderFields.Any())

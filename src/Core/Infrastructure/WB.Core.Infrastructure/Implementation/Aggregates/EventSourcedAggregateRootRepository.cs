@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -23,6 +24,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         }
 
         public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+            => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
+
+        public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 
@@ -30,7 +34,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                 ? snapshot.Version + 1
                 : 0;
 
-            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion);
+            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion, progress, cancellationToken);
 
             return this.repository.Load(aggregateType, aggregateId, snapshot, events);
         }

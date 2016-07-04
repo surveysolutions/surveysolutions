@@ -8,8 +8,8 @@ using WB.Core.Infrastructure.FileSystem;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
@@ -24,12 +24,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             var singleOptionQuestionId = Guid.NewGuid();
             var gpsQuestionId = Guid.NewGuid();
 
-            var questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.TextQuestion(questionId: textQuestionId, text: "text question", label: "a", instruction: "ttt"),
-                Create.NumericQuestion(questionId: numericQuestionId, title: "numeric question"),
-                Create.SingleOptionQuestion(questionId: singleOptionQuestionId, title: "single option question"),
-                Create.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
+                Create.Entity.TextQuestion(questionId: textQuestionId, text: "text question", label: "a", instruction: "ttt"),
+                Create.Entity.NumericQuestion(questionId: numericQuestionId, title: "numeric question"),
+                Create.Entity.SingleOptionQuestion(questionId: singleOptionQuestionId, title: "single option question"),
+                Create.Entity.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
             });
 
             questionnaire.Title = "main level";
@@ -38,19 +38,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 x => x.CreateLabelsForQuestionnaire(Moq.It.IsAny<QuestionnaireExportStructure>()))
                 .Returns(new[]
                 {
-                    Create.QuestionnaireLevelLabels("main level",
-                        Create.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
-                        Create.LabeledVariable(variableName: "num", questionId: numericQuestionId),
-                        Create.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
+                    Create.Entity.QuestionnaireLevelLabels("main level",
+                        Create.Entity.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
+                        Create.Entity.LabeledVariable(variableName: "num", questionId: numericQuestionId),
+                        Create.Entity.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
                             variableValueLabels:
                                 new[]
                                 {
-                                    Create.VariableValueLabel(value: "1", label: "t1"),
-                                    Create.VariableValueLabel(value: "2", label: "t2")
+                                    Create.Entity.VariableValueLabel(value: "1", label: "t1"),
+                                    Create.Entity.VariableValueLabel(value: "2", label: "t2")
                                 }),
-                        Create.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
-                    Create.QuestionnaireLevelLabels("nested roster level",
-                        Create.LabeledVariable(variableName: "r1"), Create.LabeledVariable(variableName: "r2"))
+                        Create.Entity.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
+                    Create.Entity.QuestionnaireLevelLabels("nested roster level",
+                        Create.Entity.LabeledVariable(variableName: "r1"), Create.Entity.LabeledVariable(variableName: "r2"))
                 });
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();

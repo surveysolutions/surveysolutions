@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             ITopologicalSorter<string> topologicalSorter = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
 
             var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
             string generationResult;
@@ -298,6 +299,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     new RoslynCompiler(),
                     Create.CodeGenerator(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
+        }
+
+        
+
+        public static QuestionnaireVerificationMessage FindWarningForEntityWithId(IEnumerable<QuestionnaireVerificationMessage> errors, string code, Guid entityId)
+        {
+            return errors.FirstOrDefault(message
+                => message.MessageLevel == VerificationMessageLevel.Warning
+                   && message.Code == code &&
+                   message.References.First().Id == entityId);
         }
     }
 }

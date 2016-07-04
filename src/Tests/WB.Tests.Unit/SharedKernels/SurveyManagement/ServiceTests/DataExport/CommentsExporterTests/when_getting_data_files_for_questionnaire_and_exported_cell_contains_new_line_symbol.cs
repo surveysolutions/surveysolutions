@@ -5,9 +5,9 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests
@@ -25,14 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
             var interviewCommentaries = new TestInMemoryWriter<InterviewCommentaries>();
 
             interviewCommentaries.Store(
-                Create.InterviewCommentaries(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion,
-                    comments: new[] { Create.InterviewComment(comment: Environment.NewLine + comment) }),
+                Create.Entity.InterviewCommentaries(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion,
+                    comments: new[] { Create.Entity.InterviewComment(comment: Environment.NewLine + comment) }),
                 "id");
 
             csvWriterMock = new Mock<ICsvWriter>();
 
-            questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
-            var headerStructureForLevel = Create.HeaderStructureForLevel();
+            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            var headerStructureForLevel = Create.Entity.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
             readSideToTabularFormatExportService =

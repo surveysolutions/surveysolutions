@@ -1,0 +1,38 @@
+﻿@using WB.UI.Headquarters.Resources
+@using WB.UI.Shared.Web.Filters
+@using WB.UI.Headquarters.Code
+
+@functions{
+    public string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+}
+
+<script type="text/javascript">
+    var input = window.input || (function () {
+        'use strict';
+        return {
+            settings: {
+                messages: {
+                    forbiddenMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_ForbiddenMessage)",
+                    unhandledExceptionMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_UnhandledExceptionMessage)",
+                    notifyDialogTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyDialogTitle)",
+                    notifyDialogText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyDialogText)",
+                    notifyNoMarkersTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyNoMarkersDialogTitle)",
+                    notifyNoMarkersText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyNoMarkersDialogText)",
+                    deleteQuestionnaireConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_DeleteQuestionnareConfirmation)",
+                    notifyMarkersLimitReachedTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedTitle)",
+                    notifyNoMarkersLimitReachedText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedText)"
+                },
+                acsrf: {
+                    tokenName : '@TokenValidationAuthorizationFilter.Apikey',
+                    token : '@TokenHeaderValue()'
+                    }
+            }
+        };
+    }(document));
+    window.input = input;
+</script>

@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
 namespace WB.UI.Interviewer.CustomControls
 {
-    public class InterviewerDashboardTemplateSelector : IItemTemplateSelector
+    public class InterviewerDashboardTemplateSelector : IMvxTemplateSelector
     {
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {

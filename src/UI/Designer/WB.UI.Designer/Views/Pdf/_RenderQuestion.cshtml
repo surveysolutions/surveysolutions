@@ -23,6 +23,19 @@
                     }
                 </div>
             }
+            @if (questionnaire.QuestionHasOptionsFilter(question))
+            {
+                <div class="instructions">
+                    <span>F</span>@questionnaire.GetQuestionOptionsFilterExcerpt(question)
+                    @if (questionnaire.OptionsFilterIsTooLong(question))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetOptionsFilterRef(question.PublicKey)">@(questionnaire.GetQuestionOptionsFilter(question).Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F")]</a>
+                        </div>
+                    }
+                </div>
+            }
+
             @if (questionnaire.QuestionHasEnablementCondition(question))
             {
                 <div class="condition"><span>E</span>@questionnaire.GetExpressionExcerpt(question.ConditionExpression)
@@ -34,6 +47,7 @@
                     }
                 </div>
             }
+
 
             @for (int i = 0; i < questionnaire.GetValidationsCount(question.ValidationConditions); i++)
             {
@@ -73,10 +87,15 @@
                     @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
                     {
                         <div class="option">
-                            <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
-                            <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                        </div>
+                            <div class="option-value"><span >
+    @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
+</span>
+                                </div>
+                            <div class="option-text">
+                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </div>
+</div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
@@ -89,24 +108,29 @@
                     @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
                     {
                         <div class="option">
-                            <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
+                            <div class="option-value">
+                                @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
+                            </div>
                             @if (questionnaire.IsYesNoMultiQuestion(question))
                             {
                                 <div class="yes_no_multiselect">
                                     <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-yes" name="@question.StataExportCaption-@option.AnswerValue">
                                     <label for="@question.StataExportCaption-@option.AnswerValue-yes"></label>
-                                    <span>/</span>
+                                    <span style="vertical-align: top;">/</span>
                                     <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-no" name="@question.StataExportCaption-@option.AnswerValue">
                                     <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
                                 </div>
-                                <span class="yes_no-option-text">@option.AnswerText</span>
+                                <div class="yes_no-option-text">@option.AnswerText</div>
                             }
                             else
                             {
-                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                                <div class="option-text">
+                                    <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                    <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                                </div>
+
                             }
-                        </div>
+</div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
@@ -116,7 +140,7 @@
                 break;
             case QuestionType.Numeric:
                 <div class="answer-editor">
-                    <input type="number" class="points">
+                    <input type="number" class="dashes">
                 </div>
                 break;
             case QuestionType.DateTime:
@@ -126,11 +150,11 @@
                 break;
             case QuestionType.GpsCoordinates:
                 <div class="answer-editor gps">
-                    <input type="text" class="points">
+                    <input type="text" class="dashes">
                     <sup>N</sup>
-                    <input type="text" class="points">
+                    <input type="text" class="dashes">
                     <sup>W</sup>
-                    <input type="text" class="points">
+                    <input type="text" class="dashes">
                     <sup>A</sup>
                 </div>
                 break;

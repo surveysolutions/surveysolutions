@@ -3,6 +3,7 @@ using Android.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -13,20 +14,15 @@ namespace WB.UI.Interviewer.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewerInterviewViewModel>
     {
-        private ICommandService CommandService
-        {
-            get { return ServiceLocator.Current.GetInstance<ICommandService>(); }   
-        }
+        protected override int MenuResourceId => Resource.Menu.interview;
 
-        protected override int MenuResourceId { get { return Resource.Menu.interview; } }
-
-        public override async void OnBackPressed()
+        public override void OnBackPressed()
         {
-            await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
-                {
-                    Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
-                    this.Finish();
-                });
+            this.ViewModel.NavigateToPreviousViewModel(() =>
+            {
+                this.ViewModel.NavigateBack();
+                this.Finish();
+            });
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -40,9 +36,9 @@ namespace WB.UI.Interviewer.Activities
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected override async void OnMenuItemSelected(int resourceId)
+        protected override void OnMenuItemSelected(int resourceId)
         {
-            await this.CommandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
 
             switch (resourceId)
             {
@@ -54,7 +50,6 @@ namespace WB.UI.Interviewer.Activities
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
-                    this.Finish();
                     break;
             }
         }

@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {

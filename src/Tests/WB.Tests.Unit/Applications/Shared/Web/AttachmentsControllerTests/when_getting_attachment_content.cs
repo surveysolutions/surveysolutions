@@ -2,8 +2,8 @@ using System.Linq;
 using System.Net.Http;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
 
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
         {
             mockOfAttachmentContentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
-            controller = Create.AttachmentsController(mockOfAttachmentContentService.Object);
+            controller = Create.Controller.AttachmentsController(mockOfAttachmentContentService.Object);
             controller.Request = new HttpRequestMessage {Headers = {IfNoneMatch = {}}};
         };
 

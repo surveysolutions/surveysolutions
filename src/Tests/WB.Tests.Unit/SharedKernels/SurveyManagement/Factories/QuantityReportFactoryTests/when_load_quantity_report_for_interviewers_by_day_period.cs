@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
@@ -22,24 +22,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             var interviewsInStaus = new List<InterviewCommentedStatus>();
 
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                    timestamp: input.From.Date.AddHours(1)));
             for (int i = 0; i < 20; i++)
             {
-                interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: Guid.NewGuid(), supervisorId: supervisorId,
+                interviewsInStaus.Add(Create.Entity.InterviewCommentedStatus(interviewerId: Guid.NewGuid(), supervisorId: supervisorId,
                     timestamp: input.From.Date.AddHours(1)));
             }
-            interviewsInStaus.Add( Create.InterviewCommentedStatus(interviewerId: userFromOtherTeam, supervisorId: Guid.NewGuid(),
+            interviewsInStaus.Add( Create.Entity.InterviewCommentedStatus(interviewerId: userFromOtherTeam, supervisorId: Guid.NewGuid(),
                            timestamp: input.From.Date.AddHours(1)));
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(2)));
-            interviewsInStaus.Add(Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
+            interviewsInStaus.Add(Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-2)));
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
 
             interviewStatuses.Store(
-                Create.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: interviewsInStaus.ToArray()), "2");
 

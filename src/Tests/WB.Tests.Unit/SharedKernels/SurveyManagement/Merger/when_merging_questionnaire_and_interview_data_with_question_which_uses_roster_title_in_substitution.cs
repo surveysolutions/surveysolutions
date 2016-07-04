@@ -6,12 +6,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -29,30 +28,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             independantRosterId = Guid.Parse("33333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new Group()
-                {
-                    PublicKey = independantRosterId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "1", "2", "3" }
-                },
-                new Group()
-                {
-                    PublicKey = rosterId,
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    RosterFixedTitles = new[] { "a", "b", "" },
-                    Children = new List<IComposite>()
-                    {
-                        new NumericQuestion()
+                   Create.Entity.FixedRoster(rosterId: independantRosterId,
+                        fixedTitles: new[] { "1", "2", "3" }),
+                   Create.Entity.FixedRoster(rosterId: rosterId,
+                        fixedTitles: new[] { "a", "b", "" },
+                        children: new IComposite[]
+                        { new NumericQuestion()
                         {
                             PublicKey = questionWithSubstitutionId,
                             QuestionType = QuestionType.Numeric,
                             QuestionText = "test %rostertitle%",
                             StataExportCaption = "var"
-                        }
-                    }
-                });
+                        }}));
 
             interview = CreateInterviewData(interviewId);
 

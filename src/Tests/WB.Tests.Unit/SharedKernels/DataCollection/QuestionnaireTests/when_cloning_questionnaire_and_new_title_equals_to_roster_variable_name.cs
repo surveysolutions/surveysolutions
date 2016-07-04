@@ -3,13 +3,13 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(children: new IComposite[]
+            QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Roster(variable: rosterVariableName),
+                Create.Entity.Roster(variable: rosterVariableName),
             });
 
             var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(_
@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
             Mock.Get(fileSystemAccessor)
-                .Setup(_ => _.MakeValidFileName(Moq.It.IsAny<string>()))
+                .Setup(_ => _.MakeStataCompatibleFileName(Moq.It.IsAny<string>()))
                 .Returns<string>(filename => filename);
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
-                    id: questionnaireIdentity.ToString(), entity: Create.QuestionnaireBrowseItem());
+                    id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
-            questionnaire = Create.DataCollectionQuestionnaire(
+            questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 plainQuestionnaireRepository: plainQuestionnaireRepository,
                 fileSystemAccessor: fileSystemAccessor);
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
-            = Create.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
+            = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string rosterVariableName = "roster_var_name";
     }
 }

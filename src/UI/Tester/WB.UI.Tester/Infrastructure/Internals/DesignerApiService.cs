@@ -10,13 +10,14 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.UI.Tester.Infrastructure.Internals
 {
     internal class DesignerApiService : IDesignerApiService
     {
+        private readonly string apiPrefix = $"/api/v{ApiVersion.Tester}";
+
         private readonly IRestService restService;
         private readonly IPrincipal principal;
 
@@ -37,7 +38,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         public async Task<bool> Authorize(string login, string password)
         {
             await this.restService.GetAsync(
-                url: "login",
+                url: $"{this.apiPrefix}/user/login",
                 credentials: new RestCredentials()
                 {
                     Login = login,
@@ -69,7 +70,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             Questionnaire downloadedQuestionnaire = null;
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
-                url: $"questionnaires/{selectedQuestionnaire.Id}",
+                url: $"{this.apiPrefix}/questionnaires/{selectedQuestionnaire.Id}",
                 credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
@@ -81,7 +82,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             CancellationToken token)
         {
             var restFile = await this.restService.DownloadFileAsync(
-                url: $"attachment/{attachmentContentId}",
+                url: $"{this.apiPrefix}/attachment/{attachmentContentId}",
                 credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged,
                 token: token).ConfigureAwait(false);
@@ -100,7 +101,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
-                url: "questionnaires",
+                url: $"{this.apiPrefix}/questionnaires",
                 token: token,
                 credentials: this.RestCredentials,
                 queryString: new { pageIndex = pageIndex });

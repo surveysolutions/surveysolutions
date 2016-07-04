@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SetCommunicationBufferSize(int bufferSize);
         Task SetGpsDesiredAccuracy(double value);
         Task SetEventChunkSize(int eventChunkSize);
-        Task SetReadSideVersionAsync(int version);
-        
+        Task SetVibrateOnErrorAsync(bool vibrate);
+
         string BackupFolder { get; }
         string RestoreFolder { get; }
     }

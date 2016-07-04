@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValidityChangesTests
     {
         Establish context = () =>
         {
-            invalidQuestions = new List<Identity> { Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty) };
+            invalidQuestions = new List<Identity> { Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty) };
         };
 
         Because of = () => validityChanges = new ValidityChanges(new List<Identity>(), invalidQuestions);

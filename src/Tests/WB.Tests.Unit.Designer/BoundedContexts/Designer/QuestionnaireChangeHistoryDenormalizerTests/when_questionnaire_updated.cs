@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         };
 
         Because of = () =>
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireUpdatedEvent(questionnaireId: questionnaireId,questionnaireTitle: questionnaireTitle));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.Event.QuestionnaireUpdatedEvent(questionnaireId: questionnaireId,questionnaireTitle: questionnaireTitle));
 
         It should_store_change_record_with_target_action_equal_to_update = () =>
             GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Update);

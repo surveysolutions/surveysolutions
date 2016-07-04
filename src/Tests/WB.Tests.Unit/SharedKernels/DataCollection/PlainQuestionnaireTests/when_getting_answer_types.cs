@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -14,23 +11,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.SingleQuestion(id: singleOptionQuestionId),
-                Create.SingleQuestion(id: singleOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
-                Create.SingleQuestion(id: singleOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
-                Create.MultyOptionsQuestion(id: multiOptionQuestionId),
-                Create.YesNoQuestion(questionId:multiOptionYesNoQuestionId),
-                Create.MultyOptionsQuestion(id: multiOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
-                Create.MultyOptionsQuestion(id: multiOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
-                Create.NumericIntegerQuestion(id: numericIntQuestionId),
-                Create.NumericRealQuestion(id: numericQuestionId),
-                Create.DateTimeQuestion(questionId: dateTitleQuestionId),
-                Create.GpsCoordinateQuestion(questionId: gpsQuestionId),
-                Create.TextQuestion(questionId: textQuestionId),
-                Create.TextListQuestion(questionId: textListQuestionId),
-                Create.QRBarcodeQuestion(questionId: qrQuestionId),
-                Create.MultimediaQuestion(questionId: multimediaQuestionId)
+                Create.Entity.SingleQuestion(id: singleOptionQuestionId),
+                Create.Entity.SingleQuestion(id: singleOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
+                Create.Entity.SingleQuestion(id: singleOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
+                Create.Entity.MultyOptionsQuestion(id: multiOptionQuestionId),
+                Create.Entity.YesNoQuestion(questionId:multiOptionYesNoQuestionId),
+                Create.Entity.MultyOptionsQuestion(id: multiOptionLinkedOnQuestionId, linkedToQuestionId:Guid.NewGuid()),
+                Create.Entity.MultyOptionsQuestion(id: multiOptionLinkedOnRosterId, linkedToRosterId:Guid.NewGuid()),
+                Create.Entity.NumericIntegerQuestion(id: numericIntQuestionId),
+                Create.Entity.NumericRealQuestion(id: numericQuestionId),
+                Create.Entity.DateTimeQuestion(questionId: dateTitleQuestionId),
+                Create.Entity.GpsCoordinateQuestion(questionId: gpsQuestionId),
+                Create.Entity.TextQuestion(questionId: textQuestionId),
+                Create.Entity.TextListQuestion(questionId: textListQuestionId),
+                Create.Entity.QRBarcodeQuestion(questionId: qrQuestionId),
+                Create.Entity.MultimediaQuestion(questionId: multimediaQuestionId)
             });
         };
 

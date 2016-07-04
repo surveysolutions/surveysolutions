@@ -33,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true)))
+                    (type) => true),
+                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 //TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
             };
@@ -54,7 +55,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public virtual TEntity GetById(string id)
         {
             TEntity entity = null;
-            this.storage.RunInTransaction(() => entity = this.storage.Find<TEntity>(x => x.Id == id));
+
+            using (this.storage.Lock())
+                this.storage.RunInTransaction(() => entity = this.storage.Find<TEntity>(x => x.Id == id));
+
             return entity;
         }
 
@@ -82,6 +86,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         connection.Delete(entity);
                 });
 
+            }
+            catch (SQLiteException ex)
+            {
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                throw;
+            }
+        }
+
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                using (this.storage.Lock())
+                    foreach (var entity in entities.Where(entity => entity != null))
+                        this.storage.Delete(entity);
             }
             catch (SQLiteException ex)
             {
@@ -146,7 +165,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
-            this.storage.RunInTransaction(() => result = function.Invoke(this.storage.Table<TEntity>()));
+
+            using (this.storage.Lock())
+                this.storage.RunInTransaction(() => result = function.Invoke(this.storage.Table<TEntity>()));
+
             return result;
         }
 

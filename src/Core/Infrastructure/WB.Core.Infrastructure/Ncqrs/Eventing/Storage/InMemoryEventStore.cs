@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -36,12 +37,14 @@ namespace Ncqrs.Eventing.Storage
                 : result;
         }
 
-        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-            => new CommittedEventStream(id, this.Read(id, minVersion).TakeWhile(x => x.EventSequence <= maxVersion));
-
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
             => this._events.GetOrNull(id)?.Where(x => x.EventSequence >= minVersion)
             ?? Enumerable.Empty<CommittedEvent>();
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+        {
+            return Read(id, minVersion);
+        }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {

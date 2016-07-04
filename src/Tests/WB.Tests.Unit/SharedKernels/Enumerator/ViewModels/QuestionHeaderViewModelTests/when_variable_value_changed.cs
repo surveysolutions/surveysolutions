@@ -57,21 +57,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
            
-            ILiteEventRegistry registry = Create.LiteEventRegistry();
-            liteEventBus = Create.LiteEventBus(registry);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
 
-            fakeInterview = Create.Interview();
+            fakeInterview = Create.AggregateRoot.Interview();
         };
 
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
+            Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
+        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Your first variable is 01/31/2016 and second is 7.77");
 
         Cleanup cleanup = () => changedCulture.Dispose();
 

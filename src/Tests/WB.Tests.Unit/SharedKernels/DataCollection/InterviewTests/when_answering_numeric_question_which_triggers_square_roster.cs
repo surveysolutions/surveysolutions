@@ -25,15 +25,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedRosterId = Guid.Parse("21111111111111111111111111111111");
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
-                    Create.Roster(rosterId: rosterId, variable: "r1",
+                    Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                    Create.Entity.Roster(rosterId: rosterId, variable: "r1",
                         rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId,
                         children: new[]
                         {
-                            Create.Roster(rosterId: nestedRosterId, variable: "r2",
+                            Create.Entity.Roster(rosterId: nestedRosterId, variable: "r2",
                                 rosterSizeSourceType: RosterSizeSourceType.Question,
                                 rosterSizeQuestionId: rosterSizeQuestionId)
                         })

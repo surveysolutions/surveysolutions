@@ -1,4 +1,7 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -22,11 +25,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         }
 
         public IStatefulInterview Get(string interviewId)
+            => this.GetImpl(interviewId, null, CancellationToken.None);
+
+        public async Task<IStatefulInterview> GetAsync(string interviewId, IProgress<EventReadingProgress> progress,
+            CancellationToken cancellationToken)
+        {
+            return await Task.Run(() => this.GetImpl(interviewId, progress, cancellationToken), cancellationToken);
+        }
+
+        public IStatefulInterview GetImpl(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(interviewId)) throw new ArgumentNullException(nameof(interviewId));
 
             var interviewAggregateRootId = Guid.Parse(interviewId);
-            var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId);
+
+            var statefullInterview = (StatefulInterview)this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId, progress, cancellationToken);
 
             if (statefullInterview == null) return null;
 

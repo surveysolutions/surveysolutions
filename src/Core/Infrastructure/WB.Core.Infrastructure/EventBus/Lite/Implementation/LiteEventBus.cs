@@ -20,14 +20,14 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             this.eventStore = eventStore;
         }
 
-        public CommittedEventStream CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-            var commitUncommittedEvents = this.eventStore.Store(eventStream);
-            return commitUncommittedEvents;
+
+            return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommittedEvents(CommittedEventStream committedEvents)
+        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
         {
             foreach (var uncommittedChange in committedEvents)
             {
@@ -39,7 +39,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 {
                     try
                     {
-                        handler.Invoke(uncommittedChange.Payload);
+                        handler.Invoke(uncommittedChange);
                     }
                     catch (Exception exception)
                     {

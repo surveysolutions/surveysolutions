@@ -12,6 +12,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public string ConnectionString { get; set; }
 
+        public DbUpgradeSettings DbUpgradeSettings { get; set; }
+
         public List<Assembly> MappingAssemblies { get; set; }
     }
 }

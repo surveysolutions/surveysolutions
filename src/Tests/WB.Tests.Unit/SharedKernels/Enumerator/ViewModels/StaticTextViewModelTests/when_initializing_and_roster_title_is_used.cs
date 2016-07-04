@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         {
             staticTextWithSubstitutionToRosterTitleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaireMock = Create.PlainQuestionnaire(Create.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireMock = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId, text: "uses %rostertitle%")
+                Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId, text: "uses %rostertitle%")
             }));  
 
             var interview = Mock.Of<IStatefulInterview>();
@@ -41,10 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         };
 
         Because of = () => 
-            viewModel.Init("interview", new Identity(staticTextWithSubstitutionToRosterTitleId, Create.RosterVector(1)), null);
+            viewModel.Init("interview", new Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
 
         It should_substitute_roster_title_value = () => 
-            viewModel.StaticText.ShouldEqual($"uses {rosterTitleAnswerValue}");
+            viewModel.Text.PlainText.ShouldEqual($"uses {rosterTitleAnswerValue}");
 
         static StaticTextViewModel viewModel;
         static Guid staticTextWithSubstitutionToRosterTitleId;

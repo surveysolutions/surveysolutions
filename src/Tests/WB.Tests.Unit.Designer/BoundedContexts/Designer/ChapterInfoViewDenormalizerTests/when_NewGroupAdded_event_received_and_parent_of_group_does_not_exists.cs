@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: groupId, parentGroupId: notExistingGroupId));
+                denormalizer.Update(viewState, Create.Event.NewGroupAddedEvent(groupId: groupId, parentGroupId: notExistingGroupId));
 
         
 

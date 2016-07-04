@@ -129,7 +129,7 @@ namespace Ncqrs.Tests.Domain
             var stream = Prepare.Events(new HandledEvent(), new HandledEvent(), new HandledEvent()).ForSource(aggId);
             var theAggregate = new MyAggregateRoot(aggId);
 
-            theAggregate.InitializeFromHistory(stream);
+            theAggregate.InitializeFromHistory(aggId, stream);
 
             theAggregate.FooEventHandlerInvokeCount.Should().Be(3);
         }                
@@ -190,7 +190,7 @@ namespace Ncqrs.Tests.Domain
         {
             var theAggregate = new MyAggregateRoot();
 
-            Action act = () => theAggregate.InitializeFromHistory(null);
+            Action act = () => theAggregate.InitializeFromHistory(Guid.NewGuid(), null);
 
             act.ShouldThrow<ArgumentNullException>();
         }
@@ -202,7 +202,7 @@ namespace Ncqrs.Tests.Domain
 
             var history = new CommittedEventStream(Guid.Empty);
 
-            theAggregate.InitializeFromHistory(history);
+            theAggregate.InitializeFromHistory(history.SourceId, history);
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace Ncqrs.Tests.Domain
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, 0, new HandledEvent()));
 
-            Action act = ()=> theAggregate.InitializeFromHistory(stream);
+            Action act = ()=> theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
             act.ShouldThrow<InvalidOperationException>().And.Message.Should().Contain("sequence");
         }
 
@@ -229,7 +229,7 @@ namespace Ncqrs.Tests.Domain
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow,0, new HandledEvent()),
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow,0, new HandledEvent()));
 
-            theAggregate.InitializeFromHistory(stream);
+            theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
         }
 
         [Test]
@@ -242,7 +242,7 @@ namespace Ncqrs.Tests.Domain
 
             var stream = Prepare.Events(new HandledEvent(), new HandledEvent()).ForSource(theAggregate.EventSourceId);
 
-            Action act = () => theAggregate.InitializeFromHistory(stream);
+            Action act = () => theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
 
             act.ShouldThrow<InvalidOperationException>();
         }
@@ -281,7 +281,7 @@ namespace Ncqrs.Tests.Domain
 
             IEnumerable<CommittedEvent> history = new[] { event1, event2, event3, event4, event5 };
 
-            ((IEventSource)theAggregate).InitializeFromHistory(new CommittedEventStream(theAggregate.EventSourceId, history));
+            ((IEventSource)theAggregate).InitializeFromHistory(theAggregate.EventSourceId, new CommittedEventStream(theAggregate.EventSourceId, history));
 
             var eventHandlerCountAfterInitialization = theAggregate.FooEventHandlerInvokeCount;
 

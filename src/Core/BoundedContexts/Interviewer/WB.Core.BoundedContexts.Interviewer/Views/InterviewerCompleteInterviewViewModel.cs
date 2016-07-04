@@ -3,6 +3,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -18,15 +19,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
-            InterviewStateViewModel interviewState)
-            : base(viewModelNavigationService, commandService, principal, messenger, interviewState)
+            InterviewStateViewModel interviewState,
+            IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory,
+            DynamicTextViewModel dynamicTextViewModel)
+            : base(viewModelNavigationService, commandService, principal, messenger, entityWithErrorsViewModelFactory, interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
         }
 
-        public override void Init(string interviewId)
+        public override void Init(string interviewId, NavigationState navigationState)
         {
-            base.Init(interviewId);
+            base.Init(interviewId, navigationState);
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
             this.CompleteComment = statefulInterview.InterviewerCompleteComment;

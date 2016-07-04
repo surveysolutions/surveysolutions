@@ -6,6 +6,7 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         Task WriteAllBytesAsync(string pathToFile, byte[] content);
         Task CopyFileAsync(string sourceDir, string targetDir);
+        Task CopyDirectoryAsync(string sourceDir, string targetDir);
         Task CreateDirectoryAsync(string path);
 
         Task<bool> IsDirectoryExistsAsync(string pathToDirectory);

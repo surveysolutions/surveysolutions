@@ -66,6 +66,20 @@
 
     </LinearLayout>
 
+    <View style="@style/Interview_Entity_Divider"  local:MvxBind="Visibility Visibility(ErrorsCount)"/>
+
+    <LinearLayout style="@style/Interview_Question" android:orientation="vertical" local:MvxBind="Visibility Visibility(ErrorsCount)">
+      <LinearLayout style="@style/Interview_Question_Header">
+        <TextView
+            style="@style/Interview_Complete_Screen_Text"
+            local:MvxBind="Text EntitiesWithErrorsDescription" />
+      </LinearLayout>
+      <MvxLinearLayout style="@style/Interview_Question_Header"
+  android:orientation="vertical"
+  local:MvxBind="ItemsSource EntitiesWithErrors;"
+  local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
+    </LinearLayout>
+
     <View style="@style/Interview_Entity_Divider" />
 
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
@@ -105,5 +119,5 @@
             local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
       </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+  </LinearLayout>
 </ScrollView>

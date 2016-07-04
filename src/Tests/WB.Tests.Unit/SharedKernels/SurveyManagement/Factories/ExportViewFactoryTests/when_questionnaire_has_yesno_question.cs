@@ -5,8 +5,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -15,12 +15,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         Establish context = () =>
         {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId,
+            questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(id: questionId,
                     variable: "mult",
                     yesNoView: true,
                     options: new List<Answer> {
-                        Create.Answer("foo", 28), Create.Answer("bar", 42)
+                        Create.Entity.Answer("foo", 28), Create.Entity.Answer("bar", 42)
                     }));
 
             exportViewFactory = CreateExportViewFactory();

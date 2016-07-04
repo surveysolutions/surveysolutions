@@ -3,11 +3,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            attachmentContent = Create.AttachmentContent(
+            attachmentContent = Create.Entity.AttachmentContent_SurveyManagement(
                 contentHash: attachmentContentId,
                 contentType: "image/png",
                 content: new byte[]{ 1,2,3 }

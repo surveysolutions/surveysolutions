@@ -31,11 +31,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, answers: new List<Answer>
+                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, options: new List<Answer>
                     {
-                        Create.Option(text: "A", value: "10"),
-                        Create.Option(text: "B", value: "20"),
-                        Create.Option(text: "C", value: "30")
+                        Create.Option(value: "10", text: "A"),
+                        Create.Option(value: "20", text: "B"),
+                        Create.Option(value: "30", text: "C")
                     }),
 
                     Create.Roster(
@@ -109,7 +109,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         };
 
         private static InvokeResults results;
-        private static AppDomainContext appDomainContext;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

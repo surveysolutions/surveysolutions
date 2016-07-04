@@ -19,7 +19,7 @@ h1 {
   margin-bottom: 30px;
 }
 h2 {
-  font-size: 23.5px;
+  font-size: 24px;
   line-height: 24px;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -72,7 +72,7 @@ pre {
 }
 /*Start header*/
 header {
-  margin: 30px 75px 38px 124px;
+  margin: 30px 75px 38px 84px;
   display: block;
   overflow: hidden;
   font-size: 10px;
@@ -125,14 +125,14 @@ article {
   margin-bottom: 54px;
 }
 .questionnaire_title {
-  margin-left: 122px;
+  margin-left: 82px;
   margin-bottom: 20px;
   width: 63%;
   font-size: 19px;
   line-height: 22px;
 }
 .table_of_contents {
-  margin: 0 68px;
+  margin: 0 28px;
   margin-bottom: 50px;
   /*delete?*/
   font-size: 18px;
@@ -204,7 +204,7 @@ article {
 /*End number of page*/
 /*Start section*/
 .section {
-  padding: 35px 70px 0px 123px;
+  padding: 35px 70px 0px 83px;
   border-bottom: 1px solid #000;
 }
 .question-container,
@@ -224,24 +224,24 @@ article {
 .question {
   vertical-align: top;
   width: 47.5%;
-  padding: 13px 0 10px 0;
+  padding: 13px 0 5px 0;
   display: table-cell;
 }
 .question-title {
   width: 87%;
-  font-size: 18px;
-  line-height: 21px;
-  margin-bottom: 15px;
+  font-size: 16px;
+  line-height: 18px;
+  margin-bottom: 10px;
 }
 .answer {
   display: table-cell;
   width: 49%;
   border-left: 1px solid #000;
-  padding: 15px 0 20px 15px;
+  padding: 15px 0 9px 15px;
 }
 .question-meta {
   overflow: hidden;
-  margin-bottom: 13px;
+  margin-bottom: 5px;
   word-break: break-all;
 }
 .type {
@@ -278,24 +278,24 @@ article {
 .answer-editor input + label,
 .yes_no-option-text {
   display: inline-block;
-  font-size: 18px;
-  line-height: 24px;
-  min-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
+  min-height: 18px;
 }
 .answer-editor input + label {
   cursor: pointer;
   position: relative;
   padding-left: 28px;
-  display: flex;
+  
 }
 .answer-editor input + label::before {
   content: "";
   display: block;
   position: absolute;
-  top: 3px;
+  top: 1px;
   left: 0;
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   border-radius: 100%;
   border: 2px solid #000;
 }
@@ -306,49 +306,57 @@ article {
   height: 10px;
   border-radius: 100%;
   display: none;
-  top: 8px;
-  left: 5px;
+  top: 4px;
+  left: 2px;
   background-color: #000;
 }
 .answer-editor input:checked + label::after {
   display: block;
 }
 .option {
-  margin-top: 12px;
+  margin-top: 2px;
+  
 }
 .option:first-of-type {
   margin-top: 0;
 }
-.option b {
-  font-size: 11px;
-  line-height: 24px;
-  margin-right: 10px;
-  vertical-align: top;
-  text-align: right;
-  float: left;
-}
+
 .option > span {
-  display: inline-block;
-  margin-left: 18px;
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
 }
+
+.option .option-value {    
+    font-size: 12px;
+    padding: 1px 0;
+    vertical-align: middle;
+    display: inline-block;
+    float:left;
+    line-height: 18px;
+}
+
 .points {
   width: 95%;
   border: none;
-  border-bottom: 1px dotted #000;
+  border-bottom: 2px dotted #000;
+}
+
+.dashes {
+  width: 95%;
+  border: none;
+  border-bottom: 2px dashed #000;
 }
 .section_header {
   border-bottom: 3px solid #000;
   margin-bottom: 3px;
   padding-bottom: 22px;
 }
-.multi-option input + label:before {
+.multi-option  input + label:before {
   border-radius: 0;
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
-.multi-option input + label:after {
+.multi-option  input + label:after {
   content: '\2713';
   font-weight: bold;
   background-color: transparent;
@@ -360,6 +368,8 @@ article {
   display: inline-block;
   width: 53px;
   vertical-align: top;
+  margin-left: 10px;
+  line-height: 18px;
 }
 .answer-editor .yes_no_multiselect label {
   padding-left: 5px;
@@ -367,18 +377,24 @@ article {
 }
 .yes_no_multiselect span {
   display: inline-block;
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .option .yes_no-option-text {
-  margin-left: 9px;
-  line-height: 24px;
-  width: 64%;
+  margin-left: 5px;
+  width: 65%;
+  vertical-align: top;
+}
+.option .option-text {
+  width: 65%;
+  display: inline-block;
+  margin-left: 10px;
+  line-height: 18px;
+  vertical-align: top; 
 }
 input[type=date] {
   outline: 0;
-  padding: 5px 10px;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
 }
@@ -391,11 +407,11 @@ input[type=date] {
   font-weight: normal;
 }
 .generated_by span a {
-  color: #000;
+  color: #0000EE;
   text-decoration: none;
 }
 .common-info {
-  padding: 8px 20px 8px 0;
+  padding: 8px 20px 4px 0;
   position: relative;
   word-break: break-all;
   text-transform: none;
@@ -437,11 +453,12 @@ input[type=date] {
 }
 .roster,
 .group {
-  padding: 40px 0 15px 1px;
+  padding: 40px 0 7px 1px;
+  margin-bottom: 1px;
 }
 .static-text,
 .variable {
-  padding: 15px 0 15px 1px;
+  padding: 15px 0 7px 1px;
 }
 .roster:after,
 .static-text:after,
@@ -456,16 +473,17 @@ input[type=date] {
 .group_container,
 .variable_container {
   float: left;
-  font-size: 17.7px;
+  font-size: 18px;
   line-height: 24px;
+  width: 100%;
 }
 .generated_by ul {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .generated_by ul li {
-  margin-top: 17px;
-  font-size: 18px;
-  line-height: 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .generated_by ul li span {
   font-size: 12px;
@@ -477,8 +495,8 @@ input[type=date] {
 }
 .static_text,
 .variable-title {
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .breacrumbs {
   text-transform: uppercase;
@@ -501,7 +519,6 @@ input[type=date] {
   line-height: 14px;
 }
 .roster .variable_name {
-  margin-top: 21px;
   text-align: right;
 }
 .gps .points {
@@ -526,7 +543,7 @@ input[type=date] {
   margin-top: 20px;
 }
 .more > a {
-  color: #000;
+  color: #0000EE;
   display: inline-block;
   padding-bottom: 3px;
 }
@@ -549,7 +566,7 @@ figure img {
 }
 /*Start Appendix*/
 .appendix_section {
-  margin: 47px 65px 0 124px;
+  margin: 7px 65px 0 84px;
 }
 .appendix_section h2 {
   font-style: italic;
@@ -596,13 +613,12 @@ figure img {
 }
 .appendix_detail > a {
   text-decoration: none;
-  border-bottom: 1px solid #000;
 }
 .appendix_detail > a:hover {
   border: transparent;
 }
 .appendix_detail a {
-  color: #000;
+  color: #0000EE;
   font-weight: normal;
 }
 .appendix_link:hover {

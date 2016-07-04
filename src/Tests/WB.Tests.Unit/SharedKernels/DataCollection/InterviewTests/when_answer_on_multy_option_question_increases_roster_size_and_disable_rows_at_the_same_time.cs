@@ -49,12 +49,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var enablementQueue = new Queue<EnablementChanges>();
             // init .ctor call
-            enablementQueue.Enqueue(Create.EnablementChanges());
+            enablementQueue.Enqueue(Create.Entity.EnablementChanges());
             // add first row to roster
-            enablementQueue.Enqueue(Create.EnablementChanges());
+            enablementQueue.Enqueue(Create.Entity.EnablementChanges());
             // add second row to roster with disable
             enablementQueue.Enqueue(
-                Create.EnablementChanges(
+                Create.Entity.EnablementChanges(
                     groupsToBeDisabled: new List <Identity>
                     {
                         new Identity(rosterGroupId, new decimal[] {1}),
@@ -65,23 +65,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         new Identity(numericQuestionInsideRoster, new decimal[] {2})
                     }));
             //remove first row
-            enablementQueue.Enqueue(Create.EnablementChanges());
+            enablementQueue.Enqueue(Create.Entity.EnablementChanges());
             //remove second row
-            enablementQueue.Enqueue(Create.EnablementChanges());
+            enablementQueue.Enqueue(Create.Entity.EnablementChanges());
             //return first row
             enablementQueue.Enqueue(
-                Create.EnablementChanges(
+                Create.Entity.EnablementChanges(
                     questionsToBeEnabled: new List<Identity>{
                       // if uncomment this line the test  become succesefull                                                                                                                         
                         new Identity(numericQuestionInsideRoster, new decimal[] {1}),
                         new Identity(numericQuestionInsideRoster, new decimal[] {2})
                     }));
             //answer on numeric question
-            enablementQueue.Enqueue(Create.EnablementChanges());
+            enablementQueue.Enqueue(Create.Entity.EnablementChanges());
 
             interviewExpressionState = new Mock<ILatestInterviewExpressionState>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
+
+            interviewExpressionState.Setup(x => x.GetStructuralChanges()).Returns(new StructuralChanges());
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
                 => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionState.Object);
@@ -91,7 +93,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     status: InterviewStatus.InterviewerAssigned,
                     userId: userId,
                     questionnaireId: questionnaireId,

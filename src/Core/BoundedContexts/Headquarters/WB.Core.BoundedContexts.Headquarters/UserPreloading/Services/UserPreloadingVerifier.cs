@@ -161,6 +161,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (userPreloadingDataRecord.Password.Length > 100)
                 return true;
 
+            if (userPreloadingDataRecord.Password.Length < 10)
+                return true;
+
             return !this.passwordValidationRegex.IsMatch(userPreloadingDataRecord.Password);
         }
 

@@ -4,6 +4,7 @@
 @using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Headquarters.Resources
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -122,28 +123,28 @@
 
 
     <script type="text/html" id="confirm-delete-template">
-        @Html.Raw(Resources.Interviews.DeleteConfirmMessage.FormatString(
+        @Html.Raw(Interviews.DeleteConfirmMessageHQ.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
             InterviewStatus.InterviewerAssigned.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-approve-template">
-        @Html.Raw(Resources.Interviews.ApproveConfirmMessage.FormatString(
+        @Html.Raw(Interviews.ApproveConfirmMessageHQ.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
-        @Html.Raw(Resources.Interviews.RejectConfirmMessage.FormatString(
+        @Html.Raw(Interviews.RejectConfirmMessageHQ.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-unapprove-template">
-        @Html.Raw(Resources.Interviews.UnapproveConfirmMessage.FormatString(
+        @Html.Raw(Interviews.UnapproveConfirmMessageHQ.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        <br />@Resources.Interviews.ContinueConfirmMessage
+        <br />@Interviews.ContinueConfirmMessage
     </script>
 }
 

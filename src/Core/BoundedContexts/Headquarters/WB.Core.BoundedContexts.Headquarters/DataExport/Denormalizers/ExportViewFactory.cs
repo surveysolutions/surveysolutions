@@ -6,19 +6,19 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
+using WB.Core.SharedKernels.DataCollection.Factories;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -250,6 +250,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             }
 
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                if (dateTimeQuestion.IsTimestamp)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTime_Timestamp;
+            }
+
             exportedHeaderItem.VariableName = question.StataExportCaption;
             exportedHeaderItem.Titles = new[]
             { string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
@@ -370,7 +377,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 throw new InvalidOperationException("level is absent in template");
 
             var firstRootGroup = rootGroups.First();
-            var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
+            var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeStataCompatibleFileName(firstRootGroup.Title);
 
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire,
                 maxValuesForRosterSizeQuestions, levelVector);
@@ -517,12 +524,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
             gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
 
+            var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
+                ? question.QuestionText
+                : question.VariableLabel;
             for (int i = 0; i < gpsColumns.Length; i++)
             {
                 gpsQuestionExportHeader.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption,
                     gpsColumns[i]);
 
-                gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);
+                gpsQuestionExportHeader.Titles[i] += $"{questionLabel}: {gpsColumns[i]}";
             }
 
             headerItems.Add(question.PublicKey, gpsQuestionExportHeader);

@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -13,8 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
     {
         Establish context = () =>
         {
-            section1Identity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
-            section2Identity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
+            section1Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
+            section2Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
 
             interview = Substitute.For<IStatefulInterview>();
             interview.HasGroup(section1Identity)
@@ -27,10 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             interview.IsEnabled(section2Identity)
                      .Returns(true);
 
-            navigationState = Create.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(section1Identity)).WaitAndUnwrapException();
-            navigationState.NavigateToAsync(NavigationIdentity.CreateForCompleteScreen()).WaitAndUnwrapException();
-            navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(section2Identity)).WaitAndUnwrapException();
+            navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
+            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
+            navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));
 
             emptyHistoryHandler = () => { };
 
@@ -39,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 
         Because of = () =>
         {
-            navigationState.NavigateBackAsync(emptyHistoryHandler).WaitAndUnwrapException();
+            navigationState.NavigateBack(emptyHistoryHandler);
         };
 
         It should_navigate_to_complete_screen = () =>

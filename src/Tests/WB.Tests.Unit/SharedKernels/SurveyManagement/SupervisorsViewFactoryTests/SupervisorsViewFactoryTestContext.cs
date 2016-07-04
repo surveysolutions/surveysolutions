@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTests

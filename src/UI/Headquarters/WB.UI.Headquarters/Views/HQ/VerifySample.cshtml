@@ -1,6 +1,5 @@
 ﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
-@model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -16,8 +15,8 @@
             var $importInterviewsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "ImportInterviews"})';
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
-            var $processUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "HQ", action = "VerifySample" })';
-            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl);
+            var $processUrl = '@Url.RouteUrl("Default", new {httproute = "", controller = "HQ", action = "VerifySample" , id=""})';
+            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl, $processUrl);
 
             model.load();
             ko.applyBindings(model);
@@ -119,6 +118,8 @@
                         </legend>
                         <legend data-bind="visible: isRunningProcessExists">
                             @BatchUpload.ImportInProgress
+                            <br/>
+                            <a data-bind="attr: { href: getOtherProcessUrl }">@BatchUpload.RunningInterviewImportProcess</a>
                         </legend>
                     </fieldset>
                     <div class="form-group" data-bind="visible: canImportInterviews">

@@ -6,8 +6,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             multiOptionQuestion = Guid.NewGuid();
             questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(Create.MultyOptionsQuestion(id: multiOptionQuestion, variable: "mul",
+                CreateQuestionnaireDocumentWithOneChapter(Create.Entity.MultyOptionsQuestion(id: multiOptionQuestion, variable: "mul",
                     options:
                         new[]
                         {
-                            Create.Answer("-23", -23), Create.Answer("70.3", (decimal)70.3), Create.Answer("-44.4", (decimal) -44.4),
-                            Create.Answer("2", 2)
+                            Create.Entity.Answer("-23", -23), Create.Entity.Answer("70.3", (decimal)70.3), Create.Entity.Answer("-44.4", (decimal) -44.4),
+                            Create.Entity.Answer("2", 2)
                         }));
             exportViewFactory = CreateExportViewFactory();
         };

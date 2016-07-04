@@ -4,8 +4,8 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -15,25 +15,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             variableName = "yesno";
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId,
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(id: questionId,
                     variable: variableName,
                     options: new List<Answer> {
-                        Create.Answer("foo", 28),
-                        Create.Answer("bar", 42),
-                        Create.Answer("blah", 21),
-                        Create.Answer("bar_null", 15)
+                        Create.Entity.Answer("foo", 28),
+                        Create.Entity.Answer("bar", 42),
+                        Create.Entity.Answer("blah", 21),
+                        Create.Entity.Answer("bar_null", 15)
                     }, areAnswersOrdered: false,
                     yesNoView: true));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-            interview = Create.InterviewData(Create.InterviewQuestion(questionId, new[]
+            interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new[]
             {
-                Create.AnsweredYesNoOption(21m, true),
-                Create.AnsweredYesNoOption(42m, false),
-                Create.AnsweredYesNoOption(28m, true),
+                Create.Entity.AnsweredYesNoOption(21m, true),
+                Create.Entity.AnsweredYesNoOption(42m, false),
+                Create.Entity.AnsweredYesNoOption(28m, true),
             }));
         };
 

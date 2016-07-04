@@ -255,7 +255,6 @@ namespace WB.Core.SharedKernels.DataCollection
             return isCurrentStateEnabled && !isPreviousStateEnabled;
         }
 
-
         protected static bool StateChangedToDisabled(ConditionalState state)
         {
             bool isCurrentStateDisabled = state.State == State.Disabled;
@@ -322,7 +321,11 @@ namespace WB.Core.SharedKernels.DataCollection
 
         protected bool IsAnswerEmpty(GeoLocation answer) 
         {
-            return answer == null;
+            return answer == null || 
+                (answer.Altitude == 0 && 
+                answer.Longitude == 0 && 
+                answer.Accuracy == 0 && 
+                answer.Latitude == 0);
         }
 
         protected bool IsAnswerEmpty(decimal[] answer)
@@ -421,6 +424,28 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (this.QuestionDecimal2DArrayUpdateMap.ContainsKey(questionId))
                 this.QuestionDecimal2DArrayUpdateMap[questionId].Invoke(selectedPropagationVectors);
+        }
+
+        public void RemoveAnswer(Guid questionId)
+        {
+            if (this.QuestionStringUpdateMap.ContainsKey(questionId))
+                this.QuestionStringUpdateMap[questionId].Invoke(null);
+            if (this.QuestionLongUpdateMap.ContainsKey(questionId))
+                this.QuestionLongUpdateMap[questionId].Invoke(null);
+            if (this.QuestionDoubleUpdateMap.ContainsKey(questionId))
+                this.QuestionDoubleUpdateMap[questionId].Invoke(null);
+            if (this.QuestionDateTimeUpdateMap.ContainsKey(questionId))
+                this.QuestionDateTimeUpdateMap[questionId].Invoke(null);
+            if (this.QuestionDecimalUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimalUpdateMap[questionId].Invoke(null);
+            if (this.QuestionDecimal1DArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(null);
+            if (this.QuestionGpsUpdateMap.ContainsKey(questionId))
+                this.QuestionGpsUpdateMap[questionId].Invoke(null);
+            if (this.QuestionTupleArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionTupleArrayUpdateMap[questionId].Invoke(null);
+            if (this.QuestionDecimal2DArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimal2DArrayUpdateMap[questionId].Invoke(null);
         }
 
         protected void Validate(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
