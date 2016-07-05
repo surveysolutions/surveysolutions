@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class QuestionnaireContentVersionProvider : IQuestionnaireContentVersionProvider
     {
-        public Version GetSupportedQuestionnaireContentVersion() => new Version(ApiVersion.QuestionnaireContent, 0, 0);
+        public Version GetSupportedQuestionnaireContentVersion() => new Version(ApiVersion.MaxQuestionnaireVersion, 0, 0);
     }
 }

@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.QuestionnaireContent /*When will be added new version, it should be changed to previous value of ApiVersion.QuestionnaireContent*/,
+                Version = ApiVersion.MaxQuestionnaireVersion /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/,
                 NewFeatures = new[]
                 {
                     new QuestionnaireFeature
