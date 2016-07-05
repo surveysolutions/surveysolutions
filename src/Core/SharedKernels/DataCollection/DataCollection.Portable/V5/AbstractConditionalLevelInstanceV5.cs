@@ -33,6 +33,11 @@ namespace WB.Core.SharedKernels.DataCollection.V5
                 this.QuestionYesNoAnswerUpdateMap[questionId].Invoke(answers);
         }
 
+        public bool IsAnswered(YesNoAnswers answer)
+        {
+            return !IsAnswerEmpty(answer);
+        }
+
         public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
         {
             return null;
