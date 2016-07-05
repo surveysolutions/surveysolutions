@@ -5,15 +5,10 @@ using Android.App;
 using Android.Content.PM;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
-using SQLite.Net.Interop;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Interviewer.Migrations;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -57,29 +52,17 @@ namespace WB.UI.Interviewer.Activities
                 }
             }
 
-            if (isMigrationNeeded)
+            if (!isMigrationNeeded)
+                return;
+
+            var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
+            var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+
+            var questionnaires = await questionnaireViewRepository.LoadAllAsync();
+            foreach (var questionnaireView in questionnaires)
             {
-                var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
-                var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
-
-                var questionnaires = await questionnaireViewRepository.LoadAllAsync();
-                foreach (var questionnaireView in questionnaires)
-                {
-                    var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
-                    await
-                        optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireView.Identity,
-                            questionnaire.Document);
-                }
-
-            }
-
-            var eventStoreMigrator = new EventStoreMigrator(Mvx.Resolve<ISQLitePlatform>(),
-                Mvx.Resolve<SqliteSettings>(), Mvx.Resolve<IEnumeratorSettings>(), Mvx.Resolve<IAsyncPlainStorage<InterviewView>>());
-            
-            if (eventStoreMigrator.IsMigrationShouldBeDone())
-            {
-                var interviewerEventStorage = Mvx.Resolve<IInterviewerEventStorage>();
-                await Task.Run(() => eventStoreMigrator.Migrate(interviewerEventStorage)).ConfigureAwait(false);
+                var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
+                await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireView.Identity, questionnaire.Document);
             }
         }
     }

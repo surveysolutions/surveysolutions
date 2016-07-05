@@ -345,7 +345,6 @@
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Infrastructure\Logging\NLogLogger.cs" />
     <Compile Include="Infrastructure\Logging\NLogLoggerProvider.cs" />
-    <Compile Include="Migrations\EventStoreMigrator.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
