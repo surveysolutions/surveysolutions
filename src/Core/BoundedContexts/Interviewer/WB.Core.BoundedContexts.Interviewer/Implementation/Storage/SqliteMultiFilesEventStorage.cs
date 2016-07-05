@@ -69,11 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
 
         private string ToSqliteConnectionString(string pathToDatabase)
-        {
-            pathToDatabase = $"file:{pathToDatabase}";
-
-            return this.settings.InMemoryStorage ? $"{pathToDatabase}?mode=memory": pathToDatabase;
-        }
+            => this.settings.InMemoryStorage ? $"file:{pathToDatabase}?mode=memory" : pathToDatabase;
 
         private SQLiteConnectionWithLock GetOrCreateConnection(Guid eventSourceId)
         {
