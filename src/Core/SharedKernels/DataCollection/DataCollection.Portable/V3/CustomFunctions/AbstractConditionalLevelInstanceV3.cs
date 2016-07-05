@@ -39,6 +39,5 @@ namespace WB.Core.SharedKernels.DataCollection.V3.CustomFunctions
         {
             return !IsAnswerEmpty(answer);
         }
-        
     }
 }
