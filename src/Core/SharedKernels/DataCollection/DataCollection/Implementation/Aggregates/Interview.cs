@@ -1249,7 +1249,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
             this.ThrowIfInterviewReceivedByInterviewer();
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             this.CalculateInterviewChangesOnAnswerPictureQuestion(expressionProcessorState, userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
         }
