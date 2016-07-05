@@ -974,6 +974,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization completed with errors.
+        /// </summary>
+        public static string Synchronization_DoneWithErrors_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_DoneWithErrors_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removing obsolete attachments..
         /// </summary>
         public static string Synchronization_Download_AttachmentsCleanup {

@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private SychronizationStatistics statistics;
         private SynchronizationStatus status;
         private CancellationTokenSource synchronizationCancellationTokenSource;
+        private bool synchronizationErrorOccured;
 
         public SychronizationStatistics Statistics
         {
@@ -37,6 +38,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set
             {
                 this.status = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool SynchronizationErrorOccured
+        {
+            get { return this.synchronizationErrorOccured; }
+            set
+            {
+                this.synchronizationErrorOccured = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -112,7 +123,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.Statistics = syncProgressInfo.Statistics;
 
-                this.Status = syncProgressInfo.HasErrors ? SynchronizationStatus.Fail : syncProgressInfo.Status;
+                this.Status = syncProgressInfo.Status;
+                this.SynchronizationErrorOccured = SynchronizationErrorOccured || syncProgressInfo.HasErrors;
 
                 this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
@@ -138,6 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsSynchronizationInfoShowed = true;
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
 
+            this.SynchronizationErrorOccured = false;
             this.SyncBgService.StartSync();
             var syncProgressDto = this.SyncBgService.CurrentProgress;
             if (syncProgressDto != null)
