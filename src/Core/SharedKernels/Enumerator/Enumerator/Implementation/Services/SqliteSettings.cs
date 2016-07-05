@@ -4,5 +4,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         public string PathToDatabaseDirectory { get; set; }
         public string PathToInterviewsDirectory { get; set; }
+        public bool InMemoryStorage { get; set; } = false;
     }
 }

@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure
     public class SqliteEventStoreTests
     {
         private Func<JsonSerializerSettings> origSerializerSettings;
-        private SqliteEventStorage sqliteEventStorage;
+        private SqliteMultiFilesEventStorage sqliteEventStorage;
 
         [SetUp]
         public void Setup()
@@ -35,14 +36,17 @@ namespace WB.Tests.Unit.Infrastructure
                 Binder = new SqliteEventStorage.CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
             };
 
-            sqliteEventStorage = new SqliteEventStorage(new SQLitePlatformWin32(),
+            sqliteEventStorage = new SqliteMultiFilesEventStorage(new SQLitePlatformWin32(),
               Mock.Of<ILogger>(),
               Mock.Of<ITraceListener>(),
               new SqliteSettings
               {
-                  PathToDatabaseDirectory = ":memory:"
+                  PathToDatabaseDirectory = "",
+                  PathToInterviewsDirectory = "",
+                  InMemoryStorage = true
               },
-              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100));
+              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
+              Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true));
         }
 
         [Test]
@@ -111,7 +115,7 @@ namespace WB.Tests.Unit.Infrastructure
             // manually removing events from the middle of store event stream
             foreach (var missingEventId in missingEventIds)
             {
-                this.sqliteEventStorage.connections.Values.Single().Delete<EventView>(missingEventId);
+                this.sqliteEventStorage.connectionByEventSource.Values.Single().Delete<EventView>(missingEventId);
             }
 
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
