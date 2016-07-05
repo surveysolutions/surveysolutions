@@ -20,14 +20,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
     public class SqliteMultiFilesEventStorage : SqliteEventStorage, IInterviewerEventStorage
     {
         private SQLiteConnectionWithLock eventStoreInSingleFile;
-        private readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
+        internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
         private readonly SqliteSettings settings;
 
         private readonly ISQLitePlatform sqLitePlatform;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private ITraceListener traceListener;
 
-        private string pathToEventStoreInSingleFile;
+        private string connectionStringToEventStoreInSingleFile;
         private static readonly Object creatorLock = new Object();
         static readonly Encoding TextEncoding = Encoding.UTF8;
 
@@ -46,14 +46,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.InitializeEventStoreInSingleFile();
         }
 
-        private SQLiteConnectionWithLock CreateConnection(string pathToDatabase)
+        private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
-            pathToDatabase = this.settings.PathToDatabaseDirectory == ":memory:"
-                ? this.settings.PathToDatabaseDirectory
-                : pathToDatabase;
-
             var connection = new SQLiteConnectionWithLock(this.sqLitePlatform,
-                new SQLiteConnectionString(pathToDatabase, true,
+                new SQLiteConnectionString(connectionString, true,
                     new BlobSerializerDelegate(
                         (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
                         (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
@@ -69,8 +65,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             return connection;
         }
 
-        private string GetEventSourceFilePath(Guid eventSourceId)
-            => Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3");
+        private string GetEventSourceConnectionString(Guid eventSourceId)
+            => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
+
+        private string ToSqliteConnectionString(string pathToDatabase)
+        {
+            pathToDatabase = $"file:{pathToDatabase}";
+
+            return this.settings.InMemoryStorage ? $"{pathToDatabase}?mode=memory": pathToDatabase;
+        }
 
         private SQLiteConnectionWithLock GetOrCreateConnection(Guid eventSourceId)
         {
@@ -80,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 lock (creatorLock)
                 {
-                    connection = this.CreateConnection(this.GetEventSourceFilePath(eventSourceId));
+                    connection = this.CreateConnection(this.GetEventSourceConnectionString(eventSourceId));
                     this.connectionByEventSource.Add(eventSourceId, connection);
                 }
             }
@@ -93,7 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         {
             IEnumerable<CommittedEvent> events = null;
 
-            var eventSourceFilePath = this.GetEventSourceFilePath(id);
+            var eventSourceFilePath = this.GetEventSourceConnectionString(id);
             if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
             {
                 events = base.Read(this.GetOrCreateConnection(id), id, minVersion, progress, cancellationToken);
@@ -107,7 +110,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public void RemoveEventSourceById(Guid interviewId)
         {
-            var eventSourceFilePath = this.GetEventSourceFilePath(interviewId);
+            var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
             if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
             {
                 SQLiteConnectionWithLock connection;
@@ -137,9 +140,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         [Obsolete("Since v6.0")]
         private void InitializeEventStoreInSingleFile()
         {
-            this.pathToEventStoreInSingleFile = Path.Combine(this.settings.PathToDatabaseDirectory, "events-data.sqlite3");
-            if (this.fileSystemAccessor.IsFileExists(this.pathToEventStoreInSingleFile))
-                this.eventStoreInSingleFile = this.CreateConnection(this.pathToEventStoreInSingleFile);
+            this.connectionStringToEventStoreInSingleFile = this.ToSqliteConnectionString(Path.Combine(this.settings.PathToDatabaseDirectory, "events-data.sqlite3"));
+
+            if (this.fileSystemAccessor.IsFileExists(this.connectionStringToEventStoreInSingleFile))
+                this.eventStoreInSingleFile = this.CreateConnection(this.connectionStringToEventStoreInSingleFile);
         }
 
         [Obsolete("Since v6.0")]
@@ -176,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.eventStoreInSingleFile.Dispose();
 
             if (countOfEventsInSingleFile == 0)
-                this.fileSystemAccessor.DeleteFile(this.pathToEventStoreInSingleFile);
+                this.fileSystemAccessor.DeleteFile(this.connectionStringToEventStoreInSingleFile);
         }
 
         [Obsolete("Since v6.0")]
