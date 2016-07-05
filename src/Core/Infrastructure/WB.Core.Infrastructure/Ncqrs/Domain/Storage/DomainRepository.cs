@@ -36,6 +36,18 @@ namespace Ncqrs.Domain.Storage
             return aggregate;
         }
 
+        public EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
+        {
+            var aggregateRoot = (EventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateRootType);
+
+            if (aggregateRoot == null)
+                throw new ArgumentException($"Cannot create new instance of aggregate root of type {aggregateRootType.Name}");
+
+            aggregateRoot.InitializeFromSnapshot(new Snapshot(aggregateRootId, events.Last().EventSequence, null));
+
+            return aggregateRoot;
+        }
+
         public Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot)
         {
             Snapshot snapshot = null;

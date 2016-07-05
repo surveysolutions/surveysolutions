@@ -14,14 +14,16 @@ namespace Ncqrs.Domain.Storage
         /// <summary>
         /// Recreates an aggregate root using (optionally a snapshot) and a stream of events.
         /// </summary>
-        /// <param name="aggreateRootType">Type of aggregate root.</param>
+        /// <param name="aggregateRootType">Type of aggregate root.</param>
         /// <param name="snapshot">Optional snapshot of state of aggregate root.</param>
         /// <param name="eventStream">A stream of events (is snapshot is provided, stream starts at next event 
         /// after snapshot. Otherwise it starts from the beginning of aggregate's life).</param>
         /// <returns>Aggregate root instance.</returns>
-        EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream);
+        EventSourcedAggregateRoot Load(Type aggregateRootType, Snapshot snapshot, CommittedEventStream eventStream);
 
-        EventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
+        EventSourcedAggregateRoot Load(Type aggregateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
+
+        EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events);
 
         /// <summary>
         /// Takes a snapshot of provided aggregate root.
