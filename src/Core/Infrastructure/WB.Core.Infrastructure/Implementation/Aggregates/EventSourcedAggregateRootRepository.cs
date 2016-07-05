@@ -38,5 +38,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             return this.repository.Load(aggregateType, aggregateId, snapshot, events);
         }
+
+        public virtual IEventSourcedAggregateRoot GetStateless(Type aggregateType, Guid aggregateId)
+        {
+            Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
+
+            int minVersion = snapshot != null
+                ? snapshot.Version + 1
+                : 0;
+
+            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion, null, CancellationToken.None);
+
+            return this.repository.LoadStateless(aggregateType, aggregateId, events);
+        }
     }
 }

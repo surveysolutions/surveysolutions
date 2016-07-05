@@ -9,5 +9,6 @@ namespace WB.Core.Infrastructure.Aggregates
     {
         IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId);
         IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken);
+        IEventSourcedAggregateRoot GetStateless(Type aggregateType, Guid aggregateId);
     }
 }

@@ -145,7 +145,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
+            IEventSourcedAggregateRoot aggregate;
+
+            if (CommandRegistry.IsStatelessCommand(command))
+            {
+                aggregate = this.eventSourcedRepository.GetStateless(aggregateType, aggregateId);
+            }
+            else
+            {
+                aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
+            }
 
             cancellationToken.ThrowIfCancellationRequested();
 
