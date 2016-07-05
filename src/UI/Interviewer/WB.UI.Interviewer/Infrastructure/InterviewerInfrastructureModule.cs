@@ -44,7 +44,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IInterviewerEventStorage, IEventStore>()
-                .To<SqliteEventStorage>()
+                .To<SqliteMultiFilesEventStorage>()
                 .InSingletonScope()
                 .WithConstructorArgument("traceListener", new MvxTraceListener("EventStore-SQL-Queries"));
             
@@ -52,7 +52,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<SqliteSettings>().ToConstant(
                 new SqliteSettings()
                 {
-                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
+                    PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
                 });
             this.Bind(typeof (IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
