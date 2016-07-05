@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             exprectedErrorMessageFromServer = "expected error message from server";
             importRequest = new ImportQuestionnaireRequest(){ Questionnaire = new DesignerQuestionnaireListViewItem()};
 
-            var versionProvider = Setup.SupportedVersionProvider(ApiVersion.QuestionnaireContent);
+            var versionProvider = Setup.SupportedVersionProvider(ApiVersion.MaxQuestionnaireVersion);
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))

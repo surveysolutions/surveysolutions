@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    [Obsolete("Since v5.11")]
+    [Obsolete("remove after all HQ will be 5.11+")]
     public class DownloadQuestionnaireRequest
     {
         public Guid QuestionnaireId { get; set; }

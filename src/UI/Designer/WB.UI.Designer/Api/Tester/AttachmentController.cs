@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Api.Tester
         [Route("{id}")]
         public HttpResponseMessage Get(string id, int version)
         {
-            if (version < ApiVersion.Tester)
+            if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
             var attachmentContent = this.attachmentService.GetContent(id);
