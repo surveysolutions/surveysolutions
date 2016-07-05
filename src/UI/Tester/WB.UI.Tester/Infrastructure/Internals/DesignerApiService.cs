@@ -16,7 +16,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
 {
     internal class DesignerApiService : IDesignerApiService
     {
-        private readonly string apiPrefix = $"/api/v{ApiVersion.Tester}";
+        private readonly string apiPrefix = $"/api/v{ApiVersion.CurrentTesterProtocolVersion}";
 
         private readonly IRestService restService;
         private readonly IPrincipal principal;
