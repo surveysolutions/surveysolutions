@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace Main.Core.Entities.Composite
 {
-    public interface IComposite
+    public interface IComposite : IQuestionnaireEntity
     {
         List<IComposite> Children { get; set; }
 
         IComposite GetParent();
 
         void SetParent(IComposite parent);
-
-        Guid PublicKey { get; }
 
         T Find<T>(Guid publicKey) where T : class, IComposite;
 
