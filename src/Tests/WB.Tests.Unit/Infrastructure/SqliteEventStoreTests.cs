@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net;
@@ -20,22 +21,11 @@ namespace WB.Tests.Unit.Infrastructure
 {
     public class SqliteEventStoreTests
     {
-        private Func<JsonSerializerSettings> origSerializerSettings;
         private SqliteMultiFilesEventStorage sqliteEventStorage;
 
         [SetUp]
         public void Setup()
         {
-            this.origSerializerSettings = SqliteEventStorage.JsonSerializerSettings;
-
-            SqliteEventStorage.JsonSerializerSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new SqliteEventStorage.CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
-            };
-
             sqliteEventStorage = new SqliteMultiFilesEventStorage(new SQLitePlatformWin32(),
               Mock.Of<ILogger>(),
               Mock.Of<ITraceListener>(),
@@ -46,7 +36,8 @@ namespace WB.Tests.Unit.Infrastructure
                   InMemoryStorage = true
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
-              Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true));
+              Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
         }
 
         [Test]
@@ -206,12 +197,6 @@ namespace WB.Tests.Unit.Infrastructure
             this.sqliteEventStorage.RemoveEventSourceById(eventSourceId);
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
             Assert.That(committedEvents.Count(), Is.EqualTo(0));
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            SqliteEventStorage.JsonSerializerSettings = this.origSerializerSettings;
         }
     }
 }

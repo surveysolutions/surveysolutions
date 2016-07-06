@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             ITraceListener traceListener,
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings,
-            IFileSystemAccessor fileSystemAccessor) : base(logger, enumeratorSettings)
+            IFileSystemAccessor fileSystemAccessor,
+            IEventTypeResolver eventTypeResolver) : base(logger, enumeratorSettings, eventTypeResolver)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.settings = settings;
@@ -95,14 +96,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var eventSourceFilePath = this.GetEventSourceConnectionString(id);
             if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
             {
-                events = base.Read(this.GetOrCreateConnection(id), id, minVersion, progress, cancellationToken);
+                events = base.Read(this.GetOrCreateConnection(id), id, minVersion, this.eventSerializer, progress, cancellationToken);
             }
 
             return events ?? this.ReadFromEventStoreInSingleFile(id, minVersion, progress, cancellationToken) ?? new CommittedEvent[0];
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
-            => this.StoreToEventStoreInSingleFile(eventStream) ?? base.Store(this.GetOrCreateConnection(eventStream.SourceId), eventStream);
+            => this.StoreToEventStoreInSingleFile(eventStream) ?? base.Store(this.GetOrCreateConnection(eventStream.SourceId), eventStream, this.eventSerializer);
 
         public void RemoveEventSourceById(Guid interviewId)
         {
@@ -147,7 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             return this.eventStoreInSingleFile != null
-                ? base.Read(this.eventStoreInSingleFile, id, minVersion, progress, cancellationToken)
+                ? base.Read(this.eventStoreInSingleFile, id, minVersion, this.backwardCompatibleEventSerializer, progress, cancellationToken)
                 : null;
         }
 
@@ -155,7 +156,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private CommittedEventStream StoreToEventStoreInSingleFile(UncommittedEventStream eventStream)
             => this.eventStoreInSingleFile != null &&
                base.GetTotalEventsByEventSourceId(this.eventStoreInSingleFile, eventStream.SourceId, 0) > 0
-                ? base.Store(this.eventStoreInSingleFile, eventStream)
+                ? base.Store(this.eventStoreInSingleFile, eventStream, this.backwardCompatibleEventSerializer)
                 : null;
 
         [Obsolete("Since v6.0")]
