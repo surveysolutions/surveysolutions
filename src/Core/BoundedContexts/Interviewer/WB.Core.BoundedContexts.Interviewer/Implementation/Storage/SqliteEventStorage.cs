@@ -118,6 +118,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             } while (readEventCount < totalEventCount);
         }
 
+        public int GetLastEventSequence(Guid id)
+        {
+            throw new NotImplementedException();
+// I write code, but I don't test it
+//            using (connection.Lock())
+//            {
+//                int lastEventSequence = this
+//                    .connection
+//                    .Table<EventView>()
+//                    .Where(eventView => eventView.EventSourceId == id)
+//                    .OrderBy(eventView => eventView.EventSequence)
+//                    .Select(eventView => eventView.EventSequence)
+//                    .LastOrDefault();
+//                return lastEventSequence;
+//            }
+        }
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             using (connection.Lock())

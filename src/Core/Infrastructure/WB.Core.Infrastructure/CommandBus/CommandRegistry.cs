@@ -29,7 +29,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 this.AggregateType = aggregateType;
                 this.AggregateKind = DetermineAggregateKind(aggregateType);
                 this.IsInitializer = isInitializer;
-                this.IsStatelessCommand = isStateless;
+                this.IsStateless = isStateless;
                 this.IdResolver = idResolver;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();                
@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public Type AggregateType { get; }
             public AggregateKind AggregateKind { get; }
             public bool IsInitializer { get; }
-            public bool IsStatelessCommand { get; }
+            public bool IsStateless { get; }
             public Func<ICommand, Guid> IdResolver { get; }
             public Action<ICommand, IAggregateRoot> Handler { get; }
             public List<Type> Validators { get; }
@@ -221,8 +221,8 @@ namespace WB.Core.Infrastructure.CommandBus
         internal static bool IsInitializer(ICommand command)
             => GetHandlerDescriptor(command).IsInitializer;
 
-        internal static bool IsStatelessCommand(ICommand command)
-            => GetHandlerDescriptor(command).IsStatelessCommand;
+        internal static bool IsStateless(ICommand command)
+            => GetHandlerDescriptor(command).IsStateless;
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
             => GetHandlerDescriptor(command).IdResolver;
