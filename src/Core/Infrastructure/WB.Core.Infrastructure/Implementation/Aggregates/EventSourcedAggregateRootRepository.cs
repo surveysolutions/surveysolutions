@@ -6,6 +6,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
@@ -41,15 +42,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public virtual IEventSourcedAggregateRoot GetStateless(Type aggregateType, Guid aggregateId)
         {
-            Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
-
-            int minVersion = snapshot != null
-                ? snapshot.Version + 1
-                : 0;
-
-            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion, null, CancellationToken.None);
-
-            return this.repository.LoadStateless(aggregateType, aggregateId, events);
+            var lastEventSequence = this.eventStore.GetLastEventSequence(aggregateId);
+            return this.repository.LoadStateless(aggregateType, aggregateId, lastEventSequence);
         }
     }
 }
