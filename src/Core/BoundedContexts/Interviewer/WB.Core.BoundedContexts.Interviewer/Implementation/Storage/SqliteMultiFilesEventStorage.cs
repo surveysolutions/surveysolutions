@@ -13,9 +13,11 @@ using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
@@ -29,14 +31,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private readonly ISQLitePlatform sqLitePlatform;
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IEventTypeResolver eventTypeResolver;
         private ITraceListener traceListener;
 
         private string connectionStringToEventStoreInSingleFile;
         private static readonly Object lockObject = new Object();
         static readonly Encoding TextEncoding = Encoding.UTF8;
         private readonly EventSerializer eventSerializer;
-        private readonly BackwardCompatibleEventSerializer backwardCompatibleEventSerializer;
+        private BackwardCompatibleEventSerializer backwardCompatibleEventSerializer;
 
         public SqliteMultiFilesEventStorage(ISQLitePlatform sqLitePlatform,
             ILogger logger,
@@ -44,17 +45,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings,
             IFileSystemAccessor fileSystemAccessor,
-            IEventTypeResolver eventTypeResolver)
+            IEventTypesResolver eventTypesResolver)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.eventTypeResolver = eventTypeResolver;
             this.settings = settings;
             this.enumeratorSettings = enumeratorSettings;
             this.sqLitePlatform = sqLitePlatform;
             this.logger = logger;
             this.traceListener = traceListener;
-            this.eventSerializer = new EventSerializer(eventTypeResolver);
-            this.backwardCompatibleEventSerializer = new BackwardCompatibleEventSerializer();
+            this.eventSerializer = new EventSerializer(eventTypesResolver);
 
             this.InitializeEventStoreInSingleFile();
         }
@@ -160,6 +159,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         [Obsolete("Since v6.0")]
         private void InitializeEventStoreInSingleFile()
         {
+            this.backwardCompatibleEventSerializer = new BackwardCompatibleEventSerializer();
+
             this.connectionStringToEventStoreInSingleFile = this.ToSqliteConnectionString(Path.Combine(this.settings.PathToDatabaseDirectory, "events-data.sqlite3"));
 
             if (this.fileSystemAccessor.IsFileExists(this.connectionStringToEventStoreInSingleFile))
@@ -209,6 +210,63 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             using (this.eventStoreInSingleFile.Lock())
             {
                 return this.eventStoreInSingleFile.Table<EventView>().Count();
+            }
+        }
+
+        [Obsolete("v 5.10.10")]
+        private class BackwardCompatibleEventSerializer : IEventSerializer
+        {
+            public string Serialize(IEvent @event)
+                => JsonConvert.SerializeObject(@event, OldJsonSerializerSettings());
+
+
+            public IEvent Deserialize(string eventAsString, string eventTypeAsString)
+               => JsonConvert.DeserializeObject<IEvent>(eventAsString, OldJsonSerializerSettings());
+
+            [Obsolete("v 5.10.10")]
+            private static readonly Func<JsonSerializerSettings> OldJsonSerializerSettings = () => new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
+            };
+
+            [Obsolete("Since v6.0")]
+            private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
+            {
+                public override Type BindToType(string assemblyName, string typeName)
+                {
+                    var oldCapiAssemblyName = "WB.UI.Capi";
+                    var newCapiAssemblyName = "WB.Core.BoundedContexts.Interviewer";
+                    var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
+                    var oldMainCoreAssemblyName = "Main.Core";
+
+                    if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal))
+                    {
+                        assemblyName = newCapiAssemblyName;
+                    }
+                    else if (String.Equals(assemblyName, oldMainCoreAssemblyName, StringComparison.Ordinal))
+                    {
+                        if (oldMainCoreTypeMap.ContainsKey(typeName))
+                            assemblyName = oldMainCoreTypeMap[typeName];
+                        else
+                            assemblyName = newQuestionsAssemblyName;
+                    }
+
+                    return base.BindToType(assemblyName, typeName);
+                }
+
+                private readonly Dictionary<string, string> oldMainCoreTypeMap = new Dictionary<string, string>()
+            {
+                {"Main.Core.Events.AggregateRootEvent", "WB.Core.Infrastructure"},
+                {"Main.Core.Events.User.NewUserCreated", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserChanged", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserLocked", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserLockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserUnlocked", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserUnlockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
+            };
             }
         }
 
@@ -366,7 +424,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: serializer.DeserializePayload(storedEvent));
+                payload: serializer.Deserialize(storedEvent.JsonEvent, storedEvent.EventType));
 
         private static CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
             => new CommittedEvent(
@@ -387,71 +445,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = serializer.SerializeEventPayload(evt),
+                JsonEvent = serializer.Serialize(evt.Payload),
                 EventType = evt.Payload.GetType().Name
             };
 
         private interface IEventSerializer
         {
-            string SerializeEventPayload(UncommittedEvent evnt);
-            Infrastructure.EventBus.IEvent DeserializePayload(EventView storedEvent);
-        }
-
-        [Obsolete("v 5.10.10")]
-        private class BackwardCompatibleEventSerializer : IEventSerializer
-        {
-            public string SerializeEventPayload(UncommittedEvent evnt)
-                => JsonConvert.SerializeObject(evnt.Payload, OldJsonSerializerSettings());
-
-
-            public Infrastructure.EventBus.IEvent DeserializePayload(EventView storedEvent)
-               => JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, OldJsonSerializerSettings());
-
-            [Obsolete("v 5.10.10")]
-            private static readonly Func<JsonSerializerSettings> OldJsonSerializerSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
-            };
-
-            [Obsolete("Since v6.0")]
-            private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
-            {
-                public override Type BindToType(string assemblyName, string typeName)
-                {
-                    var oldCapiAssemblyName = "WB.UI.Capi";
-                    var newCapiAssemblyName = "WB.Core.BoundedContexts.Interviewer";
-                    var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
-                    var oldMainCoreAssemblyName = "Main.Core";
-
-                    if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal))
-                    {
-                        assemblyName = newCapiAssemblyName;
-                    }
-                    else if (String.Equals(assemblyName, oldMainCoreAssemblyName, StringComparison.Ordinal))
-                    {
-                        if (oldMainCoreTypeMap.ContainsKey(typeName))
-                            assemblyName = oldMainCoreTypeMap[typeName];
-                        else
-                            assemblyName = newQuestionsAssemblyName;
-                    }
-
-                    return base.BindToType(assemblyName, typeName);
-                }
-
-                private readonly Dictionary<string, string> oldMainCoreTypeMap = new Dictionary<string, string>()
-            {
-                {"Main.Core.Events.AggregateRootEvent", "WB.Core.Infrastructure"},
-                {"Main.Core.Events.User.NewUserCreated", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserChanged", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserLocked", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserLockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserUnlocked", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserUnlockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
-            };
-            }
+            string Serialize(IEvent @event);
+            IEvent Deserialize(string eventAsString, string eventTypeAsString);
         }
 
         private class EventSerializer : IEventSerializer
@@ -465,18 +466,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-            private readonly IEventTypeResolver eventTypeResolver;
+            private readonly IEventTypesResolver eventTypesResolver;
 
-            public EventSerializer(IEventTypeResolver eventTypeResolver)
+            public EventSerializer(IEventTypesResolver eventTypesResolver)
             {
-                this.eventTypeResolver = eventTypeResolver;
+                this.eventTypesResolver = eventTypesResolver;
             }
 
-            public string SerializeEventPayload(UncommittedEvent evnt)
-                => JsonConvert.SerializeObject(evnt.Payload, Formatting.None, JsonSerializerSettings);
+            public string Serialize(IEvent @event)
+                => JsonConvert.SerializeObject(@event, Formatting.None, JsonSerializerSettings);
 
-            public Infrastructure.EventBus.IEvent DeserializePayload(EventView storedEvent)
-                => JsonConvert.DeserializeObject(storedEvent.JsonEvent, this.eventTypeResolver.ResolveType(storedEvent.EventType), JsonSerializerSettings) as Infrastructure.EventBus.IEvent;
+            public IEvent Deserialize(string eventAsString, string eventTypeAsString)
+                => JsonConvert.DeserializeObject(eventAsString, this.eventTypesResolver.GetTypeByName(eventTypeAsString), JsonSerializerSettings) as IEvent;
         }
     }
 }
