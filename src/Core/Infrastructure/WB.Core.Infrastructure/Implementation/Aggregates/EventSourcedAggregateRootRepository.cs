@@ -42,8 +42,10 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public virtual IEventSourcedAggregateRoot GetStateless(Type aggregateType, Guid aggregateId)
         {
-            var lastEventSequence = this.eventStore.GetLastEventSequence(aggregateId);
-            return this.repository.LoadStateless(aggregateType, aggregateId, lastEventSequence);
+            int? lastEventSequence = this.eventStore.GetLastEventSequence(aggregateId);
+            if (!lastEventSequence.HasValue)
+                return null;
+            return this.repository.LoadStateless(aggregateType, aggregateId, lastEventSequence.Value);
         }
     }
 }

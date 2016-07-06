@@ -89,7 +89,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
             => this.Read(id, minVersion);
 
-        public int GetLastEventSequence(Guid id)
+        public int? GetLastEventSequence(Guid id)
         {
             ResolvedEvent? lastResolvedEvent = null;
 
@@ -103,7 +103,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             if (lastResolvedEvent.HasValue)
                 return this.ToCommittedEvent(lastResolvedEvent.Value).EventSequence;
 
-            return 0;
+            return null;
         }
 
         public IEnumerable<CommittedEvent> GetAllEvents()
