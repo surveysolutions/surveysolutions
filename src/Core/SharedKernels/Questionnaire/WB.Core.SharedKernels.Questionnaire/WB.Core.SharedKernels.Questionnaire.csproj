@@ -57,7 +57,7 @@
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
     <Compile Include="Documents\IComposite.cs" />
-    <Compile Include="Documents\ICompositeExtensions.cs" />
+    <Compile Include="Documents\QuestionnaireEntityExtensions.cs" />
     <Compile Include="Documents\IQuestionnaireEntity.cs" />
     <Compile Include="Documents\IValidatable.cs" />
     <Compile Include="Documents\IConditional.cs" />
