@@ -26,6 +26,8 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -153,68 +155,8 @@ namespace WB.UI.Interviewer
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
             kernel.Get<InterviewerDashboardEventHandler>();
 
-            var resolver = kernel.Get<IEventTypeResolver>();
-
-            var types = new Type[]
-            {
-                typeof(TextQuestionAnswered),
-                typeof(DateTimeQuestionAnswered),
-                typeof(MultipleOptionsLinkedQuestionAnswered),
-                typeof(NumericRealQuestionAnswered),
-                typeof(PictureQuestionAnswered),
-                typeof(SingleOptionLinkedQuestionAnswered),
-                typeof(TextListQuestionAnswered),
-                typeof(SynchronizationMetadataApplied),
-                typeof(InterviewSynchronized),
-                typeof(InterviewStatusChanged),
-                typeof(InterviewHardDeleted),
-
-                typeof(MultipleOptionsQuestionAnswered),
-                typeof(SingleOptionQuestionAnswered),
-                typeof(NumericIntegerQuestionAnswered),
-                typeof(GeoLocationQuestionAnswered),
-                typeof(QRBarcodeQuestionAnswered),
-                typeof(YesNoQuestionAnswered),
-                typeof(AnswersRemoved),
-                typeof(InterviewOnClientCreated),
-                typeof(AnswerRemoved),
-
-                typeof(StaticTextsDeclaredValid),
-                typeof(StaticTextsDeclaredInvalid),
-                typeof(LinkedOptionsChanged),
-                typeof(GroupsDisabled),
-                typeof(GroupsEnabled),
-                typeof(VariablesDisabled),
-                typeof(VariablesEnabled),
-                typeof(VariablesChanged),
-                typeof(QuestionsDisabled),
-                typeof(QuestionsEnabled),
-                typeof(StaticTextsEnabled),
-                typeof(StaticTextsDisabled),
-                typeof(AnswerCommented),
-                typeof(SubstitutionTitlesChanged),
-                typeof(GroupPropagated),
-                typeof(RosterInstancesTitleChanged),
-                typeof(RosterInstancesAdded),
-                typeof(RosterInstancesRemoved),
-                typeof(SupervisorAssigned),
-                typeof(InterviewerAssigned),
-                typeof(InterviewCompleted),
-                typeof(InterviewRestarted),
-                typeof(InterviewRejected),
-                typeof(InterviewDeclaredValid),
-                typeof(InterviewDeclaredInvalid),
-                typeof(AnswersRemoved),
-                typeof(AnswerRemoved),
-                typeof(AnswersDeclaredValid),
-                typeof(AnswersDeclaredInvalid)
-            };
-
-            foreach (var type in types)
-            {
-                resolver.RegisterEventDataType(type);
-            }
-
+            kernel.Bind<IEventTypesResolver>().ToConstant(new EventTypesResolver(typeof(InterviewActiveEvent).Assembly));
+            
             return kernel;
         }
 
