@@ -15,20 +15,20 @@ namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_executing_stateless_command_and_aggregate_root_raised_no_events
     {
-        private class DoNothing : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class DoNothingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
 
         private class Aggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 
-            public void DoNothing(DoNothing command) {}
+            public void DoNothing(DoNothingCommand command) {}
         }
 
         Establish context = () =>
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .StatelessHandles<DoNothing>(_ => aggregateId, aggregate => aggregate.DoNothing);
+                .StatelessHandles<DoNothingCommand>(_ => aggregateId, aggregate => aggregate.DoNothing);
 
             aggregateFromRepository = new Aggregate();
 
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new DoNothing(), null);
+            commandService.Execute(new DoNothingCommand(), null);
 
         It should_not_commit_events = () =>
             eventBusMock.Verify(
