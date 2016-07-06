@@ -105,6 +105,16 @@ namespace WB.Core.Infrastructure.CommandBus
             }
 
             public AggregateSetup<TAggregate> StatelessHandles<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Func<TAggregate, Action<TCommand>> getCommandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
+                where TCommand : ICommand
+                => this.StatelessHandles(
+                    aggregateRootIdResolver,
+                    (command, aggregate) => getCommandHandler(aggregate).Invoke(command),
+                    configurer);
+
+            public AggregateSetup<TAggregate> StatelessHandles<TCommand>(
                 Func<TCommand, Guid> aggregateRootIdResolver, 
                 Action<TCommand, TAggregate> commandHandler,
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)

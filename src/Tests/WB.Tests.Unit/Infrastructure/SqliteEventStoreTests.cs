@@ -204,6 +204,35 @@ namespace WB.Tests.Unit.Infrastructure
             Assert.That(committedEvents.Count(), Is.EqualTo(0));
         }
 
+        [Test]
+        public void Should_be_able_to_read_last_event_sequence()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var uncommittedEvents = new List<UncommittedEvent>();
+
+            for (int i = 1; i <= 301; i++)
+            {
+                uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
+                    Create.Event.StaticTextUpdated(text: "text " + i),
+                    sequence: i));
+            }
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null, uncommittedEvents));
+
+            var lastEventSequence = sqliteEventStorage.GetLastEventSequence(eventSourceId);
+            Assert.That(lastEventSequence, Is.EqualTo(301));
+        }
+
+        [Test]
+        public void Should_be_able_to_read_last_event_sequence_when_aggregate_is_not_exists()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var lastEventSequence = sqliteEventStorage.GetLastEventSequence(eventSourceId);
+            Assert.That(lastEventSequence, Is.Null);
+        }
+
         [TearDown]
         public void TearDown()
         {
