@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
 
         private static void TranslateTitles(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
         {
-            foreach (var entity in questionnaireDocument.Find<IComposite>())
+            foreach (var entity in questionnaireDocument.Find<IQuestionnaireEntity>())
             {
                 TranslateTitle(entity, translation);
             }
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             // roster fixed titles
         }
 
-        private static void TranslateTitle(IComposite entity, IQuestionnaireTranslation translation)
+        private static void TranslateTitle(IQuestionnaireEntity entity, IQuestionnaireTranslation translation)
         {
             entity.SetTitle(Translate(
                 original: entity.GetTitle(),
