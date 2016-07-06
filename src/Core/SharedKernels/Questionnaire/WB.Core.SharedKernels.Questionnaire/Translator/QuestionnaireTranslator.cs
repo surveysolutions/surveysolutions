@@ -31,6 +31,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             foreach (var question in questionnaireDocument.Find<IQuestion>())
             {
                 TranslateInstruction(question, translation);
+
+                foreach (var answerOption in question.Answers)
+                {
+                    TranslateAnswerOption(question.PublicKey, answerOption, translation);
+                }
             }
 
             // options
@@ -40,22 +45,26 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
 
         private static void TranslateTitle(IComposite entity, IQuestionnaireTranslation translation)
         {
-            string original = entity.GetTitle();
-            string translated = translation.GetTitle(entity.PublicKey);
-
-            string result = string.IsNullOrWhiteSpace(translated) ? translated : original;
-
-            entity.SetTitle(result);
+            entity.SetTitle(Translate(
+                original: entity.GetTitle(),
+                translated: translation.GetTitle(entity.PublicKey)));
         }
 
         private static void TranslateInstruction(IQuestion question, IQuestionnaireTranslation translation)
         {
-            string original = question.Instructions;
-            string translated = translation.GetInstruction(question.PublicKey);
-
-            string result = string.IsNullOrWhiteSpace(translated) ? translated : original;
-
-            question.Instructions = result;
+            question.Instructions = Translate(
+                original: question.Instructions,
+                translated: translation.GetInstruction(question.PublicKey));
         }
+
+        private static void TranslateAnswerOption(Guid questionId, Answer answerOption, IQuestionnaireTranslation translation)
+        {
+            answerOption.AnswerText = Translate(
+                original: answerOption.AnswerText,
+                translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue));
+        }
+
+        private static string Translate(string original, string translated)
+            => string.IsNullOrWhiteSpace(translated) ? translated : original;
     }
 }
