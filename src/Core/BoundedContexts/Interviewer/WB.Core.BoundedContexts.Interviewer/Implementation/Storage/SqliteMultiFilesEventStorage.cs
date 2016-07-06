@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private ITraceListener traceListener;
 
         private string connectionStringToEventStoreInSingleFile;
-        private static readonly Object creatorLock = new Object();
+        private static readonly Object lockObject = new Object();
         static readonly Encoding TextEncoding = Encoding.UTF8;
 
         public SqliteMultiFilesEventStorage(ISQLitePlatform sqLitePlatform,
@@ -78,17 +78,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
             if (!this.connectionByEventSource.TryGetValue(eventSourceId, out connection))
             {
-                lock (creatorLock)
+                lock (lockObject)
                 {
-                    connection = this.CreateConnection(this.GetEventSourceConnectionString(eventSourceId));
-                    this.connectionByEventSource.Add(eventSourceId, connection);
+                    if (!this.connectionByEventSource.TryGetValue(eventSourceId, out connection))
+                    {
+                        connection = this.CreateConnection(this.GetEventSourceConnectionString(eventSourceId));
+                        this.connectionByEventSource.Add(eventSourceId, connection);
+                    }
                 }
             }
 
             return connection;
         }
 
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion) => this.Read(id, minVersion, null, CancellationToken.None);
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+            => this.Read(id, minVersion, null, CancellationToken.None);
+
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             IEnumerable<CommittedEvent> events = null;
@@ -110,15 +115,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
             if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
             {
-                SQLiteConnectionWithLock connection;
-
-                if (this.connectionByEventSource.TryGetValue(interviewId, out connection))
+                lock (lockObject)
                 {
-                    connection.Dispose();
-                    this.connectionByEventSource.Remove(interviewId);
-                }
+                    if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+                    {
+                        SQLiteConnectionWithLock connection;
+                        if (this.connectionByEventSource.TryGetValue(interviewId, out connection))
+                        {
+                            connection.Dispose();
+                            this.connectionByEventSource.Remove(interviewId);
+                        }
 
-                this.fileSystemAccessor.DeleteFile(eventSourceFilePath);
+                        this.fileSystemAccessor.DeleteFile(eventSourceFilePath);
+                    }
+                }
             }
             
             this.RemoveFromEventStoreInSingleFile(interviewId);

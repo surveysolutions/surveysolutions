@@ -14,7 +14,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
-    public class SqliteEventStorage
+    public abstract class SqliteEventStorage
     {
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly ILogger logger;
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         protected readonly IEventSerializer eventSerializer;
         protected readonly IEventSerializer backwardCompatibleEventSerializer;
 
-        public SqliteEventStorage(
+        protected SqliteEventStorage(
             ILogger logger,
             IEnumeratorSettings enumeratorSettings,
             IEventTypeResolver eventTypeResolver)
