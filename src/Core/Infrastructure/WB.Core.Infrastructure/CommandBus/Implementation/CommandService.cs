@@ -147,7 +147,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         {
             IEventSourcedAggregateRoot aggregate;
 
-            if (CommandRegistry.IsStatelessCommand(command))
+            if (CommandRegistry.IsStateless(command))
             {
                 aggregate = this.eventSourcedRepository.GetStateless(aggregateType, aggregateId);
             }

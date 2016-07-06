@@ -23,7 +23,7 @@ namespace Ncqrs.Domain.Storage
 
         EventSourcedAggregateRoot Load(Type aggregateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
 
-        EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events);
+        EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, int lastEventSequence);
 
         /// <summary>
         /// Takes a snapshot of provided aggregate root.

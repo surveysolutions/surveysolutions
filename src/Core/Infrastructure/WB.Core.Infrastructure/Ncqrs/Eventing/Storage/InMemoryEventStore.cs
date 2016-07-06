@@ -46,6 +46,9 @@ namespace Ncqrs.Eventing.Storage
             return Read(id, minVersion);
         }
 
+        public int GetLastEventSequence(Guid id)
+             => this._events.GetOrNull(id)?.LastOrDefault()?.EventSequence ?? 0;
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             Queue<CommittedEvent> events;
