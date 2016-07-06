@@ -84,12 +84,12 @@ namespace WB.Tests.Unit.TestFactories
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
-        public IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
+        public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
             => new DomainRepository(
                 aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
 
-        public IEventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(
+        public EventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
 
