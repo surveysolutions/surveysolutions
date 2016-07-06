@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.Questionnaire.Translator
@@ -26,19 +27,35 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             {
                 TranslateTitle(entity, translation);
             }
+
+            foreach (var question in questionnaireDocument.Find<IQuestion>())
+            {
+                TranslateInstruction(question, translation);
+            }
+
+            // options
+            // error messages
+            // roster fixed titles
         }
 
         private static void TranslateTitle(IComposite entity, IQuestionnaireTranslation translation)
         {
-            string originalTitle = entity.GetTitle();
-            string translatedTitle = translation.GetTitle(entity);
+            string original = entity.GetTitle();
+            string translated = translation.GetTitle(entity.PublicKey);
 
-            string resultTitle =
-                string.IsNullOrWhiteSpace(translatedTitle)
-                    ? translatedTitle
-                    : originalTitle;
+            string result = string.IsNullOrWhiteSpace(translated) ? translated : original;
 
-            entity.SetTitle(resultTitle);
+            entity.SetTitle(result);
+        }
+
+        private static void TranslateInstruction(IQuestion question, IQuestionnaireTranslation translation)
+        {
+            string original = question.Instructions;
+            string translated = translation.GetInstruction(question.PublicKey);
+
+            string result = string.IsNullOrWhiteSpace(translated) ? translated : original;
+
+            question.Instructions = result;
         }
     }
 }
