@@ -94,6 +94,7 @@
     <Compile Include="EventBus\Lite\ILiteEventBus.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventRegistry.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventBus.cs" />
+    <Compile Include="IEventTypesResolver.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
