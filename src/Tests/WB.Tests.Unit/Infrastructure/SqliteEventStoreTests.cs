@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.Infrastructure
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
-              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
+              Mock.Of<IEventTypesResolver>(x => x.GetTypeByName("StaticTextUpdated") == typeof(StaticTextUpdated)));
         }
 
         [Test]
