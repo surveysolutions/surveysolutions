@@ -118,9 +118,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             } while (readEventCount < totalEventCount);
         }
 
-        public int GetLastEventSequence(Guid id)
+        public int? GetLastEventSequence(Guid id)
         {
-            throw new NotImplementedException();
+            using (connection.Lock())
+            {
+                var isExists = this.connection
+                    .Table<EventView>()
+                    .Any(eventView => eventView.EventSourceId == id);
+
+                if (!isExists)
+                    return null;
+
+                var lastEventSequence = this.connection
+                    .Table<EventView>()
+                    .Where(eventView => eventView.EventSourceId == id)
+                    .Max(eventView => eventView.EventSequence);
+
+                return lastEventSequence;
+            }
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
