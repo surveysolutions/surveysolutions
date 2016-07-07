@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Infrastructure
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
-              Mock.Of<IEventTypesResolver>(x => x.GetTypeByName("StaticTextUpdated") == typeof(StaticTextUpdated)));
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
         }
 
         [Test]
