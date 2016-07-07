@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
+                excelPackage.Workbook.Worksheets.Add("Translations");
                 var worksheet = excelPackage.Workbook.Worksheets[1];
                 var cells = worksheet.Cells;
 
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 foreach (var childNode in questionnaire.Children.TreeToEnumerable(x => x.Children))
                 {
-                    AppendTranslationRow(cells, currentRowNumber, TranslationType.Title, childNode.PublicKey, childNode.GetTitle(), translation.GetTitle(childNode.PublicKey));
+                    AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Title, childNode.PublicKey, childNode.GetTitle(), translation.GetTitle(childNode.PublicKey));
 
                     var validatable = childNode as IValidatable;
                     if (validatable != null)
@@ -66,25 +67,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         for (int i = 1; i < validatable.ValidationConditions.Count + 1; i++)
                         {
                             AppendTranslationRow(cells,
-                                currentRowNumber,
+                                ref currentRowNumber,
                                 TranslationType.ValidationMessage,
                                 validatable.PublicKey,
                                 validatable.ValidationConditions[i - 1].Message,
                                 translation.GetValidationMessage(validatable.PublicKey, i),
                                 i.ToString());
-                            currentRowNumber++;
                         }
                     }
 
                     var question = childNode as IQuestion;
                     if (question != null)
                     {
-                        currentRowNumber++;
-
                         if (!string.IsNullOrEmpty(question.Instructions))
                         {
-                            AppendTranslationRow(cells, currentRowNumber, TranslationType.Instruction, question.PublicKey, question.Instructions, translation.GetInstruction(question.PublicKey));
-                            currentRowNumber++;
+                            AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Instruction, question.PublicKey, question.Instructions, translation.GetInstruction(question.PublicKey));
                         }
 
                         for (int i = 0; i < question.Answers?.Count; i++)
@@ -94,13 +91,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             var originalAnswerTitle = question.Answers[i].AnswerText;
 
                             AppendTranslationRow(cells,
-                              currentRowNumber,
+                              ref currentRowNumber,
                               TranslationType.OptionTitle,
                               question.PublicKey,
                               originalAnswerTitle,
                               translatedOptionTitle,
                               answerOptionValue);
-                            currentRowNumber++;
                         }
                     }
                 }
@@ -110,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         }
 
         private static void AppendTranslationRow(ExcelRange cells,
-            int currentRowNumber, 
+            ref int currentRowNumber, 
             TranslationType translationType, 
             Guid entityId,
             string originalValue, 
@@ -122,6 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             cells[currentRowNumber, originalTextColumn].Value = originalValue;
             cells[currentRowNumber, translactionColumn].Value = translatedValue;
             cells[currentRowNumber, translationIndexColumn].Value = translationIndex;
+            currentRowNumber++;
         }
 
         public void Store(Guid questionnaireId, string culture, byte[] excelRepresentation)

@@ -2,10 +2,7 @@
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.DenormalizerStorage;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
@@ -70,15 +67,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static byte[] fileStream;
         static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    }
-
-    [Subject(typeof(TranslationsService))]
-    internal class TranslationsServiceTestsContext
-    {
-        protected static TranslationsService CreateTranslationsService(IPlainStorageAccessor<TranslationInstance> traslationsStorage = null)
-        {
-            return new TranslationsService(traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>());
-        }
     }
 }
