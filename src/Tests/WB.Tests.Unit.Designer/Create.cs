@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -999,6 +1000,24 @@ namespace WB.Tests.Unit.Designer
                 IsOwner = isOwner,
                 Email = email ?? "user@e.mail",
                 ShareType = shareType
+            };
+        }
+
+        public static TranslationInstance TranslationInstance(Guid? questionnaireId = null,
+            TranslationType type = TranslationType.Unknown,
+            Guid? questionnaireEntityId = null,
+            string translationIndex = null,
+            string culture = null,
+            string translation = null)
+        {
+            return new TranslationInstance
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
+                Type = type,
+                Translation = translation,
+                TranslationIndex = translationIndex,
+                Culture = culture
             };
         }
     }
