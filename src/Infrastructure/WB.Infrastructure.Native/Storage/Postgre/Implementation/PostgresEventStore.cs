@@ -65,19 +65,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT MAX(eventsequence) FROM events WHERE eventsourceid=:sourceId";
+                    command.CommandText = $"SELECT MAX(eventsequence) as eventsourceid FROM events WHERE eventsourceid=:sourceId";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
-
-                    using (IDataReader npgsqlDataReader = command.ExecuteReader())
-                    {
-                        if (npgsqlDataReader.Read())
-                        {
-                            var eventSequence = (int)npgsqlDataReader["eventsequence"];
-                            return eventSequence;
-                        }
-
-                        return null;
-                    }
+                    var executeScalar = command.ExecuteScalar() as int?;
+                    return executeScalar;
                 }
             }
         }
