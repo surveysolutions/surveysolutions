@@ -286,7 +286,6 @@
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepositoryWithCache.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
-    <Compile Include="Implementation\Services\EventTypesResolver.cs" />
     <Compile Include="Implementation\Services\VariableToUIStringService.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />

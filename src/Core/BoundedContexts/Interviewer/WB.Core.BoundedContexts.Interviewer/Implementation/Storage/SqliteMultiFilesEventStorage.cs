@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings,
             IFileSystemAccessor fileSystemAccessor,
-            IEventTypesResolver eventTypesResolver)
+            IEventTypeResolver eventTypesResolver)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.settings = settings;
@@ -466,9 +466,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-            private readonly IEventTypesResolver eventTypesResolver;
+            private readonly IEventTypeResolver eventTypesResolver;
 
-            public EventSerializer(IEventTypesResolver eventTypesResolver)
+            public EventSerializer(IEventTypeResolver eventTypesResolver)
             {
                 this.eventTypesResolver = eventTypesResolver;
             }
@@ -477,7 +477,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 => JsonConvert.SerializeObject(@event, Formatting.None, JsonSerializerSettings);
 
             public IEvent Deserialize(string eventAsString, string eventTypeAsString)
-                => JsonConvert.DeserializeObject(eventAsString, this.eventTypesResolver.GetTypeByName(eventTypeAsString), JsonSerializerSettings) as IEvent;
+                => JsonConvert.DeserializeObject(eventAsString, this.eventTypesResolver.ResolveType(eventTypeAsString), JsonSerializerSettings) as IEvent;
         }
     }
 }

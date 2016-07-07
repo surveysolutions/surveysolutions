@@ -1,11 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Ncqrs.Eventing.Storage
 {
     public class EventTypeResolver : IEventTypeResolver
     {
         readonly Dictionary<string, Type> KnownEventDataTypes = new Dictionary<string, Type>();
+
+        public EventTypeResolver() { }
+
+        public EventTypeResolver(params Assembly[] assembliesWithEvents)
+        {
+            var eventInterfaceInfo = typeof(WB.Core.Infrastructure.EventBus.IEvent).GetTypeInfo();
+
+            var eventImplementations = assembliesWithEvents.SelectMany(assembly => assembly.DefinedTypes)
+                .Where(definedType => eventInterfaceInfo.IsAssignableFrom(definedType));
+
+            foreach (var eventImplementation in eventImplementations)
+            {
+                this.RegisterEventDataType(eventImplementation.AsType());
+            }
+        }
 
         public Type ResolveType(string eventName)
         {
