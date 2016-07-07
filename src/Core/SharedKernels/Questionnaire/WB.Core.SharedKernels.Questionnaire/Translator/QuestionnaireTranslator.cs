@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Questionnaire.Translator
 {
@@ -48,7 +49,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
                 }
             }
 
-            // roster fixed titles
+            foreach (var roster in questionnaireDocument.Find<IGroup>(group => group.IsRoster))
+            {
+                foreach (var fixedRosterTitle in roster.FixedRosterTitles)
+                {
+                    TranslateFixedRosterTitle(roster.PublicKey, fixedRosterTitle, translation);
+                }
+            }
         }
 
         private static void TranslateTitle(IQuestionnaireEntity entity, IQuestionnaireTranslation translation)
@@ -78,6 +85,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             validation.Message = Translate(
                 original: validation.Message,
                 translated: translation.GetValidationMessage(validatableEntityId, validationOneBasedIndex));
+        }
+
+        private static void TranslateFixedRosterTitle(Guid rosterId, FixedRosterTitle fixedRosterTitle, IQuestionnaireTranslation translation)
+        {
+            fixedRosterTitle.Title = Translate(
+                original: fixedRosterTitle.Title,
+                translated: translation.GetFixedRosterTitle(rosterId, fixedRosterTitle.Value));
         }
 
         private static string Translate(string original, string translated)
