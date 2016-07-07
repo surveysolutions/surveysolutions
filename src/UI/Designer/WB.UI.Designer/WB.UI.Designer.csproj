@@ -290,6 +290,7 @@
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
