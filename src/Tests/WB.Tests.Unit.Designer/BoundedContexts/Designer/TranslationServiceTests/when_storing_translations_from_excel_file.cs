@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.DenormalizerStorage;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -13,7 +15,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var testType = typeof(when_storing_translations_from_excel_file);
             var readResourceFile = testType.Namespace + ".testTranslations.xlsx";
-            fileStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                manifestResourceStream.CopyTo(memoryStream);
+                fileStream = memoryStream.ToArray();
+            }
 
             plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
             service = CreateTranslationsService(plainStorageAccessor);
@@ -58,11 +65,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationInstance.TranslationIndex.ShouldEqual("2");
         };
 
-        Cleanup things = () => fileStream.Dispose();
-
         static TranslationsService service;
         static TestPlainStorage<TranslationInstance> plainStorageAccessor;
-        static Stream fileStream;
+        static byte[] fileStream;
         static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
@@ -72,7 +77,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
     {
         protected static TranslationsService CreateTranslationsService(IPlainStorageAccessor<TranslationInstance> traslationsStorage = null)
         {
-            return new TranslationsService(traslationsStorage ?? new TestPlainStorage<TranslationInstance>());
+            return new TranslationsService(traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
+                new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>());
         }
     }
 }
