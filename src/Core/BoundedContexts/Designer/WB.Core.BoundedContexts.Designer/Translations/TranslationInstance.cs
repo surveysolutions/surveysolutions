@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public virtual Guid QuestionnaireEntityId { get; set; }
 
-        public virtual int? TranslationIndex { get; set; }
+        public virtual string TranslationIndex { get; set; }
 
         public virtual string Culture { get; set; }
 
@@ -40,8 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 var hashCode = this.QuestionnaireId.GetHashCode();
                 hashCode = (hashCode*397) ^ (int) this.Type;
                 hashCode = (hashCode*397) ^ this.QuestionnaireEntityId.GetHashCode();
-                hashCode = (hashCode*397) ^ this.TranslationIndex.GetHashCode();
-                hashCode = (hashCode*397) ^ (this.Culture != null ? this.Culture.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (this.TranslationIndex?.GetHashCode() ?? 0);
+                hashCode = (hashCode*397) ^ (this.Culture?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }

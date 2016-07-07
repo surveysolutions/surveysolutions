@@ -52,6 +52,10 @@
     <Reference Include="EmitMapper">
       <HintPath>..\..\..\..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlSanitizer, Version=1.1.5297.28403, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
@@ -563,8 +567,10 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Translations\QuestionnaireTranslation.cs" />
     <Compile Include="Translations\TranslationInstance.cs" />
     <Compile Include="Translations\TranslationInstanceMap.cs" />
+    <Compile Include="Translations\TranslationsService.cs" />
     <Compile Include="Translations\TranslationType.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
