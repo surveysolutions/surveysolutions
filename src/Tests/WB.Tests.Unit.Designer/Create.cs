@@ -534,6 +534,7 @@ namespace WB.Tests.Unit.Designer
             IList<ValidationCondition> validationConditions = null,
             string variableLabel =null,
             string title= "Question X test",
+            string instructions = null,
             params Answer[] answers)
         {
             return new TextQuestion(title)
@@ -545,6 +546,7 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 VariableLabel = variableLabel,
+                Instructions = instructions,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
