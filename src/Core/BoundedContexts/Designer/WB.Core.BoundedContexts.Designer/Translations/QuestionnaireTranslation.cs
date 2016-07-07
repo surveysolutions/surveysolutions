@@ -46,6 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 TranslationType.ValidationMessage);
         }
 
+        public string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
+        {
+            throw new NotImplementedException(); // TODO: ank
+        }
+
         private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
         {
             if (this.translations.ContainsKey(questionId))
