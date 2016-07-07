@@ -122,11 +122,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         {
             using (connection.Lock())
             {
-                var isExists = this.connection
+                var doesExists = this.connection
                     .Table<EventView>()
                     .Any(eventView => eventView.EventSourceId == id);
 
-                if (!isExists)
+                if (!doesExists)
                     return null;
 
                 var lastEventSequence = this.connection

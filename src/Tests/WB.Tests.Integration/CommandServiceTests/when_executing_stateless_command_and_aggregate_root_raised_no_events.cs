@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -13,15 +14,23 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_stateless_command_and_aggregate_root_raised_no_events
+    internal class when_executing_stateless_command_and_aggregate_root_raised_events
     {
         private class DoNothingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class DoNothingEvent : WB.Core.Infrastructure.EventBus.IEvent
+        { 
+            public Guid EventIdentifier => Guid.NewGuid();
+            public DateTime EventTimeStamp => DateTime.UtcNow;
+        }
 
         private class Aggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 
-            public void DoNothing(DoNothingCommand command) {}
+            public void DoNothing(DoNothingCommand command)
+            {
+                ApplyEvent(new DoNothingEvent());
+            }
         }
 
         Establish context = () =>
@@ -41,15 +50,15 @@ namespace WB.Tests.Integration.CommandServiceTests
         Because of = () =>
             commandService.Execute(new DoNothingCommand(), null);
 
-        It should_not_commit_events = () =>
+        It should_commit_events = () =>
             eventBusMock.Verify(
-                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()),
-                Times.Never());
+                bus => bus.CommitUncommittedEvents(aggregateFromRepository, null),
+                Times.Once);
 
-        It should_not_publish_events = () =>
+        It should_publish_events = () =>
             eventBusMock.Verify(
-                bus => bus.PublishCommittedEvents(Moq.It.IsAny<CommittedEventStream>()),
-                Times.Never());
+                bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()),
+                Times.Once);
 
         It should_not_load_latest_aggregate_from_repository = () =>
             Mock.Get(repository).Verify(
