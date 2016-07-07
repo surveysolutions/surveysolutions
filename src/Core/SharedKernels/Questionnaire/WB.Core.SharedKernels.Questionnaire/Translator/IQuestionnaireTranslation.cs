@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
         string GetInstruction(Guid questionId);
         string GetAnswerOption(Guid questionId, string answerOptionValue);
         string GetValidationMessage(Guid entityId, int validationOneBasedIndex);
+        string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue);
     }
 }
