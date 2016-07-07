@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
@@ -149,7 +150,8 @@ namespace WB.UI.Interviewer
             kernel.Get<InterviewerDashboardEventHandler>();
 
             kernel.Unbind<IEventTypeResolver>();
-            kernel.Bind<IEventTypeResolver>().ToConstant(new EventTypeResolver(typeof(InterviewActiveEvent).Assembly));
+            kernel.Bind<IEventTypeResolver>().ToConstant(new EventTypeResolver(typeof(InterviewActiveEvent).Assembly,
+                typeof(InterviewAnswersFromSyncPackageRestored).Assembly));
             
             return kernel;
         }
