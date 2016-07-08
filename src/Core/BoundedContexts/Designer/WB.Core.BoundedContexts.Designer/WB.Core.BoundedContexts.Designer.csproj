@@ -204,6 +204,8 @@
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\Translation\AddOrUpdateTranslation.cs" />
+    <Compile Include="Commands\Questionnaire\Translation\DeleteTranslation.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Variable\AddVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\DeleteVariable.cs" />
@@ -221,6 +223,8 @@
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
+    <Compile Include="Events\Questionnaire\Translation\TranslationDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Translation\TranslationUpdated.cs" />
     <Compile Include="Events\Questionnaire\VariableAdded.cs" />
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />

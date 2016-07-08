@@ -33,7 +33,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -105,6 +107,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         internal void Apply(AttachmentDeleted e)
+        {
+        }
+
+        internal void Apply(TranslationUpdated e)
+        {
+        }
+
+        internal void Apply(TranslationDeleted e)
         {
         }
 
@@ -950,6 +960,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
+        }
+
+        #endregion
+
+        #region Translation command handlers
+                
+        public void AddOrUpdateTranslation(AddOrUpdateTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ApplyEvent(new TranslationUpdated(
+                translationId: command.TranslationId,
+                name: command.Name,
+                responsibleId: command.ResponsibleId));
+        }
+
+        public void DeleteTranslation(DeleteTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ApplyEvent(new TranslationDeleted(command.TranslationId, command.ResponsibleId));
         }
 
         #endregion

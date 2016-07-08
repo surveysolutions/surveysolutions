@@ -7,8 +7,10 @@ using System.Web.Http;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -36,6 +38,7 @@ namespace WB.UI.Designer.Api
        
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly TranslationsService translationsService;
 
         public CommandController(
             ICommandService commandService, 
@@ -44,7 +47,8 @@ namespace WB.UI.Designer.Api
             ICommandInflater commandPreprocessor,
             ICommandPostprocessor commandPostprocessor, 
             ILookupTableService lookupTableService, 
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            TranslationsService translationsService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -53,6 +57,7 @@ namespace WB.UI.Designer.Api
             this.commandPostprocessor = commandPostprocessor;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
+            this.translationsService = translationsService;
         }
 
         public class AttachmentModel
@@ -169,6 +174,40 @@ namespace WB.UI.Designer.Api
                 this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
                 throw;
             }
+        }
+
+        public class TranslationModel
+        {
+            public HttpFile File { get; set; }
+            public string Command { get; set; }
+        }
+
+
+        [Route("~/api/command/translation")]
+        [HttpPost]
+        public HttpResponseMessage UpdateTranslation(TranslationModel model)
+        {
+            var commandType = typeof(AddOrUpdateTranslation).Name;
+            AddOrUpdateTranslation command;
+            try
+            {
+                command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
+
+                this.translationsService.Store(command.QuestionnaireId,
+                    command.TranslationId.FormatGuid(),
+                    model.File.Buffer);
+            }
+            catch (FormatException e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+
+            return this.ProcessCommand(command, commandType);
         }
 
         private HttpResponseMessage ProcessCommand(ICommand concreteCommand, string commandType)
