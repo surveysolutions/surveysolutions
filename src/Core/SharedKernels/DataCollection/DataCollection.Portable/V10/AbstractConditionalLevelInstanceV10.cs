@@ -327,11 +327,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             if (!this.LinkedOptionFiltersMap.ContainsKey(questionId))
                 return null;
-
-            if (this.EnablementStates.ContainsKey(questionId) &&
-                this.EnablementStates[questionId].State == State.Disabled)
-                return null;
-
+            
             var linkedQuestionFilter = this.LinkedOptionFiltersMap[questionId];
             var isEnabled = this.GetLinkedFilterResult(linkedQuestionFilter, currentScope);
             return new LinkedQuestionFilterResult
