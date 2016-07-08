@@ -24,6 +24,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
+        protected TranslationsService()
+        {
+            
+        }
+
         public TranslationsService(IPlainStorageAccessor<TranslationInstance> translations,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
