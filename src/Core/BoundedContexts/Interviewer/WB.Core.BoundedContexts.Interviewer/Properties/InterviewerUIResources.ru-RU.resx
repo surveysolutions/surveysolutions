@@ -597,4 +597,7 @@
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
     <value>{0} интервью не синхронизировано из-за ошибки</value>
   </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Не удалось открыть интервью</value>
+  </data>
 </root>

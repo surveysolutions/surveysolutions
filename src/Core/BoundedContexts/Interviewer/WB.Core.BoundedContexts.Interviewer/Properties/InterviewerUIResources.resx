@@ -596,4 +596,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
     <value>{0} interview(s) failed to synchronize</value>
   </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Failed to open interview</value>
+  </data>
 </root>
