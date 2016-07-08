@@ -36,7 +36,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return command.ExecuteNonQuery();
         }
 
-        void EnlistInTransaction(IDbCommand command)
+        private void EnlistInTransaction(IDbCommand command)
         {
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;
