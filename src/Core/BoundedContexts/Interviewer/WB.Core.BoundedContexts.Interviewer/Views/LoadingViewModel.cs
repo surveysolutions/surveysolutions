@@ -3,8 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Ncqrs.Eventing.Storage;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -24,6 +26,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ICommandService commandService;
+        private readonly ILogger logger;
+        private readonly IUserInteractionService interactionService;
         private readonly IPrincipal principal;
         private CancellationTokenSource loadingCancellationTokenSource;
 
@@ -31,11 +35,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IViewModelNavigationService viewModelNavigationService,
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
+            ILogger logger,
+            IUserInteractionService interactionService,
             IPlainQuestionnaireRepository questionnaireRepository)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
+            this.logger = logger;
+            this.interactionService = interactionService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireRepository = questionnaireRepository;
@@ -64,16 +72,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                
+
                 IStatefulInterview interview =
-                    await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
-         
+                    await
+                        this.interviewRepository.GetAsync(interviewIdString, progress,
+                            this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
+
                 await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
+                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                     await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                 }
 
@@ -91,6 +102,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             catch (OperationCanceledException)
             {
 
+            }
+            catch (Exception exception)
+            {
+                this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview).WaitWithoutException();
+                this.logger.Error($"Failed to load interview {this.interviewId}", exception);
+                this.viewModelNavigationService.NavigateToDashboard();
             }
             finally
             {

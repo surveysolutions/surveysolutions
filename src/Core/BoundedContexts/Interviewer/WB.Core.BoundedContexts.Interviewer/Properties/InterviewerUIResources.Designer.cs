@@ -614,6 +614,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to open interview.
+        /// </summary>
+        public static string FailedToLoadInterview {
+            get {
+                return ResourceManager.GetString("FailedToLoadInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization endpoint &apos;{0}&apos; is different from provided in Settings (&apos;{1}&apos;). Load URL from settings?.
         /// </summary>
         public static string FinishInstallation_EndpointDiffers {
