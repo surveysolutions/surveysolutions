@@ -61,12 +61,12 @@ namespace WB.Tests.Unit.Designer
             return new AccountDocument() { UserName = userName };
         }
 
-        public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
+        public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
             return new Answer()
             {
                 AnswerText = answer,
-                AnswerValue = value.ToString(),
+                AnswerValue = stringValue ?? value.ToString(),
                 ParentValue = parentValue.HasValue ? parentValue.ToString() : null
             };
         }
@@ -423,7 +423,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false,
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -438,7 +438,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
         }
 
@@ -745,7 +745,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null)
+            Guid? linkedToRosterId = null, List<Answer> answers = null)
         {
             return new SingleQuestion
             {
@@ -759,7 +759,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 LinkedFilterExpression = linkedFilterExpression
             };
         }
