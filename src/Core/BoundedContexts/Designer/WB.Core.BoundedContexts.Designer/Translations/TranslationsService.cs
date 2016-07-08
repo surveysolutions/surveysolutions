@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         const int questionnaireEntityIdColumn = 3;
         const int originalTextColumn = 4;
         const int translactionColumn = 5;
+        private const string EntityIdColumnName = "Entity Id";
+        private const string TranslationTypeColumnName = "Type";
 
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
@@ -55,9 +58,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 var worksheet = excelPackage.Workbook.Worksheets[1];
                 var cells = worksheet.Cells;
 
-                cells[1, translationTypeColumn].Value = "Type";
+                worksheet.Column(translationTypeColumn).Hidden = true;
+                worksheet.Column(translationIndexColumn).Hidden = true;
+                worksheet.Column(questionnaireEntityIdColumn).Hidden = true;
+                cells[1, translationTypeColumn].Value = TranslationTypeColumnName;
                 cells[1, translationIndexColumn].Value = "Index";
-                cells[1, questionnaireEntityIdColumn].Value = "Entity Id";
+                cells[1, questionnaireEntityIdColumn].Value = EntityIdColumnName;
                 cells[1, originalTextColumn].Value = "Original";
                 cells[1, translationIndexColumn].Value = "Translation";
 
@@ -148,10 +154,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public void Store(Guid questionnaireId, string culture, byte[] excelRepresentation)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
+            if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
+
             using (MemoryStream stream = new MemoryStream(excelRepresentation))
             {
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
+                    ValidatePackage(package);
+
                     var worksheet = package.Workbook.Worksheets[1];
 
                     for (int rowNumber = 2; ; rowNumber++)
@@ -175,6 +186,73 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         }
                     }
                 }
+            }
+        }
+
+        private void ValidatePackage(ExcelPackage package)
+        {
+            if (package.Workbook.Worksheets.Count == 0)
+            {
+                throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
+            }
+
+            List<TranslationValidationError> foundErrors = new List<TranslationValidationError>();
+            var translationTypesWithIndex = new List<TranslationType>
+            {
+                TranslationType.FixedRosterTitle,
+                TranslationType.OptionTitle,
+                TranslationType.ValidationMessage
+            };
+
+            var worksheet = package.Workbook.Worksheets[1];
+            for (int rowNumber = 2; ; rowNumber++)
+            {
+                if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null || foundErrors.Count < 11)
+                {
+                    string entityId = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>();
+                    Guid parsedId;
+                    if (!Guid.TryParse(entityId, out parsedId))
+                    {
+                        foundErrors.Add(new TranslationValidationError
+                        {
+                            Message = $"{EntityIdColumnName} has invalid id at [{worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Address}]",
+                            ErrorAddress =  worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Address 
+                        });
+                    }
+                    string translationTypeString = worksheet.Cells[rowNumber, translationTypeColumn].GetValue<string>();
+                    TranslationType type;
+                    if (!Enum.TryParse(translationTypeString, out type) || type == TranslationType.Unknown)
+                    {
+                        foundErrors.Add(new TranslationValidationError
+                        {
+                            Message = $"{TranslationTypeColumnName} has invalid type [{worksheet.Cells[rowNumber, translationTypeColumn].Address}]",
+                            ErrorAddress = worksheet.Cells[rowNumber, translationTypeColumn].Address
+                        });
+                    }
+
+                    string translationIndex = worksheet.Cells[rowNumber, translationIndexColumn].GetValue<string>();
+                    if (translationTypesWithIndex.Contains(type) && string.IsNullOrEmpty(translationIndex))
+                    {
+                        var errorAddress = worksheet.Cells[rowNumber, translationIndexColumn].Address;
+                        foundErrors.Add(new TranslationValidationError
+                        {
+                            Message = $"{TranslationTypeColumnName} has invalid index at [{errorAddress}]",
+                            ErrorAddress = errorAddress
+                        });
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (foundErrors.Count > 0)
+            {
+                throw new InvalidExcelFileException("Found errors in excel file")
+                {
+                    FoundErrors = foundErrors
+                };
             }
         }
     }

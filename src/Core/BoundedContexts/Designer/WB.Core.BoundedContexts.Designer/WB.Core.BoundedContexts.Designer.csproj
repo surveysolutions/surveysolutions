@@ -571,11 +571,13 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\QuestionnaireTranslation.cs" />
     <Compile Include="Translations\TranslationInstance.cs" />
     <Compile Include="Translations\TranslationInstanceMap.cs" />
     <Compile Include="Translations\TranslationsService.cs" />
     <Compile Include="Translations\TranslationType.cs" />
+    <Compile Include="Translations\TranslationValidationError.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
