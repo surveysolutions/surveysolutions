@@ -37,6 +37,8 @@ namespace Main.Core.Documents
 
         public List<Attachment> Attachments { get; set; }
 
+        public List<Translation> Translations { get; set; }
+
         public DateTime? CloseDate { get; set; }
 
         public string ConditionExpression { get; set; }
