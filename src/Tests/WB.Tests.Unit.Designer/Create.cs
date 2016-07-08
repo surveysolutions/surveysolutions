@@ -39,6 +39,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Translator;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code;
@@ -1022,5 +1023,8 @@ namespace WB.Tests.Unit.Designer
                 Culture = culture
             };
         }
+
+        public static QuestionnaireTranslator QuestionnaireTranslator()
+            => new QuestionnaireTranslator();
     }
 }
