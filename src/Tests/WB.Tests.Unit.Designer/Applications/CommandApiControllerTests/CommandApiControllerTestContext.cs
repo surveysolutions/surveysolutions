@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
@@ -29,7 +30,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandInflater ?? Mock.Of<ICommandInflater>(),
                 commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
                 Mock.Of<ILookupTableService>(),
-                attachmentService ?? Mock.Of<IAttachmentService>());
+                attachmentService ?? Mock.Of<IAttachmentService>(),
+                Mock.Of<TranslationsService>());
 
             controller.Request = httpRequestMessage ?? new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(httpConfiguration ??  new HttpConfiguration());

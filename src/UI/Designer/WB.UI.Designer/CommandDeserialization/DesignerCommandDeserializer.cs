@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.UI.Shared.Web.CommandDeserialization;
 
@@ -69,7 +70,10 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "DeleteLookupTable", typeof (DeleteLookupTable) },
                      //Attachment commands
                     { "AddOrUpdateAttachment", typeof (AddOrUpdateAttachment) },
-                    { "DeleteAttachment", typeof (DeleteAttachment) }
+                    { "DeleteAttachment", typeof (DeleteAttachment) },
+                     //Translation commands
+                    { "AddOrUpdateTranslation", typeof (AddOrUpdateTranslation) },
+                    { "DeleteTranslation", typeof (DeleteTranslation) },
                 };
             }
         }

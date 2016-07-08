@@ -14,6 +14,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
+            if (record.TargetType == QuestionnaireItemType.Translation)
+            {
+                var translationRecord = GetFormattedHistoricalRecordForTranslation(record);
+                if (!string.IsNullOrWhiteSpace(translationRecord))
+                    return MvcHtmlString.Create(translationRecord);
+            }
+
             if (record.TargetType == QuestionnaireItemType.Attachment)
             {
                 var attachmentRecord = GetFormattedHistoricalRecordForAttachment(record);
@@ -92,6 +99,18 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return string.Format(QuestionnaireHistoryResources.Attachment_Deleted, record.TargetTitle);
                 case QuestionnaireActionType.Update:
                     return string.Format(QuestionnaireHistoryResources.Attachment_Updated, record.TargetTitle);
+            }
+            return null;
+        }
+
+        private static string GetFormattedHistoricalRecordForTranslation(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Delete:
+                    return string.Format(QuestionnaireHistoryResources.Translation_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    return string.Format(QuestionnaireHistoryResources.Translation_Updated, record.TargetTitle);
             }
             return null;
         }
