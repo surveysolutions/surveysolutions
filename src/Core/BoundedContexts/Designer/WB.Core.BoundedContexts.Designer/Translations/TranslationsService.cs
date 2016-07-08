@@ -207,7 +207,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var worksheet = package.Workbook.Worksheets[1];
             for (int rowNumber = 2; ; rowNumber++)
             {
-                if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null || foundErrors.Count < 11)
+                if (foundErrors.Count > 10)
+                {
+                    break;
+                }
+                if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null)
                 {
                     string entityId = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>();
                     Guid parsedId;
