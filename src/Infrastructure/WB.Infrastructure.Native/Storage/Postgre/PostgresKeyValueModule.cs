@@ -22,7 +22,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 .InSingletonScope();
 
             this.Kernel.Bind(typeof(IPlainKeyValueStorage<>))
-                .To(typeof(PostgresPlainKeyValueStorage<>));
+                .To(typeof(PostgresPlainKeyValueStorage<>))
+                .InSingletonScope();
         }
     }
 }
