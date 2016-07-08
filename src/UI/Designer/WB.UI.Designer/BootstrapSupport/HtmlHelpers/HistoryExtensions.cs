@@ -148,13 +148,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 return MvcHtmlString.Create(quatedTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
-                return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
+                return helper.ActionLink(quatedTitle, "Details", "Questionnaire", new { id = itemId.FormatGuid() }, null);
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
                 return MvcHtmlString.Create(quatedTitle);
 
             var url =
-                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
+                urlHelper.Content(string.Format("~/questionnaire/details/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
                     chapterId.FormatGuid(), itemId.FormatGuid(), GetQuestionnaireItemTypeStringRepresentationForLink(type)));
             return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
         }
