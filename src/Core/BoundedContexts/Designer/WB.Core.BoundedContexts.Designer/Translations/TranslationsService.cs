@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Main.Core.Documents;
@@ -97,6 +98,25 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                               originalAnswerTitle,
                               translatedOptionTitle,
                               answerOptionValue);
+                        }
+                    }
+
+                    var group = childNode as IGroup;
+                    if (group != null)
+                    {
+                        for (int i = 0; i < group.FixedRosterTitles?.Length; i++)
+                        {
+                            var fixedRosterValue = group.FixedRosterTitles[i].Value;
+                            var translatedOptionTitle = translation.GetFixedRosterTitle(group.PublicKey, fixedRosterValue);
+                            var originalAnswerTitle = group.FixedRosterTitles[i].Title;
+
+                            AppendTranslationRow(cells,
+                              ref currentRowNumber,
+                              TranslationType.FixedRosterTitle,
+                              group.PublicKey,
+                              originalAnswerTitle,
+                              translatedOptionTitle,
+                              fixedRosterValue.ToString(CultureInfo.InvariantCulture));
                         }
                     }
                 }
