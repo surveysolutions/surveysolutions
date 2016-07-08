@@ -95,6 +95,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
         }
 
         private static string Translate(string original, string translated)
-            => string.IsNullOrWhiteSpace(translated) ? translated : original;
+            => !string.IsNullOrWhiteSpace(translated) ? translated : original;
     }
 }
