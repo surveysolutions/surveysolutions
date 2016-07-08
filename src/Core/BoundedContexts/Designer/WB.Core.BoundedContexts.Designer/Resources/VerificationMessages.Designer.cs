@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question supports only integer values.
+        ///   Looks up a localized string similar to Multi select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
         internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1063,7 +1063,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single select question supports only integer values.
+        ///   Looks up a localized string similar to Single select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
         internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
