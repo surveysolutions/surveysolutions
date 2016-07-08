@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using WB.Core.SharedKernels.Questionnaire.Translator;
 
@@ -48,7 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
         {
-            throw new NotImplementedException(); // TODO: ank
+            return this.GetTranslationByTypeAndIndex(rosterId, fixedRosterTitleValue.ToString(CultureInfo.InvariantCulture),
+                TranslationType.FixedRosterTitle);
         }
 
         private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
