@@ -1,0 +1,28 @@
+﻿@animation-duration: .5s;
+
+.question-editor[ui-view] {
+    &.ng-enter, &.ng-leave {
+        opacity: 1;
+        transition: opacity @animation-duration ease-in-out;
+    }
+
+   &.ng-enter {
+        opacity: 0;
+        transition: opacity @animation-duration ease-in-out;
+    }
+
+   &.ng-enter-active {
+        opacity: 1;
+        transition: opacity @animation-duration ease-in-out;
+    }
+
+   &.ng-leave {
+        opacity: 1;
+        transition: opacity @animation-duration ease-in-out;
+    }
+
+   &.ng-leave-active {
+        opacity: 0;
+        transition: opacity @animation-duration ease-in-out;
+    }
+}

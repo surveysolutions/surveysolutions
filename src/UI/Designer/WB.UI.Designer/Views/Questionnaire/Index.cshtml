@@ -46,7 +46,7 @@
 
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                             <td class="search-value">
-                                @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
+                                @Html.ActionLink(listViewModel.Title, "Details", "Questionnaire", routevalues, null)
                             </td>
                             <td class="date">
                                 @listViewModel.LastEntryDate.FormatDate()
@@ -70,7 +70,7 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Open", "Open", "App", routevalues, null)</li>
+                                        <li>@Html.ActionLink("Open", "Details", "Questionnaire", routevalues, null)</li>
                                         @{
                                 if (actionModel.CanCopy)
                                 {

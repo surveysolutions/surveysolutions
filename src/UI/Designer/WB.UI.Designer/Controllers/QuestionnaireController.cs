@@ -66,6 +66,9 @@ namespace WB.UI.Designer.Controllers
             this.commandPostprocessor = commandPostprocessor;
         }
 
+        public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+            => this.View("~/questionnaire/details/index.cshtml");
+
         public ActionResult Clone(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
@@ -91,7 +94,7 @@ namespace WB.UI.Designer.Controllers
 
                     this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
-                    return this.RedirectToAction("Open", "App", new { id = questionnaireId });
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
                 }
                 catch (Exception e)
                 {
@@ -134,7 +137,7 @@ namespace WB.UI.Designer.Controllers
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
                             isPublic: model.IsPublic));
-                    return this.RedirectToAction("Open", "App", new {id = questionnaireId});
+                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId});
                 }
                 catch (QuestionnaireException e)
                 {

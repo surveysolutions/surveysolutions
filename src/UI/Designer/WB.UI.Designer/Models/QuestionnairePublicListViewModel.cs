@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Models
         public DateTime CreationDate { get; set; }
 
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [Display(Name = "Last Entry Date", Order = 4)]
         public DateTime LastEntryDate { get; set; }
