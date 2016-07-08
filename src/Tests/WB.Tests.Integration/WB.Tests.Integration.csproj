@@ -315,6 +315,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_roster_size_question_and_other_question_is_linked_to_triggered_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss.cs" />
@@ -326,6 +327,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
