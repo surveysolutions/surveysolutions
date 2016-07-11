@@ -1,15 +1,8 @@
 using System;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using ImageResizer;
-using MultipartDataMediaFormatter.Infrastructure;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -19,10 +12,10 @@ namespace WB.UI.Designer.Api
     [RoutePrefix("translations")]
     public class TranslationsController : ApiController
     {
-        private readonly TranslationsService translationsService;
+        private readonly ITranslationsService translationsService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public TranslationsController(TranslationsService translationsService,
+        public TranslationsController(ITranslationsService translationsService,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.translationsService = translationsService;

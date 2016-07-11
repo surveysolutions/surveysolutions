@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.Questionnaire.Translator;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
-    public class TranslationsService
+    internal class TranslationsService : ITranslationsService
     {
         const int translationTypeColumn = 1;
         const int translationIndexColumn = 2;
