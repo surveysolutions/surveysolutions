@@ -449,6 +449,8 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Content Include="fonts\lucidaconsole.svg" />
+    <Content Include="questionnaire\vendor\js-cookie\MIT-LICENSE.txt" />
+    <Content Include="questionnaire\vendor\js-cookie\src\js.cookie.js" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -478,6 +480,11 @@
     <Content Include="fonts\NotoSansThai-Regular.ttf" />
     <Content Include="fonts\NotoSansBengali-Regular.ttf" />
     <Content Include="fonts\NotoSansArmenian-Regular.ttf" />
+    <Content Include="questionnaire\vendor\js-cookie\.bower.json" />
+    <Content Include="questionnaire\vendor\js-cookie\bower.json" />
+    <Content Include="questionnaire\vendor\js-cookie\CONTRIBUTING.md" />
+    <Content Include="questionnaire\vendor\js-cookie\README.md" />
+    <Content Include="questionnaire\vendor\js-cookie\SERVER_SIDE.md" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -905,8 +912,6 @@
     <Content Include="questionnaire\vendor\es5-shim\tests\spec\s-number.js" />
     <Content Include="questionnaire\vendor\es5-shim\tests\spec\s-object.js" />
     <Content Include="questionnaire\vendor\es5-shim\tests\spec\s-string.js" />
-    <Content Include="questionnaire\vendor\jquery-cookie\.bower.json" />
-    <Content Include="questionnaire\vendor\jquery-cookie\jquery.cookie.js" />
     <Content Include="questionnaire\vendor\jquery-mousewheel\.bower.json" />
     <Content Include="questionnaire\vendor\jquery-mousewheel\bower.json" />
     <Content Include="questionnaire\vendor\jquery-mousewheel\ChangeLog.md" />

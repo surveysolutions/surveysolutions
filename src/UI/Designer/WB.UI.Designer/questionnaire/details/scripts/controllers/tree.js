@@ -33,7 +33,7 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            $rootScope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
+            $rootScope.readyToPaste = !(_.isNull(Cookies.get('itemToCopy')) || _.isUndefined(Cookies.get('itemToCopy')));
 
             var scrollDown = 'down';
             var scrollUp = 'up';
@@ -606,7 +606,7 @@
 
             $scope.pasteItemInto = function (parent) {
 
-                var itemToCopy = $.cookie('itemToCopy');
+                var itemToCopy = Cookies.getJSON('itemToCopy');
                 if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
                 
@@ -624,7 +624,7 @@
 
             $scope.pasteItemAfter = function (item) {
 
-                var itemToCopy = $.cookie('itemToCopy');
+                var itemToCopy = Cookies.getJSON('itemToCopy');
                 if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
 
@@ -649,7 +649,8 @@
                     itemType: getItemType(item)
                 };
 
-                $.cookie('itemToCopy', itemToCopy, { expires: 30 });
+                Cookies.remove('itemToCopy');
+                Cookies.set('itemToCopy', itemToCopy, { expires: 7 });
 
                 $rootScope.readyToPaste = true;
             };
