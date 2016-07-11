@@ -86,7 +86,7 @@
             
             $scope.pasteAfterChapter = function (chapter) {
 
-                var itemToCopy = $.cookie('itemToCopy');
+                var itemToCopy = Cookies.getJSON('itemToCopy');
                 if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
 
