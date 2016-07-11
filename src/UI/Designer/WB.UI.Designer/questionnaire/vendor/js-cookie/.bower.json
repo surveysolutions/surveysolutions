@@ -1,0 +1,30 @@
+{
+  "name": "js-cookie",
+  "license": "MIT",
+  "main": [
+    "src/js.cookie.js"
+  ],
+  "ignore": [
+    "travis.sh",
+    "test",
+    "Gruntfile.js",
+    "package.json",
+    ".gitignore",
+    ".jshintignore",
+    ".jshintrc",
+    ".tm_properties",
+    ".travis.yml"
+  ],
+  "homepage": "https://github.com/js-cookie/js-cookie",
+  "version": "2.1.2",
+  "_release": "2.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.2",
+    "commit": "8bb6144bc6efd3ccf95af29dd8ed67fcfe33eaa7"
+  },
+  "_source": "https://github.com/js-cookie/js-cookie.git",
+  "_target": "^2.1.2",
+  "_originalSource": "js-cookie",
+  "_direct": true
+}
