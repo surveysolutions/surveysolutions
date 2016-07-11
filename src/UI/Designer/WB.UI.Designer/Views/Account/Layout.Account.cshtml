@@ -1,4 +1,6 @@
 ﻿@using System.Web.Configuration
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.Infrastructure.Versions
 
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
@@ -71,8 +73,10 @@
         </div>
     </section>
 
-    <footer>
-        @Html.Partial("_commonFooter")
-    </footer>
+<footer>
+    @Html.Partial("_commonFooter")
+</footer>
+
+    <!-- Site version is: @(ServiceLocator.Current.GetInstance<IProductVersion>()) --> 
 </body>
 </html>
