@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Translations
+﻿namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
     public enum TranslationType
     {
