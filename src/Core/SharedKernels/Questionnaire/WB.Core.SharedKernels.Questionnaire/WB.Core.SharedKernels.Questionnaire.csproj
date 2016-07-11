@@ -105,9 +105,9 @@
     <Compile Include="Documents\VariableType.cs" />
     <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translator\IQuestionnaireTranslation.cs" />
-    <Compile Include="Translator\IQuestionnaireTranslator.cs" />
-    <Compile Include="Translator\QuestionnaireTranslator.cs" />
+    <Compile Include="Translations\IQuestionnaireTranslation.cs" />
+    <Compile Include="Translations\IQuestionnaireTranslator.cs" />
+    <Compile Include="Translations\QuestionnaireTranslator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

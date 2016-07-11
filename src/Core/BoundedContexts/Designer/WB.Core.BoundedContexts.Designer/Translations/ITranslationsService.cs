@@ -1,5 +1,5 @@
 using System;
-using WB.Core.SharedKernels.Questionnaire.Translator;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
