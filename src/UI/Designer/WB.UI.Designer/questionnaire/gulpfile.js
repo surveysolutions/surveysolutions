@@ -10,9 +10,9 @@ var minifyHTML = require('gulp-minify-html');
 var templateCache = require("gulp-angular-templatecache");
 
 var paths = {
-  scripts: ['app/scripts/**/*.js'],
+  scripts: ['details/scripts/**/*.js'],
   styles: ['content/markup.css.less'],
-  htmls: ['app/views/**/*.html']
+  htmls: ['details/views/**/*.html']
 };
 
 gulp.task('clean', function	(){
@@ -63,7 +63,7 @@ gulp.task('devJs', function () {
 });
 
 gulp.task('index', function () {
-  var target = gulp.src('app/index.html');
+  var target = gulp.src('details/index.cshtml');
   // It's not necessary to read the files (will speed up things), we're only after their paths:
   var sources = gulp.src(['./build/libs*.js',
   	'./build/app*.js',
@@ -73,7 +73,7 @@ gulp.task('index', function () {
   	'./build/*.css'], { read: false });
 
   return target.pipe(plugins.inject(sources, {relative: true}))
-    		   .pipe(gulp.dest('./app'));
+    		   .pipe(gulp.dest('./details'));
 });
 
 gulp.task('default', function(callback){
