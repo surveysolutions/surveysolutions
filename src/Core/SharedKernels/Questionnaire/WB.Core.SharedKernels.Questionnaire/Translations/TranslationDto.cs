@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
-    public class Translation
+    public class TranslationDto
     {
         public virtual TranslationType Type { get; set; }
 
