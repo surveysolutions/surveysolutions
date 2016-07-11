@@ -300,10 +300,10 @@
     </div>
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
-            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();"></a></li>
-            <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();"></a></li>
-            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();"></a></li>
-            <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();"></a></li>
+            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" title="Chapters"></a></li>
+            <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" title="Macroses"></a></li>
+            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" title="Lookup tables"></a></li>
+            <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" title="Attachments"></a></li>
         </ul>
     </div>
     <div class="questionnaire-tree" ui-view></div>
