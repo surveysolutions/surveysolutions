@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.Questionnaire.Translator;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslatorTests
@@ -33,6 +34,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
                     Create.Answer(stringValue: checkOption1, answer: "check 1"),
                     Create.Answer(stringValue: checkOption2, answer: "check 2"),
                 }),
+                Create.Question(questionId: questionWithValidations, validationConditions: new []
+                {
+                    Create.ValidationCondition(message: "question validation 1"),
+                    Create.ValidationCondition(message: "question validation 2"),
+                }),
+                Create.StaticText(staticTextId: staticTextWithValidations, validationConditions: new []
+                {
+                    Create.ValidationCondition(message: "text validation 1"),
+                    Create.ValidationCondition(message: "text validation 2"),
+                }),
             });
 
             translation = Mock.Of<IQuestionnaireTranslation>(_
@@ -41,7 +52,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
                 && _.GetTitle(question1) == "вопрос 1"
                 && _.GetInstruction(question1) == "инструкция 1"
                 && _.GetAnswerOption(singleOptionQuestion, radioOption1) == "радио 1"
-                && _.GetAnswerOption(multipleOptionsQuestion, checkOption1) == "галочка 1");
+                && _.GetAnswerOption(multipleOptionsQuestion, checkOption1) == "галочка 1"
+                && _.GetValidationMessage(questionWithValidations, 1) == "валидация вопроса 1"
+                && _.GetValidationMessage(staticTextWithValidations, 1) == "валидация текста 1");
 
             translator = Create.QuestionnaireTranslator();
         };
@@ -88,6 +101,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
         It should_not_translate_multiple_options_question_option_which_does_not_have_translation = () =>
             translatedDocument.Find<IQuestion>(multipleOptionsQuestion).Answers.Single(a => a.AnswerValue == checkOption2).AnswerText.ShouldEqual("check 2");
 
+        It should_translate_question_validation_message_which_has_translation = () =>
+            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[0].Message.ShouldEqual("валидация вопроса 1");
+
+        It should_not_translate_question_validation_message_which_does_not_have_translation = () =>
+            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[1].Message.ShouldEqual("question validation 2");
+
+        It should_translate_static_text_validation_message_which_has_translation = () =>
+            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[0].Message.ShouldEqual("валидация текста 1");
+
+        It should_not_translate_static_text_validation_message_which_does_not_have_translation = () =>
+            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[1].Message.ShouldEqual("text validation 2");
+
         private static QuestionnaireDocument originalDocument;
         private static QuestionnaireTranslator translator;
         private static IQuestionnaireTranslation translation;
@@ -100,6 +125,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
         private static Guid question2 = Guid.Parse("3333333333333333BBBBBBBBBBBBBBBB");
         private static Guid singleOptionQuestion = Guid.Parse("44444444444444444444444444444444");
         private static Guid multipleOptionsQuestion = Guid.Parse("55555555555555555555555555555555");
+        private static Guid questionWithValidations = Guid.Parse("66666666666666666666666666666666");
+        private static Guid staticTextWithValidations = Guid.Parse("77777777777777777777777777777777");
         private static string radioOption1 = "10";
         private static string radioOption2 = "20";
         private static string checkOption1 = "1000";
