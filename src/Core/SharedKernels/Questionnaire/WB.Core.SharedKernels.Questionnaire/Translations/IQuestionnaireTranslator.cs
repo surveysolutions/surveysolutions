@@ -1,6 +1,6 @@
 ﻿using Main.Core.Documents;
 
-namespace WB.Core.SharedKernels.Questionnaire.Translator
+namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
     public interface IQuestionnaireTranslator
     {
