@@ -3,6 +3,9 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.EventBus;
@@ -42,7 +45,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>
+        IEventHandler<StaticTextDeleted>,
+        IEventHandler<VariableAdded>,
+        IEventHandler<VariableCloned>,
+        IEventHandler<VariableDeleted>,
+        IEventHandler<VariableUpdated>,
+        IEventHandler<LookupTableAdded>,
+        IEventHandler<LookupTableDeleted>,
+        IEventHandler<LookupTableUpdated>,
+        IEventHandler<AttachmentUpdated>,
+        IEventHandler<AttachmentDeleted>,
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroDeleted>,
+        IEventHandler<MacroUpdated>
     {
         #region Fields
 
@@ -332,6 +347,66 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         }
 
         public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<VariableAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<VariableCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<VariableDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<VariableUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
         {
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
