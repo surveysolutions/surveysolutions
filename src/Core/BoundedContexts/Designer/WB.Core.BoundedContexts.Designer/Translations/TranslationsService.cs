@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public IQuestionnaireTranslation Get(Guid questionnaireId, string culture)
         {
             var storedTranslations =
-                this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Culture == culture).ToList());
+                this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
 
             return new QuestionnaireTranslation(storedTranslations);
         }
@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             TranslationInstance instance = new TranslationInstance();
 
                             instance.QuestionnaireId = questionnaireId;
-                            instance.Culture = culture;
+                            instance.Language = culture;
                             instance.QuestionnaireEntityId = Guid.Parse(worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>());
                             instance.Translation = worksheet.Cells[rowNumber, translactionColumn].GetValue<string>();
                             instance.TranslationIndex = worksheet.Cells[rowNumber, translationIndexColumn].GetValue<string>();

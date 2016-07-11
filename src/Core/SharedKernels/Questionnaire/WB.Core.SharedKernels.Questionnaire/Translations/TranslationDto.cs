@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         public virtual string TranslationIndex { get; set; }
 
-        public virtual string Culture { get; set; }
+        public virtual string Language { get; set; }
 
         public virtual string Value { get; set; }
     }
