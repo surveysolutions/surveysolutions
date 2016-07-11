@@ -19,6 +19,10 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             var translatedDocument = originalDocument.Clone();
 
             TranslateTitles(translatedDocument, translation);
+            TranslateInstructions(translatedDocument, translation);
+            TranslateAnswerOptions(translatedDocument, translation);
+            TranslateValidationMessages(translatedDocument, translation);
+            TranslateFixedRosterTitles(translatedDocument, translation);
 
             return translatedDocument;
         }
@@ -29,17 +33,29 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
             {
                 TranslateTitle(entity, translation);
             }
+        }
 
+        private static void TranslateInstructions(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        {
             foreach (var question in questionnaireDocument.Find<IQuestion>())
             {
                 TranslateInstruction(question, translation);
+            }
+        }
 
+        private static void TranslateAnswerOptions(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        {
+            foreach (var question in questionnaireDocument.Find<IQuestion>())
+            {
                 foreach (var answerOption in question.Answers)
                 {
                     TranslateAnswerOption(question.PublicKey, answerOption, translation);
                 }
             }
+        }
 
+        private static void TranslateValidationMessages(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        {
             foreach (var validatableEntity in questionnaireDocument.Find<IValidatable>())
             {
                 for (int index = 0; index < validatableEntity.ValidationConditions.Count; index++)
@@ -48,8 +64,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translator
                     TranslateValidationMessage(validatableEntity.PublicKey, index + 1, validationCondition, translation);
                 }
             }
+        }
 
-            foreach (var roster in questionnaireDocument.Find<IGroup>(group => group.IsRoster))
+        private static void TranslateFixedRosterTitles(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        {
+            foreach (var roster in questionnaireDocument.Find<IGroup>(group => @group.IsRoster))
             {
                 foreach (var fixedRosterTitle in roster.FixedRosterTitles)
                 {
