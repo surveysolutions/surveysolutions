@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             ICommandPostprocessor commandPostprocessor = null,
             HttpRequestMessage httpRequestMessage = null,
             HttpConfiguration httpConfiguration = null,
-            IAttachmentService attachmentService = null)
+            IAttachmentService attachmentService = null,
+            ITranslationsService translationsService = null)
         {
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
                 Mock.Of<ILookupTableService>(),
                 attachmentService ?? Mock.Of<IAttachmentService>(),
-                Mock.Of<TranslationsService>());
+                translationsService ?? Mock.Of<TranslationsService>());
 
             controller.Request = httpRequestMessage ?? new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(httpConfiguration ??  new HttpConfiguration());
