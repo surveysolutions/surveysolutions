@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.SharedKernels.Questionnaire.Translator;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslationTests
 {

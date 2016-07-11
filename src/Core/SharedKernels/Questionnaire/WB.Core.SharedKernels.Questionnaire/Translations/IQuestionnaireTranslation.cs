@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.Questionnaire.Translator
+namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
     public interface IQuestionnaireTranslation
     {

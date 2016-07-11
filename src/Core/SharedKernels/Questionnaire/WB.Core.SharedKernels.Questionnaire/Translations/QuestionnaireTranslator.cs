@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.SharedKernels.Questionnaire.Translator
+namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
     internal class QuestionnaireTranslator : IQuestionnaireTranslator
     {
