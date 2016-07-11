@@ -106,13 +106,12 @@ namespace WB.UI.Designer.Migrations.ReadSide
 
         public override void Down()
         {
-            this.Delete.Table("AccountDocuments");
-            this.Delete.Table("SimpleRoles");
-            this.Delete.Table("SimpleRoles");
-            this.Delete.Table("QuestionnaireChangeRecords");
-            this.Delete.Table("QuestionnaireListViewItems");
-            this.Delete.Table("SharedPersons");
-            this.Delete.Table("QuestionnaireChangeReferences");
+            this.Delete.Table("accountdocuments");
+            this.Delete.Table("simpleroles");
+            this.Delete.Table("questionnairechangerecords");
+            this.Delete.Table("questionnairelistviewitems");
+            this.Delete.Table("sharedpersons");
+            this.Delete.Table("questionnairechangereferences");
             this.Delete.Table("hibernate_unique_key");
         }
     }
