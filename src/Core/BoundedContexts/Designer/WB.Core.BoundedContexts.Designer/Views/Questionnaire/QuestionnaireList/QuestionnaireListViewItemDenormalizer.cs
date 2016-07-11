@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.EventBus;
@@ -57,7 +58,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         IEventHandler<AttachmentDeleted>,
         IEventHandler<MacroAdded>,
         IEventHandler<MacroDeleted>,
-        IEventHandler<MacroUpdated>
+        IEventHandler<MacroUpdated>,
+        IEventHandler<TranslationUpdated>,
+        IEventHandler<TranslationDeleted>
     {
         #region Fields
 
@@ -407,6 +410,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         }
 
         public void Handle(IPublishedEvent<MacroUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TranslationUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TranslationDeleted> evnt)
         {
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
