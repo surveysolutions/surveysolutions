@@ -108,6 +108,8 @@
     <Compile Include="Translations\IQuestionnaireTranslation.cs" />
     <Compile Include="Translations\IQuestionnaireTranslator.cs" />
     <Compile Include="Translations\QuestionnaireTranslator.cs" />
+    <Compile Include="Translations\TranslationInstance.cs" />
+    <Compile Include="Translations\TranslationType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
