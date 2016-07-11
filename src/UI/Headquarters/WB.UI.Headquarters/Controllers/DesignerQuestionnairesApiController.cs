@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -125,7 +127,17 @@ namespace WB.UI.Headquarters.Controllers
                             attachmentContent.ContentType, attachmentContent.Content);
                     }
                 }
-                
+
+                if (questionnaire.Translations != null)
+                {
+                    foreach (var translation in questionnaire.Translations)
+                    {
+                        //var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
+                        //   url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
+                        //   credentials: designerUserCredentials);
+                    }
+                }
+
                 this.CommandService.Execute(new ImportFromDesigner(
                     this.GlobalInfo.GetCurrentUser().Id, 
                     questionnaire,

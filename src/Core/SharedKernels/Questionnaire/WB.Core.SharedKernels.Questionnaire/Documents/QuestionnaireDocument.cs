@@ -25,6 +25,7 @@ namespace Main.Core.Documents
             this.Macros = new Dictionary<Guid, Macro>();
             this.LookupTables = new Dictionary<Guid, LookupTable>();
             this.Attachments = new List<Attachment>();
+            this.Translations = new List<Translation>();
         }
 
         public string Id { get; set; }

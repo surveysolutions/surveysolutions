@@ -1020,7 +1020,7 @@ namespace WB.Tests.Unit.Designer
                 Type = type,
                 Translation = translation,
                 TranslationIndex = translationIndex,
-                Culture = culture
+                Language = culture
             };
         }
 

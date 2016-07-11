@@ -266,6 +266,7 @@
     <Compile Include="Api\Designer\QuestionnaireController.cs" />
     <Compile Include="Api\Designer\UsersController.cs" />
     <Compile Include="Api\Headquarters\HQAttachmentController.cs" />
+    <Compile Include="Api\Headquarters\HQTranslationsController.cs" />
     <Compile Include="Api\Headquarters\ImportController.cs" />
     <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
     <Compile Include="Api\Headquarters\HQQuestionnairesController.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable - Copy.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
