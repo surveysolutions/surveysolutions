@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 map.Property(x => x.Type, ptp => ptp.NotNullable(true));
                 map.Property(x => x.QuestionnaireEntityId, ptp => ptp.NotNullable(true));
                 map.Property(x => x.TranslationIndex);
-                map.Property(x => x.Culture, ptp => ptp.NotNullable(true));
+                map.Property(x => x.Language, ptp => ptp.NotNullable(true));
             });
 
             Property(x => x.Translation, ptp => ptp.NotNullable(true));
