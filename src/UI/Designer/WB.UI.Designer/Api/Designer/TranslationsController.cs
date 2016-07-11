@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("{id:Guid}/{culture}")]
+        [Route("{id:Guid}/{translationId:Guid}")]
         public HttpResponseMessage Get(Guid id, Guid translationId)
         {
             byte[] translationContent = this.translationsService.GetAsExcelFile(id, translationId.FormatGuid());
