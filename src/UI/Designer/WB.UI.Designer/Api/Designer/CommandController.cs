@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Api
        
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly TranslationsService translationsService;
+        private readonly ITranslationsService translationsService;
 
         public CommandController(
             ICommandService commandService, 
@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Api
             ICommandPostprocessor commandPostprocessor, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            TranslationsService translationsService)
+            ITranslationsService translationsService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;

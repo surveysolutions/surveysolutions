@@ -34,6 +34,7 @@ using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -61,6 +62,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
+            this.Bind<ITranslationsService>().To<TranslationsService>();
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
