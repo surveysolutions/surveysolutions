@@ -528,6 +528,9 @@ namespace Main.Core.Documents
             doc.Attachments = new List<Attachment>();
             this.Attachments.ForEach(x => doc.Attachments.Add(x.Clone()));
 
+            doc.Translations = new List<Translation>();
+            this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
+
             return doc;
         }
 

@@ -70,7 +70,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<LookupTableDeleted>,
         
         IEventHandler<AttachmentUpdated>,
-        IEventHandler<AttachmentDeleted>
+        IEventHandler<AttachmentDeleted>,
+
+        IEventHandler<TranslationUpdated>,
+        IEventHandler<TranslationDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;

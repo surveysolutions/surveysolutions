@@ -241,6 +241,7 @@
 
                 $rootScope.$broadcast("closeChaptersListRequested", {});
                 $rootScope.$broadcast("closeMacrosListRequested", {});
+                $rootScope.$broadcast("closeTranslationsRequested", {});
 
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {

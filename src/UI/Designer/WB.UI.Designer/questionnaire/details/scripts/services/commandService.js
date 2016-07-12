@@ -98,6 +98,34 @@
                     return commandCall("DeleteLookupTable", command);
                 };
 
+                commandService.updateTranslation = function (questionnaireId, translation) {
+                    blockUI.start();
+
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        translationId: translation.translationId,
+                        name: translation.name
+                        
+                    };
+
+                    return Upload.upload({
+                        url: urlBase + '/translation',
+                        data: { file: _.isNull(translation.file) ? "" : translation.file, "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
+                    });
+                };
+
+                commandService.deleteTranslation = function (questionnaireId, translationId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        translationId: translationId
+                    };
+                    return commandCall("DeleteTranslation", command);
+                };
+
                 commandService.addMacro = function (questionnaireId, macro) {
                     var command = {
                         questionnaireId: questionnaireId,

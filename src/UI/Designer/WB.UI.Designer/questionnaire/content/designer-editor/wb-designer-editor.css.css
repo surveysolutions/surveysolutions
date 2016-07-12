@@ -89,6 +89,9 @@
 #left-menu ul li a.left-menu-attachments {
   background: url(../i/designer-left-icons.png) 0 -150px no-repeat;
 }
+#left-menu ul li a.left-menu-translations {
+  background: url(../i/designer-left-icons.png) 0 -100px no-repeat;
+}
 #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }

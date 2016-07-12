@@ -192,10 +192,12 @@ namespace WB.UI.Designer.Api
             try
             {
                 command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
-
-                this.translationsService.Store(command.QuestionnaireId,
-                    command.TranslationId.FormatGuid(),
-                    model.File.Buffer);
+                if (model.File != null)
+                {
+                    this.translationsService.Store(command.QuestionnaireId,
+                        command.TranslationId.FormatGuid(),
+                        model.File.Buffer);
+                }
             }
             catch (FormatException e)
             {
