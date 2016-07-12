@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
             this.Source = source;
             this.SupportingAssembly = supportingAssembly;
             this.QuestionnaireContentVersion = questionnaireContentVersion;
+            this.QuestionnaireVersion = questionnaireVersion;
         }
 
         public Guid CreatedBy { get; private set; }
