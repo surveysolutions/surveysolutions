@@ -1,7 +1,7 @@
 using System;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations
 {
     [Serializable]
     public class AddOrUpdateTranslation : QuestionnaireCommand
