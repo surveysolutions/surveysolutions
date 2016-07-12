@@ -324,6 +324,8 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
+    <Compile Include="Questionnaires\Translations\TranslationInstance.cs" />
+    <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
@@ -370,6 +372,7 @@
     <Compile Include="Services\IFileNameService.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
+    <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
@@ -380,6 +383,7 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
