@@ -14,8 +14,6 @@ namespace WB.UI.Interviewer.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewerInterviewViewModel>
     {
-        protected override int MenuResourceId => Resource.Menu.interview;
-
         public override void OnBackPressed()
         {
             this.ViewModel.NavigateToPreviousViewModel(() =>
@@ -27,7 +25,7 @@ namespace WB.UI.Interviewer.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(this.MenuResourceId, menu);
+            this.MenuInflater.Inflate(Resource.Menu.interview, menu);
 
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
@@ -36,11 +34,9 @@ namespace WB.UI.Interviewer.Activities
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected override void OnMenuItemSelected(int resourceId)
+        protected override void OnMenuItemSelected(IMenuItem item)
         {
-            var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
-
-            switch (resourceId)
+            switch (item.ItemId)
             {
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
