@@ -150,6 +150,7 @@
 
                 $rootScope.$broadcast("closeChaptersListRequested", {});
                 $rootScope.$broadcast("closeLookupTablesRequested", {});
+                $rootScope.$broadcast("closeTranslationsRequested", {});
 
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {

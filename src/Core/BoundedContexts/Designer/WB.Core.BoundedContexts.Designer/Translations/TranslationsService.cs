@@ -41,6 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public IQuestionnaireTranslation Get(Guid questionnaireId, string culture)
         {
+            if (culture == Guid.Empty.FormatGuid())
+                return new QuestionnaireTranslation(new List<TranslationInstance>());
+
             var storedTranslations =
                 this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
 
