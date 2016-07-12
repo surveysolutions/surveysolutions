@@ -29,6 +29,8 @@ namespace WB.UI.Tester.Activities
             menu.LocalizeMenuItem(Resource.Id.interview_dashboard, TesterUIResources.MenuItem_Title_Dashboard);
             menu.LocalizeMenuItem(Resource.Id.interview_settings, TesterUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.interview_signout, TesterUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.interview_language, TesterUIResources.MenuItem_Title_Language);
+            menu.LocalizeMenuItem(Resource.Id.interview_language_original, TesterUIResources.MenuItem_Title_Language_Original);
 
             return base.OnCreateOptionsMenu(menu);
         }

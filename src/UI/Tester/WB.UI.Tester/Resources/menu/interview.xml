@@ -5,6 +5,15 @@
       android:id="@+id/interview_dashboard"
       local:showAsAction="never" />
   <item
+      android:id="@+id/interview_language"
+      local:showAsAction="never">
+      <menu>
+          <item
+              android:id="@+id/interview_language_original"
+              local:showAsAction="never" />
+      </menu>
+  </item>
+  <item
       android:id="@+id/interview_settings"
       local:showAsAction="never" />
   <item
