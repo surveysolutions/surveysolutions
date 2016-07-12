@@ -137,7 +137,7 @@ namespace WB.UI.Designer.Controllers
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
                             isPublic: model.IsPublic));
-                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId});
+                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
                 }
                 catch (QuestionnaireException e)
                 {
