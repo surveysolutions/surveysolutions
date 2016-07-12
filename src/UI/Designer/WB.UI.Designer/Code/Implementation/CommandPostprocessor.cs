@@ -5,7 +5,10 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,6 +26,7 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly ILogger logger;
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
+        private readonly ITranslationsService translationsService;
 
 
         public CommandPostprocessor(
@@ -32,7 +36,8 @@ namespace WB.UI.Designer.Code.Implementation
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader, 
             ILogger logger, 
             IAttachmentService attachmentService, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            ITranslationsService translationsService)
         {
             this.userHelper = userHelper;
             this.notifier = notifier;
@@ -41,6 +46,7 @@ namespace WB.UI.Designer.Code.Implementation
             this.logger = logger;
             this.attachmentService = attachmentService;
             this.lookupTableService = lookupTableService;
+            this.translationsService = translationsService;
         }
 
 
@@ -73,6 +79,12 @@ namespace WB.UI.Designer.Code.Implementation
                     this.lookupTableService.DeleteLookupTableContent(deleteLookupTable.QuestionnaireId, deleteLookupTable.LookupTableId);
                 }
 
+                var deleteTranslation = command as DeleteTranslation;
+                if (deleteTranslation != null)
+                {
+                    this.translationsService.Delete(deleteTranslation.QuestionnaireId, deleteTranslation.TranslationId.FormatGuid());
+                }
+
                 var deleteQuestionnaire = command as DeleteQuestionnaire;
                 if (deleteQuestionnaire != null)
                 {
@@ -97,6 +109,11 @@ namespace WB.UI.Designer.Code.Implementation
             foreach (var lookupTable in questionnaire.LookupTables)
             {
                 this.lookupTableService.DeleteLookupTableContent(questionnaireId, lookupTable.Key);
+            }
+
+            foreach (var translation in questionnaire.Translations)
+            {
+                this.translationsService.Delete(questionnaireId, translation.TranslationId.FormatGuid());
             }
         }
 

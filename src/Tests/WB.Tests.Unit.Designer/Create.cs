@@ -984,7 +984,8 @@ namespace WB.Tests.Unit.Designer
             IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
             ILogger logger,
             IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null)
+            ILookupTableService lookupTableService = null,
+            ITranslationsService translationsService = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -993,7 +994,8 @@ namespace WB.Tests.Unit.Designer
                documentStorage,
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
-               lookupTableService ?? Mock.Of<ILookupTableService>());
+               lookupTableService ?? Mock.Of<ILookupTableService>(),
+               translationsService ?? Mock.Of<ITranslationsService>());
         }
 
         public static AttachmentService AttachmentService(
