@@ -156,12 +156,13 @@ namespace WB.Tests.Unit.TestFactories
         public CloneQuestionnaire CloneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity = null,
             Guid? questionnaireId = null, long? questionnaireVersion = null,
-            string newTitle = null)
+            string newTitle = null,
+            long? newQuestionnaireVersion = null)
             => new CloneQuestionnaire(
                 questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
-                42,
+                newQuestionnaireVersion??42,
                 Guid.NewGuid());
 
         public CreateInterviewCommand CreateInterviewCommand()
