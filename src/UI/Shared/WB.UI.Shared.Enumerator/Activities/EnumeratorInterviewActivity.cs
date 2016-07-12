@@ -107,12 +107,11 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return true;
             }
 
-            this.OnMenuItemSelected(item.ItemId);
+            this.OnMenuItemSelected(item);
 
             return base.OnOptionsItemSelected(item);
         }
 
-        protected abstract int MenuResourceId { get; }
-        protected abstract void OnMenuItemSelected(int resourceId);
+        protected abstract void OnMenuItemSelected(IMenuItem item);
     }
 }
