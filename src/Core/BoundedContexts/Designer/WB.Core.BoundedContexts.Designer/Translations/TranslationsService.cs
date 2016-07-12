@@ -193,6 +193,20 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
+        public void CloneTranslation(Guid questionnaireId, string culture, Guid newQuestionnaireId, string newCulture)
+        {
+            var storedTranslations = this.translations.Query(_ => _
+                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture)
+                .ToList());
+
+            foreach (var storedTranslation in storedTranslations)
+            {
+                storedTranslation.Language = newCulture;
+                storedTranslation.QuestionnaireId = newQuestionnaireId;
+                this.translations.Store(storedTranslation, storedTranslation);
+            }
+        }
+
         private void ValidatePackage(ExcelPackage package)
         {
             if (package.Workbook.Worksheets.Count == 0)
