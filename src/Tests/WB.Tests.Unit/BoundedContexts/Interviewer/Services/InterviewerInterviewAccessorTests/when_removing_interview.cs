@@ -20,7 +20,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
 {
-    internal class when_removing_interview : InterviewerInterviewAccessorTestsContext
+    internal class when_removing_interview
     {
         Establish context = () =>
         {
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             inMemoryFileViewRepository = new SqliteInmemoryStorage<InterviewFileView>();
             inMemoryFileViewRepository.StoreAsync(interviewFileViews);
 
-            interviewerInterviewAccessor = CreateInterviewerInterviewAccessor(
+            interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
                 interviewViewRepository: interviewViewRepositoryMock.Object,
                 aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,

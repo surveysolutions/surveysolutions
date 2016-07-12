@@ -974,6 +974,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization completed with errors.
+        /// </summary>
+        public static string Synchronization_DoneWithErrors_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_DoneWithErrors_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removing obsolete attachments..
         /// </summary>
         public static string Synchronization_Download_AttachmentsCleanup {
@@ -1006,6 +1015,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Fail_State_DeletedInterviews_Format {
             get {
                 return ResourceManager.GetString("Synchronization_Fail_State_DeletedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) failed to synchronize.
+        /// </summary>
+        public static string Synchronization_Fail_State_FailedToProcess_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_FailedToProcess_Format", resourceCulture);
             }
         }
         

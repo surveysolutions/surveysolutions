@@ -38,9 +38,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -115,6 +119,31 @@ namespace WB.Tests.Unit.TestFactories
                 eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+
+        public InterviewerInterviewAccessor InterviewerInterviewAccessor(
+            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IInterviewerEventStorage eventStore = null,
+            ICommandService commandService = null,
+            IAsyncPlainStorage<QuestionnaireView> questionnaireRepository = null,
+            IInterviewerPrincipal principal = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
+            ISnapshotStoreWithCache snapshotStoreWithCache = null,
+            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
+            IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository = null)
+            => new InterviewerInterviewAccessor(
+                questionnaireRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
+                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+                interviewMultimediaViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
+                interviewFileViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
+                eventStore ?? Mock.Of<IInterviewerEventStorage>(),
+                aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
+                snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
+                synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
+                Mock.Of<IInterviewEventStreamOptimizer>(),
+                Mock.Of<ILogger>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();

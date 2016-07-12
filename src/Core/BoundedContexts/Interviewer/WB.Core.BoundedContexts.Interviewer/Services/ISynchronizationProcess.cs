@@ -23,13 +23,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         public SychronizationStatistics Statistics { get; set; }
         public bool UserIsLinkedToAnotherDevice { get; set; }
 
-        public bool IsRunning
-        {
-            get
-            {
-                return this.Status == SynchronizationStatus.Download || this.Status == SynchronizationStatus.Started ||
-                       this.Status == SynchronizationStatus.Upload;
-            }
-        }
+        public bool HasErrors => this.Statistics.FailedToUploadInterviwesCount != 0 || 
+                                 this.Statistics.FailedToCreateInterviewsCount != 0;
+
+        public bool IsRunning => this.Status == SynchronizationStatus.Download || 
+                                 this.Status == SynchronizationStatus.Started ||
+                                 this.Status == SynchronizationStatus.Upload;
     }
 }
