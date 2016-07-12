@@ -7,9 +7,11 @@
             $scope.isUnfoldedMacros = false;
             $scope.isUnfoldedLookupTables = false;
             $scope.isUnfoldedAttachments = false;
+            $scope.isUnfoldedTranslations = false;
+
 
             var closeOpenPanelIfAny = function() {
-                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments))
+                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments || $scope.isUnfoldedTranslations))
                     return;
 
                 if ($scope.isUnfoldedChapters) {
@@ -24,6 +26,10 @@
                 if ($scope.isUnfoldedAttachments) {
                     $rootScope.$broadcast("closeAttachmentsRequested", {});
                 }
+                if ($scope.isUnfoldedTranslations) {
+                    $rootScope.$broadcast("closeTranslationsRequested", {});
+                }
+
             };
 
             var closeAllPanel = function () {
@@ -31,6 +37,7 @@
                 $scope.isUnfoldedChapters = false;
                 $scope.isUnfoldedLookupTables = false;
                 $scope.isUnfoldedAttachments = false;
+                $scope.isUnfoldedTranslations = false;
             }
 
             $scope.unfoldChapters = function () {
@@ -68,6 +75,15 @@
                 $rootScope.$broadcast("openAttachments", {});
             };
 
+            $scope.unfoldTranslations = function () {
+                if ($scope.isUnfoldedTranslations)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isUnfoldedTranslations = true;
+                $rootScope.$broadcast("openTranslations", {});
+            };
+
             $scope.$on('openChaptersList', function () {
                 $scope.isUnfoldedChapters = true;
             });
@@ -78,6 +94,10 @@
 
             $scope.$on('openAttachments', function () {
                 $scope.isUnfoldedAttachments = true;
+            });
+
+            $scope.$on('openTranslations', function () {
+                $scope.isUnfoldedTranslations = true;
             });
 
             $scope.$on('openMacrosList', function () {
@@ -97,6 +117,10 @@
             });
             
             $scope.$on('closeAttachments', function () {
+                closeAllPanel();
+            });
+
+            $scope.$on('closeTranslations', function () {
                 closeAllPanel();
             });
         });
