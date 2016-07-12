@@ -28,7 +28,11 @@ namespace WB.Tests.Unit.Designer
 
         public void Remove(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            foreach (var entity in entities)
+            {
+                var itemToRemove = this.entites.SingleOrDefault(x => x.Value.Equals(entity));
+                this.entites.Remove(itemToRemove.Key);
+            }
         }
 
         public void Store(T entity, object id)
