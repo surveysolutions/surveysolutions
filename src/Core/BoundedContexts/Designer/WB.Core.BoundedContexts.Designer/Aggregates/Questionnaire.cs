@@ -36,6 +36,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
+using WB.Core.BoundedContexts.Designer.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -790,6 +791,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IKeywordsProvider variableNameValidator;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationService;
 
         #endregion
 
@@ -801,7 +803,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ISubstitutionService substitutionService, 
             IKeywordsProvider variableNameValidator, 
             ILookupTableService lookupTableService, 
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            ITranslationsService translationService)
         {
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
@@ -811,6 +814,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.variableNameValidator = variableNameValidator;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
+            this.translationService = translationService;
         }
 
         #region Questionnaire command handlers
@@ -875,6 +879,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var newAttachmentId = Guid.NewGuid();
                 this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
                 attachment.AttachmentId = newAttachmentId;
+            }
+
+            foreach (var translation in clonedDocument.Translations)
+            {
+                var newTranslationId = Guid.NewGuid();
+                this.translationService.CloneTranslation(document.PublicKey, translation.TranslationId.FormatGuid(), clonedDocument.PublicKey, newTranslationId.FormatGuid());
+                translation.TranslationId = newTranslationId;
             }
 
             ApplyEvent(new QuestionnaireCloned
