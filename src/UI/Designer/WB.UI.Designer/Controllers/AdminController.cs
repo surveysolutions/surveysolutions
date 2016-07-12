@@ -15,6 +15,7 @@ using System.Web.Security;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -81,6 +82,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IAccountListViewFactory accountListViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationsService;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -92,7 +94,7 @@ namespace WB.UI.Designer.Controllers
             ISerializer serializer, 
             IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService, ITranslationsService translationsService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -104,6 +106,7 @@ namespace WB.UI.Designer.Controllers
             this.accountListViewFactory = accountListViewFactory;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
+            this.translationsService = translationsService;
         }
 
         [HttpGet]
@@ -252,6 +255,11 @@ namespace WB.UI.Designer.Controllers
                     zipEntryPathChunks[1].ToLower() == "lookup tables" &&
                     zipEntryPathChunks[2].ToLower().EndsWith(".txt");
 
+                bool isTranslationEntry =
+                    zipEntryPathChunks.Length == 3 &&
+                    zipEntryPathChunks[1].ToLower() == "translation" &&
+                    zipEntryPathChunks[2].ToLower().EndsWith(".xlsx");
+
                 if (isQuestionnaireDocumentEntry)
                 {
                     string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
@@ -312,6 +320,23 @@ namespace WB.UI.Designer.Controllers
 
                     this.Success($"[{zipEntry.Name}].", append: true);
                     this.Success($"    Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.", append: true);
+                    state.RestoredEntitiesCount++;
+                }
+                else if (isTranslationEntry)
+                {
+                    var translationId = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    byte[] excelContent = null;
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        zipStream.CopyTo(memoryStream);
+                        excelContent = memoryStream.ToArray();
+                    }
+
+                    this.translationsService.Store(questionnaireId, translationId, excelContent);
+
+                    this.Success($"[{zipEntry.Name}].", append: true);
+                    this.Success($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;
                 }
                 else
@@ -409,6 +434,12 @@ namespace WB.UI.Designer.Controllers
             foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
             {
                 zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
+            }
+
+            foreach (var translation in questionnaireDocument.Translations)
+            {
+                var excelFile = this.translationsService.GetAsExcelFile(id, translation.TranslationId.FormatGuid());
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Translation/{translation.TranslationId.FormatGuid()}.xlsx", excelFile);
             }
 
             zipStream.Finish();
