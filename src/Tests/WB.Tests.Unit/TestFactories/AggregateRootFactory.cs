@@ -40,7 +40,8 @@ namespace WB.Tests.Unit.TestFactories
         public Questionnaire Questionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            IPlainStorageAccessor<TranslationInstance> translationsStorage = null)
             => new Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                new InMemoryPlainStorageAccessor<TranslationInstance>());
+                translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());
 
         public StatefulInterview StatefulInterview(
             Guid? questionnaireId = null,

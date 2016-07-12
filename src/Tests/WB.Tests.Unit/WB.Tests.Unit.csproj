@@ -356,6 +356,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_questionnaire_contains_yes_no_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_combobox.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
+    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_with_translations.cs" />
     <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\OptionsRepositoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
