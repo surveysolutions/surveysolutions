@@ -12,11 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.Version = version;
         }
 
-        public long Version { get; set; }
+        public virtual long Version { get; set; }
 
-        public Guid QuestionnaireId { get; set; }
+        public virtual Guid QuestionnaireId { get; set; }
 
-        public bool Equals(QuestionnaireIdentity other)
+        public virtual bool Equals(QuestionnaireIdentity other)
         {
             return this.Version == other.Version && this.QuestionnaireId.Equals(other.QuestionnaireId);
         }
