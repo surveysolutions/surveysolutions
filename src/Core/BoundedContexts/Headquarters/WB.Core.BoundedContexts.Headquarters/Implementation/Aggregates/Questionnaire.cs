@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
+        private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private Guid Id { get; set; }
@@ -48,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor, 
+            IPlainStorageAccessor<TranslationInstance> translations)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -59,6 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.translations = translations;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -83,24 +87,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
+            QuestionnaireDocument sourceQuestionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            this.ThrowIfTitleIsInvalid(command.NewTitle, questionnaireDocument);
+            this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaire);
 
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.SourceQuestionnaireVersion);
             QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            questionnaireDocument.Title = command.NewTitle;
+            sourceQuestionnaire.Title = command.NewTitle;
 
-
+            CloneTranslations(sourceQuestionnaire.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                questionnaireDocument,
+                sourceQuestionnaire,
                 assemblyAsBase64, 
                 questionnaireBrowseItem.AllowCensusMode, 
                 questionnaireBrowseItem.QuestionnaireContentVersion,
                 command.NewQuestionnaireVersion
                 );
+        }
+
+        private void CloneTranslations(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
+        {
+            var oldTranslations = this.translations.Query(_ =>_.Where(x =>
+                                x.QuestionnaireId.QuestionnaireId == sourceQuestionnaireId &&
+                                x.QuestionnaireId.Version == newQuestionnaireVersion).ToList());
+
+            this.translations.Remove(oldTranslations);
+
+            var sourceTranslations = this.translations.Query(_ => _.Where(x =>
+                             x.QuestionnaireId.QuestionnaireId == sourceQuestionnaireId &&
+                             x.QuestionnaireId.Version == sourceQuestionnaireVersion).ToList());
+            foreach (var translationInstance in sourceTranslations)
+            {
+                var targetTranslation = translationInstance.Clone();
+                targetTranslation.QuestionnaireId = new QuestionnaireIdentity(targetTranslation.QuestionnaireId.QuestionnaireId, newQuestionnaireVersion);
+                this.translations.Store(targetTranslation, null);
+            }
         }
 
         private void StoreQuestionnaireAndProjectionsAsNewVersion(QuestionnaireDocument questionnaireDocument, 
