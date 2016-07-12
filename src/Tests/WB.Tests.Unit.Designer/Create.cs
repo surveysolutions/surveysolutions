@@ -566,7 +566,8 @@ namespace WB.Tests.Unit.Designer
                 Create.SubstitutionService(),
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -1034,5 +1035,10 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
+
+        public static Translation Translation(Guid translationId, string name = null)
+        {
+            return new Translation() { Name = name, TranslationId = translationId };
+        }
     }
 }
