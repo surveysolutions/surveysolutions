@@ -10,6 +10,7 @@ using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -37,6 +38,7 @@ using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
 namespace WB.Tests.Unit.TestFactories
@@ -1027,5 +1029,23 @@ namespace WB.Tests.Unit.TestFactories
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] { });
+
+        public TranslationInstance TranslationInstance(string value = null,
+            string language = null, 
+            QuestionnaireIdentity questionnaireId = null,
+            Guid? entityId = null, 
+            string translationIndex = null, 
+            TranslationType? type = null)
+        {
+            return new TranslationInstance
+            {
+                Value = value,
+                Language = language,
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
     }
 }
