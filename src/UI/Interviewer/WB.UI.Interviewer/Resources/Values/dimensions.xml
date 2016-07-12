@@ -47,7 +47,7 @@
 
   <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
 
-  <dimen name="Dashboard_Synchronization_Statistics_Height">160dp</dimen>
+  <dimen name="Dashboard_Synchronization_Statistics_Height">180dp</dimen>
   <dimen name="Dashboard_Synchronization_Statistics_Width">350dp</dimen>
 
   <dimen name="Relink_Message_marginBottom">28dp</dimen>

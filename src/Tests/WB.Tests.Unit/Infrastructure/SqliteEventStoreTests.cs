@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net;
 using SQLite.Net.Platform.Win32;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -18,30 +22,23 @@ namespace WB.Tests.Unit.Infrastructure
 {
     public class SqliteEventStoreTests
     {
-        private Func<JsonSerializerSettings> origSerializerSettings;
-        private SqliteEventStorage sqliteEventStorage;
+        private SqliteMultiFilesEventStorage sqliteEventStorage;
 
         [SetUp]
         public void Setup()
         {
-            this.origSerializerSettings = SqliteEventStorage.JsonSerializerSettings;
-
-            SqliteEventStorage.JsonSerializerSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new SqliteEventStorage.CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
-            };
-
-            sqliteEventStorage = new SqliteEventStorage(new SQLitePlatformWin32(),
+            sqliteEventStorage = new SqliteMultiFilesEventStorage(new SQLitePlatformWin32(),
               Mock.Of<ILogger>(),
               Mock.Of<ITraceListener>(),
               new SqliteSettings
               {
-                  PathToDatabaseDirectory = ":memory:"
+                  PathToDatabaseDirectory = "",
+                  PathToInterviewsDirectory = "",
+                  InMemoryStorage = true
               },
-              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100));
+              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
+              Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
         }
 
         [Test]
@@ -82,6 +79,43 @@ namespace WB.Tests.Unit.Infrastructure
             Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
             Assert.That(payload.Text, Is.EqualTo("text 301"));
             
+        }
+
+        [Test]
+        public void Should_be_able_to_read_events_if_events_in_the_middle_are_missing()
+        {
+            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var missingEventIds = new List<Guid>();
+            var uncommittedEvents = new List<UncommittedEvent>();
+
+            for (int i = 1; i <= 1000; i++)
+            {
+                var uncommittedEvent = Create.Other.UncommittedEvent(eventSourceId, sequence: i,
+                    payload: Create.Event.StaticTextUpdated(text: $"text {i}"));
+
+                if (101 <= i && i <= 900)
+                {
+                    missingEventIds.Add(uncommittedEvent.EventIdentifier);
+                }
+
+                uncommittedEvents.Add(uncommittedEvent);
+            }
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null, uncommittedEvents));
+
+            // manually removing events from the middle of store event stream
+            foreach (var missingEventId in missingEventIds)
+            {
+                this.sqliteEventStorage.connectionByEventSource.Values.Single().Delete<EventView>(missingEventId);
+            }
+
+            var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
+            Assert.That(committedEvents.Count, Is.EqualTo(200));
+
+            var payload = committedEvents.Last().Payload as StaticTextUpdated;
+            Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
+            Assert.That(payload.Text, Is.EqualTo("text 1000"));
         }
 
         [TestCase(1)]
@@ -164,12 +198,6 @@ namespace WB.Tests.Unit.Infrastructure
             this.sqliteEventStorage.RemoveEventSourceById(eventSourceId);
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
             Assert.That(committedEvents.Count(), Is.EqualTo(0));
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            SqliteEventStorage.JsonSerializerSettings = this.origSerializerSettings;
         }
     }
 }

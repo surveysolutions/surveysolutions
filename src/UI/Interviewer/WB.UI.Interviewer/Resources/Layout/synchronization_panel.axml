@@ -10,12 +10,18 @@
                local:MvxBind="BackgroundStyle SynchronizationStatusToDrawable(Synchronization.Status);
                               Visible Synchronization.IsSynchronizationInfoShowed"/>
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-      <LinearLayout style="@style/VerticalContentHeightWrappingLayout">
+      <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Not(Synchronization.SynchronizationErrorOccured)">
         <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperation; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
         <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
       </LinearLayout>
+
+      <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Synchronization.SynchronizationErrorOccured">
+        <TextView style="@style/Dashboard_Synchronization_WithError_Title"
+                  local:MvxBind="Text Localization('Synchronization_DoneWithErrors_Title');" />
+      </LinearLayout>
+      
       <RelativeLayout style="@style/FullWidthWrappingLayout" 
                       local:MvxBind="Visible Synchronization.IsSynchronizationInProgress">
           <TextView style="@style/Dashboard_Synchronization_Lock_Text"
@@ -26,7 +32,7 @@
       </RelativeLayout>
       <RelativeLayout style="@style/FullWidthWrappingLayout">
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
-                      local:MvxBind="Visible And(IsSynchronizationFailOrCanceled(Synchronization.Status), Not(Synchronization.HasUserAnotherDevice))">
+                      local:MvxBind="Visible And(Or(IsSynchronizationFailOrCanceled(Synchronization.Status), Synchronization.SynchronizationErrorOccured), Not(Synchronization.HasUserAnotherDevice))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.NewInterviewsCount, Synchronization.Statistics.TotalNewInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
@@ -36,13 +42,17 @@
                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_DeletedInterviews_Format'), Synchronization.Statistics.DeletedInterviewsCount, Synchronization.Statistics.TotalDeletedInterviewsCount)" />
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.CompletedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_FailedToProcess_Format'), Synchronization.Statistics.FailedInterviewsCount);" />
+          
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
-                      local:MvxBind="Visible And(Not(IsSynchronizationFailOrCanceled(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress))">
+                      local:MvxBind="Visible And(Not(IsSynchronizationFailOrCanceled(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress), Not(Synchronization.SynchronizationErrorOccured))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount)" />
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                   local:MvxBind="Text Format(Localization('Synchronization_Success_State_DeletedInterviews_Format'), Synchronization.Statistics.TotalDeletedInterviewsCount)" />
@@ -51,6 +61,7 @@
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount)" />
+
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"

@@ -225,6 +225,10 @@
     <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
   </style>
 
+  <style name="Dashboard_Synchronization_WithError_Title" parent="Dashboard_Synchronization_Operation_Title">
+    <item name="android:textColor">@color/dashboard_synchronization_fail_title</item>
+  </style>
+
   <style name="Dashboard_Synchronization_Statistics_Text" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
