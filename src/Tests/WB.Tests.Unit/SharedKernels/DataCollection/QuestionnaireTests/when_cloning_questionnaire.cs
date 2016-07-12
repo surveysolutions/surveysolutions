@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -32,7 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         Because of = () =>
             questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
-                questionnaireIdentity: questionnaireIdentity, newTitle: newQuestionnaireTitle));
+                questionnaireIdentity: questionnaireIdentity, newTitle: newQuestionnaireTitle,
+                newQuestionnaireVersion: questionnaireIdentity.Version + 1));
 
         It should_store_questionnaire_document_which_was_read_from_repository = () =>
             plainQuestionnaireRepositoryMock.Verify(
