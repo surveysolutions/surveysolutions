@@ -71,6 +71,7 @@ namespace WB.UI.Tester.Activities
                     if (item.GroupId == Resource.Id.interview_languages)
                     {
                         item.SetChecked(true);
+                        this.ViewModel.ReloadInterviewCommand.Execute();
                     }
                     break;
             }
