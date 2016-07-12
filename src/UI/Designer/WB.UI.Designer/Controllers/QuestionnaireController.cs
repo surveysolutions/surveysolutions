@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Controllers
 
                     this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
-                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }
                 catch (Exception e)
                 {
@@ -137,7 +137,7 @@ namespace WB.UI.Designer.Controllers
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
                             isPublic: model.IsPublic));
-                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId});
+                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
                 }
                 catch (QuestionnaireException e)
                 {
