@@ -207,6 +207,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
+        public void Delete(Guid questionnaireId, string culture)
+        {
+            var storedTranslations = this.translations.Query(_ => _
+                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture)
+                .ToList());
+            this.translations.Remove(storedTranslations);
+        }
+
         private void ValidatePackage(ExcelPackage package)
         {
             if (package.Workbook.Worksheets.Count == 0)
