@@ -157,6 +157,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (culture == null) throw new ArgumentNullException(nameof(culture));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
+            var oldTranslations = this.translations.Query(
+                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
+            this.translations.Remove(oldTranslations);
+
             using (MemoryStream stream = new MemoryStream(excelRepresentation))
             {
                 using (ExcelPackage package = new ExcelPackage(stream))

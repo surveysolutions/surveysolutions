@@ -249,6 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
             this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
 
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();

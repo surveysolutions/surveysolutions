@@ -8,11 +8,12 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Create.Table("translationinstances")
-                .WithColumn("questionnaireid").AsGuid().NotNullable().PrimaryKey()
-                .WithColumn("type").AsInt32().NotNullable().PrimaryKey()
-                .WithColumn("questionnaireentityid").AsGuid().NotNullable().PrimaryKey()
-                .WithColumn("translationindex").AsString().Nullable().PrimaryKey()
-                .WithColumn("culture").AsString().NotNullable().PrimaryKey()
+                .WithColumn("id").AsInt32().PrimaryKey()
+                .WithColumn("questionnaireid").AsGuid().NotNullable()
+                .WithColumn("type").AsInt32().NotNullable()
+                .WithColumn("questionnaireentityid").AsGuid().NotNullable()
+                .WithColumn("translationindex").AsString().Nullable()
+                .WithColumn("culture").AsString().NotNullable()
                 .WithColumn("translation").AsString().NotNullable();
 
             Create.Index("translationinstances_questionnaire")

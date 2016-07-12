@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
@@ -8,14 +9,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     {
         public TranslationInstanceMap()
         {
-            ComposedId(map =>
-            {
-                map.Property(x => x.QuestionnaireId, ptp => ptp.NotNullable(true));
-                map.Property(x => x.Type, ptp => ptp.NotNullable(true));
-                map.Property(x => x.QuestionnaireEntityId, ptp => ptp.NotNullable(true));
-                map.Property(x => x.TranslationIndex);
-                map.Property(x => x.Language, ptp => ptp.NotNullable(true));
-            });
+            Id(x => x.Id, idMapper => idMapper.Generator(Generators.HighLow));
+            
+            Property(x => x.QuestionnaireId, ptp => ptp.NotNullable(true));
+            Property(x => x.Type, ptp => ptp.NotNullable(true));
+            Property(x => x.QuestionnaireEntityId, ptp => ptp.NotNullable(true));
+            Property(x => x.TranslationIndex);
+            Property(x => x.Language, ptp => ptp.NotNullable(true));
 
             Property(x => x.Translation, ptp => ptp.NotNullable(true));
         }

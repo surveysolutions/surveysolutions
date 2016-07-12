@@ -75,31 +75,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 questionnaireDocument, command.SupportingAssembly,
-                command.AllowCensusMode, command.QuestionnaireContentVersion);
+                command.AllowCensusMode, command.QuestionnaireContentVersion,
+                command.QuestionnaireVersion);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
         {
-            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
+            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
             this.ThrowIfTitleIsInvalid(command.NewTitle, questionnaireDocument);
 
-            string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
-            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
+            string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.SourceQuestionnaireVersion);
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
             questionnaireDocument.Title = command.NewTitle;
 
+
+
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                questionnaireDocument, assemblyAsBase64, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.QuestionnaireContentVersion);
+                questionnaireDocument,
+                assemblyAsBase64, 
+                questionnaireBrowseItem.AllowCensusMode, 
+                questionnaireBrowseItem.QuestionnaireContentVersion,
+                command.NewQuestionnaireVersion
+                );
         }
 
-        private void StoreQuestionnaireAndProjectionsAsNewVersion(
-            QuestionnaireDocument questionnaireDocument, string assemblyAsBase64,
-            bool isCensus, long questionnaireContentVersion)
+        private void StoreQuestionnaireAndProjectionsAsNewVersion(QuestionnaireDocument questionnaireDocument, 
+            string assemblyAsBase64, 
+            bool isCensus, 
+            long questionnaireContentVersion, 
+            long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(this.Id, this.GetNextVersion());
+            var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
@@ -166,18 +176,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                     this.Id, command.Version));
 
             throw new NotSupportedException("This command is no longer supported and should be reimplemented if we decide to resurrect Supervisor");
-        }
-
-        private long GetNextVersion()
-        {
-            var availableVersions =
-                this.questionnaireBrowseItemStorage.Query(
-                    _ => _.Where(q => q.QuestionnaireId == this.Id).Select(q => q.Version));
-
-            if (!availableVersions.Any())
-                return 1;
-
-            return availableVersions.Max() + 1;
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)

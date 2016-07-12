@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -32,6 +37,9 @@ namespace WB.UI.Headquarters.Controllers
         private readonly string apiVersion = @"v3";
 
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+
 
         internal RestCredentials designerUserCredentials
         {
@@ -47,8 +55,8 @@ namespace WB.UI.Headquarters.Controllers
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService,
-            IAttachmentContentService questionnaireAttachmentService)
-            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService)
+            IAttachmentContentService questionnaireAttachmentService, IPlainStorageAccessor<TranslationInstance> translations, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage, IQuestionnaireVersionProvider questionnaireVersionProvider)
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService, translations, questionnaireVersionProvider)
         {
             
         }
@@ -56,7 +64,7 @@ namespace WB.UI.Headquarters.Controllers
         internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
             Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService,
-            IAttachmentContentService attachmentContentService)
+            IAttachmentContentService attachmentContentService, IPlainStorageAccessor<TranslationInstance> translations, IQuestionnaireVersionProvider questionnaireVersionProvider)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -64,6 +72,8 @@ namespace WB.UI.Headquarters.Controllers
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
             this.attachmentContentService = attachmentContentService;
+            this.translations = translations;
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
         }
 
         private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
@@ -108,7 +118,7 @@ namespace WB.UI.Headquarters.Controllers
                     credentials: designerUserCredentials,
                     queryString: new { clientQuestionnaireContentVersion = supportedVersion });
 
-                var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+                QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
@@ -128,13 +138,25 @@ namespace WB.UI.Headquarters.Controllers
                     }
                 }
 
-                if (questionnaire.Translations != null)
+                var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
+                if (questionnaire.Translations?.Count > 0)
                 {
-                    foreach (var translation in questionnaire.Translations)
+                    var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
+                        url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
+                        credentials: designerUserCredentials);
+
+                    foreach (var translationDto in translationContent)
                     {
-                        //var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
-                        //   url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
-                        //   credentials: designerUserCredentials);
+                        var translationInstace = new TranslationInstance
+                        {
+                            QuestionnaireId = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion),
+                            Value = translationDto.Value,
+                            QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                            Type = translationDto.Type,
+                            TranslationIndex = translationDto.TranslationIndex,
+                            Language = translationDto.Language
+                        };
+                        this.translations.Store(translationInstace, null);
                     }
                 }
 
@@ -143,7 +165,8 @@ namespace WB.UI.Headquarters.Controllers
                     questionnaire,
                     request.AllowCensusMode, 
                     questionnaireAssembly,
-                    questionnaireContentVersion));
+                    questionnaireContentVersion,
+                    questionnaireVersion));
 
                 return new QuestionnaireVerificationResponse();
             }
@@ -188,5 +211,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw;
             }
         }
+
+    
     }
 }

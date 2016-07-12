@@ -161,6 +161,7 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
+                42,
                 Guid.NewGuid());
 
         public CreateInterviewCommand CreateInterviewCommand()
@@ -187,7 +188,8 @@ namespace WB.Tests.Unit.TestFactories
                 },
                 false,
                 base64StringOfAssembly,
-                questionnaireContentVersion);
+                questionnaireContentVersion,
+                2);
 
         public LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
             => new LinkUserToDevice(userId, deviceId);
