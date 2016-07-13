@@ -23,14 +23,6 @@ namespace WB.UI.Designer.Api.Tester
         [HttpGet]
         [Route("{id:Guid}")]
         public TranslationDto[] Get(Guid id)
-            => this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id).ToList())
-                .Select(x => new TranslationDto
-                {
-                    Language = x.Language,
-                    Value = x.Translation,
-                    QuestionnaireEntityId = x.QuestionnaireEntityId,
-                    Type = x.Type,
-                    TranslationIndex = x.TranslationIndex
-                }).ToArray();
+            => this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id).ToList()).Cast<TranslationDto>().ToArray();
     }
 }

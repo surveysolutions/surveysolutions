@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Title));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
-            translationInstance.Translation.ShouldEqual("title");
+            translationInstance.Value.ShouldEqual("title");
             translationInstance.TranslationIndex.ShouldBeNull();
         };
 
@@ -43,15 +43,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Instruction));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
-            translationInstance.Translation.ShouldEqual("instruction");
+            translationInstance.Value.ShouldEqual("instruction");
             translationInstance.TranslationIndex.ShouldBeNull();
         };
-
+        
         It should_store_validation_translation = () =>
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.ValidationMessage));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
-            translationInstance.Translation.ShouldEqual("validation message");
+            translationInstance.Value.ShouldEqual("validation message");
             translationInstance.TranslationIndex.ShouldEqual("1");
         };
 
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.OptionTitle));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
-            translationInstance.Translation.ShouldEqual("option");
+            translationInstance.Value.ShouldEqual("option");
             translationInstance.TranslationIndex.ShouldEqual("2");
         };
 
