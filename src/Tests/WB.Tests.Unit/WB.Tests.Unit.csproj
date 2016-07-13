@@ -338,6 +338,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\SynchronizationProcessTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_questionniare_has_translations.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\SynchronizationViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_password.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_need_download_attachments.cs" />
