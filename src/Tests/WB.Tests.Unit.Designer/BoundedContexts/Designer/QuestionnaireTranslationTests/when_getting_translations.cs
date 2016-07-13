@@ -1,35 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslationTests
 {
-    [Subject(typeof(Translation))]
+    [Subject(typeof(QuestionnaireTranslation))]
     internal class when_getting_translations : QuestionnaireTranslationTestsContext
     {
         Establish context = () =>
         {
             string culture = "en-US";
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            storedTranslations = new List<TranslationInstance>
+            storedTranslations = new List<TranslationDto>
             {
-                Create.TranslationInstance(type: TranslationType.Title,
+                Create.TranslationDto(type: TranslationType.Title,
                     translation: "title",
                     culture: culture,
                     questionnaireEntityId: questionId),
-                Create.TranslationInstance(type: TranslationType.Instruction,
+                Create.TranslationDto(type: TranslationType.Instruction,
                     translation: "instruction",
                     culture: culture,
                     questionnaireEntityId: questionId),
-                Create.TranslationInstance(type: TranslationType.OptionTitle,
+                Create.TranslationDto(type: TranslationType.OptionTitle,
                     translation: "option1",
                     culture: culture,
                     questionnaireEntityId: questionId,
                     translationIndex:"1"),
-                Create.TranslationInstance(type: TranslationType.ValidationMessage,
+                Create.TranslationDto(type: TranslationType.ValidationMessage,
                     translation: "validation message",
                     culture: culture,
                     questionnaireEntityId: questionId,
@@ -56,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
         It should_return_null_for_missing_translated_validation = () => translation.GetValidationMessage(Guid.NewGuid(), 1).ShouldBeNull();
 
         static ITranslation translation;
-        static List<TranslationInstance> storedTranslations;
+        static List<TranslationDto> storedTranslations;
         static Guid questionId;
     }
 }

@@ -42,12 +42,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public ITranslation Get(Guid questionnaireId, string culture)
         {
             if (culture == Guid.Empty.FormatGuid())
-                return new Translation(new List<TranslationInstance>());
+                return new QuestionnaireTranslation(new List<TranslationDto>());
 
-            var storedTranslations =
-                this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
+            var storedTranslations = this.translations.Query(
+                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList())
+                .Cast<TranslationDto>()
+                .ToList();
 
-            return new Translation(storedTranslations);
+            return new QuestionnaireTranslation(storedTranslations);
         }
 
         public byte[] GetAsExcelFile(Guid questionnaireId, string culture)
@@ -181,7 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             instance.QuestionnaireId = questionnaireId;
                             instance.Language = culture;
                             instance.QuestionnaireEntityId = Guid.Parse(worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>());
-                            instance.Translation = worksheet.Cells[rowNumber, translactionColumn].GetValue<string>();
+                            instance.Value = worksheet.Cells[rowNumber, translactionColumn].GetValue<string>();
                             instance.TranslationIndex = worksheet.Cells[rowNumber, translationIndexColumn].GetValue<string>();
                             instance.Type = (TranslationType) Enum.Parse(typeof(TranslationType), worksheet.Cells[rowNumber, translationTypeColumn].GetValue<string>());
 

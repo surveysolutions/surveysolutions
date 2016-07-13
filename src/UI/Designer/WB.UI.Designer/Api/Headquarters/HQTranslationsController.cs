@@ -26,25 +26,11 @@ namespace WB.UI.Designer.Api.Headquarters
         public HttpResponseMessage Get(string id)
         {
             Guid questionnaireId = Guid.Parse(id);
-            var translationInstances = 
-                this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).ToList());
+            var translationInstances = this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).ToList()).Cast<TranslationDto>().ToList();
 
-            if (translationInstances.Count == 0)
-            {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found questionnaireId: {questionnaireId}, culture: {id}");
-            }
-
-            var dtos = translationInstances.Select(x => new TranslationDto
-            {
-                Language = x.Language,
-                Value = x.Translation,
-                QuestionnaireEntityId = x.QuestionnaireEntityId,
-                Type = x.Type,
-                TranslationIndex = x.TranslationIndex
-            }).ToList();
-
-            var result = Request.CreateResponse(HttpStatusCode.OK, dtos);
-            return result;
+            return translationInstances.Count == 0
+                ? this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found questionnaireId: {questionnaireId}, culture: {id}")
+                : this.Request.CreateResponse(HttpStatusCode.OK, translationInstances);
         }
     }
 }

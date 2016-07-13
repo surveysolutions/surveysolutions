@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
-    public class Translation : ITranslation
+    public class QuestionnaireTranslation : ITranslation
     {
         private readonly Dictionary<Guid, List<TranslationDto>> translations = new Dictionary<Guid, List<TranslationDto>>();
 
-        public Translation(List<TranslationDto> translationInstances)
+        public QuestionnaireTranslation(List<TranslationDto> translationInstances)
         {
             if (this.translations == null) throw new ArgumentNullException(nameof(this.translations));
 
