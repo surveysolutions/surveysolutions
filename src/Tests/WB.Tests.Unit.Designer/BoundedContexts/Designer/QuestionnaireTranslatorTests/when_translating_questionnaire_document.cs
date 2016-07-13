@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
                 }),
             });
 
-            translation = Mock.Of<IQuestionnaireTranslation>(_
+            translation = Mock.Of<ITranslation>(_
                 => _.GetTitle(chapter1) == "глава 1"
                 && _.GetTitle(staticText1) == "текст 1"
                 && _.GetTitle(question1) == "вопрос 1"
@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
 
         private static QuestionnaireDocument originalDocument;
         private static QuestionnaireTranslator translator;
-        private static IQuestionnaireTranslation translation;
+        private static ITranslation translation;
         private static QuestionnaireDocument translatedDocument;
         private static Guid chapter1 = Guid.Parse("1111111111111111AAAAAAAAAAAAAAAA");
         private static Guid chapter2 = Guid.Parse("1111111111111111BBBBBBBBBBBBBBBB");
