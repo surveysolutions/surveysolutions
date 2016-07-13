@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         private readonly ICommandService commandService;
         private readonly ILogger logger;
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly ITranslationManagementService translations;
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
-            IPlainStorageAccessor<TranslationInstance> translations)
+            ITranslationManagementService translations)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -108,12 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
             plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var translations =
-                    this.translations.Query(_ => _.Where( x =>
-                                    x.QuestionnaireId.QuestionnaireId == questionnaireId &&
-                                    x.QuestionnaireId.Version == questionnaireVersion).ToList());
-
-                this.translations.Remove(translations);
+                this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             });
         }
 

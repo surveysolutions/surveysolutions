@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetQuestionnaireAttachments,
         GetAttachmentContent,
         PostInterview,
-        PostPackage
+        PostPackage,
+        GetTranslations
     }
 }
