@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.UI.Designer.Api
@@ -23,23 +22,27 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("{id:Guid}/{translationId:Guid}")]
-        public HttpResponseMessage Get(Guid id, Guid translationId)
+        [Route("{id:Guid}/{translationId:Guid?}")]
+        public HttpResponseMessage Get(Guid id, Guid? translationId = null)
         {
-            var culture = translationId == Guid.Empty ? null : translationId.FormatGuid();
-            byte[] translationContent = this.translationsService.GetAsExcelFile(id, culture);
+            var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
 
-            if (translationContent == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
+            if (translationFile.ContentAsExcelFile == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(translationContent)
+                Content = new ByteArrayContent(translationFile.ContentAsExcelFile)
             };
+
+            var translationName = string.IsNullOrEmpty(translationFile.TranslationName)
+                ? "New translation"
+                : translationFile.TranslationName;
+            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.xlsx");
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = this.fileSystemAccessor.MakeValidFileName(translationId + ".xlsx")
+                FileName = filename
             };
             
             return response;

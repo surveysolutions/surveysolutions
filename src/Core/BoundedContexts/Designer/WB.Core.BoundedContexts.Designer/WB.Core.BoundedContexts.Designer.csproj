@@ -573,6 +573,7 @@
     <Compile Include="Services\ExpressionLocationItemType.cs" />
     <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\ITranslationsService.cs" />
+    <Compile Include="Translations\TranslationFile.cs" />
     <Compile Include="Translations\TranslationInstance.cs" />
     <Compile Include="Translations\TranslationInstanceMap.cs" />
     <Compile Include="Translations\TranslationsService.cs" />
