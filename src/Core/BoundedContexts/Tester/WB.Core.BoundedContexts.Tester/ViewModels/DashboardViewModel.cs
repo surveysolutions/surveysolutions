@@ -294,12 +294,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage);
 
-                    var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+                    var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
 
-                    await this.DownloadTranslations(questionnaireIdentity);
+                    await this.DownloadTranslations(questionnaireId: selectedQuestionnaire.Id,
+                            fakeQuestionnaireIdentity: fakeQuestionnaireIdentity);
 
-                    await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
-                    var interviewId = await this.CreateInterview(questionnaireIdentity);
+                    await this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage);
+                    var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
@@ -411,15 +412,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private async Task DownloadTranslations(QuestionnaireIdentity questionnaireIdentity)
+        private async Task DownloadTranslations(string questionnaireId, QuestionnaireIdentity fakeQuestionnaireIdentity)
         {
-            var translations = await this.designerApiService.GetTranslationsAsync(questionnaireIdentity.QuestionnaireId, token: this.tokenSource.Token);
+            var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: questionnaireId, token: this.tokenSource.Token);
 
             foreach (var translation in translations)
             {
                 await this.translationsStorage.StoreAsync(new TranslationInstance
                 {
-                    QuestionnaireId = questionnaireIdentity.ToString(),
+                    QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
                     Type = translation.Type,
                     TranslationIndex = translation.TranslationIndex,
                     QuestionnaireEntityId = translation.QuestionnaireEntityId,
