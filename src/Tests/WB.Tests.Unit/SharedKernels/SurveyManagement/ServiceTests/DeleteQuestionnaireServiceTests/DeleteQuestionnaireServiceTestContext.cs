@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 new DeleteQuestionnaireService(
                     factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
-                    new InMemoryPlainStorageAccessor<TranslationInstance>());
+                    Mock.Of<ITranslationManagementService>());
         }
     }
 }

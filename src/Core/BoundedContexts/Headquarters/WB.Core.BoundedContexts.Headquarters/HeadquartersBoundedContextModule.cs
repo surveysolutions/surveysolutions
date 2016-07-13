@@ -66,6 +66,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -250,6 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
+            this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
 
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
