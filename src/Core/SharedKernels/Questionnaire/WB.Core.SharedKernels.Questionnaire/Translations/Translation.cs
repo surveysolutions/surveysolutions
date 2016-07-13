@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.Core.BoundedContexts.Designer.Translations
+namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
-    internal class Translation : ITranslation
+    public class Translation : ITranslation
     {
-        private readonly Dictionary<Guid, List<TranslationInstance>> translations = new Dictionary<Guid, List<TranslationInstance>>();
+        private readonly Dictionary<Guid, List<TranslationDto>> translations = new Dictionary<Guid, List<TranslationDto>>();
 
-        public Translation(List<TranslationInstance> translationInstances)
+        public Translation(List<TranslationDto> translationInstances)
         {
             if (this.translations == null) throw new ArgumentNullException(nameof(this.translations));
 
@@ -19,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 if (!this.translations.ContainsKey(translation.QuestionnaireEntityId))
                 {
-                    this.translations[translation.QuestionnaireEntityId] = new List<TranslationInstance>();
+                    this.translations[translation.QuestionnaireEntityId] = new List<TranslationDto>();
                 }
 
                 this.translations[translation.QuestionnaireEntityId].Add(translation); 
@@ -58,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (this.translations.ContainsKey(questionId))
             {
                 var translationInstance = this.translations[questionId].SingleOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue);
-                return translationInstance?.Translation;
+                return translationInstance?.Value;
             }
 
             return null;
@@ -69,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (this.translations.ContainsKey(entityId))
             {
                 var translationInstance = this.translations[entityId].SingleOrDefault(x => x.Type == translationType);
-                return translationInstance?.Translation;
+                return translationInstance?.Value;
             }
 
             return null;
