@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -27,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
+        private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
         private readonly IPrincipal principal;
@@ -154,6 +156,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
               url: string.Concat(this.questionnairesController, "/list"),
               credentials: this.restCredentials, token: cancellationToken)).ConfigureAwait(false);
+        }
+
+        public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        {
+            var url = $"{this.translationsController}/{questionnaireIdentity}";
+
+            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<TranslationDto>>(
+                url: url,
+                credentials: this.restCredentials, token: cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
