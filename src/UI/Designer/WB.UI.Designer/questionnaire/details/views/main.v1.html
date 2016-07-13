@@ -343,7 +343,7 @@
                                                     <button type="button" class="btn lighter-hover" ng-click="cancel(translation);$event.stopPropagation()">Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
-                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="file">
+                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="file">
                                                         <span>Update</span>
                                                     </button>
                                                     <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download</a>
@@ -356,7 +356,7 @@
                         </div>
                     </form>
                     <div class="button-holder">
-                        <input type="button" value="Upload new translation" class="btn lighter-hover pull-left" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-max-size="4MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
+                        <input type="button" value="Upload new translation" class="btn lighter-hover pull-left" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-max-size="10MB" accept=".xls,.xlsx" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
 
                         <a ng-href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId }}" class="btn btn-default pull-right" target="_blank">Get Template</a>
 
