@@ -428,20 +428,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
+            var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__latitude");
+
+            var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__longitude");
+
+            var altitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__altitude");
+
+            if (latitudeColumnIndex < 0 && longitudeColumnIndex < 0 && altitudeColumnIndex < 0)
+                yield break;
+
+            if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
+            {
+                yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
+                yield break;
+            }
+
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
-                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                    $"{gpsExportedQuestion.VariableName}__latitude");
-
-                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                    $"{gpsExportedQuestion.VariableName}__longitude");
-
-                if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
-                {
-                    yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(rowIndex, levelData));
-                    yield break;
-                }
-
                 var latitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
                         latitudeColumnIndex, level, preloadedDataService);
 

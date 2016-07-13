@@ -10,7 +10,6 @@ using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Nito.AsyncEx.Synchronous;
@@ -21,14 +20,11 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
@@ -153,6 +149,10 @@ namespace WB.UI.Interviewer
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
             kernel.Get<InterviewerDashboardEventHandler>();
 
+            kernel.Unbind<IEventTypeResolver>();
+            kernel.Bind<IEventTypeResolver>().ToConstant(new EventTypeResolver(typeof(InterviewActiveEvent).Assembly,
+                typeof(InterviewAnswersFromSyncPackageRestored).Assembly));
+            
             return kernel;
         }
 

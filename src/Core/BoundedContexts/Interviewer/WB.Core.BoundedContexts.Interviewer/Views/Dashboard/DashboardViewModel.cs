@@ -73,9 +73,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public int StartedInterviewsCount => this.dashboardInformation.StartedInterviews.Count();
         public int CompletedInterviewsCount => this.dashboardInformation.CompletedInterviews.Count();
 
-        public int FailedInterviewsCount => this.synchronization.Statistics.FailedToCreateInterviewsCount +
-                                            this.synchronization.Statistics.FailedToUploadInterviwesCount;
-
         public int RejectedInterviewsCount => this.dashboardInformation.RejectedInterviews.Count();
 
         public bool IsExistsAnyCensusQuestionniories => this.dashboardInformation.CensusQuestionnaires.Any();
@@ -188,7 +185,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
 
             this.RefreshTab();
-
             IsLoaded = true;
         }
 
