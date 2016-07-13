@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
     internal class QuestionnaireTranslator : IQuestionnaireTranslator
     {
-        public QuestionnaireDocument Translate(QuestionnaireDocument originalDocument, IQuestionnaireTranslation translation)
+        public QuestionnaireDocument Translate(QuestionnaireDocument originalDocument, ITranslation translation)
         {
             var translatedDocument = originalDocument.Clone();
 
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             return translatedDocument;
         }
 
-        private static void TranslateTitles(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        private static void TranslateTitles(QuestionnaireDocument questionnaireDocument, ITranslation translation)
         {
             foreach (var entity in questionnaireDocument.Find<IQuestionnaireEntity>())
             {
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        private static void TranslateInstructions(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        private static void TranslateInstructions(QuestionnaireDocument questionnaireDocument, ITranslation translation)
         {
             foreach (var question in questionnaireDocument.Find<IQuestion>())
             {
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        private static void TranslateAnswerOptions(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        private static void TranslateAnswerOptions(QuestionnaireDocument questionnaireDocument, ITranslation translation)
         {
             foreach (var question in questionnaireDocument.Find<IQuestion>())
             {
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        private static void TranslateValidationMessages(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        private static void TranslateValidationMessages(QuestionnaireDocument questionnaireDocument, ITranslation translation)
         {
             foreach (var validatableEntity in questionnaireDocument.Find<IValidatable>())
             {
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        private static void TranslateFixedRosterTitles(QuestionnaireDocument questionnaireDocument, IQuestionnaireTranslation translation)
+        private static void TranslateFixedRosterTitles(QuestionnaireDocument questionnaireDocument, ITranslation translation)
         {
             foreach (var roster in questionnaireDocument.Find<IGroup>(group => @group.IsRoster))
             {
@@ -72,21 +72,21 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        private static void TranslateTitle(IQuestionnaireEntity entity, IQuestionnaireTranslation translation)
+        private static void TranslateTitle(IQuestionnaireEntity entity, ITranslation translation)
         {
             entity.SetTitle(Translate(
                 original: entity.GetTitle(),
                 translated: translation.GetTitle(entity.PublicKey)));
         }
 
-        private static void TranslateInstruction(IQuestion question, IQuestionnaireTranslation translation)
+        private static void TranslateInstruction(IQuestion question, ITranslation translation)
         {
             question.Instructions = Translate(
                 original: question.Instructions,
                 translated: translation.GetInstruction(question.PublicKey));
         }
 
-        private static void TranslateAnswerOption(Guid questionId, Answer answerOption, IQuestionnaireTranslation translation)
+        private static void TranslateAnswerOption(Guid questionId, Answer answerOption, ITranslation translation)
         {
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
@@ -94,14 +94,14 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         }
 
         private static void TranslateValidationMessage(Guid validatableEntityId, int validationOneBasedIndex,
-            ValidationCondition validation, IQuestionnaireTranslation translation)
+            ValidationCondition validation, ITranslation translation)
         {
             validation.Message = Translate(
                 original: validation.Message,
                 translated: translation.GetValidationMessage(validatableEntityId, validationOneBasedIndex));
         }
 
-        private static void TranslateFixedRosterTitle(Guid rosterId, FixedRosterTitle fixedRosterTitle, IQuestionnaireTranslation translation)
+        private static void TranslateFixedRosterTitle(Guid rosterId, FixedRosterTitle fixedRosterTitle, ITranslation translation)
         {
             fixedRosterTitle.Title = Translate(
                 original: fixedRosterTitle.Title,

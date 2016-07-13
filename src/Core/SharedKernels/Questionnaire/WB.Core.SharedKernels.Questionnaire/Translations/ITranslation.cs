@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
-    public interface IQuestionnaireTranslation
+    public interface ITranslation
     {
         string GetTitle(Guid entityId);
         string GetInstruction(Guid questionId);

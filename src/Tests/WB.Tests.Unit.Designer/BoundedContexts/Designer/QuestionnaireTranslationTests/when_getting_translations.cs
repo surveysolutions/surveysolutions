@@ -7,7 +7,7 @@ using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.Transl
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslationTests
 {
-    [Subject(typeof(QuestionnaireTranslation))]
+    [Subject(typeof(Translation))]
     internal class when_getting_translations : QuestionnaireTranslationTestsContext
     {
         Establish context = () =>
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
 
         It should_return_null_for_missing_translated_validation = () => translation.GetValidationMessage(Guid.NewGuid(), 1).ShouldBeNull();
 
-        static IQuestionnaireTranslation translation;
+        static ITranslation translation;
         static List<TranslationInstance> storedTranslations;
         static Guid questionId;
     }
