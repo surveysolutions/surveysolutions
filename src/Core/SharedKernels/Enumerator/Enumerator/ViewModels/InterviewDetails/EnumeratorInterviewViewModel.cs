@@ -90,6 +90,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     })
                     .ToList();
 
+                this.AvailableLanguages = questionnaire.GetTranslationLanguages();
+                this.CurrentLanguage = this.interview.Language;
+
                 this.BreadCrumbs.Init(interviewId, this.navigationState);
                 this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
 
@@ -188,6 +191,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
+
+        public string CurrentLanguage { get; private set; }
+        public IReadOnlyCollection<string> AvailableLanguages { get; private set; }
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {

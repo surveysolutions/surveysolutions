@@ -654,11 +654,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
+        public string Language { get; private set; }
+
         public bool HasErrors { get; private set; }
 
         public bool IsCompleted { get; private set; }
-
-        public string Language { get; private set; }
 
         public InterviewRoster GetRoster(Identity identity)
         {
