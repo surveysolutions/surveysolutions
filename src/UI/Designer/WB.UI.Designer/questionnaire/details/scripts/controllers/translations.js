@@ -104,14 +104,16 @@
                 translation.meta.lastUpdated = moment();
 
                 var maxNameLength = 32;
-                var fileNameLength = translation.meta.fileName.length;
 
-                var suspectedTranslation = translation.meta.fileName.match(/[^[\]]+(?=])/g);
-                if (suspectedTranslation && suspectedTranslation.length > 0)
-                    translation.name = suspectedTranslation[0];
+                var suspectedTranslations = translation.meta.fileName.match(/[^[\]]+(?=])/g);
+
+                if (suspectedTranslations && suspectedTranslations.length > 0)
+                    translation.name = suspectedTranslations[0];
                 else
-                    translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "")
-                            .substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+                    translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "");
+
+                var fileNameLength = translation.name.length;
+                translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
 
                 if (!_.isUndefined(translation.form)) {
                     translation.form.$setDirty();
