@@ -106,7 +106,11 @@
                 var maxNameLength = 32;
                 var fileNameLength = translation.meta.fileName.length;
 
-                translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "")
+                var suspectedTranslation = translation.meta.fileName.match(/[^[\]]+(?=])/g);
+                if (suspectedTranslation && suspectedTranslation.length > 0)
+                    translation.name = suspectedTranslation[0];
+                else
+                    translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "")
                             .substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
 
                 if (!_.isUndefined(translation.form)) {

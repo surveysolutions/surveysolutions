@@ -52,10 +52,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new QuestionnaireTranslation(storedTranslations);
         }
 
-        public byte[] GetAsExcelFile(Guid questionnaireId, string culture)
+        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? cultureId)
         {
+            var translationFile = new TranslationFile();
+            string culture = cultureId.FormatGuid();
+
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             var translation = this.Get(questionnaireId, culture);
+
+            translationFile.QuestionnaireTitle = questionnaire.Title;
+            translationFile.TranslationName = cultureId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == cultureId)?.Name : string.Empty;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
@@ -137,7 +143,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     }
                 }
 
-                return excelPackage.GetAsByteArray();
+                translationFile.ContentAsExcelFile = excelPackage.GetAsByteArray();
+
+                return translationFile;
             }
         }
 
