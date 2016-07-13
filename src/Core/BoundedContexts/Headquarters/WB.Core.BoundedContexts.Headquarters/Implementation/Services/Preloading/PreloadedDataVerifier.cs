@@ -434,7 +434,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
                 $"{gpsExportedQuestion.VariableName}__longitude");
 
-            if (latitudeColumnIndex < 0 && longitudeColumnIndex < 0)
+            var altitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__altitude");
+
+            if (latitudeColumnIndex < 0 && longitudeColumnIndex < 0 && altitudeColumnIndex < 0)
                 yield break;
 
             if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
