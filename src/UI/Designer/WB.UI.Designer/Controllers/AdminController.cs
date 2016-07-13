@@ -94,7 +94,8 @@ namespace WB.UI.Designer.Controllers
             ISerializer serializer, 
             IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
-            IAttachmentService attachmentService, ITranslationsService translationsService)
+            IAttachmentService attachmentService,
+            ITranslationsService translationsService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
