@@ -18,6 +18,8 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
@@ -38,6 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IAsyncPlainStorage<TranslationInstance> translations;
 
         private RestCredentials restCredentials;
 
@@ -53,7 +56,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher, 
+            IAsyncPlainStorage<TranslationInstance> translations)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -68,6 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFileViewStorage = interviewFileViewStorage;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
+            this.translations = translations;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -286,6 +291,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
 
+            await this.DownloadTranslationsAsync(questionnaireIdentity, cancellationToken).ConfigureAwait(false);
+
             if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
@@ -314,6 +321,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     questionnaireApiView.QuestionnaireDocument, questionnaireApiView.AllowCensus);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
+            }
+        }
+
+        private async Task DownloadTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        {
+            string questionnaireId = questionnaireIdentity.ToString();
+            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
+            this.translations.Remove(oldTranslations);
+
+            List<TranslationDto> translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken)
+                                                             .ConfigureAwait(false);
+            foreach (var translationDto in translationDtos)
+            {
+                var instance = new TranslationInstance
+                {
+                    QuestionnaireId = questionnaireId,
+                    Language = translationDto.Language,
+                    QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                    Type = translationDto.Type,
+                    TranslationIndex = translationDto.TranslationIndex,
+                    Value = translationDto.Value,
+                    Id = Guid.NewGuid().FormatGuid()
+                };
+                await this.translations.StoreAsync(instance).ConfigureAwait(false);
             }
         }
 
