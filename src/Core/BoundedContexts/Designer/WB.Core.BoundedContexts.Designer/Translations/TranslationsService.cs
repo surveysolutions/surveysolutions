@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public ITranslation Get(Guid questionnaireId, string culture)
         {
-            if (culture == Guid.Empty.FormatGuid())
+            if (string.IsNullOrEmpty(culture))
                 return new QuestionnaireTranslation(new List<TranslationDto>());
 
             var storedTranslations = this.translations.Query(
@@ -162,10 +162,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (culture == null) throw new ArgumentNullException(nameof(culture));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
-            var oldTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
-            this.translations.Remove(oldTranslations);
-
             using (MemoryStream stream = new MemoryStream(excelRepresentation))
             {
                 using (ExcelPackage package = new ExcelPackage(stream))
@@ -173,6 +169,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     ValidatePackage(package);
 
                     var worksheet = package.Workbook.Worksheets[1];
+
+                    var oldTranslations = this.translations.Query(
+                        _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
+                    this.translations.Remove(oldTranslations);
+
 
                     for (int rowNumber = 2; ; rowNumber++)
                     {

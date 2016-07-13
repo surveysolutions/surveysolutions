@@ -26,7 +26,8 @@ namespace WB.UI.Designer.Api
         [Route("{id:Guid}/{translationId:Guid}")]
         public HttpResponseMessage Get(Guid id, Guid translationId)
         {
-            byte[] translationContent = this.translationsService.GetAsExcelFile(id, translationId.FormatGuid());
+            var culture = translationId == Guid.Empty ? null : translationId.FormatGuid();
+            byte[] translationContent = this.translationsService.GetAsExcelFile(id, culture);
 
             if (translationContent == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 

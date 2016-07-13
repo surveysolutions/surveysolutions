@@ -274,7 +274,7 @@
     <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
     <Compile Include="Api\Headquarters\HQQuestionnairesController.cs" />
     <Compile Include="Api\Headquarters\HQUserController.cs" />
-    <Compile Include="Api\Tester\TranslationsController.cs" />
+    <Compile Include="Api\Tester\TranslationController.cs" />
     <Compile Include="Api\Tester\AttachmentController.cs" />
     <Compile Include="Api\Tester\QuestionnairesController.cs" />
     <Compile Include="Api\Tester\UserController.cs" />

@@ -10,12 +10,12 @@ using WB.UI.Designer.Api.Attributes;
 namespace WB.UI.Designer.Api.Tester
 {
     [ApiBasicAuth]
-    [RoutePrefix("translations")]
-    public class TranslationsController : ApiController
+    [RoutePrefix("translation")]
+    public class TranslationController : ApiController
     {
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
 
-        public TranslationsController(IPlainStorageAccessor<TranslationInstance> translations)
+        public TranslationController(IPlainStorageAccessor<TranslationInstance> translations)
         {
             this.translations = translations;
         }
