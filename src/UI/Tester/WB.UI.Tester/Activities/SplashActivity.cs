@@ -23,6 +23,8 @@ namespace WB.UI.Tester.Activities
         {
             await ClearAttachmentStorage();
 
+            await Mvx.Resolve<IAsyncPlainStorage<TranslationInstance>>().RemoveAllAsync();
+
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 

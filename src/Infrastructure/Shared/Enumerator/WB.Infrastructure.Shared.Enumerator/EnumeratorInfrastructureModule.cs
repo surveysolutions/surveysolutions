@@ -38,6 +38,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             });
 
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
+            this.Bind<ITranslationStorage>().To<TranslationsStorage>();
         }
     }
 }
