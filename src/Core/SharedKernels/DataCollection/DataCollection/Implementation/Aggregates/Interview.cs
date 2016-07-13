@@ -530,6 +530,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(FlagSetToAnswer @event) { }
 
+        public virtual void Apply(TranslationSwitched @event) { }
+
         public virtual void Apply(FlagRemovedFromAnswer @event) { }
 
         public virtual void Apply(SubstitutionTitlesChanged @event) { }
@@ -1513,6 +1515,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void RepeatLastInterviewStatus(RepeatLastInterviewStatus command)
         {
             this.ApplyEvent(new InterviewStatusChanged(this.status, command.Comment));
+        }
+
+        public void SwitchTranslation(SwitchTranslation command)
+        {
+            if (command.Language != null)
+            {
+                IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+                IReadOnlyCollection<string> availableLanguages = questionnaire.GetTranslationLanguages();
+
+                if (!availableLanguages.Contains(command.Language))
+                    throw new InterviewException(
+                        $"Questionnaire does not have translation for language '{command.Language}'. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+            }
+
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
