@@ -99,7 +99,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return attachmentContent;
         }
 
-        public Task<TranslationDto[]> GetTranslationsAsync(Guid questionnaireId, CancellationToken token)
+        public Task<TranslationDto[]> GetTranslationsAsync(string questionnaireId, CancellationToken token)
             => this.restService.GetAsync<TranslationDto[]>(
                 url: $"{this.apiPrefix}/translation/{questionnaireId}",
                 token: token,
