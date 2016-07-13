@@ -456,6 +456,7 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Content Include="fonts\lucidaconsole.svg" />
+    <Content Include="questionnaire\content\i\designer-left-icons-2.png" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\vendor\js-cookie\MIT-LICENSE.txt" />
     <Content Include="questionnaire\vendor\js-cookie\src\js.cookie.js" />
@@ -551,7 +552,6 @@
     <Content Include="questionnaire\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\i\designer-left-icons.png" />
     <Content Include="questionnaire\content\i\left-panel-shadow-small.png" />
     <Content Include="questionnaire\content\i\macro-panel-btn.png" />
     <Content Include="questionnaire\vendor\ace-builds\src-noconflict\ext-language_tools.js" />
