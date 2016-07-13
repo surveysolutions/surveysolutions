@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -45,6 +46,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncRunner asyncRunner;
+        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -60,7 +62,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
             IAttachmentContentStorage attachmentContentStorage,
-            IAsyncRunner asyncRunner) : base(principal, viewModelNavigationService)
+            IAsyncRunner asyncRunner,
+            IAsyncPlainStorage<TranslationInstance> translationsStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -73,6 +76,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
             this.asyncRunner = asyncRunner;
+            this.translationsStorage = translationsStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -289,7 +293,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage);
+
                     var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+
+                    await this.DownloadTranslations(questionnaireIdentity);
+
                     await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
                     var interviewId = await this.CreateInterview(questionnaireIdentity);
 
@@ -400,6 +408,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.attachmentContentStorage.StoreAsync(attachmentContent);
                 }
+            }
+        }
+
+        private async Task DownloadTranslations(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var translations = await this.designerApiService.GetTranslationsAsync(questionnaireIdentity.QuestionnaireId, token: this.tokenSource.Token);
+
+            foreach (var translation in translations)
+            {
+                await this.translationsStorage.StoreAsync(new TranslationInstance
+                {
+                    QuestionnaireId = questionnaireIdentity.ToString(),
+                    Type = translation.Type,
+                    TranslationIndex = translation.TranslationIndex,
+                    QuestionnaireEntityId = translation.QuestionnaireEntityId,
+                    Language = translation.Language,
+                    Value = translation.Value
+                });
             }
         }
 
