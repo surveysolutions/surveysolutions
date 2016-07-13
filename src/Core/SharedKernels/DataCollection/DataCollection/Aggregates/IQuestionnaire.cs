@@ -216,5 +216,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasQuestion(string variableName);
         bool IsTimestampQuestion(Guid questionId);
         bool IsSupportFilteringForOptions(Guid questionId);
+
+        IReadOnlyCollection<string> GetTranslationLanguages();
     }
 }
