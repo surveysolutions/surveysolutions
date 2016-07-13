@@ -1035,7 +1035,24 @@ namespace WB.Tests.Unit.Designer
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
                 Type = type,
-                Translation = translation,
+                Value = translation,
+                TranslationIndex = translationIndex,
+                Language = culture
+            };
+        }
+
+        public static TranslationDto TranslationDto(
+            TranslationType type = TranslationType.Unknown,
+            Guid? questionnaireEntityId = null,
+            string translationIndex = null,
+            string culture = null,
+            string translation = null)
+        {
+            return new TranslationDto
+            {
+                QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
+                Type = type,
+                Value = translation,
                 TranslationIndex = translationIndex,
                 Language = culture
             };

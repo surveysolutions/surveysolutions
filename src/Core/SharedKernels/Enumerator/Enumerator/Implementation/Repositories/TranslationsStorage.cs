@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 .Cast<TranslationDto>()
                 .ToList();
 
-            return new Translation(translations);
+            return new QuestionnaireTranslation(translations);
         }
     }
 }

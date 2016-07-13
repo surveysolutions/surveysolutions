@@ -108,7 +108,7 @@
     <Compile Include="Translations\ITranslation.cs" />
     <Compile Include="Translations\IQuestionnaireTranslator.cs" />
     <Compile Include="Translations\QuestionnaireTranslator.cs" />
-    <Compile Include="Translations\Translation.cs" />
+    <Compile Include="Translations\QuestionnaireTranslation.cs" />
     <Compile Include="Translations\TranslationDto.cs" />
     <Compile Include="Translations\TranslationType.cs" />
   </ItemGroup>
