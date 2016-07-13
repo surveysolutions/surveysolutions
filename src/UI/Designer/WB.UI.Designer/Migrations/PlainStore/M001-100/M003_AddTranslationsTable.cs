@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 .WithColumn("questionnaireentityid").AsGuid().NotNullable()
                 .WithColumn("translationindex").AsString().Nullable()
                 .WithColumn("culture").AsString().NotNullable()
-                .WithColumn("translation").AsString().NotNullable();
+                .WithColumn("value").AsString().NotNullable();
 
             Create.Index("translationinstances_questionnaire")
                 .OnTable("translationinstances")
