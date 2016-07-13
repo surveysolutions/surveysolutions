@@ -324,8 +324,10 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
+    <Compile Include="Questionnaires\Translations\ITranslationManagementService.cs" />
     <Compile Include="Questionnaires\Translations\TranslationInstance.cs" />
     <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
+    <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
