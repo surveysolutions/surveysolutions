@@ -536,6 +536,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #endregion
 
+        public new void Apply(TranslationSwitched @event)
+        {
+            this.Language = @event.Language;
+        }
+
         #region Roster instances and titles
 
         public new void Apply(RosterInstancesTitleChanged @event)
@@ -649,9 +654,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        public bool HasErrors { get; set; }
+        public bool HasErrors { get; private set; }
 
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; private set; }
+
+        public string Language { get; private set; }
 
         public InterviewRoster GetRoster(Identity identity)
         {

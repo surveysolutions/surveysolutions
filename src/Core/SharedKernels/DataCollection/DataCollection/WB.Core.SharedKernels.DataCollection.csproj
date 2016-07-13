@@ -77,6 +77,7 @@
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
     <Compile Include="Commands\Interview\CreateInterviewByPrefilledQuestions.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
+    <Compile Include="Commands\Interview\SwitchTranslation.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
+    <Compile Include="Events\Interview\TranslationSwitched.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />
     <Compile Include="Events\Interview\VariablesEnabled.cs" />
     <Compile Include="Events\Interview\VariablesChanged.cs" />
