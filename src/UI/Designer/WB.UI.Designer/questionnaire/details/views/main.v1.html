@@ -358,7 +358,7 @@
                     <div class="button-holder">
                         <input type="button" value="Upload new translation" class="btn lighter-hover pull-left" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-max-size="4MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
 
-                        <a ng-href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/00000000000000000000000000000000' }}" class="btn btn-default pull-right" target="_blank">Get Template</a>
+                        <a ng-href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId }}" class="btn btn-default pull-right" target="_blank">Get Template</a>
 
                     </div>
                 </perfect-scrollbar>

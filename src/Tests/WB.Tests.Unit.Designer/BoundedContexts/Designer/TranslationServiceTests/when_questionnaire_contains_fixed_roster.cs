@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using It = Machine.Specifications.It;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 Create.TranslationInstance(type: TranslationType.FixedRosterTitle,
                     translation: "fixed roster item 1",
-                    culture: culture,
+                    culture: cultureId.FormatGuid(),
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: rosterId,
                     translationIndex: "42")
@@ -54,8 +55,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         Because of = () =>
         {
-            excelFileBytes = service.GetAsExcelFile(questionnaireId, culture);
-            var memory = new MemoryStream(excelFileBytes);
+            excelFile = service.GetAsExcelFile(questionnaireId, cultureId);
+            var memory = new MemoryStream(excelFile.ContentAsExcelFile);
             package = new ExcelPackage(memory);
             cells = package.Workbook.Worksheets[1].Cells;
         };
@@ -86,8 +87,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static Guid rosterId;
         static TranslationsService service;
         static Guid questionnaireId;
-        static string culture = "en-US";
-        static byte[] excelFileBytes;
+        static Guid cultureId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static TranslationFile excelFile;
         static ExcelPackage package;
         static ExcelRange cells;
     }

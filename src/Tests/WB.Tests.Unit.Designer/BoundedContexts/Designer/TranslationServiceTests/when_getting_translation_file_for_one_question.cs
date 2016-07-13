@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -27,24 +28,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 Create.TranslationInstance(type: TranslationType.Title,
                     translation: "title",
-                    culture: culture,
+                    culture: cultureId.FormatGuid(),
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: questionId),
                 Create.TranslationInstance(type: TranslationType.Instruction,
                     translation: "instruction",
                     questionnaireId: questionnaireId,
-                    culture: culture,
+                    culture: cultureId.FormatGuid(),
                     questionnaireEntityId: questionId),
                 Create.TranslationInstance(type: TranslationType.OptionTitle,
                     translation: "translated option",
                     questionnaireId: questionnaireId,
-                    culture: culture,
+                    culture: cultureId.FormatGuid(),
                     questionnaireEntityId: questionId,
                     translationIndex:"2"),
                 Create.TranslationInstance(type: TranslationType.ValidationMessage,
                     translation: "validation message",
                     questionnaireId: questionnaireId,
-                    culture: culture,
+                    culture: cultureId.FormatGuid(),
                     questionnaireEntityId: questionId,
                     translationIndex:"1")
             };
@@ -84,8 +85,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         Because of = () =>
         {
-            excelFileBytes = service.GetAsExcelFile(questionnaireId, culture);
-            var memory = new MemoryStream(excelFileBytes);
+            excelFile = service.GetAsExcelFile(questionnaireId, cultureId);
+            var memory = new MemoryStream(excelFile.ContentAsExcelFile);
             package  = new ExcelPackage(memory);
             cells = package.Workbook.Worksheets[1].Cells;
         };
@@ -176,8 +177,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static TranslationsService service;
         static Guid questionId1;
         static Guid questionnaireId;
-        static string culture = "en-US";
-        static byte[] excelFileBytes;
+        static Guid cultureId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        static TranslationFile excelFile;
         static ExcelPackage package;
         static ExcelRange cells;
     }
