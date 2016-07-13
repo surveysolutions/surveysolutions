@@ -1,7 +1,10 @@
 using Android.App;
 using Android.Views;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
@@ -32,21 +35,25 @@ namespace WB.UI.Tester.Activities
 
             ISubMenu languagesMenu = menu.FindItem(Resource.Id.interview_language).SubMenu;
 
-            languagesMenu.Add(
-                groupId: Resource.Id.interview_languages,
-                itemId: Menu.None,
-                order: Menu.None,
-                title: "English");
+            IMenuItem currentLanguageMenuItem = menu.FindItem(Resource.Id.interview_language_original);
 
-            languagesMenu.Add(
-                groupId: Resource.Id.interview_languages,
-                itemId: Menu.None,
-                order: Menu.None,
-                title: "Русский");
+            foreach (var language in this.ViewModel.AvailableLanguages)
+            {
+                var languageMenuItem = languagesMenu.Add(
+                    groupId: Resource.Id.interview_languages,
+                    itemId: Menu.None,
+                    order: Menu.None,
+                    title: language);
+
+                if (language == this.ViewModel.CurrentLanguage)
+                {
+                    currentLanguageMenuItem = languageMenuItem;
+                }
+            }
 
             languagesMenu.SetGroupCheckable(Resource.Id.interview_languages, checkable: true, exclusive: true);
 
-            menu.FindItem(Resource.Id.interview_language_original).SetChecked(true);
+            currentLanguageMenuItem.SetChecked(true);
 
             return base.OnCreateOptionsMenu(menu);
         }
