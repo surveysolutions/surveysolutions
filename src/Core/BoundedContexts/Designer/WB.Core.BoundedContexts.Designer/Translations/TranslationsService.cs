@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         const int translationIndexColumn = 2;
         const int questionnaireEntityIdColumn = 3;
         const int originalTextColumn = 4;
-        const int translactionColumn = 5;
+        const int translationColumn = 5;
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
 
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 cells[1, translationIndexColumn].Value = "Index";
                 cells[1, questionnaireEntityIdColumn].Value = EntityIdColumnName;
                 cells[1, originalTextColumn].Value = "Original";
-                cells[1, translationIndexColumn].Value = "Translation";
+                cells[1, translationColumn].Value = "Translation";
 
                 int currentRowNumber = 2;
 
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             cells[currentRowNumber, translationTypeColumn].Value = (int)translationType;
             cells[currentRowNumber, questionnaireEntityIdColumn].Value = entityId;
             cells[currentRowNumber, originalTextColumn].Value = originalValue;
-            cells[currentRowNumber, translactionColumn].Value = translatedValue;
+            cells[currentRowNumber, translationColumn].Value = translatedValue;
             cells[currentRowNumber, translationIndexColumn].Value = translationIndex;
             currentRowNumber++;
         }
@@ -185,14 +185,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     for (int rowNumber = 2; ; rowNumber++)
                     {
-                        if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null && worksheet.Cells[rowNumber, translactionColumn].Value != null)
+                        if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null && worksheet.Cells[rowNumber, translationColumn].Value != null)
                         {
                             TranslationInstance instance = new TranslationInstance();
 
                             instance.QuestionnaireId = questionnaireId;
                             instance.Language = culture;
                             instance.QuestionnaireEntityId = Guid.Parse(worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>());
-                            instance.Value = worksheet.Cells[rowNumber, translactionColumn].GetValue<string>();
+                            instance.Value = worksheet.Cells[rowNumber, translationColumn].GetValue<string>();
                             instance.TranslationIndex = worksheet.Cells[rowNumber, translationIndexColumn].GetValue<string>();
                             instance.Type = (TranslationType) Enum.Parse(typeof(TranslationType), worksheet.Cells[rowNumber, translationTypeColumn].GetValue<string>());
 
