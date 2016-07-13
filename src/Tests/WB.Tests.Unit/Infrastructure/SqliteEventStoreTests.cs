@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SQLite.Net;
@@ -12,6 +13,8 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -19,30 +22,23 @@ namespace WB.Tests.Unit.Infrastructure
 {
     public class SqliteEventStoreTests
     {
-        private Func<JsonSerializerSettings> origSerializerSettings;
-        private SqliteEventStorage sqliteEventStorage;
+        private SqliteMultiFilesEventStorage sqliteEventStorage;
 
         [SetUp]
         public void Setup()
         {
-            this.origSerializerSettings = SqliteEventStorage.JsonSerializerSettings;
-
-            SqliteEventStorage.JsonSerializerSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new SqliteEventStorage.CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
-            };
-
-            sqliteEventStorage = new SqliteEventStorage(new SQLitePlatformWin32(),
+            sqliteEventStorage = new SqliteMultiFilesEventStorage(new SQLitePlatformWin32(),
               Mock.Of<ILogger>(),
               Mock.Of<ITraceListener>(),
               new SqliteSettings
               {
-                  PathToDatabaseDirectory = ":memory:"
+                  PathToDatabaseDirectory = "",
+                  PathToInterviewsDirectory = "",
+                  InMemoryStorage = true
               },
-              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100));
+              Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
+              Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
         }
 
         [Test]
@@ -111,7 +107,7 @@ namespace WB.Tests.Unit.Infrastructure
             // manually removing events from the middle of store event stream
             foreach (var missingEventId in missingEventIds)
             {
-                this.sqliteEventStorage.connection.Delete<EventView>(missingEventId);
+                this.sqliteEventStorage.connectionByEventSource.Values.Single().Delete<EventView>(missingEventId);
             }
 
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
@@ -202,41 +198,6 @@ namespace WB.Tests.Unit.Infrastructure
             this.sqliteEventStorage.RemoveEventSourceById(eventSourceId);
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
             Assert.That(committedEvents.Count(), Is.EqualTo(0));
-        }
-
-        [Test]
-        public void Should_be_able_to_read_last_event_sequence()
-        {
-            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            var uncommittedEvents = new List<UncommittedEvent>();
-
-            for (int i = 1; i <= 301; i++)
-            {
-                uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
-                    Create.Event.StaticTextUpdated(text: "text " + i),
-                    sequence: i));
-            }
-
-            sqliteEventStorage.Store(new UncommittedEventStream(null, uncommittedEvents));
-
-            var lastEventSequence = sqliteEventStorage.GetLastEventSequence(eventSourceId);
-            Assert.That(lastEventSequence, Is.EqualTo(301));
-        }
-
-        [Test]
-        public void Should_be_able_to_read_last_event_sequence_when_aggregate_is_not_exists()
-        {
-            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            var lastEventSequence = sqliteEventStorage.GetLastEventSequence(eventSourceId);
-            Assert.That(lastEventSequence, Is.Null);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            SqliteEventStorage.JsonSerializerSettings = this.origSerializerSettings;
         }
     }
 }

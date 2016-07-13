@@ -834,7 +834,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                expressionProcessorStatePrototypeLocal,
+                expressionProcessorStatePrototype.Clone(),
                 interviewChangeStructures,
                 fixedRosterCalculationDatas,
                 questionnaire,
