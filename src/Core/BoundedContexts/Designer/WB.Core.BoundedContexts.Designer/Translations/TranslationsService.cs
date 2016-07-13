@@ -39,15 +39,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public IQuestionnaireTranslation Get(Guid questionnaireId, string culture)
+        public ITranslation Get(Guid questionnaireId, string culture)
         {
             if (culture == Guid.Empty.FormatGuid())
-                return new QuestionnaireTranslation(new List<TranslationInstance>());
+                return new Translation(new List<TranslationInstance>());
 
             var storedTranslations =
                 this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
 
-            return new QuestionnaireTranslation(storedTranslations);
+            return new Translation(storedTranslations);
         }
 
         public byte[] GetAsExcelFile(Guid questionnaireId, string culture)

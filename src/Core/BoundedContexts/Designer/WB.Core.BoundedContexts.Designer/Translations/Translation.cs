@@ -6,11 +6,11 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
-    internal class QuestionnaireTranslation : IQuestionnaireTranslation
+    internal class Translation : ITranslation
     {
         private readonly Dictionary<Guid, List<TranslationInstance>> translations = new Dictionary<Guid, List<TranslationInstance>>();
 
-        public QuestionnaireTranslation(List<TranslationInstance> translationInstances)
+        public Translation(List<TranslationInstance> translationInstances)
         {
             if (this.translations == null) throw new ArgumentNullException(nameof(this.translations));
 

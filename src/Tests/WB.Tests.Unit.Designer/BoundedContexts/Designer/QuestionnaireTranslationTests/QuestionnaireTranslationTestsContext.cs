@@ -7,9 +7,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
 {
     internal class QuestionnaireTranslationTestsContext
     {
-        protected static IQuestionnaireTranslation CreateQuestionnaireTranslation(List<TranslationInstance> translations)
+        protected static ITranslation CreateQuestionnaireTranslation(List<TranslationInstance> translations)
         {
-            return new QuestionnaireTranslation(translations);
+            return new Translation(translations);
         }
     }
 }

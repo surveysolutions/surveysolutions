@@ -296,6 +296,7 @@
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionOptionsRepository.cs" />
+    <Compile Include="Repositories\ITranslationStorage.cs" />
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Services\IVariableToUIStringService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
