@@ -242,6 +242,9 @@
   <ItemGroup>
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\QuestionnairesControllerTestContext.cs" />
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\when_getting_Questionaire_but_client_version_lower_than_serrver_one.cs" />
+    <Compile Include="Api\Tester\TranslationsControllerTests\TranslationsControllerTestsContext.cs" />
+    <Compile Include="Api\Tester\TranslationsControllerTests\when_getting_translations.cs" />
+    <Compile Include="Api\Tester\TranslationsControllerTests\when_getting_translations_and_client_has_old_app_version.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\UsersControllerTestsContext.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_very_old_client_has_old_app_version.cs" />
     <Compile Include="Api\Tester\UsersControllerTests\when_user_logged_in_and_client_has_old_app_version.cs" />
