@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -31,10 +32,11 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
-            IInterviewViewModelFactory interviewViewModelFactory)
+            IInterviewViewModelFactory interviewViewModelFactory,
+            ICommandService commandService)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
-                interviewViewModelFactory)
+                interviewViewModelFactory, commandService)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;

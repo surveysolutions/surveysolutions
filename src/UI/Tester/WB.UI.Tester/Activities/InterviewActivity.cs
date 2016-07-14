@@ -78,6 +78,13 @@ namespace WB.UI.Tester.Activities
                     if (item.GroupId == Resource.Id.interview_languages)
                     {
                         item.SetChecked(true);
+
+                        string translationLanguage =
+                            item.ItemId == Resource.Id.interview_language_original
+                                ? null
+                                : item.TitleFormatted.ToString();
+
+                        this.ViewModel.SwitchTranslationCommand.Execute(translationLanguage);
                         this.ViewModel.ReloadInterviewCommand.Execute();
                     }
                     break;

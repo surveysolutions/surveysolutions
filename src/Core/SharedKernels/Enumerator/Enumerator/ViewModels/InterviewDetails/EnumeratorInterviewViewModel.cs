@@ -4,8 +4,10 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -26,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly InterviewStateViewModel interviewState;
         private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
+        private readonly ICommandService commandService;
         protected string interviewId;
         private IStatefulInterview interview;
 
@@ -42,7 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             InterviewStateViewModel interviewState,
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
-            IInterviewViewModelFactory interviewViewModelFactory) : base(principal, viewModelNavigationService)
+            IInterviewViewModelFactory interviewViewModelFactory,
+            ICommandService commandService)
+            : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -53,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewState = interviewState;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
+            this.commandService = commandService;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
@@ -194,6 +200,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string CurrentLanguage { get; private set; }
         public IReadOnlyCollection<string> AvailableLanguages { get; private set; }
+
+        public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
+
+        private void SwitchTranslation(string language) => this.commandService.Execute(
+            new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
