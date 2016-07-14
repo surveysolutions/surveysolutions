@@ -367,6 +367,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
+    <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />

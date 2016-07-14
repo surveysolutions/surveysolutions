@@ -11,11 +11,13 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -60,7 +62,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
-                topologicalSorter ?? Create.TopologicalSorter<string>());
+                topologicalSorter ?? Create.TopologicalSorter<string>(),
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnaireTranslator>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

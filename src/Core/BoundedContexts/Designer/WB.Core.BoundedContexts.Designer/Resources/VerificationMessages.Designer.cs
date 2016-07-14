@@ -1268,5 +1268,23 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0255_QuestionIsTooShort", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation name is invalid.
+        /// </summary>
+        internal static string WB0256_TranslationNameIsInvalid {
+            get {
+                return ResourceManager.GetString("WB0256_TranslationNameIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation has empty content.
+        /// </summary>
+        internal static string WB0257_TranslationHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0257_TranslationHasEmptyContent", resourceCulture);
+            }
+        }
     }
 }

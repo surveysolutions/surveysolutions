@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
         {
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
@@ -261,8 +261,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<Attachment, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
                questionnaire
@@ -272,16 +272,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
             Warning(
-            Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
+            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
                 validationConditionRefersToAFutureQuestion)
         {
             return (questionnaire) => validationConditionRefersToAFutureQuestion(questionnaire);
         }
 
-        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<AttachmentSize, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<AttachmentSize, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
                    this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
            Func<TEntity, bool> hasError, string code, string message)
            where TEntity : class, IComposite
         {
@@ -299,8 +299,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
                 hasError(questionnaire)
