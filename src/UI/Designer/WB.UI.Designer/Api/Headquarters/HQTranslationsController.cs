@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,7 +27,17 @@ namespace WB.UI.Designer.Api.Headquarters
         public HttpResponseMessage Get(string id)
         {
             Guid questionnaireId = Guid.Parse(id);
-            var translationInstances = this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).ToList()).Cast<TranslationDto>().ToList();
+            //Cast<TranslationDto> preserves TranslationInstance type that used during serialization
+            //consumer has no idea about that type
+            var translationInstances = this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).ToList())
+                .Select(x => new TranslationDto()
+                {
+                    Value = x.Value,
+                    Type = x.Type,
+                    Language = x.Language,
+                    QuestionnaireEntityId = x.QuestionnaireEntityId,
+                    TranslationIndex = x.TranslationIndex
+                }).ToList();
 
             return translationInstances.Count == 0
                 ? this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found questionnaireId: {questionnaireId}, culture: {id}")
