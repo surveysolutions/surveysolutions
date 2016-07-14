@@ -582,7 +582,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
             questionnaire.Translations.ForEach(t =>
             {
-                var translation = this.translationService.Get(questionnaire.PublicKey, t.TranslationId.FormatGuid());
+                var translation = this.translationService.Get(questionnaire.PublicKey, t.TranslationId);
                 var translatedQuestionnaireDocument = this.questionnaireTranslator.Translate(questionnaire, translation);
                 translatedQuestionnaires.Add(translatedQuestionnaireDocument.AsReadOnly());
             });

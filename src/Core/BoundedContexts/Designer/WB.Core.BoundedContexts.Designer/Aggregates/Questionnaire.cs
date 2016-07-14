@@ -884,7 +884,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var translation in clonedDocument.Translations)
             {
                 var newTranslationId = Guid.NewGuid();
-                this.translationService.CloneTranslation(document.PublicKey, translation.TranslationId.FormatGuid(), clonedDocument.PublicKey, newTranslationId.FormatGuid());
+                this.translationService.CloneTranslation(document.PublicKey, translation.TranslationId, clonedDocument.PublicKey, newTranslationId);
                 translation.TranslationId = newTranslationId;
             }
 
