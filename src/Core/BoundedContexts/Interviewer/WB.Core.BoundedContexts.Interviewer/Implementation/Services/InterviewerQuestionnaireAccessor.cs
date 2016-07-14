@@ -81,8 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
-            var oldTranslations = await this.GetTranslationsByQuestionnaireAsync(questionnaireIdentity).ConfigureAwait(false);
-            await this.translations.RemoveAsync(oldTranslations).ConfigureAwait(false);
+            await this.RemoveTranslationsAsync(questionnaireIdentity).ConfigureAwait(false);
         }
 
         private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
@@ -104,15 +103,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
-            var oldTranslations = await this.GetTranslationsByQuestionnaireAsync(questionnaireIdentity);
-            await this.translations.RemoveAsync(oldTranslations).ConfigureAwait(false);
-            await this.translations.StoreAsync(translationInstances).ConfigureAwait(false);
+            await this.RemoveTranslationsAsync(questionnaireIdentity);
+            await this.translations.StoreAsync(translationInstances);
         }
 
-        private async Task<IReadOnlyCollection<TranslationInstance>> GetTranslationsByQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
+        private async Task RemoveTranslationsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             string questionnaireId = questionnaireIdentity.ToString();
-            return await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
+
+            var storedTranslations =
+                await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
+
+            await this.translations.RemoveAsync(storedTranslations).ConfigureAwait(false);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
