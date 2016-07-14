@@ -95,6 +95,18 @@ namespace WB.UI.Designer.Code
                     };
                     continue;
                 }
+                if (reference.Type == QuestionnaireVerificationReferenceType.Translation)
+                {
+                    var translation = questionnaireDocument.Translations.Single(x => x.TranslationId == reference.Id);
+                    yield return new VerificationReferenceEnriched
+                    {
+                        ItemId = reference.Id.FormatGuid(),
+                        Type = QuestionnaireVerificationReferenceType.Translation,
+                        Variable = translation.Name,
+                        Title = translation.Name
+                    };
+                    continue;
+                }
                 var item = questionnaireDocument.Find<IComposite>(reference.Id);
                 var parent = item;
                 while (parent != null)
