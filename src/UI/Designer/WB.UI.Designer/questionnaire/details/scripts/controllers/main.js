@@ -217,6 +217,9 @@ angular.module('designerApp')
                 } else if (reference.type.toLowerCase() === "attachment") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openAttachments", { focusOn: reference.itemId });
+                } else if (reference.type.toLowerCase() === "translation") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
                 } else {
                     if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
                         $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {

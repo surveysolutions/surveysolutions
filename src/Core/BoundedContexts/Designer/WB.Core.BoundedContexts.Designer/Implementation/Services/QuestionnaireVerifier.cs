@@ -632,7 +632,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .Translations
                     .Where(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.TranslationId)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForTranslation(entity.TranslationId)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
