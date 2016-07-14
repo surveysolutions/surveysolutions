@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
-        private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
 
@@ -40,7 +39,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
-            this.principal = principal;
             this.messenger = messenger;
             this.commandService = commandService;
             this.Synchronization = synchronization;

@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IUserInteractionService interactionService;
-        private readonly IPrincipal principal;
         private CancellationTokenSource loadingCancellationTokenSource;
 
         public LoadingViewModel(IPrincipal principal,
@@ -44,7 +43,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.commandService = commandService;
             this.logger = logger;
             this.interactionService = interactionService;
-            this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireRepository = questionnaireRepository;
         }
