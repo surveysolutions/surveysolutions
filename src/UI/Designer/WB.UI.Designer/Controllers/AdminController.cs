@@ -325,7 +325,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else if (isTranslationEntry)
                 {
-                    var translationId = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
                     byte[] excelContent = null;
 
                     using (var memoryStream = new MemoryStream())
@@ -334,6 +334,7 @@ namespace WB.UI.Designer.Controllers
                         excelContent = memoryStream.ToArray();
                     }
 
+                    var translationId = Guid.Parse(translationIdString);
                     this.translationsService.Store(questionnaireId, translationId, excelContent);
 
                     this.Success($"[{zipEntry.Name}].", append: true);

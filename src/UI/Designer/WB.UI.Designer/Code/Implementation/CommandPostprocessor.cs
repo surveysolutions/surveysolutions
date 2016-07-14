@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Code.Implementation
                 var deleteTranslation = command as DeleteTranslation;
                 if (deleteTranslation != null)
                 {
-                    this.translationsService.Delete(deleteTranslation.QuestionnaireId, deleteTranslation.TranslationId.FormatGuid());
+                    this.translationsService.Delete(deleteTranslation.QuestionnaireId, deleteTranslation.TranslationId);
                 }
 
                 var deleteQuestionnaire = command as DeleteQuestionnaire;
@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Code.Implementation
 
             foreach (var translation in questionnaire.Translations)
             {
-                this.translationsService.Delete(questionnaireId, translation.TranslationId.FormatGuid());
+                this.translationsService.Delete(questionnaireId, translation.TranslationId);
             }
         }
 
