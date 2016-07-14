@@ -38,8 +38,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.Find<T>(condition);
 
+        public IEnumerable<T> FindWithTranslations<T>(Func<T, bool> condition) where T : class
+        {
+            var allQuestionnaires = this.Questionnaire.ToEnumerable().Union(this.TranslatedQuestionnaires);
+            foreach (var questionnaire in allQuestionnaires)
+            {
+                var findResult = questionnaire.Find<T>(condition);
+                foreach (var entity in findResult)
+                {
+                    yield return entity;
+                }
+            }
+        }
+
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.FirstOrDefault(condition);
+
+        public IEnumerable<ReadOnlyQuestionnaireDocument.QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
+            => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
 
         public static implicit operator ReadOnlyQuestionnaireDocument(MultiLanguageQuestionnaireDocument questionnaireDocument)
         {
