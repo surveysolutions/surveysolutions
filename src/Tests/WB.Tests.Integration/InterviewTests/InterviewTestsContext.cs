@@ -61,8 +61,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
-            return Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            return Stub<IPlainQuestionnaireRepository>.Returning(questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
@@ -97,8 +96,7 @@ namespace WB.Tests.Integration.InterviewTests
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
-                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+                => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
@@ -123,8 +121,7 @@ namespace WB.Tests.Integration.InterviewTests
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
-                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+                => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 

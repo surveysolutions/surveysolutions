@@ -107,14 +107,11 @@ namespace WB.Tests.Unit
 
         private static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
-            => Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
-                && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
+            => Stub<IPlainQuestionnaireRepository>.Returning(questionnaire);
 
         private static IPlainQuestionnaireRepository QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
             => Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
-                && repository.GetHistoricalQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
                 && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
                 && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
 

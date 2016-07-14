@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     /// </summary>
     public interface IPlainQuestionnaireRepository /*: IPlainQuestionnaireRepository*/
     {
-        IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version);
         IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity);
+
         void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument);
 
         QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity);
