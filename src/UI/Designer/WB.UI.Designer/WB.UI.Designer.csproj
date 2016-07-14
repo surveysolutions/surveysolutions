@@ -467,7 +467,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scripts\components\query-string.js" />
+    <Content Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
