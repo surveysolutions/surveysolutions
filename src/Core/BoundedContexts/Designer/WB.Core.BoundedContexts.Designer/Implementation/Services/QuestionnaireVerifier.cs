@@ -11,13 +11,16 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -95,9 +98,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationService;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly ITopologicalSorter<string> topologicalSorter;
 
         private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
+        private static readonly Regex TranslationNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(
@@ -110,7 +116,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IMacrosSubstitutionService macrosSubstitutionService,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITopologicalSorter<string> topologicalSorter)
+            ITopologicalSorter<string> topologicalSorter, 
+            ITranslationsService translationService, 
+            IQuestionnaireTranslator questionnaireTranslator)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -122,12 +130,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.topologicalSorter = topologicalSorter;
+            this.translationService = translationService;
+            this.questionnaireTranslator = questionnaireTranslator;
         }
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
             => this.ErrorsVerifiers.Concat(this.WarningsVerifiers);
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
@@ -194,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
-            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
@@ -218,6 +228,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
             AttachmentVerifier(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
+
+            TranslationVerifier(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
+            TranslationVerifier(TranslationHasEmptyContent, "WB0256", VerificationMessages.WB0257_TranslationHasEmptyContent),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
@@ -583,7 +596,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
             Func<Macro, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -592,7 +605,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForMacro(entity.Key)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
             Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -601,7 +614,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier(
+            Func<Translation, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire) => questionnaire
+                    .Translations
+                    .Where(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.TranslationId)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
             Func<Guid, LookupTable, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -610,7 +632,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(entity.Key)));
         }
 
-        private Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
             Func<LookupTable, LookupTableContent, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
@@ -621,7 +643,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(lookupTable.Key));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
             Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
@@ -630,7 +652,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
             Func<ReadOnlyQuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
         {
             return (questionnaire) =>
@@ -642,7 +664,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
             return (questionnaire) =>
@@ -653,15 +675,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
             return Verifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+            where TEntity : class, IComposite
+        {
+            return TranslationVerifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
             return (questionnaire) =>
@@ -672,8 +701,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
-            Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+            where TEntity : class, IComposite
+        {
+            return (questionnaire) =>
+            {
+                List<ReadOnlyQuestionnaireDocument> allQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
+                allQuestionnaires.Add(questionnaire);
+                questionnaire.Translations.ForEach(t =>
+                {
+                    var translation = this.translationService.Get(questionnaire.PublicKey, t.TranslationId.FormatGuid());
+                    var translatedQuestionnaireDocument =
+                        this.questionnaireTranslator.Translate(questionnaire.Questionnaire, translation);
+                    allQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument));
+                });
+
+                var verificationMessages = new List<QuestionnaireVerificationMessage>();
+                foreach (var questionnaireDocument in allQuestionnaires)
+                {
+                    var verifier = Verifier(getSubEnitites, hasError, code, getMessageBySubEntityIndex);
+                    verificationMessages.AddRange(verifier.Invoke(questionnaireDocument));
+                }
+                return verificationMessages;
+            };
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return (questionnaire) =>
@@ -682,8 +737,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
-            Func<TEntity, ReadOnlyQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
             where TReferencedEntity : class, IComposite
         {
@@ -708,6 +763,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var attachmentContent = this.attachmentService.GetContentDetails(attachment.ContentId);
             return attachmentContent == null || attachmentContent.Size == 0;
+        }
+
+        private bool TranslationNameIsInvalid(Translation translation, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var names = questionnaire.Translations.Select(t => t.Name);
+            return names.All(name =>
+            {
+                if (string.IsNullOrWhiteSpace(name) || name.Length > 32)
+                    return false;
+
+                return !TranslationNameRegex.IsMatch(name);
+            });
+        }
+
+        private bool TranslationHasEmptyContent(Translation translation, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var content = this.translationService.GetAsExcelFile(questionnaire.PublicKey, translation.TranslationId.FormatGuid());
+            return content == null || content.Length == 0;
         }
 
         private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
