@@ -13,63 +13,32 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             var translatedDocument = originalDocument.Clone();
 
-            TranslateTitles(translatedDocument, translation);
-            TranslateInstructions(translatedDocument, translation);
-            TranslateAnswerOptions(translatedDocument, translation);
-            TranslateValidationMessages(translatedDocument, translation);
-            TranslateFixedRosterTitles(translatedDocument, translation);
+            foreach (var entity in translatedDocument.Find<IQuestionnaireEntity>())
+            {
+                var entityAsQuestion = entity as IQuestion;
+                var entityAsValidatable = entity as IValidatable;
+                var entityAsGroup = entity as IGroup;
+
+                TranslateTitle(entity, translation);
+
+                if (entityAsQuestion != null)
+                {
+                    TranslateInstruction(entityAsQuestion, translation);
+                    TranslateAnswerOptions(entityAsQuestion, translation);
+                }
+
+                if (entityAsValidatable != null)
+                {
+                    TranslateValidationMessages(entityAsValidatable, translation);
+                }
+
+                if (entityAsGroup != null && entityAsGroup.IsRoster)
+                {
+                    TranslateFixedRosterTitles(entityAsGroup, translation);
+                }
+            }
 
             return translatedDocument;
-        }
-
-        private static void TranslateTitles(QuestionnaireDocument questionnaireDocument, ITranslation translation)
-        {
-            foreach (var entity in questionnaireDocument.Find<IQuestionnaireEntity>())
-            {
-                TranslateTitle(entity, translation);
-            }
-        }
-
-        private static void TranslateInstructions(QuestionnaireDocument questionnaireDocument, ITranslation translation)
-        {
-            foreach (var question in questionnaireDocument.Find<IQuestion>())
-            {
-                TranslateInstruction(question, translation);
-            }
-        }
-
-        private static void TranslateAnswerOptions(QuestionnaireDocument questionnaireDocument, ITranslation translation)
-        {
-            foreach (var question in questionnaireDocument.Find<IQuestion>())
-            {
-                foreach (var answerOption in question.Answers)
-                {
-                    TranslateAnswerOption(question.PublicKey, answerOption, translation);
-                }
-            }
-        }
-
-        private static void TranslateValidationMessages(QuestionnaireDocument questionnaireDocument, ITranslation translation)
-        {
-            foreach (var validatableEntity in questionnaireDocument.Find<IValidatable>())
-            {
-                for (int index = 0; index < validatableEntity.ValidationConditions.Count; index++)
-                {
-                    var validationCondition = validatableEntity.ValidationConditions[index];
-                    TranslateValidationMessage(validatableEntity.PublicKey, index + 1, validationCondition, translation);
-                }
-            }
-        }
-
-        private static void TranslateFixedRosterTitles(QuestionnaireDocument questionnaireDocument, ITranslation translation)
-        {
-            foreach (var roster in questionnaireDocument.Find<IGroup>(group => @group.IsRoster))
-            {
-                foreach (var fixedRosterTitle in roster.FixedRosterTitles)
-                {
-                    TranslateFixedRosterTitle(roster.PublicKey, fixedRosterTitle, translation);
-                }
-            }
         }
 
         private static void TranslateTitle(IQuestionnaireEntity entity, ITranslation translation)
@@ -86,11 +55,28 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 translated: translation.GetInstruction(question.PublicKey));
         }
 
+        private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)
+        {
+            foreach (var answerOption in question.Answers)
+            {
+                TranslateAnswerOption(question.PublicKey, answerOption, translation);
+            }
+        }
+
         private static void TranslateAnswerOption(Guid questionId, Answer answerOption, ITranslation translation)
         {
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
                 translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue));
+        }
+
+        private static void TranslateValidationMessages(IValidatable validatableEntity, ITranslation translation)
+        {
+            for (int index = 0; index < validatableEntity.ValidationConditions.Count; index++)
+            {
+                var validationCondition = validatableEntity.ValidationConditions[index];
+                TranslateValidationMessage(validatableEntity.PublicKey, index + 1, validationCondition, translation);
+            }
         }
 
         private static void TranslateValidationMessage(Guid validatableEntityId, int validationOneBasedIndex,
@@ -99,6 +85,14 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             validation.Message = Translate(
                 original: validation.Message,
                 translated: translation.GetValidationMessage(validatableEntityId, validationOneBasedIndex));
+        }
+
+        private static void TranslateFixedRosterTitles(IGroup roster, ITranslation translation)
+        {
+            foreach (var fixedRosterTitle in roster.FixedRosterTitles)
+            {
+                TranslateFixedRosterTitle(roster.PublicKey, fixedRosterTitle, translation);
+            }
         }
 
         private static void TranslateFixedRosterTitle(Guid rosterId, FixedRosterTitle fixedRosterTitle, ITranslation translation)
