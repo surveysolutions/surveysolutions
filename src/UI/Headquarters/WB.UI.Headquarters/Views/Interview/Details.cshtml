@@ -86,6 +86,29 @@
                     <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
                 }
             </h3>
+            <div class="form-inline">
+                <span class="small">@Pages.InterviewDetails_TranslationLabel :</span>
+
+                @if (Model.InterviewDetails.ReceivedByInterviewer)
+                {
+                    <span>@(string.IsNullOrEmpty(Model.InterviewDetails.CurrentTranslation) ? Pages.InterviewDetails_DefaultTranslation : Model.InterviewDetails.CurrentTranslation)</span>
+                }
+                else
+                {
+                    <div class="input-group">
+                        <select id="translationSelector" class="form-control">
+                            <option value='@Pages.InterviewDetails_DefaultTranslation'>@Pages.InterviewDetails_DefaultTranslation</option>
+                            @foreach (var item in Model.Translations)
+                            {
+                                <option value='@item'>@item</option>
+                            }
+
+                        </select>
+                        </div>
+                        }
+
+                    </div>
+
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
@@ -109,7 +132,7 @@
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> @Pages.InterviewDetails_FlaggedButtonLabel (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> @Pages.InterviewDetails_SupervisorsButtonLabel (<span>@Model.Statistic.SupervisorsCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> @Pages.InterviewDetails_HiddenButtonLabel (<span>@Model.Statistic.HiddenCount</span>)</a>
-
+                
             </div>
         </div>
         <div id="list">

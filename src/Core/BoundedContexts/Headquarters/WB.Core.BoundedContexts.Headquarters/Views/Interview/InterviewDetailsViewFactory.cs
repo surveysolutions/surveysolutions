@@ -133,7 +133,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 FilteredGroups = selectedGroups,
                 Statistic = detailsStatisticView,
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
-                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId)
+                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
+                Translations = questionnaire.Translations.Select(translation => translation.Name).ToReadOnlyCollection()
             };
         }
 

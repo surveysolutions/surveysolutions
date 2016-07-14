@@ -1519,6 +1519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SwitchTranslation(SwitchTranslation command)
         {
+            ThrowIfInterviewHardDeleted();
             if (command.Language != null)
             {
                 IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
