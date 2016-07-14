@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private readonly IPrincipal principal;
         private readonly IDesignerApiService designerApiService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
@@ -33,9 +32,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            IAsyncPlainStorage<TesterUserIdentity> userStorage) : base(principal, viewModelNavigationService)
+            IAsyncPlainStorage<TesterUserIdentity> userStorage)
+            : base(principal, viewModelNavigationService)
         {
-            this.principal = principal;
             this.designerApiService = designerApiService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
