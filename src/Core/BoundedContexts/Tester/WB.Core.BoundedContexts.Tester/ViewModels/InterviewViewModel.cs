@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using MvvmCross.Core.ViewModels;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -15,10 +16,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class InterviewViewModel : EnumeratorInterviewViewModel
     {
-        private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public InterviewViewModel(IPrincipal principal,
+        public InterviewViewModel(
+            IPrincipal principal,
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
@@ -29,12 +30,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
-            IInterviewViewModelFactory interviewViewModelFactory)
+            IInterviewViewModelFactory interviewViewModelFactory,
+            ICommandService commandService)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
-                interviewViewModelFactory)
+                interviewViewModelFactory, commandService)
         {
-            this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
