@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             string repositoryId = GetRepositoryId(id, version);
             this.repository.Store(questionnaireDocument, repositoryId);
-            this.cache[repositoryId] = questionnaireDocument;
+            this.cache[repositoryId] = questionnaireDocument.Clone();
             this.plainQuestionnaireCache.Remove(new QuestionnaireIdentity(id, version));
         }
 
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private static string GetRepositoryId(Guid id, long version)
         {
-            return string.Format("{0}${1}", id.FormatGuid(), version);
+            return $"{id.FormatGuid()}${version}";
         }
     }
 }
