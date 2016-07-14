@@ -529,6 +529,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Default].
+        /// </summary>
+        public static string InterviewDetails_DefaultTranslation {
+            get {
+                return ResourceManager.GetString("InterviewDetails_DefaultTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to enabled.
         /// </summary>
         public static string InterviewDetails_EnabledButtonLabel {
@@ -624,6 +633,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewDetails_SupervisorsButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_SupervisorsButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation.
+        /// </summary>
+        public static string InterviewDetails_TranslationLabel {
+            get {
+                return ResourceManager.GetString("InterviewDetails_TranslationLabel", resourceCulture);
             }
         }
         

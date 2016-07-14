@@ -68,7 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
-        IUpdateHandler<InterviewData, VariablesEnabled>
+        IUpdateHandler<InterviewData, VariablesEnabled>,
+        IUpdateHandler<InterviewData, TranslationSwitched>
     {
         private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
@@ -747,6 +748,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interviewLevel.DisabledVariables.Remove(enabledVariable.Id);
                 });
             }
+            return interview;
+        }
+
+        public InterviewData Update(InterviewData interview, IPublishedEvent<TranslationSwitched> @event)
+        {
+            interview.CurrentTranslation = @event.Payload.Language;
             return interview;
         }
     }
