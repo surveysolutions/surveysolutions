@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Questionnaire.Translations
 {
-    internal class QuestionnaireTranslator : IQuestionnaireTranslator
+    public class QuestionnaireTranslator : IQuestionnaireTranslator
     {
         public QuestionnaireDocument Translate(QuestionnaireDocument originalDocument, ITranslation translation)
         {
