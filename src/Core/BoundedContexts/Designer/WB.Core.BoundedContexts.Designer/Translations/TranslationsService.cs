@@ -39,29 +39,29 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public ITranslation Get(Guid questionnaireId, string culture)
+        public ITranslation Get(Guid questionnaireId, string language)
         {
-            if (string.IsNullOrEmpty(culture))
+            if (string.IsNullOrEmpty(language))
                 return new QuestionnaireTranslation(new List<TranslationDto>());
 
             var storedTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList())
+                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList())
                 .Cast<TranslationDto>()
                 .ToList();
 
             return new QuestionnaireTranslation(storedTranslations);
         }
 
-        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? cultureId)
+        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? languageId)
         {
             var translationFile = new TranslationFile();
-            string culture = cultureId.FormatGuid();
+            string language = languageId.FormatGuid();
 
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
-            var translation = this.Get(questionnaireId, culture);
+            var translation = this.Get(questionnaireId, language);
 
             translationFile.QuestionnaireTitle = questionnaire.Title;
-            translationFile.TranslationName = cultureId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == cultureId)?.Name : string.Empty;
+            translationFile.TranslationName = languageId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == languageId)?.Name : string.Empty;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
@@ -165,9 +165,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             currentRowNumber++;
         }
 
-        public void Store(Guid questionnaireId, string culture, byte[] excelRepresentation)
+        public void Store(Guid questionnaireId, string language, byte[] excelRepresentation)
         {
-            if (culture == null) throw new ArgumentNullException(nameof(culture));
+            if (language == null) throw new ArgumentNullException(nameof(language));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
             using (MemoryStream stream = new MemoryStream(excelRepresentation))
@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     var worksheet = package.Workbook.Worksheets[1];
 
                     var oldTranslations = this.translations.Query(
-                        _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture).ToList());
+                        _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList());
                     this.translations.Remove(oldTranslations);
 
 
@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             TranslationInstance instance = new TranslationInstance();
 
                             instance.QuestionnaireId = questionnaireId;
-                            instance.Language = culture;
+                            instance.Language = language;
                             instance.QuestionnaireEntityId = Guid.Parse(worksheet.Cells[rowNumber, questionnaireEntityIdColumn].GetValue<string>());
                             instance.Value = worksheet.Cells[rowNumber, translationColumn].GetValue<string>();
                             instance.TranslationIndex = worksheet.Cells[rowNumber, translationIndexColumn].GetValue<string>();
@@ -221,10 +221,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        public void Delete(Guid questionnaireId, string culture)
+        public void Delete(Guid questionnaireId, string language)
         {
             var storedTranslations = this.translations.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture)
+                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
                 .ToList());
             this.translations.Remove(storedTranslations);
         }
