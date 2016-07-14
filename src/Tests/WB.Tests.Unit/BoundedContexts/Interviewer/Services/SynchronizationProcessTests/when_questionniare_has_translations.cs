@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -53,15 +52,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 viewModel = CreateSynchronizationProcess(principal: principal,
                     interviewViewRepository: interviewViewRepository,
                     synchronizationService: synchronizationService,
-                    questionnaireFactory: interviewerQuestionnaireAccessor,
-                    translations: translationsStorage
+                    questionnaireFactory: interviewerQuestionnaireAccessor
                     );
             };
 
             Because of = () => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
 
             It should_store_translations = () =>
-                translationsStorage.inMemroyStorage.Count.ShouldEqual(1);
+                Mock.Get(interviewerQuestionnaireAccessor).Verify(x => x.StoreTranslationsAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.Is<List<TranslationInstance>>(i => 
+                i.Count == 1)));
+
+
 
             static SynchronizationProcess viewModel;
             static ISynchronizationService synchronizationService;

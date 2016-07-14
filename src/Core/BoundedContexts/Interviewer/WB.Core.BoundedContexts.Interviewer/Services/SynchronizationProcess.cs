@@ -40,8 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IAsyncPlainStorage<TranslationInstance> translations;
-
+        
         private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
@@ -56,8 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher, 
-            IAsyncPlainStorage<TranslationInstance> translations)
+            IPasswordHasher passwordHasher)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -72,7 +70,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFileViewStorage = interviewFileViewStorage;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
-            this.translations = translations;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -326,26 +323,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private async Task DownloadTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {
-            string questionnaireId = questionnaireIdentity.ToString();
-            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
-            this.translations.Remove(oldTranslations);
-
             List<TranslationDto> translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken)
-                                                             .ConfigureAwait(false);
-            foreach (var translationDto in translationDtos)
+                                                              .ConfigureAwait(false);
+
+
+            List<TranslationInstance> translations = translationDtos.Select(translationDto => new TranslationInstance
             {
-                var instance = new TranslationInstance
-                {
-                    QuestionnaireId = questionnaireId,
-                    Language = translationDto.Language,
-                    QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
-                    Type = translationDto.Type,
-                    TranslationIndex = translationDto.TranslationIndex,
-                    Value = translationDto.Value,
-                    Id = Guid.NewGuid().FormatGuid()
-                };
-                await this.translations.StoreAsync(instance).ConfigureAwait(false);
-            }
+                QuestionnaireId = questionnaireIdentity.ToString(),
+                Language = translationDto.Language,
+                QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                Type = translationDto.Type,
+                TranslationIndex = translationDto.TranslationIndex,
+                Value = translationDto.Value,
+                Id = Guid.NewGuid().FormatGuid()
+            }).ToList();
+
+            await this.questionnairesAccessor.StoreTranslationsAsync(questionnaireIdentity, translations);
         }
 
         private async Task DownloadInterviewsAsync(SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)

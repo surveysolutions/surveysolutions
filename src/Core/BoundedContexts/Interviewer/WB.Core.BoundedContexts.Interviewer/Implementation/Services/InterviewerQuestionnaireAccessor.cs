@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -25,6 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
+        private readonly IAsyncPlainStorage<TranslationInstance> translations;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
@@ -77,6 +82,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
+            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
+            this.translations.Remove(oldTranslations);
         }
 
         private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
@@ -94,6 +101,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             await this.questionnaireAssemblyFileAccessor.StoreAssemblyAsync(questionnaireIdentity, assembly);
+        }
+
+        public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
+        {
+            string questionnaireId = questionnaireIdentity.ToString();
+            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
+            this.translations.Remove(oldTranslations);
+            
+            await this.translations.StoreAsync(translationInstances).ConfigureAwait(false);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
