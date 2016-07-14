@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     /// Interface used to store and read questionnaires in plain way, when no CQRS is involved.
     /// Therefore DTO is fixed and is now QuestionnaireDocument.
     /// </summary>
-    public interface IPlainQuestionnaireRepository /*: IPlainQuestionnaireRepository*/
+    public interface IPlainQuestionnaireRepository
     {
         IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity);
 
