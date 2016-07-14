@@ -39,8 +39,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public ITranslation Get(Guid questionnaireId, string language)
+        public ITranslation Get(Guid questionnaireId, Guid? translationId)
         {
+            var language = translationId.FormatGuid();
             if (string.IsNullOrEmpty(language))
                 return new QuestionnaireTranslation(new List<TranslationDto>());
 
@@ -52,16 +53,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new QuestionnaireTranslation(storedTranslations);
         }
 
-        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? languageId)
+        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? translationId)
         {
             var translationFile = new TranslationFile();
-            string language = languageId.FormatGuid();
-
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
-            var translation = this.Get(questionnaireId, language);
+            var translation = this.Get(questionnaireId, translationId);
 
             translationFile.QuestionnaireTitle = questionnaire.Title;
-            translationFile.TranslationName = languageId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == languageId)?.Name : string.Empty;
+            translationFile.TranslationName = translationId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == translationId)?.Name : string.Empty;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
@@ -165,8 +164,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             currentRowNumber++;
         }
 
-        public void Store(Guid questionnaireId, string language, byte[] excelRepresentation)
+        public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
         {
+            var language = translationId.FormatGuid();
+
             if (language == null) throw new ArgumentNullException(nameof(language));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
@@ -207,22 +208,26 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        public void CloneTranslation(Guid questionnaireId, string language, Guid newQuestionnaireId, string newCulture)
+        public void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId)
         {
+            var language = translationId.FormatGuid();
+            var newLanguage = newTranslationId.FormatGuid();
+
             var storedTranslations = this.translations.Query(_ => _
                 .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
                 .ToList());
 
             foreach (var storedTranslation in storedTranslations)
             {
-                storedTranslation.Language = newCulture;
+                storedTranslation.Language = newLanguage;
                 storedTranslation.QuestionnaireId = newQuestionnaireId;
                 this.translations.Store(storedTranslation, storedTranslation);
             }
         }
 
-        public void Delete(Guid questionnaireId, string language)
+        public void Delete(Guid questionnaireId, Guid translationId)
         {
+            var language = translationId.FormatGuid();
             var storedTranslations = this.translations.Query(_ => _
                 .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
                 .ToList());

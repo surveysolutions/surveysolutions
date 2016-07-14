@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
@@ -26,10 +27,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             
         };
 
-        Because of = () => service.Store(questionnaireId, "en-US", fileStream);
+        Because of = () => service.Store(questionnaireId, translationId, fileStream);
 
         It should_store_all_entities_for_questionnaire_and_culture = () => 
-            plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.Language == "en-US")).ShouldBeTrue();
+            plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.Language == translationId.FormatGuid())).ShouldBeTrue();
 
         It should_store_title_translation = () =>
         {
@@ -69,5 +70,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static byte[] fileStream;
         static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
 }

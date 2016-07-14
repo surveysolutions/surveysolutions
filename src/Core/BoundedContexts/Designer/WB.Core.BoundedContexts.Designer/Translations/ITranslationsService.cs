@@ -5,10 +5,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 {
     public interface ITranslationsService
     {
-        ITranslation Get(Guid questionnaireId, string language);
+        ITranslation Get(Guid questionnaireId, Guid? translationId);
         TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? translationId);
-        void Store(Guid questionnaireId, string language, byte[] excelRepresentation);
-        void CloneTranslation(Guid questionnaireId, string language, Guid newQuestionnaireId, string newCulture);
-        void Delete(Guid questionnaireId, string language);
+        void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation);
+        void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId);
+        void Delete(Guid questionnaireId, Guid translationId);
     }
 }

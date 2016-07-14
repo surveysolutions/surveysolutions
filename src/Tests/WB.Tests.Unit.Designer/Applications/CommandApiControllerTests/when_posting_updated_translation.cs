@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 
         It should_save_translation_with_specified_params = () =>
             translationServiceMock.Verify(
-                x => x.Store(questionnaireId, translationId.FormatGuid(), fileBytes), Times.Once);
+                x => x.Store(questionnaireId, translationId, fileBytes), Times.Once);
 
         It should_execute_AddOrUpdateTranslation_command = () =>
             mockOfCommandService.Verify(

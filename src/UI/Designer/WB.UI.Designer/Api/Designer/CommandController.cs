@@ -195,7 +195,7 @@ namespace WB.UI.Designer.Api
                 if (model.File != null)
                 {
                     this.translationsService.Store(command.QuestionnaireId,
-                        command.TranslationId.FormatGuid(),
+                        command.TranslationId,
                         model.File.Buffer);
                 }
             }
