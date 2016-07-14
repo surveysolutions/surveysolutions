@@ -525,4 +525,7 @@
   <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
     <value>Translation has empty content</value>
   </data>
+  <data name="WB0258_TranslationsHasDuplicatedNames" xml:space="preserve">
+    <value>Translations has duplicate names</value>
+  </data>
 </root>
