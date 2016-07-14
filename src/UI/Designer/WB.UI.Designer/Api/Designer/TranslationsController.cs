@@ -22,11 +22,24 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("{id:Guid}/{translationId:Guid?}")]
-        public HttpResponseMessage Get(Guid id, Guid? translationId = null)
+        [Route("{id:Guid}/template")]
+        public HttpResponseMessage Get(Guid id)
         {
-            var translationFile = translationId.HasValue ? this.translationsService.GetAsExcelFile(id, translationId.Value) : this.translationsService.GetTemplateAsExcelFile(id);
+            var translationFile = this.translationsService.GetTemplateAsExcelFile(id);
+            return GetTranslation(translationFile);
+        }
 
+        [HttpGet]
+        [Route("{id:Guid}/{translationId:Guid}")]
+        public HttpResponseMessage Get(Guid id, Guid translationId )
+        {
+            var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
+            
+            return GetTranslation(translationFile);
+        }
+
+        private HttpResponseMessage GetTranslation(TranslationFile translationFile)
+        {
             if (translationFile.ContentAsExcelFile == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -44,7 +57,7 @@ namespace WB.UI.Designer.Api
             {
                 FileName = filename
             };
-            
+
             return response;
         }
     }
