@@ -207,10 +207,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        public void CloneTranslation(Guid questionnaireId, string culture, Guid newQuestionnaireId, string newCulture)
+        public void CloneTranslation(Guid questionnaireId, string language, Guid newQuestionnaireId, string newCulture)
         {
             var storedTranslations = this.translations.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == culture)
+                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
                 .ToList());
 
             foreach (var storedTranslation in storedTranslations)
