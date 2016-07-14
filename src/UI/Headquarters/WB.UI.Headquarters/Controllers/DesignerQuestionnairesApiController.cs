@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Controllers
                             TranslationIndex = translationDto.TranslationIndex,
                             Language = translationDto.Language
                         };
-                        this.translations.Store(translationInstace, null);
+                        this.translations.Store(translationInstace, translationInstace);
                     }
                 }
 
