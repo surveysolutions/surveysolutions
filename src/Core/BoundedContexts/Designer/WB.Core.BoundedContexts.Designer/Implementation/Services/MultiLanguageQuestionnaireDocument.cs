@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -10,17 +11,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class MultiLanguageQuestionnaireDocument
     {
-        private ReadOnlyQuestionnaireDocument Questionnaire { get; set; }
-        private ReadOnlyQuestionnaireDocument[] TranslatedQuestionnaires { get; set; }
+        public ReadOnlyQuestionnaireDocument Questionnaire { get; private set; }
+        public ReadOnlyCollection<ReadOnlyQuestionnaireDocument> TranslatedQuestionnaires { get; private set; }
 
         public MultiLanguageQuestionnaireDocument(ReadOnlyQuestionnaireDocument originalQuestionnaireDocument,
             params ReadOnlyQuestionnaireDocument[] translatedQuestionnaireDocuments)
         {
             this.Questionnaire = originalQuestionnaireDocument;
-            this.TranslatedQuestionnaires = translatedQuestionnaireDocuments.ToArray();
+            this.TranslatedQuestionnaires = translatedQuestionnaireDocuments.ToReadOnlyCollection();
         }
-
-
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
         public Dictionary<Guid, LookupTable> LookupTables => this.Questionnaire.LookupTables;
@@ -56,29 +55,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<ReadOnlyQuestionnaireDocument.QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
             => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
-
-        public static implicit operator ReadOnlyQuestionnaireDocument(MultiLanguageQuestionnaireDocument questionnaireDocument)
-        {
-            return questionnaireDocument.Questionnaire;
-        }
-//
-//
-//        private IComposite[] CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(QuestionnaireDocument questionnaire)
-//        {
-//            var result = new List<IComposite>();
-//            var stack = new Stack<IComposite>();
-//            stack.Push(questionnaire);
-//            while (stack.Any())
-//            {
-//                var current = stack.Pop();
-//                for (int i = current.Children.Count - 1; i >= 0; i--)
-//                {
-//                    var child = current.Children[i];
-//                    stack.Push(child);
-//                }
-//                result.Add(current);
-//            }
-//            return result.Skip(1).ToArray();
-//        }
     }
 }
