@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -13,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -39,7 +36,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
-            IOptionsRepository optionsRepository)
+            IOptionsRepository optionsRepository, 
+            IAsyncPlainStorage<TranslationInstance> translations)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -49,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewFactory = interviewFactory;
             this.questionnaireDocuments = questionnaireDocuments;
             this.optionsRepository = optionsRepository;
+            this.translations = translations;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
