@@ -35,6 +35,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -63,6 +64,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
             this.Bind<ITranslationsService>().To<TranslationsService>();
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
