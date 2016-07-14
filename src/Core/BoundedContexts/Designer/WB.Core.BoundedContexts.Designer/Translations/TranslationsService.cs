@@ -39,12 +39,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public ITranslation Get(Guid questionnaireId, Guid? translationId)
+        public ITranslation Get(Guid questionnaireId, Guid translationId)
         {
             var language = translationId.FormatGuid();
-            if (string.IsNullOrEmpty(language))
-                return new QuestionnaireTranslation(new List<TranslationDto>());
-
+            
             var storedTranslations = this.translations.Query(
                 _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList())
                 .Cast<TranslationDto>()
@@ -53,15 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new QuestionnaireTranslation(storedTranslations);
         }
 
-        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? translationId)
+        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
         {
-            var translationFile = new TranslationFile();
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
-            var translation = this.Get(questionnaireId, translationId);
-
-            translationFile.QuestionnaireTitle = questionnaire.Title;
-            translationFile.TranslationName = translationId.HasValue ? questionnaire.Translations.FirstOrDefault(x => x.TranslationId == translationId)?.Name : string.Empty;
-
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
                 excelPackage.Workbook.Worksheets.Add("Translations");
@@ -81,7 +72,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 foreach (var childNode in questionnaire.Children.TreeToEnumerable(x => x.Children))
                 {
-                    AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Title, childNode.PublicKey, childNode.GetTitle(), translation.GetTitle(childNode.PublicKey));
+                    AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Title, childNode.PublicKey,
+                        childNode.GetTitle(), translation.GetTitle(childNode.PublicKey));
 
                     var validatable = childNode as IValidatable;
                     if (validatable != null)
@@ -103,22 +95,25 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     {
                         if (!string.IsNullOrEmpty(question.Instructions))
                         {
-                            AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Instruction, question.PublicKey, question.Instructions, translation.GetInstruction(question.PublicKey));
+                            AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Instruction,
+                                question.PublicKey, question.Instructions,
+                                translation.GetInstruction(question.PublicKey));
                         }
 
                         for (int i = 0; i < question.Answers?.Count; i++)
                         {
                             var answerOptionValue = question.Answers[i].AnswerValue;
-                            var translatedOptionTitle = translation.GetAnswerOption(question.PublicKey, answerOptionValue);
+                            var translatedOptionTitle = translation.GetAnswerOption(question.PublicKey,
+                                answerOptionValue);
                             var originalAnswerTitle = question.Answers[i].AnswerText;
 
                             AppendTranslationRow(cells,
-                              ref currentRowNumber,
-                              TranslationType.OptionTitle,
-                              question.PublicKey,
-                              originalAnswerTitle,
-                              translatedOptionTitle,
-                              answerOptionValue);
+                                ref currentRowNumber,
+                                TranslationType.OptionTitle,
+                                question.PublicKey,
+                                originalAnswerTitle,
+                                translatedOptionTitle,
+                                answerOptionValue);
                         }
                     }
 
@@ -128,24 +123,51 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         for (int i = 0; i < group.FixedRosterTitles?.Length; i++)
                         {
                             var fixedRosterValue = group.FixedRosterTitles[i].Value;
-                            var translatedOptionTitle = translation.GetFixedRosterTitle(group.PublicKey, fixedRosterValue);
+                            var translatedOptionTitle = translation.GetFixedRosterTitle(group.PublicKey,
+                                fixedRosterValue);
                             var originalAnswerTitle = group.FixedRosterTitles[i].Title;
 
                             AppendTranslationRow(cells,
-                              ref currentRowNumber,
-                              TranslationType.FixedRosterTitle,
-                              group.PublicKey,
-                              originalAnswerTitle,
-                              translatedOptionTitle,
-                              fixedRosterValue.ToString(CultureInfo.InvariantCulture));
+                                ref currentRowNumber,
+                                TranslationType.FixedRosterTitle,
+                                group.PublicKey,
+                                originalAnswerTitle,
+                                translatedOptionTitle,
+                                fixedRosterValue.ToString(CultureInfo.InvariantCulture));
                         }
                     }
                 }
 
-                translationFile.ContentAsExcelFile = excelPackage.GetAsByteArray();
-
-                return translationFile;
+                return excelPackage.GetAsByteArray();
             }
+        }
+
+        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var translation = this.Get(questionnaireId, translationId);
+            var translationFile = new TranslationFile
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.TranslationId == translationId)?.Name,
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation)
+            };
+
+            return translationFile;
+        }
+
+        public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var translation = new QuestionnaireTranslation(new List<TranslationDto>());
+            var translationFile = new TranslationFile
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                TranslationName = string.Empty,
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation)
+            };
+
+            return translationFile;
         }
 
         private static void AppendTranslationRow(ExcelRange cells,
