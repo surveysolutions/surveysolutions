@@ -30,8 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             IMvxMessenger messenger = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
-            IAttachmentContentStorage attachmentContentStorage = null,
-            IAsyncPlainStorage<TranslationInstance> translations = null)
+            IAttachmentContentStorage attachmentContentStorage = null)
         {
             
             return new SynchronizationProcess(
@@ -47,8 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewMultimediaViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
                 Mock.Of<AttachmentsCleanupService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                translations ?? new InMemoryAsyncPlainStorage<TranslationInstance>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
     }
 }
