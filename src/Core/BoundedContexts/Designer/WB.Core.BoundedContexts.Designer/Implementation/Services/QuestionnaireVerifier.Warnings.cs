@@ -60,15 +60,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionText.IndexOf("email", StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
-        private bool TooFewVariableLabelsAreDefined(ReadOnlyQuestionnaireDocument questionnaire)
+        private bool TooFewVariableLabelsAreDefined(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var countOfAllQuestions = questionnaire.Questionnaire.Find<IQuestion>().Count();
-            var countOfQuestionsWithoutLabels= questionnaire.Questionnaire.Find<IQuestion>(q=>string.IsNullOrEmpty(q.VariableLabel)).Count();
+            var countOfAllQuestions = questionnaire.Find<IQuestion>().Count();
+            var countOfQuestionsWithoutLabels= questionnaire.Find<IQuestion>(q=>string.IsNullOrEmpty(q.VariableLabel)).Count();
 
             return countOfQuestionsWithoutLabels > (countOfAllQuestions/2);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> EnablementConditionRefersToAFutureQuestion(ReadOnlyQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> EnablementConditionRefersToAFutureQuestion(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var result = new List<QuestionnaireVerificationMessage>();
             var questionnairePlainStructure = questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder().Select(e => e.Id).ToArray();
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ValidationConditionRefersToAFutureQuestion(
-            ReadOnlyQuestionnaireDocument questionnaire)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             var result=new List<QuestionnaireVerificationMessage>();
             var questionnairePlainStructure = questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder().Select(e=>e.Id).ToArray();
@@ -145,17 +145,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return result;
         }
 
-        private bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, ReadOnlyQuestionnaireDocument questionnaire) 
+        private bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, MultiLanguageQuestionnaireDocument questionnaire) 
             => attachmentSize.Size > 5*1024*1024;
 
-        private bool UnusedAttachments(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !questionnaire
                 .Find<IStaticText>(t => t.AttachmentName == attachment.Name)
                 .Any();
         }
 
-        private bool TotalAttachmentsSizeIsMoreThan50Mb(ReadOnlyQuestionnaireDocument questionnaire)
+        private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return this.attachmentService
                 .GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 500;
         }
 
-        private static bool HasNoGpsQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool HasNoGpsQuestions(MultiLanguageQuestionnaireDocument questionnaire)
             => !questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates).Any();
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
@@ -189,17 +189,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return exceeded;
         }
 
-        private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LargeNumberOfRosters(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > 20;
 
-        private static bool TooManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool TooManyQuestions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count() > 1000;
 
-        private static bool FewSectionsManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool FewSectionsManyQuestions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count() > 100
             && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
-        private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count(IsNumericWithoutValidation) > 0.5 * questionnaire.Find<IQuestion>().Count(IsNumeric);
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
@@ -232,15 +232,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsNumeric(IQuestion question)
             => question.QuestionType == QuestionType.Numeric;
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
             return Warning(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
             return (questionnaire) =>
@@ -251,8 +251,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(descriptor => QuestionnaireVerificationMessage.Warning(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
-            Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return (questionnaire) =>

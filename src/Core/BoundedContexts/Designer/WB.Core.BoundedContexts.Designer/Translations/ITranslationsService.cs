@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     public interface ITranslationsService
     {
         ITranslation Get(Guid questionnaireId, string language);
-        TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? languageId);
+        TranslationFile GetAsExcelFile(Guid questionnaireId, Guid? translationId);
         void Store(Guid questionnaireId, string language, byte[] excelRepresentation);
         void CloneTranslation(Guid questionnaireId, string language, Guid newQuestionnaireId, string newCulture);
         void Delete(Guid questionnaireId, string language);
