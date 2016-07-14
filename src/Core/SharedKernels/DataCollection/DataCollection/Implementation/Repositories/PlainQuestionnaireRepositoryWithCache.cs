@@ -21,28 +21,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.repository = repository;
         }
 
-        public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
+        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity)
         {
-            var identity = new QuestionnaireIdentity(id, version);
-
             if (!this.plainQuestionnaireCache.ContainsKey(identity))
             {
-                QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(id, version);
+                QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);
                 if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                     return null;
 
-                var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, version);
+                var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version);
                 plainQuestionnaire.WarmUpPriorityCaches();
 
                 this.plainQuestionnaireCache[identity] = plainQuestionnaire;
             }
 
             return this.plainQuestionnaireCache[identity];
-        }
-
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity)
-        {
-            return this.GetHistoricalQuestionnaire(identity.QuestionnaireId, identity.Version);
         }
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
