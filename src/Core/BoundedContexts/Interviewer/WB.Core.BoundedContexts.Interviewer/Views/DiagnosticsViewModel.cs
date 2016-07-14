@@ -11,7 +11,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class DiagnosticsViewModel : BaseViewModel
     {
-        private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
@@ -25,7 +24,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
         {
-            this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
