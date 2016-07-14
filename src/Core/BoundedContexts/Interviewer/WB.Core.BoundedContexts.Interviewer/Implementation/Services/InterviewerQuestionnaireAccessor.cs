@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
             var oldTranslations = await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
-            this.translations.Remove(oldTranslations);
+            await this.translations.RemoveAsync(oldTranslations).ConfigureAwait(false);
         }
 
         private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
