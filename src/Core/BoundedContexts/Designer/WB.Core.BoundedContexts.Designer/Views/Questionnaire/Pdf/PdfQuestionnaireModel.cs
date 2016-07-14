@@ -208,6 +208,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 return string.Empty;
 
             var question = this.Find<IQuestion>(rosterSizeQuestionId.Value);
+            if (question == null)
+                return string.Empty;
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
