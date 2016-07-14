@@ -32,7 +32,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
 
         private CancellationTokenSource tokenSource;
         private readonly IDesignerApiService designerApiService;
@@ -63,9 +62,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             ILogger logger,
             IAttachmentContentStorage attachmentContentStorage,
             IAsyncRunner asyncRunner,
-            IAsyncPlainStorage<TranslationInstance> translationsStorage) : base(principal, viewModelNavigationService)
+            IAsyncPlainStorage<TranslationInstance> translationsStorage)
+            : base(principal, viewModelNavigationService)
         {
-            this.principal = principal;
             this.designerApiService = designerApiService;
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
