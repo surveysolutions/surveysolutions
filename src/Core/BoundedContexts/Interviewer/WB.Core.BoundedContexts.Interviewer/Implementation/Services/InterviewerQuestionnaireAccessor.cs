@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
-            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
+            var oldTranslations = await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
             this.translations.Remove(oldTranslations);
         }
 
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
             string questionnaireId = questionnaireIdentity.ToString();
-            var oldTranslations = this.translations.Where(x => x.QuestionnaireId == questionnaireId).ToList();
+            var oldTranslations = await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
             this.translations.Remove(oldTranslations);
             
             await this.translations.StoreAsync(translationInstances).ConfigureAwait(false);
