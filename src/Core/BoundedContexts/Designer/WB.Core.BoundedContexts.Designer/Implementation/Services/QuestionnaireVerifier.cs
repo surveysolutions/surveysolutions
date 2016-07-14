@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
+            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire.Questionnaire, Formatting.None);
             var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
             var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
             var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
