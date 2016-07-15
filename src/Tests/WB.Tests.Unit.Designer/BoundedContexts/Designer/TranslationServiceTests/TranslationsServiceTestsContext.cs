@@ -10,11 +10,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
     [Subject(typeof(TranslationsService))]
     internal class TranslationsServiceTestsContext
     {
-        protected const int translationTypeColumn = 1;
-        protected const int translationIndexColumn = 2;
-        protected const int questionnaireEntityIdColumn = 3;
-        protected const int originalTextColumn = 4;
-        protected const int translactionColumn = 5;
+        protected const int translationTypeColumn = 0;
+        protected const int translationIndexColumn = 1;
+        protected const int questionnaireEntityIdColumn = 2;
+        protected const int originalTextColumn = 3;
+        protected const int translactionColumn = 4;
 
         protected static TranslationsService CreateTranslationsService(IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
