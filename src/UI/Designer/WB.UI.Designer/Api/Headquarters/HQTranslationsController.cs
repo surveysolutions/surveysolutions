@@ -40,7 +40,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 }).ToList();
 
             return translationInstances.Count == 0
-                ? this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found questionnaireId: {questionnaireId}, culture: {id}")
+                ? this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found for questionnaire Id: {id}")
                 : this.Request.CreateResponse(HttpStatusCode.OK, translationInstances);
         }
     }
