@@ -105,7 +105,6 @@
                         questionnaireId: questionnaireId,
                         translationId: translation.translationId,
                         name: translation.name
-                        
                     };
 
                     return Upload.upload({
