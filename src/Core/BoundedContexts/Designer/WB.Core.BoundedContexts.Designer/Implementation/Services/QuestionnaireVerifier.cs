@@ -782,8 +782,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var content = this.translationService.GetAsExcelFile(questionnaire.PublicKey, translation.TranslationId);
-            return content?.ContentAsExcelFile == null || content.ContentAsExcelFile.Length == 0;
+            var trans = this.translationService.Get(questionnaire.PublicKey, translation.TranslationId);
+            return trans?.IsEmpty() ?? true;
         }
 
         private bool TranslationsHasDuplicatedNames(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
