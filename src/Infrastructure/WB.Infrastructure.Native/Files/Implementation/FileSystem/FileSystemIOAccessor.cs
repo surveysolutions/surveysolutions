@@ -198,7 +198,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public string[] GetFilesInDirectory(string pathToDirectory)
         {
-            return ZlpIOHelper.GetFiles(pathToDirectory).Select(fileInfo => fileInfo.FullName).ToArray();
+            return ZlpIOHelper.GetFiles(pathToDirectory, "*.*", SearchOption.AllDirectories).Select(fileInfo => fileInfo.FullName).ToArray();
         }
 
         public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
