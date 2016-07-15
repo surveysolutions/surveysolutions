@@ -103,7 +103,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ITopologicalSorter<string> topologicalSorter;
 
         private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
-        private static readonly Regex TranslationNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(
@@ -780,10 +779,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var names = questionnaire.Translations.Select(t => t.Name);
             return names.All(name =>
             {
-                if (string.IsNullOrWhiteSpace(name) || name.Length > 32)
+                if (string.IsNullOrWhiteSpace(name) || name.Length > 30)
                     return false;
 
-                return !TranslationNameRegex.IsMatch(name);
+                return true;
             });
         }
 
@@ -795,14 +794,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool TranslationsHasDuplicatedNames(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var names = questionnaire.Questionnaire.Translations.Select(t => t.Name);
-            HashSet<string> uniqueNames = new HashSet<string>();
-            foreach (var name in names)
-            {
-                if (!uniqueNames.Add(name.Trim()))
-                    return true;
-            }
-            return false;
+            var countNames = questionnaire.Questionnaire.Translations.Count(t => t.Name == translation.Name);
+            return countNames > 1;
         }
 
         private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
