@@ -52,6 +52,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 TranslationType.FixedRosterTitle);
         }
 
+        public bool IsEmpty()
+        {
+            return this.translations.Any() == false;
+        }
+
         private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
         {
             if (this.translations.ContainsKey(questionId))

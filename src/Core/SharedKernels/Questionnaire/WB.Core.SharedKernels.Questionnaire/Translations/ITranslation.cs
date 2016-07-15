@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         string GetAnswerOption(Guid questionId, string answerOptionValue);
         string GetValidationMessage(Guid entityId, int validationOneBasedIndex);
         string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue);
+        bool IsEmpty();
     }
 }
