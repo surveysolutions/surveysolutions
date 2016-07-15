@@ -794,7 +794,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool TranslationsHasDuplicatedNames(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var countNames = questionnaire.Questionnaire.Translations.Count(t => t.Name == translation.Name);
+            var trimedTranslationName = translation.Name.Trim();
+            var countNames = questionnaire.Questionnaire.Translations.Count(t => t.Name.Trim() == trimedTranslationName);
             return countNames > 1;
         }
 

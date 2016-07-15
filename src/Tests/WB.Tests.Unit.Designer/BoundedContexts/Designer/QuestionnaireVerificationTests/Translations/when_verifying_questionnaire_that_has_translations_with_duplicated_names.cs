@@ -19,13 +19,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(translations: new[]
             {
                 Create.Translation(name: "duplicated name"),
-                Create.Translation(name: "duplicated name"),
+                Create.Translation(name: "duplicated name  "),
                 Create.Translation(name: "unique name")
             });
             var translatedQuestionnaire = Create.QuestionnaireDocumentWithOneChapter(translations: new[]
             {
                 Create.Translation(name: "duplicated name"),
-                Create.Translation(name: "duplicated name"),
+                Create.Translation(name: "duplicated name  "),
                 Create.Translation(name: "unique name")
             });
 
