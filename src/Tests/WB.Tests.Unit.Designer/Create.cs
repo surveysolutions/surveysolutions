@@ -636,20 +636,25 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+            return QuestionnaireDocumentWithOneChapter(chapterId, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, attachments, children);
+            return QuestionnaireDocumentWithOneChapter(null, attachments, null, children);
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Translation[] translations = null, params IComposite[] children)
+        {
+            return QuestionnaireDocumentWithOneChapter(null, null, translations, children);
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Attachment[] attachments = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
@@ -662,6 +667,7 @@ namespace WB.Tests.Unit.Designer
             }
 
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
+            result.Translations.AddRange(translations ?? new Translation[0]);
 
             return result;
         }
@@ -1061,9 +1067,9 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
 
-        public static Translation Translation(Guid translationId, string name = null)
+        public static Translation Translation(Guid? translationId = null, string name = null)
         {
-            return new Translation() { Name = name, TranslationId = translationId };
+            return new Translation() { Name = name, TranslationId = translationId ?? Guid.NewGuid() };
         }
     }
 }

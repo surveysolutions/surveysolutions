@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             IMacrosSubstitutionService macrosSubstitutionService = null,
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
-            ITopologicalSorter<string> topologicalSorter = null)
+            ITopologicalSorter<string> topologicalSorter = null,
+            IQuestionnaireTranslator questionnaireTranslator = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 attachmentService ?? attachmentServiceMock,
                 topologicalSorter ?? Create.TopologicalSorter<string>(),
                 Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnaireTranslator>());
+                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
