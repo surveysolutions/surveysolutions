@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
 
+        private const string WorksheetName = "Translations";
+
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
@@ -58,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             IWorksheet worksheet = workbook.Worksheets[0];
             IRange cells = worksheet.Cells;
 
-            worksheet.Name = "Translations";
+            worksheet.Name = WorksheetName;
             
             cells[headerIndex, translationTypeColumn].Value = TranslationTypeColumnName;
             cells[headerIndex, translationIndexColumn].Value = "Index";
@@ -193,7 +195,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             IWorkbookSet workbookSet = SpreadsheetGear.Factory.GetWorkbookSet();
             IWorkbook workbook = workbookSet.Workbooks.OpenFromMemory(excelRepresentation);
-
             
             ValidateWorkbook(workbook);
 
@@ -260,6 +261,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
             }
 
+            var worksheet = workbook.Worksheets[0];
+
+            //for some reason componet doesn't throws exception if loads not excel file
+            //checking first header cell
+            if (worksheet.Cells[headerIndex, translationTypeColumn].Value.ToString() != TranslationTypeColumnName)
+            {
+                throw new InvalidExcelFileException("Worksheet with translation was not found.");
+            }
+
             List<TranslationValidationError> foundErrors = new List<TranslationValidationError>();
             var translationTypesWithIndex = new List<TranslationType>
             {
@@ -267,8 +277,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 TranslationType.OptionTitle,
                 TranslationType.ValidationMessage
             };
-
-            var worksheet = workbook.Worksheets[0];
+            
             for (int rowNumber = headerIndex + 1; ; rowNumber++)
             {
                 if (foundErrors.Count > 10)

@@ -208,6 +208,11 @@ namespace WB.UI.Designer.Api
                 this.logger.Error($"Error on command of type ({commandType}) handling ", e);
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
+            catch (InvalidExcelFileException e)
+            {
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
 
             return this.ProcessCommand(command, commandType);
         }
