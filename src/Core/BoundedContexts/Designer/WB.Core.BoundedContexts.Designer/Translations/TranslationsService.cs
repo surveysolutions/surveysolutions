@@ -208,7 +208,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     for (int rowNumber = 2; ; rowNumber++)
                     {
-                        if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null && worksheet.Cells[rowNumber, translationColumn].Value != null)
+                        var questionnaireEntityIdValue = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value;
+                        var questionnaireValue = worksheet.Cells[rowNumber, translationColumn].Value;
+
+                        if (questionnaireEntityIdValue == null && questionnaireValue == null)
+                            break;
+
+                        if (questionnaireEntityIdValue != null && questionnaireValue != null)
                         {
                             TranslationInstance instance = new TranslationInstance();
 
@@ -220,10 +226,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             instance.Type = (TranslationType) Enum.Parse(typeof(TranslationType), worksheet.Cells[rowNumber, translationTypeColumn].GetValue<string>());
 
                             this.translations.Store(instance, instance);
-                        }
-                        else
-                        {
-                            break;
                         }
                     }
                 }
