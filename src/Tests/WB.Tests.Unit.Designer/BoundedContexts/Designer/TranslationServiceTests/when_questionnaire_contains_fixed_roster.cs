@@ -5,7 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
-using OfficeOpenXml;
+using SpreadsheetGear;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -56,40 +56,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         Because of = () =>
         {
             excelFile = service.GetAsExcelFile(questionnaireId, cultureId);
-            var memory = new MemoryStream(excelFile.ContentAsExcelFile);
-            package = new ExcelPackage(memory);
-            cells = package.Workbook.Worksheets[1].Cells;
+            workbook = SpreadsheetGear.Factory.GetWorkbookSet().Workbooks.OpenFromMemory(excelFile.ContentAsExcelFile);
+            cells = workbook.Worksheets[0].Cells;
         };
 
         It should_output_roster_title_translation = () =>
         {
-            var questionTitleRow = 3;
-            ((TranslationType)cells[questionTitleRow, translationTypeColumn].GetValue<int>()).ShouldEqual(TranslationType.Title);
-            cells[questionTitleRow, translationIndexColumn].GetValue<string>().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].GetValue<string>().ShouldEqual(rosterId.ToString());
-            cells[questionTitleRow, originalTextColumn].GetValue<string>().ShouldEqual("non translated title");
-            cells[questionTitleRow, translactionColumn].GetValue<string>().ShouldBeNull();
+            var questionTitleRow = 2;
+            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Title);
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.ToString());
+            cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated title");
+            cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
 
         It should_output_roster_fixed_option_title_translation = () =>
         {
-            var questionTitleRow = 4;
-            ((TranslationType)cells[questionTitleRow, translationTypeColumn].GetValue<int>()).ShouldEqual(TranslationType.FixedRosterTitle);
-            cells[questionTitleRow, translationIndexColumn].GetValue<string>().ShouldEqual("42");
-            cells[questionTitleRow, questionnaireEntityIdColumn].GetValue<string>().ShouldEqual(rosterId.ToString());
-            cells[questionTitleRow, originalTextColumn].GetValue<string>().ShouldEqual("invariant option title");
-            cells[questionTitleRow, translactionColumn].GetValue<string>().ShouldEqual("fixed roster item 1");
+            var questionTitleRow = 3;
+            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.FixedRosterTitle);
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("42");
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.ToString());
+            cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("invariant option title");
+            cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldEqual("fixed roster item 1");
         };
 
-
-        Cleanup things = () => package?.Dispose();
 
         static Guid rosterId;
         static TranslationsService service;
         static Guid questionnaireId;
         static Guid cultureId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static TranslationFile excelFile;
-        static ExcelPackage package;
-        static ExcelRange cells;
+        static IWorkbook workbook;
+        static IRange cells;
     }
 }
