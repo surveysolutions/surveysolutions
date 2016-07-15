@@ -401,6 +401,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_integer_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translation_with_empty_content.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translation_with_invalid_name.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translations_with_duplicated_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_negative_integer_title_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_non_integer_title_value.cs" />

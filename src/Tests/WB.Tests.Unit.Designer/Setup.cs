@@ -8,13 +8,16 @@ using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer
@@ -30,6 +33,7 @@ namespace WB.Tests.Unit.Designer
             
             return attachmentServiceMock.Object;
         }
+
 
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
@@ -130,6 +134,15 @@ namespace WB.Tests.Unit.Designer
         {
             return Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>(_ => 
                 _.GetById(It.IsAny<string>()) == Create.QuestionnaireStateTacker());
+        }
+
+        public static IQuestionnaireTranslator QuestionnaireTranslator(QuestionnaireDocument questionnaireDocument, ITranslation translation, QuestionnaireDocument translatedQuestionnaireDocument)
+        {
+            var serviceMock = new Mock<IQuestionnaireTranslator>();
+            serviceMock.Setup(x => x.Translate(questionnaireDocument, translation))
+                 .Returns(translatedQuestionnaireDocument);
+
+            return serviceMock.Object;
         }
     }
 }
