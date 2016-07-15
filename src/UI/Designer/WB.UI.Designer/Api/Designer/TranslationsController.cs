@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Api
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = filename
+                FileNameStar = filename
             };
 
             return response;
