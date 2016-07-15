@@ -777,13 +777,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool TranslationNameIsInvalid(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var names = questionnaire.Translations.Select(t => t.Name);
-            return names.All(name =>
-            {
-                if (string.IsNullOrWhiteSpace(name) || name.Length > 30)
-                    return false;
-
-                return true;
-            });
+            return names.All(name =>string.IsNullOrWhiteSpace(name) || name.Length > 30);
         }
 
         private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
