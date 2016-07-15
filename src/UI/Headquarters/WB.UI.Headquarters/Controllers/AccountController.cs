@@ -74,8 +74,16 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
             {
-                this.authentication.SignIn(model.UserName, false);
-                return this.RedirectToLocal(returnUrl);
+                var isInterviewer = Roles.GetRolesForUser(model.UserName)
+                    .Contains(UserRoles.Operator.ToString(), StringComparer.OrdinalIgnoreCase);
+
+                if (isInterviewer)
+                    this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
+                else
+                {
+                    this.authentication.SignIn(model.UserName, false);
+                    return this.RedirectToLocal(returnUrl);
+                }
             }
             else this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
 
