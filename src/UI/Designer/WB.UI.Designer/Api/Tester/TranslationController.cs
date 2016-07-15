@@ -29,7 +29,14 @@ namespace WB.UI.Designer.Api.Tester
             if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
-            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id).ToList()).Cast<TranslationDto>().ToArray();
+            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id).ToList()).Select(x => new TranslationDto()
+            {
+                Value = x.Value,
+                Type = x.Type,
+                Language = x.Language,
+                QuestionnaireEntityId = x.QuestionnaireEntityId,
+                TranslationIndex = x.TranslationIndex
+            }).ToArray();
         }
     }
 }
