@@ -419,6 +419,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 await this.translationsStorage.StoreAsync(new TranslationInstance
                 {
+                    Id = Guid.NewGuid().FormatGuid(),
                     QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
                     Type = translation.Type,
                     TranslationIndex = translation.TranslationIndex,
