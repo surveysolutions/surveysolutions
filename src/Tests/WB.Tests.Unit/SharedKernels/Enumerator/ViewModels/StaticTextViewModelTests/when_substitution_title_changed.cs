@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             }));
 
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
+            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock);
 
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);
