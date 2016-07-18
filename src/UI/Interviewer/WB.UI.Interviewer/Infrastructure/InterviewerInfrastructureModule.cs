@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
@@ -40,6 +41,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 

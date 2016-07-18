@@ -265,6 +265,7 @@
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\DummyTranslationStorage.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
