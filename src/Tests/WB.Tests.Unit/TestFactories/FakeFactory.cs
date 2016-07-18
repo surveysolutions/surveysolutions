@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.TestFactories
             questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
 
             return Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         public IRosterTitleSubstitutionService RosterTitleSubstitutionService()

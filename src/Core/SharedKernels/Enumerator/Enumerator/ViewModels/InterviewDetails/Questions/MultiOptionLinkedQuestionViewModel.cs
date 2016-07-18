@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = this.userIdentity.CurrentUserIdentity.UserId;
             this.interview = this.interviewRepository.Get(interviewId);
             this.interviewId = this.interview.Id;
-            this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity));
+            this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
         }
         protected abstract void InitFromModel(IQuestionnaire questionnaire);

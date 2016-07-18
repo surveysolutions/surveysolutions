@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
             if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");

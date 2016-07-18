@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IEnumerable<string> GetValidationMessages(IStatefulInterview interview)
         {
             IReadOnlyList<FailedValidationCondition> failedConditions = interview.GetFailedValidationConditions(this.questionIdentity);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             var validationMessages = failedConditions.Select(x =>
             {
                 var validationMessage = questionnaire.GetValidationMessage(this.questionIdentity.Id, x.FailedConditionIndex);

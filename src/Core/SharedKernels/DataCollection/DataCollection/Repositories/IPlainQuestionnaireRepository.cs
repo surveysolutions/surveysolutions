@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     /// </summary>
     public interface IPlainQuestionnaireRepository
     {
-        IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity);
+        IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language);
 
         void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument);
 
