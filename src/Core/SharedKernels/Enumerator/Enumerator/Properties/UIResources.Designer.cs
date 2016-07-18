@@ -613,6 +613,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, enter text.
+        /// </summary>
+        public static string Interview_Question_Text_Empty {
+            get {
+                return ResourceManager.GetString("Interview_Question_Text_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, fill in all the required values.
         /// </summary>
         public static string Interview_Question_Text_MaskError {

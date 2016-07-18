@@ -107,13 +107,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public bool IsMaskedQuestionAnswered { get; set; }
-
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerTextQuestionCommand)); }
-        }
+        
+        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
 
         private IMvxCommand answerRemoveCommand;
 
@@ -146,11 +141,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
-        private async void SendAnswerTextQuestionCommand(string text)
+        private async Task SaveAnswer(string text)
         {
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(text))
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
                 return;
             }
 
