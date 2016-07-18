@@ -415,6 +415,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: questionnaireId, token: this.tokenSource.Token);
 
+            await this.translationsStorage.RemoveAllAsync();
+
             foreach (var translation in translations)
             {
                 await this.translationsStorage.StoreAsync(new TranslationInstance
