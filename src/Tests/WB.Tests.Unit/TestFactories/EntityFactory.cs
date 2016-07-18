@@ -68,6 +68,9 @@ namespace WB.Tests.Unit.TestFactories
         public Attachment Attachment(string attachmentHash)
             => new Attachment { ContentId = attachmentHash };
 
+        public Translation Translation(Guid translationId, string translationName)
+            => new Translation { TranslationId = translationId, Name = translationName};
+
         public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
             => new Core.SharedKernels.Enumerator.Views.AttachmentContent
             {
@@ -704,6 +707,16 @@ namespace WB.Tests.Unit.TestFactories
                 Attachments = attachments.ToList()
             };
 
+        public QuestionnaireDocument QuestionnaireDocumentWithTranslations(Guid? chapterId = null, params Translation[] translations)
+            => new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
+                },
+                Translations = translations.ToList()
+            };
+
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => this.QuestionnaireDocumentWithOneChapter(null, children);
 
@@ -1043,6 +1056,41 @@ namespace WB.Tests.Unit.TestFactories
                 Value = value,
                 Language = language,
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
+
+        public WB.Core.SharedKernels.Enumerator.Views.TranslationInstance TranslationInstance_Enumetaror(string value = null,
+            string language = null,
+            string questionnaireId = null,
+            Guid? entityId = null,
+            string translationIndex = null,
+            TranslationType? type = null)
+        {
+            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            {
+                Value = value,
+                Language = language,
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
+
+        public TranslationDto TranslationDto(string value = null,
+            string language = null,
+            string questionnaireId = null,
+            Guid? entityId = null,
+            string translationIndex = null,
+            TranslationType? type = null)
+        {
+            return new TranslationDto
+            {
+                Value = value,
+                Language = language,
                 QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
                 TranslationIndex = translationIndex,
                 Type = type ?? TranslationType.Unknown
