@@ -438,6 +438,7 @@
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_questionnaire_contains_fixed_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translations_from_excel_file_with_missing_same_translations.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translations_from_excel_file.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable.cs" />
@@ -1263,6 +1264,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
