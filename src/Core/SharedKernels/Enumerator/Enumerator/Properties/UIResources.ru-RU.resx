@@ -392,7 +392,7 @@
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Показать инструкцию</value>
   </data>
-    <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Сохранить текущее время</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
@@ -409,5 +409,8 @@
   </data>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Вибрировать когда дан не валидный ответ</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>Пожалуйста, введите тескт</value>
   </data>
 </root>
