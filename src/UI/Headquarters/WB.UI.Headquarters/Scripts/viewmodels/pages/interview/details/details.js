@@ -7,7 +7,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.filteredComboboxes = filteredComboboxes.map(function(combobox) {
         combobox.options = combobox.options.map(function(option) {
-            option.label = decodeURIComponent(option.label);
+            option.label = option.label;
             return option;
         });
         return combobox;
