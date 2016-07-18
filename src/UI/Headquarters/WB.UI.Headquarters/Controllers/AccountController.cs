@@ -74,8 +74,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
             {
-                var isInterviewer = Roles.GetRolesForUser(model.UserName)
-                    .Contains(UserRoles.Operator.ToString(), StringComparer.OrdinalIgnoreCase);
+                var isInterviewer = Roles.GetRolesForUser(model.UserName).Contains(UserRoles.Operator.ToString());
 
                 if (isInterviewer)
                     this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
