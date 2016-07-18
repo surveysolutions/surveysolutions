@@ -52,6 +52,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -333,6 +334,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
+            this.Bind<ITranslationStorage>().To<DummyTranslationStorage>();
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>()
