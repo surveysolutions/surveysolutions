@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public string Substitute(string title, Identity entityIdentity, string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             Guid nearestRosterId = questionnaire.GetRostersFromTopToSpecifiedEntity(entityIdentity.Id).Last();
 

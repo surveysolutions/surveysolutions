@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private SubstitutionVariables GetSubstitutionVariables()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var variableNames = this.substitutionService.GetAllSubstitutionVariableNames(this.textWithSubstitutions);
 
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string ReplaceSubstitutions()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var textWithReplacedSubstitutions = this.textWithSubstitutions;
 

@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var tasks = questionnaire
                 .GetPrefilledQuestions()
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             if (!questionnaire.HasGroup(groupIdentity.Id))
                 throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} was not found. Interview id: {interviewId}.");

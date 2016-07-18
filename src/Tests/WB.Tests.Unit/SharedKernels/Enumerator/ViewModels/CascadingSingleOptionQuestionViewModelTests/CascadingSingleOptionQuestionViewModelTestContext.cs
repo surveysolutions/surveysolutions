@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 && _.GetOptionsForQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>()) == /*(optionsRepository == null) ? Options :*/ Options//optionsRepository.GetQuestionOptions()
             );
 
-            return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+            return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
 

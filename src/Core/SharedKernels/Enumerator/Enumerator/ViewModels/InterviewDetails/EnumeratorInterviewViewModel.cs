@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                 if (questionnaire == null)
                     throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 

@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.repository = repository;
         }
 
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity)
+        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
             if (!this.plainQuestionnaireCache.ContainsKey(identity))
             {

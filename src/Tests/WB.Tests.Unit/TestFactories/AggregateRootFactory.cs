@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.TestFactories
 
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
