@@ -355,7 +355,11 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         });
     };
 
-    self.switchTranslation = function (translation) {
+    self.switchTranslation = function () {
+        var translation = $('#translationSelector').val();
+        if (translation === '')
+            translation = null;
+
         var command = datacontext.getCommand(config.commands.switchTranslation, { language: translation });
 
         self.SendCommand(command, function () {
