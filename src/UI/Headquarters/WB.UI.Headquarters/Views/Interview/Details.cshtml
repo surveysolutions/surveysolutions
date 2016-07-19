@@ -97,18 +97,17 @@
                 else
                 {
                     <div class="input-group">
-                        <select id="translationSelector" class="form-control">
-                            <option value='@Pages.InterviewDetails_DefaultTranslation'>@Pages.InterviewDetails_DefaultTranslation</option>
+                        <select id="translationSelector" class="form-control" data-bind="event: { change: switchTranslation }">
+                            <option value='' @(null == Model.InterviewDetails.CurrentTranslation ? "selected='selected'" : "")>@Pages.InterviewDetails_DefaultTranslation</option>
                             @foreach (var item in Model.Translations)
                             {
-                                <option value='@item'>@item</option>
+                                <option value='@item' @(item == Model.InterviewDetails.CurrentTranslation ? "selected='selected'" : "")>@item</option>
                             }
-
                         </select>
-                        </div>
-                        }
-
                     </div>
+                }
+
+            </div>
 
         </div>
         <div class="panel panel-default">

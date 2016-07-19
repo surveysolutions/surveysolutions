@@ -334,7 +334,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
-            this.Bind<ITranslationStorage>().To<DummyTranslationStorage>();
+            this.Bind<ITranslationStorage>().To<TranslationStorage>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
 
