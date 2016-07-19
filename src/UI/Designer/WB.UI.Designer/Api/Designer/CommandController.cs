@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Api
@@ -192,11 +193,15 @@ namespace WB.UI.Designer.Api
             try
             {
                 command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
-                if (model.File != null)
+                if (model.File != null && model.File.Buffer?.Length > 0)
                 {
                     this.translationsService.Store(command.QuestionnaireId,
                         command.TranslationId,
                         model.File.Buffer);
+                }
+                else
+                {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, ErrorMessages.EmptyTranslationFile);
                 }
             }
             catch (FormatException e)
