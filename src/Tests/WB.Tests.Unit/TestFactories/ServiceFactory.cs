@@ -50,6 +50,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.SharedKernels.DataCollection;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -118,7 +119,9 @@ namespace WB.Tests.Unit.TestFactories
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
-                attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+                attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
+                Mock.Of<ITranslationStorage>(),
+                Mock.Of<IQuestionnaireTranslator>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
