@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
@@ -9,8 +10,10 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -28,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly ITranslationStorage translationStorage;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IPlainStorageAccessor<UserDocument> userStore,
@@ -37,7 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
-            IAttachmentContentService attachmentContentService)
+            IAttachmentContentService attachmentContentService,
+            ITranslationStorage translationStorage,
+            IQuestionnaireTranslator questionnaireTranslator)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -48,11 +55,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.eventSourcedRepository = eventSourcedRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
+            this.translationStorage = translationStorage;
+            this.questionnaireTranslator = questionnaireTranslator;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId,
-            Guid? currentGroupId, 
-            decimal[] currentGroupRosterVector, 
+            Guid? currentGroupId,
+            decimal[] currentGroupRosterVector,
             InterviewDetailsFilter? filter)
         {
             var interview = this.interviewStore.GetById(interviewId);
@@ -64,15 +73,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
+                interview.QuestionnaireVersion);
 
             if (questionnaire == null)
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
-            
-            var attachmentIdAndTypes = this.attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
 
-            InterviewDetailsView interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
+            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.Name == interview.CurrentTranslation);
+            if (currentTranslation != null)
+            {
+                var questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
+                var translation = this.translationStorage.Get(questionnaireIdentity, currentTranslation.TranslationId.FormatGuid());
+
+                if (translation == null)
+                    throw new ArgumentException($"No translation found for language '{interview.CurrentTranslation}' and questionnaire '{questionnaireIdentity}'.");
+
+                questionnaire = this.questionnaireTranslator.Translate(questionnaire, translation);
+            }
+
+            var attachmentIdAndTypes =
+                this.attachmentContentService.GetAttachmentInfosByContentIds(
+                    questionnaire.Attachments.Select(x => x.ContentId).ToList());
+
+            InterviewDetailsView interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(),
+                this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
             var interviewEntityViews = interviewDetailsView.Groups
                 .SelectMany(group => group.Entities)
@@ -113,10 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 else
                 {
                     interviewGroupView.Entities = interviewGroupView.Entities
-                        .Where(question =>
-                        {
-                            return IsEntityInFilter(filter, question);
-                        })
+                        .Where(question => { return IsEntityInFilter(filter, question); })
                         .ToList();
 
                     if (interviewGroupView.Entities.Any())
@@ -132,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 InterviewDetails = interviewDetailsView,
                 FilteredGroups = selectedGroups,
                 Statistic = detailsStatisticView,
-                History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
+                History = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = interviewId}),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
                 Translations = questionnaire.Translations.Select(translation => translation.Name).ToReadOnlyCollection()
             };
@@ -165,7 +187,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (interview != null && !interview.IsDeleted)
             {
-                var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+                var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(
+                    interview.QuestionnaireId, interview.QuestionnaireVersion);
 
                 return questionnaire.Children[0].PublicKey;
             }
