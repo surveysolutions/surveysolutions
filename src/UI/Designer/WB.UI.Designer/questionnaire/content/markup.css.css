@@ -7894,7 +7894,7 @@ textarea#edit-group-description {
   left: 75%;
 }
 .left-side-panel.attachments .foldback-region {
-  left: 90%;
+  left: 75%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 .left-side-panel .foldback-button {
@@ -8058,7 +8058,7 @@ textarea#edit-group-description {
   position: static;
 }
 .attachments-panel {
-  width: 90%;
+  width: 75%;
   min-width: 538px;
 }
 .attachments-panel .attachments {
@@ -8091,6 +8091,7 @@ textarea#edit-group-description {
   background: #fff;
   margin-bottom: 7px;
   padding: 12px 10px 5px 10px;
+  height: 80px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;

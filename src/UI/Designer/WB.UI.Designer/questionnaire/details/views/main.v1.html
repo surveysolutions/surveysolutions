@@ -358,10 +358,18 @@
                         </div>
                     </form>
                     <div class="button-holder">
-                        <input type="button" value="Upload new translation" class="btn lighter-hover pull-left" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-max-size="10MB" accept=".xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
-
-                        <a ng-href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" class="btn btn-default pull-right" target="_blank">Get Template</a>
-
+                        <p>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Get Template</a>
+                        </p>
+                        <p>
+                            <input type="button" value="Upload new translation"
+                                   class="btn lighter-hover" ngf-select
+                                   ngf-change="createAndUploadFile($file);$event.stopPropagation()"
+                                   ngf-max-size="10MB"
+                                   accept=".xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                   ngf-select-disabled="isReadOnlyForUser"
+                                   ngf-drop-disabled="isReadOnlyForUser" />
+                        </p>
                     </div>
                 </perfect-scrollbar>
             </div>
