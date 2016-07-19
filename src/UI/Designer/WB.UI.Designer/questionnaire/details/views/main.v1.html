@@ -216,88 +216,90 @@
         </div>
 
     </div>
-<div class="left-side-panel attachments" ng-class="{unfolded: isFolded }" ng-controller="AttachmentsCtrl">
-    <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
-    <div class="left-side-panel-content attachments-panel">
-        <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
-            <div class="foldback-button"></div>
-        </div>
-        <div class="attachments">
-            <perfect-scrollbar class="scroller">
-                <div class="panel-header clearfix">
-                    <div class="title pull-left">
-                        <h3 ng-pluralize
-                            count="attachments.length"
-                            when="{
+    <div class="left-side-panel attachments" ng-class="{unfolded: isFolded }" ng-controller="AttachmentsCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content attachments-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="attachments">
+                <perfect-scrollbar class="scroller">
+                    <div class="panel-header clearfix">
+                        <div class="title pull-left">
+                            <h3 ng-pluralize
+                                count="attachments.length"
+                                when="{
                             '0': 'No Files Attachment to questionnaire',
                             '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
                             'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
-                        <p class="estimated-download-time">
-                            Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)
-                        </p>
+                            <p class="estimated-download-time">
+                                Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)
+                            </p>
 
+                        </div>
+                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
+                            Upload new
+                        </button>
                     </div>
-                    <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
-                        Upload new
-                    </button>
-                </div>
-                <div class="empty-list" ng-show="attachments.length == 0">
-                    <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
-                    <p>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
-                        For supported file types, formats, and dimensions <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank">click here</a>
-                    </p>
-                    <p>To refer to an attachment in the questionnaire add a static text element and
-                        specify the attachment <span class="variable-name">name</span> in its attachment property.
-                    </p>
-                </div>
-                <form role="form" name="attachmentsForm" novalidate>
-                    <div class="attachment-list">
-                        <ng-form name="attachment.form" ng-repeat="attachment in attachments">
-                            <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
-                                <div class="attachment">
-                                    <div class="attachment-preview">
-                                        <div class="attachment-preview-cover clearfix">
-                                            <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
-                                        </div>
-                                    </div>
-                                    <div class="attachment-content">
-                                        <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
-                                               required=""
-                                               placeholder="attachment name"
-                                               maxlength="32"
-                                               spellcheck="false"
-                                               ng-model="attachment.name"
-                                               name="name"
-                                               class="form-control table-name"
-                                               type="text"/>
-                                        <div class="divider"></div>
-                                        <div class="drop-box">
-                                            Drop File here
-                                        </div>
-                                        <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
-                                        <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
-                                            <div ng-show="attachment.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()">Save</button>
-                                                <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
+                    <div class="empty-list" ng-show="attachments.length == 0">
+                        <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
+                        <p>
+                            To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
+                            For supported file types, formats, and dimensions <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank">click here</a>
+                        </p>
+                        <p>
+                            To refer to an attachment in the questionnaire add a static text element and
+                            specify the attachment <span class="variable-name">name</span> in its attachment property.
+                        </p>
+                    </div>
+                    <form role="form" name="attachmentsForm" novalidate>
+                        <div class="attachment-list">
+                            <ng-form name="attachment.form" ng-repeat="attachment in attachments">
+                                <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                    <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <div class="attachment">
+                                        <div class="attachment-preview">
+                                            <div class="attachment-preview-cover clearfix">
+                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
                                             </div>
-                                            <div class="permanent-actions pull-right clearfix">
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
-                                                    <span>Update</span>
-                                                </button>
-                                                <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
+                                        </div>
+                                        <div class="attachment-content">
+                                            <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
+                                                   required=""
+                                                   placeholder="attachment name"
+                                                   maxlength="32"
+                                                   spellcheck="false"
+                                                   ng-model="attachment.name"
+                                                   name="name"
+                                                   class="form-control table-name"
+                                                   type="text" />
+                                            <div class="divider"></div>
+                                            <div class="drop-box">
+                                                Drop File here
+                                            </div>
+                                            <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
+                                            <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
+                                                <div ng-show="attachment.form.$dirty" class="pull-left">
+                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()">Save</button>
+                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
+                                                </div>
+                                                <div class="permanent-actions pull-right clearfix">
+                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
+                                                        <span>Update</span>
+                                                    </button>
+                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </ng-form>
-                    </div>
-                </form>
-            </perfect-scrollbar>
+                            </ng-form>
+                        </div>
+                    </form>
+                </perfect-scrollbar>
+            </div>
         </div>
     </div>
-</div>
     <div class="left-side-panel attachments translations" ng-class="{unfolded: isFolded }" ng-controller="TranslationsCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="left-side-panel-content attachments-panel translations-panel">
@@ -306,19 +308,18 @@
             </div>
             <div class="attachments translations">
                 <perfect-scrollbar class="scroller">
-                    
+                    <div class="panel-header clearfix">
+                        <h3>
+                            <span ng-show="translations.length!=0">{{translations.length}}</span> Translation<span ng-show="translations.length!=1">s</span>:
+                        </h3>
+                    </div>
+                    <div class="empty-list" ng-show="translations.length == 0">
+                        <p>Use this tab to manage questionnaire translations.</p>
+                        <p>You may download and update translations to different languages.</p>
+                        <p>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</p>
+                    </div>
                     <form role="form" name="translationsForm" novalidate>
                         <div class="attachment-list">
-                            <div class="panel-header clearfix">
-                                <h3>
-                                    Translations:
-                                </h3>
-                            </div>
-                            <div class="empty-list" ng-show="translations.length == 0">
-                                <p>Use this tab to manage questionnaire translations.</p>
-                                <p>You may download and update translations to different languages.</p>
-                                <p>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</p>
-                            </div>
                             <ng-form name="translation.form" ng-repeat="translation in translations">
                                 <div class="attachments-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}" ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteTranslation($index)" class="btn delete-btn" tabindex="-1"></a>
@@ -333,7 +334,7 @@
                                                    ng-model="translation.name"
                                                    name="name"
                                                    class="form-control table-name"
-                                                   type="text"/>
+                                                   type="text" />
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
@@ -352,6 +353,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </ng-form>
                         </div>
                     </form>
@@ -366,7 +368,7 @@
         </div>
     </div>
 
-<div id="left-menu" ng-controller="LeftMenuCtrl">
+    <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" title="Chapters"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" title="Translations"></a></li>
@@ -380,9 +382,10 @@
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
-    <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-    <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.content.details.width}}&nbsp;&times;&nbsp;{{attachment.content.details.height}}px</span>,&nbsp; format:&nbsp;{{attachment.content.type}},
-    <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.content.size)}}</span></p>
+        <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.content.details.width}}&nbsp;&times;&nbsp;{{attachment.content.details.height}}px</span>,&nbsp; format:&nbsp;{{attachment.content.type}},
+        <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.content.size)}}</span>
+    </p>
     <p>uploaded: {{attachment.meta.lastUpdated | amDateFormat:'MMMM DD, YYYY [at] h:mm a'}}</p>
 </script>
 
