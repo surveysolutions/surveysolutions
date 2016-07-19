@@ -6590,6 +6590,9 @@ body {
     overflow-x: auto;
   }
 }
+::-ms-clear {
+  display: none;
+}
 /**
  * WorldBank Designer
  * file: wb-vars.css.less
