@@ -147,15 +147,9 @@ input[type="radio"] {
   box-sizing: border-box;
   padding: 0;
 }
-input[type=number] {
-    -moz-appearance:textfield;
-}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
+  height: auto;
 }
 input[type="search"] {
   -webkit-appearance: textfield;
@@ -6920,6 +6914,16 @@ input.wb-radio:checked:disabled + label > span {
 textarea {
   resize: vertical;
 }
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
 .popover {
   max-width: inherit;
 }
@@ -7571,11 +7575,10 @@ input#edit-group-title {
   color: #3da802;
   font-size: 14px;
 }
-
 .question-editor .singleOption .table-holder .table-row .column-2 input.has-error,
-.question-editor .multyOption .table-holder .table-row .column-2 input.has-error{
-    border-color: #a94442;
-    border-width: 2px;
+.question-editor .multyOption .table-holder .table-row .column-2 input.has-error {
+  border-color: #a94442;
+  border-width: 2px;
 }
 .question-editor .singleOption .table-holder .table-row .column-3 input,
 .question-editor .multyOption .table-holder .table-row .column-3 input {
@@ -7794,19 +7797,19 @@ textarea#edit-group-description {
   text-decoration: none;
 }
 #left-menu ul li a.left-menu-chapters {
-  background: url(i/designer-left-icons-2.png) 0 0 no-repeat;
+  background: url('i/designer-left-icons-2-3.png') 0 0 no-repeat;
 }
 #left-menu ul li a.left-menu-macroses {
-  background: url(i/designer-left-icons-2.png) 0 -200px no-repeat;
+  background: url('i/designer-left-icons-2-3.png') 0 -200px no-repeat;
 }
 #left-menu ul li a.left-menu-lookupTables {
-  background: url(i/designer-left-icons-2.png) 0 -250px no-repeat;
+  background: url('i/designer-left-icons-2-3.png') 0 -250px no-repeat;
 }
 #left-menu ul li a.left-menu-attachments {
-  background: url(i/designer-left-icons-2.png) 0 -150px no-repeat;
+  background: url('i/designer-left-icons-2-3.png') 0 -150px no-repeat;
 }
 #left-menu ul li a.left-menu-translations {
-  background: url(i/designer-left-icons-2.png) 0 -300px no-repeat;
+  background: url('i/designer-left-icons-2-3.png') 0 -50px no-repeat;
 }
 #left-menu ul li a:hover {
   background-color: #dbdfe2;

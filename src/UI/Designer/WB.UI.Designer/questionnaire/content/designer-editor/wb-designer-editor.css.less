@@ -58,6 +58,8 @@
 @selected-panel-border-color: #dbdfe2;
 @selected-panel-grey-color: #7e898f;
 @leftpanel-accent-color: #e004c9;
+@leftpanel-icons-sprite: '../i/designer-left-icons-2-3.png';
+@leftpanel-icon-height: 50px;
 
 #left-menu {
     position: absolute;
@@ -87,23 +89,23 @@
 
 
             &.left-menu-chapters {
-                background: url(../i/designer-left-icons-2.png) 0 0 no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 0 no-repeat;
             }
 
             &.left-menu-macroses {
-                background: url(../i/designer-left-icons-2.png) 0 -200px no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*4 no-repeat;
             }
 
             &.left-menu-lookupTables {
-                background: url(../i/designer-left-icons-2.png) 0 -250px no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*5 no-repeat;
             }
 
             &.left-menu-attachments {
-                background: url(../i/designer-left-icons-2.png) 0 -150px no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*3 no-repeat;
             }
 
             &.left-menu-translations {
-                background: url(../i/designer-left-icons-2.png) 0 -300px no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*1 no-repeat;
             }
 
             &:hover {
