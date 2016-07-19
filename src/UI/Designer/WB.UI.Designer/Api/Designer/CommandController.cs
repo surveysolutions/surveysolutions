@@ -199,10 +199,6 @@ namespace WB.UI.Designer.Api
                         command.TranslationId,
                         model.File.Buffer);
                 }
-                else
-                {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, ErrorMessages.EmptyTranslationFile);
-                }
             }
             catch (FormatException e)
             {
