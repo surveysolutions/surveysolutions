@@ -198,4 +198,7 @@
   <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
     <value>A message was sent to your email account. Please follow instructions in the email to restore password.</value>
   </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>Selected translation file is empty</value>
+  </data>
 </root>

@@ -79,6 +79,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected translation file is empty.
+        /// </summary>
+        internal static string EmptyTranslationFile {
+            get {
+                return ResourceManager.GetString("EmptyTranslationFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
         /// </summary>
         internal static string Maintenance {
