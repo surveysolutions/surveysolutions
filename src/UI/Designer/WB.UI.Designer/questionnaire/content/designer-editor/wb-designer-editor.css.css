@@ -175,7 +175,7 @@
   left: 75%;
 }
 .left-side-panel.attachments .foldback-region {
-  left: 90%;
+  left: 75%;
   background: url(../i/left-panel-shadow-small.png) repeat-y;
 }
 .left-side-panel .foldback-button {
@@ -339,7 +339,7 @@
   position: static;
 }
 .attachments-panel {
-  width: 90%;
+  width: 75%;
   min-width: 538px;
 }
 .attachments-panel .attachments {
@@ -372,6 +372,7 @@
   background: #fff;
   margin-bottom: 7px;
   padding: 12px 10px 5px 10px;
+  height: 80px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
