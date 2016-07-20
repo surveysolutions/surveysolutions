@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
@@ -42,6 +43,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl
                 x.QuestionnaireId.Version == questionnaireId.Version).ToList());
 
             this.translations.Remove(translationInstances);
+        }
+
+        public void Store(IEnumerable<TranslationInstance> translationInstances)
+        {
+            var enumerable = translationInstances.Select(x => Tuple.Create(x, (object)x));
+            this.translations.Store(enumerable);
         }
     }
 }
