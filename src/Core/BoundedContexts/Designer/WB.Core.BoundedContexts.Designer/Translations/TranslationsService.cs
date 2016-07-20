@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
         private const string WorksheetName = "Translations";
+        private const string workSheetPassword = "Qwerty1234";
 
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
@@ -105,8 +106,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 throw new InvalidExcelFileException(ex.Message);
             }
-
+            
             var worksheet = workbook.Worksheets[0];
+            worksheet.Protect(workSheetPassword);
 
             if (worksheet.Name != WorksheetName)
                 throw new InvalidExcelFileException("Worksheet with translations not found");
@@ -235,6 +237,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             cells["D1"].Value = "Original text";
             cells["E1"].Value = "Translation";
             cells["A1:E1"].Font.Bold = true;
+            cells["A1:D1"].Interior.Color = Color.FromArgb(240, 240, 240);
+            cells["A1:D1"].Borders.Color = Color.FromArgb(225, 225, 225);
+            cells["A1"].AddComment("Read only field");
+            cells["B1"].AddComment("Read only field");
+            cells["C1"].AddComment("Read only field");
+            cells["D1"].AddComment("Read only field");
 
             int currentRowNumber = 1;
 
@@ -251,13 +259,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 cells[$"D{currentRowNumber}"].Value = translationRow.OriginalText;
                 cells[$"E{currentRowNumber}"].Value = translationRow.Translation;
                 cells[$"E{currentRowNumber}"].Locked = false;
+                cells[$"A{currentRowNumber}:D{currentRowNumber}"].Interior.Color = Color.FromArgb(240, 240, 240);
+                cells[$"A{currentRowNumber}:D{currentRowNumber}"].Borders.Color = Color.FromArgb(225, 225, 225);
             }
             
             cells["A:E"].Columns.AutoFit();
             cells["D:E"].ColumnWidth = 100;
             cells["D:E"].WrapText = true;
 
-            worksheet.Protect("Qwerty1234");
+            worksheet.Protect(workSheetPassword);
 
             return workbook.SaveToMemory(FileFormat.Excel8);
         }
