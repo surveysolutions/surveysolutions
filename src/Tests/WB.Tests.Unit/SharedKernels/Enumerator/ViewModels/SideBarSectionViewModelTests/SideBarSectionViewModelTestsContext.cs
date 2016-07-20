@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
         {
             Mock<IStatefulInterviewRepository> interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
-            Mock<IPlainQuestionnaireRepository> questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            Mock<IQuestionnaireStorage> questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
 
             return new SideBarSectionViewModel(

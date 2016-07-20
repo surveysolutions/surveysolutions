@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILiteEventRegistry eventRegistry,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {

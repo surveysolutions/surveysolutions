@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             command = Create.Command.AnswerYesNoQuestion();
 
-            var repositoryWithoutQuestionnaire = Mock.Of<IPlainQuestionnaireRepository>();
+            var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireStorage>();
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 

@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IDisposable
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,

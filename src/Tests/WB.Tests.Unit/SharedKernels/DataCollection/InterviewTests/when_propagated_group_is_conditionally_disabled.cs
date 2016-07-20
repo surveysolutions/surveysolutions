@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            
             questionWhichIsForcesPropagationId = Guid.Parse("22222222222222222222222222222222");
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                 && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true);

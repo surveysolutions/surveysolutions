@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         protected Guid interviewId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ICommandService commandService,
             ILogger logger,
             IUserInteractionService interactionService,
-            IPlainQuestionnaireRepository questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;

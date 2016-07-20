@@ -59,9 +59,9 @@ namespace WB.Tests.Integration.InterviewTests
             return new PlainQuestionnaire(questionnaireDocument, 1);
         }
 
-        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
+        protected static IQuestionnaireStorage CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
-            return Stub<IPlainQuestionnaireRepository>.Returning(questionaire);
+            return Stub<IQuestionnaireStorage>.Returning(questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
@@ -95,7 +95,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
@@ -120,7 +120,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);

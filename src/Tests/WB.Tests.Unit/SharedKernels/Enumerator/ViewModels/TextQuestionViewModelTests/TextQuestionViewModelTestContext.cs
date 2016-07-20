@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
         }
         
         public static TextQuestionViewModel CreateTextQuestionViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IUserInteractionService userInteractionService = null)
         {
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             return new TextQuestionViewModel(
                 principal: principal,
-                questionnaireRepository: questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository: questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository: interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel: QuestionStateMock.Object,
                 answering: AnsweringViewModelMock.Object,
@@ -52,12 +52,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             EventRegistry = new Mock<ILiteEventRegistry>();
         }
 
-        protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
+        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSize
             );
-            return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         protected static Identity questionIdentity = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });

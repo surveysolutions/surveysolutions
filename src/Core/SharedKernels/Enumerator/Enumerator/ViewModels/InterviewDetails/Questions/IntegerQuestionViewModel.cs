@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly IPrincipal principal; 
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
         private Identity questionIdentity;
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IntegerQuestionViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,

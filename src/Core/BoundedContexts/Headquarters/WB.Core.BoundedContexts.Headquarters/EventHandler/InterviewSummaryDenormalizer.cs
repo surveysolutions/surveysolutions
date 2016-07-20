@@ -43,15 +43,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
 
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<UserDocument> users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IPlainStorageAccessor<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainStorageAccessor<UserDocument> users, IQuestionnaireStorage questionnaireStorage)
             : base(interviewSummary)
         {
             this.users = users;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public override object[] Readers
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (this.questionnaireCache.Contains(key))
                 return (QuestionnaireDocument)this.questionnaireCache[key];
 
-            var questionare = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
+            var questionare = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
             this.questionnaireCache[key] = questionare;
             return questionare;
         }

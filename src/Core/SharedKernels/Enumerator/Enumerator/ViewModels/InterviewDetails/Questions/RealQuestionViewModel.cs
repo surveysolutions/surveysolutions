@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            IPlainQuestionnaireRepository questionnaireRepository, ILiteEventRegistry liteEventRegistry)
+            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;

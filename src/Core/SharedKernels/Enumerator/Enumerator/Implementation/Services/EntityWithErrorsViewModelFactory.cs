@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     internal class EntityWithErrorsViewModelFactory : IEntityWithErrorsViewModelFactory
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public EntityWithErrorsViewModelFactory(
             IStatefulInterviewRepository interviewRepository, 
-            IPlainQuestionnaireRepository questionnaireRepository, 
+            IQuestionnaireStorage questionnaireRepository, 
             IInterviewViewModelFactory interviewViewModelFactory, 
             IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {

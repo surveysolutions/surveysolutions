@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
-                plainQuestionnaireRepository: mockOfPlainQuestionnaireRepository.Object,
+                questionnaireStorage: mockOfPlainQuestionnaireRepository.Object,
                 questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object,
                 interviewViewRepository: interviewsAsyncPlainStorage,
                 interviewFactory: mockOfInterviewAccessor.Object);
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             mockOfInterviewAccessor.Verify(x => x.RemoveInterviewAsync(Moq.It.IsAny<Guid>()), Times.Exactly(2));
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IPlainQuestionnaireRepository> mockOfPlainQuestionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+        private static readonly Mock<IQuestionnaireStorage> mockOfPlainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
         private static readonly Mock<IAsyncPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireView>>();
         private static readonly Mock<IQuestionnaireAssemblyFileAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyFileAccessor>();
         private static readonly Mock<IInterviewerInterviewAccessor> mockOfInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();

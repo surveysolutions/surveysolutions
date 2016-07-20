@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             && _.HasVariable(substitutedVariable2Name) == true
             );
 
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
            
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();

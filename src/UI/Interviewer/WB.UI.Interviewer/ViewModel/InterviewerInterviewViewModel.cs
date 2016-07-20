@@ -22,7 +22,7 @@ namespace WB.UI.Interviewer.ViewModel
         readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewerInterviewViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,

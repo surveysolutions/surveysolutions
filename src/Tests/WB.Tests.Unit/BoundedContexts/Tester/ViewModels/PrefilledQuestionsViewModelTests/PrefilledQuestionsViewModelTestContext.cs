@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
         {
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),

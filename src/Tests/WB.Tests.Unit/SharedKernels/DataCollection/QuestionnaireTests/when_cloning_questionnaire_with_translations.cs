@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             questionnaireDocument.PublicKey = sourceQuestionnaireId.QuestionnaireId;
 
             var plainQuestionnaireRepositoryMock = 
-                Mock.Get(Mock.Of<IPlainQuestionnaireRepository>(_ => 
+                Mock.Get(Mock.Of<IQuestionnaireStorage>(_ => 
                     _.GetQuestionnaireDocument(sourceQuestionnaireId.QuestionnaireId, sourceQuestionnaireId.Version) == questionnaireDocument));
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             questionnaire = Create.AggregateRoot.Questionnaire(
                 translationsStorage: translations,
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
-                plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object);
+                questionnaireStorage: plainQuestionnaireRepositoryMock.Object);
         };
 
         Because of = () => questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(sourceQuestionnaireId, newQuestionnaireVersion: targetQuestionnaireVersion));

@@ -659,13 +659,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// So this repository may be used only in command handlers.
         /// And should never be used in event handlers!!
         /// </remarks>
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
         #endregion
 
-        public Interview(ILogger logger, IPlainQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+        public Interview(ILogger logger, IQuestionnaireStorage questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
         {
             this.logger = logger;
             this.questionnaireRepository = questionnaireRepository;

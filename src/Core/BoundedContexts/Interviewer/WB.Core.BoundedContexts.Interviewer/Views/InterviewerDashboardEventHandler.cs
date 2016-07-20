@@ -43,10 +43,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                          ILitePublishedEventHandler<AnswerRemoved>
     {
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public InterviewerDashboardEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, 
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry liteEventRegistry)
         {
             this.interviewViewRepository = interviewViewRepository;

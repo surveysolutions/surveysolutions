@@ -42,7 +42,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
+            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IInterviewerEventStorage, IEventStore>()

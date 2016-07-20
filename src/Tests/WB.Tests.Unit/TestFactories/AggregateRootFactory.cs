@@ -24,12 +24,12 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class AggregateRootFactory
     {
-        public Interview Interview(Guid? interviewId = null, IPlainQuestionnaireRepository questionnaireRepository = null,
+        public Interview Interview(Guid? interviewId = null, IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
@@ -38,12 +38,12 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public Questionnaire Questionnaire(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IPlainStorageAccessor<TranslationInstance> translationsStorage = null)
             => new Questionnaire(
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(),
                 new QuestionnaireRosterStructureFactory(),
@@ -58,13 +58,13 @@ namespace WB.Tests.Unit.TestFactories
             Guid? questionnaireId = null,
             long? questionnaireVersion = null,
             Guid? userId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.TestFactories
 
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
+                Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
