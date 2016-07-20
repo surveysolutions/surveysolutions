@@ -613,7 +613,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please, enter text.
+        ///   Looks up a localized string similar to Answer should not be empty.
         /// </summary>
         public static string Interview_Question_Text_Empty {
             get {
