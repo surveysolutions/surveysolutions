@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using SpreadsheetGear;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -29,18 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private const string TranslationTypeColumnName = "Type";
         private const string WorksheetName = "Translations";
 
-        private readonly TranslationType[] translationTypesWithIndexes =
-        {
-            TranslationType.FixedRosterTitle, TranslationType.OptionTitle, TranslationType.ValidationMessage
-        };
-
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
-        protected TranslationsService()
-        {
-            
-        }
 
         public TranslationsService(IPlainStorageAccessor<TranslationInstance> translations,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
@@ -98,27 +90,27 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
             IWorkbookSet workbookSet = Factory.GetWorkbookSet();
-            IWorkbook workbook = workbookSet.Workbooks.OpenFromMemory(excelRepresentation);
+            IWorkbook workbook;
 
-            if (workbook.Worksheets.Count == 0)
-                throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
+            try
+            {
+                workbook = workbookSet.Workbooks.OpenFromMemory(excelRepresentation);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidExcelFileException(ex.Message);
+            }
 
             var worksheet = workbook.Worksheets[0];
 
-            //for some reason componet doesn't throws exception if loads not excel file
-            //checking first header cell
-            if (worksheet.Cells["B1"].Text != TranslationTypeColumnName)
-                throw new InvalidExcelFileException("Worksheet with translation was not found.");
-
-            var translationErrors = this.Verify(worksheet).Take(10).ToList();
-            if (translationErrors.Any())
-                throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
-
+            if (worksheet.Name != WorksheetName)
+                throw new InvalidExcelFileException("Worksheet with translations not found");
+            
             this.RemoveStoredTranslations(questionnaireId, language);
-
+            
             for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
             {
-                TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
+                TranslationRow importedTranslation = GetExcelTranslation(worksheet.UsedRange, rowNumber);
 
                 if(string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
@@ -174,49 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].Text,
             Translation = cells[$"E{rowNumber}"].Text
         };
-
-        private IEnumerable<TranslationValidationError> Verify(IWorksheet worksheet)
-        {
-            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
-            {
-                var importedTranslation = GetExcelTranslation(worksheet.UsedRange.Cells, rowNumber);
-
-                Guid entityId;
-                if (!Guid.TryParse(importedTranslation.EntityId, out entityId))
-                {
-                    var cellAddress = worksheet.Cells[$"A{rowNumber}"].Address;
-
-                    yield return new TranslationValidationError
-                    {
-                        Message = $"{EntityIdColumnName} has invalid id at [{cellAddress}]",
-                        ErrorAddress = cellAddress
-                    };
-                }
-
-                TranslationType importedType;
-                if (!Enum.TryParse(importedTranslation.Type, out importedType) || importedType == TranslationType.Unknown)
-                {
-                    var cellAddress = worksheet.Cells[$"B{rowNumber}"].Address;
-
-                    yield return new TranslationValidationError
-                    {
-                        Message = $"{TranslationTypeColumnName} has invalid type [{cellAddress}]",
-                        ErrorAddress = cellAddress
-                    };
-                }
-
-                if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
-                {
-                    var cellAddress = worksheet.Cells[$"C{rowNumber}"].Address;
-
-                    yield return new TranslationValidationError
-                    {
-                        Message = $"{TranslationTypeColumnName} has invalid index at [{cellAddress}]",
-                        ErrorAddress = cellAddress
-                    };
-                }
-            }
-        }
 
         private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
         {
