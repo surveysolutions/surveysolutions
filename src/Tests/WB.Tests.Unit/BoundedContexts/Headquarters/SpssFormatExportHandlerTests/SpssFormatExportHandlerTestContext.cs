@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService = null)
         {
             return new SpssFormatExportHandler(
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(_=>_.GetFilesInDirectory(Moq.It.IsAny<string>())==new[] {"test.tab"}),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(_=>_.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()) ==new[] {"test.tab"}),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 new InterviewDataExportSettings(),
                 tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
