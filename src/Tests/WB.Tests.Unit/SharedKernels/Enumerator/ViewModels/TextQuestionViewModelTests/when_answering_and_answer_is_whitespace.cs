@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
         Because of = () =>
         {
-            model.ValueChangeCommand.ExecuteAsync(" ");
+            model.ValueChangeCommand.Execute(" ");
         };
 
         It should_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Please, enter text"), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer should not be empty"), Times.Once);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextQuestionCommand>()), Times.Never);
