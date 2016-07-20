@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             
             this.RemoveStoredTranslations(questionnaireId, language);
             
-            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
+            for (int rowNumber = 2; rowNumber <= worksheet.UsedRange.RowCount; rowNumber++)
             {
                 TranslationRow importedTranslation = GetExcelTranslation(worksheet.UsedRange, rowNumber);
 
