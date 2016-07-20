@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionInstuctionsRow = 3;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionInstuctionsRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.ValidationMessage);
-            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldEqual("0");
+            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldEqual("1");
             cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.FormatGuid());
             cells[questionInstuctionsRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated validation");
             cells[questionInstuctionsRow, translactionColumn].Value?.ToString().ShouldEqual("validation message");
@@ -154,7 +154,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 7;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.ValidationMessage);
-            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("0");
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("1");
             cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated validation 1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();

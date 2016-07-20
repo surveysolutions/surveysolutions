@@ -319,7 +319,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private static IEnumerable<TranslationRow> GetTranslatedValidationMessages(IValidatable validatable, ITranslation translation)
             => from validationCondition in validatable.ValidationConditions
-               let validationIndex = validatable.ValidationConditions.IndexOf(validationCondition)
+               let validationIndex = validatable.ValidationConditions.IndexOf(validationCondition) + 1
                select new TranslationRow
                {
                    EntityId = validatable.PublicKey.FormatGuid(),
