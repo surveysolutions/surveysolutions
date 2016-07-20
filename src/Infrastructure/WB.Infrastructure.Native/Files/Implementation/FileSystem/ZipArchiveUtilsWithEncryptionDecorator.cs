@@ -84,7 +84,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                     if (this.exportSettings != null && this.exportSettings.EncryptionEnforced())
                         zipFile.Password = this.exportSettings.GetPassword();
                     
-                    foreach (var filePath in this.fileSystemAccessor.GetFilesInDirectory(directory))
+                    foreach (var filePath in this.fileSystemAccessor.GetFilesInDirectory(directory, true))
                     {
                         var filePathInZip = $"{this.fileSystemAccessor.GetFileName(directory)}\\{filePath.Substring(directory.Length).TrimStart('\\')}";
                         zipFile.AddEntry(filePathInZip, this.fileSystemAccessor.ReadFile(filePath));
