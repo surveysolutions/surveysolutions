@@ -1,4 +1,5 @@
 ﻿using System;
+using NHibernate.Type;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
@@ -7,6 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     {
         public virtual Guid QuestionnaireId { get; set; }
 
-        public virtual int Id { get; set; }
+        public virtual Guid Id { get; set; }
     }
 }

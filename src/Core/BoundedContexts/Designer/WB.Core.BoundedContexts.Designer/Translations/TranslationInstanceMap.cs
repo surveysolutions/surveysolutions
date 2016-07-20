@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     {
         public TranslationInstanceMap()
         {
-            Id(x => x.Id, idMapper => idMapper.Generator(Generators.HighLow));
+            Id(x => x.Id, idMapper => idMapper.Generator(Generators.Guid));
             
             Property(x => x.QuestionnaireId, ptp => ptp.NotNullable(true));
             Property(x => x.Type, ptp => ptp.NotNullable(true));

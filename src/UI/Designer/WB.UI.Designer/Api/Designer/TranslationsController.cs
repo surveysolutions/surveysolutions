@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Api
             var translationName = string.IsNullOrEmpty(translationFile.TranslationName)
                 ? "New translation"
                 : translationFile.TranslationName;
-            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.xlsx");
+            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.xls");
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using SpreadsheetGear;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,17 +16,23 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 {
     internal class TranslationsService : ITranslationsService
     {
-        const int headerIndex = 0;
+        private class TranslationRow
+        {
+            public string EntityId { get; set; }
+            public string Type { get; set; }
+            public string OptionValueOrValidationIndexOrFixedRosterId { get; set; }
+            public string OriginalText { get; set; }
+            public string Translation { get; set; }
+        }
 
-        const int translationTypeColumn = 0;
-        const int translationIndexColumn = 1;
-        const int questionnaireEntityIdColumn = 2;
-        const int originalTextColumn = 3;
-        const int translationColumn = 4;
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
-
         private const string WorksheetName = "Translations";
+
+        private readonly TranslationType[] translationTypesWithIndexes =
+        {
+            TranslationType.FixedRosterTitle, TranslationType.OptionTitle, TranslationType.ValidationMessage
+        };
 
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
@@ -53,94 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             return new QuestionnaireTranslation(storedTranslations);
         }
-
-        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
-        {
-            IWorkbook workbook = SpreadsheetGear.Factory.GetWorkbook();
-            IWorksheet worksheet = workbook.Worksheets[0];
-            IRange cells = worksheet.Cells;
-
-            worksheet.Name = WorksheetName;
-            
-            cells[headerIndex, translationTypeColumn].Value = TranslationTypeColumnName;
-            cells[headerIndex, translationIndexColumn].Value = "Index";
-            cells[headerIndex, questionnaireEntityIdColumn].Value = EntityIdColumnName;
-            cells[headerIndex, originalTextColumn].Value = "Original";
-            cells[headerIndex, translationColumn].Value = "Translation";
-
-            int currentRowNumber = headerIndex + 1;
-
-            foreach (var childNode in questionnaire.Children.TreeToEnumerable(x => x.Children))
-            {
-                AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Title, childNode.PublicKey,
-                    childNode.GetTitle(), translation.GetTitle(childNode.PublicKey));
-
-                var validatable = childNode as IValidatable;
-                if (validatable != null)
-                {
-                    for (int i = 1; i < validatable.ValidationConditions.Count + 1; i++)
-                    {
-                        AppendTranslationRow(cells,
-                            ref currentRowNumber,
-                            TranslationType.ValidationMessage,
-                            validatable.PublicKey,
-                            validatable.ValidationConditions[i - 1].Message,
-                            translation.GetValidationMessage(validatable.PublicKey, i),
-                            i.ToString());
-                    }
-                }
-
-                var question = childNode as IQuestion;
-                if (question != null)
-                {
-                    if (!string.IsNullOrEmpty(question.Instructions))
-                    {
-                        AppendTranslationRow(cells, ref currentRowNumber, TranslationType.Instruction,
-                            question.PublicKey, question.Instructions,
-                            translation.GetInstruction(question.PublicKey));
-                    }
-
-                    for (int i = 0; i < question.Answers?.Count; i++)
-                    {
-                        var answerOptionValue = question.Answers[i].AnswerValue;
-                        var translatedOptionTitle = translation.GetAnswerOption(question.PublicKey,
-                            answerOptionValue);
-                        var originalAnswerTitle = question.Answers[i].AnswerText;
-
-                        AppendTranslationRow(cells,
-                            ref currentRowNumber,
-                            TranslationType.OptionTitle,
-                            question.PublicKey,
-                            originalAnswerTitle,
-                            translatedOptionTitle,
-                            answerOptionValue);
-                    }
-                }
-
-                var group = childNode as IGroup;
-                if (group != null)
-                {
-                    for (int i = 0; i < group.FixedRosterTitles?.Length; i++)
-                    {
-                        var fixedRosterValue = group.FixedRosterTitles[i].Value;
-                        var translatedOptionTitle = translation.GetFixedRosterTitle(group.PublicKey,
-                            fixedRosterValue);
-                        var originalAnswerTitle = group.FixedRosterTitles[i].Title;
-
-                        AppendTranslationRow(cells,
-                            ref currentRowNumber,
-                            TranslationType.FixedRosterTitle,
-                            group.PublicKey,
-                            originalAnswerTitle,
-                            translatedOptionTitle,
-                            fixedRosterValue.ToString(CultureInfo.InvariantCulture));
-                    }
-                }
-            }
-
-            return workbook.SaveToMemory(SpreadsheetGear.FileFormat.OpenXMLWorkbook);
-        }
-
+        
         public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
@@ -169,22 +89,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return translationFile;
         }
 
-        private static void AppendTranslationRow(IRange cells,
-            ref int currentRowNumber,
-            TranslationType translationType,
-            Guid entityId,
-            string originalValue,
-            string translatedValue,
-            string translationIndex = null)
-        {
-            cells[currentRowNumber, translationTypeColumn].Value = (int)translationType;
-            cells[currentRowNumber, questionnaireEntityIdColumn].Value = entityId.ToString();
-            cells[currentRowNumber, originalTextColumn].Value = originalValue;
-            cells[currentRowNumber, translationColumn].Value = translatedValue;
-            cells[currentRowNumber, translationIndexColumn].Value = translationIndex;
-            currentRowNumber++;
-        }
-
         
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
         {
@@ -193,38 +97,40 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (language == null) throw new ArgumentNullException(nameof(language));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
-            IWorkbookSet workbookSet = SpreadsheetGear.Factory.GetWorkbookSet();
+            IWorkbookSet workbookSet = Factory.GetWorkbookSet();
             IWorkbook workbook = workbookSet.Workbooks.OpenFromMemory(excelRepresentation);
-            
-            ValidateWorkbook(workbook);
+
+            if (workbook.Worksheets.Count == 0)
+                throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
 
             var worksheet = workbook.Worksheets[0];
 
-            var oldTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList());
-            this.translations.Remove(oldTranslations);
+            //for some reason componet doesn't throws exception if loads not excel file
+            //checking first header cell
+            if (worksheet.Cells["B1"].Text != TranslationTypeColumnName)
+                throw new InvalidExcelFileException("Worksheet with translation was not found.");
 
-            for (int rowNumber = headerIndex + 1; ; rowNumber++)
+            var translationErrors = this.Verify(worksheet).Take(10).ToList();
+            if (translationErrors.Any())
+                throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
+
+            this.RemoveStoredTranslations(questionnaireId, language);
+
+            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
             {
-                var questionnaireEntityIdValue = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value;
-                var questionnaireValue = worksheet.Cells[rowNumber, translationColumn].Value;
+                TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
 
-                if (questionnaireEntityIdValue == null && questionnaireValue == null)
-                    break;
+                if(string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
-                if (questionnaireEntityIdValue != null && questionnaireValue != null)
+                this.translations.Store(new TranslationInstance
                 {
-                    TranslationInstance instance = new TranslationInstance();
-
-                    instance.QuestionnaireId = questionnaireId;
-                    instance.Language = language;
-                    instance.QuestionnaireEntityId = Guid.Parse(worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value?.ToString());
-                    instance.Value = worksheet.Cells[rowNumber, translationColumn].Value?.ToString();
-                    instance.TranslationIndex = worksheet.Cells[rowNumber, translationIndexColumn].Value?.ToString();
-                    instance.Type = (TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cells[rowNumber, translationTypeColumn].Value?.ToString());
-
-                    this.translations.Store(instance, instance);
-                }
+                    QuestionnaireId = questionnaireId,
+                    Language = language,
+                    QuestionnaireEntityId = Guid.Parse(importedTranslation.EntityId),
+                    Value = importedTranslation.Translation,
+                    TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                    Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
+                }, null);
             }
         }
 
@@ -254,83 +160,183 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.translations.Remove(storedTranslations);
         }
 
-        private void ValidateWorkbook(IWorkbook workbook)
+        private void RemoveStoredTranslations(Guid questionnaireId, string language)
         {
-            if (workbook.Worksheets.Count == 0)
-            {
-                throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
-            }
+            var oldTranslations = this.translations.Query(
+                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList());
+            this.translations.Remove(oldTranslations);
+        }
 
-            var worksheet = workbook.Worksheets[0];
+        private TranslationRow GetExcelTranslation(IRange cells, int rowNumber) => new TranslationRow
+        {
+            EntityId = cells[$"A{rowNumber}"].Text,
+            Type = cells[$"B{rowNumber}"].Text,
+            OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].Text,
+            Translation = cells[$"E{rowNumber}"].Text
+        };
 
-            //for some reason componet doesn't throws exception if loads not excel file
-            //checking first header cell
-            if (worksheet.Cells[headerIndex, translationTypeColumn].Value.ToString() != TranslationTypeColumnName)
+        private IEnumerable<TranslationValidationError> Verify(IWorksheet worksheet)
+        {
+            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
             {
-                throw new InvalidExcelFileException("Worksheet with translation was not found.");
-            }
+                var importedTranslation = GetExcelTranslation(worksheet.UsedRange.Cells, rowNumber);
 
-            List<TranslationValidationError> foundErrors = new List<TranslationValidationError>();
-            var translationTypesWithIndex = new List<TranslationType>
-            {
-                TranslationType.FixedRosterTitle,
-                TranslationType.OptionTitle,
-                TranslationType.ValidationMessage
-            };
-            
-            for (int rowNumber = headerIndex + 1; ; rowNumber++)
-            {
-                if (foundErrors.Count > 10)
+                Guid entityId;
+                if (!Guid.TryParse(importedTranslation.EntityId, out entityId))
                 {
-                    break;
-                }
-                if (worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value != null)
-                {
-                    string entityId = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Value?.ToString();
-                    Guid parsedId;
-                    if (!Guid.TryParse(entityId, out parsedId))
+                    var cellAddress = worksheet.Cells[$"A{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
                     {
-                        foundErrors.Add(new TranslationValidationError
-                        {
-                            Message = $"{EntityIdColumnName} has invalid id at [{worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Address}]",
-                            ErrorAddress = worksheet.Cells[rowNumber, questionnaireEntityIdColumn].Address
-                        });
-                    }
-                    string translationTypeString = worksheet.Cells[rowNumber, translationTypeColumn].Value?.ToString();
-                    TranslationType type;
-                    if (!Enum.TryParse(translationTypeString, out type) || type == TranslationType.Unknown)
-                    {
-                        foundErrors.Add(new TranslationValidationError
-                        {
-                            Message = $"{TranslationTypeColumnName} has invalid type [{worksheet.Cells[rowNumber, translationTypeColumn].Address}]",
-                            ErrorAddress = worksheet.Cells[rowNumber, translationTypeColumn].Address
-                        });
-                    }
-
-                    string translationIndex = worksheet.Cells[rowNumber, translationIndexColumn].Value?.ToString();
-                    if (translationTypesWithIndex.Contains(type) && string.IsNullOrEmpty(translationIndex))
-                    {
-                        var errorAddress = worksheet.Cells[rowNumber, translationIndexColumn].Address;
-                        foundErrors.Add(new TranslationValidationError
-                        {
-                            Message = $"{TranslationTypeColumnName} has invalid index at [{errorAddress}]",
-                            ErrorAddress = errorAddress
-                        });
-                    }
+                        Message = $"{EntityIdColumnName} has invalid id at [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
                 }
-                else
-                {
-                    break;
-                }
-            }
 
-            if (foundErrors.Count > 0)
-            {
-                throw new InvalidExcelFileException("Found errors in excel file")
+                TranslationType importedType;
+                if (!Enum.TryParse(importedTranslation.Type, out importedType) || importedType == TranslationType.Unknown)
                 {
-                    FoundErrors = foundErrors
-                };
+                    var cellAddress = worksheet.Cells[$"B{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = $"{TranslationTypeColumnName} has invalid type [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
+                }
+
+                if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
+                {
+                    var cellAddress = worksheet.Cells[$"C{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = $"{TranslationTypeColumnName} has invalid index at [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
+                }
             }
         }
+
+        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
+        {
+            IWorkbook workbook = Factory.GetWorkbook();
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            IRange cells = worksheet.Cells;
+
+            worksheet.Name = WorksheetName;
+
+            cells["A1"].Value = EntityIdColumnName;
+            cells["B1"].Value = TranslationTypeColumnName;
+            cells["C1"].Value = "Index";
+            cells["D1"].Value = "Original text";
+            cells["E1"].Value = "Translation";
+            cells["A1:E1"].Font.Bold = true;
+
+            int currentRowNumber = 1;
+
+            var textsToTranslate = this.GetTranlsatedTexts(questionnaire, translation);
+            foreach (var translationRow in textsToTranslate)
+            {
+                if (string.IsNullOrWhiteSpace(translationRow.OriginalText)) continue;
+
+                currentRowNumber++;
+
+                cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
+                cells[$"B{currentRowNumber}"].Value = translationRow.Type;
+                cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
+                cells[$"D{currentRowNumber}"].Value = translationRow.OriginalText;
+                cells[$"E{currentRowNumber}"].Value = translationRow.Translation;
+                cells[$"E{currentRowNumber}"].Locked = false;
+            }
+            
+            cells["A:E"].Columns.AutoFit();
+            cells["D:E"].ColumnWidth = 100;
+            cells["D:E"].WrapText = true;
+
+            worksheet.Protect("P@$$w0rd");
+
+            return workbook.SaveToMemory(FileFormat.Excel8);
+        }
+
+        private IEnumerable<TranslationRow> GetTranlsatedTexts(QuestionnaireDocument questionnaire, ITranslation translation)
+        {
+            foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
+            {
+                yield return GetTranslatedTitle(entity, translation);
+
+                var group = entity as IGroup;
+                var question = entity as IQuestion;
+                var validatable = entity as IValidatable;
+
+                if (validatable != null)
+                    foreach (var translatedValidationMessage in GetTranslatedValidationMessages(validatable, translation))
+                        yield return translatedValidationMessage;
+
+                if (question != null)
+                {
+                    if (!string.IsNullOrEmpty(question.Instructions))
+                        yield return GetTranslatedInstrution(question, translation);
+
+                    foreach (var translatedOption in GetTranslatedOptions(question, translation))
+                        yield return translatedOption;
+                }
+
+                if (group != null)
+                    foreach (var translatedRosterTitle in GetTranslatedRosterTitles(@group, translation))
+                        yield return translatedRosterTitle;
+            }
+        }
+
+        private static TranslationRow GetTranslatedTitle(IComposite entity, ITranslation translation) => new TranslationRow
+        {
+            EntityId = entity.PublicKey.FormatGuid(),
+            Type = TranslationType.Title.ToString("G"),
+            OriginalText = entity.GetTitle(),
+            Translation = translation.GetTitle(entity.PublicKey)
+        };
+
+        private static TranslationRow GetTranslatedInstrution(IQuestion question, ITranslation translation) => new TranslationRow
+        {
+            EntityId = question.PublicKey.FormatGuid(),
+            Type = TranslationType.Instruction.ToString("G"),
+            OriginalText = question.Instructions,
+            Translation = translation.GetInstruction(question.PublicKey)
+        };
+
+        private static IEnumerable<TranslationRow> GetTranslatedValidationMessages(IValidatable validatable, ITranslation translation)
+            => from validationCondition in validatable.ValidationConditions
+               let validationIndex = validatable.ValidationConditions.IndexOf(validationCondition)
+               select new TranslationRow
+               {
+                   EntityId = validatable.PublicKey.FormatGuid(),
+                   Type = TranslationType.ValidationMessage.ToString("G"),
+                   OriginalText = validationCondition.Message,
+                   Translation = translation.GetValidationMessage(validatable.PublicKey, validationIndex),
+                   OptionValueOrValidationIndexOrFixedRosterId = validationIndex.ToString()
+               };
+
+        private static IEnumerable<TranslationRow> GetTranslatedOptions(IQuestion question, ITranslation translation)
+            => from option in question.Answers
+               select new TranslationRow
+               {
+                   EntityId = question.PublicKey.FormatGuid(),
+                   Type = TranslationType.OptionTitle.ToString("G"),
+                   OriginalText = option.AnswerText,
+                   Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
+                   OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue
+               };
+
+        private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup @group, ITranslation translation)
+            => from fixedRoster in @group.FixedRosterTitles
+               select new TranslationRow
+               {
+                   EntityId = @group.PublicKey.FormatGuid(),
+                   Type = TranslationType.FixedRosterTitle.ToString("G"),
+                   OriginalText = fixedRoster.Title,
+                   Translation = translation.GetFixedRosterTitle(@group.PublicKey, fixedRoster.Value),
+                   OptionValueOrValidationIndexOrFixedRosterId = fixedRoster.Value.ToString(CultureInfo.InvariantCulture)
+               };
     }
 }
