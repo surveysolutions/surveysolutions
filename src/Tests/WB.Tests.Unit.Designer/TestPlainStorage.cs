@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.Designer
 
         public void Store(T entity, object id)
         {
+            id = id ?? Guid.NewGuid();
             if (this.entites.ContainsKey(id))
             {
                 this.entites[id] = entity;
