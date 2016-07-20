@@ -25,6 +25,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual Identity CurrentGroup { get; private set; }
         public virtual ScreenType CurrentScreenType { get; private set; }
 
+        public NavigationIdentity CurrentNavigationIdentity
+            => this.CurrentScreenType == ScreenType.Complete
+                ? NavigationIdentity.CreateForCompleteScreen()
+                : NavigationIdentity.CreateForGroup(this.CurrentGroup);
+
         private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
         public NavigationState(

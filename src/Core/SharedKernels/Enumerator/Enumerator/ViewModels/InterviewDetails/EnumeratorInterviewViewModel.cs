@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
         protected string interviewId;
         private IStatefulInterview interview;
+        private readonly IJsonAllTypesSerializer jsonSerializer;
 
 
         protected EnumeratorInterviewViewModel(
@@ -46,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICommandService commandService)
+            ICommandService commandService,
+            IJsonAllTypesSerializer jsonSerializer)
             : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -59,15 +62,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.commandService = commandService;
+            this.jsonSerializer = jsonSerializer;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
         }
 
-        public void Init(string interviewId)
+        private NavigationIdentity targetNavigationIdentity;
+
+        public void Init(string interviewId, string jsonNavigationIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
+
+            if (jsonNavigationIdentity != null)
+            {
+                this.targetNavigationIdentity = this.jsonSerializer.Deserialize<NavigationIdentity>(jsonNavigationIdentity);
+            }
         }
 
         public override void Load()
@@ -104,9 +115,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
                 this.navigationState.ScreenChanged += this.OnScreenChanged;
+                
                 this.navigationState.NavigateTo(
-                    NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(),
-                        new decimal[0])));
+                    this.targetNavigationIdentity
+                    ?? NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty)));
 
                 this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
             }
@@ -176,7 +188,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private GroupStatus status;
-
         public GroupStatus Status
         {
             get { return this.status; }
