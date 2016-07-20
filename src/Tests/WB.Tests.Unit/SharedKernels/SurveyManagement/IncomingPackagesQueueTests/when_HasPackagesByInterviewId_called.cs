@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         Establish context = () =>
         {
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
+            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Returns(filesInFolder);
 
             incomingSyncPackagesService = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
