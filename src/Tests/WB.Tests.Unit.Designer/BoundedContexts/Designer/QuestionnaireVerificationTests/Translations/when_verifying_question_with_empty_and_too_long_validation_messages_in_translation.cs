@@ -48,6 +48,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_messages_with_codes__WB0105 = () =>
             verificationMessages.Select(message => message.Code).ShouldContain("WB0105");
 
+        It should_return_messages_with_translation_name = () =>
+            verificationMessages.Single(message => message.Code == "WB0105").Message.ShouldContain("normal name");
+
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
