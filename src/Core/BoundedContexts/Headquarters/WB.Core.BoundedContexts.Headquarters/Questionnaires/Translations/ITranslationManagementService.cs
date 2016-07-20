@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
         IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, string language);
         IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId);
         void Delete(QuestionnaireIdentity questionnaireId);
+        void Store(IEnumerable<TranslationInstance> translationInstances);
     }
 }

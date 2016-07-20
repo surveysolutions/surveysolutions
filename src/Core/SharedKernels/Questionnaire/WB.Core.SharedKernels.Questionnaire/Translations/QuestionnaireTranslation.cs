@@ -13,7 +13,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             if (this.translations == null) throw new ArgumentNullException(nameof(this.translations));
 
-
             foreach (var translation in translationInstances)
             {
                 if (!this.translations.ContainsKey(translation.QuestionnaireEntityId))

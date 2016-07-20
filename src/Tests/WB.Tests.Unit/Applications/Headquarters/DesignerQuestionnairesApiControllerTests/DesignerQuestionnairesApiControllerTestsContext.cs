@@ -38,8 +38,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> {DefaultValue = DefaultValue.Mock}.Object),
                 restService ?? Mock.Of<IRestService>(),
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
-                translationInstances ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>());
+                questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
+                translationManagementService: Mock.Of<ITranslationManagementService>());
         }
     }
 }
