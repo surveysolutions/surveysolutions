@@ -93,9 +93,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_question_title_translation = () =>
         {
             var questionTitleRow = 2;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Title);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated title");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldEqual("title");
         };
@@ -103,9 +103,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_question_instructions_translation = () =>
         {
             var questionInstuctionsRow = 4;
-            ((TranslationType)Convert.ToInt32(cells[questionInstuctionsRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Instruction);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionInstuctionsRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Instruction);
             cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.ToString());
+            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.FormatGuid());
             cells[questionInstuctionsRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated instruction");
             cells[questionInstuctionsRow, translactionColumn].Value?.ToString().ShouldEqual("instruction");
         };
@@ -113,9 +113,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_question_validation_translation = () =>
         {
             var questionInstuctionsRow = 3;
-            ((TranslationType)Convert.ToInt32(cells[questionInstuctionsRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.ValidationMessage);
-            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldEqual("1");
-            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.ToString());
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionInstuctionsRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.ValidationMessage);
+            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldEqual("0");
+            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.FormatGuid());
             cells[questionInstuctionsRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated validation");
             cells[questionInstuctionsRow, translactionColumn].Value?.ToString().ShouldEqual("validation message");
         };
@@ -123,9 +123,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_question_options_translation = () =>
         {
             var questionInstuctionsRow = 5;
-            ((TranslationType)Convert.ToInt32(cells[questionInstuctionsRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.OptionTitle);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionInstuctionsRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.OptionTitle);
             cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().ShouldEqual("2");
-            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.ToString());
+            cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId.FormatGuid());
             cells[questionInstuctionsRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated option");
             cells[questionInstuctionsRow, translactionColumn].Value?.ToString().ShouldEqual("translated option");
         };
@@ -133,9 +133,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_empty_translation_row_for_missing_translation_title = () =>
         {
             var questionTitleRow = 6;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Title);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated title1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
@@ -143,9 +143,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_empty_translation_row_for_missing_translation_instruction = () =>
         {
             var questionTitleRow = 8;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Instruction);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Instruction);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated instruction 1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
@@ -153,9 +153,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_empty_translation_row_for_missing_translation_validation_message = () =>
         {
             var questionTitleRow = 7;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.ValidationMessage);
-            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("1");
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.ToString());
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.ValidationMessage);
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("0");
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated validation 1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
@@ -163,9 +163,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_empty_translation_row_for_missing_translation_option = () =>
         {
             var questionTitleRow = 9;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.OptionTitle);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.OptionTitle);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("1");
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated option 1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
