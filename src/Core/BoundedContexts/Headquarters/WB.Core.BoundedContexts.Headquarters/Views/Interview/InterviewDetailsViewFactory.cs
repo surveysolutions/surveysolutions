@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly ITranslationStorage translationStorage;
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IInterviewDataAndQuestionnaireMerger merger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService,
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.merger = merger;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.eventSourcedRepository = eventSourcedRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
 
             if (questionnaire == null)
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (interview != null && !interview.IsDeleted)
             {
-                var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
                     interview.QuestionnaireId, interview.QuestionnaireVersion);
 
                 return questionnaire.Children[0].PublicKey;

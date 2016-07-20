@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private bool hasLinkedOptionsChangedEvents=false;
 
         public StatefulInterview(ILogger logger,
-                                 IPlainQuestionnaireRepository questionnaireRepository,
+                                 IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {

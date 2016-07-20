@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 && _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true);
 
             var interviews = new Mock<IStatefulInterviewRepository>();
-            var questionnaires = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaires = new Mock<IQuestionnaireStorage>();
 
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);

@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetAnswerType(integerQuestionId) == AnswerType.Integer
                 && _.GetAnswerType(decimalQuestionId) == AnswerType.Decimal
                 && _.GetAnswerType(dateTimeQuestionId) == AnswerType.DateTime

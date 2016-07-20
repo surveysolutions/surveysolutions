@@ -78,11 +78,11 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             ILiteEventRegistry liteEventRegistry = null)
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
         public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.TestFactories
             IInterviewDataAndQuestionnaireMerger merger = null,
             IChangeStatusFactory changeStatusFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             IEventSourcedAggregateRootRepository eventSourcedRepository = null,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore = null,
             IAttachmentContentService attachmentContentService = null)
@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.TestFactories
                 merger ?? Mock.Of<IInterviewDataAndQuestionnaireMerger>(),
                 changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.TestFactories
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(It.IsAny<string>()) == questionnaireQuestionsInfo));
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)

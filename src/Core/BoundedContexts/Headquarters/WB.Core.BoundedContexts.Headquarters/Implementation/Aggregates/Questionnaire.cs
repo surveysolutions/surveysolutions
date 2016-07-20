@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private const int MaxTitleLength = 500;
         private static readonly Regex InvalidTitleRegex = new Regex(@"^[\w \-\(\)\\/]*$", RegexOptions.Compiled);
 
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private Guid Id { get; set; }
 
         public Questionnaire(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument sourceQuestionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
+            QuestionnaireDocument sourceQuestionnaire = this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
             this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaire);
 
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
+            this.questionnaireStorage.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
 
             string projectionId = GetProjectionId(identity);
@@ -184,14 +184,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 this.questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
 
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            QuestionnaireDocument questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             questionnaireDocument.IsDeleted = true;
-            this.plainQuestionnaireRepository.StoreQuestionnaire(command.QuestionnaireId, command.QuestionnaireVersion, questionnaireDocument);
+            this.questionnaireStorage.StoreQuestionnaire(command.QuestionnaireId, command.QuestionnaireVersion, questionnaireDocument);
         }
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
+            QuestionnaireDocument questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(command.Id, command.Version);
             
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(

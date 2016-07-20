@@ -6,11 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
-    /// <summary>
-    /// Interface used to store and read questionnaires in plain way, when no CQRS is involved.
-    /// Therefore DTO is fixed and is now QuestionnaireDocument.
-    /// </summary>
-    public interface IPlainQuestionnaireRepository
+    public interface IQuestionnaireStorage
     {
         IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language);
 

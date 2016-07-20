@@ -31,8 +31,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                         Create.Entity.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
-            IPlainQuestionnaireRepository plainQuestionnaireRepository =
-                Mock.Of<IPlainQuestionnaireRepository>(storage
+            IQuestionnaireStorage questionnaireStorage =
+                Mock.Of<IQuestionnaireStorage>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
 
             var storeAsyncTask = new Task(() => { });
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Returns(storeAsyncTask);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
-                plainQuestionnaireRepository: plainQuestionnaireRepository);
+                questionnaireStorage: questionnaireStorage);
         };
 
         Because of = () =>

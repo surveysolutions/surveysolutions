@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     internal class SampleImportService : ISampleImportService
     {
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
@@ -42,14 +42,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public SampleImportService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             SampleImportSettings sampleImportSettings, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.sampleImportSettings = sampleImportSettings;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 this.plainTransactionManager.BeginTransaction();
-                bigTemplate = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
+                bigTemplate = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
                 questionnaireExportStructure =
                     this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                         new QuestionnaireIdentity(questionnaireId, version));

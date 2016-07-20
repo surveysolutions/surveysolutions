@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class PrefilledQuestionsViewModel : BaseViewModel
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,

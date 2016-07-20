@@ -13,12 +13,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class RosterTitleSubstitutionService : IRosterTitleSubstitutionService
     {
-        private readonly IPlainQuestionnaireRepository questionnaireStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
 
         public RosterTitleSubstitutionService(
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService)
         {

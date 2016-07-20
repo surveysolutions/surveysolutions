@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 "rootDirectoryPath", this.basePath);
 
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IPlainQuestionnaireRepository, PlainQuestionnaireRepositoryWithCache>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
     }
 }

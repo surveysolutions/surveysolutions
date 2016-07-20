@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             RosterModel = 201,
             StaticTextModel = 300
         }
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private static T Load<T>() where T : class => Mvx.Resolve<T>();
 
         public InterviewViewModelFactory(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;

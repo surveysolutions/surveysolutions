@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly IAnswerToStringService answerToStringService;
         private Guid linkedToQuestionId;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private HashSet<Guid> parentRosterIds;
 
         public MultiOptionLinkedToQuestionQuestionViewModel(
@@ -30,10 +30,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher, 
-            IPlainQuestionnaireRepository questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository)
             : base(
                 questionState, answering, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)

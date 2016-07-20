@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(), 
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
                 commandService ?? Substitute.For<ICommandService>(),
-                questionnaireRepository: Substitute.For<IPlainQuestionnaireRepository>(),
+                questionnaireRepository: Substitute.For<IQuestionnaireStorage>(),
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>());
         }

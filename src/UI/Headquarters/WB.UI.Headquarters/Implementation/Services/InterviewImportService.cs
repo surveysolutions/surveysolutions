@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 {
     public class InterviewImportService : IInterviewImportService
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.commandService = commandService;
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             Guid? supervisorId, Guid headquartersId)
         {
             var bigTemplateObject =
-                this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
+                this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version);
 
             this.Status = new InterviewImportStatus

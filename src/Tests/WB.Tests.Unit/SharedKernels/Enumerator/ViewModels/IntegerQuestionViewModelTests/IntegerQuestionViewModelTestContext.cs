@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         }
         
         public static IntegerQuestionViewModel CreateIntegerQuestionViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IUserInteractionService userInteractionService = null)
         {
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             return new IntegerQuestionViewModel(
                 principal,
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
@@ -53,12 +53,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             EventRegistry = new Mock<ILiteEventRegistry>();
         }
 
-        protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
+        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSize
             );
-            return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         protected static Identity questionIdentity = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });

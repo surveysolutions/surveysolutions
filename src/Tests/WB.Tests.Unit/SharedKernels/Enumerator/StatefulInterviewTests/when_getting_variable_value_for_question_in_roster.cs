@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId);
 
-            IPlainQuestionnaireRepository questionnaireRepository =
+            IQuestionnaireStorage questionnaireRepository =
                 Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                     Create.Entity.PlainQuestionnaire(questionnaireDocument));
 

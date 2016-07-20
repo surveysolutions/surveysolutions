@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private readonly ILogger logger;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
 
@@ -33,14 +33,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             ILogger logger,
             IMetaDescriptionFactory metaDescriptionFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)
         {
-            return this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId);
+            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
         }
 
         private DdiDataType GetDdiDataType(QuestionType questionType)
