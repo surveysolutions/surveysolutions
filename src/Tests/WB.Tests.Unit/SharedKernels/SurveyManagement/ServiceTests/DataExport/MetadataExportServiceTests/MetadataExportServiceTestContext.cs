@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 Mock.Of<ILogger>(),
                 metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
                 questionnaireLabelFactory ?? new QuestionnaireLabelFactory(),
-                Mock.Of<IPlainQuestionnaireRepository>(
+                Mock.Of<IQuestionnaireStorage>(
                     _ =>
                         _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
                 Mock.Of<IQuestionnaireExportStructureStorage>(

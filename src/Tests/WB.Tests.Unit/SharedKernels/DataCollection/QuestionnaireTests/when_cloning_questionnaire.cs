@@ -21,12 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
 
-            plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IPlainQuestionnaireRepository>(_
+            plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IQuestionnaireStorage>(_
                 => _.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaireDocumentFromRepository));
 
             questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
-                plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object);
+                questionnaireStorage: plainQuestionnaireRepositoryMock.Object);
 
             questionnaire.SetId(questionnaireIdentity.QuestionnaireId);
         };
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         private static QuestionnaireIdentity questionnaireIdentity
             = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string newQuestionnaireTitle = "New Questionnaire Title";
-        private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
+        private static Mock<IQuestionnaireStorage> plainQuestionnaireRepositoryMock;
         private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
     }
 }

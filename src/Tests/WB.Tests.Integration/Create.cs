@@ -546,7 +546,7 @@ namespace WB.Tests.Integration
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaire = new Questionnaire(
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(), 
                 new QuestionnaireRosterStructureFactory(),
@@ -563,11 +563,11 @@ namespace WB.Tests.Integration
         }
 
         public static Interview Interview(Guid? questionnaireId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
@@ -582,11 +582,11 @@ namespace WB.Tests.Integration
         }
 
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
@@ -888,11 +888,11 @@ namespace WB.Tests.Integration
 
         public static SubstitutionViewModel SubstitutionViewModel(
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new SubstitutionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 new SubstitutionService(),
                 new AnswerToStringService(),
                 new VariableToUIStringService(),
@@ -916,7 +916,7 @@ namespace WB.Tests.Integration
             ILiteEventRegistry registry = null,
             SubstitutionViewModel substitutionViewModel = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new DynamicTextViewModel(
                 registry ?? Create.LiteEventRegistry(),

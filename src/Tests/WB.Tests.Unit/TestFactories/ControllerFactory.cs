@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.TestFactories
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_
+                Mock.Of<IQuestionnaireStorage>(_
                     => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaire),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(_
                     => _.GetById(It.IsAny<object>()) == questionnaireBrowseItem))

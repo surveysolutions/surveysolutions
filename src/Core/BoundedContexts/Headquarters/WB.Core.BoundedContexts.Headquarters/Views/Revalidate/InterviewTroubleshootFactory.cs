@@ -21,18 +21,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IPlainStorageAccessor<UserDocument> userStore;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService)
         {
             this.merger = merger;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnaire == null)
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");

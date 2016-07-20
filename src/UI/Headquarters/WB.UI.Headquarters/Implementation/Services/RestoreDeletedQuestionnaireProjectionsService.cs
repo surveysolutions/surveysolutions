@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 {
     internal class RestoreDeletedQuestionnaireProjectionsService : IRestoreDeletedQuestionnaireProjectionsService
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
 
-        public RestoreDeletedQuestionnaireProjectionsService(IPlainQuestionnaireRepository plainQuestionnaireRepository,
+        public RestoreDeletedQuestionnaireProjectionsService(IQuestionnaireStorage questionnaireStorage,
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             foreach (var allDeletedQuestionnaireId in allDeletedQuestionnaireIds)
             {
                 var document =
-                    this.plainQuestionnaireRepository.GetQuestionnaireDocument(
+                    this.questionnaireStorage.GetQuestionnaireDocument(
                         allDeletedQuestionnaireId.QuestionnaireId, allDeletedQuestionnaireId.Version);
                 var questionnaireEntityId = new QuestionnaireIdentity(allDeletedQuestionnaireId.QuestionnaireId, allDeletedQuestionnaireId.Version).ToString();
 

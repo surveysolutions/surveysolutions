@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private NavigationState navigationState;
 
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory)
         {

@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public InterviewViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
                 &&*/ _.GetRostersFromTopToSpecifiedQuestion(questionId) == new Guid[] {});
 
-            var questionnaireRepository = Stub<IPlainQuestionnaireRepository>.Returning(questionaire);
+            var questionnaireRepository = Stub<IQuestionnaireStorage>.Returning(questionaire);
 
             eventContext = new EventContext();
 

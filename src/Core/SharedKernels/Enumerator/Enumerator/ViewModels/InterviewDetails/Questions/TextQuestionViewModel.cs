@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public event EventHandler AnswerRemoved;
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)

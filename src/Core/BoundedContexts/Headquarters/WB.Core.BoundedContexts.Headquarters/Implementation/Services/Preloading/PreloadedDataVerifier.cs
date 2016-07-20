@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-      	private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+      	private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
@@ -43,13 +43,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         public PreloadedDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         
         private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
         {
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireId, version));

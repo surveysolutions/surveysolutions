@@ -52,7 +52,7 @@ namespace WB.Tests.Integration
         public static SideBarSectionsViewModel SidebarSectionViewModel(QuestionnaireDocument questionnaireDocument, StatefulInterview interview)
         {
             var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
                 x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
             var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);

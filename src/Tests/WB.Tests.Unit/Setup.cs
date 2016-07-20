@@ -86,31 +86,31 @@ namespace WB.Tests.Unit
             Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
         }
 
-        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
             return Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
-        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity,
                 Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
-        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity,
                 Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
 
-        private static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
-            => Stub<IPlainQuestionnaireRepository>.Returning(questionnaire);
+            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
-        private static IPlainQuestionnaireRepository QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
-            => Mock.Of<IPlainQuestionnaireRepository>(repository
+        private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
+            => Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
                 && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
                 && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
@@ -166,7 +166,7 @@ namespace WB.Tests.Unit
             Guid questionnaireId = Guid.NewGuid();
             long questionnaireVersion = 777;
 
-            IPlainQuestionnaireRepository questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+            IQuestionnaireStorage questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
                 questionnaire: questionnaire);
@@ -291,7 +291,7 @@ namespace WB.Tests.Unit
             var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
 
             return Create.Service.InterviewDetailsViewFactory(
-                plainQuestionnaireRepository: questionnaireRepository,
+                questionnaireStorage: questionnaireRepository,
                 interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
                 eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
                 merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));

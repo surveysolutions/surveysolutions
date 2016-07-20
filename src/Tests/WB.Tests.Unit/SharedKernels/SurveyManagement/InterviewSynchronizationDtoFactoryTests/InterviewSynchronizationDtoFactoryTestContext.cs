@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                         _.GetById(Moq.It.IsAny<string>()) ==
                         new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
+                Mock.Of<IQuestionnaireStorage>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                         _.GetById(Moq.It.IsAny<string>()) ==
                         questionnaireRosterStructure),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IPlainQuestionnaireRepository>());
+                Mock.Of<IQuestionnaireStorage>());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

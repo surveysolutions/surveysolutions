@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        protected readonly IPlainQuestionnaireRepository questionnaireStorage;
+        protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPrincipal userIdentity;
         protected readonly ILiteEventRegistry eventRegistry;
         protected readonly IMvxMainThreadDispatcher mainThreadDispatcher;
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher)

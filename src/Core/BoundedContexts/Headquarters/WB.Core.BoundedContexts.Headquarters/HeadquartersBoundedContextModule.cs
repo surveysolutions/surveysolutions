@@ -336,7 +336,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<ITranslationStorage>().To<TranslationStorage>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
+            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope(); // has internal cache, so should be singleton
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath);

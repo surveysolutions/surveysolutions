@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly Guid userId;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,

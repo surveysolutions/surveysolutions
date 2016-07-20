@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
 
         private string interviewId;
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public GroupViewModel(
             IStatefulInterviewRepository interviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,

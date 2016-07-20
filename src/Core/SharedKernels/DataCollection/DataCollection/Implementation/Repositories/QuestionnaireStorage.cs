@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class PlainQuestionnaireRepositoryWithCache : IPlainQuestionnaireRepository
+    internal class QuestionnaireStorage : IQuestionnaireStorage
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ConcurrentDictionary<string, QuestionnaireDocument> cache = new ConcurrentDictionary<string, QuestionnaireDocument>();
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
 
-        public PlainQuestionnaireRepositoryWithCache(IPlainKeyValueStorage<QuestionnaireDocument> repository, ITranslationStorage translationStorage, IQuestionnaireTranslator translator)
+        public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, ITranslationStorage translationStorage, IQuestionnaireTranslator translator)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;

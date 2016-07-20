@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 x.GetFilteredOptionsForQuestion(questionId, null, string.Empty) == options
                 && x.GetFilteredOptionsForQuestion(questionId, null, "a") == filteredOptions);
 
-            var questionnaireStorage = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
