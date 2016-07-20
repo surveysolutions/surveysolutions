@@ -48,8 +48,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
-        public IMvxCommand ReloadInterviewCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
-
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 

@@ -29,8 +29,33 @@ namespace WB.UI.Interviewer.Activities
 
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
-
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
+
+            menu.LocalizeMenuItem(Resource.Id.interview_language, InterviewerUIResources.MenuItem_Title_Language);
+            menu.LocalizeMenuItem(Resource.Id.interview_language_original, InterviewerUIResources.MenuItem_Title_Language_Original);
+
+            ISubMenu languagesMenu = menu.FindItem(Resource.Id.interview_language).SubMenu;
+
+            IMenuItem currentLanguageMenuItem = menu.FindItem(Resource.Id.interview_language_original);
+
+            foreach (var language in this.ViewModel.AvailableLanguages)
+            {
+                var languageMenuItem = languagesMenu.Add(
+                    groupId: Resource.Id.interview_languages,
+                    itemId: Menu.None,
+                    order: Menu.None,
+                    title: language);
+
+                if (language == this.ViewModel.CurrentLanguage)
+                {
+                    currentLanguageMenuItem = languageMenuItem;
+                }
+            }
+
+            languagesMenu.SetGroupCheckable(Resource.Id.interview_languages, checkable: true, exclusive: true);
+
+            currentLanguageMenuItem.SetChecked(true);
+
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -41,11 +66,26 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
+
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
+
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    break;
+
+                default:
+                    if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
+                    {
+                        string translationLanguage =
+                            item.ItemId == Resource.Id.interview_language_original
+                                ? null
+                                : item.TitleFormatted.ToString();
+
+                        this.ViewModel.SwitchTranslationCommand.Execute(translationLanguage);
+                        this.ViewModel.ReloadInterviewCommand.Execute();
+                    }
                     break;
             }
         }

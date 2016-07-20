@@ -413,6 +413,12 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Login</value>
   </data>
