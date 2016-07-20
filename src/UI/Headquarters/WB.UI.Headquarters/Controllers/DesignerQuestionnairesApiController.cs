@@ -10,7 +10,6 @@ using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -37,9 +36,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly string apiVersion = @"v3";
 
         private readonly IAttachmentContentService attachmentContentService;
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-
+        private readonly ITranslationManagementService translationManagementService;
 
         internal RestCredentials designerUserCredentials
         {
@@ -55,8 +53,8 @@ namespace WB.UI.Headquarters.Controllers
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService,
-            IAttachmentContentService questionnaireAttachmentService, IPlainStorageAccessor<TranslationInstance> translations, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage, IQuestionnaireVersionProvider questionnaireVersionProvider)
-            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService, translations, questionnaireVersionProvider)
+            IAttachmentContentService questionnaireAttachmentService, IPlainStorageAccessor<TranslationInstance> translations, IQuestionnaireVersionProvider questionnaireVersionProvider, ITranslationManagementService translationManagementService)
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService, questionnaireVersionProvider, translationManagementService)
         {
             
         }
@@ -64,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
         internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
             Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService,
-            IAttachmentContentService attachmentContentService, IPlainStorageAccessor<TranslationInstance> translations, IQuestionnaireVersionProvider questionnaireVersionProvider)
+            IAttachmentContentService attachmentContentService, IQuestionnaireVersionProvider questionnaireVersionProvider, ITranslationManagementService translationManagementService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -72,8 +70,8 @@ namespace WB.UI.Headquarters.Controllers
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
             this.attachmentContentService = attachmentContentService;
-            this.translations = translations;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.translationManagementService = translationManagementService;
         }
 
         private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
@@ -141,23 +139,24 @@ namespace WB.UI.Headquarters.Controllers
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
                 if (questionnaire.Translations?.Count > 0)
                 {
+                    var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
+
+                    this.translationManagementService.Delete(questionnaireIdentity);
+
                     var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
                         url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
                         credentials: designerUserCredentials);
 
-                    foreach (var translationDto in translationContent)
+                    this.translationManagementService.Store(translationContent.Select(x => new TranslationInstance
                     {
-                        var translationInstace = new TranslationInstance
-                        {
-                            QuestionnaireId = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion),
-                            Value = translationDto.Value,
-                            QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
-                            Type = translationDto.Type,
-                            TranslationIndex = translationDto.TranslationIndex,
-                            Language = translationDto.Language
-                        };
-                        this.translations.Store(translationInstace, translationInstace);
-                    }
+                        QuestionnaireId = questionnaireIdentity,
+                        Value = x.Value,
+                        QuestionnaireEntityId = x.QuestionnaireEntityId,
+                        Type = x.Type,
+                        TranslationIndex = x.TranslationIndex,
+                        Language = x.Language
+                    }));
+
                 }
 
                 this.CommandService.Execute(new ImportFromDesigner(
