@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
                 else
                 {
-                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
+                    this.viewModelNavigationService.NavigateToInterview(interviewIdString, navigationIdentity: null);
                 }
             }
             catch (OperationCanceledException)

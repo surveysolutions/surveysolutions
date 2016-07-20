@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (questionnaire.GetPrefilledQuestions().Count == 0)
             {
-                this.viewModelNavigationService.NavigateToInterview(interviewId);
+                this.viewModelNavigationService.NavigateToInterview(interviewId, navigationIdentity: null);
                 return;
             }
 

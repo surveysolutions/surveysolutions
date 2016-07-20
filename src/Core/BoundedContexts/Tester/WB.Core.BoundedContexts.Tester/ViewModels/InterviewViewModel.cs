@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -31,10 +32,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICommandService commandService)
+            ICommandService commandService,
+            IJsonAllTypesSerializer jsonSerializer)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService)
+                interviewViewModelFactory, commandService, jsonSerializer)
         {
             this.viewModelNavigationService = viewModelNavigationService;
         }
@@ -46,7 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
-        public IMvxCommand ReloadInterviewCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId));
+        public IMvxCommand ReloadInterviewCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);

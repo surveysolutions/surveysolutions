@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -33,10 +34,11 @@ namespace WB.UI.Interviewer.ViewModel
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICommandService commandService)
+            ICommandService commandService,
+            IJsonAllTypesSerializer jsonSerializer)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService)
+                interviewViewModelFactory, commandService, jsonSerializer)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
