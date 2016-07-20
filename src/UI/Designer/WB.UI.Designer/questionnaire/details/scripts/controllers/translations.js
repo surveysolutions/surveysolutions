@@ -127,7 +127,6 @@
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
                     translation.initialTranslation = angular.copy(translation);
-                    translation.form.$setPristine();
                 }).then(translation.form.$setPristine());
             };
 
