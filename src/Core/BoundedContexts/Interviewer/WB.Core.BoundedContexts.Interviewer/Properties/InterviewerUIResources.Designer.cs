@@ -470,7 +470,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on this device.
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assignments on this device.
         /// </summary>
         public static string Diagnostics_Restore_Description {
             get {
