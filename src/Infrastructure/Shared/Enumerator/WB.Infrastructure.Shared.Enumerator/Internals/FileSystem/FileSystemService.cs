@@ -120,7 +120,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return Directory.GetDirectories(pathToDirectory).ToArray();
         }
 
-        public string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = true)
+        public string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = false)
             => Directory.GetFiles(pathToDirectory, "*.*", searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToArray();
 
         public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
