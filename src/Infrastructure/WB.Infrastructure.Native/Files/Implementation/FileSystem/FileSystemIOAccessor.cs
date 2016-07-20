@@ -196,10 +196,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return ZlpIOHelper.GetDirectories(pathToDirectory).Select(directoryInfo => directoryInfo.FullName).ToArray();
         }
 
-        public string[] GetFilesInDirectory(string pathToDirectory)
-        {
-            return ZlpIOHelper.GetFiles(pathToDirectory, "*.*", SearchOption.AllDirectories).Select(fileInfo => fileInfo.FullName).ToArray();
-        }
+        public string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = true) 
+            => ZlpIOHelper.GetFiles(pathToDirectory, "*.*", searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
+            .Select(fileInfo => fileInfo.FullName)
+            .ToArray();
 
         public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
         {
