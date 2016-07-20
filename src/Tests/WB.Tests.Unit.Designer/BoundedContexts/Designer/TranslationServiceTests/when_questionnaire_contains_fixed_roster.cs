@@ -63,9 +63,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_roster_title_translation = () =>
         {
             var questionTitleRow = 2;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.Title);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated title");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         };
@@ -73,9 +73,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         It should_output_roster_fixed_option_title_translation = () =>
         {
             var questionTitleRow = 3;
-            ((TranslationType)Convert.ToInt32(cells[questionTitleRow, translationTypeColumn].Value)).ShouldEqual(TranslationType.FixedRosterTitle);
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.FixedRosterTitle);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("42");
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.ToString());
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("invariant option title");
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldEqual("fixed roster item 1");
         };
