@@ -75,10 +75,8 @@ namespace WB.UI.Tester.Activities
                     break;
 
                 default:
-                    if (item.GroupId == Resource.Id.interview_languages)
+                    if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
                     {
-                        item.SetChecked(true);
-
                         string translationLanguage =
                             item.ItemId == Resource.Id.interview_language_original
                                 ? null

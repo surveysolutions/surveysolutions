@@ -212,15 +212,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string CurrentLanguage { get; private set; }
         public IReadOnlyCollection<string> AvailableLanguages { get; private set; }
 
+        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
+
         public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
+        public IMvxCommand ReloadInterviewCommand => new MvxCommand(this.ReloadInterview);
 
         private void SwitchTranslation(string language) => this.commandService.Execute(
             new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
 
-        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
-        {
-            get { return PrefilledQuestions.Where(x => !x.StatsInvisible); }
-        }
+        private void ReloadInterview() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity);
 
         public void Dispose()
         {

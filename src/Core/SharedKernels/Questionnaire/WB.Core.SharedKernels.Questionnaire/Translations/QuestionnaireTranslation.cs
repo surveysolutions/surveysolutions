@@ -26,36 +26,23 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         }
 
         public string GetTitle(Guid entityId)
-        {
-            return this.GetTranslationByType(entityId, TranslationType.Title);
-        }
+            => this.GetTranslationByType(entityId, TranslationType.Title);
 
         public string GetInstruction(Guid questionId)
-        {
-            return this.GetTranslationByType(questionId, TranslationType.Instruction);
-        }
+            => this.GetTranslationByType(questionId, TranslationType.Instruction);
 
         public string GetAnswerOption(Guid questionId, string answerOptionValue)
-        {
-            return this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
-        }
+            => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
 
         public string GetValidationMessage(Guid entityId, int validationOneBasedIndex)
-        {
-            return this.GetTranslationByTypeAndIndex(entityId, validationOneBasedIndex.ToString(),
-                TranslationType.ValidationMessage);
-        }
+            => this.GetTranslationByTypeAndIndex(
+                entityId, validationOneBasedIndex.ToString(), TranslationType.ValidationMessage);
 
         public string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
-        {
-            return this.GetTranslationByTypeAndIndex(rosterId, fixedRosterTitleValue.ToString(CultureInfo.InvariantCulture),
-                TranslationType.FixedRosterTitle);
-        }
+            => this.GetTranslationByTypeAndIndex(
+                rosterId, fixedRosterTitleValue.ToString(CultureInfo.InvariantCulture), TranslationType.FixedRosterTitle);
 
-        public bool IsEmpty()
-        {
-            return this.translations.Any() == false;
-        }
+        public bool IsEmpty() => !this.translations.Any();
 
         private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
         {
