@@ -411,6 +411,6 @@
     <value>Вибрировать когда дан не валидный ответ</value>
   </data>
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
-    <value>Пожалуйста, введите тескт</value>
+    <value>Ответ не может быть пустым</value>
   </data>
 </root>
