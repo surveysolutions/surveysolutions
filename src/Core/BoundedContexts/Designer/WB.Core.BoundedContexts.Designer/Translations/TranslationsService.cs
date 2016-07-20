@@ -26,6 +26,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string Translation { get; set; }
         }
 
+        private readonly TranslationType[] translationTypesWithIndexes =
+        {
+            TranslationType.FixedRosterTitle, TranslationType.OptionTitle, TranslationType.ValidationMessage
+        };
+
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
         private const string WorksheetName = "Translations";
@@ -105,7 +110,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             if (worksheet.Name != WorksheetName)
                 throw new InvalidExcelFileException("Worksheet with translations not found");
-            
+
+            var translationErrors = this.Verify(worksheet).Take(10).ToList();
+            if (translationErrors.Any())
+                throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
+
+
             this.RemoveStoredTranslations(questionnaireId, language);
             
             for (int rowNumber = 2; rowNumber <= worksheet.UsedRange.RowCount; rowNumber++)
@@ -166,6 +176,49 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].Text,
             Translation = cells[$"E{rowNumber}"].Text
         };
+
+        private IEnumerable<TranslationValidationError> Verify(IWorksheet worksheet)
+        {
+            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
+            {
+                var importedTranslation = GetExcelTranslation(worksheet.UsedRange.Cells, rowNumber);
+
+                Guid entityId;
+                if (!Guid.TryParse(importedTranslation.EntityId, out entityId))
+                {
+                    var cellAddress = worksheet.Cells[$"A{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = $"{EntityIdColumnName} has invalid id at [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
+                }
+
+                TranslationType importedType;
+                if (!Enum.TryParse(importedTranslation.Type, out importedType) || importedType == TranslationType.Unknown)
+                {
+                    var cellAddress = worksheet.Cells[$"B{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = $"{TranslationTypeColumnName} has invalid type [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
+                }
+
+                if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
+                {
+                    var cellAddress = worksheet.Cells[$"C{rowNumber}"].Address;
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = $"{TranslationTypeColumnName} has invalid index at [{cellAddress}]",
+                        ErrorAddress = cellAddress
+                    };
+                }
+            }
+        }
 
         private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
         {
