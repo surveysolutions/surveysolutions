@@ -23,9 +23,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
         private readonly IEnumerable<IComposite> allItems;
         public QuestionnaireDocument Questionnaire { get; private set; }
+        public string Translation { get; private set; }
 
-        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire)
+        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire, string translation = null)
         {
+            this.Translation = translation;
             this.Questionnaire = questionnaire;
             this.Questionnaire.ConnectChildrenWithParent();
             this.allItems = CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);

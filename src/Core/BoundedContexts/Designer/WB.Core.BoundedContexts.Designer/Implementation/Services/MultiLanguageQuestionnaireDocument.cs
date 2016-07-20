@@ -37,7 +37,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.Find<T>(condition);
 
-        public IEnumerable<T> FindWithTranslations<T>(Func<T, bool> condition) where T : class
+        public class TranslatedEntity<TEntity>
+        {
+            public TranslatedEntity(TEntity entity, string translationName)
+            {
+                this.Entity = entity;
+                this.TranslationName = translationName;
+            }
+
+            public TEntity Entity { get; private set; }
+            public string TranslationName { get; private set; }
+        }
+
+        public IEnumerable<TranslatedEntity<T>> FindWithTranslations<T>(Func<T, bool> condition) where T : class
         {
             var allQuestionnaires = this.Questionnaire.ToEnumerable().Union(this.TranslatedQuestionnaires);
             foreach (var questionnaire in allQuestionnaires)
@@ -45,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var findResult = questionnaire.Find<T>(condition);
                 foreach (var entity in findResult)
                 {
-                    yield return entity;
+                    yield return new TranslatedEntity<T>(entity, questionnaire.Translation); 
                 }
             }
         }
