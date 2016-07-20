@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 var translation = this.translationService.Get(questionnaire.PublicKey, t.TranslationId);
                 var translatedQuestionnaireDocument = this.questionnaireTranslator.Translate(questionnaire, translation);
-                translatedQuestionnaires.Add(translatedQuestionnaireDocument.AsReadOnly());
+                translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
             });
 
             var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(readOnlyQuestionnaireDocument,
@@ -690,11 +690,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             where TEntity : class, IComposite
         {
             return (questionnaire) =>
-                questionnaire
-                    .FindWithTranslations<TEntity>(hasError)
-                    .Select(entity => level == VerificationMessageLevel.General 
-                        ? QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity))
-                        : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+                    questionnaire
+                        .FindWithTranslations<TEntity>(hasError)
+                            .Select(translatedEntity =>
+                            {
+                                var translationMessage = translatedEntity.TranslationName == null
+                                    ? message
+                                    : translatedEntity.TranslationName + ": " + message;
+                                var questionnaireVerificationReference = CreateReference(translatedEntity.Entity);
+                                return level == VerificationMessageLevel.General
+                                    ? QuestionnaireVerificationMessage.Error(code, translationMessage, questionnaireVerificationReference)
+                                    : QuestionnaireVerificationMessage.Critical(code, translationMessage, questionnaireVerificationReference);
+                            }
+                      );
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
@@ -730,9 +738,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) =>
                 questionnaire
                     .FindWithTranslations<TEntity>(entity => true)
-                    .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
-                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire))
-                    .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
+                    .SelectMany(translatedEntity => getSubEnitites(translatedEntity.Entity).Select((subEntity, index) => new { Entity = translatedEntity, SubEntity = subEntity, Index = index }))
+                    .Where(descriptor => hasError(descriptor.Entity.Entity, descriptor.SubEntity, questionnaire))
+                    .Select(descriptor => 
+                        QuestionnaireVerificationMessage.Error(
+                            code, 
+                            descriptor.Entity.TranslationName == null 
+                                ? getMessageBySubEntityIndex(descriptor.Index + 1)
+                                : descriptor.Entity.TranslationName + ": " + getMessageBySubEntityIndex(descriptor.Index + 1), 
+                            CreateReference(descriptor.Entity.Entity, descriptor.Index))
+                     );
 
         }
 
