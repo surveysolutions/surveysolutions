@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
                 Mock.Of<ILookupTableService>(),
                 attachmentService ?? Mock.Of<IAttachmentService>(),
-                translationsService ?? Mock.Of<TranslationsService>());
+                translationsService ?? Mock.Of<ITranslationsService>());
 
             controller.Request = httpRequestMessage ?? new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(httpConfiguration ??  new HttpConfiguration());
