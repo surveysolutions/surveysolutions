@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string MakeValidFileName(string name);
 
         string[] GetDirectoriesInDirectory(string pathToDirectory);
-        string[] GetFilesInDirectory(string pathToDirectory);
+        string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = true);
         string[] GetFilesInDirectory(string pathToDirectory, string pattern);
 
         void WriteAllText(string pathToFile, string content);
