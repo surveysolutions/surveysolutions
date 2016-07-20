@@ -47,9 +47,9 @@
         ];
         var answeredYesNoQuestionsBySupervisor = [
             @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
-
+        var translation = '@Model.InterviewDetails.CurrentTranslation';
         $(function () {
-            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, translation);
             ko.applyBindings(model);
             model.load();
         });
@@ -77,38 +77,39 @@
 
     </div>
     <div id="content" class="col-md-9 col-md-offset-3 main">
-        <div class="row-fluid">
-            <h3 class="span10 text-overflow-ellipsis">
-                <span>@Model.InterviewDetails.Title</span>
-                <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
-                <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
-                @if (Model.HasUnprocessedSyncPackages)
-                {
-                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
-                }
-            </h3>
-            <div class="form-inline">
-                <span class="small">@Pages.InterviewDetails_TranslationLabel :</span>
-
-                @if (Model.InterviewDetails.ReceivedByInterviewer)
-                {
-                    <span>@(string.IsNullOrEmpty(Model.InterviewDetails.CurrentTranslation) ? Pages.InterviewDetails_DefaultTranslation : Model.InterviewDetails.CurrentTranslation)</span>
-                }
-                else
-                {
-                    <div class="input-group">
-                        <select id="translationSelector" class="form-control" data-bind="event: { change: switchTranslation }">
-                            <option value='' @(null == Model.InterviewDetails.CurrentTranslation ? "selected='selected'" : "")>@Pages.InterviewDetails_DefaultTranslation</option>
-                            @foreach (var item in Model.Translations)
-                            {
-                                <option value='@item' @(item == Model.InterviewDetails.CurrentTranslation ? "selected='selected'" : "")>@item</option>
-                            }
-                        </select>
-                    </div>
-                }
-
+        <div class="row">
+            <div class="col-md-9">
+                <h3 class="span10 text-overflow-ellipsis">
+                    <span>@Model.InterviewDetails.Title</span>
+                    <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
+                    <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
+                    @if (Model.HasUnprocessedSyncPackages)
+                    {
+                        <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
+                    }
+                </h3>
             </div>
-
+            <div class="col-md-3">
+                <div class="form-inline pull-right">
+                    <span class="small">@Pages.InterviewDetails_TranslationLabel :</span>
+                    @if (Model.InterviewDetails.ReceivedByInterviewer)
+                    {
+                        <span>@(string.IsNullOrEmpty(Model.InterviewDetails.CurrentTranslation) ? Pages.InterviewDetails_DefaultTranslation : Model.InterviewDetails.CurrentTranslation)</span>
+                    }
+                    else
+                    {
+                        <div class="input-group">
+                            <select id="translationSelector" class="form-control" data-bind="value: currentTranslation">
+                                <option value=''>@Pages.InterviewDetails_DefaultTranslation</option>
+                                @foreach (var item in Model.Translations)
+                                {
+                                    <option value='@item'>@item</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
