@@ -1525,15 +1525,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SwitchTranslation(SwitchTranslation command)
         {
             ThrowIfInterviewHardDeleted();
-            if (command.TranlstionId != null)
+            if (command.TranslationId != null)
             {
                 IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.translationId);
                 IReadOnlyCollection<Translation> availableLanguages = questionnaire.GetTranslationLanguages();
 
-                if (availableLanguages.All(translation => translation.TranslationId != command.TranlstionId.Value))
+                if (availableLanguages.All(translation => translation.TranslationId != command.TranslationId.Value))
                     throw new InterviewException(
-                        $"Questionnaire does not have translation. Translation ID: {command.TranlstionId.FormatGuid()}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
-                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.TranlstionId);
+                        $"Questionnaire does not have translation. Translation ID: {command.TranslationId.FormatGuid()}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.TranslationId);
 
                 var fixedRosterInstances =
                     this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
@@ -1555,7 +1555,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            this.ApplyEvent(new TranslationSwitched(command.TranlstionId, command.UserId));
+            this.ApplyEvent(new TranslationSwitched(command.TranslationId, command.UserId));
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)

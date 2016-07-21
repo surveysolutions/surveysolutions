@@ -5,12 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class SwitchTranslation : InterviewCommand
     {
-        public SwitchTranslation(Guid interviewId, Guid? tranlstionId, Guid userId)
+        public SwitchTranslation(Guid interviewId, Guid? translationId, Guid userId)
             : base(interviewId, userId)
         {
-            this.TranlstionId = tranlstionId;
+            this.TranslationId = translationId;
         }
 
-        public Guid? TranlstionId { get; }
+        public Guid? TranslationId { get; }
     }
 }
