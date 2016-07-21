@@ -348,7 +348,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                    Type = TranslationType.FixedRosterTitle.ToString("G"),
                    OriginalText = fixedRoster.Title,
                    Translation = translation.GetFixedRosterTitle(@group.PublicKey, fixedRoster.Value),
-                   OptionValueOrValidationIndexOrFixedRosterId = fixedRoster.Value.ToString(CultureInfo.InvariantCulture)
+                   OptionValueOrValidationIndexOrFixedRosterId = fixedRoster.Value.ToString("F0", CultureInfo.InvariantCulture)
                };
     }
 }

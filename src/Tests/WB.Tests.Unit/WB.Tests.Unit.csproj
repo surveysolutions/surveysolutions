@@ -354,6 +354,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_fixed_rosters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_timestamp_question_which_is_roster_title.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_questionnaire_contains_yes_no_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_switching_translation_language_to_existing_language.cs" />

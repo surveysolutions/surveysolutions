@@ -685,7 +685,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(
-                questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
+                questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, targetLanguage: null);
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
@@ -745,7 +745,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, version);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, version, targetLanguage: null);
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
@@ -814,7 +814,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, targetLanguage: null);
 
             var interviewChangeStructures = new InterviewChangeStructures();
             var newAnswers =
@@ -857,7 +857,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, targetLanguage: null);
             this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
@@ -892,7 +892,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, targetLanguage: null);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
                 interviewStatus, featuredQuestionsMeta, true, null, null, null));
@@ -1532,6 +1532,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (!availableLanguages.Contains(command.Language))
                     throw new InterviewException(
                         $"Questionnaire does not have translation for language '{command.Language}'. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
+
+                List<RosterCalculationData> calculateFixedRostersData = this.CalculateFixedRostersData(this.interviewState, targetQuestionnaire);
+                List<InterviewChanges> changes = new List<InterviewChanges>();
+
+                foreach (var fixedRosterCalculationData in calculateFixedRostersData)
+                {
+                    var fixedRosterChanges = new InterviewChanges(
+                        null, null, null, fixedRosterCalculationData, null, null, null, null, null, null, null);
+                    changes.Add(fixedRosterChanges);
+                }
+
+                this.ApplyInterviewChanges(changes);
             }
 
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
@@ -1766,7 +1779,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(interviewDto.QuestionnaireId,
-                interviewDto.QuestionnaireVersion, language: null);
+                interviewDto.QuestionnaireVersion, targetLanguage: null);
 
             var rosters = CalculateRostersFromInterviewSynchronizationDto(interviewDto);
 
@@ -1869,7 +1882,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, targetLanguage: null);
 
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
@@ -4246,12 +4259,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string language)
+        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string targetLanguage)
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version), targetLanguage);
 
             if (questionnaire == null)
-                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version), InterviewDomainExceptionType.QuestionnaireIsMissing);
+                throw new InterviewException($"Questionnaire '{new QuestionnaireIdentity(id, version)}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }
