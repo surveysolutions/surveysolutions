@@ -1295,5 +1295,23 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0258_TranslationsHasDuplicatedNames", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question title is too long. It should be no longer than 250 characters..
+        /// </summary>
+        internal static string WB0259_QuestionTitleIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0259_QuestionTitleIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is too long. It should be no longer than 250 characters..
+        /// </summary>
+        internal static string WB0260_GroupTitleIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
+            }
+        }
     }
 }
