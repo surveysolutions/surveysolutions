@@ -208,7 +208,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
-            
+            TranslationVerifier<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
+            TranslationVerifier<IGroup>(GroupTitleIsTooLong, "WB0260", VerificationMessages.WB0260_GroupTitleIsTooLong),
+
 
             Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
             Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName, VerificationMessageLevel.Critical),
@@ -792,7 +794,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool TranslationNameIsInvalid(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var names = questionnaire.Translations.Select(t => t.Name);
-            return names.All(name =>string.IsNullOrWhiteSpace(name) || name.Length > 30);
+            return names.All(name =>string.IsNullOrWhiteSpace(name) || name.Length > 32);
         }
 
         private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1040,6 +1042,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
             => validationCondition.Message?.Length > 250;
+
+        private static bool QuestionTitleIsTooLong(IQuestion question)
+            => question.QuestionText?.Length > 500;
+
+        private static bool GroupTitleIsTooLong(IGroup group)
+            => group.Title?.Length > 500;
 
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
