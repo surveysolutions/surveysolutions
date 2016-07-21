@@ -299,7 +299,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M004_RenameCultureColumn.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M006_ReplaceColumnLanguageToTranslationIdInTranslationInstances.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M006_ReplacedColumnLanguageToTranslationIdAndChangedIdColumnTypeInTranslationInstances.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M002_AddRolesIndex.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
