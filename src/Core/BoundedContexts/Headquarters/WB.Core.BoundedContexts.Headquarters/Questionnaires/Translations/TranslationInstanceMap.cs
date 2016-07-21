@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
             this.Property(x => x.Type, ptp => ptp.NotNullable(true));
             this.Property(x => x.QuestionnaireEntityId, ptp => ptp.NotNullable(true));
             this.Property(x => x.TranslationIndex);
-            this.Property(x => x.Language, ptp => ptp.NotNullable(true));
+            this.Property(x => x.TranslationId, ptp => ptp.NotNullable(true));
             this.Property(x => x.Value, ptp => ptp.NotNullable(true));
         }
     }

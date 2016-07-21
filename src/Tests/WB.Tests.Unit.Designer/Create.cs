@@ -1033,7 +1033,7 @@ namespace WB.Tests.Unit.Designer
             TranslationType type = TranslationType.Unknown,
             Guid? questionnaireEntityId = null,
             string translationIndex = null,
-            string culture = null,
+            Guid? translationId = null,
             string translation = null)
         {
             return new TranslationInstance
@@ -1043,7 +1043,7 @@ namespace WB.Tests.Unit.Designer
                 Type = type,
                 Value = translation,
                 TranslationIndex = translationIndex,
-                Language = culture
+                TranslationId = translationId ?? Guid.NewGuid()
             };
         }
 
@@ -1051,7 +1051,7 @@ namespace WB.Tests.Unit.Designer
             TranslationType type = TranslationType.Unknown,
             Guid? questionnaireEntityId = null,
             string translationIndex = null,
-            string culture = null,
+            Guid? translationId = null,
             string translation = null)
         {
             return new TranslationDto
@@ -1060,7 +1060,7 @@ namespace WB.Tests.Unit.Designer
                 Type = type,
                 Value = translation,
                 TranslationIndex = translationIndex,
-                Language = culture
+                TranslationId = translationId ?? Guid.NewGuid()
             };
         }
 

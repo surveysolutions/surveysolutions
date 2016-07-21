@@ -4,6 +4,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
-                => questionnaire.GetTranslationLanguages() == new [] { "Русский" });
+                => questionnaire.GetTranslationLanguages() == new [] { new Translation {TranslationId = translationId, Name = "Русский" }});
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
 
@@ -20,11 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.SwitchTranslation(new SwitchTranslation(Guid.NewGuid(), "Русский", Guid.NewGuid()));
+            interview.SwitchTranslation(new SwitchTranslation(Guid.NewGuid(), translationId, Guid.NewGuid()));
 
         It should_publish_TranslationSwitched_event_with_target_language = () =>
-            eventContext.ShouldContainEvent<TranslationSwitched>(@event => @event.Language == "Русский");
+            eventContext.ShouldContainEvent<TranslationSwitched>(@event => @event.TranslationId == translationId);
 
+        private static Guid translationId = Guid.Parse("11111111111111111111111111111111");
         private static Interview interview;
         private static EventContext eventContext;
     }

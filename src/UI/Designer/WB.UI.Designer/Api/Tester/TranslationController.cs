@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Api.Tester
             {
                 Value = x.Value,
                 Type = x.Type,
-                Language = x.Language,
+                TranslationId = x.TranslationId,
                 QuestionnaireEntityId = x.QuestionnaireEntityId,
                 TranslationIndex = x.TranslationIndex
             }).ToArray();

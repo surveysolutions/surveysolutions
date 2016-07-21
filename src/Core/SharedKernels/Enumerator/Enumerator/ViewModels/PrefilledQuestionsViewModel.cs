@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 return;
             }
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
             if (questionnaire.GetPrefilledQuestions().Count == 0)

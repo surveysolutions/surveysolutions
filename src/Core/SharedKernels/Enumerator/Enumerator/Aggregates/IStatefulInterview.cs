@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
 
-        string Language { get; }
+        Guid? TranslationId { get; }
 
         bool HasErrors { get; }
         bool IsCompleted { get; }

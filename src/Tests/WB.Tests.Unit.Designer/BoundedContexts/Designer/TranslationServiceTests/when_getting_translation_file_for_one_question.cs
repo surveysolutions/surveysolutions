@@ -28,24 +28,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 Create.TranslationInstance(type: TranslationType.Title,
                     translation: "title",
-                    culture: cultureId.FormatGuid(),
+                    translationId: translationId,
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: questionId),
                 Create.TranslationInstance(type: TranslationType.Instruction,
                     translation: "instruction",
                     questionnaireId: questionnaireId,
-                    culture: cultureId.FormatGuid(),
+                    translationId: translationId,
                     questionnaireEntityId: questionId),
                 Create.TranslationInstance(type: TranslationType.OptionTitle,
                     translation: "translated option",
                     questionnaireId: questionnaireId,
-                    culture: cultureId.FormatGuid(),
+                    translationId: translationId,
                     questionnaireEntityId: questionId,
                     translationIndex:"2"),
                 Create.TranslationInstance(type: TranslationType.ValidationMessage,
                     translation: "validation message",
                     questionnaireId: questionnaireId,
-                    culture: cultureId.FormatGuid(),
+                    translationId: translationId,
                     questionnaireEntityId: questionId,
                     translationIndex:"1")
             };
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         Because of = () =>
         {
-            excelFile = service.GetAsExcelFile(questionnaireId, cultureId);
+            excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook  = SpreadsheetGear.Factory.GetWorkbookSet().Workbooks.OpenFromMemory(excelFile.ContentAsExcelFile);
             cells = workbook.Worksheets[0].Cells;
         };
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static TranslationsService service;
         static Guid questionId1;
         static Guid questionnaireId;
-        static Guid cultureId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        static Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static TranslationFile excelFile;
         static IWorkbook workbook;
         static IRange cells;

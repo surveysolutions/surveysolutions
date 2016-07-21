@@ -15,14 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl
             this.translations = translations;
         }
 
-        public IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, string language)
+        public IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, Guid translationId)
         {
             var translationInstances =
                 this.translations.Query(_ =>
                     _.Where(x =>
                         x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
                         x.QuestionnaireId.Version == questionnaireId.Version &&
-                        x.Language == language).ToList());
+                        x.TranslationId == translationId).ToList());
             return translationInstances;
         }
 
