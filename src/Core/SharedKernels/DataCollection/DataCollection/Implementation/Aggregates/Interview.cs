@@ -1533,7 +1533,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (availableLanguages.All(translation => translation.TranslationId != command.TranlstionId.Value))
                     throw new InterviewException(
                         $"Questionnaire does not have translation. Translation ID: {command.TranlstionId.FormatGuid()}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
-                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
+                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.TranlstionId);
 
                 List<RosterCalculationData> calculateFixedRostersData = this.CalculateFixedRostersData(this.interviewState, targetQuestionnaire);
                 List<InterviewChanges> changes = new List<InterviewChanges>();
