@@ -80,11 +80,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.TranslationId == interview.CurrentTranslation);
+            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.Id == interview.CurrentTranslation);
             if (currentTranslation != null)
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
-                var translation = this.translationStorage.Get(questionnaireIdentity, currentTranslation.TranslationId);
+                var translation = this.translationStorage.Get(questionnaireIdentity, currentTranslation.Id);
 
                 if (translation == null)
                     throw new ArgumentException($"No translation found for language '{interview.CurrentTranslation}' and questionnaire '{questionnaireIdentity}'.");
@@ -156,7 +156,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Statistic = detailsStatisticView,
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = interviewId}),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
-                Translations = questionnaire.Translations.Select(translation => translation.Name).ToReadOnlyCollection()
+                Translations = questionnaire.Translations.Select(translation => 
+                    new InterviewTranslationView()
+                    {
+                        Id = translation.Id,
+                        Name = translation.Name
+                    }
+                ).ToReadOnlyCollection()
             };
         }
 

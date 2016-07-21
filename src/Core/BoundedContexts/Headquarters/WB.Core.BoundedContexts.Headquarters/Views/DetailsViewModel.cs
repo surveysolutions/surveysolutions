@@ -16,6 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public DetailsStatisticView Statistic { get; set; }
         public bool HasUnprocessedSyncPackages { get; set; }
 
-        public IReadOnlyCollection<string> Translations { set; get; }
+        public IReadOnlyCollection<InterviewTranslationView> Translations { set; get; }
     }
 }
