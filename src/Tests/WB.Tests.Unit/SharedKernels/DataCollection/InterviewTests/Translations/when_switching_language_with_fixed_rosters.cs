@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 
             IQuestionnaireStorage questionnaires = Moq.Mock.Of<IQuestionnaireStorage>(x =>
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
-                x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
+                x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), translationId) == translatedPlainQuestionnaire);
 
             interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaires
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
+        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(translationId: translationId));
 
         It should_raise_roster_titles_changed_event_for_fixed_roster = () =>
         {
@@ -58,6 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 
         static Interview interview;
         static EventContext eventContext;
+        static Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static string targetLanguage = "ru";
         static Guid rosterId;
     }
