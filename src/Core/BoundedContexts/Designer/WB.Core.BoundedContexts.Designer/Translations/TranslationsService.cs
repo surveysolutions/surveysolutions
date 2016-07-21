@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using SpreadsheetGear;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -315,15 +316,24 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                };
 
         private static IEnumerable<TranslationRow> GetTranslatedOptions(IQuestion question, ITranslation translation)
-            => from option in question.Answers
-               select new TranslationRow
-               {
-                   EntityId = question.PublicKey.FormatGuid(),
-                   Type = TranslationType.OptionTitle.ToString("G"),
-                   OriginalText = option.AnswerText,
-                   Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
-                   OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue
-               };
+        {
+            var singleQuestion = question as SingleQuestion;
+            var isNeedIgnoreOptions = (singleQuestion?.CascadeFromQuestionId.HasValue ?? false) 
+                                               || (singleQuestion?.IsFilteredCombobox ?? false);
+
+            if (isNeedIgnoreOptions)
+                return Enumerable.Empty<TranslationRow>();
+
+            return from option in question.Answers
+                select new TranslationRow
+                {
+                    EntityId = question.PublicKey.FormatGuid(),
+                    Type = TranslationType.OptionTitle.ToString("G"),
+                    OriginalText = option.AnswerText,
+                    Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
+                    OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue
+                };
+        }
 
         private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup @group, ITranslation translation)
             => from fixedRoster in @group.FixedRosterTitles
