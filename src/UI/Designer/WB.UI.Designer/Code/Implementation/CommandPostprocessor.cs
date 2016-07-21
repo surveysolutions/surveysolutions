@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Code.Implementation
 
             foreach (var translation in questionnaire.Translations)
             {
-                this.translationsService.Delete(questionnaireId, translation.TranslationId);
+                this.translationsService.Delete(questionnaireId, translation.Id);
             }
         }
 

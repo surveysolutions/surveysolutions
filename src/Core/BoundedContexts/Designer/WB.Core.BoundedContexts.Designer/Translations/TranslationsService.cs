@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var translationFile = new TranslationFile
             {
                 QuestionnaireTitle = questionnaire.Title,
-                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.TranslationId == translationId)?.Name,
+                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name,
                 ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation)
             };
 

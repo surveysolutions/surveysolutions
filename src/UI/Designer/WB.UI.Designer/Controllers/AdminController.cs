@@ -440,8 +440,8 @@ namespace WB.UI.Designer.Controllers
 
             foreach (var translation in questionnaireDocument.Translations)
             {
-                var excelFile = this.translationsService.GetAsExcelFile(id, translation.TranslationId);
-                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.TranslationId.FormatGuid()}.xls", excelFile.ContentAsExcelFile);
+                var excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xls", excelFile.ContentAsExcelFile);
             }
 
             zipStream.Finish();

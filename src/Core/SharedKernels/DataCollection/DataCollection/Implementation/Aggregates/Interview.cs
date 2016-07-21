@@ -1530,7 +1530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.translationId);
                 IReadOnlyCollection<Translation> availableLanguages = questionnaire.GetTranslationLanguages();
 
-                if (availableLanguages.All(translation => translation.TranslationId != command.TranslationId.Value))
+                if (availableLanguages.All(translation => translation.Id != command.TranslationId.Value))
                     throw new InterviewException(
                         $"Questionnaire does not have translation. Translation ID: {command.TranslationId.FormatGuid()}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
                 var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.TranslationId);

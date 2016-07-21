@@ -884,8 +884,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var translation in clonedDocument.Translations)
             {
                 var newTranslationId = Guid.NewGuid();
-                this.translationService.CloneTranslation(document.PublicKey, translation.TranslationId, clonedDocument.PublicKey, newTranslationId);
-                translation.TranslationId = newTranslationId;
+                this.translationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
+                translation.Id = newTranslationId;
             }
 
             ApplyEvent(new QuestionnaireCloned

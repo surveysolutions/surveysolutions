@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.Translations = questionnaireDocument.Translations
                 .Select(translationIdentity => new TranslationView
                 {
-                    TranslationId = translationIdentity.TranslationId.FormatGuid(),
+                    TranslationId = translationIdentity.Id.FormatGuid(),
                     Name = translationIdentity.Name
                 })
                 .ToList();

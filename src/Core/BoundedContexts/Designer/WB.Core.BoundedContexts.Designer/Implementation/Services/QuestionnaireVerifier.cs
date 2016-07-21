@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
             questionnaire.Translations.ForEach(t =>
             {
-                var translation = this.translationService.Get(questionnaire.PublicKey, t.TranslationId);
+                var translation = this.translationService.Get(questionnaire.PublicKey, t.Id);
                 var translatedQuestionnaireDocument = this.questionnaireTranslator.Translate(questionnaire, translation);
                 translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
             });
@@ -633,7 +633,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .Translations
                     .Where(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForTranslation(entity.TranslationId)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForTranslation(entity.Id)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
@@ -799,7 +799,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var trans = this.translationService.Get(questionnaire.PublicKey, translation.TranslationId);
+            var trans = this.translationService.Get(questionnaire.PublicKey, translation.Id);
             return trans?.IsEmpty() ?? true;
         }
 
