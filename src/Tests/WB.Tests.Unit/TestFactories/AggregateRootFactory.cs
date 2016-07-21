@@ -24,8 +24,10 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class AggregateRootFactory
     {
-        public Interview Interview(Guid? interviewId = null, IQuestionnaireStorage questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        public Interview Interview(Guid? interviewId = null,
+            IQuestionnaireStorage questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
+            QuestionnaireIdentity questionnaireId = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
@@ -33,7 +35,6 @@ namespace WB.Tests.Unit.TestFactories
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
-
             return interview;
         }
 

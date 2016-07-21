@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         public string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
             => this.GetTranslationByTypeAndIndex(
-                rosterId, fixedRosterTitleValue.ToString(CultureInfo.InvariantCulture), TranslationType.FixedRosterTitle);
+                rosterId, fixedRosterTitleValue.ToString("F0", CultureInfo.InvariantCulture), TranslationType.FixedRosterTitle);
 
         public bool IsEmpty() => !this.translations.Any();
 
