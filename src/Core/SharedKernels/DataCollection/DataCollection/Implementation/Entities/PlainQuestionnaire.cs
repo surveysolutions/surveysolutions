@@ -933,6 +933,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return group.FixedRosterTitles;
         }
 
+        public string GetFixedRosterTitle(Guid groupId, decimal fixedTitleValue)
+            => this.GetFixedRosterTitles(groupId).Single(title => title.Value == fixedTitleValue).Title;
+
         public bool DoesQuestionSpecifyRosterTitle(Guid questionId) => this.GetRostersAffectedByRosterTitleQuestion(questionId).Any();
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
