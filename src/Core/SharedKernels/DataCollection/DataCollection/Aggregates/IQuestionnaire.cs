@@ -148,6 +148,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         FixedRosterTitle[] GetFixedRosterTitles(Guid groupId);
 
+        string GetFixedRosterTitle(Guid groupId, decimal fixedTitleValue);
+
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
