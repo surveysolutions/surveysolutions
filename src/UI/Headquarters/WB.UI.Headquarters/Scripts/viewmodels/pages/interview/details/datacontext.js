@@ -117,7 +117,7 @@
     commands[config.commands.switchTranslation] = function (args) {
         return {
             interviewId: interviewId,
-            language: args.language
+            translationId: args.translationId
         };
     };
 
