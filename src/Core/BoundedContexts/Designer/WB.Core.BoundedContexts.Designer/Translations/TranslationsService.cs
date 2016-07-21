@@ -49,10 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
         {
-            var language = translationId.FormatGuid();
-            
             var storedTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList())
+                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId).ToList())
                 .Cast<TranslationDto>()
                 .ToList();
 
@@ -90,9 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
         {
-            var language = translationId.FormatGuid();
-
-            if (language == null) throw new ArgumentNullException(nameof(language));
+            if (translationId == null) throw new ArgumentNullException(nameof(translationId));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
             IWorkbookSet workbookSet = Factory.GetWorkbookSet();
@@ -118,7 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
 
 
-            this.RemoveStoredTranslations(questionnaireId, language);
+            this.Delete(questionnaireId, translationId);
             
             for (int rowNumber = 2; rowNumber <= worksheet.UsedRange.RowCount; rowNumber++)
             {
@@ -129,7 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 this.translations.Store(new TranslationInstance
                 {
                     QuestionnaireId = questionnaireId,
-                    Language = language,
+                    TranslationId = translationId,
                     QuestionnaireEntityId = Guid.Parse(importedTranslation.EntityId),
                     Value = importedTranslation.Translation,
                     TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
@@ -140,16 +136,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId)
         {
-            var language = translationId.FormatGuid();
-            var newLanguage = newTranslationId.FormatGuid();
-
             var storedTranslations = this.translations.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
+                .Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)
                 .ToList());
 
             foreach (var storedTranslation in storedTranslations)
             {
-                storedTranslation.Language = newLanguage;
+                storedTranslation.TranslationId = newTranslationId;
                 storedTranslation.QuestionnaireId = newQuestionnaireId;
                 this.translations.Store(storedTranslation, storedTranslation);
             }
@@ -157,18 +150,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public void Delete(Guid questionnaireId, Guid translationId)
         {
-            var language = translationId.FormatGuid();
             var storedTranslations = this.translations.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId && x.Language == language)
+                .Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)
                 .ToList());
             this.translations.Remove(storedTranslations);
-        }
-
-        private void RemoveStoredTranslations(Guid questionnaireId, string language)
-        {
-            var oldTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.Language == language).ToList());
-            this.translations.Remove(oldTranslations);
         }
 
         private TranslationRow GetExcelTranslation(IRange cells, int rowNumber) => new TranslationRow

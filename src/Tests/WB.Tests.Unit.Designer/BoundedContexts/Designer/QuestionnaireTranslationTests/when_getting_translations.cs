@@ -10,26 +10,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
     {
         Establish context = () =>
         {
-            string culture = "en-US";
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             storedTranslations = new List<TranslationDto>
             {
                 Create.TranslationDto(type: TranslationType.Title,
                     translation: "title",
-                    culture: culture,
+                    translationId: translationId,
                     questionnaireEntityId: questionId),
                 Create.TranslationDto(type: TranslationType.Instruction,
                     translation: "instruction",
-                    culture: culture,
+                    translationId: translationId,
                     questionnaireEntityId: questionId),
                 Create.TranslationDto(type: TranslationType.OptionTitle,
                     translation: "option1",
-                    culture: culture,
+                    translationId: translationId,
                     questionnaireEntityId: questionId,
                     translationIndex:"1"),
                 Create.TranslationDto(type: TranslationType.ValidationMessage,
                     translation: "validation message",
-                    culture: culture,
+                    translationId: translationId,
                     questionnaireEntityId: questionId,
                     translationIndex:"1")
             };

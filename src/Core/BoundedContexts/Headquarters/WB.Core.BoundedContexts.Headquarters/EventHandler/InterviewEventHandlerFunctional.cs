@@ -753,7 +753,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData interview, IPublishedEvent<TranslationSwitched> @event)
         {
-            interview.CurrentTranslation = @event.Payload.Language;
+            interview.CurrentTranslation = @event.Payload.TranslationId;
             return interview;
         }
     }

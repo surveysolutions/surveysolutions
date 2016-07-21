@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -92,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.TranslationId);
                 if (questionnaire == null)
                     throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -107,8 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     })
                     .ToList();
 
-                this.AvailableLanguages = questionnaire.GetTranslationLanguages();
-                this.CurrentLanguage = this.interview.Language;
+                this.AvailableTranslations = questionnaire.GetTranslationLanguages();
+                this.CurrentLanguage = this.interview.TranslationId;
 
                 this.BreadCrumbs.Init(interviewId, this.navigationState);
                 this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
@@ -209,16 +210,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
 
-        public string CurrentLanguage { get; private set; }
-        public IReadOnlyCollection<string> AvailableLanguages { get; private set; }
+        public Guid? CurrentLanguage { get; private set; }
+        public IReadOnlyCollection<Translation> AvailableTranslations { get; private set; }
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
 
-        public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
+        public IMvxCommand SwitchTranslationCommand => new MvxCommand<Guid?>(this.SwitchTranslation);
         public IMvxCommand ReloadInterviewCommand => new MvxCommand(this.ReloadInterview);
 
-        private void SwitchTranslation(string language) => this.commandService.Execute(
-            new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
+        private void SwitchTranslation(Guid? translationId) => this.commandService.Execute(
+            new SwitchTranslation(Guid.Parse(this.interviewId), translationId, this.principal.CurrentUserIdentity.UserId));
 
         private void ReloadInterview() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity);
 

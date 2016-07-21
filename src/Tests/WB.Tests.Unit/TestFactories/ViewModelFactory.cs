@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.TestFactories
             AnsweringViewModel answering = null)
             => new SingleOptionLinkedQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
                 Create.Service.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -115,7 +115,7 @@ namespace WB.Tests.Unit.TestFactories
             Identity entityIdentity = null)
         {
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) == questionnaire);
 
             return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),

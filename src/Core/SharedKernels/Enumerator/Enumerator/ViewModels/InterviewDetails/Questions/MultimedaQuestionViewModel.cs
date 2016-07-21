@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
             MultimediaAnswer multimediaAnswer = interview.GetMultimediaAnswer(entityIdentity);
             if (multimediaAnswer.IsAnswered)

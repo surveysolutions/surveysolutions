@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
             return new TranslationInstance
             {
                 QuestionnaireId = this.QuestionnaireId,
-                Language = this.Language,
+                TranslationId = this.TranslationId,
                 QuestionnaireEntityId = this.QuestionnaireEntityId,
                 TranslationIndex = this.TranslationIndex,
                 Type = this.Type,

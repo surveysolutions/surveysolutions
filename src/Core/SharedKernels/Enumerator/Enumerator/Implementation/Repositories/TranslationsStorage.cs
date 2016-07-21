@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -17,12 +18,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         }
 
 
-        public ITranslation Get(QuestionnaireIdentity questionnaire, string language)
+        public ITranslation Get(QuestionnaireIdentity questionnaire, Guid translationId)
         {
             var questionnaireId = questionnaire.ToString();
 
             var translations = this.translationsRepository
-                .Where(translation => translation.QuestionnaireId == questionnaireId && translation.Language == language)
+                .Where(translation => translation.QuestionnaireId == questionnaireId && translation.TranslationId == translationId)
                 .Cast<TranslationDto>()
                 .ToList();
 

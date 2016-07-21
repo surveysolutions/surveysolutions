@@ -832,11 +832,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return !this.GetQuestion(questionId).Properties.OptionsFilterExpression?.Trim().IsNullOrEmpty() ?? false;
         }
 
-        public IReadOnlyCollection<string> GetTranslationLanguages()
+        public IReadOnlyCollection<Translation> GetTranslationLanguages()
             => this
                 .QuestionnaireDocument
                 .Translations
-                .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

@@ -649,7 +649,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        public string Language => this.language;
+        public Guid? TranslationId => this.translationId;
 
         public bool HasErrors { get; private set; }
 
@@ -728,7 +728,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.translationId);
             var answerDtos = synchronizedInterview
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
@@ -1608,7 +1608,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetQuestionnaireOrThrow(
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version,
-                this.Language));
+                this.TranslationId));
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)

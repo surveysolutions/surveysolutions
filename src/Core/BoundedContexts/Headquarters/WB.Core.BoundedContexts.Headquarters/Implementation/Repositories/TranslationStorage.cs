@@ -18,11 +18,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         }
 
 
-        public ITranslation Get(QuestionnaireIdentity questionnaireIdentity, string language)
+        public ITranslation Get(QuestionnaireIdentity questionnaireIdentity, Guid translationId)
         {
             var translations = this.translationsRepository
                 .Query(t => 
-                    t.Where(translation => translation.QuestionnaireId == questionnaireIdentity && translation.Language == language)
+                    t.Where(translation => translation.QuestionnaireId == questionnaireIdentity && translation.TranslationId == translationId)
                     .Cast<TranslationDto>()
                     .ToList()
                 );

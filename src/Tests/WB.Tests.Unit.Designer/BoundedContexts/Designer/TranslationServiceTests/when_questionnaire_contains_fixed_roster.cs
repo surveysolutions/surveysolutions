@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 Create.TranslationInstance(type: TranslationType.FixedRosterTitle,
                     translation: "fixed roster item 1",
-                    culture: cultureId.FormatGuid(),
+                    translationId: translationId,
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: rosterId,
                     translationIndex: "42")
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         Because of = () =>
         {
-            excelFile = service.GetAsExcelFile(questionnaireId, cultureId);
+            excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = SpreadsheetGear.Factory.GetWorkbookSet().Workbooks.OpenFromMemory(excelFile.ContentAsExcelFile);
             cells = workbook.Worksheets[0].Cells;
         };
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static Guid rosterId;
         static TranslationsService service;
         static Guid questionnaireId;
-        static Guid cultureId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static Guid translationId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static TranslationFile excelFile;
         static IWorkbook workbook;
         static IRange cells;

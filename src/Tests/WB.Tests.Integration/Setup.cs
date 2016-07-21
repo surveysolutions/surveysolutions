@@ -53,7 +53,7 @@ namespace WB.Tests.Integration
         {
             var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) == questionnaire);
 
             var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);
 

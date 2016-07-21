@@ -1045,7 +1045,7 @@ namespace WB.Tests.Unit.TestFactories
                 answers: answers ?? new decimal[] { });
 
         public TranslationInstance TranslationInstance(string value = null,
-            string language = null, 
+            Guid? translationId = null, 
             QuestionnaireIdentity questionnaireId = null,
             Guid? entityId = null, 
             string translationIndex = null, 
@@ -1054,7 +1054,7 @@ namespace WB.Tests.Unit.TestFactories
             return new TranslationInstance
             {
                 Value = value,
-                Language = language,
+                TranslationId = translationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
                 QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
                 TranslationIndex = translationIndex,
@@ -1063,7 +1063,7 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public WB.Core.SharedKernels.Enumerator.Views.TranslationInstance TranslationInstance_Enumetaror(string value = null,
-            string language = null,
+            Guid? tranlationId = null,
             string questionnaireId = null,
             Guid? entityId = null,
             string translationIndex = null,
@@ -1072,7 +1072,7 @@ namespace WB.Tests.Unit.TestFactories
             return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
             {
                 Value = value,
-                Language = language,
+                TranslationId = tranlationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
                 QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
                 TranslationIndex = translationIndex,
@@ -1081,7 +1081,7 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public TranslationDto TranslationDto(string value = null,
-            string language = null,
+            Guid? translationId = null,
             string questionnaireId = null,
             Guid? entityId = null,
             string translationIndex = null,
@@ -1090,7 +1090,7 @@ namespace WB.Tests.Unit.TestFactories
             return new TranslationDto
             {
                 Value = value,
-                Language = language,
+                TranslationId = translationId ?? Guid.NewGuid(),
                 QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
                 TranslationIndex = translationIndex,
                 Type = type ?? TranslationType.Unknown

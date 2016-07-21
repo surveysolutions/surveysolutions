@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
                         QuestionnaireEntityId = x.QuestionnaireEntityId,
                         Type = x.Type,
                         TranslationIndex = x.TranslationIndex,
-                        Language = x.Language
+                        TranslationId = x.TranslationId
                     }));
 
                 }

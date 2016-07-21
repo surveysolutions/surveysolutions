@@ -330,7 +330,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             List<TranslationInstance> translations = translationDtos.Select(translationDto => new TranslationInstance
             {
                 QuestionnaireId = questionnaireIdentity.ToString(),
-                Language = translationDto.Language,
+                TranslationId = translationDto.TranslationId,
                 QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
                 Type = translationDto.Type,
                 TranslationIndex = translationDto.TranslationIndex,

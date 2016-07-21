@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 {
                     Value = x.Value,
                     Type = x.Type,
-                    Language = x.Language,
+                    TranslationId = x.TranslationId,
                     QuestionnaireEntityId = x.QuestionnaireEntityId,
                     TranslationIndex = x.TranslationIndex
                 }).ToList();
