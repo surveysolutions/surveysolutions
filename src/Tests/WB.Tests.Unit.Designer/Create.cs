@@ -1069,7 +1069,7 @@ namespace WB.Tests.Unit.Designer
 
         public static Translation Translation(Guid? translationId = null, string name = null)
         {
-            return new Translation() { Name = name, TranslationId = translationId ?? Guid.NewGuid() };
+            return new Translation() { Name = name, Id = translationId ?? Guid.NewGuid() };
         }
     }
 }

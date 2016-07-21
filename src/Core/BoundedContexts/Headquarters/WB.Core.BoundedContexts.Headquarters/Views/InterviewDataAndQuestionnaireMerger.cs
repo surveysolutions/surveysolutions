@@ -132,6 +132,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 }
             }
 
+            var currentTranslation = interview.CurrentTranslation.HasValue
+                ? questionnaire.Translations.Single(t => t.Id == interview.CurrentTranslation.Value).Name
+                : null;
+
             return new InterviewDetailsView()
             {
                 Groups = interviewGroups,
@@ -142,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 PublicKey = interview.InterviewId,
                 Status = interview.Status,
                 ReceivedByInterviewer = interview.ReceivedByInterviewer,
-                CurrentTranslation = interview.CurrentTranslation
+                CurrentTranslation = currentTranslation
             };
         }
 

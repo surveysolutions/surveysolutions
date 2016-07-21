@@ -635,10 +635,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             var translation = new Translation
             {
-                TranslationId = evnt.Payload.TranslationId,
+                Id = evnt.Payload.TranslationId,
                 Name = evnt.Payload.Name,
             };
-            document.Translations.RemoveAll(x => x.TranslationId == evnt.Payload.TranslationId);
+            document.Translations.RemoveAll(x => x.Id == evnt.Payload.TranslationId);
             document.Translations.Add(translation);
 
             this.UpdateQuestionnaire(evnt, document);
@@ -647,7 +647,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<TranslationDeleted> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Translations.RemoveAll(x => x.TranslationId == evnt.Payload.TranslationId);
+            document.Translations.RemoveAll(x => x.Id == evnt.Payload.TranslationId);
             this.UpdateQuestionnaire(evnt, document);
         }
 

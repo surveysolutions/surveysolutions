@@ -47,7 +47,7 @@ namespace WB.UI.Tester.Activities
                     order: Menu.None,
                     title: language.Name);
 
-                if (language.TranslationId == this.ViewModel.CurrentLanguage)
+                if (language.Id == this.ViewModel.CurrentLanguage)
                 {
                     currentLanguageMenuItem = languageMenuItem;
                 }
@@ -82,7 +82,7 @@ namespace WB.UI.Tester.Activities
                         Guid? translationId =
                             item.ItemId == Resource.Id.interview_language_original
                                 ? null
-                                : this.ViewModel.AvailableTranslations.FirstOrDefault(language => language.Name == item.TitleFormatted.ToString())?.TranslationId;
+                                : this.ViewModel.AvailableTranslations.FirstOrDefault(language => language.Name == item.TitleFormatted.ToString())?.Id;
 
                         this.ViewModel.SwitchTranslationCommand.Execute(translationId);
                         this.ViewModel.ReloadInterviewCommand.Execute();

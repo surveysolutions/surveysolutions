@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Translations.Count.ShouldEqual(1);
 
         It should_set_new_TranslationId_in_raised_event = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Translations.First().TranslationId.ShouldNotEqual(translationId);
+            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Translations.First().Id.ShouldNotEqual(translationId);
 
         It should_set_original_Name_in_raised_event = () =>
             eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Translations.First().Name.ShouldEqual(name);

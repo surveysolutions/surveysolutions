@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
-                => questionnaire.GetTranslationLanguages() == new [] { new Translation {TranslationId = translationId, Name = "Русский" }});
+                => questionnaire.GetTranslationLanguages() == new [] { new Translation {Id = translationId, Name = "Русский" }});
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
 

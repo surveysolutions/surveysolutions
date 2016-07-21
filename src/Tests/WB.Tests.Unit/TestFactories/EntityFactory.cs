@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.TestFactories
             => new Attachment { ContentId = attachmentHash };
 
         public Translation Translation(Guid translationId, string translationName)
-            => new Translation { TranslationId = translationId, Name = translationName};
+            => new Translation { Id = translationId, Name = translationName};
 
         public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
             => new Core.SharedKernels.Enumerator.Views.AttachmentContent
