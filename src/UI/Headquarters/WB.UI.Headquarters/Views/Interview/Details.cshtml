@@ -47,9 +47,10 @@
         ];
         var answeredYesNoQuestionsBySupervisor = [
             @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
-        var translation = '@Model.InterviewDetails.CurrentTranslation';
+        var currentTranslation = '@(string.IsNullOrEmpty(Model.InterviewDetails.CurrentTranslation) ? "" : Model.Translations.Single(t => t.Name == Model.InterviewDetails.CurrentTranslation).Id.ToString())';
+
         $(function () {
-            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, translation);
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, currentTranslation);
             ko.applyBindings(model);
             model.load();
         });
@@ -103,7 +104,7 @@
                                 <option value=''>@Pages.InterviewDetails_DefaultTranslation</option>
                                 @foreach (var item in Model.Translations)
                                 {
-                                    <option value='@item'>@item</option>
+                                    <option value='@item.Id'>@item.Name</option>
                                 }
                             </select>
                         </div>
