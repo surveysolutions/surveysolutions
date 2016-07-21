@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfTranslationsStorage.Verify(_ => _.RemoveAllAsync(), Times.Once);
 
         It should_store_2_tranlations_by_russian_language_to_local_storage = () =>
-            mockOfTranslationsStorage.Verify(_ => _.StoreAsync(Moq.It.Is<TranslationInstance>(x=>x.TranslationId == translationId)), Times.Exactly(2));
+            mockOfTranslationsStorage.Verify(_ => _.StoreAsync(Moq.It.Is<IEnumerable<TranslationInstance>>(x=>true)), Times.Once);
         
         private static DashboardViewModel viewModel;
         private static Questionnaire downloadedQuestionnaire;
