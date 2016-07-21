@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Android.App;
 using Android.Views;
 using Microsoft.Practices.ServiceLocation;
@@ -37,15 +39,15 @@ namespace WB.UI.Tester.Activities
 
             IMenuItem currentLanguageMenuItem = menu.FindItem(Resource.Id.interview_language_original);
 
-            foreach (var language in this.ViewModel.AvailableLanguages)
+            foreach (var language in this.ViewModel.AvailableTranslations)
             {
                 var languageMenuItem = languagesMenu.Add(
                     groupId: Resource.Id.interview_languages,
                     itemId: Menu.None,
                     order: Menu.None,
-                    title: language);
+                    title: language.Name);
 
-                if (language == this.ViewModel.CurrentLanguage)
+                if (language.TranslationId == this.ViewModel.CurrentLanguage)
                 {
                     currentLanguageMenuItem = languageMenuItem;
                 }
@@ -77,12 +79,12 @@ namespace WB.UI.Tester.Activities
                 default:
                     if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
                     {
-                        string translationLanguage =
+                        Guid? translationId =
                             item.ItemId == Resource.Id.interview_language_original
                                 ? null
-                                : item.TitleFormatted.ToString();
+                                : this.ViewModel.AvailableTranslations.FirstOrDefault(language => language.Name == item.TitleFormatted.ToString())?.TranslationId;
 
-                        this.ViewModel.SwitchTranslationCommand.Execute(translationLanguage);
+                        this.ViewModel.SwitchTranslationCommand.Execute(translationId);
                         this.ViewModel.ReloadInterviewCommand.Execute();
                     }
                     break;

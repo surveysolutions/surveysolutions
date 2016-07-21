@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         Because of = () => service.Store(questionnaireId, translationId, fileStream);
 
         It should_store_all_entities_for_questionnaire_and_culture = () => 
-            plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.Language == translationId.FormatGuid())).ShouldBeTrue();
+            plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)).ShouldBeTrue();
 
         It should_store_title_translation = () =>
         {

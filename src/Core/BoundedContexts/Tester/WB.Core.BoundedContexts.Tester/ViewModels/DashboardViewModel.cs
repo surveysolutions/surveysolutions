@@ -416,20 +416,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: questionnaireId, token: this.tokenSource.Token);
 
             await this.translationsStorage.RemoveAllAsync();
-
-            foreach (var translation in translations)
+            await this.translationsStorage.StoreAsync(translations.Select(translation => new TranslationInstance
             {
-                await this.translationsStorage.StoreAsync(new TranslationInstance
-                {
-                    Id = Guid.NewGuid().FormatGuid(),
-                    QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
-                    Type = translation.Type,
-                    TranslationIndex = translation.TranslationIndex,
-                    QuestionnaireEntityId = translation.QuestionnaireEntityId,
-                    Language = translation.Language,
-                    Value = translation.Value
-                });
-            }
+                Id = Guid.NewGuid().FormatGuid(),
+                QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
+                Type = translation.Type,
+                TranslationIndex = translation.TranslationIndex,
+                QuestionnaireEntityId = translation.QuestionnaireEntityId,
+                TranslationId = translation.TranslationId,
+                Value = translation.Value
+            }));
         }
 
         private async Task LoadServerQuestionnairesAsync()

@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
 
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
@@ -91,8 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(newGroupIdentity.Id);
 
