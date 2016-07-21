@@ -41,6 +41,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaires
                 );
+            var instance1 = Create.Entity.RosterVector(0);
+            var instance2 = Create.Entity.RosterVector(1);
+
+            interview.Apply(Create.Event.RosterInstancesAdded(rosterId, instance1));
+            interview.Apply(Create.Event.RosterInstancesAdded(rosterId, instance2));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(rosterId, instance1));
+            interview.Apply(Create.Event.RosterInstancesTitleChanged(rosterId, instance2));
 
             eventContext = new EventContext();
         };
