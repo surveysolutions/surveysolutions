@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class EnumeratorInterviewViewModel : BaseViewModel, IDisposable
+    public abstract class EnumeratorInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -108,8 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     })
                     .ToList();
 
-                this.AvailableTranslations = questionnaire.GetTranslationLanguages();
-                this.CurrentLanguage = this.interview.TranslationId;
+                this.availableTranslations = questionnaire.GetTranslationLanguages();
+                this.currentLanguage = this.interview.TranslationId;
 
                 this.BreadCrumbs.Init(interviewId, this.navigationState);
                 this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
@@ -210,8 +210,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
 
-        public Guid? CurrentLanguage { get; private set; }
-        public IReadOnlyCollection<Translation> AvailableTranslations { get; private set; }
+        private Guid? currentLanguage;
+        public override Guid? CurrentLanguage => this.currentLanguage;
+
+        private IReadOnlyCollection<Translation> availableTranslations;
+        public override IReadOnlyCollection<Translation> AvailableTranslations => this.availableTranslations;
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
 

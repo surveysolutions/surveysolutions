@@ -212,6 +212,7 @@
     <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
+    <Compile Include="Activities\SingleInterviewActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\JsonPluginBootstrap.cs" />
