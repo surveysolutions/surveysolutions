@@ -36,27 +36,8 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.interview_language, InterviewerUIResources.MenuItem_Title_Language);
             menu.LocalizeMenuItem(Resource.Id.interview_language_original, InterviewerUIResources.MenuItem_Title_Language_Original);
 
-            ISubMenu languagesMenu = menu.FindItem(Resource.Id.interview_language).SubMenu;
-
-            IMenuItem currentLanguageMenuItem = menu.FindItem(Resource.Id.interview_language_original);
-
-            foreach (var language in this.ViewModel.AvailableTranslations)
-            {
-                var languageMenuItem = languagesMenu.Add(
-                    groupId: Resource.Id.interview_languages,
-                    itemId: Menu.None,
-                    order: Menu.None,
-                    title: language.Name);
-
-                if (language.Id == this.ViewModel.CurrentLanguage)
-                {
-                    currentLanguageMenuItem = languageMenuItem;
-                }
-            }
-
-            languagesMenu.SetGroupCheckable(Resource.Id.interview_languages, checkable: true, exclusive: true);
-
-            currentLanguageMenuItem.SetChecked(true);
+            this.PopulateLanguagesMenu(menu,
+                Resource.Id.interview_language, Resource.Id.interview_language_original, Resource.Id.interview_languages);
 
             return base.OnCreateOptionsMenu(menu);
         }
