@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -128,6 +129,8 @@ namespace Main.Core.Entities.SubEntities
             {
                 question.Answers.Add(answer.Clone());
             }
+
+            question.ValidationConditions = new List<ValidationCondition>(this.ValidationConditions.Select(x => new ValidationCondition(x.Expression, x.Message)));
             question.Properties = this.Properties;
 
             return question;
