@@ -2,9 +2,9 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -12,7 +12,7 @@ using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel>
+    public abstract class EnumeratorInterviewActivity<TViewModel> : SingleInterviewActivity<TViewModel>
         where TViewModel : EnumeratorInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
@@ -24,6 +24,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private Toolbar toolbar;
 
         protected override int ViewResourceId => Resource.Layout.interview;
+        protected override ActionBarDrawerToggle DrawerToggle => this.drawerToggle;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -100,45 +101,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnPostCreate(savedInstanceState);
             this.drawerToggle.SyncState();
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (this.drawerToggle.OnOptionsItemSelected(item))
-            {
-                return true;
-            }
-
-            this.OnMenuItemSelected(item);
-
-            return base.OnOptionsItemSelected(item);
-        }
-
-        protected abstract void OnMenuItemSelected(IMenuItem item);
-
-        protected void PopulateLanguagesMenu(IMenu menu, int languagesMenuId, int originalLanguageMenuItemId, int languagesMenuGroupId)
-        {
-            ISubMenu languagesMenu = menu.FindItem(languagesMenuId).SubMenu;
-
-            IMenuItem currentLanguageMenuItem = menu.FindItem(originalLanguageMenuItemId);
-
-            foreach (var language in this.ViewModel.AvailableTranslations)
-            {
-                var languageMenuItem = languagesMenu.Add(
-                    groupId: languagesMenuGroupId,
-                    itemId: Menu.None,
-                    order: Menu.None,
-                    title: language.Name);
-
-                if (language.Id == this.ViewModel.CurrentLanguage)
-                {
-                    currentLanguageMenuItem = languageMenuItem;
-                }
-            }
-
-            languagesMenu.SetGroupCheckable(languagesMenuGroupId, checkable: true, exclusive: true);
-
-            currentLanguageMenuItem.SetChecked(true);
         }
     }
 }

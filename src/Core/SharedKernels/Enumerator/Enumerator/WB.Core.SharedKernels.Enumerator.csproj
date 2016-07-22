@@ -177,6 +177,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\State\SubstitutionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
