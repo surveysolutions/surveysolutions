@@ -578,6 +578,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetAllRosters()
+        {
+            return this.AllGroups
+                .Where(x => x.IsRoster)
+                .Select(x => x.PublicKey)
+                .ToList();
+        }
+
         public IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null)
         {
             if (parentRosterId.HasValue)
@@ -830,6 +838,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsSupportFilteringForOptions(Guid questionId)
         {
             return !this.GetQuestion(questionId).Properties.OptionsFilterExpression?.Trim().IsNullOrEmpty() ?? false;
+        }
+
+        public bool IsFixedRoster(Guid id)
+        {
+            var @group = this.GetGroup(id);
+            return @group != null && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
         }
 
         public IReadOnlyCollection<Translation> GetTranslationLanguages()

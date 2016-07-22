@@ -1535,19 +1535,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         $"Questionnaire does not have translation. Translation ID: {command.TranslationId.FormatGuid()}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
                 var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.TranslationId);
 
-                var fixedRosterInstances =
+                var rosterInstances =
                     this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                        targetQuestionnaire.GetFixedRosterGroups(), RosterVector.Empty,
+                        targetQuestionnaire.GetAllRosters(), RosterVector.Empty,
                         targetQuestionnaire);
 
-                var changedTitles = fixedRosterInstances.Select(
+                var changedTitles = rosterInstances.Select(
                     rosterInstance =>
                         new ChangedRosterInstanceTitleDto(
                             RosterInstance.CreateFromIdentity(rosterInstance),
-                            targetQuestionnaire.GetFixedRosterTitle(rosterInstance.Id,
-                                rosterInstance.RosterVector.Coordinates.Last())))
+                            GetRosterTitle(targetQuestionnaire, rosterInstance)))
                     .ToArray();
-
 
                 if (changedTitles.Any())
                 {
@@ -1556,6 +1554,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyEvent(new TranslationSwitched(command.TranslationId, command.UserId));
+        }
+
+        private string GetRosterTitle(IQuestionnaire targetQuestionnaire, Identity rosterInstance)
+        {
+            if (targetQuestionnaire.IsFixedRoster(rosterInstance.Id))
+            {
+                return targetQuestionnaire.GetFixedRosterTitle(rosterInstance.Id,
+                    rosterInstance.RosterVector.Coordinates.Last());
+            }
+            else
+            {
+                return targetQuestionnaire.GetAnswerOptionTitle(
+                    targetQuestionnaire.GetRosterSizeQuestion(rosterInstance.Id).Value,
+                    rosterInstance.RosterVector.Last());
+            }
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
