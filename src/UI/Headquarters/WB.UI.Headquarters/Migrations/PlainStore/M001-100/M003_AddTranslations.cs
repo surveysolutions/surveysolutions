@@ -14,13 +14,13 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                   .WithColumn("questionnaireversion").AsInt64().NotNullable()
                   .WithColumn("questionnaireentityid").AsGuid().NotNullable()
                   .WithColumn("translationindex").AsString().Nullable()
-                  .WithColumn("language").AsString().NotNullable()
+                  .WithColumn("translationid").AsGuid().NotNullable()
                   .WithColumn("value").AsString().NotNullable();
 
             Create.Index("translationinstances_questionnaire_indx").OnTable("translationinstances")
                 .OnColumn("questionnaireid").Ascending()
                 .OnColumn("questionnaireversion").Ascending()
-                .OnColumn("language").Ascending();
+                .OnColumn("translationid").Ascending();
         }
 
         public override void Down()

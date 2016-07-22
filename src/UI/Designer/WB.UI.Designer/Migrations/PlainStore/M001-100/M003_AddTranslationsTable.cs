@@ -8,18 +8,18 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Create.Table("translationinstances")
-                .WithColumn("id").AsInt32().PrimaryKey()
+                .WithColumn("id").AsGuid().PrimaryKey()
                 .WithColumn("questionnaireid").AsGuid().NotNullable()
                 .WithColumn("type").AsInt32().NotNullable()
                 .WithColumn("questionnaireentityid").AsGuid().NotNullable()
                 .WithColumn("translationindex").AsString().Nullable()
-                .WithColumn("culture").AsString().NotNullable()
+                .WithColumn("translationid").AsGuid().NotNullable()
                 .WithColumn("value").AsString().NotNullable();
 
             Create.Index("translationinstances_questionnaire")
                 .OnTable("translationinstances")
                 .OnColumn("questionnaireid").Ascending()
-                .OnColumn("culture").Ascending()
+                .OnColumn("translationid").Ascending()
                 .OnColumn("questionnaireentityid").Ascending();
         }
 
