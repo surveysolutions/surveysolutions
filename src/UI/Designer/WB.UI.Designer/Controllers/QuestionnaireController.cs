@@ -320,9 +320,9 @@ namespace WB.UI.Designer.Controllers
             return Json(commandResult);
         }
         
-        private JsonQuestionnaireResult ExecuteCommand(QuestionCommand command)
+        private JsonResponseResult ExecuteCommand(QuestionCommand command)
         {
-            var commandResult = new JsonQuestionnaireResult() { IsSuccess = true };
+            var commandResult = new JsonResponseResult() { IsSuccess = true };
             try
             {
                 this.commandService.Execute(command);
@@ -335,7 +335,7 @@ namespace WB.UI.Designer.Controllers
                     this.logger.Error(string.Format("Error on command of type ({0}) handling ", command.GetType()), e);
                 }
 
-                commandResult = new JsonQuestionnaireResult
+                commandResult = new JsonResponseResult
                 {
                     IsSuccess = false,
                     HasPermissions = domainEx != null && (domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit),

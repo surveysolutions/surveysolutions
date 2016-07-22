@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation);
         void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId);
         void Delete(Guid questionnaireId, Guid translationId);
+        int Count(Guid questionnaireId, Guid translationId);
     }
 }
