@@ -6,12 +6,14 @@ using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : EnumeratorInterviewViewModel
+    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel>
+        where TViewModel : EnumeratorInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
@@ -113,5 +115,30 @@ namespace WB.UI.Shared.Enumerator.Activities
         }
 
         protected abstract void OnMenuItemSelected(IMenuItem item);
+
+        protected void PopulateLanguagesMenu(IMenu menu, int languagesMenuId, int originalLanguageMenuItemId, int languagesMenuGroupId)
+        {
+            ISubMenu languagesMenu = menu.FindItem(languagesMenuId).SubMenu;
+
+            IMenuItem currentLanguageMenuItem = menu.FindItem(originalLanguageMenuItemId);
+
+            foreach (var language in this.ViewModel.AvailableTranslations)
+            {
+                var languageMenuItem = languagesMenu.Add(
+                    groupId: languagesMenuGroupId,
+                    itemId: Menu.None,
+                    order: Menu.None,
+                    title: language.Name);
+
+                if (language.Id == this.ViewModel.CurrentLanguage)
+                {
+                    currentLanguageMenuItem = languageMenuItem;
+                }
+            }
+
+            languagesMenu.SetGroupCheckable(languagesMenuGroupId, checkable: true, exclusive: true);
+
+            currentLanguageMenuItem.SetChecked(true);
+        }
     }
 }
