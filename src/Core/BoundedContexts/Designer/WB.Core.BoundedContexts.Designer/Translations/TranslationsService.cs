@@ -317,11 +317,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private static IEnumerable<TranslationRow> GetTranslatedOptions(IQuestion question, ITranslation translation)
         {
-            var singleQuestion = question as SingleQuestion;
-            var isNeedIgnoreOptions = (singleQuestion?.CascadeFromQuestionId.HasValue ?? false) 
-                                               || (singleQuestion?.IsFilteredCombobox ?? false);
+            var singleOptionQuestion = question as SingleQuestion;
+            var shouldIgnoreOptions = (singleOptionQuestion?.CascadeFromQuestionId.HasValue ?? false) 
+                                               || (singleOptionQuestion?.IsFilteredCombobox ?? false);
 
-            if (isNeedIgnoreOptions)
+            if (shouldIgnoreOptions)
                 return Enumerable.Empty<TranslationRow>();
 
             return from option in question.Answers
