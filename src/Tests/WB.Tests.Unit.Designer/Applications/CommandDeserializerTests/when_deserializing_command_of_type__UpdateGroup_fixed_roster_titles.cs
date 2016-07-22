@@ -57,10 +57,10 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             ((UpdateGroup)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
         
         It should_return_first_fixed_roster_title_value_1_0 = () =>
-            ((UpdateGroup)result).FixedRosterTitles[0].Value.ShouldEqual("1");
+            ((UpdateGroup)result).FixedRosterTitles[0].Value.ShouldEqual("1.0");
 
         It should_return_second_fixed_roster_title_value_2_0 = () =>
-            ((UpdateGroup)result).FixedRosterTitles[1].Value.ShouldEqual("2");
+            ((UpdateGroup)result).FixedRosterTitles[1].Value.ShouldEqual("2.0");
 
 
         private static ICommand result;
