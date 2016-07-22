@@ -157,6 +157,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.translations.Remove(storedTranslations);
         }
 
+        public int Count(Guid questionnaireId, Guid translationId)
+            => this.translations.Query(_ => _.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId));
+
         private TranslationRow GetExcelTranslation(IRange cells, int rowNumber) => new TranslationRow
         {
             EntityId = cells[$"A{rowNumber}"].Text,

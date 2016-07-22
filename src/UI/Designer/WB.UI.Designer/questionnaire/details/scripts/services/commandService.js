@@ -1,8 +1,8 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('commandService', [
-            '$http', 'blockUI', 'Upload',
-            function ($http, blockUI, Upload) {
+            '$http', 'blockUI', 'Upload', 'notificationService',
+            function ($http, blockUI, Upload, notificationService) {
 
                 var urlBase = '../../api/command';
                 var commandService = {};
@@ -110,8 +110,14 @@
                     return Upload.upload({
                         url: urlBase + '/translation',
                         data: { file: _.isNull(translation.file) ? "" : translation.file, "command": JSON.stringify(command) }
-                    }).success(function () {
+                    }).success(function (response) {
                         blockUI.stop();
+
+                        if (!_.isNull(translation.file))
+                            notificationService.notice(response);
+
+                        translation.file = null;
+
                     }).error(function () {
                         blockUI.stop();
                     });
