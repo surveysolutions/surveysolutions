@@ -394,6 +394,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_shared_persons_contains_viewer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTranslationTests\QuestionnaireTranslationTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTranslationTests\when_getting_translations_with_duplicate_entities.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTranslationTests\when_getting_translations.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTranslatorTests\when_translating_questionnaire_document.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_itself.cs" />
