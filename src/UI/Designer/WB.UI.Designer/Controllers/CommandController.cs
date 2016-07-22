@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public JsonResult Execute(string type, string command)
         {
-            var returnValue = new JsonQuestionnaireResult();
+            var returnValue = new JsonResponseResult();
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);

@@ -215,7 +215,12 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(command, commandType);
+            var commandResponse = this.ProcessCommand(command, commandType);
+            var commandResponseContent = commandResponse.Content.ReadAsAsync<JsonResponseResult>().Result;
+
+            return commandResponseContent == null || model.File == null
+                ? commandResponse
+                : this.Request.CreateResponse($"{this.translationsService.Count(command.QuestionnaireId, command.TranslationId)} rows of translation were obtained");
         }
 
         private HttpResponseMessage ProcessCommand(ICommand concreteCommand, string commandType)
@@ -259,7 +264,7 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message);
             }
 
-            return this.Request.CreateResponse(new JsonQuestionnaireResult());
+            return this.Request.CreateResponse(new JsonResponseResult());
         }
     }
 }
