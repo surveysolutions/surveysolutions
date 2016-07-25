@@ -578,12 +578,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetAllRosters()
+        public IEnumerable<Guid> GetCategoricalRosters()
         {
             return this.AllGroups
                 .Where(x => x.IsRoster)
+                .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles || 
+                            IsMultioptionQuestion(x.RosterSizeQuestionId))
                 .Select(x => x.PublicKey)
                 .ToList();
+        }
+
+        private bool IsMultioptionQuestion(Guid? questionId)
+        {
+            if (!questionId.HasValue) return false;
+            return this.GetQuestion(questionId.Value)?.QuestionType == QuestionType.MultyOption;
         }
 
         public IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null)
