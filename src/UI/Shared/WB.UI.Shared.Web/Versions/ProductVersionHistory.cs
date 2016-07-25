@@ -13,7 +13,9 @@ namespace WB.UI.Shared.Web.Versions
         private readonly IPlainStorageAccessor<ProductVersionChange> historyStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
-        public ProductVersionHistory(IProductVersion productVersion, IPlainStorageAccessor<ProductVersionChange> historyStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
+        public ProductVersionHistory(IProductVersion productVersion, 
+            IPlainStorageAccessor<ProductVersionChange> historyStorage,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.productVersion = productVersion;
             this.historyStorage = historyStorage;
