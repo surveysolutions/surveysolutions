@@ -364,7 +364,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
         if (translation === '')
             translation = null;
 
-        var command = datacontext.getCommand(config.commands.switchTranslation, { translationId: translation });
+        var command = datacontext.getCommand(config.commands.switchTranslation, { language: translation });
 
         self.SendCommand(command, function () {
             location.reload();
