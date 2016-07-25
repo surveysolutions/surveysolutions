@@ -26,19 +26,37 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage Get(Guid id)
         {
             var translationFile = this.translationsService.GetTemplateAsExcelFile(id);
-            return GetTranslation(translationFile);
+            return this.GetTranslation(translationFile, "xlsx", "application/vnd.oasis.opendocument.spreadsheet");
         }
 
         [HttpGet]
-        [Route("{id:Guid}/{translationId:Guid}")]
+        [Route("{id:Guid}/ods_template")]
+        public HttpResponseMessage GetOpenOffice(Guid id)
+        {
+            var translationFile = this.translationsService.GetTemplateAsOpenOfficeFile(id);
+
+            return this.GetTranslation(translationFile, "ods", "application/vnd.oasis.opendocument.spreadsheet");
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}/xlsx/{translationId:Guid}")]
         public HttpResponseMessage Get(Guid id, Guid translationId )
         {
             var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
             
-            return GetTranslation(translationFile);
+            return this.GetTranslation(translationFile, "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
-        private HttpResponseMessage GetTranslation(TranslationFile translationFile)
+        [HttpGet]
+        [Route("{id:Guid}/ods/{translationId:Guid}")]
+        public HttpResponseMessage GetOpenOffice(Guid id, Guid translationId)
+        {
+            var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
+
+            return this.GetTranslation(translationFile, "ods", "application/vnd.oasis.opendocument.spreadsheet");
+        }
+
+        private HttpResponseMessage GetTranslation(TranslationFile translationFile, string fileExtension, string mediaType)
         {
             if (translationFile.ContentAsExcelFile == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -50,9 +68,9 @@ namespace WB.UI.Designer.Api
             var translationName = string.IsNullOrEmpty(translationFile.TranslationName)
                 ? "New translation"
                 : translationFile.TranslationName;
-            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.xls");
+            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.{fileExtension}");
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
                 FileNameStar = filename

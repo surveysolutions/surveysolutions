@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using Aspose.Cells;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -66,7 +69,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation)
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.Xlsx, SaveFormat.Xlsx)
             };
 
             return translationFile;
@@ -80,32 +83,43 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation)
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.Xlsx, SaveFormat.Xlsx)
             };
 
             return translationFile;
         }
 
-        
+        public TranslationFile GetTemplateAsOpenOfficeFile(Guid questionnaireId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var translation = new QuestionnaireTranslation(new List<TranslationDto>());
+            var translationFile = new TranslationFile
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                TranslationName = string.Empty,
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.ODS, SaveFormat.ODS)
+            };
+
+            return translationFile;
+        }
+
+
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
         {
             if (translationId == null) throw new ArgumentNullException(nameof(translationId));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
-            IWorkbookSet workbookSet = Factory.GetWorkbookSet();
-            IWorkbook workbook;
-
+            Workbook workbook;
             try
             {
-                workbook = workbookSet.Workbooks.OpenFromMemory(excelRepresentation);
+                workbook = new Workbook(new MemoryStream(excelRepresentation));
             }
             catch (Exception ex)
             {
                 throw new InvalidExcelFileException(ex.Message);
             }
-            
-            var worksheet = workbook.Worksheets[0];
-            worksheet.Protect(workSheetPassword);
+
+            Worksheet worksheet = workbook.Worksheets[0];
 
             if (worksheet.Name != WorksheetName)
                 throw new InvalidExcelFileException("Worksheet with translations not found");
@@ -117,9 +131,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             this.Delete(questionnaireId, translationId);
             
-            for (int rowNumber = 2; rowNumber <= worksheet.UsedRange.RowCount; rowNumber++)
+            for (int rowNumber = 2; rowNumber <= worksheet.Cells.Rows.Count; rowNumber++)
             {
-                TranslationRow importedTranslation = GetExcelTranslation(worksheet.UsedRange, rowNumber);
+                TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
 
                 if(string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
@@ -160,24 +174,24 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public int Count(Guid questionnaireId, Guid translationId)
             => this.translations.Query(_ => _.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId));
 
-        private TranslationRow GetExcelTranslation(IRange cells, int rowNumber) => new TranslationRow
+        private TranslationRow GetExcelTranslation(Cells cells, int rowNumber) => new TranslationRow
         {
-            EntityId = cells[$"A{rowNumber}"].Text,
-            Type = cells[$"B{rowNumber}"].Text,
-            OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].Text,
-            Translation = cells[$"E{rowNumber}"].Text
+            EntityId = cells[$"A{rowNumber}"].StringValue,
+            Type = cells[$"B{rowNumber}"].StringValue,
+            OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].StringValue,
+            Translation = cells[$"E{rowNumber}"].StringValue
         };
 
-        private IEnumerable<TranslationValidationError> Verify(IWorksheet worksheet)
+        private IEnumerable<TranslationValidationError> Verify(Worksheet worksheet)
         {
-            for (int rowNumber = 2; rowNumber < worksheet.UsedRange.RowCount; rowNumber++)
+            for (int rowNumber = 2; rowNumber < worksheet.Cells.Rows.Count; rowNumber++)
             {
-                var importedTranslation = GetExcelTranslation(worksheet.UsedRange.Cells, rowNumber);
+                var importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
 
                 Guid entityId;
                 if (!Guid.TryParse(importedTranslation.EntityId, out entityId))
                 {
-                    var cellAddress = worksheet.Cells[$"A{rowNumber}"].Address;
+                    var cellAddress = $"A{rowNumber}"; //worksheet.Cells[$"A{rowNumber}"].;
 
                     yield return new TranslationValidationError
                     {
@@ -189,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 TranslationType importedType;
                 if (!Enum.TryParse(importedTranslation.Type, out importedType) || importedType == TranslationType.Unknown)
                 {
-                    var cellAddress = worksheet.Cells[$"B{rowNumber}"].Address;
+                    var cellAddress = $"B{rowNumber}"; //worksheet.Cells[$"B{rowNumber}"].Address;
 
                     yield return new TranslationValidationError
                     {
@@ -200,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {
-                    var cellAddress = worksheet.Cells[$"C{rowNumber}"].Address;
+                    var cellAddress = $"C{rowNumber}"; //worksheet.Cells[$"C{rowNumber}"].Address;
 
                     yield return new TranslationValidationError
                     {
@@ -211,27 +225,32 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation)
+        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation, FileFormatType fileFormatType, SaveFormat saveFormat)
         {
-            IWorkbook workbook = Factory.GetWorkbook();
-            IWorksheet worksheet = workbook.Worksheets[0];
+            Workbook workbook = new Workbook(fileFormatType);
 
-            IRange cells = worksheet.Cells;
+            int i = workbook.Worksheets.Count > 0 ? 0 : workbook.Worksheets.Add();
+
+            Worksheet worksheet = workbook.Worksheets[i];
 
             worksheet.Name = WorksheetName;
 
-            cells["A1"].Value = EntityIdColumnName;
-            cells["B1"].Value = TranslationTypeColumnName;
-            cells["C1"].Value = "Index";
-            cells["D1"].Value = "Original text";
-            cells["E1"].Value = "Translation";
-            cells["A1:E1"].Font.Bold = true;
-            cells["A1:D1"].Interior.Color = Color.FromArgb(240, 240, 240);
-            cells["A1:D1"].Borders.Color = Color.FromArgb(225, 225, 225);
-            cells["A1"].AddComment("Read only field");
-            cells["B1"].AddComment("Read only field");
-            cells["C1"].AddComment("Read only field");
-            cells["D1"].AddComment("Read only field");
+            worksheet.Cells["A1"].Value = EntityIdColumnName;
+            worksheet.Cells["B1"].Value = TranslationTypeColumnName;
+            worksheet.Cells["C1"].Value = "Index";
+            worksheet.Cells["D1"].Value = "Original text";
+            worksheet.Cells["E1"].Value = "Translation";
+
+            FormatCell(worksheet, "A1");
+            FormatCell(worksheet, "B1");
+            FormatCell(worksheet, "C1");
+            FormatCell(worksheet, "D1");
+            FormatCell(worksheet, "E1");
+
+            AddComment(workbook, "A1", "Read only field");
+            AddComment(workbook, "B1", "Read only field");
+            AddComment(workbook, "C1", "Read only field");
+            AddComment(workbook, "D1", "Read only field");
 
             int currentRowNumber = 1;
 
@@ -242,23 +261,64 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 currentRowNumber++;
 
-                cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
-                cells[$"B{currentRowNumber}"].Value = translationRow.Type;
-                cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
-                cells[$"D{currentRowNumber}"].Value = translationRow.OriginalText;
-                cells[$"E{currentRowNumber}"].Value = translationRow.Translation;
-                cells[$"E{currentRowNumber}"].Locked = false;
-                cells[$"A{currentRowNumber}:D{currentRowNumber}"].Interior.Color = Color.FromArgb(240, 240, 240);
-                cells[$"A{currentRowNumber}:D{currentRowNumber}"].Borders.Color = Color.FromArgb(225, 225, 225);
+                worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
+                worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
+                worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
+                worksheet.Cells[$"D{currentRowNumber}"].Value = translationRow.OriginalText;
+                worksheet.Cells[$"E{currentRowNumber}"].Value = translationRow.Translation;
             }
-            
-            cells["A:E"].Columns.AutoFit();
-            cells["D:E"].ColumnWidth = 100;
-            cells["D:E"].WrapText = true;
 
-            worksheet.Protect(workSheetPassword);
+            //worksheet.Protect(ProtectionType.All, workSheetPassword, null);
 
-            return workbook.SaveToMemory(FileFormat.Excel8);
+            worksheet.AutoFitColumns();
+            worksheet.Cells.SetColumnWidth(3, 100);
+            worksheet.Cells.SetColumnWidth(4, 100);
+
+            LockColumn(worksheet, 0);
+            LockColumn(worksheet, 1);
+            LockColumn(worksheet, 2);
+            LockColumn(worksheet, 3);
+
+            for (int j = 2; j < worksheet.Cells.Rows.Count; j++)
+            {
+                SetWordWrap(worksheet, $"D{j}");
+            }
+            MemoryStream stream = new MemoryStream();
+            workbook.Save(stream, saveFormat);
+
+            // Rewind the stream position back to zero so it is ready for the next reader.
+            stream.Position = 0;
+            return stream.ToArray();
+        }
+
+        private static void LockColumn(Worksheet worksheet, int i)
+        {
+            var style = worksheet.Cells.Columns[(byte) i].Style;
+            style.IsLocked = true;
+            worksheet.Cells.Columns[(byte) i].ApplyStyle(style, new StyleFlag {Locked = true});
+        }
+
+        private void SetWordWrap(Worksheet worksheet, string address)
+        {
+            var cell = worksheet.Cells[address];
+            var cellStyle = cell.GetStyle();
+            cellStyle.IsTextWrapped = true;
+            cell.SetStyle(cellStyle);
+        }
+
+        private void FormatCell(Worksheet worksheet, string address)
+        {
+            var cell = worksheet.Cells[address];
+            var cellStyle = cell.GetStyle();
+            cellStyle.Font.IsBold = true;
+            cell.SetStyle(cellStyle);
+        }
+
+        private static void AddComment(Workbook workbook, string cellName, string comment)
+        {
+            int commentIndex = workbook.Worksheets[0].Comments.Add(cellName);
+            Comment cellComment = workbook.Worksheets[0].Comments[commentIndex];
+            cellComment.Note = comment;
         }
 
         private IEnumerable<TranslationRow> GetTranlsatedTexts(QuestionnaireDocument questionnaire, ITranslation translation)
