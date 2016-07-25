@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Api
         [Route("{id:Guid}/ods/{translationId:Guid}")]
         public HttpResponseMessage GetOpenOffice(Guid id, Guid translationId)
         {
-            var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
+            var translationFile = this.translationsService.GetAsOpenOfficeFile(id, translationId);
 
             return this.GetTranslation(translationFile, "ods", "application/vnd.oasis.opendocument.spreadsheet");
         }
