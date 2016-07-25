@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interviewException.ShouldNotBeNull();
 
         It should_throw_exception_with_message_containing__translation____language__ = () =>
-            interviewException.Message.ToLower().ToSeparateWords().ShouldContain("translation", language);
+            interviewException.Message.ToLower().ToSeparateWords().ShouldContain("translation", "language");
 
         private static string language = "Afrikaans";
         private static Interview interview;
