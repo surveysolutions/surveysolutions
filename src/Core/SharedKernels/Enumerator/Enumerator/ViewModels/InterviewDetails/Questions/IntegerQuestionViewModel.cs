@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
 

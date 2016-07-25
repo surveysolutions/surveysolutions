@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.TranslationId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =

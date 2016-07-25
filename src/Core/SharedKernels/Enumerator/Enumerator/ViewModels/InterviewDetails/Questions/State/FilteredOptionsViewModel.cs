@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
 
             interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.questionIdentity = entityIdentity;
 

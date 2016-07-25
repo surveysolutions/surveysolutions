@@ -5,12 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class TranslationSwitched : InterviewActiveEvent
     {
-        public TranslationSwitched(Guid? translationId, Guid userId)
+        public TranslationSwitched(string language, Guid userId)
             : base(userId)
         {
-            this.TranslationId = translationId;
+            this.Language = language;
         }
 
-        public Guid? TranslationId { get; }
+        public string Language { get; }
     }
 }

@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
     public interface IQuestionnaireStorage
     {
-        IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, Guid? translationId);
+        IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language);
 
         void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument);
 

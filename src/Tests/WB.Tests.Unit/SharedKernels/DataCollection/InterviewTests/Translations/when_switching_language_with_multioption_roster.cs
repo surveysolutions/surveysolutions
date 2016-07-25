@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 
             IQuestionnaireStorage questionnaires = Moq.Mock.Of<IQuestionnaireStorage>(x =>
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
-                x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), translationId) == translatedPlainQuestionnaire);
+                x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
 
             interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaires
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
         };
 
 
-        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(translationId: translationId));
+        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
 
         It should_raise_roster_titles_changed_event_for_multioption_question = () =>
         {

@@ -29,15 +29,15 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             IMenuItem currentLanguageMenuItem = menu.FindItem(originalLanguageMenuItemId);
 
-            foreach (var language in this.ViewModel.AvailableTranslations)
+            foreach (var language in this.ViewModel.AvailableLanguages)
             {
                 var languageMenuItem = languagesMenu.Add(
                     groupId: languagesMenuGroupId,
                     itemId: Menu.None,
                     order: Menu.None,
-                    title: language.Name);
+                    title: language);
 
-                if (language.Id == this.ViewModel.CurrentLanguage)
+                if (language == this.ViewModel.CurrentLanguage)
                 {
                     currentLanguageMenuItem = languageMenuItem;
                 }
