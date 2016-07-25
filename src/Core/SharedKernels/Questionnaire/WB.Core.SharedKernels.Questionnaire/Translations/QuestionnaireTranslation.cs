@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             if (this.translations.ContainsKey(questionId))
             {
-                var translationInstance = this.translations[questionId].FirstOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue);
+                var translationInstance = this.translations[questionId].SingleOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue);
                 return translationInstance?.Value;
             }
 
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             if (this.translations.ContainsKey(entityId))
             {
-                var translationInstance = this.translations[entityId].FirstOrDefault(x => x.Type == translationType);
+                var translationInstance = this.translations[entityId].SingleOrDefault(x => x.Type == translationType);
                 return translationInstance?.Value;
             }
 

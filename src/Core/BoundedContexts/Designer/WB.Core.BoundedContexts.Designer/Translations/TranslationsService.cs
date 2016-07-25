@@ -133,6 +133,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             HashSet<Guid> idsOfAllQuestionnaireEntities =
                 new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
 
+            var translationInstances = new List<TranslationInstance>();
+
             for (int rowNumber = 2; rowNumber <= worksheet.Cells.Rows.Count; rowNumber++)
             {
                 TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
@@ -151,6 +153,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
                     Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
                 };
+
+                translationInstances.Add(translationInstance);
+            }
+
+            var uniqueTranslationInstances = translationInstances
+                .Distinct(new TranslationInstance.IdentityComparer())
+                .ToList();
+
+            foreach (var translationInstance in uniqueTranslationInstances)
+            {
                 this.translations.Store(translationInstance, translationInstance);
             }
         }
