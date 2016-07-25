@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             this.questionnaireId = interview.QuestionnaireIdentity;
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
             this.root = root;
@@ -280,7 +280,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (myChangedInstance != null)
             {
                 var interview = this.statefulInterviewRepository.Get(this.interviewId);
-                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId, interview.TranslationId);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId, interview.Language);
                 if (questionnaire == null) throw new Exception("questionnaire is null");
 
                 string groupTitle = questionnaire.GetGroupTitle(this.SectionIdentity.Id);

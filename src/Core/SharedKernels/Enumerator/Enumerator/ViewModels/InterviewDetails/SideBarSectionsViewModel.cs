@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void BuildSectionsList()
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
             foreach (Guid sectionId in questionnaire.GetAllSections())
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(GroupsEnabled @event)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.TranslationId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
             
             foreach (var groupId in @event.Groups)
             {

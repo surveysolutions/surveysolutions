@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
-                => questionnaire.GetTranslationLanguages() == new [] { new Translation {Id = translationId, Name = "Русский" }});
+                => questionnaire.GetTranslationLanguages() == new [] { language });
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
 
@@ -21,12 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.SwitchTranslation(new SwitchTranslation(Guid.NewGuid(), translationId, Guid.NewGuid()));
+            interview.SwitchTranslation(new SwitchTranslation(Guid.NewGuid(), language, Guid.NewGuid()));
 
         It should_publish_TranslationSwitched_event_with_target_language = () =>
-            eventContext.ShouldContainEvent<TranslationSwitched>(@event => @event.TranslationId == translationId);
+            eventContext.ShouldContainEvent<TranslationSwitched>(@event => @event.Language == language);
 
-        private static Guid translationId = Guid.Parse("11111111111111111111111111111111");
+        private static string language = "French";
         private static Interview interview;
         private static EventContext eventContext;
     }

@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected SingleInterviewViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
             : base(principal, viewModelNavigationService) {}
 
-        public abstract IReadOnlyCollection<Translation> AvailableTranslations { get; }
-        public abstract Guid? CurrentLanguage { get; }
+        public abstract IReadOnlyCollection<string> AvailableLanguages { get; }
+        public abstract string CurrentLanguage { get; }
     }
 }

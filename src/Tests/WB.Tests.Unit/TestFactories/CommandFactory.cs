@@ -212,9 +212,9 @@ namespace WB.Tests.Unit.TestFactories
             return new DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
         }
 
-        public SwitchTranslation SwitchTranslation(Guid? translationId = null)
+        public SwitchTranslation SwitchTranslation(string language = null)
         {
-            return new SwitchTranslation(Guid.Empty, translationId, Guid.NewGuid());
+            return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
         }
     }
 }

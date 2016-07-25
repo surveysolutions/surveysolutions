@@ -80,14 +80,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.Id == interview.CurrentTranslation);
+            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.Name == interview.CurrentLanguage);
             if (currentTranslation != null)
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
                 var translation = this.translationStorage.Get(questionnaireIdentity, currentTranslation.Id);
 
                 if (translation == null)
-                    throw new ArgumentException($"No translation found for language '{interview.CurrentTranslation}' and questionnaire '{questionnaireIdentity}'.");
+                    throw new ArgumentException($"No translation found for language '{interview.CurrentLanguage}' and questionnaire '{questionnaireIdentity}'.");
 
                 questionnaire = this.questionnaireTranslator.Translate(questionnaire, translation);
             }

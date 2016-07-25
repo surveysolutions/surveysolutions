@@ -846,10 +846,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return @group != null && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
         }
 
-        public IReadOnlyCollection<Translation> GetTranslationLanguages()
+        public IReadOnlyCollection<string> GetTranslationLanguages()
             => this
                 .QuestionnaireDocument
                 .Translations
+                .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

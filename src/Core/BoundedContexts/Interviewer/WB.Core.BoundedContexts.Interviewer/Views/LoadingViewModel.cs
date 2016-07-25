@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         this.interviewRepository.GetAsync(interviewIdString, progress,
                             this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
 
-                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId));
+                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
