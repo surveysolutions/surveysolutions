@@ -7948,6 +7948,30 @@ textarea#edit-group-description {
 .left-side-panel.unfolded .foldback-button {
   display: block;
 }
+.left-side-panel input[type="text"][placeholder],
+.left-side-panel textarea[placeholder] {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+.left-side-panel input[type="text"]::-moz-placeholder,
+.left-side-panel textarea::-moz-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+.left-side-panel input[type="text"]:-ms-input-placeholder,
+.left-side-panel textarea:-ms-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+.left-side-panel input[type="text"]::-webkit-input-placeholder,
+.left-side-panel textarea::-webkit-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
 .lookup-tables-panel {
   width: 75%;
 }
@@ -8060,6 +8084,86 @@ textarea#edit-group-description {
 .lookup-tables-panel .lookup-tables ul li .actions.dirty .permanent-actions {
   position: static;
 }
+.translations-panel {
+  width: 75%;
+  min-width: 538px;
+}
+.translations-panel .translations {
+  height: 100%;
+}
+.translations-panel .translations div.translation-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding-right: 30px;
+  padding-left: 20px;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item {
+  background: #fff;
+  margin-bottom: 7px;
+  padding: 5px 10px;
+  min-height: 65px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 2px solid #e5e8ea;
+  position: relative;
+  z-index: 10;
+  font-family: "Lucida Console", Monaco, monospace;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item:hover {
+  border-color: #d9dde0;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .drop-box {
+  color: #78838a;
+  border: 2px dashed #78838a;
+  height: 30px;
+  text-align: center;
+  line-height: 26px;
+  display: none;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item.dragover .drop-box {
+  display: block;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item input,
+.translations-panel .translations div.translation-list div.translations-panel-item textarea {
+  display: block;
+  border: none;
+  border-color: #fff;
+  box-shadow: none;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item input.table-name {
+  width: 275px;
+  color: #e004c9;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .actions {
+  top: -5px;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .actions button,
+.translations-panel .translations div.translation-list div.translations-panel-item .actions a.btn {
+  background: #fff;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .actions button:hover,
+.translations-panel .translations div.translation-list div.translations-panel-item .actions a.btn:hover {
+  background: #e6e6e6;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .actions .permanent-actions {
+  padding-left: 5px;
+  display: none;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item .actions.dirty .permanent-actions {
+  position: static;
+}
+.translations-panel .translations div.translation-list div.translations-panel-item:hover .actions .permanent-actions {
+  display: block;
+}
 .attachments-panel {
   width: 75%;
   min-width: 538px;
@@ -8099,7 +8203,7 @@ textarea#edit-group-description {
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
-  border: 3px solid #e5e8ea;
+  border: 2px solid #e5e8ea;
   position: relative;
   z-index: 10;
   font-family: "Lucida Console", Monaco, monospace;
@@ -8187,30 +8291,6 @@ textarea#edit-group-description {
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item fieldset[disabled] .form-control {
   background: #fff;
 }
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"][placeholder],
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea[placeholder] {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]::-moz-placeholder,
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea::-moz-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]:-ms-input-placeholder,
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea:-ms-input-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]::-webkit-input-placeholder,
-.attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea::-webkit-input-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions {
   margin-right: 0;
   margin-bottom: 4px;
@@ -8282,30 +8362,6 @@ textarea#edit-group-description {
   border-radius: 0;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
-}
-.macros-panel .macroses ul li input[type="text"][placeholder],
-.macros-panel .macroses ul li textarea[placeholder] {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.macros-panel .macroses ul li input[type="text"]::-moz-placeholder,
-.macros-panel .macroses ul li textarea::-moz-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.macros-panel .macroses ul li input[type="text"]:-ms-input-placeholder,
-.macros-panel .macroses ul li textarea:-ms-input-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-.macros-panel .macroses ul li input[type="text"]::-webkit-input-placeholder,
-.macros-panel .macroses ul li textarea::-webkit-input-placeholder {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  text-overflow: ellipsis;
 }
 .macros-panel .macroses ul li .divider {
   height: 2px;
