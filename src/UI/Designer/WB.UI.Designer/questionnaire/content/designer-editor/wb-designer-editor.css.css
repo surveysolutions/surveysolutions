@@ -372,7 +372,7 @@
   background: #fff;
   margin-bottom: 7px;
   padding: 12px 10px 5px 10px;
-  height: 80px;
+  min-height: 80px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
