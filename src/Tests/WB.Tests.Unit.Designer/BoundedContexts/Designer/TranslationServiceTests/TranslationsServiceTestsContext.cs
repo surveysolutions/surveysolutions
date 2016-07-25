@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
         {
             return new TranslationsService(traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>());
+                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
         }
     }
 }
