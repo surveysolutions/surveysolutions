@@ -39,7 +39,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
 
         public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)
-            => this.NavigateTo<InterviewerInterviewViewModel>(new
+            => this.NavigateTo<InterviewViewModel>(new
             {
                 interviewId = interviewId,
                 jsonNavigationIdentity = navigationIdentity != null ? this.jsonSerializer.Serialize(navigationIdentity) : null

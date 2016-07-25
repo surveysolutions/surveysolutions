@@ -1,4 +1,6 @@
+using Android.OS;
 using Android.Support.V7.App;
+using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -7,20 +9,14 @@ namespace WB.UI.Shared.Enumerator.Activities
     public abstract class SingleInterviewActivity<TViewModel> : BaseActivity<TViewModel>
         where TViewModel : SingleInterviewViewModel
     {
-        protected abstract ActionBarDrawerToggle DrawerToggle { get; }
+        protected Toolbar toolbar;
 
-        protected abstract void OnMenuItemSelected(IMenuItem item);
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
+        protected override void OnCreate(Bundle bundle)
         {
-            if (this.DrawerToggle.OnOptionsItemSelected(item))
-            {
-                return true;
-            }
+            base.OnCreate(bundle);
 
-            this.OnMenuItemSelected(item);
-
-            return base.OnOptionsItemSelected(item);
+            this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            this.SetSupportActionBar(this.toolbar);
         }
 
         protected void PopulateLanguagesMenu(IMenu menu, int languagesMenuId, int originalLanguageMenuItemId, int languagesMenuGroupId)

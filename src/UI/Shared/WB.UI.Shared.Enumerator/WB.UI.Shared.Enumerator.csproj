@@ -208,10 +208,10 @@
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
-    <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
+    <Compile Include="Activities\BaseInterviewActivity.cs" />
     <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
-    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
+    <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SingleInterviewActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />

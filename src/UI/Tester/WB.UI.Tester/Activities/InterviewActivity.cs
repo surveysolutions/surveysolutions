@@ -14,7 +14,7 @@ namespace WB.UI.Tester.Activities
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : EnumeratorInterviewActivity<InterviewViewModel>
+    public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
     {
         public override void OnBackPressed()
         {
@@ -41,21 +41,21 @@ namespace WB.UI.Tester.Activities
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected override void OnMenuItemSelected(IMenuItem item)
+        public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
             {
                 case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
-                    break;
+                    return true;
 
                 case Resource.Id.interview_settings:
                     this.ViewModel.NavigateToSettingsCommand.Execute();
-                    break;
+                    return true;
 
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();
-                    break;
+                    return true;
 
                 default:
                     if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
@@ -67,8 +67,12 @@ namespace WB.UI.Tester.Activities
 
                         this.ViewModel.SwitchTranslationCommand.Execute(language);
                         this.ViewModel.ReloadInterviewCommand.Execute();
+                        return true;
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
             }
         }
     }

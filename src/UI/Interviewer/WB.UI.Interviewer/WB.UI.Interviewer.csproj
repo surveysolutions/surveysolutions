@@ -317,6 +317,7 @@
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
@@ -359,7 +360,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
+    <Compile Include="ViewModel\InterviewViewModel.cs" />
+    <Compile Include="ViewModel\PrefilledQuestionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

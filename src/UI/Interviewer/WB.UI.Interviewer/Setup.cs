@@ -77,9 +77,10 @@ namespace WB.UI.Interviewer
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(LoadingViewModel),typeof(LoadingActivity) },
-                {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
+                {typeof(InterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
