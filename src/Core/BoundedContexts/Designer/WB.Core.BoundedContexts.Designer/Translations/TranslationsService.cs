@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -60,33 +59,31 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         }
         
         public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId) => 
-            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, FileFormatType.Xlsx, SaveFormat.Xlsx);
+            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, SaveFormat.Xlsx);
 
         public TranslationFile GetAsOpenOfficeFile(Guid questionnaireId, Guid translationId) => 
-            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, FileFormatType.ODS, SaveFormat.ODS);
+            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, SaveFormat.ODS);
 
         public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) => 
-            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, FileFormatType.Xlsx, SaveFormat.Xlsx);
+            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, SaveFormat.Xlsx);
 
         public TranslationFile GetTemplateAsOpenOfficeFile(Guid questionnaireId) => 
-            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, FileFormatType.ODS, SaveFormat.ODS);
+            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, SaveFormat.ODS);
 
-        private TranslationFile GetTranslationFileWithSpecifiedFormat(Guid questionnaireId, Guid translationId,
-            FileFormatType fileFormatType, SaveFormat saveFormat)
+        private TranslationFile GetTranslationFileWithSpecifiedFormat(Guid questionnaireId, Guid translationId, SaveFormat saveFormat)
         {
             var translation = this.Get(questionnaireId, translationId);
-
-            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, translationId, translation, fileFormatType, saveFormat);
+            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, translationId, translation, saveFormat);
         }
 
-        private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId, FileFormatType fileFormatType,
+        private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId,
             SaveFormat saveFormat)
         {
             var translation = new QuestionnaireTranslation(new List<TranslationDto>());
-            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, Guid.Empty, translation, fileFormatType, saveFormat);
+            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, Guid.Empty, translation, saveFormat);
         }
 
-        private TranslationFile GenerateTranslationFileWithGivenTranslation(Guid questionnaireId, Guid translationId, ITranslation translation, FileFormatType fileFormatType, SaveFormat saveFormat)
+        private TranslationFile GenerateTranslationFileWithGivenTranslation(Guid questionnaireId, Guid translationId, ITranslation translation, SaveFormat saveFormat)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
 
@@ -94,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, fileFormatType, saveFormat)
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, saveFormat)
             };
 
             return translationFile;
@@ -207,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Guid entityId;
                 if (!Guid.TryParse(importedTranslation.EntityId, out entityId))
                 {
-                    var cellAddress = $"A{rowNumber}"; //worksheet.Cells[$"A{rowNumber}"].;
+                    var cellAddress = $"A{rowNumber}";
 
                     yield return new TranslationValidationError
                     {
@@ -219,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 TranslationType importedType;
                 if (!Enum.TryParse(importedTranslation.Type, out importedType) || importedType == TranslationType.Unknown)
                 {
-                    var cellAddress = $"B{rowNumber}"; //worksheet.Cells[$"B{rowNumber}"].Address;
+                    var cellAddress = $"B{rowNumber}";
 
                     yield return new TranslationValidationError
                     {
@@ -230,7 +227,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {
-                    var cellAddress = $"C{rowNumber}"; //worksheet.Cells[$"C{rowNumber}"].Address;
+                    var cellAddress = $"C{rowNumber}";
 
                     yield return new TranslationValidationError
                     {
@@ -241,9 +238,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation, FileFormatType fileFormatType, SaveFormat saveFormat)
+        private byte[] GetExcelFileContent(QuestionnaireDocument questionnaire, ITranslation translation, SaveFormat saveFormat)
         {
-            Workbook workbook = new Workbook(fileFormatType);
+            Workbook workbook = new Workbook();
 
             int i = workbook.Worksheets.Count > 0 ? 0 : workbook.Worksheets.Add();
 
@@ -301,8 +298,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
             MemoryStream stream = new MemoryStream();
             workbook.Save(stream, saveFormat);
-
-            // Rewind the stream position back to zero so it is ready for the next reader.
             stream.Position = 0;
             return stream.ToArray();
         }
