@@ -157,9 +157,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             foreach (var storedTranslation in storedTranslations)
             {
-                storedTranslation.TranslationId = newTranslationId;
-                storedTranslation.QuestionnaireId = newQuestionnaireId;
-                this.translations.Store(storedTranslation, storedTranslation);
+                var translationCopy = storedTranslation.Clone();
+                translationCopy.TranslationId = newTranslationId;
+                translationCopy.QuestionnaireId = newQuestionnaireId;
+                this.translations.Store(translationCopy, translationCopy);
             }
         }
 
