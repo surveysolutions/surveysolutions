@@ -130,7 +130,7 @@ namespace Main.Core.Entities.SubEntities
                 question.Answers.Add(answer.Clone());
             }
 
-            question.ValidationConditions = new List<ValidationCondition>(this.ValidationConditions.Select(x => new ValidationCondition(x.Expression, x.Message)));
+            question.ValidationConditions = new List<ValidationCondition>(this.ValidationConditions.Select(x => x.Clone()));
             question.Properties = this.Properties;
 
             return question;
