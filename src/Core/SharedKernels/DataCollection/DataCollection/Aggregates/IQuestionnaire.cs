@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
-        IEnumerable<Guid> GetCategoricalRosters();
+        IEnumerable<Guid> GetCategoricalAndFixedRosters();
 
         Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
