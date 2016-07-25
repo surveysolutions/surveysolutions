@@ -1538,7 +1538,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var rosterInstances =
                     this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                        targetQuestionnaire.GetCategoricalRosters(), RosterVector.Empty,
+                        targetQuestionnaire.GetCategoricalAndFixedRosters(), RosterVector.Empty,
                         targetQuestionnaire);
 
                 var changedTitles = rosterInstances.Select(
