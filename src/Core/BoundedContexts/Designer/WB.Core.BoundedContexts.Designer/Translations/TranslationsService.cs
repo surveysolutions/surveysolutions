@@ -103,7 +103,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return translationFile;
         }
 
-
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
         {
             if (translationId == null) throw new ArgumentNullException(nameof(translationId));
@@ -130,22 +129,29 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
 
             this.Delete(questionnaireId, translationId);
-            
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            HashSet<Guid> idsOfAllQuestionnaireEntities =
+                new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
+
             for (int rowNumber = 2; rowNumber <= worksheet.Cells.Rows.Count; rowNumber++)
             {
                 TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
 
                 if(string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
-                this.translations.Store(new TranslationInstance
+                var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
+                if (!idsOfAllQuestionnaireEntities.Contains(questionnaireEntityId)) continue;
+
+                var translationInstance = new TranslationInstance
                 {
                     QuestionnaireId = questionnaireId,
                     TranslationId = translationId,
-                    QuestionnaireEntityId = Guid.Parse(importedTranslation.EntityId),
+                    QuestionnaireEntityId = questionnaireEntityId,
                     Value = importedTranslation.Translation,
                     TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
                     Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
-                }, null);
+                };
+                this.translations.Store(translationInstance, translationInstance);
             }
         }
 
