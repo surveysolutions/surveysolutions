@@ -61,7 +61,11 @@ namespace WB.UI.Interviewer.Activities
                 default:
                     if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
                     {
-                        var language = item.TitleFormatted.ToString();
+                        var language =
+                            item.ItemId == Resource.Id.interview_language_original
+                                ? null
+                                : item.TitleFormatted.ToString();
+
                         this.ViewModel.SwitchTranslationCommand.Execute(language);
                         this.ViewModel.ReloadInterviewCommand.Execute();
                     }
