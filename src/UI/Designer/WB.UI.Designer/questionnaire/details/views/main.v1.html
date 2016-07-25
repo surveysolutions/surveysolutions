@@ -350,7 +350,8 @@
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="file">
                                                         <span>Update</span>
                                                     </button>
-                                                    <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download</a>
+                                                    <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download xlsx</a>
+                                                    <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download ods</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -362,7 +363,8 @@
                     </form>
                     <div class="button-holder">
                         <p>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Get Template</a>
+                            Get Template for <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Excel (xlsx)</a> or
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods_template' }}" target="_blank">Open office (ods)</a>
                         </p>
                         <p>
                             <input type="button" value="Upload new translation"
