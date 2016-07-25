@@ -329,7 +329,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             QuestionnaireIdentity questionnaireIdentity;
             if (this.mapInterviewIdToQuestionnaireIdentity.TryGetValue(interviewId, out questionnaireIdentity))
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, translationId: null);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, language: null);
                 if (!questionnaire.IsPrefilled(questionId))
                     return;
             }

@@ -222,6 +222,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsSupportFilteringForOptions(Guid questionId);
         bool IsFixedRoster(Guid id);
 
-        IReadOnlyCollection<Translation> GetTranslationLanguages();
+        IReadOnlyCollection<string> GetTranslationLanguages();
     }
 }

@@ -60,12 +60,8 @@ namespace WB.UI.Tester.Activities
                 default:
                     if (item.GroupId == Resource.Id.interview_languages && !item.IsChecked)
                     {
-                        Guid? translationId =
-                            item.ItemId == Resource.Id.interview_language_original
-                                ? null
-                                : this.ViewModel.AvailableTranslations.FirstOrDefault(language => language.Name == item.TitleFormatted.ToString())?.Id;
-
-                        this.ViewModel.SwitchTranslationCommand.Execute(translationId);
+                        var language = item.TitleFormatted.ToString();
+                        this.ViewModel.SwitchTranslationCommand.Execute(language);
                         this.ViewModel.ReloadInterviewCommand.Execute();
                     }
                     break;

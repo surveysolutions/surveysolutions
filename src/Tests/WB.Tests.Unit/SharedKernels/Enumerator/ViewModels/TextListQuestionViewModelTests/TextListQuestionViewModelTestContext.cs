@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSizeQuestion
                 && _.GetMaxSelectedAnswerOptions(questionIdentity.Id) == maxAnswerCount
             );
-            return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) == questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         protected static TextListQuestionViewModel CreateTextListQuestionViewModel(

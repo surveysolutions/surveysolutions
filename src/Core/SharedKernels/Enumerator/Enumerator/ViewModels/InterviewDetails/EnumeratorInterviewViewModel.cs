@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.TranslationId);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
                 if (questionnaire == null)
                     throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -108,8 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     })
                     .ToList();
 
-                this.availableTranslations = questionnaire.GetTranslationLanguages();
-                this.currentLanguage = this.interview.TranslationId;
+                this.availableLanguages = questionnaire.GetTranslationLanguages();
+                this.currentLanguage = this.interview.Language;
 
                 this.BreadCrumbs.Init(interviewId, this.navigationState);
                 this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
@@ -210,19 +210,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
 
-        private Guid? currentLanguage;
-        public override Guid? CurrentLanguage => this.currentLanguage;
+        private string currentLanguage;
+        public override string CurrentLanguage => this.currentLanguage;
 
-        private IReadOnlyCollection<Translation> availableTranslations;
-        public override IReadOnlyCollection<Translation> AvailableTranslations => this.availableTranslations;
+        private IReadOnlyCollection<string> availableLanguages;
+        public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
 
-        public IMvxCommand SwitchTranslationCommand => new MvxCommand<Guid?>(this.SwitchTranslation);
+        public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
         public IMvxCommand ReloadInterviewCommand => new MvxCommand(this.ReloadInterview);
 
-        private void SwitchTranslation(Guid? translationId) => this.commandService.Execute(
-            new SwitchTranslation(Guid.Parse(this.interviewId), translationId, this.principal.CurrentUserIdentity.UserId));
+        private void SwitchTranslation(string language) => this.commandService.Execute(
+            new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
 
         private void ReloadInterview() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity);
 

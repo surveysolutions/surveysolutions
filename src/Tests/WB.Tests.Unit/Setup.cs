@@ -111,7 +111,7 @@ namespace WB.Tests.Unit
 
         private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
             => Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Guid?>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
                 && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
                 && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
 

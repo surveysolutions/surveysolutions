@@ -27,9 +27,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.translator = translator;
         }
 
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, Guid? translationId)
+        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
-            string questionnaireCacheKey = translationId != null ? $"{identity}${translationId}" : $"{identity}";
+            string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
             if (!this.plainQuestionnaireCache.ContainsKey(questionnaireCacheKey))
             {
@@ -37,12 +37,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                     return null;
 
-                if (translationId != null)
+                if (language != null)
                 {
-                    var translation = this.translationStorage.Get(identity, translationId.Value);
+                    var translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
+
+                    var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Value) : null;
 
                     if (translation == null)
-                        throw new ArgumentException($"No translation found for translation '{translationId}' and questionnaire '{identity}'.", nameof(translationId));
+                        throw new ArgumentException($"No translation found for language '{language}' and questionnaire '{identity}'.", nameof(translationId));
 
                     questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
                 }

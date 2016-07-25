@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(interviewId);
             this.questionnaireIdentity = interview.QuestionnaireIdentity;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             if (!questionnaire.GetParentGroup(groupIdentity.Id).HasValue)
             {
                 this.SetNextEnabledSection();
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private Identity GetParentGroupOrRosterIdentity()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
 
             Guid parentId = questionnaire.GetParentGroup(this.Identity.Id).Value;
             int rosterLevelOfParent = questionnaire.GetRosterLevelForGroup(parentId);
@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Clear();
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.TranslationId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
 
             var sections = questionnaire.GetAllSections().ToList();
 
