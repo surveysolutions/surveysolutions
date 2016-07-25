@@ -17,7 +17,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Api
@@ -29,6 +28,18 @@ namespace WB.UI.Designer.Api
         {
             public string Type { get; set; }
             public string Command { get; set; }
+        }
+
+        public class CommandProcessResult
+        {
+            public CommandProcessResult(HttpResponseMessage httpResponseMessage, bool hasErrors = true)
+            {
+                this.Response = httpResponseMessage;
+                this.HasErrors = hasErrors;
+            }
+
+            public bool HasErrors { get; set; }
+            public HttpResponseMessage Response { get; set; }
         }
 
         private readonly ICommandService commandService;
@@ -108,7 +119,7 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(command, commandType);
+            return this.ProcessCommand(command, commandType).Response;
         }
 
         [Route("~/api/command/updateLookupTable")]
@@ -160,7 +171,7 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(updateLookupTableCommand, commandType);
+            return this.ProcessCommand(updateLookupTableCommand, commandType).Response;
         }
 
         public HttpResponseMessage Post(CommandExecutionModel model)
@@ -168,7 +179,7 @@ namespace WB.UI.Designer.Api
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
-                return this.ProcessCommand(concreteCommand, model.Type);
+                return this.ProcessCommand(concreteCommand, model.Type).Response;
             }
             catch (Exception e)
             {
@@ -216,20 +227,18 @@ namespace WB.UI.Designer.Api
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
-            var commandResponseContent = commandResponse.Content.ReadAsAsync<JsonResponseResult>().Result;
 
-            if (commandResponseContent == null || model.File == null) return commandResponse;
-            else
-            {
-                var storedTranslationsCount = this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
-                var resultMessage = storedTranslationsCount == 1 ? 
-                    $"Obtained {storedTranslationsCount} row from translation file" :
-                    $"Obtained {storedTranslationsCount} rows from translation file";
-                return this.Request.CreateResponse(resultMessage);
-            }
+            if (commandResponse.HasErrors || model.File == null)
+                return commandResponse.Response;
+
+            var storedTranslationsCount = this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
+            var resultMessage = storedTranslationsCount == 1 ? 
+                $"Obtained {storedTranslationsCount} row from translation file" :
+                $"Obtained {storedTranslationsCount} rows from translation file";
+            return this.Request.CreateResponse(resultMessage);
         }
 
-        private HttpResponseMessage ProcessCommand(ICommand concreteCommand, string commandType)
+        private CommandProcessResult ProcessCommand(ICommand concreteCommand, string commandType)
         {
             try
             {
@@ -243,15 +252,15 @@ namespace WB.UI.Designer.Api
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, exc.Message);
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, exc.Message);
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, exc.Message));
                 }
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, exc.Message);
+                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, exc.Message));
             }
             catch (Exception e)
             {
@@ -264,13 +273,13 @@ namespace WB.UI.Designer.Api
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, domainEx.Message);
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, domainEx.Message));
                 }
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message);
+                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message));
             }
 
-            return this.Request.CreateResponse(new JsonResponseResult());
+            return new CommandProcessResult(this.Request.CreateResponse(new JsonResponseResult()), false);
         }
     }
 }
