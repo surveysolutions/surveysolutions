@@ -578,7 +578,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetCategoricalRosters()
+        public IEnumerable<Guid> GetCategoricalAndFixedRosters()
         {
             return this.AllGroups
                 .Where(x => x.IsRoster)
