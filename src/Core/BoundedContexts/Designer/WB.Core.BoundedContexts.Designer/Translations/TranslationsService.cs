@@ -9,9 +9,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using SpreadsheetGear;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -61,43 +59,42 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new QuestionnaireTranslation(storedTranslations);
         }
         
-        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId)
+        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId) => 
+            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, FileFormatType.Xlsx, SaveFormat.Xlsx);
+
+        public TranslationFile GetAsOpenOfficeFile(Guid questionnaireId, Guid translationId) => 
+            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId, FileFormatType.ODS, SaveFormat.ODS);
+
+        public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) => 
+            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, FileFormatType.Xlsx, SaveFormat.Xlsx);
+
+        public TranslationFile GetTemplateAsOpenOfficeFile(Guid questionnaireId) => 
+            this.GetTemplateFileWithSpecifiedFormat(questionnaireId, FileFormatType.ODS, SaveFormat.ODS);
+
+        private TranslationFile GetTranslationFileWithSpecifiedFormat(Guid questionnaireId, Guid translationId,
+            FileFormatType fileFormatType, SaveFormat saveFormat)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             var translation = this.Get(questionnaireId, translationId);
-            var translationFile = new TranslationFile
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.Xlsx, SaveFormat.Xlsx)
-            };
 
-            return translationFile;
+            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, translationId, translation, fileFormatType, saveFormat);
         }
 
-        public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId)
+        private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId, FileFormatType fileFormatType,
+            SaveFormat saveFormat)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             var translation = new QuestionnaireTranslation(new List<TranslationDto>());
-            var translationFile = new TranslationFile
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                TranslationName = string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.Xlsx, SaveFormat.Xlsx)
-            };
-
-            return translationFile;
+            return this.GenerateTranslationFileWithGivenTranslation(questionnaireId, Guid.Empty, translation, fileFormatType, saveFormat);
         }
 
-        public TranslationFile GetTemplateAsOpenOfficeFile(Guid questionnaireId)
+        private TranslationFile GenerateTranslationFileWithGivenTranslation(Guid questionnaireId, Guid translationId, ITranslation translation, FileFormatType fileFormatType, SaveFormat saveFormat)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
-            var translation = new QuestionnaireTranslation(new List<TranslationDto>());
+
             var translationFile = new TranslationFile
             {
                 QuestionnaireTitle = questionnaire.Title,
-                TranslationName = string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, FileFormatType.ODS, SaveFormat.ODS)
+                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
+                ContentAsExcelFile = this.GetExcelFileContent(questionnaire, translation, fileFormatType, saveFormat)
             };
 
             return translationFile;

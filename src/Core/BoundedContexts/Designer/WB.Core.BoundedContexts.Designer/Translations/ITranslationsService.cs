@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     {
         ITranslation Get(Guid questionnaireId, Guid translationId);
         TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId);
+        TranslationFile GetAsOpenOfficeFile(Guid questionnaireId, Guid translationId);
         TranslationFile GetTemplateAsExcelFile(Guid questionnaireId);
         TranslationFile GetTemplateAsOpenOfficeFile(Guid questionnaireId);
         void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation);
