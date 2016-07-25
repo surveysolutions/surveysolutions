@@ -218,9 +218,15 @@ namespace WB.UI.Designer.Api
             var commandResponse = this.ProcessCommand(command, commandType);
             var commandResponseContent = commandResponse.Content.ReadAsAsync<JsonResponseResult>().Result;
 
-            return commandResponseContent == null || model.File == null
-                ? commandResponse
-                : this.Request.CreateResponse($"{this.translationsService.Count(command.QuestionnaireId, command.TranslationId)} rows of translation were obtained");
+            if (commandResponseContent == null || model.File == null) return commandResponse;
+            else
+            {
+                var storedTranslationsCount = this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
+                var resultMessage = storedTranslationsCount == 1 ? 
+                    $"Obtained {storedTranslationsCount} row from translation file" :
+                    $"Obtained {storedTranslationsCount} rows from translation file";
+                return this.Request.CreateResponse(resultMessage);
+            }
         }
 
         private HttpResponseMessage ProcessCommand(ICommand concreteCommand, string commandType)
