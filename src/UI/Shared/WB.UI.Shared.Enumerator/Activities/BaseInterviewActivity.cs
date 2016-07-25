@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
+using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -12,8 +13,8 @@ using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class EnumeratorInterviewActivity<TViewModel> : SingleInterviewActivity<TViewModel>
-        where TViewModel : EnumeratorInterviewViewModel
+    public abstract class BaseInterviewActivity<TViewModel> : SingleInterviewActivity<TViewModel>
+        where TViewModel : BaseInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
@@ -21,22 +22,14 @@ namespace WB.UI.Shared.Enumerator.Activities
         private MvxSubscriptionToken interviewCompleteActivityToken;
         private MvxSubscriptionToken countOfInvalidEntitiesIncreasedToken;
         private Vibrator vibrator;
-        private Toolbar toolbar;
 
         protected override int ViewResourceId => Resource.Layout.interview;
-        protected override ActionBarDrawerToggle DrawerToggle => this.drawerToggle;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-
-            this.SetSupportActionBar(this.toolbar);
-            this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            this.SupportActionBar.SetHomeButtonEnabled(true);
-
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
@@ -59,6 +52,10 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.countOfInvalidEntitiesIncreasedToken = messenger.Subscribe<CountOfInvalidEntitiesIncreasedMessage>(this.OnCountOfInvalidEntitiesIncreased);
             base.OnStart();
         }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+            => this.drawerToggle.OnOptionsItemSelected(item)
+            || base.OnOptionsItemSelected(item);
 
         private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
         {

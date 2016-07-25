@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class EnumeratorInterviewViewModel : SingleInterviewViewModel, IDisposable
+    public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -30,13 +30,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly InterviewStateViewModel interviewState;
         private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly ICommandService commandService;
-        protected string interviewId;
         private IStatefulInterview interview;
         private readonly IJsonAllTypesSerializer jsonSerializer;
 
 
-        protected EnumeratorInterviewViewModel(
+        protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
@@ -51,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
-            : base(principal, viewModelNavigationService)
+            : base(principal, viewModelNavigationService, commandService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -62,7 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewState = interviewState;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
-            this.commandService = commandService;
             this.jsonSerializer = jsonSerializer;
 
             this.BreadCrumbs = breadCrumbsViewModel;
@@ -73,8 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId, string jsonNavigationIdentity)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.interviewId = interviewId;
+            base.Initialize(interviewId);
 
             if (jsonNavigationIdentity != null)
             {
@@ -217,14 +213,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
-
-        public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
-        public IMvxCommand ReloadInterviewCommand => new MvxCommand(this.ReloadInterview);
-
-        private void SwitchTranslation(string language) => this.commandService.Execute(
-            new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
-
-        private void ReloadInterview() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity);
 
         public void Dispose()
         {

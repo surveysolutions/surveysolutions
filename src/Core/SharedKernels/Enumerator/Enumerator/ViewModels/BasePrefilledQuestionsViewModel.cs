@@ -1,31 +1,35 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class PrefilledQuestionsViewModel : BaseViewModel
+    public abstract class BasePrefilledQuestionsViewModel : SingleInterviewViewModel
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
-        protected string interviewId;
 
-        public PrefilledQuestionsViewModel(
+        protected BasePrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,
-            IPrincipal principal) : base(principal, viewModelNavigationService)
+            IPrincipal principal,
+            ICommandService commandService)
+            : base(principal, viewModelNavigationService, commandService)
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException(nameof(interviewViewModelFactory));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -48,10 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
-        public void Init(string interviewId)
-        {
-            this.interviewId = interviewId;   
-        }
+        public void Init(string interviewId) => base.Initialize(interviewId);
+
+        private string currentLanguage;
+        public override string CurrentLanguage => this.currentLanguage;
+
+        private IReadOnlyCollection<string> availableLanguages;
+        public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
         public override void Load()
         {
@@ -82,6 +89,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.Init(interviewId, null, null);
             this.PrefilledQuestions.Add(startButton);
+
+            this.availableLanguages = questionnaire.GetTranslationLanguages();
+            this.currentLanguage = interview.Language;
         }
 
         public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();

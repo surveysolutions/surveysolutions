@@ -1,5 +1,6 @@
 using Android.App;
 using Android.OS;
+using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
@@ -9,11 +10,8 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", 
-        HardwareAccelerated = true,
-        WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class PrefilledQuestionsActivity : BaseActivity<PrefilledQuestionsViewModel>
+    public abstract class BasePrefilledQuestionsActivity<TViewModel> : SingleInterviewActivity<TViewModel>
+        where TViewModel : BasePrefilledQuestionsViewModel
     {
         protected override int ViewResourceId => Resource.Layout.prefilled_questions;
 
@@ -22,8 +20,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
             var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
             var layoutManager = new LinearLayoutManager(this);

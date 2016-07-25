@@ -1,31 +1,17 @@
-using System;
-using System.Linq;
 using Android.App;
-using Android.Support.V7.App;
 using Android.Views;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
+    [Activity(Label = "", Theme = "@style/BlueAppTheme",
+        HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
+    public class PrefilledQuestionsActivity : BasePrefilledQuestionsActivity<PrefilledQuestionsViewModel>
     {
-        public override void OnBackPressed()
-        {
-            this.ViewModel.NavigateToPreviousViewModel(() =>
-            {
-                this.ViewModel.NavigateBack();
-                this.Finish();
-            });
-        }
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.interview, menu);
@@ -68,7 +54,7 @@ namespace WB.UI.Interviewer.Activities
                                 : item.TitleFormatted.ToString();
 
                         this.ViewModel.SwitchTranslationCommand.Execute(language);
-                        this.ViewModel.ReloadInterviewCommand.Execute();
+                        this.ViewModel.ReloadPrefilledQuestionsCommand.Execute();
                         return true;
                     }
                     else
