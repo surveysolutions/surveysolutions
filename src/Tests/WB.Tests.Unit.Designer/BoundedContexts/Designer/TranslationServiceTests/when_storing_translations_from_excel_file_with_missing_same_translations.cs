@@ -2,9 +2,14 @@
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using It = Machine.Specifications.It;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
@@ -23,7 +28,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             }
 
             plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
-            service = CreateTranslationsService(plainStorageAccessor);
+            var questionnaire = Create.QuestionnaireDocument(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
+            {
+                Create.Group(groupId: Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+            });
+
+            var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            service = CreateTranslationsService(plainStorageAccessor, questionnaires.Object);
             
         };
 
