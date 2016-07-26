@@ -346,6 +346,7 @@
                                             </div>
                                             <div class="permanent-actions pull-right">
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default" target="_blank">Download xlsx</a>
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods/' + translation.translationId}}" class="btn btn-default" target="_blank">Download ods</a>
                                                 <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
                                                     <span>Update</span>
                                                 </button>
@@ -358,7 +359,8 @@
                     </form>
                     <div class="button-holder">
                         <p>
-                            Get Template for <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Excel (xlsx)</a>
+                            Get Template for <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Excel (xlsx)</a> or
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods_template' }}" target="_blank">Open office (ods)</a>
                         </p>
                         <p>
                             <input type="button" value="Upload new translation"
