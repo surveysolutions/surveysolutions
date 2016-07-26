@@ -64,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             var interview = this.interviewRepository.Get(this.interviewId);
+
             if (interview == null)
             {
                 logger.Error("Interview is null. interviewId: " + interviewId);
@@ -83,6 +84,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = new ObservableCollection<dynamic>();
 
+            this.availableLanguages = questionnaire.GetTranslationLanguages();
+            this.currentLanguage = interview.Language;
+
             var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
             questions.ForEach(x => this.PrefilledQuestions.Add(x));
 
@@ -92,6 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
+
+            this.IsSuccessfullyLoaded = true;
         }
 
         public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();

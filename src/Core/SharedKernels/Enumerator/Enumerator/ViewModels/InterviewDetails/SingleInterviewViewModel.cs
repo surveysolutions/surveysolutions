@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.commandService = commandService;
         }
 
+        public bool IsSuccessfullyLoaded { get; protected set; }
+
         public abstract IReadOnlyCollection<string> AvailableLanguages { get; }
         public abstract string CurrentLanguage { get; }
 
