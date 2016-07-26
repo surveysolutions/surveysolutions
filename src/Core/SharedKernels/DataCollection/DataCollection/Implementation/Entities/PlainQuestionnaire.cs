@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -31,34 +32,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #region State
 
-        private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private readonly QuestionnaireDocument innerDocument;
 
-        private Dictionary<Guid, IVariable> variableCache = null;
-        private Dictionary<Guid, IStaticText> staticTextCache = null;
-        private Dictionary<Guid, IQuestion> questionCache = null;
-        
-        private Dictionary<string, IGroup> groupCache = null;
-        private Dictionary<Guid, IComposite> entityCache = null;
-        private List<Guid> sectionCache = null;
-
+        private Dictionary<Guid, IVariable> variablesCache = null;
+        private Dictionary<Guid, IStaticText> staticTextsCache = null;
+        private Dictionary<Guid, IQuestion> questionsCache = null;
+        private Dictionary<string, IGroup> groupsCache = null;
+        private Dictionary<Guid, IComposite> entitiesCache = null;
+        private ReadOnlyCollection<Guid> sectionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
 
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new Dictionary<Guid, ReadOnlyCollection<decimal>>();
-        private readonly Dictionary<Guid, Dictionary<decimal, Answer>> cacheOfAnswerOptions = new Dictionary<Guid, Dictionary<decimal, Answer>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
+
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
+
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new ConcurrentDictionary<Guid, ReadOnlyCollection<decimal>>();
+
+        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, Answer>> cacheOfAnswerOptions = new ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, Answer>>();
+        private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -69,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.entityCache ?? (this.entityCache
+                return this.entitiesCache ?? (this.entitiesCache
                     = this.innerDocument
                         .Find<IComposite>(_ => true)
                         .ToDictionary(
@@ -78,11 +80,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private List<Guid> SectionCache
+        private ReadOnlyCollection<Guid> SectionCache
         {
             get
             {
-                return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
+                return this.sectionsCache ?? (this.sectionsCache 
+                    = this.innerDocument
+                    .Children.Cast<IGroup>()
+                    .Where(x => x != null)
+                    .Select(x => x.PublicKey)
+                    .ToReadOnlyCollection());
             }
         }
 
@@ -90,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.variableCache ?? (this.variableCache
+                return this.variablesCache ?? (this.variablesCache
                     = this.innerDocument
                         .Find<IVariable>(_ => true)
                         .ToDictionary(
@@ -103,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.staticTextCache ?? (this.staticTextCache
+                return this.staticTextsCache ?? (this.staticTextsCache
                     = this.innerDocument
                         .Find<IStaticText>(_ => true)
                         .ToDictionary(
@@ -116,7 +123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.questionCache ?? (this.questionCache
+                return this.questionsCache ?? (this.questionsCache
                     = this.innerDocument
                         .Find<IQuestion>(_ => true)
                         .ToDictionary(
@@ -125,25 +132,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private Dictionary<Guid, IVariable> VariableCache
-        {
-            get
-            {
-                return this.variableCache ?? (this.variableCache
-                    = this.innerDocument
-                        .Find<IVariable>(_ => true)
-                        .ToDictionary(
-                            variable => variable.PublicKey,
-                            variable => variable));
-            }
-        }
-
         private Dictionary<string, IGroup> GroupCache
         {
             get
             {
-                return this.groupCache ?? (
-                    this.groupCache = this.innerDocument.Find<IGroup>(_ => true)
+                return this.groupsCache ?? (
+                    this.groupsCache = this.innerDocument.Find<IGroup>(_ => true)
                         .ToDictionary(
                             group => group.PublicKey.FormatGuid(),
                             group => group));
@@ -167,7 +161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
 
-        private IEnumerable<IVariable> AllVariables => this.VariableCache.Values;
+        private IEnumerable<IVariable> AllVariables => this.VariablesCache.Values;
 
         private IEnumerable<IGroup> AllGroups => this.GroupCache.Values;
 
@@ -188,7 +182,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var groups = this.GroupCache;
             var questions = this.QuestionCache;
             var staticTexts = this.StaticTextCache;
-            var variables = this.VariableCache;
+            var variables = this.VariablesCache;
+
+            var substitutionReferencedQuestions = this.SubstitutionReferencedQuestionsCache;
+            var substitutionReferencedStaticTexts = this.substitutionReferencedStaticTextsCache;
+            var substitutionReferencedGroups = this.substitutionReferencedGroupsCache;
         }
 
         public long Version { get; }
@@ -299,7 +297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
-             => this.cacheOfAnswerOptionsAsValues.GetOrUpdate(questionId, () 
+             => this.cacheOfAnswerOptionsAsValues.GetOrAdd(questionId, x 
                 => this.GetAnswerOptionsAsValuesImpl(questionId));
 
         //should be used on HQ only
@@ -428,8 +426,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         private Answer GetAnswerOption(Guid questionId, decimal answerOptionValue)
-            => this.cacheOfAnswerOptions.GetOrUpdate(questionId, answerOptionValue, 
-                                                    () => GetAnswerOptionImpl(questionId, answerOptionValue));
+            => this.cacheOfAnswerOptions.GetOrAdd(questionId, x => new ConcurrentDictionary<decimal, Answer>()).GetOrAdd(answerOptionValue, GetAnswerOptionImpl(questionId, answerOptionValue));
 
         private Answer GetAnswerOptionImpl(Guid questionId, decimal answerOptionValue)
         {
@@ -444,14 +441,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
             {
-                return question.Answers
-                    .Single(answer => answer.AnswerCode == answerOptionValue);
+                return question.Answers.Single(answer => answer.AnswerCode == answerOptionValue);
             }
             else
             {
-                return question
-                    .Answers
-                    .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
+                return question.Answers.Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
             }
         }
 
@@ -495,9 +489,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
-            => this.cacheOfParentsStartingFromTop.GetOrUpdate(entityId, ()
-                => this
-                    .GetAllParentGroupsForEntityStartingFromBottom(entityId)
+            => this.cacheOfParentsStartingFromTop.GetOrAdd(entityId, 
+                x => this.GetAllParentGroupsForEntityStartingFromBottom(entityId)
                     .Reverse()
                     .ToReadOnlyCollection());
 
@@ -680,10 +673,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
-            => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
+            => this.cacheOfUnderlyingQuestions.GetOrAdd(groupId, this.GetAllUnderlyingQuestionsImpl);
 
         public IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId)
-             => this.cacheOfUnderlyingStaticTexts.GetOrUpdate(groupId, this.GetAllUnderlyingStaticTextsImpl);
+             => this.cacheOfUnderlyingStaticTexts.GetOrAdd(groupId, this.GetAllUnderlyingStaticTextsImpl);
 
         public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
         {
@@ -727,8 +720,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
-            => this.cacheOfChildInterviewerQuestions.GetOrUpdate(groupId, ()
-                => this
+            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
                     .GetGroupOrThrow(groupId)
                     .Children.OfType<IQuestion>()
                     .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
@@ -736,7 +728,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToReadOnlyCollection());
 
         public ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId)
-             => this.cacheOfChildStaticTexts.GetOrUpdate(groupId, ()
+             => this.cacheOfChildStaticTexts.GetOrAdd(groupId, x
                 => this
                     .GetGroupOrThrow(groupId)
                     .Children.OfType<IStaticText>()
@@ -963,13 +955,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
-            if (!this.cacheOfRostersAffectedByRosterTitleQuestion.ContainsKey(questionId))
-            {
-                IEnumerable<Guid> rosters = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
-                this.cacheOfRostersAffectedByRosterTitleQuestion.Add(questionId, rosters);
-            }
-
-            return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
+            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId,
+                this.GetRostersAffectedByRosterTitleQuestionImpl(questionId));
         }
 
         public bool IsRosterTitleQuestionAvailable(Guid rosterId)
@@ -1042,7 +1029,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id)
         {
-            return questionCache.Values.Where(x =>
+            return questionsCache.Values.Where(x =>
             {
                 var question = x as AbstractQuestion;
                 return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
@@ -1051,7 +1038,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetAllChildCascadingQuestions()
         {
-            return questionCache.Values.Where(x =>
+            return questionsCache.Values.Where(x =>
             {
                 var question = x as AbstractQuestion;
                 return question != null && question.CascadeFromQuestionId.HasValue;

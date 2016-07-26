@@ -6,7 +6,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -15,10 +14,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     internal class QuestionnaireStorage : IQuestionnaireStorage
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
-        private readonly ConcurrentDictionary<string, QuestionnaireDocument> cache = new ConcurrentDictionary<string, QuestionnaireDocument>();
-        private readonly Dictionary<string, PlainQuestionnaire> plainQuestionnaireCache = new Dictionary<string, PlainQuestionnaire>();
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
+
+        private readonly ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
+        private readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, ITranslationStorage translationStorage, IQuestionnaireTranslator translator)
         {
@@ -31,51 +31,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
-            if (!this.plainQuestionnaireCache.ContainsKey(questionnaireCacheKey))
+            return this.plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
+        }
+
+        private PlainQuestionnaire CreatePlainQuestionnaire(QuestionnaireIdentity identity, string language)
+        {
+            QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);
+            if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
+                return null;
+
+            if (language != null)
             {
-                QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);
-                if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
-                    return null;
+                var translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
 
-                if (language != null)
-                {
-                    var translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
+                var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Value) : null;
 
-                    var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Value) : null;
+                if (translation == null)
+                    throw new ArgumentException($"No translation found for language '{language}' and questionnaire '{identity}'.", nameof(translationId));
 
-                    if (translation == null)
-                        throw new ArgumentException($"No translation found for language '{language}' and questionnaire '{identity}'.", nameof(translationId));
-
-                    questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
-                }
-
-                var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version);
-                plainQuestionnaire.WarmUpPriorityCaches();
-
-                this.plainQuestionnaireCache[questionnaireCacheKey] = plainQuestionnaire;
+                questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
             }
 
-            return this.plainQuestionnaireCache[questionnaireCacheKey];
+            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version);
+
+            plainQuestionnaire.WarmUpPriorityCaches();
+
+            return plainQuestionnaire;
         }
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             string repositoryId = GetRepositoryId(id, version);
             this.repository.Store(questionnaireDocument, repositoryId);
-            this.cache[repositoryId] = questionnaireDocument.Clone();
-            this.plainQuestionnaireCache.Clear();
+            this.questionnaireDocumentsCache[repositoryId] = questionnaireDocument.Clone();
+            this.plainQuestionnairesCache.Clear();
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
             string repositoryId = GetRepositoryId(id, version);
 
-            if (!this.cache.ContainsKey(repositoryId))
+            if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
-                this.cache[repositoryId] = this.repository.GetById(repositoryId);
+                this.questionnaireDocumentsCache[repositoryId] = this.repository.GetById(repositoryId);
             }
 
-            return this.cache[repositoryId];
+            return this.questionnaireDocumentsCache[repositoryId];
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
@@ -94,8 +95,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.cache[repositoryId] = null;
-            this.plainQuestionnaireCache.Clear();
+            this.questionnaireDocumentsCache[repositoryId] = null;
+            this.plainQuestionnairesCache.Clear();
         }
 
         private static string GetRepositoryId(Guid id, long version) => $"{id.FormatGuid()}${version}";
