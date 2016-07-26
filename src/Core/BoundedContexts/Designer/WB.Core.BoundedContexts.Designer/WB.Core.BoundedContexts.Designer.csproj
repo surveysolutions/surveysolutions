@@ -42,8 +42,9 @@
       <HintPath>..\..\..\..\..\packages\AngleSharp.0.9.6\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\..\..\libs\Aspose.Cells\Aspose.Cells.dll</HintPath>
+    <Reference Include="Aspose.Cells, Version=8.9.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Aspose.Cells.8.9.0\lib\net40\Aspose.Cells.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CsQuery">
       <HintPath>..\..\..\..\..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
