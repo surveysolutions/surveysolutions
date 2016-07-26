@@ -254,16 +254,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             worksheet.Cells["D1"].Value = "Original text";
             worksheet.Cells["E1"].Value = "Translation";
 
-            FormatCell(worksheet, "A1");
-            FormatCell(worksheet, "B1");
-            FormatCell(worksheet, "C1");
-            FormatCell(worksheet, "D1");
-            FormatCell(worksheet, "E1");
+            //FormatCell(worksheet, "A1");
+            //FormatCell(worksheet, "B1");
+            //FormatCell(worksheet, "C1");
+            //FormatCell(worksheet, "D1");
+            //FormatCell(worksheet, "E1");
 
-            AddComment(workbook, "A1", "Read only field");
-            AddComment(workbook, "B1", "Read only field");
-            AddComment(workbook, "C1", "Read only field");
-            AddComment(workbook, "D1", "Read only field");
+            //AddComment(workbook, "A1", "Read only field");
+            //AddComment(workbook, "B1", "Read only field");
+            //AddComment(workbook, "C1", "Read only field");
+            //AddComment(workbook, "D1", "Read only field");
 
             int currentRowNumber = 1;
 
@@ -283,19 +283,19 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             //worksheet.Protect(ProtectionType.All, workSheetPassword, null);
 
-            worksheet.AutoFitColumns();
-            worksheet.Cells.SetColumnWidth(3, 100);
-            worksheet.Cells.SetColumnWidth(4, 100);
+            //worksheet.AutoFitColumns();
+            //worksheet.Cells.SetColumnWidth(3, 100);
+            //worksheet.Cells.SetColumnWidth(4, 100);
 
-            LockColumn(worksheet, 0);
-            LockColumn(worksheet, 1);
-            LockColumn(worksheet, 2);
-            LockColumn(worksheet, 3);
+            //LockColumn(worksheet, 0);
+            //LockColumn(worksheet, 1);
+            //LockColumn(worksheet, 2);
+            //LockColumn(worksheet, 3);
 
-            for (int j = 2; j < worksheet.Cells.Rows.Count; j++)
-            {
-                SetWordWrap(worksheet, $"D{j}");
-            }
+            //for (int j = 2; j < worksheet.Cells.Rows.Count; j++)
+            //{
+            //    SetWordWrap(worksheet, $"D{j}");
+            //}
             MemoryStream stream = new MemoryStream();
             workbook.Save(stream, saveFormat);
             stream.Position = 0;
