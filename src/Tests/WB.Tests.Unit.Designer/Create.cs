@@ -1071,5 +1071,12 @@ namespace WB.Tests.Unit.Designer
         {
             return new Translation() { Name = name, Id = translationId ?? Guid.NewGuid() };
         }
+
+        public static TranslationsService TranslationsService(
+            IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            => new TranslationsService(
+                traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
+                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
     }
 }

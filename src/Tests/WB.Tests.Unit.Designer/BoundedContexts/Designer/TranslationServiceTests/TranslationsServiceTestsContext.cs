@@ -15,12 +15,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         protected const int questionnaireEntityIdColumn = 0;
         protected const int originalTextColumn = 3;
         protected const int translactionColumn = 4;
-
-        protected static TranslationsService CreateTranslationsService(IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
-        {
-            return new TranslationsService(traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
-        }
     }
 }
