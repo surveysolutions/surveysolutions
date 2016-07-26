@@ -43,6 +43,10 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.3\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Aspose.Cells, Version=8.9.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Aspose.Cells.8.9.0\lib\net40\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
@@ -439,6 +443,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_static_text_with_empty_and_too_long_validation_messages_and_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question.cs" />
+    <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question_with_non_printable_char.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_questionnaire_contains_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_transation_for_different_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translations_from_excel_file_with_missing_same_translations.cs" />
