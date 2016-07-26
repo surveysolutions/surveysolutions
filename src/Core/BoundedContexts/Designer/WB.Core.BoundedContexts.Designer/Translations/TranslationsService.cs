@@ -277,8 +277,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
                 worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
                 worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
-                worksheet.Cells[$"D{currentRowNumber}"].Value = translationRow.OriginalText;
-                worksheet.Cells[$"E{currentRowNumber}"].Value = translationRow.Translation;
+                worksheet.Cells[$"D{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
+                worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
             }
 
             //worksheet.Protect(ProtectionType.All, workSheetPassword, null);
@@ -300,6 +300,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             workbook.Save(stream, saveFormat);
             stream.Position = 0;
             return stream.ToArray();
+        }
+
+        private string CleanUpString(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+            return new string(text.Where(c => char.IsWhiteSpace(c) || !char.IsControl(c)).ToArray());
         }
 
         private static void LockColumn(Worksheet worksheet, int i)
