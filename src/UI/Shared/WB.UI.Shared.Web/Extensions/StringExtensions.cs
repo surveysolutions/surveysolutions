@@ -35,5 +35,12 @@ namespace WB.UI.Shared.Web.Extensions
 
             return Boolean.TryParse(value, out result) ? result : @default;
         }
+
+        public static string Ellipsis(this string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
+        }
     }
 }
