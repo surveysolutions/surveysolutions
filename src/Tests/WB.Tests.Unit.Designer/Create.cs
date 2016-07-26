@@ -636,27 +636,27 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(chapterId, null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, attachments, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Translation[] translations = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, translations, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
         {
-            var result = new QuestionnaireDocument();
+            var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
 
             result.Children.Add(chapter);

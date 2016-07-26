@@ -750,7 +750,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 : descriptor.Entity.TranslationName + ": " + getMessageBySubEntityIndex(descriptor.Index + 1), 
                             CreateReference(descriptor.Entity.Entity, descriptor.Index))
                      );
-
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
@@ -1494,13 +1493,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
-            IEnumerable<IComposite> entitiesSupportingSubstitutions = questionnaire.Find<IComposite>().Where(SupportsSubstitutions).ToList();
+            var entitiesSupportingSubstitutions = 
+                questionnaire.FindWithTranslations<IComposite>(SupportsSubstitutions)
+                .ToList();
 
-            foreach (var entity in entitiesSupportingSubstitutions)
+            foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(entity, entity.GetTitle(), questionnaire));
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
 
-                var entityAsValidatable = entity as IValidatable;
+                var entityAsValidatable = translatedEntity.Entity as IValidatable;
 
                 if (entityAsValidatable != null)
                 {
@@ -1510,7 +1511,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         var validationCondition = validationConditions[validationConditionIndex];
                         foundErrors.AddRange(this.GetErrorsBySubstitutionsInValidationCondition(
-                            entity, validationCondition.Message, validationConditionIndex, questionnaire));
+                            translatedEntity, validationCondition.Message, validationConditionIndex, questionnaire));
                     }
                 }
             }
@@ -1518,41 +1519,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesComparer());
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(
-            IComposite entity, string title, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            var question = entity as IQuestion;
+            var question = translatedEntity.Entity as IQuestion;
             if (question != null && IsPreFilledQuestion(question))
                 return QuestionWithTitleSubstitutionCantBePrefilled(question).ToEnumerable();
 
-            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(translatedEntity.Entity, questionnaire);
 
             IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    entity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                    translatedEntity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
                 .Where(errorOrNull => errorOrNull != null);
 
             return entityErrors;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(
-            IComposite entity, string validationCondition, int validationConditionIndex, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string validationCondition, int validationConditionIndex, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(translatedEntity.Entity, questionnaire);
 
             IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    entity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                    translatedEntity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
                 .Where(errorOrNull => errorOrNull != null);
 
             return entityErrors;
@@ -1619,19 +1618,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
 
         private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
-            IComposite entityWithSubstitution,
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> traslatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,
             Guid[] vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            bool isTitle = validationConditionIndex == null;
-            var referenceToEntityWithSubstitution = CreateReference(entityWithSubstitution, validationConditionIndex);
+            string inTranslation = string.IsNullOrWhiteSpace(traslatedEntityWithSubstitution.TranslationName)
+                ? ""
+                : $"{traslatedEntityWithSubstitution.TranslationName}: ";
 
-            if (entityWithSubstitution is IQuestion && isTitle && substitutionReference == ((IQuestion)entityWithSubstitution).StataExportCaption)
+            bool isTitle = validationConditionIndex == null;
+            var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
+
+            if (traslatedEntityWithSubstitution.Entity is IQuestion && isTitle && substitutionReference == ((IQuestion)traslatedEntityWithSubstitution.Entity).StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
-                    VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                    inTranslation + VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1640,7 +1643,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
-                        VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        inTranslation + VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
                         referenceToEntityWithSubstitution);
                 }
                 return null;
@@ -1650,7 +1653,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (entityToSubstitute == null)
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
-                    VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    inTranslation + VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1663,7 +1666,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
-                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    inTranslation + VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -1672,7 +1675,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 vectorOfRosterQuestionsByEntityWithSubstitutions, questionnaire))
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
-                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    inTranslation + VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
