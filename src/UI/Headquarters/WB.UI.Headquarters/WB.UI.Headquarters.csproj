@@ -1208,7 +1208,6 @@
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
