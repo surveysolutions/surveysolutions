@@ -240,8 +240,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.DisabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
-            this.interviewState.ValidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
-            this.interviewState.InvalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
+            this.interviewState.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(@event.InterviewData.ValidAnsweredQuestions.Select(x => new Identity(x.Id, x.InterviewItemRosterVector)));
+            this.interviewState.InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>(@event.InterviewData.InvalidAnsweredQuestions.Select(x => new Identity(x.Id, x.InterviewItemRosterVector)));
 
             this.interviewState.DisabledStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.DisabledStaticTexts ?? new List<Identity>());
             this.interviewState.ValidStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.ValidStaticTexts ?? new List<Identity>());
@@ -3187,7 +3187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changes.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
             changes.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
             changes.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
-
+            
             return changes;
         }
 
@@ -4751,8 +4751,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return filteredOption;
         }
 
-        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();
-        protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any();
+        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any(x => !this.interviewState.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(x)));
+        protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any(x => !this.interviewState.DisabledStaticTexts.Contains(x.Key));
 
         private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
         {
