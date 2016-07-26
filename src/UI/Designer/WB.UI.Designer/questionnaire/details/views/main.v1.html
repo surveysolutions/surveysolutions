@@ -345,11 +345,11 @@
                                                 <button type="button" class="btn lighter-hover" ng-click="cancel(translation);$event.stopPropagation()">Cancel</button>
                                             </div>
                                             <div class="permanent-actions pull-right">
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="file">
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default" target="_blank">Download xlsx</a>
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods/' + translation.translationId}}" class="btn btn-default" target="_blank">Download ods</a>
+                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
                                                     <span>Update</span>
                                                 </button>
-                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download xlsx</a>
-                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/ods/' + translation.translationId}}" class="btn btn-default pull-right" target="_blank">Download ods</a>
                                             </div>
                                         </div>
                                     </div>
