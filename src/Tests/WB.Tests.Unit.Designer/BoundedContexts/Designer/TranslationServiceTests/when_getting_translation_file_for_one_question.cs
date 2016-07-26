@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
 
-            service = CreateTranslationsService(translationsStorage, questionnaires.Object);
+            service = Create.TranslationsService(translationsStorage, questionnaires.Object);
         };
 
         Because of = () =>
