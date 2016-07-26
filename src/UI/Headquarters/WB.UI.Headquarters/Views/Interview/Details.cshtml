@@ -10,6 +10,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@using WB.UI.Shared.Web.Extensions
 @model WB.Core.BoundedContexts.Headquarters.Views.DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -104,7 +105,7 @@
                                 <option value=''>@Pages.InterviewDetails_DefaultTranslation</option>
                                 @foreach (var item in Model.Translations)
                                 {
-                                    <option value='@item.Name'>@item.Name</option>
+                                    <option value='@item.Name'>@item.Name.Ellipsis(25)</option>
                                 }
                             </select>
                         </div>
