@@ -86,39 +86,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interview == null)
             {
                 this.viewModelNavigationService.NavigateToDashboard();
+                return;
             }
-            else
-            {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
-                if (questionnaire == null)
-                    throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
-                this.QuestionnaireTitle = questionnaire.Title;
-                this.PrefilledQuestions = questionnaire
-                    .GetPrefilledQuestions()
-                    .Select(questionId => new SideBarPrefillQuestion
-                    {
-                        Question = questionnaire.GetQuestionTitle(questionId),
-                        Answer = this.GetAnswer(questionnaire, questionId),
-                        StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
-                    })
-                    .ToList();
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+            if (questionnaire == null)
+                throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
-                this.availableLanguages = questionnaire.GetTranslationLanguages();
-                this.currentLanguage = this.interview.Language;
+            this.QuestionnaireTitle = questionnaire.Title;
+            this.PrefilledQuestions = questionnaire
+                .GetPrefilledQuestions()
+                .Select(questionId => new SideBarPrefillQuestion
+                {
+                    Question = questionnaire.GetQuestionTitle(questionId),
+                    Answer = this.GetAnswer(questionnaire, questionId),
+                    StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
+                })
+                .ToList();
 
-                this.BreadCrumbs.Init(interviewId, this.navigationState);
-                this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
+            this.availableLanguages = questionnaire.GetTranslationLanguages();
+            this.currentLanguage = this.interview.Language;
 
-                this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-                this.navigationState.ScreenChanged += this.OnScreenChanged;
+            this.BreadCrumbs.Init(interviewId, this.navigationState);
+            this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
+
+            this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
                 
-                this.navigationState.NavigateTo(
-                    this.targetNavigationIdentity
-                    ?? NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty)));
+            this.navigationState.NavigateTo(
+                this.targetNavigationIdentity
+                ?? NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty)));
 
-                this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
-            }
+            this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
+
+            this.IsSuccessfullyLoaded = true;
         }
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)

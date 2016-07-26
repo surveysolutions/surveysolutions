@@ -21,6 +21,9 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected void PopulateLanguagesMenu(IMenu menu, int languagesMenuId, int originalLanguageMenuItemId, int languagesMenuGroupId)
         {
+            if (!this.ViewModel.IsSuccessfullyLoaded)
+                return;
+
             ISubMenu languagesMenu = menu.FindItem(languagesMenuId).SubMenu;
 
             IMenuItem currentLanguageMenuItem = menu.FindItem(originalLanguageMenuItemId);
