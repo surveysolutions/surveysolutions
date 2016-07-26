@@ -259,7 +259,8 @@ namespace WB.UI.Designer.Controllers
                 bool isTranslationEntry =
                     zipEntryPathChunks.Length == 3 &&
                     zipEntryPathChunks[1].ToLower() == "translations" &&
-                    zipEntryPathChunks[2].ToLower().EndsWith(".xls");
+                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
+                    ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
 
                 if (isQuestionnaireDocumentEntry)
                 {
@@ -440,8 +441,8 @@ namespace WB.UI.Designer.Controllers
 
             foreach (var translation in questionnaireDocument.Translations)
             {
-                var excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
-                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.ods", excelFile.ContentAsExcelFile);
+                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
             }
 
             zipStream.Finish();
