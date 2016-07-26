@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
-            service = CreateTranslationsService(plainStorageAccessor,
+            service = Create.TranslationsService(plainStorageAccessor,
                 questionnaireStorage: questionnaires.Object);
         };
 

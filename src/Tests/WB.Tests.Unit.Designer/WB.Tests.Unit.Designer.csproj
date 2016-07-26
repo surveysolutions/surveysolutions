@@ -443,6 +443,7 @@
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_transation_for_different_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translations_from_excel_file_with_missing_same_translations.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translations_from_excel_file.cs" />
+    <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translation_with_4_lines_duplicated_3_times.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateVariableHandlerTest\when_updating_variable_and_all_parameters_specified.cs" />
@@ -1271,6 +1272,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
