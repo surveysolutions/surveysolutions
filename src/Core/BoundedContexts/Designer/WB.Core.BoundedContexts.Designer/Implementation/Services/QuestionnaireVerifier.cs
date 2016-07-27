@@ -1516,7 +1516,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
 
-            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesComparer());
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1624,17 +1624,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Guid[] vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            string inTranslation = string.IsNullOrWhiteSpace(traslatedEntityWithSubstitution.TranslationName)
-                ? ""
-                : $"{traslatedEntityWithSubstitution.TranslationName}: ";
-
             bool isTitle = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
 
             if (traslatedEntityWithSubstitution.Entity is IQuestion && isTitle && substitutionReference == ((IQuestion)traslatedEntityWithSubstitution.Entity).StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
-                    inTranslation + VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                    VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                    traslatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1643,7 +1640,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
-                        inTranslation + VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        traslatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
                 }
                 return null;
@@ -1653,7 +1651,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (entityToSubstitute == null)
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
-                    inTranslation + VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    traslatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1666,7 +1665,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
-                    inTranslation + VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    traslatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -1675,7 +1675,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 vectorOfRosterQuestionsByEntityWithSubstitutions, questionnaire))
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
-                    inTranslation + VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    traslatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
