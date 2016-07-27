@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class RelinkDeviceViewModel : BaseViewModel
     {
-        private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -24,9 +23,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage) : base(principal, viewModelNavigationService)
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+            : base(principal, viewModelNavigationService)
         {
-            this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;

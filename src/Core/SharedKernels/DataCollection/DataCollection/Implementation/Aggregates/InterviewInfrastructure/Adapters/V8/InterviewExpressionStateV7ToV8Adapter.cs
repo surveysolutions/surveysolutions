@@ -56,7 +56,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone() => this.Clone();
         public void SetInterviewProperties(IInterviewProperties properties) => this.adaptee.SetInterviewProperties(properties);
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();
-        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle) => this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
+
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
+        {
+        }
+
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
 
         public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) { }

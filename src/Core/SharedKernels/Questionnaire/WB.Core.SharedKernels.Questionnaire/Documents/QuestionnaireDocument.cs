@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -25,6 +24,7 @@ namespace Main.Core.Documents
             this.Macros = new Dictionary<Guid, Macro>();
             this.LookupTables = new Dictionary<Guid, LookupTable>();
             this.Attachments = new List<Attachment>();
+            this.Translations = new List<Translation>();
         }
 
         public string Id { get; set; }
@@ -36,6 +36,8 @@ namespace Main.Core.Documents
         public Dictionary<Guid, LookupTable> LookupTables { get; set; }
 
         public List<Attachment> Attachments { get; set; }
+
+        public List<Translation> Translations { get; set; }
 
         public DateTime? CloseDate { get; set; }
 
@@ -77,33 +79,19 @@ namespace Main.Core.Documents
 
         public string VariableName { get; set; }
 
-        public bool IsRoster
-        {
-            get { return false; }
-        }
+        public bool IsRoster => false;
 
-        public Guid? RosterSizeQuestionId
-        {
-            get { return null; }
-        }
+        public Guid? RosterSizeQuestionId => null;
 
-        public RosterSizeSourceType RosterSizeSource
-        {
-            get { return RosterSizeSourceType.Question; }
-        }
+        public RosterSizeSourceType RosterSizeSource => RosterSizeSourceType.Question;
 
         public string[] RosterFixedTitles {
             set {}
         }
 
-        public FixedRosterTitle[] FixedRosterTitles
-        {
-            get { return new FixedRosterTitle[0]; }
-        }
+        public FixedRosterTitle[] FixedRosterTitles => new FixedRosterTitle[0];
 
-        public Guid? RosterTitleQuestionId {
-            get { return null; }
-        }
+        public Guid? RosterTitleQuestionId => null;
 
         public List<Guid> SharedPersons { get; set; }
 
@@ -539,6 +527,9 @@ namespace Main.Core.Documents
 
             doc.Attachments = new List<Attachment>();
             this.Attachments.ForEach(x => doc.Attachments.Add(x.Clone()));
+
+            doc.Translations = new List<Translation>();
+            this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
 
             return doc;
         }

@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                                 Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
                             (preloadedDataService ?? preloadedService)),
                     userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                    Mock.Of<IPlainQuestionnaireRepository>(
+                    Mock.Of<IQuestionnaireStorage>(
                         _ =>
                             _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                             questionnaireDocument),

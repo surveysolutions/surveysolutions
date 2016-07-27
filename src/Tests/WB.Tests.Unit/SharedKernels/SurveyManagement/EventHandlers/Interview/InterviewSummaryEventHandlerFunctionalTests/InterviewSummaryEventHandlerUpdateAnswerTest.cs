@@ -183,8 +183,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryDenormalizer(mockOfInterviewSummary.Object,
                 new Mock<IPlainStorageAccessor<UserDocument>>().Object,
-                plainQuestionnaireRepository:
-                    Mock.Of<IPlainQuestionnaireRepository>(
+                questionnaireStorage:
+                    Mock.Of<IQuestionnaireStorage>(
                         _ =>
                             _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                             questionnaire));

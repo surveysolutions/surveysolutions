@@ -22,7 +22,7 @@
               style="@style/Interview_Question_Answer_Text_Editor"
               local:MvxBind="Text NewListItem; 
                   FocusValueChanged ValueChangeCommand; 
-                  Hint Localization('TextListQuestion_Hint'); 
+                  Watermark Localization('TextListQuestion_Hint'); 
                   Visible IsAddNewItemVisible;" />
         </LinearLayout>
       </LinearLayout>

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class MultiOptionQuestionViewModelTestsContext
     {
         protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
-            IPlainQuestionnaireRepository questionnaireStorage = null, 
+            IQuestionnaireStorage questionnaireStorage = null, 
             ILiteEventRegistry eventRegistry = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             IPrincipal principal = null, 
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         {
             return new MultiOptionQuestionViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
-                questionnaireStorage ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),

@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                 Create.Entity.NumericRealQuestion(variable: "substitute", id: substitedQuestionId)
             }));
 
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireMock);
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
+            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock);
 
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);

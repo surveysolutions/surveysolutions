@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -144,7 +145,8 @@ namespace WB.Tests.Unit.Designer.Applications
                 Mock.Of<ISerializer>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
                 Mock.Of<IAccountListViewFactory>(),
                 Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
         }
 
         protected Mock<ICommandService> CommandServiceMock;

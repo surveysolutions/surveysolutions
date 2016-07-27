@@ -27,10 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             };
             questionnaireDocument = Create.Entity.QuestionnaireDocumentWithAttachments(chapterId: Guid.NewGuid(), attachments: attachments);
 
-            plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
+            questionnaireStorage = Mock.Of<IQuestionnaireStorage>(
                 x => x.GetQuestionnaireDocument(questionnairesId, questionnairesVersion) == questionnaireDocument);
 
-            controller = CreateQuestionnairesApiV2Controller(plainQuestionnaireRepository: plainQuestionnaireRepository);
+            controller = CreateQuestionnairesApiV2Controller(questionnaireStorage: questionnaireStorage);
         };
 
         Because of = () =>
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             responseMessage.ShouldBeOfExactType<HttpResponseMessage>();
 
         It should_call_get_questionnaire_document_once = () =>
-            Mock.Get(plainQuestionnaireRepository).Verify(x => x.GetQuestionnaireDocument(questionnairesId, questionnairesVersion), Times.Once());
+            Mock.Get(questionnaireStorage).Verify(x => x.GetQuestionnaireDocument(questionnairesId, questionnairesVersion), Times.Once());
 
         private It should_return_content_in_body = () =>
             responseMessage.Content.ReadAsAsync<List<string>>().Result.ShouldEqual(attachments.Select(a => a.ContentId).ToList());
@@ -55,6 +55,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static QuestionnaireDocument questionnaireDocument; 
         private static HttpResponseMessage responseMessage;
         private static QuestionnairesApiV2Controller controller;
-        private static IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private static IQuestionnaireStorage questionnaireStorage;
     }
 }

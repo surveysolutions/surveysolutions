@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
@@ -40,7 +41,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
+            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IInterviewerEventStorage, IEventStore>()
@@ -55,7 +57,7 @@ namespace WB.UI.Interviewer.Infrastructure
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
                     PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
                 });
-            this.Bind(typeof (IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());

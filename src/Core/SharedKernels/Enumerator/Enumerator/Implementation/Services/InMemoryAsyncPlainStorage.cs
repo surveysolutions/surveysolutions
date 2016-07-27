@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class InMemoryAsyncPlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
     {
-        private readonly Dictionary<string, TEntity> inMemroyStorage = new Dictionary<string, TEntity>();
+        public readonly Dictionary<string, TEntity> inMemroyStorage = new Dictionary<string, TEntity>();
 
         public TEntity GetById(string id)
         {
@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
         }
+
+        public async Task RemoveAllAsync() => await Task.Run(() => this.inMemroyStorage.Clear());
 
         public async Task<TEntity> GetByIdAsync(string id) => await Task.Run(() => this.GetById(id));
 

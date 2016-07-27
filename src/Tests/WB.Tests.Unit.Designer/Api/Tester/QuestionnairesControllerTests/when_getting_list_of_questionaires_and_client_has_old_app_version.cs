@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
         };
 
         Because of = () => expectedException =
-            Catch.Exception(() => controller.Get(version: ApiVersion.Tester - 1, pageIndex: 1, pageSize: 128));
+            Catch.Exception(() => controller.Get(version: ApiVersion.CurrentTesterProtocolVersion - 1, pageIndex: 1, pageSize: 128));
 
         It should_response_code_be_UpgradeRequired = () =>
             ((HttpResponseException)expectedException).Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);

@@ -1,0 +1,62 @@
+.share-question-dialog {
+    ul.accounts {
+        list-style: none;
+        padding-left: 0;
+
+        > li {
+            .georgia-font();
+            font-style: italic;
+            font-size: 14px;
+
+            > a {
+                color: #5d6468;
+            }
+        }
+    }
+
+    input[type="text"] {
+        .placeholder-style() {
+            font-style: italic;
+        }
+
+        &::-moz-placeholder {
+            .placeholder-style();
+        }
+
+        &:-ms-input-placeholder {
+            .placeholder-style();
+        }
+
+        &::-webkit-input-placeholder {
+            .placeholder-style();
+        }
+    }
+
+    .form-group {
+        
+        .vertical-top{
+            vertical-align: top;
+        }
+
+        .questionaire-title {
+            width: 475px;
+        }
+        .share-with-email {
+            width: 430px;
+        }
+        &.share-form-btn-label {
+            padding-top: 6px;
+         }
+        .invite-button {
+            line-height: 0px;
+        }
+
+        p{
+            color: #a94442;
+        }
+    }
+
+    a.owner{
+        color: @success-message-color;
+    }
+}

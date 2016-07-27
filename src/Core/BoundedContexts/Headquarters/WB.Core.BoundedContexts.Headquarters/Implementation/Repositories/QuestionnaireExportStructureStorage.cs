@@ -10,14 +10,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     internal class QuestionnaireExportStructureStorage: IQuestionnaireExportStructureStorage
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IExportViewFactory exportViewFactory;
 
         private readonly MemoryCache cache = new MemoryCache(nameof(QuestionnaireExportStructure));
 
-        public QuestionnaireExportStructureStorage(IPlainQuestionnaireRepository plainQuestionnaireRepository, IExportViewFactory exportViewFactory)
+        public QuestionnaireExportStructureStorage(IQuestionnaireStorage questionnaireStorage, IExportViewFactory exportViewFactory)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.exportViewFactory = exportViewFactory;
         }
 
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             if (cachedQuestionnaireExportStructure == null)
             {
                 cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(
-                    this.plainQuestionnaireRepository.GetQuestionnaireDocument(id), id.Version);
+                    this.questionnaireStorage.GetQuestionnaireDocument(id), id.Version);
 
                 this.cache.Set(idStringKey, 
                     cachedQuestionnaireExportStructure,

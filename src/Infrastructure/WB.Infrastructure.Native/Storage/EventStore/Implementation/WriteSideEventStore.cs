@@ -89,6 +89,23 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
             => this.Read(id, minVersion);
 
+        public int? GetLastEventSequence(Guid id)
+        {
+            ResolvedEvent? lastResolvedEvent = null;
+
+            StreamEventsSlice currentSlice = this.RunWithDefaultTimeout(
+                this.connection.ReadStreamEventsBackwardAsync(GetStreamName(id), StreamPosition.End, 1, false)
+            );
+
+            if (currentSlice.Events.Length > 0)
+                lastResolvedEvent = currentSlice.Events.Single();
+
+            if (lastResolvedEvent.HasValue)
+                return this.ToCommittedEvent(lastResolvedEvent.Value).EventSequence;
+
+            return null;
+        }
+
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
             Position position = Position.Start;

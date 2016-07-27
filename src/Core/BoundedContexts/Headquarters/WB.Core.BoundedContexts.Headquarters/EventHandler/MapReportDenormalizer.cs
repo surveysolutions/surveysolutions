@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage;
 
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public MapReportDenormalizer(
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage,
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
         {
             if (interviewReferencesStorage == null) throw new ArgumentNullException(nameof(interviewReferencesStorage));
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             this.interviewReferencesStorage = interviewReferencesStorage;
             this.mapReportPointStorage = mapReportPointStorage;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
         }
 
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private void ClearMapReportPointsForInterview(Guid interviewId)
         {
             InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(interviewId);
-            var questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion);
 
             var gpsQuestionVariableNames = questionnaireDocument
                 .Find<GpsCoordinateQuestion>()

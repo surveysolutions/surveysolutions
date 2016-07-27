@@ -38,9 +38,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                         })
                     });
-                IInterviewExpressionStateV7 state = GetInterviewExpressionState(questionnaireDocument, version: new Version(13, 0, 0)) as IInterviewExpressionStateV7;
+                IInterviewExpressionStateV7 state = GetInterviewExpressionState(questionnaireDocument, version: 13) as IInterviewExpressionStateV7;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
-                state.UpdateRosterTitle(rosterId, new decimal[0], 1, "1");
 
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()

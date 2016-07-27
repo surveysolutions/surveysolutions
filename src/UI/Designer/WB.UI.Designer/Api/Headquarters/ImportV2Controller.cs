@@ -15,8 +15,9 @@ using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
+    [Obsolete("Since v5.11")]
     [ApiBasicAuth]
-    [RoutePrefix("import")]
+    [RoutePrefix("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
@@ -50,12 +51,6 @@ namespace WB.UI.Designer.Api.Headquarters
         [HttpPost]
         [Route("PagedQuestionnaireList")]
         public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request) => base.PagedQuestionnaireList(request);
-        
-
-        [HttpGet]
-        [Route("QuestionnaireList")]
-        public override QuestionnaireListCommunicationPackage QuestionnaireList() => base.QuestionnaireList();
-        
 
         [HttpPost]
         [Route("Questionnaire")]
@@ -66,7 +61,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireView = this.GetQuestionnaireViewOrThrow(request);
 
-            this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
+            this.CheckInvariantsAndThrowIfInvalid(request.SupportedVersion.Major, questionnaireView);
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
@@ -81,7 +76,7 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion.Major
+                QuestionnaireContentVersion = questionnaireContentVersion
             };
         }
 

@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.TestFactories
             });
 
         public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
-            => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
+            => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion, 1);
 
         public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new InterviewCreated(

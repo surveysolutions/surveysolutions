@@ -118,6 +118,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             return events ?? this.ReadFromEventStoreInSingleFile(id, minVersion, progress, cancellationToken) ?? new CommittedEvent[0];
         }
 
+        public int? GetLastEventSequence(Guid id)
+        {
+            var eventSourceFilePath = this.GetEventSourceConnectionString(id);
+            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+            {
+                var connection = this.GetOrCreateConnection(id);
+                return GetLastEventSequence(connection, id);
+            }
+            return GetLastEventSequence(this.eventStoreInSingleFile, id);
+        }
+
+        private int? GetLastEventSequence(SQLiteConnectionWithLock connection, Guid id)
+        {
+            using (connection.Lock())
+            {
+                var isDataExist = connection
+                    .Table<EventView>()
+                    .Any(eventView => eventView.EventSourceId == id);
+
+                if (!isDataExist)
+                    return null;
+
+                var lastEventSequence = connection
+                    .Table<EventView>()
+                    .Where(eventView => eventView.EventSourceId == id)
+                    .Max(eventView => eventView.EventSequence);
+
+                return lastEventSequence;
+            }
+        }
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
             => this.StoreToEventStoreInSingleFile(eventStream) ?? this.Store(this.GetOrCreateConnection(eventStream.SourceId), eventStream, this.eventSerializer);
 

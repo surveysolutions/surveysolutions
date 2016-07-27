@@ -9,16 +9,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 
     public class TakeNewInterviewViewFactory : ITakeNewInterviewViewFactory
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public TakeNewInterviewViewFactory(IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public TakeNewInterviewViewFactory(IQuestionnaireStorage questionnaireStorage)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public TakeNewInterviewView Load(TakeNewInterviewInputModel input)
         {
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(input.QuestionnaireId,
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(input.QuestionnaireId,
                 input.QuestionnaireVersion.Value);
 
             return new TakeNewInterviewView(questionnaire, input.QuestionnaireVersion.Value);

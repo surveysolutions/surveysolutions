@@ -15,54 +15,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         }
 
         [Test]
-        public void
-            IsQuestionnaireDocumentSupportedByClientVersion_When_client_version_is_greater_then_10_Then_should_return_true
-            ()
+        public void GetListOfNewFeaturesForClient_When_client_version_is_greater_then_10_Then_should_be_empty()
         {
 
-            var designerEngineVersionService =
-                this.CreateDesignerEngineVersionService();
+            var designerEngineVersionService =this.CreateDesignerEngineVersionService();
 
-            var result =
-                designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
-                    Create.QuestionnaireDocument(), new Version(10, 1, 1));
+            var result = designerEngineVersionService.GetListOfNewFeaturesForClient(Create.QuestionnaireDocument(), 11);
 
-            Assert.That(result, Is.True);
+            Assert.IsEmpty(result);
         }
 
         [Test]
-        public void
-            IsQuestionnaireDocumentSupportedByClientVersion_When_client_version_is_less_then_10_and_questionnaire_doesnt_have_hidden_questions_Then_should_return_true
-            ()
+        public void GetListOfNewFeaturesForClient_When_client_version_is_less_then_10_and_questionnaire_doesnt_have_hidden_questions_Then_should_be_empty()
         {
 
-            var designerEngineVersionService =
-                this.CreateDesignerEngineVersionService();
+            var designerEngineVersionService = this.CreateDesignerEngineVersionService();
 
-            var expressionsEngineVersionService = Setup.DesignerEngineVersionService();
+            var result = designerEngineVersionService.GetListOfNewFeaturesForClient(Create.QuestionnaireDocument(), 10);
 
-            var result =
-                designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
-                    Create.QuestionnaireDocument(), new Version(10, 0, 0));
-
-            Assert.That(result, Is.True);
+            Assert.IsEmpty(result);
         }
 
         [Test]
-        public void
-            IsQuestionnaireDocumentSupportedByClientVersion_When_client_version_is_less_then_10_and_questionnaire_has_hidden_question_Then_should_return_false
-            ()
+        public void GetListOfNewFeaturesForClient_When_client_version_is_less_then_10_and_questionnaire_has_hidden_question_Then_should_be_empty()
         {
-
-            var designerEngineVersionService =
-                this.CreateDesignerEngineVersionService();
+            
+            var designerEngineVersionService = this.CreateDesignerEngineVersionService();
 
             var result =
-                designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
+                designerEngineVersionService.GetListOfNewFeaturesForClient(
                     Create.QuestionnaireDocument(children:
-                        new IComposite[] {Create.TextQuestion(scope: QuestionScope.Hidden)}), new Version(9, 0, 0));
-
-            Assert.That(result, Is.False);
+                        new IComposite[] {Create.TextQuestion(scope: QuestionScope.Hidden)}), 9);
+            
+            Assert.IsEmpty(result);
         }
 
         [Test]
@@ -76,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var result =
                 designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
-            Assert.That(result, Is.EqualTo(new Version(11, 0, 0)));
+            Assert.That(result, Is.EqualTo(11));
         }
 
         [Test]
@@ -89,7 +74,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var result =
                 designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
-            Assert.That(result, Is.EqualTo(new Version(13, 0, 0)));
+            Assert.That(result, Is.EqualTo(13));
         }
     }
 }

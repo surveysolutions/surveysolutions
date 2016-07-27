@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessUrl) {
+﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessUrl, reprocessSelectedUrl) {
     Supervisor.VM.ControlPanel.BrokenInterviewPackages.superclass.constructor.apply(this, arguments);
 
     var dateFormat = "YYYY-MM-DD";
@@ -145,6 +145,30 @@
                         self.SendRequest(reprocessUrl, {}, function () {
                             self.search();
                         }, true);
+                    }
+                }
+            }
+        });
+    };
+
+    self.reprocessSelected = function () {
+        bootbox.dialog({
+            message: "Are you sure you want to reprocess selected broken packages?",
+            title: "Confirmation",
+            buttons: {
+                cancel: {
+                    label: "No",
+                    className: "btn-primary"
+                },
+                ok: {
+                    label: "Yes",
+                    className: "btn-danger",
+                    callback: function () {
+                        var request = {
+                            packageIds: _.map(self.SelectedItems(), function(package) { return package.Id(); })
+                        };
+
+                        self.SendRequest(reprocessSelectedUrl, request, function () { self.search(); }, true);
                     }
                 }
             }

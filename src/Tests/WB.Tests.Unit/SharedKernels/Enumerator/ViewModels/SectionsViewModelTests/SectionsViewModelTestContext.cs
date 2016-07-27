@@ -19,13 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         protected static SideBarSectionsViewModel CreateSectionsViewModel(
             IMvxMessenger messenger = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             ISubstitutionService substitutionService = null,
             ISideBarSectionViewModelsFactory sideBarSectionViewModelsFactory = null)
         {
 
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 Create.Service.LiteEventRegistry(),
                 sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
         }
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
         protected static SideBarSectionsViewModel CreateSectionsViewModel(IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
 
             var interviewsRepository = new Mock<IStatefulInterviewRepository>();

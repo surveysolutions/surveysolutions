@@ -14,12 +14,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
     [Subject(typeof(FilteredOptionsViewModel))]
     public class FilteredOptionsViewModelTestContext
     {
-        protected static FilteredOptionsViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null,
+        protected static FilteredOptionsViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             AnswerNotifier answerNotifier = null)
         {
             return new FilteredOptionsViewModel(
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 answerNotifier ?? Mock.Of<AnswerNotifier>());
         }

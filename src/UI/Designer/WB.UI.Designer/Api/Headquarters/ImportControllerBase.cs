@@ -49,16 +49,14 @@ namespace WB.UI.Designer.Api.Headquarters
 
         public virtual void Login() { }
 
-        protected string GetQuestionnaireAssemblyOrThrow(QuestionnaireView questionnaireView, Version questionnaireContentVersion)
+        protected string GetQuestionnaireAssemblyOrThrow(QuestionnaireView questionnaireView, int questionnaireContentVersion)
         {
             GenerationResult generationResult;
             string resultAssembly;
             try
             {
-                generationResult =
-                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, questionnaireContentVersion,
-                        out resultAssembly);
+                generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                        questionnaireView.Source, questionnaireContentVersion, out resultAssembly);
             }
             catch (Exception)
             {
@@ -89,31 +87,24 @@ namespace WB.UI.Designer.Api.Headquarters
             return resultAssembly;
         }
 
-        protected void CheckInvariantsAndThrowIfInvalid(DownloadQuestionnaireRequest request, QuestionnaireView questionnaireView)
+        protected void CheckInvariantsAndThrowIfInvalid(int clientVersion, QuestionnaireView questionnaireView)
         {
-            var supportedClientVersion = new Version(request.SupportedVersion.Major,
-                request.SupportedVersion.Minor,
-                request.SupportedVersion.Patch);
-
-            if (!this.engineVersionService.IsClientVersionSupported(supportedClientVersion))
+            if (!this.engineVersionService.IsClientVersionSupported(clientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.OldClientPleaseUpdate, supportedClientVersion)
+                    ReasonPhrase = string.Format(ErrorMessages.OldClientPleaseUpdate, clientVersion)
                 });
             }
 
-            if (
-                !this.engineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaireView.Source,
-                    supportedClientVersion))
+            var listOfNewFeaturesForClient = this.engineVersionService.GetListOfNewFeaturesForClient(questionnaireView.Source, clientVersion).ToList();
+            if (listOfNewFeaturesForClient.Any())
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase =
-                        string.Format(
-                            ErrorMessages
-                                .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
-                            questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                            questionnaireView.Title,
+                            string.Join(", ", listOfNewFeaturesForClient.Select(featureDescription => $"\"{featureDescription}\"")))
                 });
             }
 
@@ -168,9 +159,6 @@ namespace WB.UI.Designer.Api.Headquarters
             return new PagedQuestionnaireCommunicationPackage()
             {
                 TotalCount = questionnaireListView.TotalCount,
-                Order = questionnaireListView.Order,
-                Page = questionnaireListView.Page,
-                PageSize = questionnaireListView.PageSize,
                 Items = questionnaireListView.Items.Select(questionnaireListItem =>
                     new QuestionnaireListItem()
                     {
@@ -178,29 +166,6 @@ namespace WB.UI.Designer.Api.Headquarters
                         Title = questionnaireListItem.Title
                     }).ToList()
             };
-        }
-
-        public virtual QuestionnaireListCommunicationPackage QuestionnaireList()
-        {
-            var questionnaireItemList = new List<QuestionnaireListItem>();
-            int pageIndex = 1;
-            while (true)
-            {
-                var questionnaireList =
-                    this.questionnaireHelper.GetQuestionnaires(
-                        viewerId: this.userHelper.WebUser.UserId,
-                        isAdmin: this.userHelper.WebUser.IsAdmin,
-                        pageIndex: pageIndex);
-
-                questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
-
-                pageIndex++;
-                if (pageIndex > questionnaireList.TotalPages)
-                    break;
-            }
-
-            return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

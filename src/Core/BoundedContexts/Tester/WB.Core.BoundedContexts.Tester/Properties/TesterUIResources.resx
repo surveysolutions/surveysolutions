@@ -153,6 +153,12 @@
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
