@@ -152,7 +152,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.substitutionReferencedStaticTextsCache
             ?? (this.substitutionReferencedStaticTextsCache = this.GetSubstitutionReferencedStaticTexts());
 
-
         private Dictionary<string, HashSet<Guid>> SubstitutionReferencedGroupsCache
            => this.substitutionReferencedGroupsCache
            ?? (this.substitutionReferencedGroupsCache = this.GetSubstitutionReferencedGroups());
@@ -185,8 +184,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var variables = this.VariablesCache;
 
             var substitutionReferencedQuestions = this.SubstitutionReferencedQuestionsCache;
-            var substitutionReferencedStaticTexts = this.substitutionReferencedStaticTextsCache;
-            var substitutionReferencedGroups = this.substitutionReferencedGroupsCache;
+            var substitutionReferencedStaticTexts = this.SubstitutionReferencedStaticTextsCache;
+            var substitutionReferencedGroups = this.SubstitutionReferencedGroupsCache;
         }
 
         public long Version { get; }
