@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
                 interviewImportDataParsingService:
                     interviewImportDataParsingService ?? Mock.Of<IInterviewImportDataParsingService>(),
-                plainQuestionnaireRepository:
-                    Mock.Of<IPlainQuestionnaireRepository>(
+                questionnaireStorage:
+                    Mock.Of<IQuestionnaireStorage>(
                         _ =>
                             _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                             questionnaireDocument),

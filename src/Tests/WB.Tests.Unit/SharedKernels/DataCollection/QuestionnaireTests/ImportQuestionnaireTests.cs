@@ -49,14 +49,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             long questionnaireVersion = 7;
 
             var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter();
-            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r => 
+            var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(r => 
                 r.GetQuestionnaireDocument(questionnaireId, questionnaireVersion) == questionnaireDocument);
             var questionnaireBrowseItem = new EntityFactory().QuestionnaireBrowseItem(questionnaireId, questionnaireVersion);
             var questionnaireBrowseItemAccessor = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(a =>
                 a.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem);
 
             var questionnaire = Create.AggregateRoot.Questionnaire(
-                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                questionnaireStorage: plainQuestionnaireRepository,
                 questionnaireBrowseItemStorage: questionnaireBrowseItemAccessor);
 
             questionnaire.DisableQuestionnaire(Create.Command.DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId));
@@ -132,9 +132,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             document.IsDeleted = true;
 
             var plainQuestionnaireRepository =
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(document.PublicKey, 3) == document);
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(document.PublicKey, 3) == document);
 
-            Setup.InstanceToMockedServiceLocator<IPlainQuestionnaireRepository>(plainQuestionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(plainQuestionnaireRepository);
 
 
             Questionnaire questionnaire = CreateImportedQuestionnaire();

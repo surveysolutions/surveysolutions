@@ -27,7 +27,7 @@
                          SelectedObject SelectedObject; 
                          ShowPopupOnFocus .;
                          HidePopupOnDone .;
-                         Hint Localization('FilteredComboboxQuestion_Hint');" />
+                         Watermark Localization('FilteredComboboxQuestion_Hint');" />
           <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText);"
                           style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
             <ImageButton style="@style/Interview_Question_RemoveAnswer"

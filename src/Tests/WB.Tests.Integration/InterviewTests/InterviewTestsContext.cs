@@ -59,10 +59,9 @@ namespace WB.Tests.Integration.InterviewTests
             return new PlainQuestionnaire(questionnaireDocument, 1);
         }
 
-        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
+        protected static IQuestionnaireStorage CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
-            return Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            return Stub<IQuestionnaireStorage>.Returning(questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
@@ -96,9 +95,8 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
-                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
@@ -122,9 +120,8 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
-                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 
@@ -202,9 +199,9 @@ namespace WB.Tests.Integration.InterviewTests
             => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
 
         protected static Assembly CompileAssemblyUsingLatestEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetLatestSupportedVersion());
+            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().LatestSupportedVersion);
 
-        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, Version engineVersion)
+        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, int engineVersion)
         {
             var fileSystemAccessor = new FileSystemIOAccessor();
 
@@ -245,9 +242,9 @@ namespace WB.Tests.Integration.InterviewTests
             return compiledAssembly;
         }
 
-        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)
         {
-            var compiledAssembly = CompileAssemblyUsingLatestEngine(questionnaireDocument);
+            var compiledAssembly = useLatestEngine ? CompileAssemblyUsingLatestEngine(questionnaireDocument) : CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
 
             Type interviewExpressionStateType =
                 compiledAssembly.GetTypes()

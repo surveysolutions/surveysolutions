@@ -25,7 +25,7 @@ namespace WB.Infrastructure.Native.Storage
             foreach (var type in assembly.GetTypes().Where(t => t.IsPublic))
             {
                 if (typesMap.ContainsKey(type.Name))
-                    throw new InvalidOperationException("Assembly contains more then one type with same name.");
+                    throw new InvalidOperationException($"Assembly contains more then one type with same name. Duplicate type: {type.Name}");
 
                 typesMap[type.Name] = type.FullName;
                 typeToName[type] = type.Name;

@@ -82,18 +82,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 		public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
-            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
-            {
-                return;
-            }
-
-            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
-			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
-			
-			var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
-            if (rosterLevel != null)
-                rosterLevel.SetRowName(rosterTitle);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)

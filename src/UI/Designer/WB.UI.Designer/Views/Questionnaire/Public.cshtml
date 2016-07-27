@@ -47,7 +47,7 @@
                             <td class="search-value">
                                 @if (actionModel.CanOpen)
                                 {
-                                    @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
+                                    @Html.ActionLink(listViewModel.Title, "Details", "Questionnaire", routevalues, null)
                                 }
                                 else {
                                     @listViewModel.Title
@@ -77,7 +77,7 @@
                                     <ul class="dropdown-menu">
                                         @if (actionModel.CanOpen)
                                         {
-                                            <li>@Html.ActionLink("View", "Open", "App", routevalues, null)</li>
+                                            <li>@Html.ActionLink("View", "Details", "Questionnaire", routevalues, null)</li>
                                         }
                                         @if (actionModel.CanCopy)
                                         {

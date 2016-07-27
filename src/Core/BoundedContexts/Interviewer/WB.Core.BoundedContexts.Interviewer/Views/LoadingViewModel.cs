@@ -3,8 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Ncqrs.Eventing.Storage;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,22 +23,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         protected Guid interviewId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
+        private readonly ILogger logger;
+        private readonly IUserInteractionService interactionService;
         private CancellationTokenSource loadingCancellationTokenSource;
 
         public LoadingViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
-            IPlainQuestionnaireRepository questionnaireRepository)
+            ILogger logger,
+            IUserInteractionService interactionService,
+            IQuestionnaireStorage questionnaireRepository)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
-            this.principal = principal;
+            this.logger = logger;
+            this.interactionService = interactionService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireRepository = questionnaireRepository;
         }
@@ -64,16 +70,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                
+
                 IStatefulInterview interview =
-                    await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
-         
-                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
+                    await
+                        this.interviewRepository.GetAsync(interviewIdString, progress,
+                            this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
+
+                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
+                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                     await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                 }
 
@@ -85,12 +94,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
                 else
                 {
-                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
+                    this.viewModelNavigationService.NavigateToInterview(interviewIdString, navigationIdentity: null);
                 }
             }
             catch (OperationCanceledException)
             {
 
+            }
+            catch (Exception exception)
+            {
+                this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview).WaitWithoutException();
+                this.logger.Error($"Failed to load interview {this.interviewId}", exception);
+                this.viewModelNavigationService.NavigateToDashboard();
             }
             finally
             {

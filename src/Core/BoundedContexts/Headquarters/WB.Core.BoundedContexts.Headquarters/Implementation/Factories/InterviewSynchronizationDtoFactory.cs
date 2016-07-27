@@ -23,20 +23,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public InterviewSynchronizationDtoFactory(
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IQuestionnaireStorage questionnaireStorage)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var result = new Dictionary<InterviewItemId, RosterVector[]>();
 
             var questionnaire =
-                this.plainQuestionnaireRepository.GetQuestionnaireDocument(
+                this.questionnaireStorage.GetQuestionnaireDocument(
                     new QuestionnaireIdentity(interview.QuestionnaireId,
                         interview.QuestionnaireVersion));
 

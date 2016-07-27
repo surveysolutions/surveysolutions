@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Api.Tester
         [Route("{id:Guid}")]
         public Questionnaire Get(Guid id, int version)
         {
-            if(version < ApiVersion.Tester)
+            if(version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
@@ -98,7 +98,7 @@ namespace WB.UI.Designer.Api.Tester
         [Route("")] 
         public HttpResponseMessage Get(int version, [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
-            if (version < ApiVersion.Tester)
+            if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
             var userId = this.userHelper.WebUser.UserId;

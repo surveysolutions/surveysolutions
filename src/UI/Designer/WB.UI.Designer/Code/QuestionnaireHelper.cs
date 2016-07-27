@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
@@ -73,7 +74,7 @@ namespace WB.UI.Designer.Code
                 !x.IsDeleted;
             return new QuestionnairePublicListViewModel
                        {
-                           Id = x.PublicId, 
+                           Id = x.PublicId.FormatGuid(), 
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
@@ -97,7 +98,7 @@ namespace WB.UI.Designer.Code
         {
             return new QuestionnaireListViewModel
                        {
-                           Id = x.PublicId,
+                           Id = x.PublicId.FormatGuid(),
                            Owner = x.Owner,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 

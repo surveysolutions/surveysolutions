@@ -6,10 +6,12 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
@@ -30,6 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             IInterviewerInterviewAccessor interviewFactory = null,
             IAttachmentContentStorage attachmentContentStorage = null)
         {
+            
             return new SynchronizationProcess(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 interviewersPlainStorage ?? Mock.Of<IAsyncPlainStorage<InterviewerIdentity>>(),

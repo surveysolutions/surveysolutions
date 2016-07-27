@@ -84,7 +84,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
 
-            var restClient = fullUrl
+            FlurlClient restClient = fullUrl
                 .WithTimeout(this.restServiceSettings.Timeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
@@ -141,17 +141,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public async Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, CancellationToken? token)
+        public async Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, CancellationToken? token)
         {
-            await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
+            return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
                     method: HttpMethod.Get, forceNoCache: forceNoCache, userCancellationToken: token,
                     request: null);
         }
 
-        public async Task PostAsync(string url, object request = null, RestCredentials credentials = null,
+        public async Task<HttpResponseMessage> PostAsync(string url, object request = null, RestCredentials credentials = null,
             CancellationToken? token = null)
         {
-            await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
+            return await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
                 userCancellationToken: token);
         }
 

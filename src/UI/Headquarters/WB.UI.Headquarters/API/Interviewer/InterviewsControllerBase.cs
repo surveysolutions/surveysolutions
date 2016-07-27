@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.metaBuilder = metaBuilder;
             this.synchronizationSerializer = synchronizationSerializer;
         }
-        
+
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public virtual HttpResponseMessage Get()
         {

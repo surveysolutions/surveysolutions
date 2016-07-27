@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private bool hasLinkedOptionsChangedEvents=false;
 
         public StatefulInterview(ILogger logger,
-                                 IPlainQuestionnaireRepository questionnaireRepository,
+                                 IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
@@ -649,9 +649,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        public bool HasErrors { get; set; }
+        public string Language => this.language;
 
-        public bool IsCompleted { get; set; }
+        public bool HasErrors { get; private set; }
+
+        public bool IsCompleted { get; private set; }
 
         public InterviewRoster GetRoster(Identity identity)
         {
@@ -726,7 +728,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             var answerDtos = synchronizedInterview
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
@@ -1605,7 +1607,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetQuestionnaireOrThrow(
                 this.QuestionnaireIdentity.QuestionnaireId, 
-                this.QuestionnaireIdentity.Version));
+                this.QuestionnaireIdentity.Version,
+                this.Language));
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)

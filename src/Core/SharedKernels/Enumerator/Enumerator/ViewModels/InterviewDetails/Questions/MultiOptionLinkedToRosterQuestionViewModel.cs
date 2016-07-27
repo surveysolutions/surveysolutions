@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher)

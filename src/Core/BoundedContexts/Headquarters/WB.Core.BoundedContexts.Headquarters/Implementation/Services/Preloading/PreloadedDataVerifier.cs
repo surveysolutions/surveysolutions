@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-      	private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+      	private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
@@ -43,13 +43,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         public PreloadedDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         
         private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
         {
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireId, version));
@@ -428,20 +428,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
+            var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__latitude");
+
+            var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__longitude");
+
+            var altitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__altitude");
+
+            if (latitudeColumnIndex < 0 && longitudeColumnIndex < 0 && altitudeColumnIndex < 0)
+                yield break;
+
+            if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
+            {
+                yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
+                yield break;
+            }
+
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
-                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                    $"{gpsExportedQuestion.VariableName}__latitude");
-
-                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                    $"{gpsExportedQuestion.VariableName}__longitude");
-
-                if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
-                {
-                    yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(rowIndex, levelData));
-                    yield break;
-                }
-
                 var latitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
                         latitudeColumnIndex, level, preloadedDataService);
 

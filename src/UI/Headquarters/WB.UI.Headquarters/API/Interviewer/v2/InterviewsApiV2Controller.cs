@@ -6,11 +6,11 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -79,14 +79,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
         public void Post(InterviewPackageApiView package)
         {
-            this.interviewPackagesService.StorePackage(
-                interviewId: package.InterviewId,
-                questionnaireId: package.MetaInfo.TemplateId,
-                questionnaireVersion: package.MetaInfo.TemplateVersion,
-                responsibleId: package.MetaInfo.ResponsibleId,
-                interviewStatus: (InterviewStatus)package.MetaInfo.Status,
-                isCensusInterview: package.MetaInfo.CreatedOnClient ?? false,
-                events: package.Events);
+            var interviewPackage = new InterviewPackage
+            {
+                InterviewId = package.InterviewId,
+                QuestionnaireId = package.MetaInfo.TemplateId,
+                QuestionnaireVersion = package.MetaInfo.TemplateVersion,
+                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
+                ResponsibleId = package.MetaInfo.ResponsibleId,
+                IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
+                IncomingDate = DateTime.UtcNow,
+                Events = package.Events
+            };
+
+            this.interviewPackagesService.StoreOrProcessPackage(interviewPackage);
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);

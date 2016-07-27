@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IEnumeratorSettings settings;
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
-            this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity);
+            this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
@@ -137,10 +137,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (scrollTo != null)
             {
-                var childItem = this.Items
-                    .FirstOrDefault(x => x.Identity.Equals(scrollTo));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    var childItem = this.Items
+                        .FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
-                anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
+                    anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
+                });
             }
             this.ScrollToIndex = anchorElementIndex;
         }

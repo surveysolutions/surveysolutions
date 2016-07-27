@@ -62,17 +62,6 @@ namespace WB.UI.Headquarters
             filters.Add(new ApiMaintenanceFilter());
         }
 
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            
-            routes.MapRoute(
-                "Default", 
-                "{controller}/{action}/{id}", 
-                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } 
-            );
-        }
-
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
@@ -104,7 +93,7 @@ namespace WB.UI.Headquarters
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterWebApiFilters(GlobalConfiguration.Configuration.Filters);
-            RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             DataAnnotationsConfig.RegisterAdapters();
 

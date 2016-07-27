@@ -170,6 +170,24 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string MenuItem_Title_Language {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string MenuItem_Title_Language_Original {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Language_Original", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string MenuItem_Title_Settings {

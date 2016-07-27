@@ -34,15 +34,13 @@ namespace WB.Tests.Unit.TestFactories
                 => _.Payload == (payload ?? Mock.Of<IEvent>())
                 && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
 
-        public IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+        public IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             Guid questionnaireId, IQuestionnaire questionnaire = null, long? questionnaireVersion = null)
         {
             questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
 
-            return Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionnaire.Version) == questionnaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionnaire
-                && repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         public IRosterTitleSubstitutionService RosterTitleSubstitutionService()

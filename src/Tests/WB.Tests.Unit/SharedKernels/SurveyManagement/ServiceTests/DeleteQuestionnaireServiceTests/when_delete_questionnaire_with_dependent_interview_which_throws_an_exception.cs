@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     x.Execute(Moq.It.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId),
                         Moq.It.IsAny<string>())).Throws<NullReferenceException>();
 
-            plainQuestionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            plainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
             interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
             var interviewQueue = new Queue<List<InterviewSummary>>();
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
-                plainQuestionnaireRepository: plainQuestionnaireRepository.Object,
+                questionnaireStorage: plainQuestionnaireRepository.Object,
                 questionnaireBrowseItemStorage:
                     Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireBrowseItem() { Disabled = false, QuestionnaireId = questionnaireId, Version = questionnaireVersion }));
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static Mock<ICommandService> commandServiceMock;
-        private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepository;
+        private static Mock<IQuestionnaireStorage> plainQuestionnaireRepository;
         private static Mock<IInterviewsToDeleteFactory> interviewsToDeleteFactoryMock;
     }
 }

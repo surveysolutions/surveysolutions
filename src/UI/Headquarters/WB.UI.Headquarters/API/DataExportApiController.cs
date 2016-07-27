@@ -145,7 +145,7 @@ namespace WB.UI.Headquarters.API
             var result = new ProgressiveDownload(this.Request).ResultMessage(stream, "application/zip");
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = HttpUtility.UrlEncode(fileSystemAccessor.GetFileName(filePath));
+            result.Content.Headers.ContentDisposition.FileNameStar = HttpUtility.UrlEncode(fileSystemAccessor.GetFileName(filePath));
 
             return result;
         }

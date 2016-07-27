@@ -130,8 +130,8 @@
       <HintPath>..\..\..\..\packages\NConfig.1.1.20\lib\Net40\NConfig.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -743,15 +743,13 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Configuration\Stacy.Headquarters.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
     <Compile Include="API\DataExportApiController.cs" />
@@ -1122,6 +1120,7 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
@@ -1209,7 +1208,6 @@
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />

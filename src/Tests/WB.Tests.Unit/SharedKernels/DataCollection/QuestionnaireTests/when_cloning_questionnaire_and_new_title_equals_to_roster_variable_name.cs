@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 Create.Entity.Roster(variable: rosterVariableName),
             });
 
-            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(_
+            var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(_
                 => _.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaireDocument);
 
             IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
-                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                questionnaireStorage: plainQuestionnaireRepository,
                 fileSystemAccessor: fileSystemAccessor);
         };
 

@@ -156,11 +156,13 @@ namespace WB.Tests.Unit.TestFactories
         public CloneQuestionnaire CloneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity = null,
             Guid? questionnaireId = null, long? questionnaireVersion = null,
-            string newTitle = null)
+            string newTitle = null,
+            long? newQuestionnaireVersion = null)
             => new CloneQuestionnaire(
                 questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
+                newQuestionnaireVersion??42,
                 Guid.NewGuid());
 
         public CreateInterviewCommand CreateInterviewCommand()
@@ -187,7 +189,8 @@ namespace WB.Tests.Unit.TestFactories
                 },
                 false,
                 base64StringOfAssembly,
-                questionnaireContentVersion);
+                questionnaireContentVersion,
+                2);
 
         public LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
             => new LinkUserToDevice(userId, deviceId);
@@ -207,6 +210,11 @@ namespace WB.Tests.Unit.TestFactories
         public DisableQuestionnaire DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
             return new DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
+        }
+
+        public SwitchTranslation SwitchTranslation(string language = null)
+        {
+            return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
         }
     }
 }

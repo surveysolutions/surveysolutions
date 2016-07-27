@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 && _.HasQuestion("subst") == true);
 
 
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
 
             var answer = new TextAnswer();

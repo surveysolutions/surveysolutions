@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
         {
             exportedDataFormatter = new Mock<ITabularFormatExportService>();
             fileSystemAccessor = CreateIFileSystemAccessorMock();
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { "1.tab" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Returns(new[] { "1.tab" });
 
             var exportFileNameService = Mock.Of<IExportFileNameService>(x => 
                 x.GetFileNameForBatchUploadByQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == "template.zip");

@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
         ILiteEventHandler<RosterInstancesTitleChanged>,IDisposable
     {
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISubstitutionService substitutionService;
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string interviewId;
 
         public BreadCrumbsViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             ISubstitutionService substitutionService)
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
@@ -91,8 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(newGroupIdentity.Id);
 

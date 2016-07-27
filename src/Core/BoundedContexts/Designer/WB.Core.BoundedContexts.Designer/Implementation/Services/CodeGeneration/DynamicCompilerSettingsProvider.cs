@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public IEnumerable<PortableExecutableReference> GetAssembliesToReference(Version apiVersion)
+        public IEnumerable<PortableExecutableReference> GetAssembliesToReference(int apiVersion)
         {
             var references = new List<PortableExecutableReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());

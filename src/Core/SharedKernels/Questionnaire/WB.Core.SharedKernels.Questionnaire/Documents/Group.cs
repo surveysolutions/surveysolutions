@@ -141,7 +141,7 @@ namespace Main.Core.Entities.SubEntities
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,
-                FixedRosterTitles = this.FixedRosterTitles
+                FixedRosterTitles = this.FixedRosterTitles.Select(x => new FixedRosterTitle(x.Value, x.Title)).ToArray()
             };
 
             foreach (var composite in this.Children)

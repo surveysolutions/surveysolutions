@@ -1,4 +1,4 @@
-Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
+Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultTranslation) {
     Supervisor.VM.Details.superclass.constructor.apply(this, [settings.Urls.CommandExecution]);
 
     var self = this,
@@ -7,7 +7,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.filteredComboboxes = filteredComboboxes.map(function(combobox) {
         combobox.options = combobox.options.map(function(option) {
-            option.label = decodeURIComponent(option.label);
+            option.label = option.label;
             return option;
         });
         return combobox;
@@ -352,6 +352,22 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
                 window.location = settings.Urls.Interviews;
             }
             
+        });
+    };
+
+    self.currentTranslation = ko.observable(defaultTranslation);
+    self.currentTranslation.subscribe(function (translation) {
+        self.switchTranslation(translation);
+    });
+
+    self.switchTranslation = function (translation) {
+        if (translation === '')
+            translation = null;
+
+        var command = datacontext.getCommand(config.commands.switchTranslation, { language: translation });
+
+        self.SendCommand(command, function () {
+            location.reload();
         });
     };
 

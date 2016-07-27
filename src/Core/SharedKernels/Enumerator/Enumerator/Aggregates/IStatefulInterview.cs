@@ -20,7 +20,9 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         string SupervisorRejectComment { get; }
 
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
-        
+
+        string Language { get; }
+
         bool HasErrors { get; }
         bool IsCompleted { get; }
         bool CreatedOnClient { get; }
