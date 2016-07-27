@@ -55,8 +55,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\..\libs\Aspose.Cells\Aspose.Cells.dll</HintPath>
+    <Reference Include="Aspose.Cells, Version=8.9.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Aspose.Cells.8.9.0\lib\net40\Aspose.Cells.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CsvHelper.2.15.0.0\lib\net45\CsvHelper.dll</HintPath>
