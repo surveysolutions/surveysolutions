@@ -84,9 +84,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = new ObservableCollection<dynamic>();
 
-            this.availableLanguages = questionnaire.GetTranslationLanguages();
-            this.currentLanguage = interview.Language;
-
             var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
             questions.ForEach(x => this.PrefilledQuestions.Add(x));
 
