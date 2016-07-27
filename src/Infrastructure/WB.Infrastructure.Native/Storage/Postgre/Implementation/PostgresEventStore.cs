@@ -57,6 +57,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
             => this.Read(id, minVersion);
 
+        public int? GetLastEventSequence(Guid id)
+        {
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                connection.Open();
+                using (connection.BeginTransaction())
+                {
+                    var command = connection.CreateCommand();
+                    command.CommandText = $"SELECT MAX(eventsequence) as eventsourceid FROM events WHERE eventsourceid=:sourceId";
+                    command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
+                    var executeScalar = command.ExecuteScalar() as int?;
+                    return executeScalar;
+                }
+            }
+        }
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             if (eventStream.IsNotEmpty)

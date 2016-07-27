@@ -6,19 +6,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -28,7 +24,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 {
     public class InterviewImportService : IInterviewImportService
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
@@ -44,7 +40,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.commandService = commandService;
@@ -52,7 +48,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
@@ -60,7 +56,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             Guid? supervisorId, Guid headquartersId)
         {
             var bigTemplateObject =
-                this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
+                this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version);
 
             this.Status = new InterviewImportStatus
@@ -160,8 +156,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private string FormatInterviewImportData(InterviewImportData importedInterview)
         {
-            return string.Join(", ",
-                importedInterview.Answers.Values.Where(x => x != null));
+            return string.Join(", ", importedInterview.Answers.Values.Where(x => x != null));
         }
 
         public bool HasResponsibleColumn(string sampleId)

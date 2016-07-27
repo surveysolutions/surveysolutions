@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class FilteredOptionsViewModel: IDisposable
     {
         private readonly AnswerNotifier answerNotifier;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private IStatefulInterview interview;
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected FilteredOptionsViewModel() { }
 
-        public FilteredOptionsViewModel (IPlainQuestionnaireRepository questionnaireRepository,
+        public FilteredOptionsViewModel (IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             AnswerNotifier answerNotifier)
         {
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
 
             interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.questionIdentity = entityIdentity;
 

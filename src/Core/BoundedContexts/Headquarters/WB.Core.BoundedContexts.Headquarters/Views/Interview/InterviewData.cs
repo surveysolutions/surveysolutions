@@ -18,5 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid? SupervisorId { get; set; }
         public bool CreatedOnClient { get; set; }
         public bool ReceivedByInterviewer { get; set; }
+        public string CurrentLanguage { get; set; }
     }
 }

@@ -8,13 +8,16 @@ using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer
@@ -31,6 +34,7 @@ namespace WB.Tests.Unit.Designer
             return attachmentServiceMock.Object;
         }
 
+
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
             Mock.Get(ServiceLocator.Current)
@@ -40,12 +44,10 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
         {
-            var version = new Version(questionnaireContentVersion, 0, 0);
-
             return Mock.Of<IDesignerEngineVersionService>(_ 
-                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
-                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
-                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+                => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == isClientVersionSupported
+                && _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == (isQuestionnaireVersionSupported ? new string[0] : new []{"New questionnaire feature"})
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
         }
 
         public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
@@ -132,6 +134,15 @@ namespace WB.Tests.Unit.Designer
         {
             return Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>(_ => 
                 _.GetById(It.IsAny<string>()) == Create.QuestionnaireStateTacker());
+        }
+
+        public static IQuestionnaireTranslator QuestionnaireTranslator(QuestionnaireDocument questionnaireDocument, ITranslation translation, QuestionnaireDocument translatedQuestionnaireDocument)
+        {
+            var serviceMock = new Mock<IQuestionnaireTranslator>();
+            serviceMock.Setup(x => x.Translate(questionnaireDocument, translation))
+                 .Returns(translatedQuestionnaireDocument);
+
+            return serviceMock.Object;
         }
     }
 }

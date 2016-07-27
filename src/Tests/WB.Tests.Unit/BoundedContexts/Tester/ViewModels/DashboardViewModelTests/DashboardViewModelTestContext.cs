@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
@@ -40,7 +41,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
             IAttachmentContentStorage attachmentContentStorage = null,
-            IAsyncRunner asyncRunner = null)
+            IAsyncRunner asyncRunner = null,
+            IAsyncPlainStorage<TranslationInstance> translationsStorage = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
@@ -65,7 +67,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
                 logger: logger ?? Mock.Of<ILogger>(),
                 attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
-                asyncRunner: asyncRunner ?? Create.Service.AsyncRunner());
+                asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
+                translationsStorage: translationsStorage ?? Mock.Of<IAsyncPlainStorage<TranslationInstance>>());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

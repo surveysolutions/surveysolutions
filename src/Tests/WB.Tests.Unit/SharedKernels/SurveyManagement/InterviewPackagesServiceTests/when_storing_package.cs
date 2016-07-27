@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.FileSystem;
@@ -17,16 +18,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             mockOfPackagesStorage = new Mock<IPlainStorageAccessor<InterviewPackage>>();
 
             var compressor = Mock.Of<IArchiveUtils>(x => x.CompressString(expectedPackage.Events) == compressedEvents);
+            var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
 
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object,
-                    archiver: compressor);
+                    archiver: compressor, syncSettings: syncSettings);
         };
 
-        Because of = () => interviewPackagesService.StorePackage(interviewId: expectedPackage.InterviewId,
-                    questionnaireId: expectedPackage.QuestionnaireId,
-                    questionnaireVersion: expectedPackage.QuestionnaireVersion,
-                    responsibleId: expectedPackage.ResponsibleId, interviewStatus: expectedPackage.InterviewStatus,
-                    isCensusInterview: expectedPackage.IsCensusInterview, events: expectedPackage.Events);
+        Because of = () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+        {
+            InterviewId = expectedPackage.InterviewId,
+            QuestionnaireId = expectedPackage.QuestionnaireId,
+            QuestionnaireVersion = expectedPackage.QuestionnaireVersion,
+            ResponsibleId = expectedPackage.ResponsibleId,
+            InterviewStatus = expectedPackage.InterviewStatus,
+            IsCensusInterview = expectedPackage.IsCensusInterview,
+            Events = expectedPackage.Events
+        });
 
         It should_store_specified_package =
             () => mockOfPackagesStorage.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);

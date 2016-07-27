@@ -1,6 +1,8 @@
 ﻿using Moq;
 using MvvmCross.Test.Core;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,11 +27,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
         {
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
-                principal ?? Mock.Of<IPrincipal>());
+                principal ?? Mock.Of<IPrincipal>(),
+                Mock.Of<ICommandService>());
         }
     }
 }

@@ -53,6 +53,9 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
+
+            config.TypedRoute("api/interviewer/v2/translations/{id}", c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
+
             config.TypedRoute("api/interviewer/v2/questionnaires/census", c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
             config.TypedRoute("api/interviewer/v2/questionnaires/list", c => c.Action<QuestionnairesApiV2Controller>(x => x.List()));
             config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/{contentVersion:long}", c => c.Action<QuestionnairesApiV2Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));

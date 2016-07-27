@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class QuestionnairesControllerBase : ApiController
     {
-        protected readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
@@ -34,13 +34,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
         
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         protected HttpResponseMessage Get(Guid id, int version, long contentVersion, bool useInOldSerializationFormat)
         {
-            var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
             var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
 
             if (questionnaireDocumentVersioned == null || questionnaireBrowseItem==null)

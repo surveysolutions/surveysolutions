@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
@@ -22,5 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         List<QuestionnaireIdentity> GetAllQuestionnaireIdentities();
 
         bool IsAttachmentUsedAsync(string contentId);
+
+        Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
     }
 }

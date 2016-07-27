@@ -1,0 +1,12 @@
+div {
+  background-image: url("prepend/pizza.jpg");
+}
+
+div {
+  background-image: url("prepend/absolute.jpg");
+}
+
+span {
+  background-image: url("data:image/jpg;base64,/9j/ke4uvs");
+}
+

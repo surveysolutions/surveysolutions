@@ -66,6 +66,9 @@ namespace WB.UI.Designer.Controllers
             this.commandPostprocessor = commandPostprocessor;
         }
 
+        public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+            => this.View("~/questionnaire/details/index.cshtml");
+
         public ActionResult Clone(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
@@ -91,7 +94,7 @@ namespace WB.UI.Designer.Controllers
 
                     this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
-                    return this.RedirectToAction("Open", "App", new { id = questionnaireId });
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }
                 catch (Exception e)
                 {
@@ -134,7 +137,7 @@ namespace WB.UI.Designer.Controllers
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
                             isPublic: model.IsPublic));
-                    return this.RedirectToAction("Open", "App", new {id = questionnaireId});
+                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
                 }
                 catch (QuestionnaireException e)
                 {
@@ -317,9 +320,9 @@ namespace WB.UI.Designer.Controllers
             return Json(commandResult);
         }
         
-        private JsonQuestionnaireResult ExecuteCommand(QuestionCommand command)
+        private JsonResponseResult ExecuteCommand(QuestionCommand command)
         {
-            var commandResult = new JsonQuestionnaireResult() { IsSuccess = true };
+            var commandResult = new JsonResponseResult() { IsSuccess = true };
             try
             {
                 this.commandService.Execute(command);
@@ -332,7 +335,7 @@ namespace WB.UI.Designer.Controllers
                     this.logger.Error(string.Format("Error on command of type ({0}) handling ", command.GetType()), e);
                 }
 
-                commandResult = new JsonQuestionnaireResult
+                commandResult = new JsonResponseResult
                 {
                     IsSuccess = false,
                     HasPermissions = domainEx != null && (domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit),

@@ -15,14 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public VersionedQustionnaireDocumentDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.documentStorage = documentStorage;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public override object[] Writers
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            QuestionnaireDocument document = this.plainQuestionnaireRepository.GetQuestionnaireDocument(evnt.EventSourceId,evnt.Payload.Version.Value).Clone();
+            QuestionnaireDocument document = this.questionnaireStorage.GetQuestionnaireDocument(evnt.EventSourceId,evnt.Payload.Version.Value).Clone();
             if (document == null)
                 return;
 

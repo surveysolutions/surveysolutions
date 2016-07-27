@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
-                syncSettings: new SyncSettings(origin),
+                syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer, 
                 interviewPackageStorage: packagesStorage,
@@ -70,14 +70,17 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     });
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StorePackage(
-                    interviewId: expectedCommand.InterviewId,
-                    questionnaireId: expectedCommand.QuestionnaireId,
-                    questionnaireVersion: expectedCommand.QuestionnaireVersion,
-                    responsibleId: expectedCommand.UserId,
-                    interviewStatus: expectedCommand.InterviewStatus,
-                    isCensusInterview: expectedCommand.CreatedOnClient,
-                    events: newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray())));
+                () => interviewPackagesService.StoreOrProcessPackage(
+                    new InterviewPackage
+                    {
+                        InterviewId = expectedCommand.InterviewId,
+                        QuestionnaireId = expectedCommand.QuestionnaireId,
+                        QuestionnaireVersion = expectedCommand.QuestionnaireVersion,
+                        ResponsibleId = expectedCommand.UserId,
+                        InterviewStatus = expectedCommand.InterviewStatus,
+                        IsCensusInterview = expectedCommand.CreatedOnClient,
+                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray())
+                    }));
         };
 
         Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(

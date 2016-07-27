@@ -14,10 +14,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
     internal class SingleOptionRosterLinkedQuestionViewModelTestsContext
     {
         protected static SingleOptionRosterLinkedQuestionViewModel CreateViewModel(IStatefulInterviewRepository interviewRepository = null, 
-            IPlainQuestionnaireRepository questionnaireRepository = null)
+            IQuestionnaireStorage questionnaireRepository = null)
         {
             return new SingleOptionRosterLinkedQuestionViewModel(Substitute.For<IPrincipal>(),
-                questionnaireRepository ?? Substitute.For<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Substitute.For<IQuestionnaireStorage>(),
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
                 Create.Service.LiteEventRegistry(),
                 Stub.MvxMainThreadDispatcher(),

@@ -50,6 +50,7 @@
     <Compile Include="Documents\AbstractQuestion.cs" />
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerExtentions.cs" />
+    <Compile Include="Documents\Translation.cs" />
     <Compile Include="Documents\Attachment.cs" />
     <Compile Include="Documents\CompositeException.cs" />
     <Compile Include="Documents\Constants.cs" />
@@ -57,7 +58,8 @@
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
     <Compile Include="Documents\IComposite.cs" />
-    <Compile Include="Documents\ICompositeExtensions.cs" />
+    <Compile Include="Documents\QuestionnaireEntityExtensions.cs" />
+    <Compile Include="Documents\IQuestionnaireEntity.cs" />
     <Compile Include="Documents\IValidatable.cs" />
     <Compile Include="Documents\IConditional.cs" />
     <Compile Include="Documents\IGroup.cs" />
@@ -103,6 +105,12 @@
     <Compile Include="Documents\VariableType.cs" />
     <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Translations\ITranslation.cs" />
+    <Compile Include="Translations\IQuestionnaireTranslator.cs" />
+    <Compile Include="Translations\QuestionnaireTranslator.cs" />
+    <Compile Include="Translations\QuestionnaireTranslation.cs" />
+    <Compile Include="Translations\TranslationDto.cs" />
+    <Compile Include="Translations\TranslationType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

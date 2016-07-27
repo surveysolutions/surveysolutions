@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
             var referencedQuestionRosters = new[] { referencedRoster1 };
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasQuestion(linkedQuestionId) == true
                 && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
                 && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters

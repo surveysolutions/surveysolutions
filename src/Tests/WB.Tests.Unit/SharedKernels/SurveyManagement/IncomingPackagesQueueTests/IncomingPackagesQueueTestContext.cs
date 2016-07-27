@@ -12,18 +12,18 @@ using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    [Subject(typeof(IncomingSyncPackagesQueue))]
+    [Subject(typeof(IncomingSyncPackagesService))]
     internal class IncomingPackagesQueueTestContext
     {
-        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IJsonAllTypesSerializer serializer = null,
+        protected static IncomingSyncPackagesService CreateIncomingPackagesQueue(IJsonAllTypesSerializer serializer = null,
             IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null, 
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
             ICommandService commandService = null)
         {
-            return new IncomingSyncPackagesQueue(
+            return new IncomingSyncPackagesService(
                 fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
-                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), 
+                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1, true), 
                 Mock.Of<ILogger>(), 
                 serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(), 

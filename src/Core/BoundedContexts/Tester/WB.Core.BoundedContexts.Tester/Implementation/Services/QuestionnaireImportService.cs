@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IOptionsRepository optionsRepository;
 
-        public QuestionnaireImportService(IPlainQuestionnaireRepository questionnaireRepository, 
+        public QuestionnaireImportService(IQuestionnaireStorage questionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IOptionsRepository optionsRepository)
         {

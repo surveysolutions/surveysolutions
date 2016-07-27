@@ -1,11 +1,11 @@
 ﻿[
   {
-    "outputFile": "UpdatedDesigner/content/markup.css.css",
-    "inputFile": "UpdatedDesigner/content/markup.css.less"
+    "outputFile": "questionnaire/content/markup.css.css",
+    "inputFile": "questionnaire/content/markup.css.less"
   },
   {
-    "outputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.css",
-    "inputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.less"
+    "outputFile": "questionnaire/content/designer-editor/wb-designer-editor.css.css",
+    "inputFile": "questionnaire/content/designer-editor/wb-designer-editor.css.less"
   },
   {
     "outputFile": "Content/pdf.css",

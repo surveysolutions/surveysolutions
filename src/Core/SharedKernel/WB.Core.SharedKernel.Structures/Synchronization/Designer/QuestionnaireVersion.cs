@@ -2,6 +2,7 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
+    [Obsolete("remove after all HQ will be 5.11+")]
     public class QuestionnaireVersion
     {
         public int Major { get; set; }

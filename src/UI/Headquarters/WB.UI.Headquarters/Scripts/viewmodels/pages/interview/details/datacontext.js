@@ -114,6 +114,13 @@
         };
     };
 
+    commands[config.commands.switchTranslation] = function (args) {
+        return {
+            interviewId: interviewId,
+            language: args.language
+        };
+    };
+
     var getCommand = function(commandName, args) {
         return {
             type: commandName,

@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -16,7 +17,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
 {
     internal class DesignerApiService : IDesignerApiService
     {
-        private readonly string apiPrefix = $"/api/v{ApiVersion.Tester}";
+        private readonly string apiPrefix = $"/api/v{ApiVersion.CurrentTesterProtocolVersion}";
 
         private readonly IRestService restService;
         private readonly IPrincipal principal;
@@ -97,6 +98,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
             return attachmentContent;
         }
+
+        public Task<TranslationDto[]> GetTranslationsAsync(string questionnaireId, CancellationToken token)
+            => this.restService.GetAsync<TranslationDto[]>(
+                url: $"{this.apiPrefix}/translation/{questionnaireId}",
+                token: token,
+                credentials: this.RestCredentials);
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {

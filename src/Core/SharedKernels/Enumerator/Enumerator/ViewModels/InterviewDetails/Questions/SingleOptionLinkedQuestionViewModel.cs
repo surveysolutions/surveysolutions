@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly Guid userId;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
@@ -97,14 +97,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = questionIdentity;
             this.interviewId = interview.Id;
 
             this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
 
-            var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
+            var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedQuestionId).ToHashSet();
@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void RefreshOptionsFromModel()
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {

@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<UserArchived>,
         IEventHandler<UserUnarchived>,
         IEventHandler<StaticTextsDeclaredInvalid>,
-        IEventHandler<StaticTextsDeclaredValid>
+        IEventHandler<StaticTextsDeclaredValid>,
+        IEventHandler<TranslationSwitched>
     {
         public override string Name => "Dummy event handler";
 
@@ -89,5 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<UserUnarchived> evnt) { }
         public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> evnt) { }
         public void Handle(IPublishedEvent<StaticTextsDeclaredValid> evnt) { }
+        public void Handle(IPublishedEvent<TranslationSwitched> evnt) { }
     }
 }

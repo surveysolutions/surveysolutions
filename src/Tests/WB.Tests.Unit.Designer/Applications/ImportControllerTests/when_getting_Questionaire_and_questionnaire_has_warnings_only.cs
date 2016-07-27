@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             string generatedAssembly = "test";
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
                 _ =>
-                    _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
+                    _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(),
                         out generatedAssembly) == Create.GenerationResult(true));
 
             importController = CreateImportController(membershipUserService: membershipUserService,

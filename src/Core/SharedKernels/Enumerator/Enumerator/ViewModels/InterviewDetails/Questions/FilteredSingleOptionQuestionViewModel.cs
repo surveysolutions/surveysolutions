@@ -18,12 +18,12 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel, 
+    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
-        public class FilteredComboboxItemViewModel 
+        public class FilteredComboboxItemViewModel
         {
             public string Text { get; set; }
             public decimal Value { get; set; }
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 unchecked
                 {
-                    return ((this.Text?.GetHashCode() ?? 0)*397) ^ this.Value.GetHashCode();
+                    return ((this.Text?.GetHashCode() ?? 0) * 397) ^ this.Value.GetHashCode();
                 }
             }
         }
@@ -66,14 +66,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected IStatefulInterview interview;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private IEnumerable<FilteredComboboxItemViewModel> Options { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, 
+            AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException("principal");
@@ -197,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public string DefaultText { get; set; }
 
-        private string filterText = string.Empty;
+        private string filterText;
         public string FilterText
         {
             get { return this.filterText; }

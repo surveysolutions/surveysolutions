@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             Guid interviewId = Guid.Parse("33333333333333333333333333333333");
 
             var commandServiceMock = Substitute.For<ICommandService>();
-            var plainQuestionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            var plainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
             var interviewQueue = new Queue<List<InterviewSummary>>();
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
-                plainQuestionnaireRepository: plainQuestionnaireRepository.Object,
+                questionnaireStorage: plainQuestionnaireRepository.Object,
                 questionnaireBrowseItemStorage:
                     Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ =>

@@ -4,17 +4,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-        <TextView
-            style="@style/PrefilledQuestionsToolbarTitle"
-            local:MvxBind="Text QuestionnaireTitle" />
-    </android.support.v7.widget.Toolbar>
+
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/colorPrimary"
+      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+      <TextView
+          style="@style/PrefilledQuestionsToolbarTitle"
+          local:MvxBind="Text QuestionnaireTitle" />
+  </android.support.v7.widget.Toolbar>
 
   <MvxRecyclerView
     style="@style/PrefilledQuestions_List"

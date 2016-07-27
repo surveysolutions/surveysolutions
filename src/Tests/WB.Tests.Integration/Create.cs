@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -44,6 +45,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -544,7 +546,7 @@ namespace WB.Tests.Integration
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaire = new Questionnaire(
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 new ReferenceInfoForLinkedQuestionsFactory(), 
                 new QuestionnaireRosterStructureFactory(),
@@ -552,19 +554,20 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
-                Mock.Of<IFileSystemAccessor>());
+                Mock.Of<IFileSystemAccessor>(),
+                new InMemoryPlainStorageAccessor<TranslationInstance>());
 
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1, 1));
 
             return questionnaire;
         }
 
         public static Interview Interview(Guid? questionnaireId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
@@ -579,11 +582,11 @@ namespace WB.Tests.Integration
         }
 
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
@@ -885,11 +888,11 @@ namespace WB.Tests.Integration
 
         public static SubstitutionViewModel SubstitutionViewModel(
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new SubstitutionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 new SubstitutionService(),
                 new AnswerToStringService(),
                 new VariableToUIStringService(),
@@ -913,7 +916,7 @@ namespace WB.Tests.Integration
             ILiteEventRegistry registry = null,
             SubstitutionViewModel substitutionViewModel = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new DynamicTextViewModel(
                 registry ?? Create.LiteEventRegistry(),

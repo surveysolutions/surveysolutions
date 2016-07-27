@@ -21,6 +21,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public HandlerDescriptor(
                 Type aggregateType, 
                 bool isInitializer, 
+                bool isStateless, 
                 Func<ICommand, Guid> idResolver,
                 Action<ICommand, IAggregateRoot> handler,
                 IEnumerable<Type> validators)
@@ -28,6 +29,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 this.AggregateType = aggregateType;
                 this.AggregateKind = DetermineAggregateKind(aggregateType);
                 this.IsInitializer = isInitializer;
+                this.IsStateless = isStateless;
                 this.IdResolver = idResolver;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();                
@@ -36,6 +38,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public Type AggregateType { get; }
             public AggregateKind AggregateKind { get; }
             public bool IsInitializer { get; }
+            public bool IsStateless { get; }
             public Func<ICommand, Guid> IdResolver { get; }
             public Action<ICommand, IAggregateRoot> Handler { get; }
             public List<Type> Validators { get; }
@@ -77,7 +80,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, configurer: configurer);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, isStateless:false, configurer: configurer);
                 return this;
             }
 
@@ -97,7 +100,27 @@ namespace WB.Core.Infrastructure.CommandBus
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: false, configurer: configurer);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: false, isStateless: false, configurer: configurer);
+                return this;
+            }
+
+            public AggregateSetup<TAggregate> StatelessHandles<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Func<TAggregate, Action<TCommand>> getCommandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
+                where TCommand : ICommand
+                => this.StatelessHandles(
+                    aggregateRootIdResolver,
+                    (command, aggregate) => getCommandHandler(aggregate).Invoke(command),
+                    configurer);
+
+            public AggregateSetup<TAggregate> StatelessHandles<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver, 
+                Action<TCommand, TAggregate> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
+                where TCommand : ICommand
+            {
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: false, isStateless: true, configurer: configurer);
                 return this;
             }
 
@@ -134,7 +157,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, configurer: null);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, isStateless:false, configurer: null);
                 return this;
             }
 
@@ -142,7 +165,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, configurer: configurer);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, isStateless: false, configurer: configurer);
                 return this;
             }
 
@@ -155,7 +178,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, configurer: null);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, isStateless: false, configurer: null);
                 return this;
             }
         }
@@ -171,6 +194,7 @@ namespace WB.Core.Infrastructure.CommandBus
         private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, 
             Action<TCommand, TAggregate> commandHandler, 
             bool isInitializer,
+            bool isStateless,
             Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
             where TCommand : ICommand
             where TAggregate : IAggregateRoot
@@ -186,6 +210,7 @@ namespace WB.Core.Infrastructure.CommandBus
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),
                 isInitializer: isInitializer,
+                isStateless: isStateless,
                 idResolver: command => aggregateRootIdResolver.Invoke((TCommand) command),
                 handler: (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
                 validators: configuration.GetValidators()));
@@ -205,6 +230,9 @@ namespace WB.Core.Infrastructure.CommandBus
 
         internal static bool IsInitializer(ICommand command)
             => GetHandlerDescriptor(command).IsInitializer;
+
+        internal static bool IsStateless(ICommand command)
+            => GetHandlerDescriptor(command).IsStateless;
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
             => GetHandlerDescriptor(command).IdResolver;

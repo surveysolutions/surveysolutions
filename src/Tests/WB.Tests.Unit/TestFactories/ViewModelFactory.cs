@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.TestFactories
     internal class ViewModelFactory
     {
         public AttachmentViewModel AttachmentViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAttachmentContentStorage attachmentContentStorage)
             => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.TestFactories
             ILiteEventRegistry eventRegistry = null, 
             SubstitutionViewModel substitutionViewModel = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new DynamicTextViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.TestFactories
             IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
+                questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IEnumeratorSettings>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
             var dynamicTextViewModelFactory = Mock.Of<IDynamicTextViewModelFactory>();
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.TestFactories
             AnsweringViewModel answering = null)
             => new SingleOptionLinkedQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
                 Create.Service.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -98,11 +98,11 @@ namespace WB.Tests.Unit.TestFactories
 
         public SubstitutionViewModel SubstitutionViewModel(
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
             => new SubstitutionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
+                questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
                 Create.Service.SubstitutionService(),
                 Create.Service.AnswerToStringService(),
                 Create.Service.VariableToUIStringService(),
@@ -114,8 +114,8 @@ namespace WB.Tests.Unit.TestFactories
             IQuestionnaire questionnaire = null,
             Identity entityIdentity = null)
         {
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
             return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),

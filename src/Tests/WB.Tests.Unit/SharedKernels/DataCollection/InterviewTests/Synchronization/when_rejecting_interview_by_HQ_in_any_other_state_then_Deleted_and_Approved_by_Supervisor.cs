@@ -62,6 +62,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         private static InterviewStatus[] statusToExclude = new InterviewStatus[]
         { InterviewStatus.Deleted, InterviewStatus.ApprovedBySupervisor };
 
-        private static IPlainQuestionnaireRepository questionnaireRepository;
+        private static IQuestionnaireStorage questionnaireRepository;
     }
 }

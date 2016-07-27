@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
             fileSystemAccessorMock.Setup(x => x.GetDirectoriesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(new[] { interviewId.FormatGuid() });
             fileSystemAccessorMock.Setup(x => x.GetFileName(Moq.It.IsAny<string>())).Returns<string>(name => name);
-            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName1, fileName2 });
+            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Returns(new[] { fileName1, fileName2 });
             fileSystemAccessorMock.Setup(x => x.ReadAllBytes(fileName1)).Returns(data1);
             fileSystemAccessorMock.Setup(x => x.ReadAllBytes(fileName2)).Returns(data2);
             interviewSynchronizationFileStorage = CreateFileSyncRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
