@@ -135,4 +135,7 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Global note</value>
+  </data>
 </root>
