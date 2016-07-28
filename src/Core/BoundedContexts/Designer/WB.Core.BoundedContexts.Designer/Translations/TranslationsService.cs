@@ -274,19 +274,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
                     worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"A{currentRowNumber}"].Style.Locked = true;
                     worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
                     worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"B{currentRowNumber}"].Style.Locked = true;
                     worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
                     worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"C{currentRowNumber}"].Style.Locked = true;
                     worksheet.Cells[$"D{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
                     worksheet.Cells[$"D{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"D{currentRowNumber}"].Style.Locked = true;
                     worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
                     worksheet.Cells[$"E{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"E{currentRowNumber}"].Style.Locked = false;
                 }
 
                 for (int i = 1; i <= 4; i++)
@@ -295,12 +290,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 }
                 
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-                worksheet.Protection.AllowInsertRows = false;
 
                 worksheet.Column(5).AutoFit();
-                worksheet.Column(5).Style.Locked = false;
-                worksheet.Protection.AllowSelectUnlockedCells = true;
-                worksheet.Protection.IsProtected = true;
                 worksheet.Protection.AllowFormatColumns = true;
                 
                 return excelPackage.GetAsByteArray();
