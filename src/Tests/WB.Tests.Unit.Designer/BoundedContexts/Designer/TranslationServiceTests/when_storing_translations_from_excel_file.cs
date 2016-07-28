@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Title));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
             translationInstance.Value.ShouldEqual("title");
-            translationInstance.TranslationIndex.ShouldBeEmpty();
+            translationInstance.TranslationIndex.ShouldBeNull();
         };
 
         It should_store_instruction_translation = () =>
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Instruction));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
             translationInstance.Value.ShouldEqual("instruction");
-            translationInstance.TranslationIndex.ShouldBeEmpty();
+            translationInstance.TranslationIndex.ShouldBeNull();
         };
         
         It should_store_validation_translation = () =>
