@@ -53,7 +53,7 @@ body {
   color: #000;
   background: #fff;
   font: 14px/16px, sans-serif;
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
 }
 b {
   font-weight: normal;
@@ -165,7 +165,7 @@ article {
   text-transform: uppercase;
 }
 .table_of_contents dl dd .appendix {
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
 }
 .table_of_contents .group-statistics {
   font-size: 12px;
@@ -190,12 +190,12 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
 }
 .page_path {
   float: left;
   text-transform: uppercase;
-  font-size: 10.2px;
+  font-size: 10px;
   line-height: 25px;
 }
 .page {
@@ -249,7 +249,7 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
 }
 .type span {
   margin-top: 6px;
@@ -258,9 +258,9 @@ article {
 .appendix_detail span > span,
 .structure_list,
 .splitted_variables {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 15px;
-  font-family: 'lucidaconsole', "Lucida Console", Monaco, monospace;
+  font-family: lucidaconsole, "Lucida Console", Monaco, monospace;
 }
 .variable_name {
   float: right;
@@ -286,7 +286,6 @@ article {
   cursor: pointer;
   position: relative;
   padding-left: 28px;
-  
 }
 .answer-editor input + label::before {
   content: "";
@@ -315,32 +314,27 @@ article {
 }
 .option {
   margin-top: 2px;
-  
 }
 .option:first-of-type {
   margin-top: 0;
 }
-
 .option > span {
   font-size: 16px;
   line-height: 18px;
 }
-
-.option .option-value {    
-    font-size: 12px;
-    padding: 1px 0;
-    vertical-align: middle;
-    display: inline-block;
-    float:left;
-    line-height: 18px;
+.option .option-value {
+  font-size: 12px;
+  padding: 1px 0;
+  vertical-align: middle;
+  display: inline-block;
+  float: left;
+  line-height: 18px;
 }
-
 .points {
   width: 95%;
   border: none;
   border-bottom: 2px dotted #000;
 }
-
 .dashes {
   width: 95%;
   border: none;
@@ -351,12 +345,12 @@ article {
   margin-bottom: 3px;
   padding-bottom: 22px;
 }
-.multi-option  input + label:before {
+.multi-option input + label:before {
   border-radius: 0;
   width: 12px;
   height: 12px;
 }
-.multi-option  input + label:after {
+.multi-option input + label:after {
   content: '\2713';
   font-weight: bold;
   background-color: transparent;
@@ -390,7 +384,7 @@ article {
   display: inline-block;
   margin-left: 10px;
   line-height: 18px;
-  vertical-align: top; 
+  vertical-align: top;
 }
 input[type=date] {
   outline: 0;
@@ -403,7 +397,7 @@ input[type=date] {
 .generated_by span a {
   font-size: 12px;
   line-height: 14px;
-  font-family: 'lucidaconsole', "Lucida Console", Monaco, monospace;
+  font-family: lucidaconsole, "Lucida Console", Monaco, monospace;
   font-weight: normal;
 }
 .generated_by span a {
@@ -448,7 +442,7 @@ input[type=date] {
 }
 .condition span,
 .validation-expression span {
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
   top: -1px;
 }
 .roster,
@@ -500,12 +494,12 @@ input[type=date] {
 }
 .breacrumbs {
   text-transform: uppercase;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 12px;
   margin-right: 3px;
 }
 .roster-title span {
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
   text-transform: none;
   font-weight: normal;
   margin-right: 5px;
@@ -684,7 +678,7 @@ input[type=date],
 .validation-expression .more,
 .validation-message .more,
 .appendix_detail {
-  font-family: NotoSansMyanmarRegular, NotoSansBengaliRegular, NotoSansDevanagariRegular, NotoSansArmenianRegular, NotoSansEthiopicRegular, NotoSansGeorgianRegular, NotoSansHebrewRegular, NotoSansMongolianRegular, NotoSansThaiRegular, NotoNaskhArabicRegular, NotoSansRegular, Arial, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
 }
 @media print {
   header {
@@ -707,6 +701,7 @@ input[type=date],
   }
   article + article {
     page-break-before: always;
+    margin-left: -40px;
   }
   ul,
   img,
