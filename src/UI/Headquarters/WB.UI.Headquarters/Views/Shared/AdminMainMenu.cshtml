@@ -95,7 +95,7 @@
             <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink(Common.Settings, "ExportEncryptionSettings", "Settings", new { area = string.Empty }, null)</li>
+                    <li>@Html.ActionLink(Common.Settings, "Index", "Settings", new { area = string.Empty }, null)</li>
                     <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new {area = string.Empty}, null)</li>
                     <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
                 </ul>
