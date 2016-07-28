@@ -30,30 +30,12 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("{id:Guid}/ods_template")]
-        public HttpResponseMessage GetOpenOffice(Guid id)
-        {
-            var translationFile = this.translationsService.GetTemplateAsOpenOfficeFile(id);
-
-            return this.GetTranslation(translationFile, "ods", "application/vnd.oasis.opendocument.spreadsheet");
-        }
-
-        [HttpGet]
         [Route("{id:Guid}/xlsx/{translationId:Guid}")]
         public HttpResponseMessage Get(Guid id, Guid translationId )
         {
             var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
             
             return this.GetTranslation(translationFile, "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        }
-
-        [HttpGet]
-        [Route("{id:Guid}/ods/{translationId:Guid}")]
-        public HttpResponseMessage GetOpenOffice(Guid id, Guid translationId)
-        {
-            var translationFile = this.translationsService.GetAsOpenOfficeFile(id, translationId);
-
-            return this.GetTranslation(translationFile, "ods", "application/vnd.oasis.opendocument.spreadsheet");
         }
 
         private HttpResponseMessage GetTranslation(TranslationFile translationFile, string fileExtension, string mediaType)
