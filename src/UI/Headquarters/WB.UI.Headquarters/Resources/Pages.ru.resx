@@ -564,4 +564,10 @@
   <data name="Total" xml:space="preserve">
     <value>Итого</value>
   </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>[По умолчанию]</value>
+  </data>
 </root>

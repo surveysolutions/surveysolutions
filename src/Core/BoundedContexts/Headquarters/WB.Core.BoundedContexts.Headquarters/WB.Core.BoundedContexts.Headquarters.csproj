@@ -673,12 +673,14 @@
     <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.pt.resx" />
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
@@ -687,24 +689,28 @@
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>
