@@ -201,7 +201,9 @@
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.th-TH.Designer.cs</LastGenOutput>
