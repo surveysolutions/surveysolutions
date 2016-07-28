@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -97,61 +98,68 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             using (MemoryStream stream = new MemoryStream(excelRepresentation))
             {
-                using (ExcelPackage package = new ExcelPackage(stream))
+                try
                 {
-                    if (package.Workbook.Worksheets.Count == 0)
+                    using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
-                    }
-
-                    var worksheet = package.Workbook.Worksheets[1];
-
-                    if (worksheet.Name != WorksheetName)
-                        throw new InvalidExcelFileException("Worksheet with translations not found");
-
-                    var translationErrors = this.Verify(worksheet).Take(10).ToList();
-                    if (translationErrors.Any())
-                        throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
-
-
-                    this.Delete(questionnaireId, translationId);
-                    var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
-                    HashSet<Guid> idsOfAllQuestionnaireEntities =
-                        new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
-
-                    var translationInstances = new List<TranslationInstance>();
-                    var end = worksheet.Dimension.End.Row;
-
-                    for (int rowNumber = 2; rowNumber <= end; rowNumber++)
-                    {
-                        TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
-
-                        if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
-
-                        var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
-                        if (!idsOfAllQuestionnaireEntities.Contains(questionnaireEntityId)) continue;
-
-                        var translationInstance = new TranslationInstance
+                        if (package.Workbook.Worksheets.Count == 0)
                         {
-                            QuestionnaireId = questionnaireId,
-                            TranslationId = translationId,
-                            QuestionnaireEntityId = questionnaireEntityId,
-                            Value = importedTranslation.Translation,
-                            TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
-                            Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
-                        };
+                            throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
+                        }
 
-                        translationInstances.Add(translationInstance);
+                        var worksheet = package.Workbook.Worksheets[1];
+
+                        if (worksheet.Name != WorksheetName)
+                            throw new InvalidExcelFileException("Worksheet with translations not found");
+
+                        var translationErrors = this.Verify(worksheet).Take(10).ToList();
+                        if (translationErrors.Any())
+                            throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
+
+
+                        this.Delete(questionnaireId, translationId);
+                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+                        HashSet<Guid> idsOfAllQuestionnaireEntities =
+                            new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
+
+                        var translationInstances = new List<TranslationInstance>();
+                        var end = worksheet.Dimension.End.Row;
+
+                        for (int rowNumber = 2; rowNumber <= end; rowNumber++)
+                        {
+                            TranslationRow importedTranslation = GetExcelTranslation(worksheet.Cells, rowNumber);
+
+                            if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
+
+                            var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
+                            if (!idsOfAllQuestionnaireEntities.Contains(questionnaireEntityId)) continue;
+
+                            var translationInstance = new TranslationInstance
+                            {
+                                QuestionnaireId = questionnaireId,
+                                TranslationId = translationId,
+                                QuestionnaireEntityId = questionnaireEntityId,
+                                Value = importedTranslation.Translation,
+                                TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                                Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
+                            };
+
+                            translationInstances.Add(translationInstance);
+                        }
+
+                        var uniqueTranslationInstances = translationInstances
+                            .Distinct(new TranslationInstance.IdentityComparer())
+                            .ToList();
+
+                        foreach (var translationInstance in uniqueTranslationInstances)
+                        {
+                            this.translations.Store(translationInstance, translationInstance);
+                        }
                     }
-
-                    var uniqueTranslationInstances = translationInstances
-                        .Distinct(new TranslationInstance.IdentityComparer())
-                        .ToList();
-
-                    foreach (var translationInstance in uniqueTranslationInstances)
-                    {
-                        this.translations.Store(translationInstance, translationInstance);
-                    }
+                }
+                catch (COMException e)
+                {
+                    throw new InvalidExcelFileException("Failed to extract translations from uploaded file", e);
                 }
             }
         }
@@ -255,11 +263,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 FormatCell(worksheet, "D1");
                 FormatCell(worksheet, "E1");
 
-                AddComment(worksheet, "A1", "Read only field");
-                AddComment(worksheet, "B1", "Read only field");
-                AddComment(worksheet, "C1", "Read only field");
-                AddComment(worksheet, "D1", "Read only field");
-
                 int currentRowNumber = 1;
 
                 var textsToTranslate = this.GetTranlsatedTexts(questionnaire, translation);
@@ -322,11 +325,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var cell = worksheet.Cells[address];
             cell.Style.Font.Bold = true;
-        }
-
-        private static void AddComment(ExcelWorksheet worksheet, string address, string comment)
-        {
-            worksheet.Comments.Add(worksheet.Cells[address], comment, "");
         }
 
         private IEnumerable<TranslationRow> GetTranlsatedTexts(QuestionnaireDocument questionnaire, ITranslation translation)
