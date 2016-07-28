@@ -377,6 +377,62 @@
     <Content Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="App_GlobalResources\BatchUpload.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>BatchUpload.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Common.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Common.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Dashboard.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\HQ.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>HQ.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MainMenu.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MainMenu.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireClonning.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Settings.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.pt.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.pt.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.pt.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -788,6 +844,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\BatchUpload.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\BatchUpload.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -802,6 +863,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Common.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Common.ru.designer.cs">
       <AutoGen>True</AutoGen>
@@ -818,6 +884,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Dashboard.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Dashboard.zh.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -827,6 +898,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\DataExport.ru.designer.cs">
       <AutoGen>True</AutoGen>
@@ -848,6 +924,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HQ.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\HQ.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\HQ.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -862,6 +943,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Import.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Import.ru.designer.cs">
       <AutoGen>True</AutoGen>
@@ -878,6 +964,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\MainMenu.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainMenu.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\MainMenu.zh.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -887,6 +978,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MapReport.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\MapReport.ru.designer.cs">
       <AutoGen>True</AutoGen>
@@ -948,6 +1044,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireClonning.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireClonning.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -967,6 +1068,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireImport.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireImport.ru.designer.cs">
       <AutoGen>True</AutoGen>
@@ -988,6 +1094,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reports.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Reports.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Reports.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1008,6 +1119,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Settings.fr.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Settings.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Settings.ru.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1023,6 +1139,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.pt.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\TakeNewInterview.zh.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1037,6 +1158,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.pt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Users.ru.designer.cs">
       <AutoGen>True</AutoGen>
