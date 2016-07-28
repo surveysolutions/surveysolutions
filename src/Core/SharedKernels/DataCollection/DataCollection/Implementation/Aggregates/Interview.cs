@@ -1525,35 +1525,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SwitchTranslation(SwitchTranslation command)
         {
             ThrowIfInterviewHardDeleted();
+            
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IReadOnlyCollection<string> availableLanguages = questionnaire.GetTranslationLanguages();
+
             if (command.Language != null)
             {
-                IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-                IReadOnlyCollection<string> availableLanguages = questionnaire.GetTranslationLanguages();
-
                 if (availableLanguages.All(language => language != command.Language))
                     throw new InterviewException(
                         $"Questionnaire does not have translation. Language: {command.Language}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+            }
 
-                var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
+            var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
 
-                var rosterInstances =
+            var rosterInstances =
                     this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                         targetQuestionnaire.GetCategoricalAndFixedRosters(), RosterVector.Empty,
                         targetQuestionnaire);
 
-                var changedTitles = rosterInstances.Select(
+            var changedTitles = rosterInstances.Select(
                     rosterInstance =>
                         new ChangedRosterInstanceTitleDto(
                             RosterInstance.CreateFromIdentity(rosterInstance),
                             GetRosterTitle(targetQuestionnaire, rosterInstance)))
                     .ToArray();
 
-                if (changedTitles.Any())
-                {
-                    this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
-                }
+            if (changedTitles.Any())
+            {
+                this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
             }
-
+            
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
         }
 
