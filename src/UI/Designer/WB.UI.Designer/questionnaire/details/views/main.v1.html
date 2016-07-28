@@ -347,7 +347,7 @@
                                             <div class="permanent-actions pull-right">
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default" target="_blank">Download xlsx</a>
                                                 
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xls,.xlsx,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
+                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
                                                     <span>Update</span>
                                                 </button>
                                             </div>
@@ -366,7 +366,7 @@
                                    class="btn lighter-hover" ngf-select
                                    ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                    ngf-max-size="10MB"
-                                   accept=".xls,.xlsx,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                                    ngf-select-disabled="isReadOnlyForUser"
                                    ngf-drop-disabled="isReadOnlyForUser" />
                         </p>
