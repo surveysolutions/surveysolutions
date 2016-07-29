@@ -447,8 +447,6 @@
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
-    <Content Include="Content\pdf-inline-fonts.css" />
-    <Content Include="Content\pdf-fonts.css" />
     <Content Include="Content\pdf.css">
       <DependentUpon>pdf.less</DependentUpon>
     </Content>
