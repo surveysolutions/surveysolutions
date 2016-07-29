@@ -252,6 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         isLookupTablesFeatureSupported: true,
                         expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV9(expressionStateModel).TransformText());
                 case 16:
+                case 17:
                     return new CodeGenerationSettings(
                         additionInterfaces: new[] { "IInterviewExpressionStateV10" },
                         namespaces: new[]
