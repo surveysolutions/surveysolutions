@@ -574,9 +574,9 @@
     <value>Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
-    <value>Translation</value>
+    <value>Language</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>[Default]</value>
+    <value>original</value>
   </data>
 </root>
