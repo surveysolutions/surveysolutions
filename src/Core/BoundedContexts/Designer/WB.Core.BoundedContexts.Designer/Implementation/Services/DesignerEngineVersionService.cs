@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/,
+                Version = 16 ,
                 NewFeatures = new[]
                 {
                     new QuestionnaireFeature
@@ -121,6 +121,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         HasQuestionnaire = (questionnaire) => questionnaire.Find<AbstractQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression)).Any(),
                         Description = "Filtered options for categorical questions"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire =>  questionnaire.Translations.Any(),
+                          Description = "Multilanguage questionnaire"
                     }
                 }
             }
