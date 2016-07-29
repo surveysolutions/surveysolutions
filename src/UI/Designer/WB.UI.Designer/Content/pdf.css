@@ -260,7 +260,7 @@ article {
 .splitted_variables {
   font-size: 12px;
   line-height: 15px;
-  font-family: lucidaconsole, "Lucida Console", Monaco, monospace;
+  font-family: "Lucida Console", Monaco, monospace;
 }
 .variable_name {
   float: right;
@@ -397,7 +397,7 @@ input[type=date] {
 .generated_by span a {
   font-size: 12px;
   line-height: 14px;
-  font-family: lucidaconsole, "Lucida Console", Monaco, monospace;
+  font-family: "Lucida Console", Monaco, monospace;
   font-weight: normal;
 }
 .generated_by span a {

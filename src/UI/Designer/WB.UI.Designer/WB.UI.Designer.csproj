@@ -455,7 +455,6 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
-    <Content Include="fonts\lucidaconsole.svg" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\vendor\js-cookie\MIT-LICENSE.txt" />
@@ -473,22 +472,7 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="fonts\lucidaconsole.eot" />
-    <Content Include="fonts\lucidaconsole.ttf" />
-    <Content Include="fonts\lucidaconsole.woff" />
-    <Content Include="fonts\lucidaconsole.woff2" />
     <Content Include="Content\pdf.less" />
-    <Content Include="fonts\NotoNaskhArabic-Regular.ttf" />
-    <Content Include="fonts\NotoSans-Regular.ttf" />
-    <Content Include="fonts\NotoSansDevanagari-Regular.ttf" />
-    <Content Include="fonts\NotoSansEthiopic-Regular.ttf" />
-    <Content Include="fonts\NotoSansGeorgian-Regular.ttf" />
-    <Content Include="fonts\NotoSansHebrew-Regular.ttf" />
-    <Content Include="fonts\NotoSansMongolian-Regular.ttf" />
-    <Content Include="fonts\NotoSansMyanmar-Regular.ttf" />
-    <Content Include="fonts\NotoSansThai-Regular.ttf" />
-    <Content Include="fonts\NotoSansBengali-Regular.ttf" />
-    <Content Include="fonts\NotoSansArmenian-Regular.ttf" />
     <Content Include="questionnaire\vendor\js-cookie\.bower.json" />
     <Content Include="questionnaire\vendor\js-cookie\bower.json" />
     <Content Include="questionnaire\vendor\js-cookie\CONTRIBUTING.md" />
