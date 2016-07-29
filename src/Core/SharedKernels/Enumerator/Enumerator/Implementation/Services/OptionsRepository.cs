@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                                 x.QuestionId == questionIdAsString &&
                                 x.ParentValue == parentValueAsDecimal &&
-                                x.Title.Contains(filter) &&
+                                x.Title.ToLower().Contains(filter.ToLower()) &&
                                 x.SortOrder > lastLoadedSortIndex)
                     .OrderBy(x => x.SortOrder)
                     .Take(pagesize)
