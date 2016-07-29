@@ -529,7 +529,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Default].
+        ///   Looks up a localized string similar to original.
         /// </summary>
         public static string InterviewDetails_DefaultTranslation {
             get {
@@ -637,7 +637,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation.
+        ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string InterviewDetails_TranslationLabel {
             get {
