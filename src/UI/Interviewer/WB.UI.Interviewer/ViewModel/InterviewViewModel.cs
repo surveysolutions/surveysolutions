@@ -44,16 +44,14 @@ namespace WB.UI.Interviewer.ViewModel
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
-        
+
+        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
+
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
-        public IMvxCommand ReloadInterviewCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
-            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
-
-        public void NavigateBack()
+        public override void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
