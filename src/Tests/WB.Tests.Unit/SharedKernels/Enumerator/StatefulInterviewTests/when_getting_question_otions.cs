@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 new CategoricalOption() {Value = 1, Title = "2"}
             };
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
                 _ => _.GetOptionsForQuestion(questionId, null, String.Empty) == options);
 
             var expressionState = new Mock<ILatestInterviewExpressionState>();

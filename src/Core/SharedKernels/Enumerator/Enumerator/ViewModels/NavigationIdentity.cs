@@ -5,8 +5,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public enum ScreenType
     {
-        Group = 0,
-        Complete = 1
+        Group = 100,
+        Complete = 1000,
     }
 
     public class NavigationIdentity : EventArgs

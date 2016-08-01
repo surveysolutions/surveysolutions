@@ -26,6 +26,12 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             await file.DeleteAsync();
         }
 
+        public async Task RemoveDirectoryAsync(string path)
+        {
+            var folder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(path);
+            await folder.DeleteAsync();
+        }
+
         public async Task CopyFileAsync(string sourceFile, string targetDir)
         {
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetDir);

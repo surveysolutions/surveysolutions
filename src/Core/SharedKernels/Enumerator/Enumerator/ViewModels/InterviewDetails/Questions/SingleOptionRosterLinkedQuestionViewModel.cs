@@ -31,13 +31,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
        public SingleOptionRosterLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
             this.referencedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedRosterId).ToHashSet();
             this.Options =

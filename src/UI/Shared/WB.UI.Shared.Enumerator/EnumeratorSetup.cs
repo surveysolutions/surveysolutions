@@ -79,7 +79,6 @@ namespace WB.UI.Shared.Enumerator
         {
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
             };
 
@@ -109,7 +108,7 @@ namespace WB.UI.Shared.Enumerator
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<NumericEditText>("Value", (view) => new NumericValueBinding(view));
-            registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("Watermark", (view) => new TextViewWatermarkBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("SideBarPrefillQuestion", (view) => new TextViewSideBarPrefillQuestionBinding(view));

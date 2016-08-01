@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private const int MaxTitleLength = 500;
         private static readonly Regex InvalidTitleRegex = new Regex(@"^[\w \-\(\)\\/]*$", RegexOptions.Compiled);
 
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
@@ -35,12 +36,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
+        private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private Guid Id { get; set; }
 
         public Questionnaire(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireStorage questionnaireStorage, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
@@ -48,9 +50,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor, 
+            IPlainStorageAccessor<TranslationInstance> translations)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
@@ -59,6 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.translations = translations;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -75,33 +79,62 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 questionnaireDocument, command.SupportingAssembly,
-                command.AllowCensusMode, command.QuestionnaireContentVersion);
+                command.AllowCensusMode, command.QuestionnaireContentVersion,
+                command.QuestionnaireVersion);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
         {
-            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.QuestionnaireVersion);
+            this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            QuestionnaireDocument sourceQuestionnaire = this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            this.ThrowIfTitleIsInvalid(command.NewTitle, questionnaireDocument);
+            this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaire);
 
-            string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.QuestionnaireVersion);
-            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.QuestionnaireVersion);
+            string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.SourceQuestionnaireVersion);
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            questionnaireDocument.Title = command.NewTitle;
+            sourceQuestionnaire.Title = command.NewTitle;
+
+            CloneTranslations(sourceQuestionnaire.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                questionnaireDocument, assemblyAsBase64, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.QuestionnaireContentVersion);
+                sourceQuestionnaire,
+                assemblyAsBase64, 
+                questionnaireBrowseItem.AllowCensusMode, 
+                questionnaireBrowseItem.QuestionnaireContentVersion,
+                command.NewQuestionnaireVersion
+                );
         }
 
-        private void StoreQuestionnaireAndProjectionsAsNewVersion(
-            QuestionnaireDocument questionnaireDocument, string assemblyAsBase64,
-            bool isCensus, long questionnaireContentVersion)
+        private void CloneTranslations(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(this.Id, this.GetNextVersion());
+            var oldTranslations = this.translations.Query(_ =>_.Where(x =>
+                                x.QuestionnaireId.QuestionnaireId == sourceQuestionnaireId &&
+                                x.QuestionnaireId.Version == newQuestionnaireVersion).ToList());
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
+            this.translations.Remove(oldTranslations);
+
+            var sourceTranslations = this.translations.Query(_ => _.Where(x =>
+                             x.QuestionnaireId.QuestionnaireId == sourceQuestionnaireId &&
+                             x.QuestionnaireId.Version == sourceQuestionnaireVersion).ToList());
+            foreach (var translationInstance in sourceTranslations)
+            {
+                var targetTranslation = translationInstance.Clone();
+                targetTranslation.QuestionnaireId = new QuestionnaireIdentity(targetTranslation.QuestionnaireId.QuestionnaireId, newQuestionnaireVersion);
+                this.translations.Store(targetTranslation, null);
+            }
+        }
+
+        private void StoreQuestionnaireAndProjectionsAsNewVersion(QuestionnaireDocument questionnaireDocument, 
+            string assemblyAsBase64, 
+            bool isCensus, 
+            long questionnaireContentVersion, 
+            long questionnaireVersion)
+        {
+            var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
+
+            this.questionnaireStorage.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
 
             string projectionId = GetProjectionId(identity);
@@ -151,14 +184,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 this.questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
 
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
+            QuestionnaireDocument questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             questionnaireDocument.IsDeleted = true;
-            this.plainQuestionnaireRepository.StoreQuestionnaire(command.QuestionnaireId, command.QuestionnaireVersion, questionnaireDocument);
+            this.questionnaireStorage.StoreQuestionnaire(command.QuestionnaireId, command.QuestionnaireVersion, questionnaireDocument);
         }
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
-            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
+            QuestionnaireDocument questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(command.Id, command.Version);
             
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
@@ -166,18 +199,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                     this.Id, command.Version));
 
             throw new NotSupportedException("This command is no longer supported and should be reimplemented if we decide to resurrect Supervisor");
-        }
-
-        private long GetNextVersion()
-        {
-            var availableVersions =
-                this.questionnaireBrowseItemStorage.Query(
-                    _ => _.Where(q => q.QuestionnaireId == this.Id).Select(q => q.Version));
-
-            if (!availableVersions.Any())
-                return 1;
-
-            return availableVersions.Max() + 1;
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)

@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
             question.Instructions = instructions;
-            question.Properties = properties;
+            question.Properties = properties ?? new QuestionProperties(false, false);
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;

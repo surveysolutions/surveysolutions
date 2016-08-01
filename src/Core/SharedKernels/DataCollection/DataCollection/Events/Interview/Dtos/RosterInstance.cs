@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
@@ -17,5 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
             this.OuterRosterVector = outerRosterVector;
             this.RosterInstanceId = rosterInstanceId;
         }
+
+        public static RosterInstance CreateFromIdentity(Identity identity)
+            => new RosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1), identity.RosterVector.Coordinates.Last());
     }
 }

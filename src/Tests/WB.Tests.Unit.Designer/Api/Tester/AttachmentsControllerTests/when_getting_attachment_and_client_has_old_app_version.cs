@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.AttachmentsControllerTests
         };
 
         Because of = () => expectedException =
-            Catch.Exception(() => controller.Get(version: ApiVersion.Tester - 1, id: "hash of attachment"));
+            Catch.Exception(() => controller.Get(version: ApiVersion.CurrentTesterProtocolVersion - 1, id: "hash of attachment"));
 
         It should_response_code_be_UpgradeRequired = () =>
             ((HttpResponseException)expectedException).Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);

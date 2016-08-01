@@ -22,9 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId, Moq.It.IsAny<bool>())).Returns(new string[] { archiveName + ".zip" });
             fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName});
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId + "\\Unzipped"))
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId + "\\Unzipped", Moq.It.IsAny<bool>()))
                 .Returns(new string[] { "1.tab", "2.tab" });
             fileSystemAccessor.Setup(x => x.GetFileExtension(Moq.It.IsAny<string>())).Returns(".tab");
             archiveUtils=new Mock<IArchiveUtils>();

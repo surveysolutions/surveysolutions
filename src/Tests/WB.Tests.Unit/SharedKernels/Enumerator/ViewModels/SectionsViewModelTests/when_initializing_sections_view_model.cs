@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         private const string questionnaireId = "questionnaire Id";
         private const string interviewId = "interview Id";
         private static readonly NavigationState navigationState = Mock.Of<NavigationState>();
-        private static readonly Mock<IPlainQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
+        private static readonly Mock<IQuestionnaireStorage> questionnaireRepositoryMock = new Mock<IQuestionnaireStorage>();
         private static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
         private static readonly List<Guid> listOfSections = new List<Guid> { Id.g1, Id.g2, Id.g3, Id.g4};
         private static QuestionnaireIdentity questionnaireIdentity;

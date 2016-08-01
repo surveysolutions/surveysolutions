@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
             return interviewerInfo.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                : this.Request.CreateResponse(HttpStatusCode.OK);
+                : this.Request.CreateResponse(HttpStatusCode.OK, "449634775");
         }
     }
 }

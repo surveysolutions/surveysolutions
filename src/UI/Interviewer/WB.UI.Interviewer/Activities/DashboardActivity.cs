@@ -51,9 +51,7 @@ namespace WB.UI.Interviewer.Activities
             this.ViewModel.Synchronization.SyncBgService = this;
         }
 
-        public override void OnBackPressed()
-        {
-        }
+        public override void OnBackPressed() {}
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -87,10 +85,7 @@ namespace WB.UI.Interviewer.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync()
-        {
-            this.Binder.GetSyncService().StartSync();
-        }
+        public void StartSync() => this.Binder.GetSyncService().StartSync();
 
         public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
     }

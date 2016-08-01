@@ -89,8 +89,8 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -265,6 +265,7 @@
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\TranslationStorage.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
@@ -297,7 +298,7 @@
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
+    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
@@ -324,6 +325,10 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
+    <Compile Include="Questionnaires\Translations\ITranslationManagementService.cs" />
+    <Compile Include="Questionnaires\Translations\TranslationInstance.cs" />
+    <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
+    <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
@@ -370,6 +375,7 @@
     <Compile Include="Services\IFileNameService.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
+    <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
@@ -380,6 +386,7 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
@@ -484,6 +491,7 @@
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewDetails\InterviewEntityViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewDetails\InterviewTranslationView.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
@@ -664,12 +672,14 @@
     <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.pt.resx" />
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
@@ -678,24 +688,28 @@
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>

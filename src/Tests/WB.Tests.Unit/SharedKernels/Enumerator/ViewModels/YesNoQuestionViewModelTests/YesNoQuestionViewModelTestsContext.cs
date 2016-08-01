@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
     public class YesNoQuestionViewModelTestsContext
     {
         protected static YesNoQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null,
-           IPlainQuestionnaireRepository questionnaireStorage = null,
+           IQuestionnaireStorage questionnaireStorage = null,
            ILiteEventRegistry eventRegistry = null,
            IStatefulInterviewRepository interviewRepository = null,
            IPrincipal principal = null,
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         {
             return new YesNoQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                questionnaireStorage ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),

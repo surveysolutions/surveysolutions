@@ -25,7 +25,11 @@ namespace WB.Core.Infrastructure.Implementation
 
         public void Remove(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            foreach (var entity in entities)
+            {
+                var itemToRemove = this.inMemroyStorage.SingleOrDefault(x => x.Value.Equals(entity));
+                this.inMemroyStorage.Remove(itemToRemove.Key);
+            }
         }
 
         public void Store(TEntity entity, object id)

@@ -27,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
+    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="Views\DashboardLastUpdate.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
     <Compile Include="Views\TesterUserIdentity.cs" />
@@ -103,19 +106,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.1\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject">
@@ -198,7 +201,9 @@
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.th-TH.Designer.cs</LastGenOutput>

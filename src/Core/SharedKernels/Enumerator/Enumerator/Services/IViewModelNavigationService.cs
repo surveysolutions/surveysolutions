@@ -1,4 +1,5 @@
 using MvvmCross.Core.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -10,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void NavigateToSettings();
         void SignOutAndNavigateToLogin();
         void NavigateToLogin();
-        void NavigateToInterview(string interviewId);
+        void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity);
         void NavigateToPrefilledQuestions(string interviewId);
         void ShowWaitMessage();
         bool HasPendingOperations { get; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -24,21 +25,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         private readonly ICommandService commandService;
         private readonly ILogger logger;
+        private readonly ITranslationManagementService translations;
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
-            ILogger logger)
+            ILogger logger, 
+            ITranslationManagementService translations)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
+            this.translations = translations;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
+            this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
+
             var questionnaire =
                 this.questionnaireBrowseItemReader.GetById(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
 
@@ -81,6 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
 
+                this.DeleteTranslations(questionnaireId, questionnaireVersion);
 
                 IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
                 plainTransactionManager.ExecuteInPlainTransaction(() =>
@@ -96,6 +103,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 DeleteInProcess.Remove(questionnaireKey);
             }
+        }
+
+        private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)
+        {
+            IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+            plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            });
         }
 
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)

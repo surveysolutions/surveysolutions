@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question supports only integer values.
+        ///   Looks up a localized string similar to Multi select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
         internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1063,7 +1063,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single select question supports only integer values.
+        ///   Looks up a localized string similar to Single select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
         internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1266,6 +1266,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0255_QuestionIsTooShort {
             get {
                 return ResourceManager.GetString("WB0255_QuestionIsTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation name is invalid.
+        /// </summary>
+        internal static string WB0256_TranslationNameIsInvalid {
+            get {
+                return ResourceManager.GetString("WB0256_TranslationNameIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation has empty content.
+        /// </summary>
+        internal static string WB0257_TranslationHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0257_TranslationHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translations has duplicate names.
+        /// </summary>
+        internal static string WB0258_TranslationsHasDuplicatedNames {
+            get {
+                return ResourceManager.GetString("WB0258_TranslationsHasDuplicatedNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question title is too long. It should be no longer than 500 characters..
+        /// </summary>
+        internal static string WB0259_QuestionTitleIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0259_QuestionTitleIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is too long. It should be no longer than 500 characters..
+        /// </summary>
+        internal static string WB0260_GroupTitleIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
             }
         }
     }

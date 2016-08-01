@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.Services.QuestionnaireDowngradeServiceTests
             service = new QuestionnaireDowngradeService();
         };
 
-        Because of = () => service.Downgrade(questionnaire, new Version(12, 0));
+        Because of = () => service.Downgrade(questionnaire, 11);
 
         It should_put_validation_message_to_validation_message_field = () => questionnaire.GetQuestion<TextQuestion>(questionId).ValidationMessage.ShouldEqual("message");
 

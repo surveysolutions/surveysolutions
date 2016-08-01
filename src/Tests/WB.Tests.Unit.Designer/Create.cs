@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -22,6 +23,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -31,6 +33,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
@@ -38,6 +41,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code;
@@ -49,6 +53,8 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
+using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
+using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -59,12 +65,12 @@ namespace WB.Tests.Unit.Designer
             return new AccountDocument() { UserName = userName };
         }
 
-        public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
+        public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
             return new Answer()
             {
                 AnswerText = answer,
-                AnswerValue = value.ToString(),
+                AnswerValue = stringValue ?? value.ToString(),
                 ParentValue = parentValue.HasValue ? parentValue.ToString() : null
             };
         }
@@ -421,7 +427,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false,
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -436,7 +442,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
         }
 
@@ -533,6 +539,7 @@ namespace WB.Tests.Unit.Designer
             IList<ValidationCondition> validationConditions = null,
             string variableLabel =null,
             string title= "Question X test",
+            string instructions = null,
             params Answer[] answers)
         {
             return new TextQuestion(title)
@@ -544,6 +551,7 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 VariableLabel = variableLabel,
+                Instructions = instructions,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
@@ -559,7 +567,8 @@ namespace WB.Tests.Unit.Designer
                 Create.SubstitutionService(),
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -627,22 +636,27 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, attachments, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, children);
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Translation[] translations = null, params IComposite[] children)
+        {
+            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Attachment[] attachments = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
         {
-            var result = new QuestionnaireDocument();
+            var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
 
             result.Children.Add(chapter);
@@ -653,6 +667,7 @@ namespace WB.Tests.Unit.Designer
             }
 
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
+            result.Translations.AddRange(translations ?? new Translation[0]);
 
             return result;
         }
@@ -741,7 +756,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null)
+            Guid? linkedToRosterId = null, List<Answer> answers = null)
         {
             return new SingleQuestion
             {
@@ -755,7 +770,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 LinkedFilterExpression = linkedFilterExpression
             };
         }
@@ -952,6 +967,16 @@ namespace WB.Tests.Unit.Designer
             {
                 return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
             }
+
+            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
+            {
+                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name);
+            }
+
+            public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
+            {
+                return new DeleteTranslation(questionnaireId, responsibleId, translationId);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -966,7 +991,8 @@ namespace WB.Tests.Unit.Designer
             IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
             ILogger logger,
             IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null)
+            ILookupTableService lookupTableService = null,
+            ITranslationsService translationsService = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -975,7 +1001,8 @@ namespace WB.Tests.Unit.Designer
                documentStorage,
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
-               lookupTableService ?? Mock.Of<ILookupTableService>());
+               lookupTableService ?? Mock.Of<ILookupTableService>(),
+               translationsService ?? Mock.Of<ITranslationsService>());
         }
 
         public static AttachmentService AttachmentService(
@@ -1001,5 +1028,55 @@ namespace WB.Tests.Unit.Designer
                 ShareType = shareType
             };
         }
+
+        public static TranslationInstance TranslationInstance(Guid? questionnaireId = null,
+            TranslationType type = TranslationType.Unknown,
+            Guid? questionnaireEntityId = null,
+            string translationIndex = null,
+            Guid? translationId = null,
+            string translation = null)
+        {
+            return new TranslationInstance
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
+                Type = type,
+                Value = translation,
+                TranslationIndex = translationIndex,
+                TranslationId = translationId ?? Guid.NewGuid()
+            };
+        }
+
+        public static TranslationDto TranslationDto(
+            TranslationType type = TranslationType.Unknown,
+            Guid? questionnaireEntityId = null,
+            string translationIndex = null,
+            Guid? translationId = null,
+            string translation = null)
+        {
+            return new TranslationDto
+            {
+                QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
+                Type = type,
+                Value = translation,
+                TranslationIndex = translationIndex,
+                TranslationId = translationId ?? Guid.NewGuid()
+            };
+        }
+
+        public static QuestionnaireTranslator QuestionnaireTranslator()
+            => new QuestionnaireTranslator();
+
+        public static Translation Translation(Guid? translationId = null, string name = null)
+        {
+            return new Translation() { Name = name, Id = translationId ?? Guid.NewGuid() };
+        }
+
+        public static TranslationsService TranslationsService(
+            IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            => new TranslationsService(
+                traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
+                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
     }
 }

@@ -15,6 +15,7 @@ using System.Web.Security;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -81,6 +82,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IAccountListViewFactory accountListViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationsService;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -92,7 +94,8 @@ namespace WB.UI.Designer.Controllers
             ISerializer serializer, 
             IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            ITranslationsService translationsService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -104,6 +107,7 @@ namespace WB.UI.Designer.Controllers
             this.accountListViewFactory = accountListViewFactory;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
+            this.translationsService = translationsService;
         }
 
         [HttpGet]
@@ -252,6 +256,12 @@ namespace WB.UI.Designer.Controllers
                     zipEntryPathChunks[1].ToLower() == "lookup tables" &&
                     zipEntryPathChunks[2].ToLower().EndsWith(".txt");
 
+                bool isTranslationEntry =
+                    zipEntryPathChunks.Length == 3 &&
+                    zipEntryPathChunks[1].ToLower() == "translations" &&
+                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
+                    ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
+
                 if (isQuestionnaireDocumentEntry)
                 {
                     string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
@@ -312,6 +322,24 @@ namespace WB.UI.Designer.Controllers
 
                     this.Success($"[{zipEntry.Name}].", append: true);
                     this.Success($"    Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.", append: true);
+                    state.RestoredEntitiesCount++;
+                }
+                else if (isTranslationEntry)
+                {
+                    var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    byte[] excelContent = null;
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        zipStream.CopyTo(memoryStream);
+                        excelContent = memoryStream.ToArray();
+                    }
+
+                    var translationId = Guid.Parse(translationIdString);
+                    this.translationsService.Store(questionnaireId, translationId, excelContent);
+
+                    this.Success($"[{zipEntry.Name}].", append: true);
+                    this.Success($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;
                 }
                 else
@@ -409,6 +437,12 @@ namespace WB.UI.Designer.Controllers
             foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
             {
                 zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
+            }
+
+            foreach (var translation in questionnaireDocument.Translations)
+            {
+                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
             }
 
             zipStream.Finish();

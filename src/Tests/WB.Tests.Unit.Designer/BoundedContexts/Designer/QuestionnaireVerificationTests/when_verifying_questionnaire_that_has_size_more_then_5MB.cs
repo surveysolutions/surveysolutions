@@ -25,14 +25,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
         
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         It should_return_message_with_code__WB0098 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0098");
+            verificationMessages.ShouldContainError("WB0098");
 
         It should_return_WB0098_error_with_appropriate_message = () =>
-            verificationMessages.Single().Message.ShouldNotBeEmpty();
+            verificationMessages.Single(m => m.Code == "WB0098").Message.ShouldNotBeEmpty();
         
 
 

@@ -47,8 +47,8 @@ namespace WB.UI.Interviewer.Activities
                 if (isUpgradeNeeded)
                 {
                     isMigrationNeeded = true;
-                    var optionViewRemover = Mvx.Resolve<IAsyncPlainStorageRemover<OptionView>>();
-                    await optionViewRemover.DeleteAllAsync();
+                    var optionViewRemover = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
+                    await optionViewRemover.RemoveAllAsync();
                 }
             }
 

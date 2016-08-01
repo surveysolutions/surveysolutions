@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -33,6 +34,8 @@ using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -60,6 +63,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
+            this.Bind<ITranslationsService>().To<TranslationsService>();
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
@@ -116,6 +121,9 @@ namespace WB.Core.BoundedContexts.Designer
                 // Attachment
                 .Handles<AddOrUpdateAttachment>(command => command.QuestionnaireId, aggregate => aggregate.AddOrUpdateAttachment)
                 .Handles<DeleteAttachment>(command => command.QuestionnaireId, aggregate => aggregate.DeleteAttachment)
+                // Translation
+                .Handles<AddOrUpdateTranslation>(command => command.QuestionnaireId, aggregate => aggregate.AddOrUpdateTranslation)
+                .Handles<DeleteTranslation>(command => command.QuestionnaireId, aggregate => aggregate.DeleteTranslation)
                 // Group
                 .Handles<AddGroup>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index))
                 .Handles<DeleteGroup>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId))

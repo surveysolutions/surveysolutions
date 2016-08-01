@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public event EventHandler AnswerRemoved;
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
@@ -107,13 +107,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public bool IsMaskedQuestionAnswered { get; set; }
-
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerTextQuestionCommand)); }
-        }
+        
+        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
 
         private IMvxCommand answerRemoveCommand;
 
@@ -146,11 +141,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
-        private async void SendAnswerTextQuestionCommand(string text)
+        private async Task SaveAnswer(string text)
         {
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(text))
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
                 return;
             }
 
@@ -176,7 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void InitQuestionSettings()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.Mask = questionnaire.GetTextQuestionMask(this.questionIdentity.Id);
         }

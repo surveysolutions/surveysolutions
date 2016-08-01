@@ -15,11 +15,10 @@ namespace WB.UI.Designer
     {
         private readonly string _centralizedPrefix;
 
-        private static readonly string[] versionedNamespaces = new string[]
-            {
-                typeof(WB.UI.Designer.Api.Headquarters.ImportV2Controller).Namespace,
-                typeof(WB.UI.Designer.Api.Tester.QuestionnairesController).Namespace
-            };
+        private static readonly string[] versionedNamespaces =
+        {
+            typeof(Api.Tester.QuestionnairesController).Namespace
+        };
 
         public CentralizedPrefixProvider(string centralizedPrefix)
         {
@@ -58,6 +57,39 @@ namespace WB.UI.Designer
             config.MessageHandlers.Add(new DecompressionHandler());
 
             config.MapHttpAttributeRoutes(new CentralizedPrefixProvider("api/v{version:int}"));
+
+            config.Routes.MapHttpRoute(
+                name: "HQApiWithAction",
+                routeTemplate: "api/hq/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
+                name: "HQApi",
+                routeTemplate: "api/hq/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "VersionedHQApiWithAction",
+                routeTemplate: "api/hq/v{version:int}/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
+                name: "VersionedHQApi",
+                routeTemplate: "api/hq/v{version:int}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "VersionedApiWithAction",
+                routeTemplate: "api/v{version:int}/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
+                name: "VersionedApi",
+                routeTemplate: "api/v{version:int}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",

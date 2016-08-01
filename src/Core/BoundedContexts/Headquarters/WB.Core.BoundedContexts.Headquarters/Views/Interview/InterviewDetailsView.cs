@@ -27,5 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             this.Groups = new List<InterviewGroupView>();
         }
+
+        public string CurrentTranslation { set; get; }
     }
 }

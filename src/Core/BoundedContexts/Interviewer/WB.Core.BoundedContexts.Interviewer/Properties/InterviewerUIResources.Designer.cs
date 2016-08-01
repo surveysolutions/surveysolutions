@@ -470,7 +470,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on this device.
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assignments on this device.
         /// </summary>
         public static string Diagnostics_Restore_Description {
             get {
@@ -614,6 +614,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to open interview.
+        /// </summary>
+        public static string FailedToLoadInterview {
+            get {
+                return ResourceManager.GetString("FailedToLoadInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization endpoint &apos;{0}&apos; is different from provided in Settings (&apos;{1}&apos;). Load URL from settings?.
         /// </summary>
         public static string FinishInstallation_EndpointDiffers {
@@ -727,6 +736,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_Diagnostics {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string MenuItem_Title_Language {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string MenuItem_Title_Language_Original {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Language_Original", resourceCulture);
             }
         }
         

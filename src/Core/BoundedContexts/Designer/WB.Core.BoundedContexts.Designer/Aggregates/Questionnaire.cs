@@ -33,7 +33,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
+using WB.Core.BoundedContexts.Designer.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -105,6 +108,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         internal void Apply(AttachmentDeleted e)
+        {
+        }
+
+        internal void Apply(TranslationUpdated e)
+        {
+        }
+
+        internal void Apply(TranslationDeleted e)
         {
         }
 
@@ -780,6 +791,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IKeywordsProvider variableNameValidator;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationService;
 
         #endregion
 
@@ -791,7 +803,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ISubstitutionService substitutionService, 
             IKeywordsProvider variableNameValidator, 
             ILookupTableService lookupTableService, 
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            ITranslationsService translationService)
         {
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
@@ -801,6 +814,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.variableNameValidator = variableNameValidator;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
+            this.translationService = translationService;
         }
 
         #region Questionnaire command handlers
@@ -865,6 +879,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var newAttachmentId = Guid.NewGuid();
                 this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
                 attachment.AttachmentId = newAttachmentId;
+            }
+
+            foreach (var translation in clonedDocument.Translations)
+            {
+                var newTranslationId = Guid.NewGuid();
+                this.translationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
+                translation.Id = newTranslationId;
             }
 
             ApplyEvent(new QuestionnaireCloned
@@ -950,6 +971,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
+        }
+
+        #endregion
+
+        #region Translation command handlers
+                
+        public void AddOrUpdateTranslation(AddOrUpdateTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ApplyEvent(new TranslationUpdated(
+                translationId: command.TranslationId,
+                name: command.Name,
+                responsibleId: command.ResponsibleId));
+        }
+
+        public void DeleteTranslation(DeleteTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ApplyEvent(new TranslationDeleted(command.TranslationId, command.ResponsibleId));
         }
 
         #endregion

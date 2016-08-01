@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -31,7 +32,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
 
         private CancellationTokenSource tokenSource;
         private readonly IDesignerApiService designerApiService;
@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncRunner asyncRunner;
+        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -60,9 +61,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
             IAttachmentContentStorage attachmentContentStorage,
-            IAsyncRunner asyncRunner) : base(principal, viewModelNavigationService)
+            IAsyncRunner asyncRunner,
+            IAsyncPlainStorage<TranslationInstance> translationsStorage)
+            : base(principal, viewModelNavigationService)
         {
-            this.principal = principal;
             this.designerApiService = designerApiService;
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
@@ -73,6 +75,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
             this.asyncRunner = asyncRunner;
+            this.translationsStorage = translationsStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -289,9 +292,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage);
-                    var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
-                    await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
-                    var interviewId = await this.CreateInterview(questionnaireIdentity);
+
+                    var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+
+                    await this.DownloadTranslations(questionnaireId: selectedQuestionnaire.Id,
+                            fakeQuestionnaireIdentity: fakeQuestionnaireIdentity);
+
+                    await this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage);
+                    var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
@@ -401,6 +409,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.attachmentContentStorage.StoreAsync(attachmentContent);
                 }
             }
+        }
+
+        private async Task DownloadTranslations(string questionnaireId, QuestionnaireIdentity fakeQuestionnaireIdentity)
+        {
+            var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: questionnaireId, token: this.tokenSource.Token);
+
+            await this.translationsStorage.RemoveAllAsync();
+            await this.translationsStorage.StoreAsync(translations.Select(translation => new TranslationInstance
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
+                Type = translation.Type,
+                TranslationIndex = translation.TranslationIndex,
+                QuestionnaireEntityId = translation.QuestionnaireEntityId,
+                TranslationId = translation.TranslationId,
+                Value = translation.Value
+            }));
         }
 
         private async Task LoadServerQuestionnairesAsync()

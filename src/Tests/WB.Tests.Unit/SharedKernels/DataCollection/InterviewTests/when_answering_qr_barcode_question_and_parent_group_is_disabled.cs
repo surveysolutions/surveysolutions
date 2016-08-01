@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         _.GetAllParentGroupsForQuestion(questionId) == new Guid[] { parentGroupId }
                 );
 
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };

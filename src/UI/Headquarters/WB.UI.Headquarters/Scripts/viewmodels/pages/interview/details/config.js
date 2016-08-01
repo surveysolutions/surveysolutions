@@ -29,6 +29,8 @@
             hQApproveInterviewCommand: "HqApproveInterviewCommand",
             hQRejectInterviewCommand: "HqRejectInterviewCommand",
             unapproveByHeadquarterCommand: "UnapproveByHeadquarterCommand",
+
+            switchTranslation : "SwitchTranslation"
         },
         statusMap = {
             Created: "Created",

@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -69,7 +70,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<LookupTableDeleted>,
         
         IEventHandler<AttachmentUpdated>,
-        IEventHandler<AttachmentDeleted>
+        IEventHandler<AttachmentDeleted>,
+
+        IEventHandler<TranslationUpdated>,
+        IEventHandler<TranslationDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -623,6 +627,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             document.Attachments.RemoveAll(x => x.AttachmentId == evnt.Payload.AttachmentId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<TranslationUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            var translation = new Translation
+            {
+                Id = evnt.Payload.TranslationId,
+                Name = evnt.Payload.Name,
+            };
+            document.Translations.RemoveAll(x => x.Id == evnt.Payload.TranslationId);
+            document.Translations.Add(translation);
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<TranslationDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Translations.RemoveAll(x => x.Id == evnt.Payload.TranslationId);
             this.UpdateQuestionnaire(evnt, document);
         }
 

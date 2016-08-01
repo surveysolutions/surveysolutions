@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using Microsoft.Security.Application
 @using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.Views
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -9,6 +10,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@using WB.UI.Shared.Web.Extensions
 @model WB.Core.BoundedContexts.Headquarters.Views.DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -42,13 +44,14 @@
 
         var filter = { filteredBy: '@Model.Filter' };
         var filteredComboboxes = [
-            @Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.HtmlEncode(x.Label))))))))
+            @Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label: {1}}}", x.Value, Encoder.JavaScriptEncode(x.Label))))))))
         ];
         var answeredYesNoQuestionsBySupervisor = [
             @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
+        var currentTranslation = '@(Model.InterviewDetails.CurrentTranslation ?? "")';
 
         $(function () {
-            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, currentTranslation);
             ko.applyBindings(model);
             model.load();
         });
@@ -76,16 +79,39 @@
 
     </div>
     <div id="content" class="col-md-9 col-md-offset-3 main">
-        <div class="row-fluid">
-            <h3 class="span10 text-overflow-ellipsis">
-                <span>@Model.InterviewDetails.Title</span>
-                <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
-                <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
-                @if (Model.HasUnprocessedSyncPackages)
-                {
-                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
-                }
-            </h3>
+        <div class="row">
+            <div class="col-md-9">
+                <h3 class="span10 text-overflow-ellipsis">
+                    <span>@Model.InterviewDetails.Title</span>
+                    <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
+                    <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
+                    @if (Model.HasUnprocessedSyncPackages)
+                    {
+                        <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> @Pages.InterviewDetails_PendingPackageLabel</span>
+                    }
+                </h3>
+            </div>
+            <div class="col-md-3">
+                <div class="form-inline pull-right">
+                    <span class="small">@Pages.InterviewDetails_TranslationLabel :</span>
+                    @if (Model.InterviewDetails.ReceivedByInterviewer)
+                    {
+                        <span>@(string.IsNullOrEmpty(Model.InterviewDetails.CurrentTranslation) ? Pages.InterviewDetails_DefaultTranslation : Model.InterviewDetails.CurrentTranslation)</span>
+                    }
+                    else
+                    {
+                        <div class="input-group">
+                            <select id="translationSelector" class="form-control" data-bind="value: currentTranslation">
+                                <option value=''>@Pages.InterviewDetails_DefaultTranslation</option>
+                                @foreach (var item in Model.Translations)
+                                {
+                                    <option value='@item.Name'>@item.Name.Ellipsis(25)</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
@@ -109,7 +135,7 @@
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> @Pages.InterviewDetails_FlaggedButtonLabel (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> @Pages.InterviewDetails_SupervisorsButtonLabel (<span>@Model.Statistic.SupervisorsCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> @Pages.InterviewDetails_HiddenButtonLabel (<span>@Model.Statistic.HiddenCount</span>)</a>
-
+                
             </div>
         </div>
         <div id="list">

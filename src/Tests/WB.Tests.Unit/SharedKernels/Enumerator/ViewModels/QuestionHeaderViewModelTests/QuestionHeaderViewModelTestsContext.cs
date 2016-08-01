@@ -11,13 +11,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     [Subject(typeof(QuestionHeaderViewModel))]
     internal class QuestionHeaderViewModelTestsContext
     {
-        public static QuestionHeaderViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null, 
+        public static QuestionHeaderViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             ILiteEventRegistry registry = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
         {
             return new QuestionHeaderViewModel(
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Create.ViewModel.DynamicTextViewModel(
                     interviewRepository: interviewRepository,

@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return PrivateFieldsPrefix + variableName + IdSuffix;
         }
 
-        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
+        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
         {
             CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
@@ -133,9 +133,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private static CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
+        private static CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(int version)
         {
-            switch (version.Major)
+            switch (version)
             {
                 case 9: 
                     return new CodeGenerationSettings(
@@ -252,6 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         isLookupTablesFeatureSupported: true,
                         expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV9(expressionStateModel).TransformText());
                 case 16:
+                case 17:
                     return new CodeGenerationSettings(
                         additionInterfaces: new[] { "IInterviewExpressionStateV10" },
                         namespaces: new[]

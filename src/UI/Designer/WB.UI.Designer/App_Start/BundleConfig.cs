@@ -14,7 +14,7 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new StyleBundle("~/content/css").Include(
-                    "~/UpdatedDesigner/vendor/bootstrap/dist/bootstrap.css",
+                    "~/questionnaire/vendor/bootstrap/dist/bootstrap.css",
                     "~/Content/font-awesome.min.css",
                     "~/Content/body.css", 
                     "~/Content/bootstrap-responsive.css", 
@@ -22,23 +22,23 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/simplepage").Include(
-                    "~/UpdatedDesigner/vendor/jquery/dist/jquery.js",
-                    "~/UpdatedDesigner/vendor/bootstrap/dist/bootstrap.js"));
+                    "~/questionnaire/vendor/jquery/dist/jquery.js",
+                    "~/questionnaire/vendor/bootstrap/dist/bootstrap.js"));
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
                     "~/Scripts/bootstrap3-unobtrusive-hack.js",
-                    "~/UpdatedDesigner/vendor/jquery-placeholder/jquery.placeholder.js",
+                    "~/questionnaire/vendor/jquery-placeholder/jquery.placeholder.js",
                     "~/Scripts/editForm.js"
                     ));
 
             bundles.Add(
                 new ScriptBundle("~/list").Include(
-                    "~/UpdatedDesigner/vendor/jquery/dist/jquery.js",
-                    "~/UpdatedDesigner/vendor/jquery-mousewheel/jquery.mousewheel.js",
-                    "~/UpdatedDesigner/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
+                    "~/questionnaire/vendor/jquery/dist/jquery.js",
+                    "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
+                    "~/questionnaire/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
                     "~/Scripts/common.js"));
 
             bundles.Add(

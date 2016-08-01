@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
 
-            var questionnaireStorage = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);

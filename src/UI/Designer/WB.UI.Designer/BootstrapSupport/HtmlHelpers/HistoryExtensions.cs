@@ -14,6 +14,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
+            if (record.TargetType == QuestionnaireItemType.Translation)
+            {
+                var translationRecord = GetFormattedHistoricalRecordForTranslation(record);
+                if (!string.IsNullOrWhiteSpace(translationRecord))
+                    return MvcHtmlString.Create(translationRecord);
+            }
+
             if (record.TargetType == QuestionnaireItemType.Attachment)
             {
                 var attachmentRecord = GetFormattedHistoricalRecordForAttachment(record);
@@ -96,6 +103,18 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return null;
         }
 
+        private static string GetFormattedHistoricalRecordForTranslation(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Delete:
+                    return string.Format(QuestionnaireHistoryResources.Translation_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    return string.Format(QuestionnaireHistoryResources.Translation_Updated, record.TargetTitle);
+            }
+            return null;
+        }
+
         private static string GetFormattedHistoricalRecordForLookupTable(QuestionnaireChangeHistoricalRecord record)
         {
             switch (record.ActionType)
@@ -142,21 +161,21 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             bool isExist,
             QuestionnaireItemType type)
         {
-            var quatedTitle = string.Format("\"{0}\"", title);
+            var entityTitle = $"\"{helper.Encode(title)}\"";
 
             if (!isExist)
-                return MvcHtmlString.Create(quatedTitle);
+                return MvcHtmlString.Create(entityTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
-                return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
+                return helper.ActionLink(entityTitle, "Details", "Questionnaire", new { id = itemId.FormatGuid() }, null);
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
-                return MvcHtmlString.Create(quatedTitle);
+                return MvcHtmlString.Create(entityTitle);
 
             var url =
-                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
+                urlHelper.Content(string.Format("~/questionnaire/details/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
                     chapterId.FormatGuid(), itemId.FormatGuid(), GetQuestionnaireItemTypeStringRepresentationForLink(type)));
-            return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
+            return MvcHtmlString.Create($"<a href='{url}'>{entityTitle}</a>");
         }
 
         private static string GetActionStringRepresentation(QuestionnaireActionType actionType,

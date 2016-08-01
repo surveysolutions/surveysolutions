@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -21,29 +22,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
+        private readonly IAsyncPlainStorage<TranslationInstance> translations;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
-            IOptionsRepository optionsRepository)
+            IOptionsRepository optionsRepository, 
+            IAsyncPlainStorage<TranslationInstance> translations)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewFactory = interviewFactory;
             this.questionnaireDocuments = questionnaireDocuments;
             this.optionsRepository = optionsRepository;
+            this.translations = translations;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
@@ -55,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
            
             await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireIdentity, serializedQuestionnaireDocument);
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, 
+            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, 
                 questionnaireIdentity.Version, 
                 serializedQuestionnaireDocument);
 
@@ -73,10 +77,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireId = questionnaireIdentity.ToString();
 
             await this.DeleteInterviewsByQuestionnaireAsync(questionnaireId);
-            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+            this.questionnaireStorage.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
+            await this.RemoveTranslationsAsync(questionnaireIdentity).ConfigureAwait(false);
         }
 
         private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
@@ -94,6 +99,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             await this.questionnaireAssemblyFileAccessor.StoreAssemblyAsync(questionnaireIdentity, assembly);
+        }
+
+        public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
+        {
+            await this.RemoveTranslationsAsync(questionnaireIdentity);
+            await this.translations.StoreAsync(translationInstances);
+        }
+
+        private async Task RemoveTranslationsAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            string questionnaireId = questionnaireIdentity.ToString();
+
+            var storedTranslations =
+                await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
+
+            await this.translations.RemoveAsync(storedTranslations).ConfigureAwait(false);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()

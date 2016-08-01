@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
                     new ValidationCondition("validation2", "message2")
                 }));
 
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey, Create.Entity.PlainQuestionnaire(questionnaire));
+            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaire.PublicKey, Create.Entity.PlainQuestionnaire(questionnaire));
             interview = CreateInterview(expressionProcessorStatePrototypeProvider: expressionProcessorProvider,
                 questionnaireId: questionnaire.PublicKey,
                 questionnaireRepository: questionnaireRepository);
