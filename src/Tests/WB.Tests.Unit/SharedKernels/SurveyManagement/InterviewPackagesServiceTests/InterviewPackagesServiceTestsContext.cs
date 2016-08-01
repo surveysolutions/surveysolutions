@@ -19,10 +19,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             IArchiveUtils archiver = null, 
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
-            ICommandService commandService = null)
+            ICommandService commandService = null,
+            SyncSettings syncSettings = null)
         {
             return new InterviewPackagesService(
-                syncSettings: new SyncSettings("hq"), 
+                syncSettings: syncSettings ?? Mock.Of<SyncSettings>(), 
                 logger: Mock.Of<ILogger>(), 
                 serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),

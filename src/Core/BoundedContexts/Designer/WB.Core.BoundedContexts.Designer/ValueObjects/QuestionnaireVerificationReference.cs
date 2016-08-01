@@ -63,5 +63,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         public static QuestionnaireVerificationReference CreateForStaticText(Guid staticTextId)
             => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.StaticText, staticTextId);
+
+        public static QuestionnaireVerificationReference CreateForTranslation(Guid translationId)
+            => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Translation, translationId);
     }
 }

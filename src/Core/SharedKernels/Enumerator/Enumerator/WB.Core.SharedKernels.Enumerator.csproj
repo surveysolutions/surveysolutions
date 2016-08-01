@@ -85,6 +85,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
-    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorageRemover.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IOptionsRepository.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
@@ -177,6 +177,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\State\SubstitutionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
@@ -192,7 +193,7 @@
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\SimpleGroupStatus.cs" />
     <Compile Include="ViewModels\InterviewDetails\IInterviewEntityViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\EnumeratorInterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\BaseInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\CompleteInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\InterviewCompletedMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\ISideBarSectionViewModelsFactory.cs" />
@@ -230,12 +231,13 @@
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
-    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\BasePrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
     <Compile Include="Views\AttachmentContentData.cs" />
     <Compile Include="Views\AttachmentContentMetadata.cs" />
     <Compile Include="Views\OptionView.cs" />
+    <Compile Include="Views\TranslationInstance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -255,24 +257,24 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.1\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>

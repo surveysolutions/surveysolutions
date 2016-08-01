@@ -63,8 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DisabledGroups = new ConcurrentHashSet<string>();
             this.DisabledQuestions = new ConcurrentHashSet<string>();
             this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentDistinctList<decimal>>();
-            this.ValidAnsweredQuestions = new ConcurrentHashSet<string>();
-            this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
+            this.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>();
+            this.InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
@@ -86,14 +86,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<Identity> DisabledStaticTexts { set; get; }
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentDictionary<string, string> RosterTitles { set; get; }
-        public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
-        public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
+        public ConcurrentHashSet<Identity> ValidAnsweredQuestions { set; get; }
+        public ConcurrentHashSet<Identity> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
         public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
         public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
         public ConcurrentDictionary<Identity, object> VariableValues { set; get; }
-
+        public bool IsValid { get; set; }
 
         public InterviewStateDependentOnAnswers Clone()
         {
@@ -109,8 +109,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 DisabledGroups = new ConcurrentHashSet<string>(this.DisabledGroups),
                 DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
                 RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
-                ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
-                InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
+                ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.InvalidAnsweredQuestions),
                 AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
                 RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
 
@@ -305,7 +305,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
+            foreach (var questionKey in questions)
             {
                 this.ValidAnsweredQuestions.Remove(questionKey);
                 this.InvalidAnsweredQuestions.Add(questionKey);
@@ -314,7 +314,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeclareAnswersValid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
+            foreach (var questionKey in questions)
             {
                 this.ValidAnsweredQuestions.Add(questionKey);
                 this.InvalidAnsweredQuestions.Remove(questionKey);
@@ -341,14 +341,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveAnswers(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
+            foreach (var questionKey in questions)
             {
-                this.AnswersSupportedInExpressions.TryRemove(questionKey);
-                this.LinkedSingleOptionAnswersBuggy.TryRemove(questionKey);
-                this.LinkedMultipleOptionsAnswers.TryRemove(questionKey);
-                this.TextListAnswers.TryRemove(questionKey);
-                this.AnsweredQuestions.Remove(questionKey);
-                this.DisabledQuestions.Remove(questionKey);
+                var identityString = ConversionHelper.ConvertIdentityToString(questionKey);
+                this.AnswersSupportedInExpressions.TryRemove(identityString);
+                this.LinkedSingleOptionAnswersBuggy.TryRemove(identityString);
+                this.LinkedMultipleOptionsAnswers.TryRemove(identityString);
+                this.TextListAnswers.TryRemove(identityString);
+                this.AnsweredQuestions.Remove(identityString);
+                this.DisabledQuestions.Remove(identityString);
                 this.ValidAnsweredQuestions.Remove(questionKey);
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }

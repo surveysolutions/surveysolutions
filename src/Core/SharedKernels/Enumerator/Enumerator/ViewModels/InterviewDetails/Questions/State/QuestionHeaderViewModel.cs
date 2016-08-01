@@ -12,12 +12,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public DynamicTextViewModel Title { get; }
 
         public QuestionHeaderViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             DynamicTextViewModel dynamicTextViewModel)
         {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
             var interview = this.interviewRepository.Get(interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
             this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);

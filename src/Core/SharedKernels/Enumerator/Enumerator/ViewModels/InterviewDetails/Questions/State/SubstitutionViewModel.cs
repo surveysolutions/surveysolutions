@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IAnswerToStringService answerToStringService;
         private readonly IVariableToUIStringService variableToUiStringService;
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SubstitutionViewModel(
             IStatefulInterviewRepository interviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
             IVariableToUIStringService variableToUiStringService,
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private SubstitutionVariables GetSubstitutionVariables()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var variableNames = this.substitutionService.GetAllSubstitutionVariableNames(this.textWithSubstitutions);
 
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string ReplaceSubstitutions()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var textWithReplacedSubstitutions = this.textWithSubstitutions;
 

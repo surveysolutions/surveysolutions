@@ -6,6 +6,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
@@ -37,6 +38,14 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion, progress, cancellationToken);
 
             return this.repository.Load(aggregateType, aggregateId, snapshot, events);
+        }
+
+        public virtual IEventSourcedAggregateRoot GetStateless(Type aggregateType, Guid aggregateId)
+        {
+            int? lastEventSequence = this.eventStore.GetLastEventSequence(aggregateId);
+            if (!lastEventSequence.HasValue)
+                return null;
+            return this.repository.LoadStateless(aggregateType, aggregateId, lastEventSequence.Value);
         }
     }
 }

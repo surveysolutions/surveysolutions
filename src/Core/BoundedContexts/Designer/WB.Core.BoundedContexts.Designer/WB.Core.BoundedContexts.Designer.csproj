@@ -52,6 +52,10 @@
     <Reference Include="EmitMapper">
       <HintPath>..\..\..\..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlSanitizer, Version=1.1.5297.28403, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
@@ -84,8 +88,8 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -95,6 +99,9 @@
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="SpreadsheetGear2012">
+      <HintPath>..\..\..\..\..\libs\SpreadsheetGear2012.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -200,6 +207,8 @@
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\Translations\AddOrUpdateTranslation.cs" />
+    <Compile Include="Commands\Questionnaire\Translations\DeleteTranslation.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Variable\AddVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\DeleteVariable.cs" />
@@ -217,6 +226,8 @@
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
+    <Compile Include="Events\Questionnaire\Translation\TranslationDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Translation\TranslationUpdated.cs" />
     <Compile Include="Events\Questionnaire\VariableAdded.cs" />
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
@@ -359,6 +370,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
+    <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -563,6 +575,13 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Translations\InvalidExcelFileException.cs" />
+    <Compile Include="Translations\ITranslationsService.cs" />
+    <Compile Include="Translations\TranslationFile.cs" />
+    <Compile Include="Translations\TranslationInstance.cs" />
+    <Compile Include="Translations\TranslationInstanceMap.cs" />
+    <Compile Include="Translations\TranslationsService.cs" />
+    <Compile Include="Translations\TranslationValidationError.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
@@ -633,6 +652,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\TranslationView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\INameable.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />

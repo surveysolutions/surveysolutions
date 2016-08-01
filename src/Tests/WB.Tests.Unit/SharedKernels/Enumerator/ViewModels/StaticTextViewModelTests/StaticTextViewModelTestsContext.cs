@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
     [Subject(typeof(StaticTextViewModel))]
     internal class StaticTextViewModelTestsContext
     {
-        public static StaticTextViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null, 
+        public static StaticTextViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             ILiteEventRegistry registry = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null,
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             SubstitutionViewModel substitutionViewModel = null)
         {
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
-            var plainQuestionnaireRepository = questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>();
+            var plainQuestionnaireRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
 
             var liteEventRegistry = registry ?? Create.Service.LiteEventRegistry();
 

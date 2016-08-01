@@ -1,13 +1,12 @@
 ﻿using Moq;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
@@ -21,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             ICommandService commandService = null,
             IMetaInfoBuilder metaBuilder = null,
-            IJsonAllTypesSerializer synchronizationSerializer =  null)
+            IJsonAllTypesSerializer synchronizationSerializer =  null,
+            SyncSettings synchronizationsettings = null)
         {
             return new InterviewsApiV2Controller(
                 plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),

@@ -258,4 +258,10 @@
   <data name="VariableUpdatedWithName" xml:space="preserve">
     <value>Variable "{0}" updated</value>
   </data>
+  <data name="Translation_Deleted" xml:space="preserve">
+    <value>Translation "{0}" deleted</value>
+  </data>
+  <data name="Translation_Updated" xml:space="preserve">
+    <value>Translation "{0}" updated</value>
+  </data>
 </root>

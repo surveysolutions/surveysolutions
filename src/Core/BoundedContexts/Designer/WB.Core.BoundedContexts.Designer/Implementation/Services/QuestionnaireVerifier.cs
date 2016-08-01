@@ -11,13 +11,16 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -79,11 +82,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.QRBarcode
         };
 
-        private class VerificationState
-        {
-            public bool HasAnyExpressionExceededLimitByCharactersLength { get; set; }
-        }
-
         private struct EntityVerificationResult<TReferencedEntity>
             where TReferencedEntity : class, IComposite
         {
@@ -100,6 +98,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationService;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly ITopologicalSorter<string> topologicalSorter;
 
         private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
@@ -115,7 +115,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IMacrosSubstitutionService macrosSubstitutionService,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITopologicalSorter<string> topologicalSorter)
+            ITopologicalSorter<string> topologicalSorter, 
+            ITranslationsService translationService, 
+            IQuestionnaireTranslator questionnaireTranslator)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -127,12 +129,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.topologicalSorter = topologicalSorter;
+            this.translationService = translationService;
+            this.questionnaireTranslator = questionnaireTranslator;
         }
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
             => this.ErrorsVerifiers.Concat(this.WarningsVerifiers);
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
@@ -154,7 +158,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
             Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
-            Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
+            TranslationVerifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
             Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
             Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
@@ -171,9 +175,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
             Verifier<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Verifier<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
-            Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
+            TranslationVerifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
             Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
-            Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
+            TranslationVerifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
             Verifier<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
@@ -199,12 +203,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
-            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+            TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
-            
+            TranslationVerifier<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
+            TranslationVerifier<IGroup>(GroupTitleIsTooLong, "WB0260", VerificationMessages.WB0260_GroupTitleIsTooLong),
+
 
             Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
             Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName, VerificationMessageLevel.Critical),
@@ -224,6 +230,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             AttachmentVerifier(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
 
+            TranslationVerifier(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
+            TranslationVerifier(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
+            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHasDuplicatedNames),
+
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
@@ -234,7 +244,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
         };
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
@@ -247,7 +257,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 group.Select(x => new QuestionnaireVerificationReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
         }
 
-        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(ReadOnlyQuestionnaireDocument questionnaire, Guid id, Type entityType)
+        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
         {
             if (typeof(IQuestion).IsAssignableFrom(entityType))
                 return QuestionnaireVerificationReferenceType.Question;
@@ -293,7 +303,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(ReadOnlyQuestionnaireDocument document, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(MultiLanguageQuestionnaireDocument document)
         {
             var gpsPrefilledQuestions = document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
             if (gpsPrefilledQuestions.Length < 2)
@@ -309,44 +319,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            var customEnablementCondition = GetCustomEnablementCondition(entity);
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, GetCustomEnablementCondition(entity));
 
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, customEnablementCondition);
-        }
+        private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties.OptionsFilterExpression);
 
-        private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.Properties.OptionsFilterExpression);
-        }
+        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
 
-        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, variable.Expression);
-        }
-
-        private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 return false;
 
-            return this.DoesExpressionExceed1000CharsLimit(state, questionnaire, question.LinkedFilterExpression);
+            return this.DoesExpressionExceed1000CharsLimit(questionnaire, question.LinkedFilterExpression);
         }
 
-        private bool DoesExpressionExceed1000CharsLimit(VerificationState state, ReadOnlyQuestionnaireDocument questionnaire,
-            string expression)
+        private bool DoesExpressionExceed1000CharsLimit(MultiLanguageQuestionnaireDocument questionnaire, string expression)
         {
             if (string.IsNullOrEmpty(expression))
                 return false;
 
             var expressionWithInlinedMacroses = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
 
-            var doesExceed = expressionWithInlinedMacroses.Length > MaxExpressionLength;
-
-            state.HasAnyExpressionExceededLimitByCharactersLength |= doesExceed;
-
-            return doesExceed;
+            return expressionWithInlinedMacroses.Length > MaxExpressionLength;
         }
 
         private static bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -359,12 +356,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(
-            QuestionnaireDocument questionnaire, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCompiler(QuestionnaireDocument questionnaire)
         {
-            if (state.HasAnyExpressionExceededLimitByCharactersLength)
-                yield break;
-
             var compilationResult = GetCompilationResult(questionnaire);
 
             if (compilationResult.Success)
@@ -377,9 +370,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(ReadOnlyQuestionnaireDocument questionnaire)
+        private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
+            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire.Questionnaire, Formatting.None);
             var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
             var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
             var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
@@ -413,7 +406,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > MaxOptionsCountInCascadingQuestion;
         }
 
-        private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
@@ -442,7 +435,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
         }
 
-        private static bool CascadingQuestionReferencesMissingParent(SingleQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool CascadingQuestionReferencesMissingParent(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return false;
@@ -450,7 +443,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return questionnaire.Find<SingleQuestion>(question.CascadeFromQuestionId.Value) == null;
         }
 
-        private static EntityVerificationResult<IComposite> ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static EntityVerificationResult<IComposite> ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -477,7 +470,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private static EntityVerificationResult<IComposite> CascadingComboboxOptionsHasNoParentOptions(IQuestion question, ReadOnlyQuestionnaireDocument document)
+        private static EntityVerificationResult<IComposite> CascadingComboboxOptionsHasNoParentOptions(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -513,7 +506,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsFilteredComboboxQuestion(question) && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private static bool StaticTextRefersAbsentAttachment(IStaticText staticText, ReadOnlyQuestionnaireDocument document)
+        private static bool StaticTextRefersAbsentAttachment(IStaticText staticText, MultiLanguageQuestionnaireDocument document)
         {
             if (string.IsNullOrWhiteSpace(staticText.AttachmentName))
                 return false;
@@ -588,51 +581,74 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
 
-            var state = new VerificationState();
+            List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
+            questionnaire.Translations.ForEach(t =>
+            {
+                var translation = this.translationService.Get(questionnaire.PublicKey, t.Id);
+                var translatedQuestionnaireDocument = this.questionnaireTranslator.Translate(questionnaire, translation);
+                translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
+            });
 
-            var verificationMessages =
+            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(readOnlyQuestionnaireDocument,
+                translatedQuestionnaires.ToArray());
+
+            var verificationMessagesByQuestionnaire =
                 (from verifier in this.AtomicVerifiers
-                 let errors = verifier.Invoke(readOnlyQuestionnaireDocument, state)
+                 let errors = verifier.Invoke(multiLanguageQuestionnaireDocument)
                  from error in errors
                  select error).ToList();
 
-            if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
-                return verificationMessages;
+            if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
+                return verificationMessagesByQuestionnaire;
 
-            return verificationMessages.Concat(ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(questionnaire, state));
+            if (HasQuestionnaireExpressionsWithExceedLength(multiLanguageQuestionnaireDocument))
+                return verificationMessagesByQuestionnaire;
+
+            var verificationMessagesByCompiler = this.ErrorsByCompiler(questionnaire).ToList();
+
+            return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
-            Func<Macro, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
+            Func<Macro, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForMacro(entity.Key)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
-            Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
+            Func<Attachment, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
                     .Attachments
                     .Where(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
-            Func<Guid, LookupTable, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier(
+            Func<Translation, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) => questionnaire
+            return (questionnaire) => questionnaire
+                    .Translations
+                    .Where(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForTranslation(entity.Id)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+            Func<Guid, LookupTable, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire) => questionnaire
                     .LookupTables
                     .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(entity.Key)));
         }
 
-        private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
-            Func<LookupTable, LookupTableContent, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+            Func<LookupTable, LookupTableContent, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 from lookupTable in questionnaire.LookupTables
                 let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
                 where lookupTableContent != null
@@ -640,19 +656,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(lookupTable.Key));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
-            Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
+            Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 hasError(questionnaire)
                     ? new[] { QuestionnaireVerificationMessage.Error(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
-            Func<ReadOnlyQuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
+            Func<MultiLanguageQuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
             {
                 var errorCheckResult = hasError(questionnaire);
                 return errorCheckResult.Item1
@@ -661,10 +677,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(hasError)
                     .Select(entity => level == VerificationMessageLevel.General 
@@ -672,119 +688,166 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+            where TEntity : class, IComposite
+        {
+            return (questionnaire) =>
+                    questionnaire
+                        .FindWithTranslations<TEntity>(hasError)
+                            .Select(translatedEntity =>
+                            {
+                                var translationMessage = translatedEntity.TranslationName == null
+                                    ? message
+                                    : translatedEntity.TranslationName + ": " + message;
+                                var questionnaireVerificationReference = CreateReference(translatedEntity.Entity);
+                                return level == VerificationMessageLevel.General
+                                    ? QuestionnaireVerificationMessage.Error(code, translationMessage, questionnaireVerificationReference)
+                                    : QuestionnaireVerificationMessage.Critical(code, translationMessage, questionnaireVerificationReference);
+                            }
+                      );
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Verifier(getSubEnitites, (subEntity, state) => hasError(subEntity), code, getMessageBySubEntityIndex);
+            return Verifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Verifier(getSubEnitites, (entity, subEntity, questionnaire, state) => hasError(subEntity, state), code, getMessageBySubEntityIndex);
+            return TranslationVerifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, ReadOnlyQuestionnaireDocument, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
-                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire, state))
+                    .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire))
                     .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
-            Func<TEntity, VerificationState, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
-                    .Find<TEntity>(entity => hasError(entity, state, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
+                    .FindWithTranslations<TEntity>(entity => true)
+                    .SelectMany(translatedEntity => getSubEnitites(translatedEntity.Entity).Select((subEntity, index) => new { Entity = translatedEntity, SubEntity = subEntity, Index = index }))
+                    .Where(descriptor => hasError(descriptor.Entity.Entity, descriptor.SubEntity, questionnaire))
+                    .Select(descriptor => 
+                        QuestionnaireVerificationMessage.Error(
+                            code, 
+                            descriptor.Entity.TranslationName == null 
+                                ? getMessageBySubEntityIndex(descriptor.Index + 1)
+                                : descriptor.Entity.TranslationName + ": " + getMessageBySubEntityIndex(descriptor.Index + 1), 
+                            CreateReference(descriptor.Entity.Entity, descriptor.Index))
+                     );
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
-            Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
-            Func<TEntity, ReadOnlyQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
             where TReferencedEntity : class, IComposite
         {
-            return (questionnaire, state) =>
+            return (questionnaire) =>
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
                 select QuestionnaireVerificationMessage.Error(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
 
-        private static bool MacroHasEmptyName(Macro macro, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool MacroHasEmptyName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(macro.Name);
         }
 
-        private static bool MacroHasInvalidName(Macro macro, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(macro.Name);
         }
 
-        private bool AttachmentHasEmptyContent(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool AttachmentHasEmptyContent(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var attachmentContent = this.attachmentService.GetContentDetails(attachment.ContentId);
             return attachmentContent == null || attachmentContent.Size == 0;
         }
 
-        private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool TranslationNameIsInvalid(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var names = questionnaire.Translations.Select(t => t.Name);
+            return names.All(name =>string.IsNullOrWhiteSpace(name) || name.Length > 32);
+        }
+
+        private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var trans = this.translationService.Get(questionnaire.PublicKey, translation.Id);
+            return trans?.IsEmpty() ?? true;
+        }
+
+        private bool TranslationsHasDuplicatedNames(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var trimedTranslationName = translation.Name.Trim();
+            var countNames = questionnaire.Questionnaire.Translations.Count(t => t.Name.Trim() == trimedTranslationName);
+            return countNames > 1;
+        }
+
+        private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(table.TableName);
         }
 
-        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
         }
 
-        private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(table.FileName))
                 return false;
             return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
         }
 
-        private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, tableId);
             return lookupTableContent == null;
         }
 
-        private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !tableContent.VariableNames.All(IsVariableNameValid);
         }
 
-        private static bool LookupTableMoreThan10Columns(LookupTable table, LookupTableContent tableContent, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LookupTableMoreThan10Columns(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return tableContent.VariableNames.Count() > 10;
         }
 
-        private static bool LookupTableMoreThan5000Rows(LookupTable table, LookupTableContent tableContent, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LookupTableMoreThan5000Rows(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return tableContent.Rows.Count() > 5000;
         }
 
-        private static bool LookupTableNotUniqueRowcodeValues(LookupTable table, LookupTableContent tableContent, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool LookupTableNotUniqueRowcodeValues(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return tableContent.Rows.Select(x => x.RowCode).Distinct().Count() != tableContent.Rows.Count();
         }
@@ -795,12 +858,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsRosterByQuestion(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
-        private static bool RosterSizeSourceQuestionTypeIsIncorrect(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool RosterSizeSourceQuestionTypeIsIncorrect(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(group, questionnaire);
             if (rosterSizeQuestion == null)
@@ -824,7 +887,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsRosterByFixedTitles(group) && group.RosterTitleQuestionId.HasValue;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!IsRosterByQuestion(group))
                 return false;
@@ -849,7 +912,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return false;
         }
 
-        private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!IsRosterByQuestion(group))
                 return false;
@@ -926,7 +989,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return null;
         }
 
-        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And40(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire, Func<IQuestion, int?> getRosterSizeQuestionMaxValue)
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And40(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire, Func<IQuestion, int?> getRosterSizeQuestionMaxValue)
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
@@ -973,17 +1036,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
-        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition, VerificationState state)
-        {
-            var isValidationConditionTooLong = validationCondition.Expression?.Length > 10000;
-
-            state.HasAnyExpressionExceededLimitByCharactersLength |= isValidationConditionTooLong;
-
-            return isValidationConditionTooLong;
-        }
+        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition)
+            => validationCondition.Expression?.Length > MaxExpressionLength;
 
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
             => validationCondition.Message?.Length > 250;
+
+        private static bool QuestionTitleIsTooLong(IQuestion question)
+            => question.QuestionText?.Length > 500;
+
+        private static bool GroupTitleIsTooLong(IGroup group)
+            => group.Title?.Length > 500;
 
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
@@ -1020,7 +1083,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question is SingleQuestion;
         }
 
-        private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
         }
@@ -1053,7 +1116,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.Answers.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
         }
 
-        private static bool QuestionnaireTitleHasInvalidCharacters(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool QuestionnaireTitleHasInvalidCharacters(MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(questionnaire.Title))
             {
@@ -1124,7 +1187,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !IsVariableNameValid(group.VariableName);
         }
 
-        private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!group.IsRoster)
                 return false;
@@ -1170,7 +1233,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
-        private static EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var noErrors = new EntityVerificationResult<IComposite> { HasErrors = false };
 
@@ -1192,7 +1255,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-            IComposite entity, string expression, ReadOnlyQuestionnaireDocument questionnaire, Func<IComposite, bool> isReferencedQuestionIncorrect)
+            IComposite entity, string expression, MultiLanguageQuestionnaireDocument questionnaire, Func<IComposite, bool> isReferencedQuestionIncorrect)
         {
             if (string.IsNullOrEmpty(expression))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -1217,7 +1280,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, ReadOnlyQuestionnaireDocument questionnaire)
+        private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!IsRosterGroup(roster))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -1246,7 +1309,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -1261,7 +1324,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             var dependencies = new Dictionary<string, string[]>();
             var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
@@ -1301,7 +1364,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             var linkedQuestions = questionnaire.Find<IQuestion>(
                 question => question.LinkedToQuestionId.HasValue);
@@ -1353,7 +1416,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByMacrosWithDuplicateName(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByMacrosWithDuplicateName(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .Macros
@@ -1369,7 +1432,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByAttachmentsWithDuplicateName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .Attachments
@@ -1384,7 +1447,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateVariableName(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosterVariableNameMappedOnRosters = questionnaire
                 .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
@@ -1426,17 +1489,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsBySubstitutions(
-            ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
-            IEnumerable<IComposite> entitiesSupportingSubstitutions = questionnaire.Find<IComposite>().Where(SupportsSubstitutions).ToList();
+            var entitiesSupportingSubstitutions = 
+                questionnaire.FindWithTranslations<IComposite>(SupportsSubstitutions)
+                .ToList();
 
-            foreach (var entity in entitiesSupportingSubstitutions)
+            foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(entity, entity.GetTitle(), questionnaire));
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
 
-                var entityAsValidatable = entity as IValidatable;
+                var entityAsValidatable = translatedEntity.Entity as IValidatable;
 
                 if (entityAsValidatable != null)
                 {
@@ -1446,7 +1511,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         var validationCondition = validationConditions[validationConditionIndex];
                         foundErrors.AddRange(this.GetErrorsBySubstitutionsInValidationCondition(
-                            entity, validationCondition.Message, validationConditionIndex, questionnaire));
+                            translatedEntity, validationCondition.Message, validationConditionIndex, questionnaire));
                     }
                 }
             }
@@ -1454,41 +1519,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesComparer());
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(
-            IComposite entity, string title, ReadOnlyQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            var question = entity as IQuestion;
+            var question = translatedEntity.Entity as IQuestion;
             if (question != null && IsPreFilledQuestion(question))
                 return QuestionWithTitleSubstitutionCantBePrefilled(question).ToEnumerable();
 
-            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(translatedEntity.Entity, questionnaire);
 
             IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    entity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                    translatedEntity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
                 .Where(errorOrNull => errorOrNull != null);
 
             return entityErrors;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(
-            IComposite entity, string validationCondition, int validationConditionIndex, ReadOnlyQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string validationCondition, int validationConditionIndex, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = GetAllRosterSizeQuestionsAsVector(translatedEntity.Entity, questionnaire);
 
             IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    entity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
+                    translatedEntity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
                 .Where(errorOrNull => errorOrNull != null);
 
             return entityErrors;
@@ -1530,7 +1593,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
         }
@@ -1549,25 +1612,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return entityAsIConditional != null ? entityAsIConditional.ValidationConditions : Enumerable.Empty<ValidationCondition>();
         }
 
-        private static IComposite GetEntityByVariable(string identifier, ReadOnlyQuestionnaireDocument questionnaire)
+        private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
             ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
             ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
 
         private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
-            IComposite entityWithSubstitution,
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> traslatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,
             Guid[] vectorOfRosterQuestionsByEntityWithSubstitutions,
-            ReadOnlyQuestionnaireDocument questionnaire)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
-            bool isTitle = validationConditionIndex == null;
-            var referenceToEntityWithSubstitution = CreateReference(entityWithSubstitution, validationConditionIndex);
+            string inTranslation = string.IsNullOrWhiteSpace(traslatedEntityWithSubstitution.TranslationName)
+                ? ""
+                : $"{traslatedEntityWithSubstitution.TranslationName}: ";
 
-            if (entityWithSubstitution is IQuestion && isTitle && substitutionReference == ((IQuestion)entityWithSubstitution).StataExportCaption)
+            bool isTitle = validationConditionIndex == null;
+            var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
+
+            if (traslatedEntityWithSubstitution.Entity is IQuestion && isTitle && substitutionReference == ((IQuestion)traslatedEntityWithSubstitution.Entity).StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
-                    VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                    inTranslation + VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1576,7 +1643,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
-                        VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        inTranslation + VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
                         referenceToEntityWithSubstitution);
                 }
                 return null;
@@ -1586,7 +1653,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (entityToSubstitute == null)
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
-                    VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    inTranslation + VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
                     referenceToEntityWithSubstitution);
             }
 
@@ -1599,7 +1666,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
-                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    inTranslation + VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -1608,7 +1675,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 vectorOfRosterQuestionsByEntityWithSubstitutions, questionnaire))
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
-                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    inTranslation + VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -1691,7 +1758,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
         }
         
-        private static bool NoQuestionsExist(ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
@@ -1716,26 +1783,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return group.IsRoster && (group.RosterSizeSource == RosterSizeSourceType.FixedTitles);
         }
 
-        private static bool IsRosterSizeQuestion(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        private static bool IsRosterSizeQuestion(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestionIds =
                 questionnaire.Find<IGroup>(IsRosterByQuestion).Select(group => group.RosterSizeQuestionId);
             return rosterSizeQuestionIds.Contains(question.PublicKey);
         }
 
-        private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
+        private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return
                 questionnaire.FirstOrDefault<IQuestion>(
                     question => group.RosterSizeQuestionId.HasValue && question.PublicKey == group.RosterSizeQuestionId.Value);
         }
 
-        private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, ReadOnlyQuestionnaireDocument document)
+        private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllRosterSizeQuestionsAsVector(IComposite item, ReadOnlyQuestionnaireDocument questionnaire)
+        private static Guid[] GetAllRosterSizeQuestionsAsVector(IComposite item, MultiLanguageQuestionnaireDocument questionnaire)
         {
             IGroup nearestGroup = item as IGroup ?? (IGroup)item.GetParent();
 
@@ -1748,7 +1815,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return rosterSizeQuestions;
         }
 
-        private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, ReadOnlyQuestionnaireDocument document)
+        private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, MultiLanguageQuestionnaireDocument document)
         {
             var parentGroups = new List<IGroup>();
 
@@ -1764,7 +1831,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(
             IComposite entity,
             Guid[] vectorOfRosterSizeQuestions,
-            ReadOnlyQuestionnaireDocument questionnaire)
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
                 GetAllRosterSizeQuestionsAsVector(entity, questionnaire);
@@ -1800,6 +1867,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue &&
                    question.IsFilteredCombobox.Value;
+        }
+
+        private bool HasQuestionnaireExpressionsWithExceedLength(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            Func<IComposite, bool> isValidationExpressionLengthExeeded =
+                entity => GetValidationConditionsOrEmpty(entity).Any(ValidationConditionIsTooLong);
+
+            Func<IComposite, bool> isConditionExpressionLengthExeeded =
+                entity => this.DoesExpressionExceed1000CharsLimit(questionnaire, GetCustomEnablementCondition(entity));
+
+            Func<IQuestion, bool> isLinkedFilterExpressionLengthExeeded =
+                question => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.LinkedFilterExpression);
+
+            Func<IQuestion, bool> isOptionsFilterExpressionLengthExeeded =
+                question => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties.OptionsFilterExpression);
+
+            Func<IVariable, bool> isVariableExpressionLengthExeeded =
+                variable => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
+
+            return questionnaire.Find<IComposite>(entity =>
+                isValidationExpressionLengthExeeded(entity) ||
+                isConditionExpressionLengthExeeded(entity) ||
+                ((entity is IQuestion) && isLinkedFilterExpressionLengthExeeded((IQuestion)entity)) ||
+                ((entity is IQuestion) && isOptionsFilterExpressionLengthExeeded((IQuestion)entity)) ||
+                ((entity is IVariable) && isVariableExpressionLengthExeeded((IVariable)entity))).Any();
         }
     }
 }

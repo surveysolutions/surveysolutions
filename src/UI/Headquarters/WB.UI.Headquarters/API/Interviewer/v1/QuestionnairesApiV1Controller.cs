@@ -22,9 +22,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
-                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                questionnaireStorage: questionnaireStorage,
                 readsideRepositoryWriter: readsideRepositoryWriter,
                 questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,

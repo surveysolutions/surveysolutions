@@ -62,16 +62,20 @@
                 self.renderCaptcha();
                 break;
             case Designer.VM.Login.LoginStatus.Success:
-                if (!_.isUndefined(self.QueryString) && !_.isUndefined(self.QueryString['ReturnUrl']))
-                    window.location.href = decodeURIComponent(self.QueryString['ReturnUrl']);
-                else
-                    window.location.href = self.homePageUrl;
+                self.navigateIfLoggedIn();
                 break;
             }
         }, false, false, function (exception) {
             // by anti forgery validation we can get BadRequest exception, so just try to move to home page
-            window.location.href = self.homePageUrl;
+            self.navigateIfLoggedIn();
         });
+    }
+
+    self.navigateIfLoggedIn = function() {
+        if (!_.isUndefined(self.QueryString) && !_.isUndefined(self.QueryString['ReturnUrl']))
+            window.location.href = decodeURIComponent(self.QueryString['ReturnUrl']);
+        else
+            window.location.href = self.homePageUrl;
     }
 
     self.renderCaptcha = function () {

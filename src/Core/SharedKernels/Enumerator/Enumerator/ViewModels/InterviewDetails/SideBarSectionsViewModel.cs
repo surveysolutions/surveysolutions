@@ -26,11 +26,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private NavigationState navigationState;
 
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private QuestionnaireIdentity questionnaireId;
+        private QuestionnaireIdentity questionnaireIdentity;
         private string interviewId;
 
         protected SideBarSectionsViewModel()
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory)
         {
@@ -64,15 +64,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            this.questionnaireId = questionnaireId;
+            this.questionnaireIdentity = questionnaireId;
             
             this.BuildSectionsList();
         }
 
         private void BuildSectionsList()
         {
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
             foreach (Guid sectionId in questionnaire.GetAllSections())
@@ -151,9 +151,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsEnabled @event)
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
+            
             foreach (var groupId in @event.Groups)
             {
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);

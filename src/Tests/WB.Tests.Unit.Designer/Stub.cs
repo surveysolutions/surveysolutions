@@ -3,10 +3,17 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Designer
 {
-    internal static class Stub<T>
-        where T : class
+    internal static class Stub<TInterface>
+        where TInterface : class
     {
-        public static T WithNotEmptyValues => new Mock<T> { DefaultValue = DefaultValue.Mock }.Object;
+        public static TInterface WithNotEmptyValues => new Mock<TInterface> { DefaultValue = DefaultValue.Mock }.Object;
+
+        public static TInterface Returning<TValue>(TValue value)
+        {
+            var mock = new Mock<TInterface>();
+            mock.SetReturnsDefault(value);
+            return mock.Object;
+        }
     }
 
     internal class Stub

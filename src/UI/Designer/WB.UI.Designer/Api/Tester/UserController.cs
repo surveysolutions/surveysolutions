@@ -15,7 +15,7 @@ namespace WB.UI.Designer.Api.Tester
         [Route("login")]
         public void Login(int version)
         {
-            if (version < ApiVersion.Tester)
+            if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
         }
 

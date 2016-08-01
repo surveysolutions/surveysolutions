@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         Macro = 40,
         LookupTable = 50,
         Attachment = 60,
-        Variable = 70
+        Variable = 70,
+        Translation = 80
     }
 }

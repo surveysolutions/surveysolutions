@@ -112,14 +112,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
         {
             var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
 
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "http://localhost");

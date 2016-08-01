@@ -12,11 +12,11 @@ namespace WB.Core.Synchronization.MetaInfo
 {
     public class MetaInfoBuilder : IMetaInfoBuilder
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public MetaInfoBuilder(IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public MetaInfoBuilder(IQuestionnaireStorage questionnaireStorage)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public InterviewMetaInfo GetInterviewMetaInfo(InterviewSynchronizationDto doc)
@@ -24,7 +24,7 @@ namespace WB.Core.Synchronization.MetaInfo
             if (doc == null)
                 return null;
 
-            var storedQuestionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(doc.QuestionnaireId, doc.QuestionnaireVersion);
+            var storedQuestionnaire = this.questionnaireStorage.GetQuestionnaireDocument(doc.QuestionnaireId, doc.QuestionnaireVersion);
             if (storedQuestionnaire == null)
                 return null;
 

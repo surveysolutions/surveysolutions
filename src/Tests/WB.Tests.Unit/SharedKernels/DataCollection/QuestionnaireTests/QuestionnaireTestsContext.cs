@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         }
 
         public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
+            IQuestionnaireStorage questionnaireStorage = null)
         {
-            var questionnaire = Create.AggregateRoot.Questionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
+            var questionnaire = Create.AggregateRoot.Questionnaire(questionnaireStorage: questionnaireStorage);
 
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1 , 1));
 
             return questionnaire;
         }

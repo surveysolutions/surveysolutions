@@ -394,6 +394,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation &quot;{0}&quot; deleted.
+        /// </summary>
+        public static string Translation_Deleted {
+            get {
+                return ResourceManager.GetString("Translation_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation &quot;{0}&quot; updated.
+        /// </summary>
+        public static string Translation_Updated {
+            get {
+                return ResourceManager.GetString("Translation_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to unknown.
         /// </summary>
         public static string unknown {

@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Linq.Expressions;
+using System.Web.Http;
+using System.Web.Mvc.Routing.Constraints;
 
 namespace WB.UI.Designer.App_Start
 {
@@ -12,6 +14,11 @@ namespace WB.UI.Designer.App_Start
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
+            routes.MapRouteLowercase(
+                name: "QuestionnaireDetails",
+                url: "questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}",
+                defaults: new { controller = "Questionnaire", action = "Details" });
+
             routes.MapRouteLowercase(
                 name: "AdminUsersView",
                 url: "admin/users",

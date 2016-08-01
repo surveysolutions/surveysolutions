@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Api
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = attachment.FileName };
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileNameStar = attachment.FileName };
             response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
             
             return response;

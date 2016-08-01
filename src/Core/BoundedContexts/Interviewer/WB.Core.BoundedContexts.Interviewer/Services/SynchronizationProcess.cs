@@ -18,6 +18,8 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-
+        
         private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
@@ -286,6 +288,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
 
+            await this.DownloadTranslationsAsync(questionnaireIdentity, cancellationToken).ConfigureAwait(false);
+
             if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
@@ -315,6 +319,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
+        }
+
+        private async Task DownloadTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        {
+            List<TranslationDto> translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken)
+                                                              .ConfigureAwait(false);
+
+
+            List<TranslationInstance> translations = translationDtos.Select(translationDto => new TranslationInstance
+            {
+                QuestionnaireId = questionnaireIdentity.ToString(),
+                TranslationId = translationDto.TranslationId,
+                QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                Type = translationDto.Type,
+                TranslationIndex = translationDto.TranslationIndex,
+                Value = translationDto.Value,
+                Id = Guid.NewGuid().FormatGuid()
+            }).ToList();
+
+            await this.questionnairesAccessor.StoreTranslationsAsync(questionnaireIdentity, translations);
         }
 
         private async Task DownloadInterviewsAsync(SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)

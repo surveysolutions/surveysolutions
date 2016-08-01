@@ -190,10 +190,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             };
         }
 
-        public static Version CreateQuestionnaireVersion()
-        {
-            return new DesignerEngineVersionService().GetLatestSupportedVersion();
-        }
+        public static int CreateQuestionnaireVersion() => new DesignerEngineVersionService().LatestSupportedVersion;
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
         {
@@ -427,12 +424,12 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, Version version=null)
+        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, int? version=null)
         {
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,version?? new Version(9, 0, 0), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, version?? 9, out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 

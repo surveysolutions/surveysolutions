@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Models
         }
 
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [Display(Name = "Title", Order = 1)]
         [Default]

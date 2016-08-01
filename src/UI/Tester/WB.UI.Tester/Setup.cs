@@ -47,6 +47,7 @@ namespace WB.UI.Tester
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

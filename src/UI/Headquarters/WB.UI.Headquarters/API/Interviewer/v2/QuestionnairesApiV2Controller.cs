@@ -27,9 +27,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
-                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                questionnaireStorage: questionnaireStorage,
                 readsideRepositoryWriter: readsideRepositoryWriter,
                 questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
         public HttpResponseMessage GetAttachments(Guid id, int version)
         {
-            var questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
 
             if (questionnaireDocument == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);

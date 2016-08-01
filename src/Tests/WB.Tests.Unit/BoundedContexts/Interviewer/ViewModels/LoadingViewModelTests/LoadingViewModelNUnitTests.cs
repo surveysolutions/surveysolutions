@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Moq;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -54,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
 
-            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null);
+            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null, null);
         }
 
         [Test]
@@ -74,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
 
-            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null);
+            navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterview(null, null);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(Moq.It.IsAny<RestartInterviewCommand>());
         }
         protected static LoadingViewModel CreateLoadingViewModel(
@@ -88,7 +90,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(), 
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
                 commandService ?? Substitute.For<ICommandService>(),
-                questionnaireRepository:Substitute.For<IPlainQuestionnaireRepository>());
+                questionnaireRepository: Substitute.For<IQuestionnaireStorage>(),
+                logger: Mock.Of<ILogger>(),
+                interactionService: Mock.Of<IUserInteractionService>());
         }
     }
 }

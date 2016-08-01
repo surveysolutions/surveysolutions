@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>Modo de carregamento de dados avançada</value>
+  </data>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>Para pré-carregar dados mais seções e variáveis, você pode preparar um conjunto de arquivos Tab que correspondem à estrutura de seu questionário e colocar em um arquivo. zip. Por favor, use o arquivo de modelo abaixo. Você pode colocar apenas aqueles arquivos e colunas que você deseja carregar. Todas as colunas deixaram falta ou com títulos não correspondente a uma variável existente no questionário será ignorado.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Tem a certeza que deseja apagar o arquivo</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Lote de upload</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>Pesquisar equipas</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Coluna</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Criar amostra apartir destes dados</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>Criar usuários</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>Criando usuários</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>Dados são válidos</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Apagar</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalhes</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Baixar entrevistas inválidas</value>
+  </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>baixar o arquivo de modelo</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Tempo estimado</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Nome do arquivo</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>Arquivo não foi analisado. Pode ser carregado somente arquivo delimitado por tabulação.</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>Tamanho do arquivo</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>O tamanho do arquivo não pode exceder 300MB.</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Terminou</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>Terminou com erro</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>Terminou com erro, razão pela qual:</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>Formato de arquivo não é suportado, dados dentro dela serão ignorados</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Outro processo de importação de entrevista está sendo executado. É permitido somente uma entrevista do processo de importação de cada vez. Esperar o processo terminar e enviar a amostra de novo. Siga o link se você deseja obter informações mais detalhadas de progresso sobre o processo de importação de outros.</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Você deve escolher um arquivo para carregar</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Selecione</value>
+  </data>
+  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
+    <value>Selecione o supervisor</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Amostra de importação</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Status de importação</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>é no processo de verificação, verificado</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>é inválido. Por favor corrigir erro (s) abaixo e fazer o upload novamente.</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Data da última atualização</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Interview(s) criado</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Por favor aguarde, o arquivo.</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>Arquivo não contiver colunas necessárias por perguntas pré-carregadas:&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processamento de...</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>Pronta para criação de usuário</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>Pronto para validação</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>Contagem de registros</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Atualização</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>Supervisor responsável será atribuído automaticamente</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Linha</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Ir para o processo de importação de entrevista em execução</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Criação de amostra foi succefully concluída.</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Resultado de criação de amostra</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Importação de amostra é concluída com erros</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Importação de amostra for concluída com êxito</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estatuto</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Fazer upload</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>Upload de data</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Carregado</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Fazer upload de novos dados</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>Carregar um novo arquivo</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>Upload de amostra</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>Para enviar a amostra para ser entrevistado, por favor, prepare um arquivo (até 300MB de tamanho) com valores separados por tabulação (Tab arquivo) correspondente ao modelo abaixo, que contém os valores dessas variáveis de seu questionário que foram marcados como pré-preenchido.</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Lote de Upload de usuário</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>Lista de arquivos com usuários pré-carregado</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Prepare um arquivo com valores separados por tabulação (Tab arquivo) correspondente a um modelo abaixo. Colunas marcadas com (*) são necessárias. São permitidos apenas valores 'Supervisor' ou 'Entrevistador' na coluna 'papel'.</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Lote de Upload de usuário</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>Processo de pré-carregamento de usuário está faltando</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>usuário (s) foram criadas</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validado</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Validando</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>Validado</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verifique se</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Verificar dados de painel</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Verifique se os dados de exemplo</value>
+  </data>
+</root>

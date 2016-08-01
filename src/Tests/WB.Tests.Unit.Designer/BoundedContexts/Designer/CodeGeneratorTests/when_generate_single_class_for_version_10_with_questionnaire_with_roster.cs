@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         It should_generate_class_with_AbstractConditionalLevelInstanceV4 = () =>
             generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV4");
 
-        private static Version version = new Version(10, 0, 0);
+        private static int version = 10;
         private static CodeGenerator generator;
         private static string generatedClassContent;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");

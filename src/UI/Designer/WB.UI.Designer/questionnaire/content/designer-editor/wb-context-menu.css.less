@@ -1,0 +1,41 @@
+.wb-context-menu() {
+  display: none;
+  position: absolute;
+  z-index: 1010;
+  background: #fff;
+  border-radius: 3px;
+  top: 100px;
+  left: 300px;
+
+  &:before {
+    position: absolute;
+    display: block;
+    content: '';
+    width: 100%;
+    height: 20px;
+    top: -20px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 6px 0;
+    padding: 0;
+
+    .context-menu-fontstyle();
+
+    li {
+      a {
+        display: block;
+        padding: 0 12px;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        &:hover {
+          color: #fff;
+          background-color: @common-blue-color;
+        }
+      }
+    }
+  }
+}
+

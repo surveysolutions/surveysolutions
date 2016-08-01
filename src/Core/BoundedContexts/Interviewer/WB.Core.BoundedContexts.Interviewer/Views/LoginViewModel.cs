@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
-        private readonly IPrincipal principal;
         private readonly IPasswordHasher passwordHasher;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationService synchronizationService;
@@ -30,10 +29,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             ISynchronizationService synchronizationService,
-            ILogger logger) : base(principal, viewModelNavigationService)
+            ILogger logger)
+            : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.principal = principal;
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;

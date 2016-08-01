@@ -5,8 +5,10 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
 {
@@ -15,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
         public static InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor = null,
             IInterviewerInterviewAccessor interviewFactory = null,
@@ -25,12 +27,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             return new InterviewerQuestionnaireAccessor(
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 questionnaireViewRepository: questionnaireViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
-                plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
                 questionnaireAssemblyFileAccessor: questionnaireAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 questionnaireDocuments: questionnaireDocuments ?? Mock.Of< IAsyncPlainStorage<QuestionnaireDocumentView>>(),
-                optionsRepository: optionsRepository ?? Mock.Of<IOptionsRepository>());
+                optionsRepository: optionsRepository ?? Mock.Of<IOptionsRepository>(),
+                translations: new InMemoryAsyncPlainStorage<TranslationInstance>());
         }
     }
 }

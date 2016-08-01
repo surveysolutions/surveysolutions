@@ -13,16 +13,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class QuestionnaireQuestionInfoFactory : IQuestionnaireQuestionInfoFactory
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnaireQuestionInfoFactory(IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireQuestionInfoFactory(IQuestionnaireStorage questionnaireStorage)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public QuestionnaireQuestionInfoView Load(QuestionnaireQuestionInfoInputModel input)
         {
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(input.QuestionnaireId, input.QuestionnaireVersion);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(input.QuestionnaireId, input.QuestionnaireVersion);
 
             if (questionnaire == null)
                 return new QuestionnaireQuestionInfoView();
