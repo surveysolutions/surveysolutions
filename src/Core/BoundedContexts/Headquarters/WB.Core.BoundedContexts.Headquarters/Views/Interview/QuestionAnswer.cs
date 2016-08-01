@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string Answer { get; set; }
         public virtual QuestionType Type { get; set; }
         public virtual InterviewSummary InterviewSummary { get; set; }
+        public virtual int Position { get; set; }
     }
 }
