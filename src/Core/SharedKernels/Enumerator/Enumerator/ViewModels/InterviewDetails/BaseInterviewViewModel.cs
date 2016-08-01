@@ -33,7 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IStatefulInterview interview;
         private readonly IJsonAllTypesSerializer jsonSerializer;
 
-
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -65,6 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
         }
+
+        public abstract void NavigateBack();
 
         private NavigationIdentity targetNavigationIdentity;
 
@@ -214,6 +215,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
+
+        public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
+            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
         public void Dispose()
         {

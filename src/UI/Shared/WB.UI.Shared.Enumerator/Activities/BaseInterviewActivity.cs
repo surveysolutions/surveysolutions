@@ -1,15 +1,12 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
-using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -51,6 +48,15 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             this.countOfInvalidEntitiesIncreasedToken = messenger.Subscribe<CountOfInvalidEntitiesIncreasedMessage>(this.OnCountOfInvalidEntitiesIncreased);
             base.OnStart();
+        }
+
+        public override void OnBackPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel(() =>
+            {
+                this.ViewModel.NavigateBack();
+                this.Finish();
+            });
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
