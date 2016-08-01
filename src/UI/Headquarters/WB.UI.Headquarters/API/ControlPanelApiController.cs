@@ -155,6 +155,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public void ReprocessBrokenPackages() => this.interviewPackagesService.ReprocessAllBrokenPackages();
 
+        [HttpPost]
+        public void ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request) 
+            => this.interviewPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
+
+        public class ReprocessSelectedBrokenPackagesRequestView
+        {
+            public int[] PackageIds { get; set; }
+        }
+
         public class QuestionnaireView
         {
             public string Title{get; set; }

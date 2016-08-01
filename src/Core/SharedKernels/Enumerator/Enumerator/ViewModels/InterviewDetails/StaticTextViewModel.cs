@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IInterviewEntityViewModel,
         IDisposable
     {
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public DynamicTextViewModel Text { get; }
@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public StaticTextStateViewModel QuestionState { get; }
 
         public StaticTextViewModel(
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             DynamicTextViewModel dynamicTextViewModel,
             AttachmentViewModel attachmentViewModel,
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = entityIdentity;
 

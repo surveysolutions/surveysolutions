@@ -413,6 +413,12 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Login</value>
   </data>
@@ -465,7 +471,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>By restoring saved data you will replace all current assigments on this device</value>
+    <value>By restoring saved data you will replace all current assignments on this device</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
     <value>RESTORE</value>
@@ -598,5 +604,8 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   </data>
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
     <value>{0} interview(s) failed to synchronize</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Failed to open interview</value>
   </data>
 </root>

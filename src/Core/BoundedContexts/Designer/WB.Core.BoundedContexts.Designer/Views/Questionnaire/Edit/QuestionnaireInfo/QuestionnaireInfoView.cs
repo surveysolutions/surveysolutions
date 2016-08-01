@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.Macros = new List<MacroView>();
             this.LookupTables = new List<LookupTableView>();
             this.Attachments = new List<AttachmentView>();
+            this.Translations = new List<TranslationView>();
         }
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }
@@ -28,5 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public bool IsReadOnlyForUser { get; set; }
         public List<AttachmentView> Attachments { get; set; }
+
+        public List<TranslationView> Translations { get; set; }
     }
 }

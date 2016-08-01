@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
             var expressionsEngineVersionService = Mock.Of<IDesignerEngineVersionService>(
-                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == false);
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == false);
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,

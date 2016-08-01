@@ -52,6 +52,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -66,6 +67,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -170,6 +173,9 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command.QuestionnaireId, command.Version, command.PreloadedData, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewerId))
                 .InitializesWith<SynchronizeInterviewFromHeadquarters>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewFromHeadquarters(command.Id, command.UserId, command.SupervisorId, command.InterviewDto, command.SynchronizationTime))
                 .InitializesWith<CreateInterviewByPrefilledQuestions>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewByPrefilledQuestions(command.QuestionnaireIdentity, command.UserId, command.SupervisorId, command.InterviewerId, command.AnswersTime, command.AnswersOnPrefilledQuestions))
+                
+                .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
+
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
                 .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedRosterVectors), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
@@ -191,7 +197,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<CancelInterviewByHqSynchronizationCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CancelByHQSynchronization(command.UserId))
                 .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.CommentTime, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId))
-                .Handles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment))
                 .Handles<HqRejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqReject(command.UserId, command.Comment))
                 .Handles<UnapproveByHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.UnapproveByHeadquarters(command.UserId, command.Comment))
@@ -205,7 +210,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
                 .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
-                .Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview));
+                .Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview))
+                .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
 
             CommandRegistry.Configure<Interview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewWithPreloadedData>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
@@ -247,6 +253,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
             this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
+            this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
 
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
@@ -309,7 +317,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Kernel.Load(new QuartzNinjectModule());
 
-            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
+            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesService>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
@@ -326,7 +334,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
+            this.Bind<ITranslationStorage>().To<TranslationStorage>();
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
+            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope(); // has internal cache, so should be singleton
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath);

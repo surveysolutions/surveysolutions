@@ -73,6 +73,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             catch (Exception exception)
             {
                 Logger.Error($"Error on assembly loading for id={questionnaireId} version={questionnaireVersion}", exception);
+                
+                var exceptions = new List<Exception> { exception };
 
                 if (exception is ReflectionTypeLoadException)
                 {
@@ -80,15 +82,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     var loaderExceptions = typeLoadException.LoaderExceptions;
                     foreach (var loaderException in loaderExceptions)
                     {
+                        exceptions.Add(loaderException);
                         Logger.Error("LoaderEcxeption found", loaderException);
                     }
                 }
-                
+
                 if (exception.InnerException != null)
+                {
+                    exceptions.Add(exception.InnerException);
                     Logger.Error("Error on assembly loading (inner)", exception.InnerException);
+                }
 
                 //hide original one
-                throw new InterviewException("Interview loading error. Code EC0001");
+                throw new InterviewException("Interview loading error. Code EC0001", new AggregateException(exceptions));
             }
         }
     }

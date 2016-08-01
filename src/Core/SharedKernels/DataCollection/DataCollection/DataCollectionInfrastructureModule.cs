@@ -1,6 +1,7 @@
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -18,7 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection
             registry.BindAsSingletonWithConstructorArgument<IPlainInterviewFileStorage, PlainInterviewFileStorage>(
                 "rootDirectoryPath", this.basePath);
 
-            registry.BindAsSingleton<IPlainQuestionnaireRepository, PlainQuestionnaireRepositoryWithCache>();
+            registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
     }
 }

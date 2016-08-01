@@ -1,0 +1,244 @@
+﻿<form role="form" id="roster-editor" name="editRosterForm" unsaved-warning-form>
+    <div class="form-holder">
+        <div class="breadcrumbs-container">
+            <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="edit-group-title" class="wb-label">Roster source</label><br>
+                <div class="btn-group type-container-dropdown" dropdown>
+                    <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" dropdown-toggle type="button">
+                        {{activeRoster.getTitleForRosterType()}}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="rosterTypeBtn">
+                        <li role="presentation" ng-repeat="type in activeRoster.rosterTypeOptions">
+                            <a role="menuitem" tabindex="-1" ng-click="updateRosterType(type.value)">{{type.text}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group input-variable-name col-xs-5 pull-right">
+                <label for="edit-group-variableName" class="wb-label">Roster ID <help key="variableName" placement="left" /></label><br>
+                <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName" maxlength="32" spellcheck="false">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-title" class="wb-label">Roster name</label><br>
+            <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title" msd-elastic></textarea>
+
+            <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
+            </div>
+
+        </div>
+
+        <div class="form-group enabling-group">
+            <div class="enabling-group-marker"></div>
+            <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label>
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeRoster.hideIfDisabled" />
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
+            <br>
+            <div class="pseudo-form-control">
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.enablementCondition"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-buttons-holder">
+        <div class="pull-left">
+            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
+            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()">Cancel</button>
+        </div>
+        <div class="pull-right">
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear>Delete</button>
+            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
+        </div>
+    </div>
+
+<script type="text/ng-template" id="List-template.html">
+
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <label>Source question (answer determines both the number and the name of roster rows): </label>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+                    <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
+                    <span class="selected-item" ng-if="selectedListQuestion !== null">
+                        <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}
+                            (<span class="var-name-line">{{selectedListQuestion.varName}}</span>)
+                        </span>
+                    </span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.lists">
+                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                        <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                           ng-click="selectListQuestion(breadCrumb.id)"
+                           role="menuitem"
+                           tabindex="-1"
+                           href="javascript:void(0);">
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </script>
+
+<script type="text/ng-template" id="Numeric-template.html">
+
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <label>Source question for number of rows:</label>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+                    <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
+                    <span class="selected-item" ng-if="selectedNumericQuestion !== null">
+                        <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}
+                            (<span class="var-name-line">{{selectedNumericQuestion.varName}}</span>)
+                        </span>
+                    </span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.numerics">
+                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                        <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                           ng-click="selectNumericQuestion(breadCrumb.id)"
+                           role="menuitem"
+                           tabindex="-1"
+                           href="javascript:void(0);">
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <label>Source question for names of rows:</label>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+                    <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
+                    <span class="selected-item" ng-if="selectedTitleQuestion !== null">
+                        <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}
+                            (<span class="var-name-line">{{selectedTitleQuestion.varName}}</span>)
+                        </span>
+                    </span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.titles">
+                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                        <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                           ng-click="selectTitleQuestion(breadCrumb.id)"
+                           role="menuitem"
+                           tabindex="-1"
+                           href="javascript:void(0);">
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </script>
+
+<script type="text/ng-template" id="Fixed-template.html">
+
+        <div class="form-group">
+            <label for="edit-fixed-roster-title" class="wb-label">Fixed set of items: <help key="fixedTitles" /></label>
+            <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
+            <div class="singleOption">
+                <div class="table-holder">
+                    <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
+                        <div class="column-2">
+                            <input type="number" min="-2147483648" max="2147483647" ng-model="title.value" name="title_value_{{$index}}" ng-pattern="/^([-+]?\d+)$/" 
+                                   ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
+                        </div>
+                        <div class="column-3">
+                            <input type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
+                        </div>
+                        <div class="column-4">
+                            <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>
+                        </div>
+                    </div>
+                    <p>
+                        <button class="btn btn-link" ng-click="addFixedTitle()">Add item</button>
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </script>
+
+<script type="text/ng-template" id="Multi-template.html">
+
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <label>Source question (answer determines both the number and the name of roster rows): </label>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+                    <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
+                    <span class="selected-item" ng-if="selectedMultiQuestion !== null">
+                        <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}
+                            (<span class="var-name-line">{{selectedMultiQuestion.varName}}</span>)
+                        </span>
+                    </span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.multiOption">
+                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                        <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                           ng-click="selectMultiQuestion(breadCrumb.id)"
+                           role="menuitem"
+                           tabindex="-1"
+                           href="javascript:void(0);">
+                            <div>
+                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <span ng-bind-html="breadCrumb.title"></span>
+                            </div>
+                            <div class="var-block">
+                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </script>
+</form>

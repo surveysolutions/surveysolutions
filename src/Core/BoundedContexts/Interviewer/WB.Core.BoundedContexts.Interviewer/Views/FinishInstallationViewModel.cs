@@ -17,8 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class FinishInstallationViewModel : BaseViewModel
     {
-        readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IPrincipal principal;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPasswordHasher passwordHasher;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerSettings interviewerSettings;
@@ -38,7 +37,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.principal = principal;
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewerSettings = interviewerSettings;
@@ -120,7 +118,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = this.userIdentity.Name;
 
 #if DEBUG
-            this.Endpoint = "http://192.168.88.39/Headquarters";
+            this.Endpoint = "http://192.168.88.39/headquarters";
             this.UserName = "int";
             this.Password = "q";
 #endif

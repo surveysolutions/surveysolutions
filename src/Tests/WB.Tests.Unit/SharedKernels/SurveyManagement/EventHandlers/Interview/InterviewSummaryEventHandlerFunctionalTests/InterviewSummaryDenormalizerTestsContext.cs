@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new InterviewSummaryDenormalizer(
                     interviewSummary: CreateInterviewSummaryWriter(),
                     users: users ?? CreateUsersWriterWith1User(new Guid().ToString(), new Guid().ToString()),
-                    plainQuestionnaireRepository:
-                        Mock.Of<IPlainQuestionnaireRepository>(
+                    questionnaireStorage:
+                        Mock.Of<IQuestionnaireStorage>(
                             _ =>
                                 _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                                 new QuestionnaireDocument()));

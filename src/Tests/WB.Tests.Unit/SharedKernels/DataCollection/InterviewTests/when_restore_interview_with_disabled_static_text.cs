@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var structuralChanges = new StructuralChanges();
             interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
-            IPlainQuestionnaireRepository questionnaireRepository =
+            IQuestionnaireStorage questionnaireRepository =
                 Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
                     Create.Entity.QuestionnaireDocument(id: questionnaireId, children: new[]
                     {

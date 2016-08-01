@@ -13,6 +13,11 @@
         }
 
         public string Expression { get; set; } 
-        public string Message { get; set; } 
+        public string Message { get; set; }
+
+        public ValidationCondition Clone()
+        {
+            return new ValidationCondition(this.Expression, this.Message);
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Guid variableId = Guid.Parse("00000000000000000000000000000001");
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1), Create.Entity.QuestionnaireDocument(id: questionnaireId));
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1), Create.Entity.QuestionnaireDocument(id: questionnaireId));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 

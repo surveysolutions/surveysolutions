@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 
             var settingsProvider = new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileAccessor);
 
-            return settingsProvider.GetAssembliesToReference(new Version(8, 0, 0)).ToArray();
+            return settingsProvider.GetAssembliesToReference(8).ToArray();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable
     {
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = this.principal.CurrentUserIdentity.UserId;
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);

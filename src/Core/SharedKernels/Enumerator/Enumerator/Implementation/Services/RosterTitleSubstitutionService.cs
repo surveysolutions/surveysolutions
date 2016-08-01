@@ -13,12 +13,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class RosterTitleSubstitutionService : IRosterTitleSubstitutionService
     {
-        private readonly IPlainQuestionnaireRepository questionnaireStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
 
         public RosterTitleSubstitutionService(
-            IPlainQuestionnaireRepository questionnaireStorage,
+            IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService)
         {
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public string Substitute(string title, Identity entityIdentity, string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             Guid nearestRosterId = questionnaire.GetRostersFromTopToSpecifiedEntity(entityIdentity.Id).Last();
 

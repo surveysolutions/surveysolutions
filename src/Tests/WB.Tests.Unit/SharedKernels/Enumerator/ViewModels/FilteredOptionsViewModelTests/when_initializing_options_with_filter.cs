@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetFilteredOptionsForQuestion(questionId, null, string.Empty) == options);
 
-            var questionnaireStorage = new Mock<IPlainQuestionnaireRepository>();
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);

@@ -364,7 +364,7 @@
     <value>Multi select yes/no question can't be linked</value>
   </data>
   <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Multi select question supports only integer values</value>
+    <value>Multi select question supports only integer values in range from -2147483648 to 2147483647</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
@@ -514,9 +514,24 @@
     <value>Question is too short. This might be an incomplete question.</value>
   </data>
   <data name="WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Single select question supports only integer values</value>
+    <value>Single select question supports only integer values in range from -2147483648 to 2147483647</value>
   </data>
   <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
     <value>Fix roster supports only integer title values</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>Translation name is invalid</value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>Translation has empty content</value>
+  </data>
+  <data name="WB0258_TranslationsHasDuplicatedNames" xml:space="preserve">
+    <value>Translations has duplicate names</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>Question title is too long. It should be no longer than 500 characters.</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>Title is too long. It should be no longer than 500 characters.</value>
   </data>
 </root>

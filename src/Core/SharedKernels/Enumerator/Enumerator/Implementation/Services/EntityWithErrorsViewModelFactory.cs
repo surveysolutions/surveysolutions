@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     internal class EntityWithErrorsViewModelFactory : IEntityWithErrorsViewModelFactory
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public EntityWithErrorsViewModelFactory(
             IStatefulInterviewRepository interviewRepository, 
-            IPlainQuestionnaireRepository questionnaireRepository, 
+            IQuestionnaireStorage questionnaireRepository, 
             IInterviewViewModelFactory interviewViewModelFactory, 
             IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
            
             var entitiesWithErrors = new List<EntityWithErrorsViewModel>();

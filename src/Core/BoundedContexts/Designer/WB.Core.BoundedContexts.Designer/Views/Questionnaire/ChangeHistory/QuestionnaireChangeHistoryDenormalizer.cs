@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
@@ -70,7 +71,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<LookupTableDeleted>,
 
         IEventHandler<AttachmentUpdated>,
-        IEventHandler<AttachmentDeleted>
+        IEventHandler<AttachmentDeleted>,
+
+        IEventHandler<TranslationUpdated>,
+        IEventHandler<TranslationDeleted>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
@@ -546,6 +550,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                evnt.EventSequence);
         }
 
+        public void Handle(IPublishedEvent<TranslationUpdated> evnt)
+        {
+            AddOrUpdateQuestionnaireStateItem(evnt.EventSourceId, evnt.Payload.TranslationId, evnt.Payload.Name, (s, id, title) => s.TranslationState[id] = title);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.Translation,
+               evnt.Payload.TranslationId,
+               evnt.Payload.Name,
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<TranslationDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.TranslationState, evnt.Payload.TranslationId, QuestionnaireItemType.Translation, evnt.Payload.ResponsibleId);
+        }
+
         public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
         {
             DeleteItemFromStateAndUpdateHistory(evnt, q => q.LookupState, evnt.Payload.LookupTableId, QuestionnaireItemType.LookupTable, evnt.Payload.ResponsibleId);
@@ -814,5 +836,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
         }
+
+ 
     }
 }

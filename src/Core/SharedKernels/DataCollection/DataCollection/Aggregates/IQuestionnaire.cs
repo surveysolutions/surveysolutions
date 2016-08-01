@@ -104,6 +104,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
+        IEnumerable<Guid> GetCategoricalAndFixedRosters();
+
         Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
         int GetRosterLevelForQuestion(Guid questionId);
@@ -147,6 +149,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
         FixedRosterTitle[] GetFixedRosterTitles(Guid groupId);
+
+        string GetFixedRosterTitle(Guid groupId, decimal fixedTitleValue);
 
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
@@ -216,5 +220,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasQuestion(string variableName);
         bool IsTimestampQuestion(Guid questionId);
         bool IsSupportFilteringForOptions(Guid questionId);
+        bool IsFixedRoster(Guid id);
+
+        IReadOnlyCollection<string> GetTranslationLanguages();
     }
 }

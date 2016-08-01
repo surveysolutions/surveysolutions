@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
         }
         protected static QuestionnaireQuestionInfoFactory CreateQuestionnaireQuestionInfoFactory(QuestionnaireDocument questionnaireDocument = null)
         {
-            return new QuestionnaireQuestionInfoFactory(Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument));
+            return new QuestionnaireQuestionInfoFactory(Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument));
         }
 
         protected static QuestionnaireQuestionInfoInputModel CreateQuestionnaireQuestionInfoInputModel(Guid questionnaireId, long version = 1, QuestionType? questionType = null)

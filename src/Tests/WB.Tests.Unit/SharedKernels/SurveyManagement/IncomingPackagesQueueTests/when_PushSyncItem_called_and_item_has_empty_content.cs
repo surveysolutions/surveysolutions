@@ -8,11 +8,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     {
         Establish context = () =>
         {
-            incomingSyncPackagesQueue = CreateIncomingPackagesQueue();
+            incomingSyncPackagesService = CreateIncomingPackagesQueue();
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomingSyncPackagesQueue.StorePackage(""));
+            incomingSyncPackagesService.StoreOrProcessPackage(""));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         It should_throw_exception_of_type_ArgumentException = () =>
           exception.ShouldBeOfExactType<ArgumentException>();
 
-        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private static IncomingSyncPackagesService incomingSyncPackagesService;
         private static Exception exception;
     }
 }

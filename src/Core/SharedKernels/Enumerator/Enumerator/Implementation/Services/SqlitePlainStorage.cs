@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>, IAsyncPlainStorageRemover<TEntity>
+    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
     {
         protected readonly SQLiteAsyncConnection asyncStorage;
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return result;
         }
 
-        public async Task DeleteAllAsync()
+        public async Task RemoveAllAsync()
         {
             await this.asyncStorage.DeleteAllAsync<TEntity>();
         }

@@ -10,6 +10,7 @@ using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -37,7 +38,9 @@ using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using TranslationInstance = WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -64,6 +67,9 @@ namespace WB.Tests.Unit.TestFactories
 
         public Attachment Attachment(string attachmentHash)
             => new Attachment { ContentId = attachmentHash };
+
+        public Translation Translation(Guid translationId, string translationName)
+            => new Translation { Id = translationId, Name = translationName};
 
         public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
             => new Core.SharedKernels.Enumerator.Views.AttachmentContent
@@ -701,6 +707,16 @@ namespace WB.Tests.Unit.TestFactories
                 Attachments = attachments.ToList()
             };
 
+        public QuestionnaireDocument QuestionnaireDocumentWithTranslations(Guid? chapterId = null, params Translation[] translations)
+            => new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
+                },
+                Translations = translations.ToList()
+            };
+
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => this.QuestionnaireDocumentWithOneChapter(null, children);
 
@@ -1027,5 +1043,58 @@ namespace WB.Tests.Unit.TestFactories
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] { });
+
+        public TranslationInstance TranslationInstance(string value = null,
+            Guid? translationId = null, 
+            QuestionnaireIdentity questionnaireId = null,
+            Guid? entityId = null, 
+            string translationIndex = null, 
+            TranslationType? type = null)
+        {
+            return new TranslationInstance
+            {
+                Value = value,
+                TranslationId = translationId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
+
+        public WB.Core.SharedKernels.Enumerator.Views.TranslationInstance TranslationInstance_Enumetaror(string value = null,
+            Guid? tranlationId = null,
+            string questionnaireId = null,
+            Guid? entityId = null,
+            string translationIndex = null,
+            TranslationType? type = null)
+        {
+            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            {
+                Value = value,
+                TranslationId = tranlationId ?? Guid.NewGuid(),
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
+
+        public TranslationDto TranslationDto(string value = null,
+            Guid? translationId = null,
+            string questionnaireId = null,
+            Guid? entityId = null,
+            string translationIndex = null,
+            TranslationType? type = null)
+        {
+            return new TranslationDto
+            {
+                Value = value,
+                TranslationId = translationId ?? Guid.NewGuid(),
+                QuestionnaireEntityId = entityId ?? Guid.NewGuid(),
+                TranslationIndex = translationIndex,
+                Type = type ?? TranslationType.Unknown
+            };
+        }
     }
 }

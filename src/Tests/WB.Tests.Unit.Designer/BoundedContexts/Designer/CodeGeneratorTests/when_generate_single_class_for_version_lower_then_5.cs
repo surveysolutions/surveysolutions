@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         It should_throw_VersionNotFoundException = () =>
             exception.ShouldBeOfExactType<VersionNotFoundException>();
         
-        private static Version version=new Version(4,0,0);
+        private static int version = 4;
         private static CodeGenerator generator;
         private static QuestionnaireDocument questionnaire;
         private static Exception exception;

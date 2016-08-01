@@ -23,9 +23,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
         private readonly IEnumerable<IComposite> allItems;
         public QuestionnaireDocument Questionnaire { get; private set; }
+        public string Translation { get; private set; }
 
-        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire)
+        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire, string translation = null)
         {
+            this.Translation = translation;
             this.Questionnaire = questionnaire;
             this.Questionnaire.ConnectChildrenWithParent();
             this.allItems = CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);
@@ -34,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
         public Dictionary<Guid, LookupTable> LookupTables => this.Questionnaire.LookupTables;
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
+        public List<Translation> Translations => this.Questionnaire.Translations;
         public string Title => this.Questionnaire.Title;
         public Guid PublicKey => this.Questionnaire.PublicKey;
 

@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface ISupportedVersionProvider
     {
-        Version GetSupportedQuestionnaireVersion();
+        int GetSupportedQuestionnaireVersion();
     }
 }
