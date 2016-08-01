@@ -32,11 +32,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 cm.NotNullable(true);
             }));
 
-            Set(x => x.AnswersToFeaturedQuestions,
+            Bag(x => x.AnswersToFeaturedQuestions,
                 collection => {
                     collection.Key(c => {
                         c.Column("InterviewSummaryId");
                     });
+                    collection.OrderBy(x  =>  x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                 },
@@ -54,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Table("AnswersToFeaturedQuestions");
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
+            Property(x => x.Position, col => col.Column("Position"));
             Property(x => x.Answer, col =>
             {
                 col.Column("AnswerValue");
