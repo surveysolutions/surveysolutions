@@ -164,9 +164,13 @@
                     .resize(function () {
                         setMinHeight();
                     });
-                new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl,
+
+                if (window.input.settings.config.syncQueueEnabled) {
+                    new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl,
                         "#IncomingPackagesQueueIndicator")
                     .load();
+                }
+
                 @if (User.Identity.IsObserver())
             {
                 <text>
