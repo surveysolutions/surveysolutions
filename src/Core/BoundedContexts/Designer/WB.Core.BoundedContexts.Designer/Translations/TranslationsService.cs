@@ -411,7 +411,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                        OriginalText = option.AnswerText,
                        Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
                        OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
-                       Sheet = isLongOptionsList ? $"{WorksheetName}: {question.StataExportCaption}" : WorksheetName
+                       Sheet = isLongOptionsList ? $"{WorksheetName} {question.StataExportCaption}" : WorksheetName
                    };
         }
 
