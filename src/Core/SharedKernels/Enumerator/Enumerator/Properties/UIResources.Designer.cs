@@ -514,15 +514,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To parent .
-        /// </summary>
-        public static string Interview_ParentGroup_ButtonText {
-            get {
-                return ResourceManager.GetString("Interview_ParentGroup_ButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {

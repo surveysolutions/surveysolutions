@@ -49,14 +49,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly AnswerNotifier answerNotifier;
 
-        private string QuestionnaireId => this.questionnaireIdentity.ToString();
-
         private GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
         {
             get { return this.groupState; }
             set { this.RaiseAndSetIfChanged(ref this.groupState, value); }
         }
+
+        public DynamicTextViewModel Title { get; }
 
         private string navigationItemTitle;
         public string NavigationItemTitle
@@ -77,13 +77,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICommandService commandService, AnswerNotifier answerNotifier)
+            ICommandService commandService, 
+            DynamicTextViewModel title,
+            AnswerNotifier answerNotifier)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.commandService = commandService;
+            this.Title = title;
             this.answerNotifier = answerNotifier;
         }
 
@@ -183,21 +186,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void UpdateNavigationItemTitle()
         {
-            this.NavigationItemTitle = this.GetNavigationItemTitle();
-        }
-
-        private string GetNavigationItemTitle()
-        {
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    return UIResources.Interview_ParentGroup_ButtonText;
-                case NavigationGroupType.LastSection:
-                    return UIResources.Interview_CompleteScreen_ButtonText;
                 case NavigationGroupType.Section:
-                    return UIResources.Interview_NextSection_ButtonText;
+                    var interview = this.interviewRepository.Get(interviewId);
+                    var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                    var textWithSubstitutions = questionnaire.GetGroupTitle(this.groupOrSectionToNavigateIdentity.Id);
+                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
+                    return ;
+                case NavigationGroupType.LastSection:
+                    this.Title.InitAsStatic(UIResources.Interview_CompleteScreen_ButtonText);
+                    return;
                 default:
-                    return string.Empty;
+                    return;
             }
         }
 
@@ -238,7 +240,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-
+            
+            this.Title.Dispose();
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
             this.answerNotifier.Dispose();
         }
