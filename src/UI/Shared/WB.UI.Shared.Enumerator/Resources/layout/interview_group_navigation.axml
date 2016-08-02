@@ -8,5 +8,5 @@
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
       ButtonGroupStyle GroupState; 
-      Text NavigationItemTitle"/>
+      Text Title.PlainText"/>
 </LinearLayout>
