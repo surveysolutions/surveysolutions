@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string OptionValueOrValidationIndexOrFixedRosterId { get; set; }
             public string OriginalText { get; set; }
             public string Translation { get; set; }
+            public string Sheet { get; set; } = WorksheetName;
         }
 
         private readonly TranslationType[] translationTypesWithIndexes =
@@ -247,53 +248,59 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                excelPackage.Workbook.Worksheets.Add("Translations");
-                var worksheet = excelPackage.Workbook.Worksheets[1];
-                worksheet.Name = WorksheetName;
+                var textsToTranslateGroupedBySheets = this.GetTranlsatedTexts(questionnaire, translation)
+                    .OrderBy(x => x.Sheet)
+                    .GroupBy(x => x.Sheet)
+                    .ToDictionary(x => x.Key, x => x.ToList());
 
-                worksheet.Cells["A1"].Value = EntityIdColumnName;
-                worksheet.Cells["B1"].Value = TranslationTypeColumnName;
-                worksheet.Cells["C1"].Value = "Index";
-                worksheet.Cells["D1"].Value = "Original text";
-                worksheet.Cells["E1"].Value = "Translation";
-
-                FormatCell(worksheet, "A1");
-                FormatCell(worksheet, "B1");
-                FormatCell(worksheet, "C1");
-                FormatCell(worksheet, "D1");
-                FormatCell(worksheet, "E1");
-
-                int currentRowNumber = 1;
-
-                var textsToTranslate = this.GetTranlsatedTexts(questionnaire, translation);
-                foreach (var translationRow in textsToTranslate)
+                foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
                 {
-                    if (string.IsNullOrWhiteSpace(translationRow.OriginalText)) continue;
+                    var worksheet = excelPackage.Workbook.Worksheets.Add(textsToTranslate.Key);
+                    worksheet.Name = textsToTranslate.Key;
 
-                    currentRowNumber++;
+                    worksheet.Cells["A1"].Value = EntityIdColumnName;
+                    worksheet.Cells["B1"].Value = TranslationTypeColumnName;
+                    worksheet.Cells["C1"].Value = "Index";
+                    worksheet.Cells["D1"].Value = "Original text";
+                    worksheet.Cells["E1"].Value = "Translation";
 
-                    worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
-                    worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
-                    worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
-                    worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"D{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
-                    worksheet.Cells[$"D{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
-                    worksheet.Cells[$"E{currentRowNumber}"].Style.WrapText = true;
+                    FormatCell(worksheet, "A1");
+                    FormatCell(worksheet, "B1");
+                    FormatCell(worksheet, "C1");
+                    FormatCell(worksheet, "D1");
+                    FormatCell(worksheet, "E1");
+
+                    int currentRowNumber = 1;
+
+                    foreach (var translationRow in textsToTranslate.Value)
+                    {
+                        if (string.IsNullOrWhiteSpace(translationRow.OriginalText)) continue;
+
+                        currentRowNumber++;
+
+                        worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
+                        worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
+                        worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cells[$"C{currentRowNumber}"].Value =
+                            translationRow.OptionValueOrValidationIndexOrFixedRosterId;
+                        worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cells[$"D{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
+                        worksheet.Cells[$"D{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
+                        worksheet.Cells[$"E{currentRowNumber}"].Style.WrapText = true;
+                    }
+
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        LockAndAutofitColumn(worksheet, i);
+                    }
+
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                    worksheet.Column(5).AutoFit();
+                    worksheet.Protection.AllowFormatColumns = true;
                 }
-
-                for (int i = 1; i <= 4; i++)
-                {
-                    LockAndAutofitColumn(worksheet, i);
-                }
-                
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
-                worksheet.Column(5).AutoFit();
-                worksheet.Protection.AllowFormatColumns = true;
-                
                 return excelPackage.GetAsByteArray();
             }
         }
@@ -378,11 +385,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private static IEnumerable<TranslationRow> GetTranslatedOptions(IQuestion question, ITranslation translation)
         {
             var singleOptionQuestion = question as SingleQuestion;
-            var shouldIgnoreOptions = (singleOptionQuestion?.CascadeFromQuestionId.HasValue ?? false) 
-                                               || (singleOptionQuestion?.IsFilteredCombobox ?? false);
 
-            if (shouldIgnoreOptions)
-                return Enumerable.Empty<TranslationRow>();
+            var isLongOptionsList = (singleOptionQuestion?.CascadeFromQuestionId.HasValue ?? false) || (singleOptionQuestion?.IsFilteredCombobox ?? false);
 
             return from option in question.Answers
                 select new TranslationRow
@@ -391,7 +395,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     Type = TranslationType.OptionTitle.ToString("G"),
                     OriginalText = option.AnswerText,
                     Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
-                    OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue
+                    OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
+                    Sheet = isLongOptionsList ? $"{WorksheetName}: {question.StataExportCaption}" : WorksheetName
                 };
         }
 
