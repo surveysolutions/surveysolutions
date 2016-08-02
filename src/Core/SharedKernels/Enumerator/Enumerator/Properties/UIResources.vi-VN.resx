@@ -259,9 +259,6 @@ Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solution
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Mục tiếp theo</value>
   </data>
-  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
-    <value>Về mục chính</value>
-  </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>Tất cả {0} câu hỏi đã được trả lời</value>
   </data>
