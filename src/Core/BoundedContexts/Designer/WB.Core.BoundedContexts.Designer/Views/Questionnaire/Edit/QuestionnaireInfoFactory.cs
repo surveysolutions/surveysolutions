@@ -480,8 +480,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
             GroupAndRosterDetailsView roster)
         {
+            var rosterSizeQuestion = questionsCollection.Questions.SingleOrDefault(x => x.Id == roster.RosterSizeQuestionId);
+            var allRostersFromSameTrigger = questionsCollection.Groups.Where(x => x.RosterSizeQuestionId == rosterSizeQuestion?.Id);
+
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.Where(x => x.ParentGroupId == roster.Id && x.Type!=QuestionType.Multimedia).ToList();
+                q => q.Where(x => (x.ParentGroupId == roster.Id || allRostersFromSameTrigger.Any(otherRoster => otherRoster.Id == x.ParentGroupId))
+                                  && x.Type != QuestionType.Multimedia).ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
