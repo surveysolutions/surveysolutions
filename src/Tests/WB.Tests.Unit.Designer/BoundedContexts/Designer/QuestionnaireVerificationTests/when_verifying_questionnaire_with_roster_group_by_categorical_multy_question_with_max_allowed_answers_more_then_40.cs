@@ -46,20 +46,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         It should_return_message_with_code__WB0100__ = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0100");
+            verificationMessages.ShouldContainError("WB0100");
 
         It should_return_message_with_1_references = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0100").References.Count().ShouldEqual(1);
 
         It should_return_message_reference_with_type_question = () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0100").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_reference_with_id_of_rosterSizeQuestionId = () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(rosterSizeQuestionId);
+            verificationMessages.GetError("WB0100").References.First().Id.ShouldEqual(rosterSizeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
