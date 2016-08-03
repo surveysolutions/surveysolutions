@@ -63,7 +63,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool TooFewVariableLabelsAreDefined(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var countOfAllQuestions = questionnaire.Find<IQuestion>(AnsweredManually).Count();
-            var countOfQuestionsWithoutLabels= questionnaire.Find<IQuestion>(q=>string.IsNullOrEmpty(q.VariableLabel)).Count();
+            var countOfQuestionsWithoutLabels =
+                questionnaire.Find<IQuestion>(q => string.IsNullOrEmpty(q.VariableLabel) && AnsweredManually(q)).Count();
 
             return countOfQuestionsWithoutLabels > (countOfAllQuestions/2);
         }
@@ -207,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 
         private static bool AnsweredManually(IQuestion question) => 
-            question.QuestionScope != QuestionScope.Headquarter && question.QuestionScope != QuestionScope.Hidden;
+            !question.Featured && question.QuestionScope != QuestionScope.Headquarter && question.QuestionScope != QuestionScope.Hidden;
 
         private static bool TooManyQuestionsInGroup(IGroup group)
             => group.Children.OfType<IQuestion>().Count() > 200;
