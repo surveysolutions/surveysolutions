@@ -43,6 +43,7 @@
                         var itemId = listViewModel.GetId();
                         var itemType = listViewModel.GetLabel();
                         var itemName = Uri.EscapeDataString(listViewModel.GetName());
+                        var pdfDownloadUrl = Url.Action("exportquestionnaire", "Pdf", routevalues);
 
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                             <td class="search-value">
@@ -80,6 +81,9 @@
                                 {
                                     <li class="divider"></li>
                                     <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                    <li>
+                                        <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl")' data-toggle="modal">Export as PDF (with progress)</a>
+                                    </li>
                                 }
                                 if (actionModel.CanSynchronize)
                                 {
@@ -88,7 +92,7 @@
                                 if (actionModel.CanDelete)
                                 {
                                     <li class="divider"></li>
-                                    <li><a href="#mDelete" onclick='deleteQuestionnaireModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
+                                    <li><a href="#mDelete" onclick='questionnaireActionModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                                 }
                                         }
                                     </ul>
@@ -112,6 +116,9 @@
 {
     <div>
         @Html.Partial("DeleteModalDialog")
+    </div>
+    <div>
+        @Html.Partial("ExportPdfModalDialog")
     </div>
 }
 @helper ShowTableHeaderCell(string field, string title, bool showSearch = false)

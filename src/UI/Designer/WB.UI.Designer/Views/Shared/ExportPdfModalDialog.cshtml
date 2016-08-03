@@ -1,0 +1,23 @@
+﻿@using WB.UI.Designer
+<div class="modal fade" id="mExportPdf">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">PDF <small>export</small></h4>
+            </div>
+            <div class="modal-body">
+                <p>Rendering questionnaire "<strong id="export-pdf-modal-questionnaire-title"></strong>"...</p>
+                <p><a id="export-pdf-modal-download-url" href="#">Download PDF</a></p>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("Pdf", GlobalHelper.CurrentController, FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input name="id" id="export-pdf-modal-questionnaire-id" type="hidden" />
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
