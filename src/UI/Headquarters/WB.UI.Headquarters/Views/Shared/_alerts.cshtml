@@ -1,6 +1,15 @@
 @using WB.UI.Headquarters.Resources
 @using WB.UI.Shared.Web.Extensions
 <div id="alerts">
+
+    @if (ViewBag.GlobalNotice != null)
+    {
+        <div class="alert alert-info alert-dismissible text-center " role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @ViewBag.GlobalNotice
+        </div>
+    }
+
     @if (TempData.ContainsKey(Alerts.ATTENTION))
     {
         <div class="alert alert-warning">
@@ -9,7 +18,7 @@
             @Html.Raw(@TempData[Alerts.ATTENTION])
         </div>
     }
-    @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
+    @foreach (string key in Alerts.ALL.Except(new[] {Alerts.ATTENTION}))
     {
         if (TempData.ContainsKey(key))
         {
