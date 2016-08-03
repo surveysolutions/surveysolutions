@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         IInterviewEntityViewModel,
         ILiteEventHandler<GroupsEnabled>, 
         ILiteEventHandler<GroupsDisabled>, 
+        ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
         private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
@@ -34,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private string interviewId;
+        private bool isRoster;
         private QuestionnaireIdentity questionnaireIdentity;
         private NavigationState navigationState;
 
@@ -57,6 +60,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public DynamicTextViewModel Title { get; }
+
+        private string rosterInstanceTitle;
+        public string RosterInstanceTitle
+        {
+            get { return this.rosterInstanceTitle; }
+            set
+            {
+                this.rosterInstanceTitle = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool IsRoster
+        {
+            get { return isRoster; }
+            set
+            {
+                isRoster = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
         private string navigationItemTitle;
         public string NavigationItemTitle
@@ -109,6 +133,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             else
             {
                 this.groupOrSectionToNavigateIdentity = this.GetParentGroupOrRosterIdentity();
+                this.IsRoster = questionnaire.IsRosterGroup(this.groupOrSectionToNavigateIdentity.Id);
+                this.RosterInstanceTitle = interview.GetRosterTitle(this.groupOrSectionToNavigateIdentity);
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
@@ -252,6 +278,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (!this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Intersect(@event.Groups).Any()) return;
 
             this.UpdateNavigation();
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            if (!this.isRoster) return;
+
+            foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.groupOrSectionToNavigateIdentity.Equals(changedInstance.RosterInstance.GetIdentity())))
+            {
+                this.RosterInstanceTitle = changedInstance.Title;
+            }
         }
 
         public void Handle(GroupsDisabled @event)
