@@ -44,6 +44,7 @@
                         var itemType = listViewModel.GetLabel();
                         var itemName = Uri.EscapeDataString(listViewModel.GetName());
                         var pdfDownloadUrl = Url.Action("exportquestionnaire", "Pdf", routevalues);
+                        var pdfStatusUrl = Url.Action("status", "Pdf", routevalues);
 
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                             <td class="search-value">
@@ -82,7 +83,7 @@
                                     <li class="divider"></li>
                                     <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
                                     <li>
-                                        <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl")' data-toggle="modal">Export as PDF (with progress)</a>
+                                        <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl")' data-toggle="modal">Export as PDF (with progress)</a>
                                     </li>
                                 }
                                 if (actionModel.CanSynchronize)

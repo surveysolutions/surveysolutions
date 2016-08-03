@@ -59,6 +59,12 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
+        [System.Web.Mvc.Authorize]
+        public string Status(Guid id)
+        {
+            return "In progress";
+        }
+
         private void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
         {
             var pdfConvertEnvironment = new PdfConvertEnvironment
