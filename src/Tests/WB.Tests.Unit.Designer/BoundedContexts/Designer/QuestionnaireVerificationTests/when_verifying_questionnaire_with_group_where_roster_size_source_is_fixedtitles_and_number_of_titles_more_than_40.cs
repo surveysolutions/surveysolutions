@@ -37,11 +37,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_first_error_with_code__WB0038 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0038");
+        It should_return_error_with_code__WB0038 = () =>
+            verificationMessages.ShouldContainError("WB0038");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

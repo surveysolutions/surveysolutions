@@ -783,6 +783,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster with more than {0} rows cannot have nested rosters.
+        /// </summary>
+        internal static string WB0080_LongRosterCannotHaveNestedRosters {
+            get {
+                return ResourceManager.GetString("WB0080_LongRosterCannotHaveNestedRosters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster with more than {0} rows cannot be nested.
+        /// </summary>
+        internal static string WB0081_LongRosterCannotBeNested {
+            get {
+                return ResourceManager.GetString("WB0081_LongRosterCannotBeNested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0082_ {
+            get {
+                return ResourceManager.GetString("WB0082_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
         internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
