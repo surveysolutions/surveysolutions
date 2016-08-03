@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', 
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys) {
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -56,6 +56,8 @@
                     $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
                     $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
 
+                    $scope.activeRoster.useListAsRosterTitleEditor = true;
+
                     $scope.activeRoster.getTitleForRosterType = function () {
                         return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
                     };
@@ -104,6 +106,24 @@
                     $scope.editRosterForm.$setDirty();
                 };
 
+                $scope.showOptionsInTextarea = function () {
+                    $scope.activeRoster.stringifiedRosterTitles = optionsService.stringifyOptions($scope.activeRoster.fixedRosterTitles);
+                    $scope.activeRoster.useListAsRosterTitleEditor = false;
+                };
+
+                $scope.showRosterTitlesInList = function () {
+                    if ($scope.activeRoster.useListAsRosterTitleEditor) {
+                        return;
+                    }
+                    if (_.isUndefined($scope.editRosterForm.stringifiedRosterTitles) || !$scope.editRosterForm.stringifiedRosterTitles.$valid) {
+                        return;
+                    }
+                    if ($scope.activeRoster.stringifiedRosterTitles) {
+                        $scope.activeRoster.fixedRosterTitles = optionsService.parseOptions($scope.activeRoster.stringifiedRosterTitles);
+                    }
+                    $scope.activeRoster.useListAsRosterTitleEditor = true;
+                };
+                
                 $scope.addFixedTitle = function () {
                     $scope.activeRoster.fixedRosterTitles.push({
                         "value": null,
