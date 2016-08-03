@@ -8,5 +8,5 @@
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
       ButtonGroupStyle GroupState; 
-      Text Title.PlainText"/>
+      TextFormatted SpannableGroupTitle(IsRoster, Title.PlainText, RosterInstanceTitle)"/>
 </LinearLayout>
