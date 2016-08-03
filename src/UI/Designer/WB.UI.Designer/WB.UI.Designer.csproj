@@ -1611,6 +1611,7 @@
     <Content Include="questionnaire\vendor\underscore\README.md" />
     <Content Include="questionnaire\vendor\underscore\underscore-min.map" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -80,8 +80,6 @@ namespace WB.UI.Designer.Controllers
             };
 
             PdfConvert.ConvertHtmlToPdf(pdfDocument, pdfConvertEnvironment, pdfOutput);
-
-            memoryStream.Flush();
         }
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()
