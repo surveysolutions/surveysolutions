@@ -534,4 +534,13 @@
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>Title is too long. It should be no longer than 500 characters.</value>
   </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value>Roster with more than {0} rows cannot have nested rosters</value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>Roster with more than {0} rows cannot be nested</value>
+  </data>
+  <data name="WB0082_" xml:space="preserve">
+    <value />
+  </data>
 </root>
