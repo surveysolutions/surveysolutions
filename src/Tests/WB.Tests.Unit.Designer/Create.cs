@@ -448,7 +448,8 @@ namespace WB.Tests.Unit.Designer
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null)
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
+            int? maxAllowedAnswers = null)
         {
             return new MultyOptionsQuestion
             {
@@ -460,7 +461,8 @@ namespace WB.Tests.Unit.Designer
                 StataExportCaption = variable,
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                MaxAllowedAnswers = maxAllowedAnswers
             };
         }
 
