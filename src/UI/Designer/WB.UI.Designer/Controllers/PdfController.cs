@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
@@ -19,18 +20,14 @@ namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
-        private class PdfGenerationProgress : IDisposable
+        private class PdfGenerationProgress
         {
-            public MemoryStream Stream { get; } = new MemoryStream();
+            public string FilePath { get; } = Path.GetTempFileName();
             public bool IsFailed { get; private set; }
             public bool IsFinished { get; private set; }
 
-            public long SizeInKb => this.Stream.Length / 1024;
-
             public void Fail() => this.IsFailed = true;
             public void Finish() => this.IsFinished = true;
-
-            public void Dispose() => this.Stream.Dispose();
         }
 
         private static readonly Dictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new Dictionary<Guid, PdfGenerationProgress>();
@@ -38,17 +35,20 @@ namespace WB.UI.Designer.Controllers
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
         private readonly ILogger logger;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public PdfController(
             IMembershipUserService userHelper, 
             IPdfFactory pdfFactory, 
             PdfSettings pdfSettings,
-            ILogger logger)
+            ILogger logger,
+            IFileSystemAccessor fileSystemAccessor)
             : base(userHelper)
         {
             this.pdfFactory = pdfFactory;
             this.pdfSettings = pdfSettings;
             this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         [LocalOrDevelopmentAccessOnly]
@@ -95,24 +95,34 @@ namespace WB.UI.Designer.Controllers
                 if (existingPdfGenerationProgress.IsFailed)
                     return "Failed to generate PDF. Please reload the page and try again or contact support@mysurvey.solutions";
 
+                long sizeInKb = this.GetSizeInKb(existingPdfGenerationProgress.FilePath);
+
+                if (sizeInKb == 0)
+                    return "Preparing to generate your PDF. Please wait...";
+
                 return existingPdfGenerationProgress.IsFinished
-                    ? $"Your PDF is ready. Size: {existingPdfGenerationProgress.SizeInKb}Kb"
-                    : $"Your PDF is being generated. Size: {existingPdfGenerationProgress.SizeInKb}Kb";
+                    ? $"Your PDF is ready. Size: {sizeInKb}Kb"
+                    : $"Your PDF is being generated. Size: {sizeInKb}Kb";
             }
             else
             {
                 var newPdfGenerationProgress = new PdfGenerationProgress();
                 this.StartRenderPdf(id, newPdfGenerationProgress);
                 GeneratedPdfs[id] = newPdfGenerationProgress;
-                return "Started PDF generation";
+                return "PDF generation requested...";
             }
         }
+
+        private long GetSizeInKb(string filepath)
+            => this.fileSystemAccessor.IsFileExists(filepath)
+                ? this.fileSystemAccessor.GetFileSize(filepath) / 1024
+                : 0;
 
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
             var pdfDocument = this.GetPdfConvertUrls(id);
-            var pdfOutput = GetPdfConvertOutput(generationProgress.Stream);
+            var pdfOutput = new PdfOutput { OutputFilePath = generationProgress.FilePath };
 
             Task.Factory.StartNew(() =>
             {
@@ -133,7 +143,7 @@ namespace WB.UI.Designer.Controllers
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
             var pdfDocument = this.GetPdfConvertUrls(id);
-            var pdfOutput = GetPdfConvertOutput(memoryStream);
+            var pdfOutput = new PdfOutput { OutputStream = memoryStream };
 
             PdfConvert.ConvertHtmlToPdf(pdfDocument, pdfConvertEnvironment, pdfOutput);
         }
@@ -157,11 +167,6 @@ namespace WB.UI.Designer.Controllers
             {
                 id = id
             }),
-        };
-
-        private static PdfOutput GetPdfConvertOutput(MemoryStream memoryStream) => new PdfOutput
-        {
-            OutputStream = memoryStream,
         };
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()
