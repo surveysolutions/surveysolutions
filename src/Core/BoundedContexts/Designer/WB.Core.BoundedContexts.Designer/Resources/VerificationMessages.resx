@@ -195,8 +195,8 @@
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Fixed set of items roster cannot have empty titles or less than two items.</value>
   </data>
-  <data name="WB0038_RosterFixedTitlesHaveMoreThan40Items" xml:space="preserve">
-    <value>Fixed set of items roster cannot have more than 40 rows.</value>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>Fixed set of items roster cannot have more than {0} rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>List question cannot be prefilled.</value>
@@ -205,7 +205,7 @@
     <value>List  question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And40" xml:space="preserve">
-    <value>Maximum number of list elements must be in range [1, 40].</value>
+    <value>Maximum number of list elements must be in range [1, {0}].</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value.</value>
@@ -330,8 +330,8 @@
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
     <value>Child cascading combo box question should not contain validation condition.</value>
   </data>
-  <data name="WB0093_" xml:space="preserve">
-    <value />
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>Roster size text list question should have limit</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Enabling condition has length more than 10,000 characters.</value>
@@ -540,7 +540,7 @@
   <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
     <value>Roster with more than {0} rows cannot be nested</value>
   </data>
-  <data name="WB0082_" xml:space="preserve">
-    <value />
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>Roster size multi-select question should have limit</value>
   </data>
 </root>

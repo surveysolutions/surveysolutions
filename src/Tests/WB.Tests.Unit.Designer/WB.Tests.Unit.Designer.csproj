@@ -404,6 +404,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_integer_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_it_is_nested_intro_other_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translation_with_empty_content.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translation_with_invalid_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_questionnaire_that_has_translations_with_duplicated_names.cs" />
@@ -429,6 +430,13 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_variable_with_expression_longer_10000_chars.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_circular_reference_in_option_filter_and_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_title_that_references_not_existing_substitutions.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_nested_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_list_roster_and_it_is_nested_intro_other_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_list_roster_and_nested_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_list_roster_with_missing_max_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_79_rows_and_nested_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_missing_max_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_condition_expression_and_without_name.cs" />
@@ -620,8 +628,6 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_max_allowed_answers_more_then_40.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_more_then_40_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_nested_group_level_11.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Create.Event.cs" />
