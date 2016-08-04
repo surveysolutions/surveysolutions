@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -19,9 +18,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterGroupId = Guid.Parse("13333333333333333333333333333333");
 
             var fixedTitles = new List<string>();
-            for (int i = 0; i < 41; i++)
+            for (int i = 0; i < 201; i++)
             {
-                fixedTitles.Add(string.Format("Fixed Title {0}", i));
+                fixedTitles.Add($"Fixed Title {i}");
             }
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(

@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
-            Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan40Items),
+            Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
             Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
             Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
             Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
@@ -168,12 +168,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
             Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
-            Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMultyOptionRosterSizeOptionCountWhenMaxAllowedAnswersIsEmpty), "WB0099", VerificationMessages.WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options),
-            Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40),
+            Verifier<IMultyOptionsQuestion>(RosterSizeMultiOptionQuestionShouldBeLimited, "WB0082", VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
+            //Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMultyOptionRosterSizeOptionCountWhenMaxAllowedAnswersIsEmpty), "WB0099", VerificationMessages.WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options),
+            //Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40),
             Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
             Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-            Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
+            Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And200, "WB0042", string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40, Constants.MaxLongRosterRowCount)),
+            Verifier<ITextListQuestion>(RosterSizeListQuestionShouldBeLimited, "WB0093", VerificationMessages.WB0093_RosterSizeListOptionQuestionShouldBeLimit),
             TranslationVerifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
             Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
@@ -216,6 +218,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
             Verifier<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
             TranslationVerifier<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
+            
+
 
             TranslationVerifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
             Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
@@ -897,12 +901,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool LongMultiRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (GetRosterSizeQuestionByRosterGroup(g, q) as TextListQuestion)?.MaxAnswerCount);
+            return IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (GetRosterSizeQuestionByRosterGroup(g, q) as MultyOptionsQuestion)?.MaxAllowedAnswers);
         }
 
         private static bool LongListRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (GetRosterSizeQuestionByRosterGroup(g, q) as MultyOptionsQuestion)?.MaxAllowedAnswers);
+            return IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (GetRosterSizeQuestionByRosterGroup(g, q) as TextListQuestion)?.MaxAnswerCount);
         }
 
         private static bool LongFixedRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
@@ -932,11 +936,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool GroupHasNestedRosters(IGroup @group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return questionnaire
-                .Find<IGroup>()
-                .Any(x => GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(x, questionnaire)
-                        .Select(r => r.PublicKey)
-                        .Contains(@group.PublicKey));
+            var findInGroup = questionnaire.FindInGroup<IGroup>(@group.PublicKey);
+            return findInGroup.Any(IsRosterGroup);
         }
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
@@ -1037,7 +1038,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > Constants.MaxRosterRowCount;
+            return group.FixedRosterTitles.Length > Constants.MaxLongRosterRowCount;
         }
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options(IQuestion question)
@@ -1066,6 +1067,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
             return !Enumerable.Range(1, Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
+        }
+
+        private static bool RosterSizeMultiOptionQuestionShouldBeLimited(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterSizeQuestion(question, questionnaire))
+                return false;
+
+            if (question.Answers.Count <= Constants.MaxRosterRowCount)
+                return false;
+
+            return !question.MaxAllowedAnswers.HasValue;
+        }
+
+        private static bool RosterSizeListQuestionShouldBeLimited(ITextListQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterSizeQuestion(question, questionnaire))
+                return false;
+
+            return !question.MaxAnswerCount.HasValue;
         }
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
@@ -1165,7 +1185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsPreFilledQuestion(question);
         }
 
-        private static bool TextListQuestionMaxAnswerNotInRange1And40(ITextListQuestion question)
+        private static bool TextListQuestionMaxAnswerNotInRange1And200(ITextListQuestion question)
         {
             if (!question.MaxAnswerCount.HasValue)
                 return false;
