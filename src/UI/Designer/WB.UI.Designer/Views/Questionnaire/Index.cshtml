@@ -43,7 +43,7 @@
                         var itemId = listViewModel.GetId();
                         var itemType = listViewModel.GetLabel();
                         var itemName = Uri.EscapeDataString(listViewModel.GetName());
-                        var pdfDownloadUrl = Url.Action("exportquestionnaire", "Pdf", routevalues);
+                        var pdfDownloadUrl = Url.Action("download", "Pdf", routevalues);
                         var pdfStatusUrl = Url.Action("status", "Pdf", routevalues);
 
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
