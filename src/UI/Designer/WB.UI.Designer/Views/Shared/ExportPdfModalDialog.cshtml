@@ -7,16 +7,11 @@
                 <h4 class="modal-title">PDF <small>export</small></h4>
             </div>
             <div class="modal-body">
-                <p id="export-pdf-modal-status">Rendering questionnaire "<strong id="export-pdf-modal-questionnaire-title"></strong>"...</p>
-                <p><a id="export-pdf-modal-download-url" href="#">Download PDF</a></p>
+                <pre id="export-pdf-modal-status">Rendering questionnaire "<strong id="export-pdf-modal-questionnaire-title"></strong>"...</pre>
             </div>
             <div class="modal-footer">
-                @using (Html.BeginForm("Pdf", GlobalHelper.CurrentController, FormMethod.Post, new { }))
-                {
-                    @Html.AntiForgeryToken()
-                    <input name="id" id="export-pdf-modal-questionnaire-id" type="hidden" />
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                }
+                <a class="btn btn-primary pull-left" id="export-pdf-modal-download-url" href="#">Download PDF</a>
+                <button class="btn pull-right" data-dismiss="modal" aria-hidden="true">Cancel</button>
             </div>
         </div>
     </div>
