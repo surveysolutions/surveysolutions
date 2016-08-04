@@ -23,13 +23,15 @@
         self.pdfStatusUrl = pdfStatusUrl;
 
         $('#export-pdf-modal-questionnaire-id').val(self.itemId);
-        $('#export-pdf-modal-download-url').attr('href', pdfDownloadUrl);
+        $('#pdfDownloadLink').attr('href', pdfDownloadUrl);
         //$('#export-pdf-modal-download-url').click(function () {
         //    alert('x');
         //    $("#mExportPdf").modal('hide');
         //    //window.href = pdfDownloadUrl;
         //});
-        $('#export-pdf-modal-questionnaire-title').html(self.itemName);
+
+        $('#pdfDownloadLink').hide();
+
         self.updateExportPdfStatusNeverending();
     };
 
@@ -39,10 +41,18 @@
             url: self.pdfStatusUrl,
             cache: false
         }).done(function (result) {
-            $('#export-pdf-modal-status').text(result + '\r\n\r\n' + 'Status updated ' + new Date().toLocaleTimeString());
+            if (result.Message != null) {
+                self.setPdfMessage(result.Message);
+            } else {
+                self.setPdfMessage("Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.");
+            }
+            if (result.ReadyForDownload == true) {
+                self.pdfStatusUrl = '';
+                $('#pdfDownloadLink').show();
+            }
         }).fail(function (xhr, status, error) {
             self.pdfStatusUrl = '';
-            $('#export-pdf-modal-status').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+            self.setPdfMessage("Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.");
         });
     }
 
@@ -50,6 +60,13 @@
         $.when(self.updateExportPdfStatus()).always(function () {
             setTimeout(self.updateExportPdfStatusNeverending, 333);
         });
+    }
+
+    self.setPdfMessage = function (message) {
+        $('#export-pdf-modal-status').text(
+            message
+            //+ '\r\n\r\n' + 'Status updated ' + new Date().toLocaleTimeString()
+        );
     }
 }
 
