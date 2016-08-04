@@ -3,6 +3,7 @@
     self.itemId = "";
     self.itemName = "";
     self.itemType = "";
+    self.pdfStatusUrl = '';
 
     self.deleteItem = function (id, type, name) {
         var encName = decodeURIComponent(name);
@@ -36,7 +37,7 @@
         if (self.pdfStatusUrl == '') return { always: function() {} };
         return $.ajax({
             url: self.pdfStatusUrl,
-            data: { timestamp: new Date().getMilliseconds() }
+            cache: false
         }).done(function (result) {
             $('#export-pdf-modal-status').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
         }).fail(function (xhr, status, error) {
@@ -47,7 +48,7 @@
 
     self.updateExportPdfStatusNeverending = function () {
         $.when(self.updateExportPdfStatus()).always(function () {
-            setTimeout(self.updateExportPdfStatusNeverending, 1000);
+            setTimeout(self.updateExportPdfStatusNeverending, 100);
         });
     }
 }
