@@ -21,16 +21,17 @@
         self.itemType = type;
         self.itemId = id;
         self.pdfStatusUrl = pdfStatusUrl;
+        self.pdfDownloadUrl = pdfDownloadUrl;
 
         $('#export-pdf-modal-questionnaire-id').val(self.itemId);
-        $('#pdfDownloadLink').attr('href', pdfDownloadUrl);
+        $('#export-pdf-modal-questionnaire-title').text(self.itemName);
         //$('#export-pdf-modal-download-url').click(function () {
         //    alert('x');
         //    $("#mExportPdf").modal('hide');
         //    //window.href = pdfDownloadUrl;
         //});
 
-        $('#pdfDownloadLink').hide();
+        $('#pdfDownloadButton').hide();
 
         self.updateExportPdfStatusNeverending();
     };
@@ -47,8 +48,13 @@
                 self.setPdfMessage("Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.");
             }
             if (result.ReadyForDownload == true) {
-                self.pdfStatusUrl = '';
-                $('#pdfDownloadLink').show();
+                $('#pdfDownloadButton').unbind('click');
+                $('#pdfDownloadButton').click(function () {
+                    self.pdfStatusUrl = '';
+                    window.location = self.pdfDownloadUrl;
+                    $('#pdfCancelButton').click();
+                });
+                $('#pdfDownloadButton').show();
             }
         }).fail(function (xhr, status, error) {
             self.pdfStatusUrl = '';
