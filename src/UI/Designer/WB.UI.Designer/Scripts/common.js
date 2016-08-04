@@ -39,7 +39,7 @@
             url: self.pdfStatusUrl,
             cache: false
         }).done(function (result) {
-            $('#export-pdf-modal-status').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
+            $('#export-pdf-modal-status').text(result + '\r\n\r\n' + 'Status updated ' + new Date().toLocaleTimeString());
         }).fail(function (xhr, status, error) {
             self.pdfStatusUrl = '';
             $('#export-pdf-modal-status').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
@@ -48,7 +48,7 @@
 
     self.updateExportPdfStatusNeverending = function () {
         $.when(self.updateExportPdfStatus()).always(function () {
-            setTimeout(self.updateExportPdfStatusNeverending, 100);
+            setTimeout(self.updateExportPdfStatusNeverending, 333);
         });
     }
 }
