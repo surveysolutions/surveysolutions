@@ -30,6 +30,22 @@ namespace WB.UI.Designer.Controllers
             public void Finish() => this.IsFinished = true;
         }
 
+        public class PdfStatus
+        {
+            private PdfStatus(string message, bool readyForDownload = false)
+            {
+                this.Message = message;
+                this.ReadyForDownload = readyForDownload;
+            }
+
+            public string Message { get; }
+            public bool ReadyForDownload { get; }
+
+            public static PdfStatus InProgress(string message) => new PdfStatus(message);
+            public static PdfStatus Failed(string message) => new PdfStatus(message);
+            public static PdfStatus Ready(string message) => new PdfStatus(message, readyForDownload: true);
+        }
+
         private static readonly Dictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new Dictionary<Guid, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
@@ -108,30 +124,30 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
-        public string Status(Guid id)
+        public JsonResult Status(Guid id)
         {
             PdfGenerationProgress existingPdfGenerationProgress;
 
             if (GeneratedPdfs.TryGetValue(id, out existingPdfGenerationProgress))
             {
                 if (existingPdfGenerationProgress.IsFailed)
-                    return "Failed to generate PDF. Please reload the page and try again or contact support@mysurvey.solutions";
+                    return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
 
                 long sizeInKb = this.GetSizeInKb(existingPdfGenerationProgress.FilePath);
 
                 if (sizeInKb == 0)
-                    return "Preparing to generate your PDF. Please wait...";
+                    return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
 
                 return existingPdfGenerationProgress.IsFinished
-                    ? $"Your PDF is ready. Size: {sizeInKb}Kb"
-                    : $"Your PDF is being generated. Size: {sizeInKb}Kb";
+                    ? this.Json(PdfStatus.Ready($"Your PDF is ready.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet)
+                    : this.Json(PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var newPdfGenerationProgress = new PdfGenerationProgress();
                 this.StartRenderPdf(id, newPdfGenerationProgress);
                 GeneratedPdfs[id] = newPdfGenerationProgress;
-                return "PDF generation requested...";
+                return this.Json(PdfStatus.InProgress("PDF generation requested.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
             }
         }
 
