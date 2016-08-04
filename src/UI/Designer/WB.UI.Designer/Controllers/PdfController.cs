@@ -85,6 +85,28 @@ namespace WB.UI.Designer.Controllers
         }
 
         [Authorize]
+        public ActionResult Download(Guid id)
+        {
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(id);
+
+            if (pdfGenerationProgress?.IsFinished == true)
+            {
+                var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id);
+
+                byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
+
+                this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
+                GeneratedPdfs.Remove(id);
+
+                return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
+            }
+            else
+            {
+                return this.HttpNotFound();
+            }
+        }
+
+        [Authorize]
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         public string Status(Guid id)
         {
