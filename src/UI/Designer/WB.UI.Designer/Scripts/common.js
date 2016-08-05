@@ -25,11 +25,6 @@
 
         $('#export-pdf-modal-questionnaire-id').val(self.itemId);
         $('#export-pdf-modal-questionnaire-title').text(self.itemName);
-        //$('#export-pdf-modal-download-url').click(function () {
-        //    alert('x');
-        //    $("#mExportPdf").modal('hide');
-        //    //window.href = pdfDownloadUrl;
-        //});
 
         $('#pdfDownloadButton').hide();
 

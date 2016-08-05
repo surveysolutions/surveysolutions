@@ -20,6 +20,8 @@ namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
+        #region Subclasses
+
         private class PdfGenerationProgress
         {
             public string FilePath { get; } = Path.GetTempFileName();
@@ -46,6 +48,8 @@ namespace WB.UI.Designer.Controllers
             public static PdfStatus Ready(string message) => new PdfStatus(message, readyForDownload: true);
         }
 
+        #endregion
+
         private static readonly Dictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new Dictionary<Guid, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
@@ -70,7 +74,7 @@ namespace WB.UI.Designer.Controllers
         [LocalOrDevelopmentAccessOnly]
         public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            var questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName);
+            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -83,21 +87,8 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         public ActionResult PrintPreview(Guid id)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
             return this.View("RenderQuestionnaire", questionnaire);
-        }
-
-        [Authorize]
-        public ActionResult ExportQuestionnaire(Guid id)
-        {
-            var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                this.RenderQuestionnairePdfToMemoryStream(id, memoryStream);
-
-                return this.File(memoryStream.ToArray(), "application/pdf", $"{questionnaireTitle}.pdf");
-            }
         }
 
         [Authorize]
@@ -133,7 +124,7 @@ namespace WB.UI.Designer.Controllers
                 if (existingPdfGenerationProgress.IsFailed)
                     return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
 
-                long sizeInKb = this.GetSizeInKb(existingPdfGenerationProgress.FilePath);
+                long sizeInKb = this.GetFileSizeInKb(existingPdfGenerationProgress.FilePath);
 
                 if (sizeInKb == 0)
                     return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
@@ -151,15 +142,10 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private long GetSizeInKb(string filepath)
-            => this.fileSystemAccessor.IsFileExists(filepath)
-                ? this.fileSystemAccessor.GetFileSize(filepath) / 1024
-                : 0;
-
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetPdfConvertUrls(id);
+            var pdfDocument = this.GetSourceUrlsForPdf(id);
             var pdfOutput = new PdfOutput { OutputFilePath = generationProgress.FilePath };
 
             Task.Factory.StartNew(() =>
@@ -177,15 +163,6 @@ namespace WB.UI.Designer.Controllers
             });
         }
 
-        private void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
-        {
-            var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetPdfConvertUrls(id);
-            var pdfOutput = new PdfOutput { OutputStream = memoryStream };
-
-            PdfConvert.ConvertHtmlToPdf(pdfDocument, pdfConvertEnvironment, pdfOutput);
-        }
-
         private PdfConvertEnvironment GetPdfConvertEnvironment() => new PdfConvertEnvironment
         {
             Timeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
@@ -193,15 +170,15 @@ namespace WB.UI.Designer.Controllers
             WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
         };
 
-        private PdfDocument GetPdfConvertUrls(Guid id) => new PdfDocument
+        private PdfDocument GetSourceUrlsForPdf(Guid id) => new PdfDocument
         {
-            Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new
+            Url = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaire), "Pdf", new
             {
                 id = id,
                 requestedByUserId = this.UserHelper.WebUser.UserId,
                 requestedByUserName = this.UserHelper.WebUser.UserName,
             }),
-            FooterUrl = GlobalHelper.GenerateUrl("RenderQuestionnaireFooter", "Pdf", new
+            FooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new
             {
                 id = id
             }),
@@ -219,7 +196,7 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private PdfQuestionnaireModel LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
+        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
             PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
             if (questionnaire == null)
@@ -228,5 +205,10 @@ namespace WB.UI.Designer.Controllers
             }
             return questionnaire;
         }
+
+        private long GetFileSizeInKb(string filepath)
+            => this.fileSystemAccessor.IsFileExists(filepath)
+                ? this.fileSystemAccessor.GetFileSize(filepath) / 1024
+                : 0;
     }
 }
