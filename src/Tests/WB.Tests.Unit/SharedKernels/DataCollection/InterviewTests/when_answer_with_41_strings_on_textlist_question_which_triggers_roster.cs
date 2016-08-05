@@ -1,17 +1,14 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_with_41_strings_on_textlist_question_which_triggers_roster : InterviewTestsContext
+    internal class when_answer_with_61_strings_on_textlist_question_which_triggers_roster : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -30,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            answers=new Tuple<decimal, string>[41];
+            answers=new Tuple<decimal, string>[61];
             for (int i = 0; i < answers.Length; i++)
             {
                 answers[i] = new Tuple<decimal, string>(i, i.ToString());
@@ -44,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_throw_InterviewException_with_explanation = () =>
-           exception.Message.ToLower().ToSeparateWords().ShouldContain("answer", "'41'", "question", "roster", "greater", "40");
+           exception.Message.ToLower().ToSeparateWords().ShouldContain("answer", "'61'", "question", "roster", "greater", "60");
 
         private static Interview interview;
         private static Guid userId;

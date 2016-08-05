@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42 : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_62 : PreloadedDataVerifierTestContext
     {
         private Establish context = () =>
         {
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire.Title = "questionnaire";
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "num" },
-                new string[][] { new string[] { "1", "42" } },
+                new string[][] { new string[] { "1", "62" } },
                 "questionnaire.csv");
 
             var preloadedDataService =
@@ -42,13 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             () =>
                 result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
-        private It should_result_has_1_error = () =>
+        It should_result_has_1_error = () =>
                result.Errors.Count().ShouldEqual(1);
 
-        private It should_return_single_PL0029_error = () =>
+        It should_return_single_PL0029_error = () =>
             result.Errors.First().Code.ShouldEqual("PL0029");
 
-        private It should_return_reference_with_Cell_type = () =>
+        It should_return_reference_with_Cell_type = () =>
             result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static PreloadedDataVerifier preloadedDataVerifier;

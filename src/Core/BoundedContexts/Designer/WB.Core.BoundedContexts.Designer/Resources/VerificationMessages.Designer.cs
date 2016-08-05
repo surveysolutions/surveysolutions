@@ -434,9 +434,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, {0}]..
         /// </summary>
-        internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
+        internal static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
             get {
-                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And40", resourceCulture);
+                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And200", resourceCulture);
             }
         }
         
@@ -966,9 +966,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 40..
         /// </summary>
-        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40 {
+        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {
-                return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40", resourceCulture);
+                return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200", resourceCulture);
             }
         }
         
