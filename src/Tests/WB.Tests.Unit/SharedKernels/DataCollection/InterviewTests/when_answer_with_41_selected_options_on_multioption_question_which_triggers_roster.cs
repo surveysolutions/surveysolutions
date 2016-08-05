@@ -1,17 +1,14 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_with_41_selected_options_on_multioption_question_which_triggers_roster : InterviewTestsContext
+    internal class when_answer_with_61_selected_options_on_multioption_question_which_triggers_roster : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -20,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            answers = new decimal[41];
+            answers = new decimal[61];
             for (int i = 0; i < answers.Length; i++)
             {
                 answers[i] = i;
@@ -44,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_throw_InterviewException_with_explanation = () =>
-           exception.Message.ToLower().ToSeparateWords().ShouldContain("answer", "'41'", "question", "roster", "greater", "40");
+           exception.Message.ToLower().ToSeparateWords().ShouldContain("answer", "'61'", "question", "roster", "greater", "60");
 
         private static Interview interview;
         private static Guid userId;
