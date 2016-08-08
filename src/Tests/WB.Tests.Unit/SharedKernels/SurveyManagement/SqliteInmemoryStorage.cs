@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NSubstitute;
 using SQLite.Net;
@@ -15,10 +16,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
                 new SQLiteConnectionString(":memory:", true, new BlobSerializerDelegate(
                     new JsonAllTypesSerializer().SerializeToByteArray,
                     (data, type) => new JsonAllTypesSerializer().DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true))),
-            Substitute.For<ILogger>()
-            )
+                    (type) => true)))
+        {
+            TraceListener = new ConsoleTraceListener()
+        },Substitute.For<ILogger>())
         {
         }
     }
+
+    public class ConsoleTraceListener : ITraceListener
+    {
+        public void Receive(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+
 }

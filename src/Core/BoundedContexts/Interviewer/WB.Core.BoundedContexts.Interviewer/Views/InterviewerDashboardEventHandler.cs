@@ -11,6 +11,7 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -40,7 +41,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                          ILitePublishedEventHandler<AnswersRemoved>,
 
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
-                                         ILitePublishedEventHandler<AnswerRemoved>
+                                         ILitePublishedEventHandler<AnswerRemoved>,
+
+                                         ILitePublishedEventHandler<TranslationSwitched>
     {
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -100,9 +103,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
-
+            
             if (questionnaireDocumentView == null)
                 return;
+
+            var storageInterviewId = interviewId.FormatGuid();
+            var interviewView = this.interviewViewRepository.GetById(storageInterviewId) ?? new InterviewView
+            {
+                Id = storageInterviewId,
+                InterviewId = interviewId,
+                ResponsibleId = responsibleId,
+                QuestionnaireId = questionnaireIdentity.ToString(),
+                Census = createdOnClient,
+                GpsLocation = new InterviewGpsLocationView()
+            };
+
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
             var prefilledQuestions = new List<InterviewAnswerOnPrefilledQuestionView>();
             var featuredQuestions = questionnaireDocumentView.Find<IQuestion>(q => q.Featured).ToList();
@@ -116,7 +132,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
                 {
-                    prefilledQuestions.Add(this.GetAnswerOnPrefilledQuestion(featuredQuestion, item?.Answer));
+                    prefilledQuestions.Add(this.GetAnswerOnPrefilledQuestion(featuredQuestion, questionnaire, item?.Answer, interviewView.Language));
                 }
                 else
                 {
@@ -134,20 +150,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
             }
 
-            var storageInterviewId = interviewId.FormatGuid();
-            var interviewView = this.interviewViewRepository.GetById(storageInterviewId) ?? new InterviewView
-            {
-                Id = storageInterviewId,
-                InterviewId = interviewId,
-                ResponsibleId = responsibleId,
-                QuestionnaireId = questionnaireIdentity.ToString(),
-                Census = createdOnClient,
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = prefilledGpsQuestionId
-                }
-            };
-
             interviewView.Status = status;
             interviewView.AnswersOnPrefilledQuestions = prefilledQuestions.ToArray();
             interviewView.StartedDateTime = startedDateTime;
@@ -155,6 +157,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             interviewView.RejectedDateTime = rejectedDateTime;
             interviewView.CanBeDeleted = canBeDeleted;
             interviewView.LastInterviewerOrSupervisorComment = comments;
+            interviewView.GpsLocation.PrefilledQuestionId = prefilledGpsQuestionId;
             interviewView.GpsLocation.Coordinates = gpsCoordinates;
             
             this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
@@ -176,7 +179,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return null;
         }
 
-        private InterviewAnswerOnPrefilledQuestionView GetAnswerOnPrefilledQuestion(IQuestion prefilledQuestion, object answer)
+        private InterviewAnswerOnPrefilledQuestionView GetAnswerOnPrefilledQuestion(IQuestion prefilledQuestion, IQuestionnaire questionnaire, object answer, string language)
         {
             Func<decimal, string> getCategoricalOptionText = null;
 
@@ -209,7 +212,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         {
                             answer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                         }
-                        getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion);
+                        getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion, questionnaire);
                         break;
                     case QuestionType.Numeric:
                         var numericQuestion = prefilledQuestion as INumericQuestion;
@@ -235,17 +238,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             };
         }
 
-        private static Func<decimal, string> GetPrefilledCategoricalQuestionOptionText(IQuestion prefilledQuestion)
+        private static Func<decimal, string> GetPrefilledCategoricalQuestionOptionText(IQuestion prefilledQuestion, IQuestionnaire questionnaire)
         {
-            if(prefilledQuestion.Answers == null) return null;
-
-            var prefilledCategoricalQuestionOptions = prefilledQuestion.Answers.ToDictionary(
-                option => decimal.Parse(option.AnswerValue, CultureInfo.InvariantCulture),
-                option => option.AnswerText);
-
-            return (optionValue) => prefilledCategoricalQuestionOptions.ContainsKey(optionValue)
-                ? prefilledCategoricalQuestionOptions[optionValue]
-                : string.Empty;
+            return (optionValue) =>
+                questionnaire.GetOptionsForQuestion(prefilledQuestion.PublicKey, null, string.Empty)
+                    .SingleOrDefault(x => x.Value == optionValue)?.Title;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
@@ -361,10 +358,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 var interviewPrefilledQuestion = interviewView.AnswersOnPrefilledQuestions?.FirstOrDefault(question => question.QuestionId == questionId);
                 if (interviewPrefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                    var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
+                    var questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                    var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId), interviewView.Language);
+                    var questionnairePrefilledQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
-                    interviewPrefilledQuestion.Answer = this.GetAnswerOnPrefilledQuestion(questionnairePrefilledQuestion, answer).Answer;
+                    interviewPrefilledQuestion.Answer = this.GetAnswerOnPrefilledQuestion(questionnairePrefilledQuestion, questionnaire, answer, interviewView.Language).Answer;
                 }
             }
 
@@ -430,6 +428,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, null, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TranslationSwitched> @event)
+        {
+            var interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null) return;
+
+            interviewView.Language = @event.Payload.Language;
+
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
     }
 }
