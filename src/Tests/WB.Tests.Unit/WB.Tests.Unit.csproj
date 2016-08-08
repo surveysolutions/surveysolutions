@@ -358,6 +358,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_to_default_language_with_multioption_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_multioption_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_timestamp_question_which_is_roster_title.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_201_on_numeric_int_question_which_triggers_of_long_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_questionnaire_contains_yes_no_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_switching_translation_language_to_existing_language.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_switching_translation_language_to_not_existing_language.cs" />
