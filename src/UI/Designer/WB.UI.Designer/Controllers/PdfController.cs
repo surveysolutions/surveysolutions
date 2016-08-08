@@ -115,6 +115,7 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
+        [System.Web.Mvc.HttpGet]
         public JsonResult Status(Guid id)
         {
             PdfGenerationProgress existingPdfGenerationProgress;
