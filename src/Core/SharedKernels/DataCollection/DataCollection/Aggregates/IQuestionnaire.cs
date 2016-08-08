@@ -72,6 +72,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxRosterRowCount();
 
+        int GetMaxLongRosterRowCount();
+
         bool IsQuestion(Guid entityId);
 
         bool IsStaticText(Guid entityId);
@@ -223,5 +225,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsFixedRoster(Guid id);
 
         IReadOnlyCollection<string> GetTranslationLanguages();
+        bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
     }
 }
