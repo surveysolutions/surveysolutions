@@ -2,7 +2,7 @@
 {
     public class Constants
     {
-        public const int MaxRosterRowCount = 60;
-        public const int MaxLongRosterRowCount = 200;
+        public static readonly int MaxRosterRowCount = 60;
+        public static readonly int MaxLongRosterRowCount = 200;
     }
 }

@@ -2492,6 +2492,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, selectedValues.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -2515,6 +2519,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(question.Id, selectedValues.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(question.Id, yesAnswersCount, questionnaire);
@@ -2542,6 +2550,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answer, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answer, questionnaire,
+                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                        ? questionnaire.GetMaxLongRosterRowCount()
+                        : questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -2560,6 +2572,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answers.Length, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answers.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -4202,12 +4218,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+        }
 
-            var maxRosterRowCount = questionnaire.GetMaxRosterRowCount();
+        private void ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(Guid questionId, int answer,
+           IQuestionnaire questionnaire, int maxRosterRowCount)
+        {
             if (answer > maxRosterRowCount)
                 throw new InterviewException(string.Format(
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater than {3}. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
+                    answer, FormatQuestionForException(questionId, questionnaire), this.EventSourceId, maxRosterRowCount));
         }
 
         protected void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
