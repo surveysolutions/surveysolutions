@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid? ResponsibleId => null;
 
+        public Guid? CurrentTranslationId { get; private set; }
+
         private Dictionary<Guid, IComposite> EntityCache
         {
             get
@@ -166,12 +168,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, long version)
+        public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? currentTranslationId = null)
         {
             InitializeQuestionnaireDocument(document);
 
             this.innerDocument = document;
             this.Version = version;
+
+            this.CurrentTranslationId = currentTranslationId;
         }
 
         public void WarmUpPriorityCaches()
@@ -300,7 +304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetAnswerOptionsAsValuesImpl(questionId));
 
         //should be used on HQ only
-        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, Guid? translationId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -309,7 +313,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionValue)
+        public CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionValue, Guid? translationId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -361,7 +365,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, questionId, parentQuestionValue, filter);
+                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                    questionId, parentQuestionValue, filter, this.CurrentTranslationId);
             }
 
             return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
@@ -374,7 +379,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, questionId, optionText);
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                    questionId, optionText, this.CurrentTranslationId);
             }
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();

@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using It = Machine.Specifications.It;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
@@ -77,7 +78,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
 
         It should_be_questionnaire_stored_to_local_storage = () => 
-            mockOfQuestionnaireImportService.Verify(_ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly), Times.Once);
+            mockOfQuestionnaireImportService.Verify(
+                _ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly, new TranslationDto[0]), 
+                Times.Once);
 
         It should_be_executed_CreateInterviewOnClientCommand = () => 
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<ICommand>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);

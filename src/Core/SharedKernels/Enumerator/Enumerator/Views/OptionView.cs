@@ -1,3 +1,4 @@
+using System;
 using SQLite.Net.Attributes;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -21,5 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public decimal? ParentValue { get; set; }
 
         public int SortOrder { get; set; }
+
+        public string TranslationId { get; set; }
     }
 }
