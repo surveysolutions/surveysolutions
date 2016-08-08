@@ -151,6 +151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
+            this.interviewExpressionState.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
         }
 
         public void SetInterviewProperties(IInterviewProperties properties)
