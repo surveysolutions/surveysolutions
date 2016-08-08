@@ -338,14 +338,12 @@
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\SynchronizationProcessTestsContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_questionniare_has_translations.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\SynchronizationViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_password.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_need_download_attachments.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\DashboardViewModelTests\DashboardViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\DashboardViewModelTests\when_start_async_and_no_user_logged_in.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoadingViewModelTests\LoadingViewModelNUnitTests.cs" />
-    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_with_translations.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_with_attachments.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />

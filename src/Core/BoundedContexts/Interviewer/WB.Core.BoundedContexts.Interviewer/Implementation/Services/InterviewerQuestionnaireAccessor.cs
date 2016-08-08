@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -50,22 +56,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.translations = translations;
         }
 
-        public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
+        public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
         {
-            var questionnaireId = questionnaireIdentity.ToString();
-
             var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
-           
-            await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireIdentity, serializedQuestionnaireDocument);
+            
+            await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
 
-            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, 
-                questionnaireIdentity.Version, 
+            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<SingleQuestion>(
+                x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
+
+            foreach (var question in questionsWithLongOptionsList)
+            {
+                var questionTranslations = translationDtos.Where(x => x.QuestionnaireEntityId == question.PublicKey).ToList();
+
+                await this.optionsRepository.StoreOptionsForQuestionAsync(questionnaireIdentity, question.PublicKey, question.Answers, questionTranslations);
+
+                //remove original answers after saving
+                //to save resources
+                question.Answers = new List<Answer>();
+            }
+
+            var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToList();
+
+            List<TranslationInstance> filteredTranslations = translationDtos
+                .Where(x => !questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId))
+                .Select(translationDto => new TranslationInstance
+                    {
+                        QuestionnaireId = questionnaireIdentity.ToString(),
+                        TranslationId = translationDto.TranslationId,
+                        QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                        Type = translationDto.Type,
+                        TranslationIndex = translationDto.TranslationIndex,
+                        Value = translationDto.Value,
+                        Id = Guid.NewGuid().FormatGuid()
+                    }).ToList();
+
+            await this.StoreTranslationsAsync(questionnaireIdentity, filteredTranslations);
+
+            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
+                questionnaireIdentity.Version,
                 serializedQuestionnaireDocument);
 
             await this.questionnaireViewRepository.StoreAsync(new QuestionnaireView
             {
-                Id = questionnaireId,
+                Id = questionnaireIdentity.ToString(),
                 Identity = questionnaireIdentity,
                 Census = census,
                 Title = serializedQuestionnaireDocument.Title

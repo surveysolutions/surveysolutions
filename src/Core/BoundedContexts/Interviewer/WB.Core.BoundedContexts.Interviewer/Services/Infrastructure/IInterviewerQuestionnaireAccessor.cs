@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
     public interface IInterviewerQuestionnaireAccessor
     {
         Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument,
-            bool census);
+            bool census, List<TranslationDto> translationDtos);
 
         Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity);
 
