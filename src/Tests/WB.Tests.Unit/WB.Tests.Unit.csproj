@@ -376,6 +376,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_with_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_without_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_changed_answer_for_filtered_question_with_filter_on_options.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\TextQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_answering_and_answer_is_whitespace.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
@@ -689,7 +691,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_39_items_and_this_questions_is_roster_size.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_59_items_and_this_questions_is_roster_size.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_substitution_title_changed.cs" />
