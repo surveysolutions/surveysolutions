@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    internal class when_answering_roster_size_numeric_question_with_big_value_and_question_was_answered : IntegerQuestionViewModelTestContext
+    internal class when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion();
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion(isLongRosterSize: true);
 
             integerModel = CreateIntegerQuestionViewModel(
                 interviewRepository: interviewRepository,
@@ -34,12 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         Because of = () =>
         {
-            integerModel.Answer = 70;
+            integerModel.Answer = 201;
             integerModel.ValueChangeCommand.Execute();
         };
 
         It should_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '201' is incorrect because answer is greater than Roster upper bound '200'."), Times.Once);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
