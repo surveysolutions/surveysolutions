@@ -282,10 +282,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter;
 
-            if (roster.RosterSizeQuestionId != rosterSizeQuestionId)
+            var areTitlesForUnsavedRosterSizeRequested = roster.RosterSizeQuestionId != rosterSizeQuestionId;
+            if (areTitlesForUnsavedRosterSizeRequested)
             {
-                var targetRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).Union(rosterSizeQuestionId.ToEnumerable()).ToArray();
-                questionFilter = q => q.Where(x => x.ParentGroupId == rosterId || x.RosterScopeIds.SequenceEqual(targetRosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+                var prospectiveRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).Union(rosterSizeQuestionId.ToEnumerable()).ToArray();
+                questionFilter = q => q.Where(x => x.ParentGroupId == rosterId || x.RosterScopeIds.SequenceEqual(prospectiveRosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
             }
             else
             {
