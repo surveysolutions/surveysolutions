@@ -964,7 +964,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 40..
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 200..
         /// </summary>
         internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {

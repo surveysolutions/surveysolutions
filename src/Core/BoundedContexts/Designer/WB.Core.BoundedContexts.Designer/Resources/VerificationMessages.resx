@@ -352,7 +352,7 @@
     <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be greater than 40.</value>
+    <value>Max number of answers for roster size question cannot be greater than 200.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
