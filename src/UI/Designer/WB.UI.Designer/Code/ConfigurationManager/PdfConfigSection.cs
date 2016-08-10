@@ -75,5 +75,4 @@ namespace WB.UI.Designer.Code.ConfigurationManager
             }
         }
     }
-
 }
