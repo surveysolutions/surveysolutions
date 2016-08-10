@@ -797,7 +797,7 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_and_interviewer_locked_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_62.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_negative_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_answer_on_numeric_question_which_contains_comma.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_column_duplicates.cs" />
@@ -873,14 +873,14 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_and_roster_has_no_roster_title_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_and_roster_has_roster_title_question.cs" />
     <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\HeadquarterUserCommandValidatorTestContext.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_41_on_numeric_int_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_61_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_minus_1_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_41_selected_options_on_multioption_question_which_triggers_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_41_strings_on_textlist_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_61_selected_options_on_multioption_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_61_strings_on_textlist_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
