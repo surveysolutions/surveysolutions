@@ -61,7 +61,7 @@
         };
         $(function() {
             var signInApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Users", action = "Login"})';
-            var homePageUrl = '@Url.Action("Index", "Questionnaire")';
+            var homePageUrl = '@Model.HomeUrl';
 
             var shouldUseRecaptcha = @Model.ShouldShowCaptcha.ToString().ToLower();
 
