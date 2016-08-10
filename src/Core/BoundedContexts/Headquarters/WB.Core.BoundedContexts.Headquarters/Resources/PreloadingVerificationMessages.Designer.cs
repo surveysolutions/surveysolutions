@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster Id is inconsistant with roster size..
+        ///   Looks up a localized string similar to Roster Id is inconsistent with roster size..
         /// </summary>
         public static string PL0009_RosterIdIsInconsistantWithRosterSizeQuestion {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General error occured..
+        ///   Looks up a localized string similar to General error occurred..
         /// </summary>
         public static string PL0011_GeneralError {
             get {
