@@ -484,7 +484,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample creation was succefully completed..
+        ///   Looks up a localized string similar to Sample creation was successfully completed..
         /// </summary>
         internal static string SampleCreationCompleted {
             get {
@@ -511,7 +511,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample import is successfuly completed.
+        ///   Looks up a localized string similar to Sample import is successfully completed.
         /// </summary>
         internal static string SampleSuccess {
             get {
