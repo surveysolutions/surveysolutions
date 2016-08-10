@@ -142,13 +142,13 @@
     <value>Roster record does not have a parent.</value>
   </data>
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
-    <value>Roster Id is inconsistant with roster size.</value>
+    <value>Roster Id is inconsistent with roster size.</value>
   </data>
   <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
     <value>Linked question is not supported in data preloading.</value>
   </data>
   <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>General error occured.</value>
+    <value>General error occurred.</value>
   </data>
   <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
     <value>Question was not found.</value>
