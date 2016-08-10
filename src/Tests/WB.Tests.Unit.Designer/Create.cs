@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -1080,5 +1081,53 @@ namespace WB.Tests.Unit.Designer
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
                 questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+
+        public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
+        {
+            return new NumericDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                IsInteger = true,
+                Title = "Numeric Integer",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0]
+            };
+        }
+
+        public static QuestionDetailsView TextDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
+        {
+            return new TextDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                Title = "Text",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0]
+            };
+        }
+
+        public static GroupAndRosterDetailsView GroupAndRosterDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null,
+            Guid? rosterSizeQuestionId = null)
+        {
+            return new GroupAndRosterDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                Title = "Numeric Ro",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0],
+                RosterSizeQuestionId = rosterSizeQuestionId
+            };
+        }
+
+        public static QuestionsAndGroupsCollectionView QuestionsAndGroupsCollectionView(GroupAndRosterDetailsView[] groups, QuestionDetailsView[] questions)
+        {
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = groups.ToList(),
+                Questions = questions.ToList()
+            };
+        }
     }
 }
