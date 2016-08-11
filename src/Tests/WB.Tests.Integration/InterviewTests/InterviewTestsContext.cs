@@ -119,7 +119,7 @@ namespace WB.Tests.Integration.InterviewTests
             ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
-
+            
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 

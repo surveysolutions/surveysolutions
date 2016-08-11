@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.HasQuestion(validatingQuestionId) == true
                     && _.GetQuestionType(validatingQuestionId) == QuestionType.MultyOption
-                    && _.GetAnswerOptionsAsValues(validatingQuestionId) == new decimal[] { 1, 2, 3, 4 }
+                    && _.GetMultiSelectAnswerOptionsAsValues(validatingQuestionId) == new decimal[] { 1, 2, 3, 4 }
                     && _.GetMaxSelectedAnswerOptions(validatingQuestionId) == 2
                 );
 

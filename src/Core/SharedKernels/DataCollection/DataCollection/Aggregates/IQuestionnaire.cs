@@ -58,12 +58,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
-        IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
+        IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId);
 
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
-        
+
+        CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
+
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
         decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);

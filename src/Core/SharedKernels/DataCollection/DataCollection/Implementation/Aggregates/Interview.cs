@@ -2848,7 +2848,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] selectedValues, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
-            List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
+            List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId).ToList();
 
             IEnumerable<decimal> rosterInstanceIds = selectedValues.ToList();
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
@@ -2904,7 +2904,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
             ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
-            List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(question.Id).ToList();
+            List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(question.Id).ToList();
 
             IEnumerable<decimal> rosterInstanceIds = answer.Where(answeredOption => answeredOption.Yes).Select(answeredOption => answeredOption.OptionValue).ToList();
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(
@@ -4111,13 +4111,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
         {
-            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
-
-            bool valueIsNotOneOfAvailable = !availableValues.Contains(value);
-            if (valueIsNotOneOfAvailable)
+            var availableValues = questionnaire.GetOptionForQuestionByOptionValue(questionId, value);
+            
+            if (availableValues == null)
                 throw new InterviewException(string.Format(
-                    "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues), EventSourceId));
+                    "For question {0} was provided selected value {1} as answer. InterviewId: {2}",
+                    FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
         }
 
         private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(IReadOnlyInterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, RosterVector rosterVector, decimal value, IQuestionnaire questionnaire)
@@ -4137,7 +4136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
             string parentAnswer = AnswerUtils.AnswerToString(answer);
 
-            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture) != childParentValue;
+            var answerNotExistsInParent = Convert.ToInt32(Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture)) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
@@ -4146,7 +4145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
         {
-            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
+            IEnumerable<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId);
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)

@@ -6,6 +6,7 @@ using MvvmCross.Plugins.Messenger;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -38,6 +39,12 @@ namespace WB.Tests.Integration
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<IFileSystemAccessor>())
                 .Returns(fileSystemIoAccessor);
+
+            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(questionOptionsRepository);
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 && _.HasQuestion(multyOptionAnsweredQuestionId) == true
                 && _.GetQuestionType(multyOptionAnsweredQuestionId) == QuestionType.MultyOption
-                && _.GetAnswerOptionsAsValues(multyOptionAnsweredQuestionId) == new decimal[] { 1, 2, 3 }
+                && _.GetMultiSelectAnswerOptionsAsValues(multyOptionAnsweredQuestionId) == new decimal[] { 1, 2, 3 }
                 && _.IsQuestionLinked(multyOptionAnsweredQuestionId) == false
 
                 && _.HasQuestion(answeredQuestionId) == true

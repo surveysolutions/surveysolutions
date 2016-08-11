@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Ninject.Selection;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -92,6 +88,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
                             x.Title == optionValue &&
+                            (x.TranslationId == translationIdAsString || x.TranslationId == null))
+                .OrderBy(x => x.TranslationId != null)
+                .FirstOrDefault();
+
+            if (categoricalQuestionOption == null)
+                return null;
+
+            return new CategoricalOption
+            {
+                ParentValue = categoricalQuestionOption.ParentValue.HasValue ? Convert.ToInt32(categoricalQuestionOption.ParentValue) : (int?)null,
+                Value = Convert.ToInt32(categoricalQuestionOption.Value),
+                Title = categoricalQuestionOption.Title
+            };
+        }
+
+        public CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+            var translationIdAsString = translationId.FormatGuid();
+
+            OptionView categoricalQuestionOption = null;
+
+            categoricalQuestionOption = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            x.Value == optionValue &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId != null)
                 .FirstOrDefault();

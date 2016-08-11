@@ -7,9 +7,11 @@ using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration
@@ -40,6 +42,8 @@ namespace WB.Tests.Integration
 
             Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
             Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
+
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
         }
 
         internal static class Stub<T> where T : class
