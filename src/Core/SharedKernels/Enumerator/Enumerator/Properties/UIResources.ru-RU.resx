@@ -410,4 +410,7 @@
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
     <value>Ответ не может быть пустым</value>
   </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Обложка</value>
+  </data>
 </root>
