@@ -209,6 +209,7 @@
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
     <Compile Include="Activities\BaseInterviewActivity.cs" />
+    <Compile Include="Activities\CoverInterviewFragment.cs" />
     <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
@@ -1025,6 +1026,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__remove_button_input.axml" />
+    <AndroidResource Include="Resources\layout\interview_cover_screen.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

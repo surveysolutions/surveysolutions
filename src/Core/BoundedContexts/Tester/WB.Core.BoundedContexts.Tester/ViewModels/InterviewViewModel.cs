@@ -64,6 +64,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
                     completeInterviewViewModel.Init(this.interviewId, this.navigationState);
                     return completeInterviewViewModel;
+                case ScreenType.Cover:
+                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
+                    coverInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return coverInterviewViewModel;
                 default:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
                     activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);

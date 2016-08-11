@@ -1,7 +1,6 @@
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Shared.Enumerator.Activities;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
-namespace WB.UI.Interviewer.Activities
+namespace WB.UI.Shared.Enumerator.Activities
 {
     public class CoverInterviewFragment : BaseFragment<CoverInterviewViewModel>
     {
