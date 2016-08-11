@@ -154,7 +154,7 @@
 
                 $scope.saveRoster = function (callback) {
                     if ($scope.editRosterForm.$valid) {
-
+                        $scope.showRosterTitlesInList();
                         commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function () {
                             $scope.initialRoster = angular.copy($scope.activeRoster);
 
