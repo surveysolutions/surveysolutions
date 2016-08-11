@@ -159,6 +159,7 @@
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\InterviewDetails\CountOfInvalidEntitiesIncreasedMessage.cs" />
+    <Compile Include="ViewModels\InterviewDetails\CoverInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
