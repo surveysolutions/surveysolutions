@@ -10,6 +10,7 @@
                 $scope.selectedListQuestion = null;
                 $scope.selectedTitleQuestion = null;
 
+                var fixedRosterLimit = 200;
                 var saveRoster = 'ctrl+s';
 
                 if (hotkeys.get(saveRoster) !== false) {
@@ -33,8 +34,12 @@
                 $scope.onKeyPressInOptions = function (keyEvent) {
                     if (keyEvent.which === 13) {
                         keyEvent.preventDefault();
+
+                        if ($scope.wasTitlesLimitReached())
+                            return;
+
                         utilityService.moveFocusAndAddOptionIfNeeded(
-                            event.target ? event.target : event.srcElement,
+                            keyEvent.target ? keyEvent.target : keyEvent.srcElement,
                             ".fixed-roster-titles-editor",
                             ".fixed-roster-titles-editor input.fixed-roster-value-editor",
                             $scope.activeRoster.fixedRosterTitles,
@@ -63,6 +68,7 @@
                         $scope.editRosterForm.$setPristine();
                     }
                 };
+
                 var getSelected = function (collection, id) {
                     if (_.isNull(id)) return null;
 
@@ -78,6 +84,10 @@
                     $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
                     $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
                     $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
+                };
+
+                $scope.wasTitlesLimitReached = function () {
+                    return $scope.activeRoster.fixedRosterTitles.length >= fixedRosterLimit;
                 };
 
                 $scope.selectNumericQuestion = function (numericId) {
