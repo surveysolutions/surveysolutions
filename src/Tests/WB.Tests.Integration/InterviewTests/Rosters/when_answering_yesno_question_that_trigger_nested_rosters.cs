@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Yes(10), Yes(20), Yes(40)));
 
                 var sidebarViewModel = Setup.SidebarSectionViewModel(questionnaireDocument, interview);
-                sidebarViewModel.Sections.First().Expanded = true;
+                sidebarViewModel.Sections.ElementAt(1).Expanded = true;
 
                 using (var eventContext = new EventContext())
                 {
