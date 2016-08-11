@@ -80,6 +80,7 @@ namespace WB.UI.Shared.Enumerator
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
+                {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
