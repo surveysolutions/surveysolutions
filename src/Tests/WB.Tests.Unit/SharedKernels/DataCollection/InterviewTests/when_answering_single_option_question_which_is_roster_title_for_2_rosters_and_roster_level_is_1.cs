@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             (_
                 => _.HasQuestion(questionId) == true
                 && _.GetQuestionType(questionId) == QuestionType.SingleOption
-                && _.GetAnswerOptionsAsValues(questionId) == new[] { 2, (decimal) 4.5, selectedOptionValue, -43 }
+                && _.GetOptionForQuestionByOptionValue(questionId, selectedOptionValue) == new CategoricalOption() {Value = Convert.ToInt32(selectedOptionValue), Title = "test"}
                 && _.GetAnswerOptionTitle(questionId, selectedOptionValue) == selectedOptionTitle
                 && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                 && _.DoesQuestionSpecifyRosterTitle(questionId) == true

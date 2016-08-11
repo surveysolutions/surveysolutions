@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containing__parse____decimal = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("parse", "decimal");
+            exception.Message.ToLower().ToSeparateWords().ShouldContain("no", "parent");
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static readonly Guid questionId = Guid.Parse("00000000000000000000000000000000");

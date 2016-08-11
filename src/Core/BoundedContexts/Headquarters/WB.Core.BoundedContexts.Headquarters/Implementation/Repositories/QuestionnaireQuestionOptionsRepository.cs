@@ -18,5 +18,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionText(questionId, optionText, translationId);
         }
+
+        public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
+            ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, decimal optionValue, Guid? translationId)
+        {
+            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionValue(questionId, optionValue, translationId);
+        }
     }
 }

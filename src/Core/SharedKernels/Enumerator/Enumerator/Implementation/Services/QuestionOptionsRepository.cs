@@ -26,5 +26,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return optionsRepository.GetQuestionOption(qestionnaireIdentity, questionId, optionText, translationId);
         }
+
+        public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
+            ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, decimal optionValue, Guid? translationId)
+        {
+            return optionsRepository.GetQuestionOptionByValue(qestionnaireIdentity, questionId, optionValue, translationId);
+        }
     }
 }
