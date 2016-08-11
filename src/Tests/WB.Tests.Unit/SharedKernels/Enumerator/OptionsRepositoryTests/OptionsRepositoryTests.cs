@@ -45,7 +45,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var answerCodes = Enumerable.Range(0, 300).Reverse().Select(Convert.ToDecimal).ToArray();
 
             var options = new List<Answer>();
             options.Add(Create.Entity.Answer(1.ToString(), 1));
@@ -84,6 +83,90 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             Assert.That(actual, Is.Not.Empty);
             Assert.That(actual.Count, Is.EqualTo(2));
             Assert.That(actual.First().Title, Is.EqualTo(optionTranslationValue));
+        }
+
+        [Test]
+        public async Task should_return_requested_option_by_title()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var options = new List<Answer>();
+            options.Add(Create.Entity.Answer(1.ToString(), 1));
+            options.Add(Create.Entity.Answer(2.ToString(), 2));
+
+
+            SingleQuestion question = Create.Entity.SingleQuestion(
+                id: questionId,
+                variable: "cat",
+                options: options,
+                isFilteredCombobox: true);
+
+            var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var optionTranslationValue = "test";
+
+            var translations = new List<TranslationDto>()
+            {
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = questionId,
+                    TranslationIndex = 1.ToString(),
+                    Value = optionTranslationValue,
+                    Type = TranslationType.OptionTitle
+                }
+            };
+
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+            var filteredQuestionOption = storage.GetQuestionOption(questionnaireIdentity, questionId, 1.ToString(), translationId);
+
+            Assert.That(filteredQuestionOption, Is.Not.Null);
+            Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task should_return_requested_option_by_value()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var options = new List<Answer>();
+            options.Add(Create.Entity.Answer(1.ToString(), 1));
+            options.Add(Create.Entity.Answer(2.ToString(), 2));
+
+
+            SingleQuestion question = Create.Entity.SingleQuestion(
+                id: questionId,
+                variable: "cat",
+                options: options,
+                isFilteredCombobox: true);
+
+            var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var optionTranslationValue = "test";
+
+            var translations = new List<TranslationDto>()
+            {
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = questionId,
+                    TranslationIndex = 1.ToString(),
+                    Value = optionTranslationValue,
+                    Type = TranslationType.OptionTitle
+                }
+            };
+
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+            var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
+
+            Assert.That(filteredQuestionOption, Is.Not.Null);
+            Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
         }
     }
 }
