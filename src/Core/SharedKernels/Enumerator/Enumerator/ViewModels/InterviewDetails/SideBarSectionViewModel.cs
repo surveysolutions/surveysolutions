@@ -109,6 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
         }
 
+        // remove code duplication
         public void InitCompleteScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
         {
             this.interviewId = interviewId;
@@ -129,6 +130,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
         }
 
+
+        public void InitCoverScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
+        {
+            this.interviewId = interviewId;
+
+            this.eventRegistry.Subscribe(this, interviewId);
+
+            this.Parent = null;
+            this.HasChildren = false;
+            this.NodeDepth = 0;
+            this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Cover;
+            this.Title.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
+            groupStateViewModel.Init(interviewId, null);
+
+            this.SideBarGroupState = groupStateViewModel;
+            this.ScreenType = ScreenType.Cover;
+            this.NavigationState = navigationState;
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
+            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
+        }
+
         void OnBeforeScreenChanged(BeforeScreenChangedEventArgs eventArgs)
         {
             this.IsCurrent = false;
@@ -139,17 +161,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.ScreenType != eventArgs.TargetScreen)
                 return;
 
-            if (eventArgs.TargetScreen == ScreenType.Complete)
+            switch (eventArgs.TargetScreen)
             {
-                this.IsCurrent = true;
-            }
-            else if (this.SectionIdentity.Equals(eventArgs.TargetGroup))
-            {
-                this.IsCurrent = true;
-                if (!this.Expanded)
-                {
-                    this.Expanded = true;
-                }
+                case ScreenType.Complete:
+                case ScreenType.Cover:
+                    this.IsCurrent = true;
+                    break;
+                default:
+                    if (this.SectionIdentity.Equals(eventArgs.TargetGroup))
+                    {
+                        this.IsCurrent = true;
+                        if (!this.Expanded)
+                        {
+                            this.Expanded = true;
+                        }
+                    }
+                    break;
             }
         }
 
@@ -252,11 +279,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.messenger.Publish(new SectionChangeMessage(this));
 
-            var navigationIdentity = this.ScreenType == ScreenType.Complete 
-                ? NavigationIdentity.CreateForCompleteScreen()
-                : NavigationIdentity.CreateForGroup(this.SectionIdentity);
+            NavigationIdentity navigationIdentity;
+            switch (this.ScreenType)
+            {
+                case ScreenType.Complete:
+                    navigationIdentity = NavigationIdentity.CreateForCompleteScreen();
+                    break;
+                case ScreenType.Cover:
+                    navigationIdentity = NavigationIdentity.CreateForCoverScreen();
+                    break;
+                default:
+                    navigationIdentity = NavigationIdentity.CreateForGroup(this.SectionIdentity);
+                    break;
+            }
 
-             this.NavigationState.NavigateTo(navigationIdentity);
+            this.NavigationState.NavigateTo(navigationIdentity);
         }
 
         private List<SideBarSectionViewModel> GenerateChildNodes()
@@ -273,7 +310,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            if (ScreenType == ScreenType.Complete)
+            if (ScreenType == ScreenType.Complete || ScreenType == ScreenType.Cover)
                 return;
 
             var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
@@ -306,7 +343,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void RefreshHasChildrenFlag()
         {
-            if (ScreenType == ScreenType.Complete)
+            if (ScreenType == ScreenType.Complete || ScreenType == ScreenType.Cover)
                 return;
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
