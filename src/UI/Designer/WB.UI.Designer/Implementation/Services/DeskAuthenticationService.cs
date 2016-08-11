@@ -24,8 +24,8 @@ namespace WB.UI.Designer.Implementation.Services
             var json = JsonConvert.SerializeObject(new Dictionary<string, string>{
                 {"uid", userId.FormatGuid() },
                 {"expires", DateTime.UtcNow.AddHours(24).ToString("o")},
-                {"customer_email",  userName},
-                {"customer_name", userEmail}
+                {"customer_email", userEmail },
+                {"customer_name", userName }
             });
 
             string deskReturnUrl;
@@ -62,18 +62,19 @@ namespace WB.UI.Designer.Implementation.Services
                 aesAlg.IV = IV;
 
                 // Create a decryptor to perform the stream transform
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
+                using (ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV))
                 {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (MemoryStream msEncrypt = new MemoryStream())
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                         {
-                            swEncrypt.Write(json);
-                        }
+                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                            {
+                                swEncrypt.Write(json);
+                            }
 
-                        encrypted = msEncrypt.ToArray();
+                            encrypted = msEncrypt.ToArray();
+                        }
                     }
                 }
             }
