@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
