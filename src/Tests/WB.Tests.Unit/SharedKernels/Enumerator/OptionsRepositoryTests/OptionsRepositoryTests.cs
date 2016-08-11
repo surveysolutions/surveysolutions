@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
-        public async Task should_()
+        public async Task should_return_options_respecting_translation()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 

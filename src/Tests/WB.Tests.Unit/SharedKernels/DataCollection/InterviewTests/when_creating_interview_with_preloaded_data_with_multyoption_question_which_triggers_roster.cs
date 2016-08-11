@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                  => _.GetQuestionType(prefilledQuestionId) == QuestionType.MultyOption
                    && _.HasQuestion(prefilledQuestionId) == true
-                   && _.GetAnswerOptionsAsValues(prefilledQuestionId) == new decimal[] { 1, 2, 3 }
+                   && _.GetMultiSelectAnswerOptionsAsValues(prefilledQuestionId) == new decimal[] { 1, 2, 3 }
                    && _.GetRosterGroupsByRosterSizeQuestion(prefilledQuestionId) == new Guid[] { rosterGroupId }
 
                    && _.HasGroup(rosterGroupId) == true

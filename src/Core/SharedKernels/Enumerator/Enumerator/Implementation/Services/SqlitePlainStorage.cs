@@ -185,36 +185,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.asyncStorage.DeleteAllAsync<TEntity>();
         }
 
-        /*public IReadOnlyCollection<TEntity> Query(
-            Expression<Func<TEntity, bool>> wherePredicate,
-            Expression<Func<TEntity, bool>> groupingPredicate, 
-            Expression<Func<TEntity, bool>> selectPredicate)
-        {
-            using (this.connection.Lock())
-            {
-                return this.connection.Table<TEntity>()
-                    .Where(wherePredicate)
-                    .GroupBy(groupingPredicate)
-                    .Select(selectPredicate)
-                    .ToReadOnlyCollection();
-            }
-        }*/
-
-
-        /*public IReadOnlyCollection<TEntity> QueryOption(Expression<Func<TEntity, bool>> wherePredicate,
-            Expression<Func<TEntity, bool>> grouppingPredicate,
-            Expression<Func<TEntity, bool>> selectPredicate)
-        {
-            using (this.storage.Lock())
-            {
-                return this.storage.Table<TEntity>()
-                    .GroupBy(grouppingPredicate)
-                    .Select(group => group.Where(wherePredicate).First())
-                    .ToReadOnlyCollection();
-            }
-        }*/
-
-
         public void Dispose()
         {
             this.connection.Dispose();

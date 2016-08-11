@@ -17,7 +17,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId,
             int? parentValue, string filter, Guid? translationId);
 
-        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionValue, Guid? translationId);
+        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionText, Guid? translationId);
+
+        CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId);
 
         Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId);
         //Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument);
