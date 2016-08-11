@@ -361,15 +361,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 foreach (var answer in question.Answers)
                 {
+                    var parentOption = string.IsNullOrEmpty(answer.ParentValue)
+                        ? (int?) null
+                        : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
+
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                        answer.ParentCode == parentQuestionValue)
+                        parentOption == parentQuestionValue)
                         yield return
                             new CategoricalOption()
                             {
                                 Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
                                 Title = answer.AnswerText,
-                                ParentValue =
-                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                                ParentValue = parentOption
                             };
                 }
             }
@@ -1085,25 +1088,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot check does question with id '{0}' have options for parent value because it's type {1} does not support answer options.",
-                    questionId, question.QuestionType));
-
-            List<decimal> parentValuesFromQuestion = question
-                .Answers
-                .Select(answer => answer.ParentValue)
-                .Where(answerParentValue => answerParentValue != null)
-                .Select(answerParentValue => ParseAnswerOptionParentValueOrThrow(answerParentValue, questionId))
-                .Distinct()
-                .ToList();
-
-            return parentValuesFromQuestion.Contains(parentValue);
+            return GetOptionsForQuestion(questionId, Convert.ToInt32(parentValue), string.Empty).Any();
         }
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedQuestions()
