@@ -388,6 +388,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cover.
+        /// </summary>
+        public static string Interview_Cover_Screen_Title {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {

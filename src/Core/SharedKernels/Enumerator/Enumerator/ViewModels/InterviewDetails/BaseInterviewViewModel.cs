@@ -8,14 +8,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -151,21 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
-        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
-        {
-            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
-            {
-                var completeInterviewViewModel = interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
-                return completeInterviewViewModel;
-            }
-            else
-            {
-                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                return activeStageViewModel;
-            }
-        }
+        protected abstract MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs);
 
         private void UpdateGroupStatus(Identity groupIdentity)
         {

@@ -1,5 +1,4 @@
-﻿using Android.App;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+﻿using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {

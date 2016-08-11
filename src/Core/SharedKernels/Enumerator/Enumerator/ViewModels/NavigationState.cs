@@ -26,9 +26,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual ScreenType CurrentScreenType { get; private set; }
 
         public NavigationIdentity CurrentNavigationIdentity
-            => this.CurrentScreenType == ScreenType.Complete
-                ? NavigationIdentity.CreateForCompleteScreen()
-                : NavigationIdentity.CreateForGroup(this.CurrentGroup);
+        {
+            get
+            {
+                switch (this.CurrentScreenType)
+                {
+                    case ScreenType.Complete:
+                        return NavigationIdentity.CreateForCompleteScreen();
+                    case ScreenType.Cover:
+                        return NavigationIdentity.CreateForCoverScreen();
+                    default:
+                        return NavigationIdentity.CreateForGroup(this.CurrentGroup);
+                }
+            }
+        }
 
         private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
@@ -86,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            if (navigationIdentity.TargetScreen == ScreenType.Complete)
+            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover)
                 return true;
 
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);
