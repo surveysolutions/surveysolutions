@@ -196,7 +196,7 @@
                     </div>
                     <p>
                         <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
-                        <button class="btn btn-link" ng-click="addFixedTitle()">Add item</button>
+                        <button class="btn btn-link" ng-hide="wasTitlesLimitReached()" ng-click="addFixedTitle()">Add item</button>
                     </p>
                 </div>
                 <div ng-if="!activeRoster.useListAsRosterTitleEditor">
