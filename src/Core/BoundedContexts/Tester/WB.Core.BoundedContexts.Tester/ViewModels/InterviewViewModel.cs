@@ -1,7 +1,4 @@
-using System;
 using System.Linq;
-using System.Threading.Tasks;
-
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -56,6 +53,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             else
             {
                 this.viewModelNavigationService.NavigateToDashboard();
+            }
+        }
+
+        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            switch (this.navigationState.CurrentScreenType)
+            {
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+                    completeInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                default:
+                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                    activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    return activeStageViewModel;
             }
         }
     }

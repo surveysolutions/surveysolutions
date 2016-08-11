@@ -66,17 +66,20 @@ namespace WB.UI.Interviewer.ViewModel
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
-            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+            switch (this.navigationState.CurrentScreenType)
             {
-                var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
-                return completeInterviewViewModel;
-            }
-            else
-            {
-                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                return activeStageViewModel;
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                    completeInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                case ScreenType.Cover:
+                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
+                    coverInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return coverInterviewViewModel;
+                default:
+                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                    activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    return activeStageViewModel;
             }
         }
     }

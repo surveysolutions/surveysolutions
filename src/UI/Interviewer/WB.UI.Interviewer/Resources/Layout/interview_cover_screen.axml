@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+        style="@style/Interview_Complete_Screen_Scroll">
+  <LinearLayout
+      style="@style/Interview_QuestionWithDivider"
+      local:MvxBind="HideKeyboardOnClick .">
+    <LinearLayout style="@style/Interview_QuestionWithDivider"
+      local:MvxBind="HideKeyboardOnClick .">
+      <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+        <LinearLayout style="@style/Interview_Question_Header">
+          <TextView
+              style="@style/Interview_Question_Title"
+              local:MvxBind="Text Localization('Interview_Complete_Screen_Description');" />
+        </LinearLayout>
+      </LinearLayout >
+
+      <View style="@style/Interview_Entity_Divider" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+      <LinearLayout style="@style/Interview_Question_Header">
+        <TextView style="@style/Interview_Complete_Screen_Text" local:MvxBind="Text Localization('Interview_Complete_Questions_Status')" />
+      </LinearLayout>
+
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>
