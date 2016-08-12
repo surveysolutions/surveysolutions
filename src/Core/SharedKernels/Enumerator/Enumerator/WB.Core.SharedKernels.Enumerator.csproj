@@ -91,7 +91,7 @@
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\AsyncRunner.cs" />
     <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
-    <Compile Include="Implementation\Services\EntityWithErrorsViewModelFactory.cs" />
+    <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InMemoryAsyncPlainStorage.cs" />
@@ -163,6 +163,7 @@
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\CoverStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
