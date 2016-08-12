@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-        style="@style/Interview_Complete_Screen_Scroll">
-  <LinearLayout
-      style="@style/Interview_QuestionWithDivider"
-      local:MvxBind="HideKeyboardOnClick .">
-    <LinearLayout style="@style/Interview_QuestionWithDivider"
-      local:MvxBind="HideKeyboardOnClick .">
+            xmlns:local="http://schemas.android.com/apk/res-auto"
+            style="@style/Interview_Complete_Screen_Scroll">
+    <LinearLayout
+        style="@style/Interview_QuestionWithDivider"
+        local:MvxBind="HideKeyboardOnClick .">
+        <LinearLayout style="@style/Interview_QuestionWithDivider"
+            local:MvxBind="HideKeyboardOnClick .">
       
-    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-        <LinearLayout style="@style/Interview_Question_Header">
-          <TextView
-              style="@style/Interview_Question_Title"
-              local:MvxBind="Text QuestionnaireTitle;" />
+            <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
+                <LinearLayout style="@style/Interview_Question_Header">
+                <TextView
+                    style="@style/Interview_Cover_Screen_Header"
+                    local:MvxBind="Text QuestionnaireTitle;" />
+                </LinearLayout>
+            </LinearLayout >
+
+        <View style="@style/Interview_Entity_Divider" />
+          
         </LinearLayout>
-    </LinearLayout >
 
-    <View style="@style/Interview_Entity_Divider" />
-    
+        <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical">
+            <MvxListView 
+                      style="@style/Interview_Cover_Prefilled_Answers"
+                      local:MvxBind="ItemsSource PrefilledQuestions"
+                      local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
+        </LinearLayout>
+      
+        <View style="@style/Interview_Entity_Divider" />
+      
+        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
+            
+            <Button
+                style="@style/Interview_Complete_Screen_Button"
+                local:MvxBind="HideKeyboardOnClick .; 
+                Click StartInterviewCommand; 
+                Text Localization('PrefilledQuestions_StartInterview'); "/>
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-      <MvxListView style="@style/Interview_Question"
-                   local:MvxBind="ItemsSource PrefilledQuestions"
-                   local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
-
-    </LinearLayout>
-
-    <View style="@style/Interview_Entity_Divider" />
-
-    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-      <Button
-          style="@style/Interview_Complete_Screen_Button"
-          local:MvxBind="HideKeyboardOnClick .; 
-          Click StartInterviewCommand; 
-          Text Localization('PrefilledQuestions_StartInterview'); "/>
-    </LinearLayout>
-  </LinearLayout>
 </ScrollView>
