@@ -1197,6 +1197,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
+        public IEnumerable<Identity> GetCommentedQuestionsInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            foreach (var sectionInstance in sectionInstances)
+            {
+                IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(sectionInstance.Id);
+
+                var invalidEntitiesInSection = this
+                    .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
+                    .Select(x => new Identity(x.Id, x.RosterVector))
+                    .Select(x => new { Key = ConversionHelper.ConvertIdentityToString(x), Identity = x})
+                    .Where(x => this.notAnsweredQuestionsInterviewerComments.ContainsKey(x.Key) || (Answers.ContainsKey(x.Key) && !string.IsNullOrWhiteSpace(Answers[x.Key].InterviewerComment)))
+                    .Select(x => x.Identity);
+
+                foreach (var identity in invalidEntitiesInSection)
+                {
+                    yield return identity;
+                }
+            }
+        }
+
         public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
         {
             return this
@@ -1413,6 +1436,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue)
         {
             return this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
+        }
+
+        public int CountCommentedQuestions()
+        {
+            return this.Answers.Values.Count(x => !string.IsNullOrWhiteSpace(x.InterviewerComment))
+                + this.notAnsweredQuestionsInterviewerComments.Count;
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)

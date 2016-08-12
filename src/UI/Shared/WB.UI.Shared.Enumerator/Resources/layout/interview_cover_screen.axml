@@ -20,6 +20,18 @@
           
         </LinearLayout>
 
+        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical" local:MvxBind="Visibility Visibility(CountOfCommentedQuestions)">
+            <LinearLayout style="@style/Interview_Question_Header">
+                <TextView
+                    style="@style/Interview_Complete_Screen_Text"
+                    local:MvxBind="Text CountOfCommentedQuestions" />
+            </LinearLayout>
+            <MvxLinearLayout style="@style/Interview_Question_Header"
+                  android:orientation="vertical"
+                  local:MvxBind="ItemsSource CommentedEntities;"
+                  local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
+        </LinearLayout>
+
         <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical">
             <MvxListView 
                       style="@style/Interview_Cover_Prefilled_Answers"
