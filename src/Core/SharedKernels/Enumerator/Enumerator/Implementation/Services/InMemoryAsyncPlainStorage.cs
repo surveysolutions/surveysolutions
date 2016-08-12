@@ -46,6 +46,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate) => await Task.Run(() => this.Where(predicate));
 
+        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount)
+        {
+            return this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Take(takeCount).ToReadOnlyCollection();
+        }
+
         public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync() => await Task.Run(this.LoadAllAsync);
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate) => await Task.Run(() => this.CountAsync(predicate));

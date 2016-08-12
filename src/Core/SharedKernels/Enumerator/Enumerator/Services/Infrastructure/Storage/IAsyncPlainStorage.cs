@@ -19,6 +19,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 
         IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
         Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+
+        IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate,
+            Expression<Func<TEntity, int>> orderPredicate, int takeCount);
+
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
         TEntity FirstOrDefault();
         IReadOnlyCollection<TEntity> LoadAll();
