@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
+        private readonly CoverStateViewModel coverState;
         private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private IStatefulInterview interview;
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState, 
             InterviewStateViewModel interviewState,
+            CoverStateViewModel coverState,
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -55,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerToStringService = answerToStringService;
             this.groupState = groupState;
             this.interviewState = interviewState;
+            this.coverState = coverState;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.jsonSerializer = jsonSerializer;
@@ -134,17 +137,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetScreen != ScreenType.Group)
+            switch (eventArgs.TargetScreen)
             {
-                this.UpdateInterviewStatus(null);
-            }
-            else
-            {
-                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
-
-                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
-
-                this.UpdateGroupStatus(eventArgs.TargetGroup);
+                case ScreenType.Complete:
+                    this.interviewState.Init(this.navigationState.InterviewId, null);
+                    this.Status = this.interviewState.Status;
+                    break;
+                case ScreenType.Cover:
+                    this.coverState.Init(this.navigationState.InterviewId, null);
+                    this.Status = this.coverState.Status;
+                    break;
+                default:
+                    IEnumerable<Identity> questionsToListen = this.interview.GetChildQuestions(eventArgs.TargetGroup);
+                    this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+                    this.UpdateGroupStatus(eventArgs.TargetGroup);
+                    break;
             }
 
             this.CurrentStage.DisposeIfDisposable();
@@ -158,12 +165,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
             this.Status = this.groupState.Status;
-        }
-
-        private void UpdateInterviewStatus(Identity groupIdentity)
-        {
-            this.interviewState.Init(this.navigationState.InterviewId, groupIdentity);
-            this.Status = this.interviewState.Status;
         }
 
         private string GetAnswer(IQuestionnaire questionnaire, Guid referenceToQuestionId)
