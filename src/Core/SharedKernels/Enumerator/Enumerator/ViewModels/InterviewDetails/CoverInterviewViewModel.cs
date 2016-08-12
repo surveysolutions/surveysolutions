@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         protected readonly IPrincipal principal;
+        private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
 
         public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
@@ -34,7 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             DynamicTextViewModel dynamicTextViewModel, 
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
-            IAnswerToStringService answerToStringService)
+            IAnswerToStringService answerToStringService, 
+            IEntitiesListViewModelFactory entitiesListViewModelFactory)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -44,11 +46,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
-           
+            this.entitiesListViewModelFactory = entitiesListViewModelFactory;
         }
 
         public string QuestionnaireTitle { get; set; }
+
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
+
+        public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
+
+        public string CommentedEntitiesDescription { get; set; }
+        public int CountOfCommentedQuestions { get; set; }
 
         protected Guid interviewId;
         protected NavigationState navigationState;
@@ -75,7 +83,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
+
+            this.CountOfCommentedQuestions = interview.CountCommentedQuestions();
+            this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
+
+            this.CommentedEntitiesDescription = CommentedEntities.Count < this.CountOfCommentedQuestions
+                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors, entitiesListViewModelFactory.MaxNumberOfEntities)
+                : UIResources.Interview_Complete_Entities_With_Errors;
         }
+
 
         private IMvxCommand startInterviewCommand;
         private Identity firstSectionIdentity;

@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
-        private readonly IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory;
+        private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         protected readonly IPrincipal principal;
 
         public InterviewStateViewModel InterviewState { get; set; }
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ICommandService commandService,
             IPrincipal principal, 
             IMvxMessenger messenger,
-            IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory,
+            IEntitiesListViewModelFactory entitiesListViewModelFactory,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel)
         {
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.commandService = commandService;
             this.principal = principal;
             this.messenger = messenger;
-            this.entityWithErrorsViewModelFactory = entityWithErrorsViewModelFactory;
+            this.entitiesListViewModelFactory = entitiesListViewModelFactory;
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
@@ -59,11 +59,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UnansweredCount = questionsCount - this.AnsweredCount;
 
             this.EntitiesWithErrors =
-                    entityWithErrorsViewModelFactory.GetEntities(interviewId, navigationState).ToList();
+                    this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
 
             this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
-                    entityWithErrorsViewModelFactory.MaxNumberOfEntities)
+                    this.entitiesListViewModelFactory.MaxNumberOfEntities)
                 : UIResources.Interview_Complete_Entities_With_Errors;
         }
 

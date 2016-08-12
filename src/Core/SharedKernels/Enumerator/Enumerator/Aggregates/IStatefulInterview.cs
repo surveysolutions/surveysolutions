@@ -133,5 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
+
+        int CountCommentedQuestions();
+
+        IEnumerable<Identity> GetCommentedQuestionsInInterview();
     }
 }
