@@ -19,11 +19,11 @@ namespace WB.UI.Designer.Implementation.Services
             this.deskSettings = deskSettings;
         }
 
-        public string GetReturnUrl(Guid userId, string userName, string userEmail)
+        public string GetReturnUrl(Guid userId, string userName, string userEmail, DateTime expiryDate)
         {
             var json = JsonConvert.SerializeObject(new Dictionary<string, string>{
                 {"uid", userId.FormatGuid() },
-                {"expires", DateTime.UtcNow.AddHours(24).ToString("o")},
+                {"expires", expiryDate.ToString("o")},
                 {"customer_email", userEmail },
                 {"customer_name", userName }
             });
@@ -31,11 +31,11 @@ namespace WB.UI.Designer.Implementation.Services
             string deskReturnUrl;
             using (AesManaged myAes = new AesManaged())
             {
-                byte[] encrypted = Encrypt(json, this.GenerateEncryptionKey(), myAes.IV);
+                byte[] encryptedJson = this.Encrypt(json, this.GenerateEncryptionKey(), myAes.IV);
 
-                byte[] combined = new byte[myAes.IV.Length + encrypted.Length];
+                byte[] combined = new byte[myAes.IV.Length + encryptedJson.Length];
                 Array.Copy(myAes.IV, 0, combined, 0, myAes.IV.Length);
-                Array.Copy(encrypted, 0, combined, myAes.IV.Length, encrypted.Length);
+                Array.Copy(encryptedJson, 0, combined, myAes.IV.Length, encryptedJson.Length);
 
                 var multipass = Convert.ToBase64String(combined);
 
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Implementation.Services
                 multipass = Uri.EscapeDataString(multipass);
                 signature = Uri.EscapeDataString(signature);
 
-                deskReturnUrl = string.Format(deskSettings.ReturnUrlFormat, this.deskSettings.SiteKey, multipass, signature);
+                deskReturnUrl = string.Format(this.deskSettings.ReturnUrlFormat, this.deskSettings.SiteKey, multipass, signature);
             }
 
             return deskReturnUrl;

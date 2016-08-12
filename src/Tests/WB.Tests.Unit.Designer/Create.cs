@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -47,6 +48,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
@@ -1128,6 +1130,11 @@ namespace WB.Tests.Unit.Designer
                 Groups = groups.ToList(),
                 Questions = questions.ToList()
             };
+        }
+
+        public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
+        {
+            return new DeskAuthenticationService(new DeskSettings(multipassKey, returnUrlFormat, siteKey));
         }
     }
 }
