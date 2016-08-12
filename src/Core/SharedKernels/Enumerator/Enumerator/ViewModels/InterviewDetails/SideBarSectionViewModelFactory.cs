@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionViewModel BuildCoverScreenSectionItem(NavigationState navigationState, string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
-            var interviewStateViewModel = this.serviceLocator.GetInstance<InterviewStateViewModel>();
+            var interviewStateViewModel = this.serviceLocator.GetInstance<CoverStateViewModel>();
             sideBarItem.InitCoverScreenItem(interviewId, interviewStateViewModel, navigationState);
             return sideBarItem;
         }

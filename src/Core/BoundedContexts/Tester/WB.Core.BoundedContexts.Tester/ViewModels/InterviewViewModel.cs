@@ -28,11 +28,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
+            CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer)
         {
             this.viewModelNavigationService = viewModelNavigationService;
