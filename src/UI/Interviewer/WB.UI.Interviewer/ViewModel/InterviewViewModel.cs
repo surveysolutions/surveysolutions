@@ -31,11 +31,12 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
+            CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer)
         {
             this.interviewRepository = interviewRepository;

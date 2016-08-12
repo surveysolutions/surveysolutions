@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -20,36 +19,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class CoverInterviewViewModel : MvxViewModel
     {
-        
-        private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
-        private readonly IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         protected readonly IPrincipal principal;
 
-        public InterviewStateViewModel InterviewState { get; set; }
+        public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
 
-        public CoverInterviewViewModel(
-            IViewModelNavigationService viewModelNavigationService,
-            ICommandService commandService,
+        public CoverInterviewViewModel(ICommandService commandService,
             IPrincipal principal,
-            IMvxMessenger messenger,
-            IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory,
-            InterviewStateViewModel interviewState,
+            CoverStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel, 
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IAnswerToStringService answerToStringService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
-            this.messenger = messenger;
-            this.entityWithErrorsViewModelFactory = entityWithErrorsViewModelFactory;
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
