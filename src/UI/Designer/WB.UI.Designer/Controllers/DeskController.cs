@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
@@ -45,7 +46,8 @@ namespace WB.UI.Designer.Controllers
             string deskReturnUrl = deskAuthenticationService.GetReturnUrl(
                 userHelper.WebUser.UserId,
                 this.userHelper.WebUser.UserName,
-                this.userHelper.WebUser.MembershipUser.Email);
+                this.userHelper.WebUser.MembershipUser.Email, 
+                DateTime.UtcNow.AddHours(24));
            
             return RedirectPermanent(deskReturnUrl);
         }
