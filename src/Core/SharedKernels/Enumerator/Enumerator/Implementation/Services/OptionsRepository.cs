@@ -53,29 +53,88 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             filter = filter ?? String.Empty;
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
-            var optionViews = this.optionsStorage
-                    .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                                x.QuestionId == questionIdAsString &&
-                                x.ParentValue == parentValueAsDecimal &&
-                                x.Title.ToLower().Contains(filter.ToLower()) &&
-                                (x.TranslationId == translationIdAsString || x.TranslationId == null))
-                    .GroupBy(y => new { y.Value , y.QuestionnaireId , y.QuestionId , y.ParentValue})
-                    .Select(group => group.OrderByDescending(x => x.TranslationId == translationIdAsString).First());
+            int batchsize = 15;
+            int lastLoadedSortIndex = -1;
 
-            var loadedBatch = optionViews.Select(x => new CategoricalOption
+            if (translationIdAsString == null)
             {
-                ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?) null,
-                Value = Convert.ToInt32(x.Value),
-                Title = x.Title
-            }).ToList();
+                List<OptionView> optionViews;
 
-            foreach (var option in loadedBatch)
+                do
+                {
+                    optionViews = this.optionsStorage
+                        .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                    x.QuestionId == questionIdAsString &&
+                                    x.ParentValue == parentValueAsDecimal &&
+                                    x.Title.ToLower().Contains(filter.ToLower()) &&
+                                    x.SortOrder > lastLoadedSortIndex &&
+                                    x.TranslationId == null,
+                               y => y.SortOrder,
+                               batchsize)
+                        .ToList();
+
+                    foreach (var option in optionViews)
+                    {
+                        yield return new CategoricalOption
+                        {
+                            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
+                            Value = Convert.ToInt32(option.Value),
+                            Title = option.Title
+                        };
+                    }
+                    lastLoadedSortIndex = optionViews.LastOrDefault()?.SortOrder ?? 0;
+
+                } while (optionViews.Any());
+            }
+
+            else
             {
-                yield return option;
+                List<OptionView> mixedOptions;
+                int startLoadedSortIndex = -1;
+
+                do
+                {
+                    mixedOptions = this.optionsStorage
+                            .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                             x.QuestionId == questionIdAsString &&
+                                             x.ParentValue == parentValueAsDecimal &&
+                                             x.Title.ToLower().Contains(filter.ToLower()) &&
+                                             x.SortOrder > lastLoadedSortIndex &&
+                                             (x.TranslationId == translationIdAsString || x.TranslationId == null),
+                                        y => y.SortOrder,
+                                        batchsize)
+                             .ToList();
+                    
+                    lastLoadedSortIndex = mixedOptions.LastOrDefault()?.SortOrder ?? 0;
+
+                    var defaultOptionValuesToCheck = mixedOptions.Where(x => x.TranslationId == null).Select(y => y.Value).ToList();
+
+                    var translatedOptions = this.optionsStorage
+                            .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                             x.QuestionId == questionIdAsString &&
+                                             x.ParentValue == parentValueAsDecimal &&
+                                             defaultOptionValuesToCheck.Contains(x.Value) &&
+                                             x.TranslationId == translationIdAsString ,
+                                        y => y.SortOrder,
+                                        batchsize)
+                             .Select(y => y.Value)
+                             .ToList();
+
+                    foreach (var option in mixedOptions.Where(x => x.TranslationId != null || !translatedOptions.Contains(x.Value)))
+                    {
+                        yield return new CategoricalOption
+                        {
+                            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?)null,
+                            Value = Convert.ToInt32(option.Value),
+                            Title = option.Title
+                        };
+                    }
+
+                } while (mixedOptions.Any());
             }
         }
 
-        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionValue, Guid? translationId)
+        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, Guid? translationId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
@@ -87,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             categoricalQuestionOption = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
-                            x.Title == optionValue &&
+                            x.Title == optionTitle &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId != null)
                 .FirstOrDefault();
@@ -181,7 +240,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         Value = value,
                         ParentValue = parentValue,
                         Title = y.Value,
-                        SortOrder = index++,
+                        SortOrder = ++index,
                         TranslationId = y.TranslationId.FormatGuid()
                     }).ToList();
 

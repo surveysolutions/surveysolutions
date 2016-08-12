@@ -86,6 +86,61 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
+        public async Task should_return_options_respecting_translation_with_no_extra()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var answerCodes = Enumerable.Range(0, 100).Reverse().Select(Convert.ToDecimal).ToArray();
+            var options = new List<Answer>();
+
+            foreach (var answerCode in answerCodes)
+            {
+                options.Add(Create.Entity.Answer(answerCode.ToString(), answerCode));
+            }
+
+            SingleQuestion question = Create.Entity.SingleQuestion(
+                id: questionId,
+                variable: "cat",
+                options: options,
+                isFilteredCombobox: true);
+
+            var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var translations = new List<TranslationDto>()
+            {
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = questionId,
+                    TranslationIndex = 11.ToString(),
+                    Value = 11.ToString() + "b",
+                    Type = TranslationType.OptionTitle
+                },
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = questionId,
+                    TranslationIndex = 21.ToString(),
+                    Value = 21.ToString() + "a",
+                    Type = TranslationType.OptionTitle
+                }
+            };
+
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+
+            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+
+            var filteredQuestionOptions = storage.GetFilteredQuestionOptions(questionnaireIdentity, questionId, null, null, translationId);
+
+            var actual = filteredQuestionOptions.Select(x => x.Value).ToList();
+            Assert.That(actual, Is.Not.Empty);
+            Assert.That(actual.Count, Is.EqualTo(100));
+            Assert.That(actual, Is.Ordered.Descending);
+
+        }
+
+        [Test]
         public async Task should_return_requested_option_by_title()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
