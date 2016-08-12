@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
                     (data, type) => new JsonAllTypesSerializer().DeserializeFromStream(new MemoryStream(data), type),
                     (type) => true)))
         {
-            TraceListener = new ConsoleTraceListener()
+            //TraceListener = new ConsoleTraceListener()
         },Substitute.For<ILogger>())
         {
         }
