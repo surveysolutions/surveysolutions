@@ -22,7 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments = null,
-            IOptionsRepository optionsRepository = null)
+            IOptionsRepository optionsRepository = null,
+            IAsyncPlainStorage<TranslationInstance>  translationRepository = null)
         {
             return new InterviewerQuestionnaireAccessor(
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 questionnaireDocuments: questionnaireDocuments ?? Mock.Of< IAsyncPlainStorage<QuestionnaireDocumentView>>(),
                 optionsRepository: optionsRepository ?? Mock.Of<IOptionsRepository>(),
-                translations: new InMemoryAsyncPlainStorage<TranslationInstance>());
+                translationsStorage: translationRepository ?? Mock.Of<IAsyncPlainStorage<TranslationInstance>>());
         }
     }
 }
