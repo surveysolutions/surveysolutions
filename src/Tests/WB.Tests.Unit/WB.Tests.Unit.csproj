@@ -333,6 +333,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\InterviewerQuestionnaireAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_getting_census_questionnaire_identities.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_remove_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_with_filtered_options.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
