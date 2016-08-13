@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
-        private readonly IAsyncPlainStorage<TranslationInstance> translations;
+        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
             IOptionsRepository optionsRepository, 
-            IAsyncPlainStorage<TranslationInstance> translations)
+            IAsyncPlainStorage<TranslationInstance> translationsStorage)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewFactory = interviewFactory;
             this.questionnaireDocuments = questionnaireDocuments;
             this.optionsRepository = optionsRepository;
-            this.translations = translations;
+            this.translationsStorage = translationsStorage;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
             await this.RemoveTranslationsAsync(questionnaireIdentity);
-            await this.translations.StoreAsync(translationInstances);
+            await this.translationsStorage.StoreAsync(translationInstances);
         }
 
         private async Task RemoveTranslationsAsync(QuestionnaireIdentity questionnaireIdentity)
@@ -147,9 +147,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             string questionnaireId = questionnaireIdentity.ToString();
 
             var storedTranslations =
-                await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
+                await this.translationsStorage.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
 
-            await this.translations.RemoveAsync(storedTranslations).ConfigureAwait(false);
+            await this.translationsStorage.RemoveAsync(storedTranslations).ConfigureAwait(false);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
