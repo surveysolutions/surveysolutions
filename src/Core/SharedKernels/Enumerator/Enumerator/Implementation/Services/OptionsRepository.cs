@@ -90,8 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             else
             {
                 List<OptionView> mixedOptions;
-                int startLoadedSortIndex = -1;
-
+                
                 do
                 {
                     mixedOptions = this.optionsStorage
