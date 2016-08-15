@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
 
-        public void InitCoverScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
+        public void InitCoverScreenItem(string interviewId, CoverStateViewModel coverStateViewModel, NavigationState navigationState)
         {
             this.interviewId = interviewId;
 
@@ -142,9 +142,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NodeDepth = 0;
             this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Cover;
             this.Title.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
-            groupStateViewModel.Init(interviewId, null);
+            coverStateViewModel.Init(interviewId, null);
 
-            this.SideBarGroupState = groupStateViewModel;
+            this.SideBarGroupState = coverStateViewModel;
             this.ScreenType = ScreenType.Cover;
             this.NavigationState = navigationState;
             this.NavigationState.ScreenChanged += this.OnScreenChanged;
