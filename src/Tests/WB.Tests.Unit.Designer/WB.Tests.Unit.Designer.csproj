@@ -1270,7 +1270,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireExtensions.cs" />
-    <Compile Include="Services\DeskAuthenticationServiceTests\when_multiple_validations_are_not_supported.cs" />
+    <Compile Include="Services\DeskAuthenticationServiceTests\when_getting_return_url.cs" />
     <Compile Include="Services\QuestionnaireDowngradeServiceTests\when_multiple_validations_are_not_supported.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
