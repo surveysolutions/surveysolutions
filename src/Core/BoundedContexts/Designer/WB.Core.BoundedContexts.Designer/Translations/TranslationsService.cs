@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private const string EntityIdColumnName = "Entity Id";
         private const string TranslationTypeColumnName = "Type";
         private const string WorksheetName = "Translations";
-        private const string workSheetPassword = "Qwerty1234";
+        private const string OptionsWorksheetPreffix = "@@_";
 
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
@@ -108,8 +108,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
                         }
 
-                        var sheetsWithTranslation =
-                            package.Workbook.Worksheets.Where(x => x.Name.StartsWith(WorksheetName));
+                        var sheetsWithTranslation = package.Workbook.Worksheets
+                            .Where(x => x.Name == WorksheetName || x.Name.StartsWith(OptionsWorksheetPreffix))
+                            .ToList();
 
                         if (!sheetsWithTranslation.Any())
                             throw new InvalidExcelFileException("Worksheet with translations not found");
@@ -270,7 +271,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
                 {
-                    var worksheet = excelPackage.Workbook.Worksheets.Add(textsToTranslate.Key);
+                    string workSheetName = this.GenerateWorksheetName(excelPackage.Workbook.Worksheets.Select(sheet => sheet.Name).ToList(),
+                            textsToTranslate.Key);
+
+                    var worksheet = excelPackage.Workbook.Worksheets.Add(workSheetName);
                     worksheet.Name = textsToTranslate.Key;
 
                     worksheet.Cells["A1"].Value = EntityIdColumnName;
@@ -318,6 +322,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 }
                 return excelPackage.GetAsByteArray();
             }
+        }
+
+        private string GenerateWorksheetName(List<string> addedWorksheetNames, string newWorksheetName)
+        {
+            if (!newWorksheetName.StartsWith(OptionsWorksheetPreffix)) return newWorksheetName;
+
+            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 31 ? 30 : newWorksheetName.Length);
+
+            return !addedWorksheetNames.Contains(newWorksheetName)
+                ? newWorksheetName
+                : $"{newWorksheetName.PadRight(2).TrimStart()}_{(addedWorksheetNames.Count + 1).ToString("D2")}";
         }
 
         private string CleanUpString(string text)
@@ -411,7 +426,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                        OriginalText = option.AnswerText,
                        Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
                        OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
-                       Sheet = isLongOptionsList ? $"{WorksheetName} {question.StataExportCaption}" : WorksheetName
+                       Sheet = isLongOptionsList ? $"{OptionsWorksheetPreffix}{question.StataExportCaption}" : WorksheetName
                    };
         }
 
