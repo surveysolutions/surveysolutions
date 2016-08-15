@@ -388,6 +388,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First {0} questions with comments:.
+        /// </summary>
+        public static string Interview_Cover_First_n_Questions_With_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Cover_First_n_Questions_With_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions with comments:.
+        /// </summary>
+        public static string Interview_Cover_Questions_With_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Questions_With_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cover.
         /// </summary>
         public static string Interview_Cover_Screen_Title {
