@@ -115,14 +115,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
                 
-            this.navigationState.NavigateTo(this.targetNavigationIdentity ?? GetDefaultScreenToNaviage(questionnaire));
+            this.navigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
 
             this.IsSuccessfullyLoaded = true;
         }
 
-        protected virtual NavigationIdentity GetDefaultScreenToNaviage(IQuestionnaire questionnaire)
+        protected virtual NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
         {
             return NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty));
         }

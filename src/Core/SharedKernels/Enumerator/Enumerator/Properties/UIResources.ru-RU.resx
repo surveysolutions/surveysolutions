@@ -413,4 +413,10 @@
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Обложка</value>
   </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Первые {0} вопросов с комментариями:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Вопросы с комментариями:</value>
+  </data>
 </root>

@@ -24,7 +24,7 @@
             <LinearLayout style="@style/Interview_Question_Header">
                 <TextView
                     style="@style/Interview_Complete_Screen_Text"
-                    local:MvxBind="Text CountOfCommentedQuestions" />
+                    local:MvxBind="Text CommentedEntitiesDescription" />
             </LinearLayout>
             <MvxLinearLayout style="@style/Interview_Question_Header"
                   android:orientation="vertical"

@@ -87,22 +87,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CountOfCommentedQuestions = interview.CountCommentedQuestions();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
 
-            this.CommentedEntitiesDescription = CommentedEntities.Count < this.CountOfCommentedQuestions
-                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors, entitiesListViewModelFactory.MaxNumberOfEntities)
-                : UIResources.Interview_Complete_Entities_With_Errors;
+            this.CommentedEntitiesDescription = CommentedEntities.Count == this.CountOfCommentedQuestions
+                ? UIResources.Interview_Complete_Entities_With_Errors
+                : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
         }
 
 
-        private IMvxCommand startInterviewCommand;
         private Identity firstSectionIdentity;
 
-        public IMvxCommand StartInterviewCommand
-        {
-            get
-            {
-                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
-            }
-        }
+        public IMvxAsyncCommand StartInterviewCommand => new MvxAsyncCommand(async () => await this.StartInterviewAsync());
 
         private async Task StartInterviewAsync()
         {

@@ -109,30 +109,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
         }
 
-        // remove code duplication
         public void InitCompleteScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
         {
-            this.interviewId = interviewId;
-
-            this.eventRegistry.Subscribe(this, interviewId);
-            
-            this.Parent = null;
-            this.HasChildren = false;
-            this.NodeDepth = 0;
-            this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Complete;
-            this.Title.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
-            groupStateViewModel.Init(interviewId, null);
-
-            this.SideBarGroupState = groupStateViewModel;
-            this.ScreenType = ScreenType.Complete;
-            this.NavigationState = navigationState;
-            this.NavigationState.ScreenChanged += this.OnScreenChanged;
-            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
+            this.InitServiceItem(interviewId, groupStateViewModel, navigationState,
+                ScreenType.Complete, UIResources.Interview_Complete_Screen_Title);
         }
-
 
         public void InitCoverScreenItem(string interviewId, CoverStateViewModel coverStateViewModel, NavigationState navigationState)
         {
+            this.InitServiceItem(interviewId, coverStateViewModel, navigationState, 
+                ScreenType.Cover, UIResources.Interview_Cover_Screen_Title);
+        }
+
+        private void InitServiceItem(string interviewId, GroupStateViewModel coverStateViewModel,
+            NavigationState navigationState, ScreenType screenType, string screenTitle)
+        {
             this.interviewId = interviewId;
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -140,12 +131,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Parent = null;
             this.HasChildren = false;
             this.NodeDepth = 0;
-            this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Cover;
-            this.Title.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
+            this.IsCurrent = navigationState.CurrentScreenType == screenType;
+            this.Title.InitAsStatic(screenTitle);
             coverStateViewModel.Init(interviewId, null);
 
             this.SideBarGroupState = coverStateViewModel;
-            this.ScreenType = ScreenType.Cover;
+            this.ScreenType = screenType;
             this.NavigationState = navigationState;
             this.NavigationState.ScreenChanged += this.OnScreenChanged;
             this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;

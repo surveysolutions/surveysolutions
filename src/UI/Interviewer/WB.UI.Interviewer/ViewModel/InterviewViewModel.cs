@@ -62,7 +62,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        protected override NavigationIdentity GetDefaultScreenToNaviage(IQuestionnaire questionnaire)
+        protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
         {
             return NavigationIdentity.CreateForCoverScreen();
         }

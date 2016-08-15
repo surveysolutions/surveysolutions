@@ -1210,7 +1210,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
                     .Select(x => new Identity(x.Id, x.RosterVector))
                     .Select(x => new { Key = ConversionHelper.ConvertIdentityToString(x), Identity = x})
+                    .Where(x => IsEnabled(x.Identity))
                     .Where(x => this.notAnsweredQuestionsInterviewerComments.ContainsKey(x.Key) || (Answers.ContainsKey(x.Key) && !string.IsNullOrWhiteSpace(Answers[x.Key].InterviewerComment)))
+
                     .Select(x => x.Identity);
 
                 foreach (var identity in invalidEntitiesInSection)
@@ -1440,8 +1442,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int CountCommentedQuestions()
         {
-            return this.Answers.Values.Count(x => !string.IsNullOrWhiteSpace(x.InterviewerComment))
-                + this.notAnsweredQuestionsInterviewerComments.Count;
+            var identitiesWithComments = this.GetCommentedQuestionsInInterview();
+            return identitiesWithComments.Count();
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
