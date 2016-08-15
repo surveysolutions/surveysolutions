@@ -275,7 +275,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             textsToTranslate.Key);
 
                     var worksheet = excelPackage.Workbook.Worksheets.Add(workSheetName);
-                    worksheet.Name = textsToTranslate.Key;
 
                     worksheet.Cells["A1"].Value = EntityIdColumnName;
                     worksheet.Cells["B1"].Value = TranslationTypeColumnName;
@@ -328,11 +327,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             if (!newWorksheetName.StartsWith(OptionsWorksheetPreffix)) return newWorksheetName;
 
-            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 31 ? 30 : newWorksheetName.Length);
+            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 31 ? 31 : newWorksheetName.Length);
 
-            return !addedWorksheetNames.Contains(newWorksheetName)
-                ? newWorksheetName
-                : $"{newWorksheetName.PadRight(2).TrimStart()}_{(addedWorksheetNames.Count + 1).ToString("D2")}";
+            if(!addedWorksheetNames.Contains(newWorksheetName)) return newWorksheetName;
+
+            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 28 ? 28 : newWorksheetName.Length);
+
+            return $"{newWorksheetName}_{(addedWorksheetNames.Count + 1).ToString("D2")}";
         }
 
         private string CleanUpString(string text)
