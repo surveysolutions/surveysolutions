@@ -21,6 +21,6 @@ namespace WB.Tests.Unit.Designer.Services.DeskAuthenticationServiceTests
 
         static DeskAuthenticationService service;
         private static string returnUrl;
-        static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 }
