@@ -455,6 +455,7 @@
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question_with_non_printable_char.cs" />
+    <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_questionnaire_with_2_comboboxes.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_questionnaire_with_combobox_question.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_questionnaire_contains_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_transation_for_different_questionnaire.cs" />
