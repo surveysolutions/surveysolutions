@@ -33,7 +33,8 @@
         </LinearLayout>
 
         <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical">
-            <MvxListView 
+            <MvxLinearLayout
+                      android:orientation="vertical"
                       style="@style/Interview_Cover_Prefilled_Answers"
                       local:MvxBind="ItemsSource PrefilledQuestions"
                       local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
