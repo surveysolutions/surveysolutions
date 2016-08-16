@@ -83,5 +83,7 @@
 
   <color name="instructions">#2a81cb</color>
   <color name="instructions_pressed">#001D8B</color>
-  
+
+  <color name="comment_from_authority">#F45D28</color>
+  <color name="comment_from_interviewer">#000000</color>
 </resources>

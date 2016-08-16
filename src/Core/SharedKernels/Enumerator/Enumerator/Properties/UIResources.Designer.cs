@@ -541,6 +541,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User comment.
+        /// </summary>
+        public static string Interview_Other_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Other_Comment_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
@@ -690,6 +699,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_Timestamp_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_Timestamp_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor comment.
+        /// </summary>
+        public static string Interview_Supervisor_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Supervisor_Comment_Caption", resourceCulture);
             }
         }
         

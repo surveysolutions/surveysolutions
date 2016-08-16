@@ -419,4 +419,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
     <value>Questions with comments:</value>
   </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>User comment</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Supervisor comment</value>
+  </data>
 </root>
