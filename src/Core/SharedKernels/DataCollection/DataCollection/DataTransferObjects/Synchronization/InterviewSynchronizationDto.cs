@@ -12,28 +12,27 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             this.FailedValidationConditions = new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>();
         }
 
-        public InterviewSynchronizationDto(Guid id, 
-            InterviewStatus status, 
-            string comments,
-            DateTime? rejectDateTime,
+        public InterviewSynchronizationDto(Guid id, InterviewStatus status, string comments, DateTime? rejectDateTime,
             DateTime? interviewerAssignedDateTime,
             Guid userId, 
+            Guid? supervisorId, 
             Guid questionnaireId, 
             long questionnaireVersion, 
             AnsweredQuestionSynchronizationDto[] answers,
-            HashSet<InterviewItemId> disabledGroups,
-            HashSet<InterviewItemId> disabledQuestions,
-            IList<Identity> disabledStaticTexts,
-            HashSet<InterviewItemId> validAnsweredQuestions,
-            HashSet<InterviewItemId> invalidAnsweredQuestions,
-            IList<Identity> validStaticTexts,
-            IList<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts,
-            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
-            IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedValidationConditions,
-            Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions,
-            Dictionary<InterviewItemId, object> variables,
-            HashSet<InterviewItemId> disabledVariables,
-            bool wasCompleted,
+            HashSet<InterviewItemId> disabledGroups, 
+            HashSet<InterviewItemId> disabledQuestions, 
+            IList<Identity> disabledStaticTexts, 
+            HashSet<InterviewItemId> validAnsweredQuestions, 
+            HashSet<InterviewItemId> invalidAnsweredQuestions, 
+            IList<Identity> validStaticTexts, 
+            IList<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts, 
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances, 
+            IList<KeyValuePair<Identity, 
+            IList<FailedValidationCondition>>> failedValidationConditions, 
+            Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions, 
+            Dictionary<InterviewItemId, object> variables, 
+            HashSet<InterviewItemId> disabledVariables, 
+            bool wasCompleted, 
             bool createdOnClient = false)
         {
             Id = id;
@@ -42,6 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             RejectDateTime = rejectDateTime;
             this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
             UserId = userId;
+            SupervisorId = supervisorId;
             QuestionnaireId = questionnaireId;
             QuestionnaireVersion = questionnaireVersion;
             Answers = answers;
@@ -71,6 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public DateTime? RejectDateTime { get; set; }
         public DateTime? InterviewerAssignedDateTime { get; set; }
         public Guid UserId { get;  set; }
+        public Guid? SupervisorId { get; set; }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
         public AnsweredQuestionSynchronizationDto[] Answers { get;  set; }
