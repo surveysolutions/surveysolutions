@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetQuestions().First();
             exportedQuestion.Answers.Length.ShouldEqual(2);
-            exportedQuestion.Answers.SequenceEqual(new[] {"2", ""}).ShouldBeTrue();
+            exportedQuestion.Answers.ShouldEqual(new[] {"2", ExportedQuestion.MissingStringQuestionValue});
         };
 
         static ExportViewFactory exportViewFactory;
