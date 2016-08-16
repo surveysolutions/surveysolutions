@@ -169,6 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 rejectedDateTime,
                 interviewerAssignedDateTime,
                 userId,
+                interview.SupervisorId,
                 interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(),
