@@ -265,7 +265,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
                 var textsToTranslateGroupedBySheets = this.GetTranlsatedTexts(questionnaire, translation)
-                    .OrderBy(x => x.Sheet)
+                    .OrderByDescending(x => x.Sheet)
                     .GroupBy(x => x.Sheet)
                     .ToDictionary(x => x.Key, x => x.ToList());
 
