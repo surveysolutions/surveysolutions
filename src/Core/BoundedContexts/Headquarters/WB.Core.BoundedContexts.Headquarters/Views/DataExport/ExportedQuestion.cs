@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web.WebSockets;
 using Main.Core.Entities.SubEntities;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
