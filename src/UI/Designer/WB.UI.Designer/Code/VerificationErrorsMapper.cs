@@ -97,12 +97,11 @@ namespace WB.UI.Designer.Code
                 }
                 if (reference.Type == QuestionnaireVerificationReferenceType.Translation)
                 {
-                    var translation = questionnaireDocument.Translations.Single(x => x.Id == reference.Id);
+                    var translation = questionnaireDocument.Translations.First(x => x.Id == reference.Id);
                     yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = QuestionnaireVerificationReferenceType.Translation,
-                        Variable = translation.Name,
                         Title = translation.Name
                     };
                     continue;
