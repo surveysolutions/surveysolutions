@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web.WebSockets;
 using Main.Core.Entities.SubEntities;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -15,6 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public const string ExportDateTimeFormat = "yyyy-MM-ddTHH:mm:ssK";
         public const string ExportDateFormat = "yyyy-MM-dd";
         private const string DefaultDelimiter = "|";
+        internal const string DisableQuestionValue = "";
+        internal const string MissingNumericQuestionValue = "-999999999";
+        internal const string MissingStringQuestionValue = "##N/A##";
 
         public ExportedQuestion()
         {
@@ -39,8 +44,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
-            if (question == null || question.Answer == null || question.IsDisabled())
-                return header.ColumnNames.Select(c => string.Empty).ToArray();
+            if (question == null)
+                return BuildMissingValueAnswer(header);
+
+            if (question.IsDisabled())
+                return header.ColumnNames.Select(c => DisableQuestionValue).ToArray();
+
+            if (question.Answer == null)
+                return BuildMissingValueAnswer(header);
 
             var gpsQuestion = question.Answer as GeoPosition;
             if (gpsQuestion != null)
@@ -63,6 +74,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 return this.BuildAnswerListForQuestionByHeader(listOfAnswers.ToArray(), header);
 
             return new string[0];
+        }
+
+        private static string[] BuildMissingValueAnswer(ExportedHeaderItem header)
+        {
+            if (header.QuestionType == QuestionType.GpsCoordinates)
+                return new[] { MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue };
+
+            string missinValue = (header.QuestionType == QuestionType.Numeric
+                                  || header.QuestionType == QuestionType.SingleOption
+                                  || header.QuestionType == QuestionType.MultyOption
+                                  || header.QuestionType == QuestionType.YesNo)
+                    ? MissingNumericQuestionValue
+                    : MissingStringQuestionValue;
+            return header.ColumnNames.Select(c => missinValue).ToArray();
         }
 
         private IEnumerable<object> TryCastToEnumerable(object value)
@@ -92,9 +117,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         private string AnswerToStringValue(object answer, ExportedHeaderItem header)
         {
             if (answer == null)
-                return string.Empty;
+                return MissingStringQuestionValue;
 
-            var arrayOfObject = this.TryCastToEnumerable(answer);
+            var arrayOfObject = this.TryCastToEnumerable(answer)?.ToArray();
 
             if (arrayOfObject != null && arrayOfObject.Any())
             {
@@ -156,19 +181,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 
         private static void FillMultioptionAnswers(object[] answers, ExportedHeaderItem header, string[] result)
         {
+            bool isMissingQuestion = answers.Length == 0;
+
             for (int i = 0; i < result.Length; i++)
             {
-                int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                result[i] = checkedOptionIndex > -1?"1":"0";
+                if (isMissingQuestion)
+                {
+                    result[i] = MissingNumericQuestionValue;
+                }
+                else
+                {
+                    int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                    result[i] = checkedOptionIndex > -1 ? "1" : "0";
+                }
             }
         }
 
         private static void FillMultioptionOrderedAnswers(object[] answers, ExportedHeaderItem header, string[] result)
         {
+            bool isMissingQuestion = answers.Length == 0;
+
             for (int i = 0; i < result.Length; i++)
             {
-                int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                result[i] = checkedOptionIndex > -1? (checkedOptionIndex + 1).ToString(exportCulture):"0";
+                if (isMissingQuestion)
+                {
+                    result[i] = MissingNumericQuestionValue;
+                }
+                else
+                {
+                    int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                    result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(exportCulture) : "0";
+                }
             }
         }
 
@@ -176,14 +219,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         {
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : MissingStringQuestionValue;
             }
         }
 
         private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result, bool ordered)
         {
             AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
-            int filledYesAnswersCount = 0;
             for (int i = 0; i < result.Length; i++)
             {
                 decimal columnValue = header.ColumnValues[i];
@@ -194,15 +236,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 {
                     if (selectedOption.Yes)
                     {
-                        var selectedItemIndex = typedAnswers
+                        if (ordered)
+                        {
+                            var selectedItemIndex = typedAnswers
                                 .Where(x => x.Yes)
                                 .Select((item, index) => new {item, index})
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
-                        if (ordered)
                             result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
+                        }
                         else
+                        {
                             result[i] = "1";
-                       filledYesAnswersCount++;
+                        }
                     }
                     else
                     {
@@ -211,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 }
                 else
                 {
-                    result[i] = "";
+                    result[i] = MissingNumericQuestionValue;
                 }
             }
         }
