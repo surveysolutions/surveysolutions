@@ -70,6 +70,7 @@
     <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
     <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
     <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
+    <Compile Include="Entities\Interview\InterviewComment.cs" />
     <Compile Include="Entities\Interview\InterviewEnablementState.cs" />
     <Compile Include="Entities\Interview\InterviewRoster.cs" />
     <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
