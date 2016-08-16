@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var excelWorkbook = new ExcelPackage(new MemoryStream(translationFile.ContentAsExcelFile)).Workbook;
             var worksheetNames = excelWorkbook.Worksheets.Select(x=>x.Name).ToList();
 
-            worksheetNames.ShouldContainOnly("@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_02", "Translations");
+            worksheetNames.ShouldContainOnly("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");
         };
 
         static TranslationFile translationFile;
