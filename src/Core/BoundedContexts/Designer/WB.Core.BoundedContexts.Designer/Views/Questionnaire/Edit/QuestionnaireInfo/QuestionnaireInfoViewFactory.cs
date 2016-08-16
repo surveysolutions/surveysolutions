@@ -115,6 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
                     Meta = attachments.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
                 })
+                .OrderBy(x => x.Name)
                 .ToList();
 
 
@@ -124,6 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     TranslationId = translationIdentity.Id.FormatGuid(),
                     Name = translationIdentity.Name
                 })
+                .OrderBy(x => x.Name)
                 .ToList();
 
             return questionnaireInfoView;
