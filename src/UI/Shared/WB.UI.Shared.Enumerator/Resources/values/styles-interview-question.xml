@@ -371,7 +371,11 @@
   <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
+    <item name="android:layout_marginTop">@dimen/zero</item>
+  </style>
+
+  <style name="Interview_Question_Comment_Item" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Comment_Item_margin_top</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerTitle" parent="FullWidthWrappingLayout">
@@ -380,7 +384,7 @@
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
     <item name="android:textColor">@color/commentInterviewerTextColor</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Title_margin_bottom</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Comment_Caption_margin_bottom</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">

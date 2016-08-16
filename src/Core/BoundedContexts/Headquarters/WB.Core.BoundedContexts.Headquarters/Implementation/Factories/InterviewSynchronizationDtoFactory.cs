@@ -223,6 +223,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 Date = x.Date,
                 UserId = x.CommenterId,
+                UserRole = x.CommenterRole,
                 Text = x.Text
             }).ToArray();
         }

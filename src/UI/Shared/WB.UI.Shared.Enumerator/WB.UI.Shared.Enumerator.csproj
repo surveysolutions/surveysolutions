@@ -228,6 +228,7 @@
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
+    <Compile Include="Converters\RoleToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
@@ -1030,6 +1031,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_cover_prefilled_question_template.axml">
       <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__comment_item.axml">
+      <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
