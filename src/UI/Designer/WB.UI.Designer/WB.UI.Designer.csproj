@@ -582,7 +582,7 @@
     <Content Include="questionnaire\details\views\treegroup.html" />
     <Content Include="questionnaire\details\views\treequestion.html" />
     <Content Include="questionnaire\details\views\treestatictext.html" />
-    <Content Include="UpdatedDesigner\build\*.js" />
+    <Content Include="questionnaire\build\*.js" />
     <Content Include="questionnaire\vendor\ace-builds\.bower.json" />
     <Content Include="questionnaire\vendor\ace-builds\ChangeLog.txt" />
     <Content Include="questionnaire\vendor\ace-builds\LICENSE" />
@@ -1364,7 +1364,7 @@
     <Content Include="questionnaire\vendor\prettycheckable\img\sprites\L-radio-checked-disabled.png" />
     <Content Include="questionnaire\vendor\prettycheckable\package.json" />
     <Content Include="questionnaire\vendor\prettycheckable\README.md" />
-    <Content Include="UpdatedDesigner\build\*.css" />
+    <Content Include="questionnaire\build\*.css" />
     <Content Include="questionnaire\details\scripts\app.js" />
     <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
     <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
