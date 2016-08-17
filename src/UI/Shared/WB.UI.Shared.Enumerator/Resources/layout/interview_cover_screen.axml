@@ -32,7 +32,8 @@
                   local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical">
+        <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
+                      local:MvxBind="Visible HasPrefilledQuestions">
             <MvxLinearLayout
                       android:orientation="vertical"
                       style="@style/Interview_Cover_Prefilled_Answers"

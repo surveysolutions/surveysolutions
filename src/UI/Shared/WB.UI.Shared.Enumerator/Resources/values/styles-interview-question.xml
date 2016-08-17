@@ -349,7 +349,7 @@
   <style name="Interview_Question_Errors">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Errors_margin_bottom</item>
   </style>
 
   <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
@@ -378,6 +378,11 @@
     <item name="android:layout_marginTop">@dimen/Interview_Comment_Item_margin_top</item>
   </style>
 
+
+  <style name="Interview_Question_Comment_Editor" parent="FullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Comment_Caption_margin_bottom</item>
+  </style>
+  
   <style name="Interview_Question_Comments_InterviewerTitle" parent="FullWidthWrappingLayout">
     <item name="android:fontFamily">Trebuchet</item>
     <item name="android:textSize">@dimen/textsize_12</item>

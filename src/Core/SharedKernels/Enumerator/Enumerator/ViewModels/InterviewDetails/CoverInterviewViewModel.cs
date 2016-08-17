@@ -53,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
 
+        public bool HasPrefilledQuestions { get; set; }
+
         public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
 
         public string CommentedEntitiesDescription { get; set; }
@@ -83,6 +85,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     Answer = this.GetAnswer(questionnaire, interview, questionId)
                 })
                 .ToList();
+
+            this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
             this.CountOfCommentedQuestions = interview.CountCommentedQuestions();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
