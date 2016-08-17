@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
-            var comments = interview.GetInterviewerAnswerComment(entityIdentity) ?? new List<QuestionComment>();
+            var comments = interview.GetInterviewerAnswerComments(entityIdentity) ?? new List<QuestionComment>();
 
             comments.Select(ToViewModel).ForEach(x => Comments.Add(x));
 
