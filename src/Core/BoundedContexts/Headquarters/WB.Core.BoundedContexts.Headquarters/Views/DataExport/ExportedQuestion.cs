@@ -79,13 +79,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             if (header.QuestionType == QuestionType.GpsCoordinates)
                 return new[] { MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue };
 
-            string missinValue = (header.QuestionType == QuestionType.Numeric
+            string missingValue = (header.QuestionType == QuestionType.Numeric
                                   || header.QuestionType == QuestionType.SingleOption
                                   || header.QuestionType == QuestionType.MultyOption
                                   || header.QuestionType == QuestionType.YesNo)
                     ? MissingNumericQuestionValue
                     : MissingStringQuestionValue;
-            return header.ColumnNames.Select(c => missinValue).ToArray();
+            return header.ColumnNames.Select(c => missingValue).ToArray();
         }
 
         private IEnumerable<object> TryCastToEnumerable(object value)
