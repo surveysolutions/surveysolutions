@@ -93,9 +93,9 @@
                 <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'CompletedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'RejectedBySupervisorCountTemplate' }"></td>
-                <td data-bind="template: { name: 'ApprovedBySupervisorCountTemplate' }"></td>
+                <td data-bind="text: ApprovedBySupervisorCount()"></td>
                 <td data-bind="template: { name: 'RejectedByHeadquartersCountTemplate' }"></td>
-                <td data-bind="template: { name: 'ApprovedByHeadquartersCountTemplate' }"></td>
+                <td data-bind="text: ApprovedByHeadquartersCount()"></td>
                 <td>
                     <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() + '&responsible=' + Responsible() }, text: TotalCount"></a>
                 </td>
