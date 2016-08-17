@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -20,6 +21,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewStatus.Deleted
         };
 
+        private static readonly InterviewStatus[] invisibleForSupervisorStatuses =
+            invisibleForUserStatuses.Concat( new[]
+            { 
+                InterviewStatus.ApprovedBySupervisor,
+                InterviewStatus.ApprovedByHeadquarters,
+            }).ToArray();
+
         internal static IEnumerable<SurveyStatusViewItem> GetAllSurveyStatusViewItems(InterviewStatus[] skipStatuses)
         {
             return from InterviewStatus status in Enum.GetValues(typeof(InterviewStatus))
@@ -31,15 +39,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                    };
         }
 
-        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems()
+        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems(IGlobalInfoProvider infoProvider)
         {
-            return (from InterviewStatus status in Enum.GetValues(typeof (InterviewStatus))
-                   where !invisibleForUserStatuses.Contains(status)
-                   select new SurveyStatusViewItem
-                       {
-                           Status = status,
-                           StatusName = GetEnumDescription(status)
-                       }).OrderBy(status=>status.StatusName);
+            var ignoreStatuses = infoProvider.IsSurepvisor
+                ? invisibleForSupervisorStatuses
+                : invisibleForUserStatuses;
+            return GetAllSurveyStatusViewItems(ignoreStatuses)
+                .OrderBy(status=>status.StatusName);
         }
 
         private static string GetEnumDescription(InterviewStatus value)
