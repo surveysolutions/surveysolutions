@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment, @event.UserId);
+            this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment, @event.UserId, @event.CommentTime);
         }
 
 
@@ -970,6 +970,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (lastComment != null && lastComment.UserId == commentDto.UserId)
                 {
                     lastComment.Comment += Environment.NewLine + commentDto.Text;
+                    lastComment.CommentTime = commentDto.Date;
                     continue;
                 }
 
@@ -990,7 +991,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     role = commentDto.UserRole ?? UserRoles.Supervisor;
                 }
 
-                var comment = new QuestionComment(commentDto.Text, commentDto.UserId, role);
+                var comment = new QuestionComment(commentDto.Text, commentDto.UserId, role, commentDto.Date);
                 commentsHistory.Add(comment);
                 lastComment = comment;
             }
@@ -1013,9 +1014,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        private void CommentQuestion(Guid questionId, RosterVector rosterVector, string comment, Guid userId)
+        private void CommentQuestion(Guid questionId, RosterVector rosterVector, string comment, Guid userId, DateTime commentTime)
         {
-            var questionComment = new QuestionComment(comment, userId, UserRoles.Operator);
+            var questionComment = new QuestionComment(comment, userId, UserRoles.Operator, commentTime);
 
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
@@ -1268,7 +1269,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                   .Where(this.IsEnabled)
                   .Where(x => questionnaire.IsInterviewierQuestion(x.Id));
 
-            return commentedEnabledInterviewerQuestionIds;
+            var orderedCommentedQuestions = commentedEnabledInterviewerQuestionIds
+                .Select(x => new
+                {
+                    Id = x,
+                    HasInterviewerReply = this.HasSupervisorCommentInterviewerReply(x),
+                    DateOfLastSupervisorComment = GetDateOfLastSupervisorComment(x)
+                })
+                .OrderBy(x => x.HasInterviewerReply)
+                .ThenByDescending(x => x.DateOfLastSupervisorComment)
+                .Select(x => x.Id);
+
+            return orderedCommentedQuestions;
+        }
+
+        private DateTime GetDateOfLastSupervisorComment(Identity questionId)
+        {
+            var lastNotInterviewerComment = this.GetInterviewerAnswerComments(questionId).LastOrDefault(x => x.UserRole != UserRoles.Operator);
+            return lastNotInterviewerComment?.CommentTime ?? new DateTime(1, 1, 1);
+        }
+
+        private bool HasSupervisorCommentInterviewerReply(Identity questionId)
+        {
+            var interviewerAnswerComments = this.GetInterviewerAnswerComments(questionId);
+            var indexOfLastNotInterviewerComment = interviewerAnswerComments.FindLastIndex(0, x => x.UserRole != UserRoles.Operator);
+            return interviewerAnswerComments.Skip(indexOfLastNotInterviewerComment + 1).Any();
         }
 
         public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
@@ -1459,7 +1484,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.IsAnswered;
         }
 
-        public List<QuestionComment> GetInterviewerAnswerComment(Identity entityIdentity)
+        public List<QuestionComment> GetInterviewerAnswerComments(Identity entityIdentity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
             if (!this.Answers.ContainsKey(questionKey))
