@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string QuestionnaireTitle { get; set; }
 
-        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
+        public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
 
         public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
 
@@ -76,11 +76,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire
                 .GetPrefilledQuestions()
-                .Select(questionId => new SideBarPrefillQuestion
+                .Where(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates)
+                .Select(questionId => new CoverPrefilledQuestion
                 {
                     Question = questionnaire.GetQuestionTitle(questionId),
-                    Answer = this.GetAnswer(questionnaire, interview, questionId),
-                    StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
+                    Answer = this.GetAnswer(questionnaire, interview, questionId)
                 })
                 .ToList();
 
