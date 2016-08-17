@@ -397,7 +397,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions with comments:.
+        ///   Looks up a localized string similar to Questions with supervisor comments:.
         /// </summary>
         public static string Interview_Cover_Questions_With_Comments {
             get {
@@ -411,6 +411,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Cover_Screen_Title {
             get {
                 return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor note:.
+        /// </summary>
+        public static string Interview_Cover_Supervisor_Note {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Supervisor_Note", resourceCulture);
             }
         }
         

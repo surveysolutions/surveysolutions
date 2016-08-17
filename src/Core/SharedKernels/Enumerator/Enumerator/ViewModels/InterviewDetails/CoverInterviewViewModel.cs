@@ -51,6 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string QuestionnaireTitle { get; set; }
 
+        public string SupervisorNote { get; set; }
+
         public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
 
         public bool HasPrefilledQuestions { get; set; }
@@ -94,6 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CommentedEntitiesDescription = CommentedEntities.Count == this.CountOfCommentedQuestions
                 ? UIResources.Interview_Cover_Questions_With_Comments
                 : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
+
+            this.SupervisorNote = interview.GetLastSupervisorComment();
         }
 
 

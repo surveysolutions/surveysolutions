@@ -146,6 +146,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => BuildCommentsHistory(x.Id, x.QuestionRosterVector, x.AllComments, @event.InterviewData.SupervisorId, @event.InterviewData.UserId));
 
+            SupervisorRejectComment = @event.InterviewData.Comments;
+
             this.ResetLocalDelta();
         }
 
@@ -1279,6 +1281,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(x => x.Id);
 
             return orderedCommentedQuestions;
+        }
+
+        public string GetLastSupervisorComment()
+        {
+            return SupervisorRejectComment;
         }
 
         private bool HasSupervisorCommentInterviewerReply(Identity questionId)
