@@ -11,9 +11,8 @@
         local:MvxItemTemplate="@layout/interview_question__comment_item"/>
   
    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
+        style="@style/Interview_Question_Comment_Editor"
         local:MvxBind="Visible QuestionState.Comments.IsCommentInEditMode">
      
     <TextView

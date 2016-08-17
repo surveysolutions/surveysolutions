@@ -1273,20 +1273,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(x => new
                 {
                     Id = x,
-                    HasInterviewerReply = this.HasSupervisorCommentInterviewerReply(x),
-                    DateOfLastSupervisorComment = GetDateOfLastSupervisorComment(x)
+                    HasInterviewerReply = this.HasSupervisorCommentInterviewerReply(x)
                 })
                 .OrderBy(x => x.HasInterviewerReply)
-                .ThenByDescending(x => x.DateOfLastSupervisorComment)
                 .Select(x => x.Id);
 
             return orderedCommentedQuestions;
-        }
-
-        private DateTime GetDateOfLastSupervisorComment(Identity questionId)
-        {
-            var lastNotInterviewerComment = this.GetInterviewerAnswerComments(questionId).LastOrDefault(x => x.UserRole != UserRoles.Operator);
-            return lastNotInterviewerComment?.CommentTime ?? new DateTime(1, 1, 1);
         }
 
         private bool HasSupervisorCommentInterviewerReply(Identity questionId)
