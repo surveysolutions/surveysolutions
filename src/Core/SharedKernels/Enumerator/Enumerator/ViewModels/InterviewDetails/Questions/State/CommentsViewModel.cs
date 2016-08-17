@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     comment: this.InterviewerComment));
 
             if (!string.IsNullOrWhiteSpace(this.InterviewerComment))
-                Comments.Add(ToViewModel(new QuestionComment(this.InterviewerComment, this.principal.CurrentUserIdentity.UserId, UserRoles.Operator)));
+                Comments.Add(ToViewModel(new QuestionComment(this.InterviewerComment, this.principal.CurrentUserIdentity.UserId, UserRoles.Operator, DateTime.Now)));
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
