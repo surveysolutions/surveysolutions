@@ -252,7 +252,6 @@
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\TextViewWatermarkBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
-    <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\TextViewUnderlinePressedBinding.cs" />
@@ -813,11 +812,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_left_side_panel_item_section.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

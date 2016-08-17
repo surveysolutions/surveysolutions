@@ -96,16 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
-                .Select(questionId => new SideBarPrefillQuestion
-                {
-                    Question = questionnaire.GetQuestionTitle(questionId),
-                    Answer = this.GetAnswer(questionnaire, questionId),
-                    StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
-                })
-                .ToList();
-
+        
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = this.interview.Language;
 
@@ -191,7 +182,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
+        public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
 
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
@@ -201,8 +192,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
-
-        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats => this.PrefilledQuestions.Where(x => !x.StatsInvisible);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
