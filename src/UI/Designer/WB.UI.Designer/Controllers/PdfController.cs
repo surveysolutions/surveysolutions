@@ -131,7 +131,7 @@ namespace WB.UI.Designer.Controllers
                     return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
 
                 return existingPdfGenerationProgress.IsFinished
-                    ? this.Json(PdfStatus.Ready($"Your PDF is ready.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet)
+                    ? this.Json(PdfStatus.Ready($"PDF document generated.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet)
                     : this.Json(PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet);
             }
             else
