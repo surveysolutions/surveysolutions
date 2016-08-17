@@ -417,12 +417,15 @@
     <value>Первые {0} вопросов с комментариями:</value>
   </data>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Вопросы с комментариями:</value>
+    <value>Вопросы с комментариями супервизора:</value>
   </data>
   <data name="Interview_Other_Comment_Caption" xml:space="preserve">
     <value>Комментарий пользователя</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
     <value>Комментарий супервизора</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Замечания супервизора</value>
   </data>
 </root>

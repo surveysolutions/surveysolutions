@@ -137,5 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         int CountCommentedQuestions();
 
         IEnumerable<Identity> GetCommentedQuestionsInInterview();
+
+        string GetLastSupervisorComment();
     }
 }
