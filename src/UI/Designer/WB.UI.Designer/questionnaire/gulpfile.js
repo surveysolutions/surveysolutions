@@ -82,7 +82,7 @@ gulp.task('index', function () {
   	'./build/*.css',
     '!./build/libs*.css' ], { read: false });
 
-  return target.pipe(plugins.inject(gulp.src('./build/libs*.css', { read: false }), { name: 'libs' }))
+  return target.pipe(plugins.inject(gulp.src('./build/libs*.css', { read: false }), { relative: true, name: 'libs' }))
                .pipe(plugins.inject(sources, { relative: true }))
     		   .pipe(gulp.dest('./details'));
 });
