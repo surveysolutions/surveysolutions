@@ -36,7 +36,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.translationsStorage = translationsStorage;
         }
 
-        public async Task ImportQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, string supportingAssembly, TranslationDto[] translations)
+        public async Task ImportQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
+            QuestionnaireDocument questionnaireDocument,
+            string supportingAssembly,
+            TranslationDto[] translations)
         {
             await this.optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
 
@@ -57,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToList();
 
             List<TranslationInstance> filteredTranslations = translations
-                .Where(x => !questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId))
+                .Except(x => questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId) && x.Type == TranslationType.OptionTitle)
                 .Select(translationDto => new TranslationInstance
                 {
                     QuestionnaireId = questionnaireIdentity.ToString(),
