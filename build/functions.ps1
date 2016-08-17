@@ -33,7 +33,7 @@ function CleanBinAndObjFolders() {
 
     CleanFolders 'bin'
     CleanFolders 'obj'
-    CleanFolders 'src\UI\Designer\WB.UI.Designer\UpdatedDesigner\build'
+    CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
@@ -42,12 +42,12 @@ function BuildNewDesigner(){
     Write-Host "##teamcity[progressStart 'Building updated designer files']"
 
     $installCommand = "npm install"
-    $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
+    $targetLocation = "src\UI\Designer\WB.UI.Designer\questionnaire"
     Write-Host "Pushing location to $targetLocation"
     Push-Location -Path $targetLocation
     Write-Host $installCommand
     iex $installCommand #install node js dependencies
-    &gulp | Write-Host #will execute script gulpfile.js in UpdatedDesigner folder
+    &gulp | Write-Host #will execute script gulpfile.js in questionnaire folder
     Pop-Location
 
     Write-Host "##teamcity[progressFinish 'Building updated designer files']"
