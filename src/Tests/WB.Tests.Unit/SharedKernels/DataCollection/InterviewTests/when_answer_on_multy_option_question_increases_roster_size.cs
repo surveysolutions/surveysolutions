@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: questionnaire.Version,
-                    answers: new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }, string.Empty) },
+                    answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }) },
                     rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
