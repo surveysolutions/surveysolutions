@@ -13,9 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     [Subject(typeof(StatefulInterview))]
     internal class StatefulInterviewTestsContext
     {
-        protected static AnsweredQuestionSynchronizationDto CreateAnsweredQuestionSynchronizationDto(Guid questionId, decimal[] rosterVector, object answer, string comment = "comment")
+        protected static AnsweredQuestionSynchronizationDto CreateAnsweredQuestionSynchronizationDto(Guid questionId, decimal[] rosterVector, object answer)
         {
-            return new AnsweredQuestionSynchronizationDto(questionId, rosterVector, answer, comment);
+            return Create.Entity.AnsweredQuestionSynchronizationDto(questionId, rosterVector, answer);
         }
 
         protected static void FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(StatefulInterview interview,

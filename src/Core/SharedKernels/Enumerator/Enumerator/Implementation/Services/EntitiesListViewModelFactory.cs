@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            Identity[] invalidEntities = interview.GetCommentedQuestionsInInterview().Take(this.maxNumberOfEntities).ToArray();
+            Identity[] invalidEntities = interview.GetCommentedBySupervisorQuestionsInInterview().Take(this.maxNumberOfEntities).ToArray();
 
             return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, invalidEntities, interview, questionnaire);
         }

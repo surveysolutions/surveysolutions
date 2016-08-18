@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool WasAnswered(Identity entityIdentity);
 
-        List<QuestionComment> GetInterviewerAnswerComments(Identity entityIdentity);
+        List<QuestionComment> GetQuestionComments(Identity entityIdentity);
 
         string GetRosterTitle(Identity rosterIdentity);
 
@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         int CountCommentedQuestions();
 
-        IEnumerable<Identity> GetCommentedQuestionsInInterview();
+        IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview();
 
         string GetLastSupervisorComment();
     }

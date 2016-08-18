@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {

@@ -64,15 +64,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: questionnaireMock.Object.Version,
-                    answers:
-                        new[]
-                        {
-                            new AnsweredQuestionSynchronizationDto(multyOptionAnsweredQuestionId, new decimal[0],
-                                new decimal[] {1}, string.Empty)
-                        },
-                    wasCompleted: true
-                    ));
-
+                    answers: new[]
+                    {
+                        Create.Entity.AnsweredQuestionSynchronizationDto(multyOptionAnsweredQuestionId, new decimal[0], new decimal[] {1})
+                    },
+                    wasCompleted: true));
 
             eventContext = new EventContext();
         };
