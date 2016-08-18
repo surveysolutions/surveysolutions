@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
         {
-            var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            var serializedQuestionnaireDocument = this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument);
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
             
             await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToList();
 
             List<TranslationInstance> filteredTranslations = translationDtos
-                .Where(x => !questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId))
+                .Except(x => questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId) && x.Type == TranslationType.OptionTitle)
                 .Select(translationDto => new TranslationInstance
                     {
                         QuestionnaireId = questionnaireIdentity.ToString(),
