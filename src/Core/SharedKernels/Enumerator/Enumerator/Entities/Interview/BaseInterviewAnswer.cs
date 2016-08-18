@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
             this.IsEnabled = true;
             this.IsValid = true;
             this.FailedValidations = new List<FailedValidationCondition>();
-            this.Comments = new List<QuestionComment>();
         }
 
         protected BaseInterviewAnswer(Guid id, decimal[] rosterVector)
@@ -28,10 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
         public bool IsEnabled { get; set; }
         public IList<FailedValidationCondition> FailedValidations { get; set; }
         public abstract bool IsAnswered { get; }
-
-        public string InterviewerComment { get; set; }
-
-        public List<QuestionComment> Comments { get; set; }
 
         public abstract void RemoveAnswer();
     }

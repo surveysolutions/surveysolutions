@@ -58,8 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
-        private readonly ConcurrentDictionary<string, List<QuestionComment>> notAnsweredQuestionsComments;
-        private readonly ConcurrentBag<Identity> questionsWithSupervisorComments;
+        private readonly ConcurrentDictionary<Identity, List<QuestionComment>> questionsComments;
         private bool createdOnClient;
         private bool hasLinkedOptionsChangedEvents = false;
 
@@ -73,9 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sortIndexesOfRosterInstanses = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
-            this.notAnsweredQuestionsComments = new ConcurrentDictionary<string, List<QuestionComment>>();
             this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
-            this.questionsWithSupervisorComments = new ConcurrentBag<Identity>();
+            this.questionsComments = new ConcurrentDictionary<Identity, List<QuestionComment>>();
 
             this.ResetCalculatedState();
             this.ResetLocalDelta();
@@ -972,67 +970,51 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (lastComment != null && lastComment.UserId == commentDto.UserId)
                 {
                     lastComment.Comment += Environment.NewLine + commentDto.Text;
-                    lastComment.CommentTime = commentDto.Date;
                     continue;
                 }
 
-                // this is new feature, so role can be empty. Decided to mark those comments as Supervisor's by default.
-                // can be removed after clients with version 5.11 and below will complete theirs surveys.
-                UserRoles role;
-                
-                if (commentDto.UserId == interviewerId)
-                {
-                    role = UserRoles.Operator;
-                }
-                else if (supervisorId.HasValue && commentDto.UserId == supervisorId)
-                {
-                    role = UserRoles.Supervisor;
-                }
-                else
-                {
-                    role = commentDto.UserRole ?? UserRoles.Supervisor;
-                }
+                var role = GetUserRole(supervisorId, interviewerId, commentDto);
 
-                var comment = new QuestionComment(commentDto.Text, commentDto.UserId, role, commentDto.Date);
+                var comment = new QuestionComment(commentDto.Text, commentDto.UserId, role);
                 commentsHistory.Add(comment);
                 lastComment = comment;
             }
 
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-            BaseInterviewAnswer answer = this.GetExistingAnswerOrNull(questionKey);
-            if (answer != null)
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            this.questionsComments[questionIdentity] = commentsHistory;
+        }
+
+        [Obsolete("Removed after clients with version 5.11 and below will complete theirs surveys. Release date: 1st of Sep 2016")]
+        private static UserRoles GetUserRole(Guid? supervisorId, Guid interviewerId, CommentSynchronizationDto commentDto)
+        {
+            UserRoles role;
+            if (commentDto.UserId == interviewerId)
             {
-                answer.Comments = commentsHistory;
+                role = UserRoles.Operator;
+            }
+            else if (supervisorId.HasValue && commentDto.UserId == supervisorId)
+            {
+                role = UserRoles.Supervisor;
             }
             else
             {
-                this.notAnsweredQuestionsComments[questionKey] = commentsHistory;
+                // Decided to mark those comments as Supervisor's by default.
+                role = commentDto.UserRole ?? UserRoles.Supervisor;
             }
-
-            var questionIdentity = new Identity(questionId, rosterVector);
-            if (commentsHistory.Any(x => x.UserRole == UserRoles.Supervisor))
-            {
-                questionsWithSupervisorComments.Add(questionIdentity);
-            }
+            return role;
         }
 
         private void CommentQuestion(Guid questionId, RosterVector rosterVector, string comment, Guid userId, DateTime commentTime)
         {
-            var questionComment = new QuestionComment(comment, userId, UserRoles.Operator, commentTime);
+            var questionComment = new QuestionComment(comment, userId, UserRoles.Operator);
 
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-            var answer = this.GetExistingAnswerOrNull(questionKey);
-            if (answer != null)
-            {
-                answer.Comments.Add(questionComment);
-            }
-            else
-            {
-                if (!this.notAnsweredQuestionsComments.ContainsKey(questionKey))
-                    this.notAnsweredQuestionsComments[questionKey] = new List<QuestionComment>();
+            var questionIdentity = new Identity(questionId, rosterVector);
 
-                this.notAnsweredQuestionsComments[questionKey].Add(questionComment);
-            }
+            if (!this.questionsComments.ContainsKey(questionIdentity))
+                this.questionsComments[questionIdentity] = new List<QuestionComment>();
+
+            this.questionsComments[questionIdentity].Add(questionComment);
         }
 
         private void DisableQuestion(Guid id, RosterVector rosterVector)
@@ -1267,7 +1249,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             var commentedEnabledInterviewerQuestionIds = this
-                  .questionsWithSupervisorComments
+                  .questionsComments
+                  .Where(x => x.Value.Any(c => c.UserRole != UserRoles.Operator))
+                  .Select(x => x.Key)
                   .Where(this.IsEnabled)
                   .Where(x => questionnaire.IsInterviewierQuestion(x.Id));
 
@@ -1485,16 +1469,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public List<QuestionComment> GetInterviewerAnswerComments(Identity entityIdentity)
         {
-            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!this.Answers.ContainsKey(questionKey))
-            {
-                return this.notAnsweredQuestionsComments.ContainsKey(questionKey)
-                    ? this.notAnsweredQuestionsComments[questionKey]
-                    : null;
-            }
-
-            var interviewAnswerModel = this.Answers[questionKey];
-            return interviewAnswerModel.Comments;
+            return this.questionsComments.ContainsKey(entityIdentity)
+                ? this.questionsComments[entityIdentity]
+                : null;
         }
 
 
@@ -1611,27 +1588,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             if (!this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey)
-                && !this.notAnsweredQuestionsComments.ContainsKey(questionKey)
                 && !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
             {
                 return new T
                 {
-                    InterviewerComment = null,
                     IsEnabled = true,
                     IsValid = true
                 };
             }
-
-            var questionComments = this.notAnsweredQuestionsComments.ContainsKey(questionKey)
-                ? this.notAnsweredQuestionsComments[questionKey]
-                : null;
-
+            
             var isEnabled = !this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsEnablementStatus[questionKey];
             var isValid = !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
 
             var answer = new T
             {
-                Comments = questionComments,
                 IsEnabled = isEnabled,
                 IsValid = isValid
             };
@@ -1672,13 +1642,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     }
                     bool removedItemValidityStatus;
                     this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
-                }
-
-                if (this.notAnsweredQuestionsComments.ContainsKey(questionKey))
-                {
-                    question.Comments = this.notAnsweredQuestionsComments[questionKey];
-                    List<QuestionComment> removedItemInterviewerComment;
-                    this.notAnsweredQuestionsComments.TryRemove(questionKey, out removedItemInterviewerComment);
                 }
             }
 

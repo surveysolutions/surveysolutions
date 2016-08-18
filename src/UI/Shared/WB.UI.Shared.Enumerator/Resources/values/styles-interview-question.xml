@@ -368,22 +368,29 @@
     <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Details_margin_top</item>
   </style>
 
-  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Comments">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginTop">@dimen/zero</item>
   </style>
 
-  <style name="Interview_Question_Comment_Item" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Comment_Item">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/Interview_Comment_Item_margin_top</item>
   </style>
 
-
-  <style name="Interview_Question_Comment_Editor" parent="FullWidthWrappingLayout">
+  <style name="Interview_Question_Comment_Editor">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/Interview_Comment_Caption_margin_bottom</item>
   </style>
   
-  <style name="Interview_Question_Comments_InterviewerTitle" parent="FullWidthWrappingLayout">
+  <style name="Interview_Question_Comments_InterviewerTitle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Trebuchet</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textAllCaps">true</item>

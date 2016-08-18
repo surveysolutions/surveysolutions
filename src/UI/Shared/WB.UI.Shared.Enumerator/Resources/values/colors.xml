@@ -7,7 +7,7 @@
   <color name="disabledTextColor">#afafaf</color>
   
   <color name="sideBarPrefilledQuestionText">#FF747474</color>
-  <color name="sideBarPrefilledAnswerText">#000000</color>
+
   
   <color name="commentInterviewerTextColor">#FF747474</color>
   <color name="commentDetailsInterviewerTextColor">#FF000000</color>
@@ -86,4 +86,6 @@
 
   <color name="comment_from_authority">#F45D28</color>
   <color name="comment_from_interviewer">#000000</color>
+
+  <color name="cover_not_from_supervisor_color">#000000</color>
 </resources>
