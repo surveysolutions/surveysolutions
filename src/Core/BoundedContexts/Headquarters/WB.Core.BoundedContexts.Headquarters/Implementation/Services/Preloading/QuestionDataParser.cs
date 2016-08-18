@@ -21,6 +21,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
         {
             parsedValue =null;
+            answer = answer?
+                .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty)
+                .Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty);
 
             if (string.IsNullOrEmpty(answer))
                 return ValueParsingResult.ValueIsNullOrEmpty;
