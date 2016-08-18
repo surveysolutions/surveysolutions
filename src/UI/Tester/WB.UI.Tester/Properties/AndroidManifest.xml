@@ -17,5 +17,5 @@
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
-	<uses-sdk android:minSdkVersion="18" android:targetSdkVersion="23" />
+	<uses-sdk android:minSdkVersion="18" android:targetSdkVersion="22" />
 </manifest>
