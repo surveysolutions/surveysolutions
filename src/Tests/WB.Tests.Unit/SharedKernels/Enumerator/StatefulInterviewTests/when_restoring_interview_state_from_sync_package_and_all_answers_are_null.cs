@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;

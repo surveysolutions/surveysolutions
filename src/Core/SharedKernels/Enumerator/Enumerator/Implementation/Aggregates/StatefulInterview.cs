@@ -1244,7 +1244,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        public IEnumerable<Identity> GetCommentedQuestionsInInterview()
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1274,7 +1274,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private bool HasSupervisorCommentInterviewerReply(Identity questionId)
         {
-            var interviewerAnswerComments = this.GetInterviewerAnswerComments(questionId);
+            var interviewerAnswerComments = this.GetQuestionComments(questionId);
             var indexOfLastNotInterviewerComment = interviewerAnswerComments.FindLastIndex(0, x => x.UserRole != UserRoles.Operator);
             return interviewerAnswerComments.Skip(indexOfLastNotInterviewerComment + 1).Any();
         }
@@ -1467,7 +1467,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.IsAnswered;
         }
 
-        public List<QuestionComment> GetInterviewerAnswerComments(Identity entityIdentity)
+        public List<QuestionComment> GetQuestionComments(Identity entityIdentity)
         {
             return this.questionsComments.ContainsKey(entityIdentity)
                 ? this.questionsComments[entityIdentity]
@@ -1492,7 +1492,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int CountCommentedQuestions()
         {
-            var identitiesWithComments = this.GetCommentedQuestionsInInterview();
+            var identitiesWithComments = this.GetCommentedBySupervisorQuestionsInInterview();
             return identitiesWithComments.Count();
         }
 
