@@ -2,6 +2,7 @@
 {
     public enum DataExportStatus
     {
+        NotStarted = 1,
         Queued,
         Running,
         Finished,

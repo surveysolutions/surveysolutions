@@ -818,6 +818,7 @@
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\ExportController.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
@@ -843,6 +844,7 @@
     <Compile Include="API\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="API\InterviewsController.cs" />
+    <Compile Include="API\ProgressiveDownloadResult.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
