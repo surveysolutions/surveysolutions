@@ -12,7 +12,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             this.FailedValidationConditions = new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>();
         }
 
-        public InterviewSynchronizationDto(Guid id, InterviewStatus status, string comments, DateTime? rejectDateTime,
+        public InterviewSynchronizationDto(Guid id, 
+            InterviewStatus status, 
+            string comments, 
+            DateTime? rejectDateTime,
             DateTime? interviewerAssignedDateTime,
             Guid userId, 
             Guid? supervisorId, 
