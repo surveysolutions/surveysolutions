@@ -78,6 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 .ToArray();
         }
 
+        public IDataExportProcessDetails[] GetAllProcesses() => this.processes.Values.ToArray();
+
         public void FinishExportSuccessfully(string processId)
         {
             var dataExportProcess = this.processes.GetOrNull(processId);
@@ -118,6 +120,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.processes.GetOrNull(processId)?.Cancel();
 
             this.processes.TryRemove(processId);
+        }
+
+        public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, DataExportType exportType)
+        {
+            var process = exportType == DataExportType.Data
+                ? (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null)
+                : new ParaDataExportProcessDetails(exportFormat);
+
+            this.DeleteDataExport(process.NaturalId);
         }
 
         private static void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
