@@ -9,6 +9,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Core.Views;
@@ -157,6 +158,12 @@ namespace WB.UI.Shared.Enumerator
             {
                 typeof(EnumeratorSharedKernelModule).Assembly,
             };
+        }
+
+        protected override void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+            Mvx.RegisterType<IMvxBindingContext, MvxBindingContext>();
         }
     }
 }
