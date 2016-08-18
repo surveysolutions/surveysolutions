@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
-            this.UpdateNavigationItemTitle();
+            this.UpdateNavigationItemTitle(true);
             this.SetGroupState();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
         }
 
-        private void UpdateNavigationItemTitle()
+        private void UpdateNavigationItemTitle(bool isInitialize = false)
         {
             switch (this.navigationGroupType)
             {
@@ -219,8 +219,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     var interview = this.interviewRepository.Get(interviewId);
                     var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                     var textWithSubstitutions = questionnaire.GetGroupTitle(this.groupOrSectionToNavigateIdentity.Id);
-                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
-                    return ;
+
+                    if (isInitialize)
+                        this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
+                    else
+                        this.Title.ChangeText(textWithSubstitutions);
+                    return;
                 case NavigationGroupType.LastSection:
                     this.Title.InitAsStatic(UIResources.Interview_CompleteScreen_ButtonText);
                     return;
