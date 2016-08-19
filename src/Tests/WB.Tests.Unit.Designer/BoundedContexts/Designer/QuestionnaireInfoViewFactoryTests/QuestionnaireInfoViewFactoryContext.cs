@@ -1,5 +1,6 @@
 ﻿using Main.Core.Documents;
 using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                                                 sharedWith ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(),
                                                 documentReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
                                                 accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
-                                                Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>());
+                                                Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
         }
     }
 }
