@@ -393,6 +393,8 @@
     <Compile Include="SupervisorTeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
     <Compile Include="SupervisorTeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
     <Compile Include="SupervisorTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
+    <Compile Include="TeamInterviewsFactoryTests\TeamInterviewsFactoryTestContext.cs" />
+    <Compile Include="TeamInterviewsFactoryTests\when_getting_team_interviews.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TesterResourcesTests\TesterResourcesTestsContext.cs" />
     <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />

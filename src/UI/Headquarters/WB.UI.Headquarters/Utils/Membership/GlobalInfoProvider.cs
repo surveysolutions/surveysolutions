@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
             }
         }
 
-        public bool IsSurepvisor {
+        public bool IsSupervisor {
             get
             {
                 return GlobalInfo.IsSupervisor;
