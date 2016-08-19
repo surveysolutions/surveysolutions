@@ -9560,6 +9560,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .share-question-dialog ul.accounts > li > a {
   color: #5d6468;
 }
+
+.share-question-dialog .make-public {
+    padding-top: 12px;
+}
+
 .share-question-dialog input[type="text"]::-moz-placeholder {
   font-style: italic;
 }
