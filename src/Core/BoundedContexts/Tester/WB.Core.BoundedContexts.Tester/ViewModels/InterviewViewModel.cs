@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override void NavigateBack()
         {
-            if (this.PrefilledQuestions.Any())
+            if (this.HasPrefilledQuestions)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }

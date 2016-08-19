@@ -64,8 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
-
-            this.PrefilledQuestions = new List<CoverPrefilledQuestion>();
         }
 
         public abstract void NavigateBack();
@@ -96,6 +94,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
             if (questionnaire == null)
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
+
+            this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(this.interview.GetLastSupervisorComment());
+            this.HasCommentsFromSupervior = this.interview.CountCommentedQuestions() > 0;
+            this.HasPrefilledQuestions = questionnaire
+                .GetPrefilledQuestions()
+                .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
 
             this.QuestionnaireTitle = questionnaire.Title;
         
@@ -160,13 +164,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Status = this.groupState.Status;
         }
 
-        private string GetAnswer(IQuestionnaire questionnaire, Guid referenceToQuestionId)
-        {
-            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestionId, new decimal[0]);
-            var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-            return this.answerToStringService.AnswerToUIString(referenceToQuestionId, interviewAnswer, interview, questionnaire);
-        }
-
         private GroupStatus status;
         public GroupStatus Status
         {
@@ -184,7 +181,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
+
+        public bool HasPrefilledQuestions { get; set; }
+        public bool HasCommentsFromSupervior { get; set; }
+        public bool HasNotEmptyNoteFromSupervior { get; set; }
 
         public MvxViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
