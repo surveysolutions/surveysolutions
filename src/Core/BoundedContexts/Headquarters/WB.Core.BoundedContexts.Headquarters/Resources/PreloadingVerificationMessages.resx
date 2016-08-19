@@ -197,7 +197,7 @@
     <value>Provided User is not Supervisor or Interviewer</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>Answer on roster size question cannot be greater than 40.</value>
+    <value>Answer on roster size question cannot be greater than {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>Gps question required Latitude and Longitude columns</value>

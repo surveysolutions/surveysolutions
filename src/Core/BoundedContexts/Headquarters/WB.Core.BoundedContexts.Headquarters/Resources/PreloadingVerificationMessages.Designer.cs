@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer on roster size question cannot be greater than 40..
+        ///   Looks up a localized string similar to Answer on roster size question cannot be greater than {0}..
         /// </summary>
         public static string PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40 {
             get {

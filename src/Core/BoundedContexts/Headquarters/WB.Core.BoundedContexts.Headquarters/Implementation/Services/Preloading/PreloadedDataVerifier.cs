@@ -491,6 +491,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (!preloadedDataService.IsQuestionRosterSize(numericExportedQuestion.VariableName))
                 yield break;
 
+            var isRosterSizeForLongRoster = preloadedDataService.IsQuestionIsRosterSizeForLongRoster(numericExportedQuestion.PublicKey);
+
             var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
                 numericExportedQuestion.VariableName);
 
@@ -507,39 +509,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 if (parsedValue < 0)
                 {
+                    
                     yield return new PreloadedDataVerificationError("PL0022",
-                        PreloadingVerificationMessages
-                            .PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
+                        PreloadingVerificationMessages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
                         this.CreateReference(columnIndex, rowIndex, levelData));
                 }
 
-                if (parsedValue > Constants.MaxRosterRowCount)
+                var maxNumericValue = isRosterSizeForLongRoster
+                    ? Constants.MaxLongRosterRowCount
+                    : Constants.MaxRosterRowCount;
+
+                if (parsedValue > maxNumericValue)
                 {
-                    {
-                        yield return new PreloadedDataVerificationError("PL0029",
-                            PreloadingVerificationMessages
-                                .PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40,
-                            this.CreateReference(columnIndex, rowIndex, levelData));
-                    }
+                    yield return new PreloadedDataVerificationError("PL0029",
+                        string.Format(PreloadingVerificationMessages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, maxNumericValue),
+                        this.CreateReference(columnIndex, rowIndex, levelData));
                 }
             }
-        }
-
-        private int[] GetColumnIndexesWhichContainsAnswersOnQuestion(
-            ExportedHeaderItem exportedQuestion,
-            PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var result = new List<int>();
-
-            foreach (var columnName in exportedQuestion.ColumnNames)
-            {
-                var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, columnName);
-                if (columnIndex >= 0)
-                    result.Add(columnIndex);
-            }
-
-            return result.ToArray();
         }
 
         private T? GetValue<T>(string[] row, string[] header, int columnIndex, HeaderStructureForLevel level, IPreloadedDataService preloadedDataService) where T : struct
