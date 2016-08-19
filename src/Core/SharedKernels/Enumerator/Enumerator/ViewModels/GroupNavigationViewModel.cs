@@ -220,10 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                     var textWithSubstitutions = questionnaire.GetGroupTitle(this.groupOrSectionToNavigateIdentity.Id);
 
-                    if (isInitialize)
-                        this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
-                    else
-                        this.Title.ChangeText(textWithSubstitutions);
+                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
                     return;
                 case NavigationGroupType.LastSection:
                     this.Title.InitAsStatic(UIResources.Interview_CompleteScreen_ButtonText);
@@ -263,7 +260,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private void UpdateNavigation()
         {
             this.SetNextEnabledSection();
-            this.UpdateNavigationItemTitle();
             this.SetGroupState();
         }
 
