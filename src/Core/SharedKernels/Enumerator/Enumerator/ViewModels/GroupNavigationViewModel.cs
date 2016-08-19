@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
-            this.SetNavigationItemTitle(true);
+            this.SetNavigationItemTitle();
             this.SetGroupState();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
