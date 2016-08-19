@@ -52,7 +52,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
+            if (this.HasPrefilledQuestions && interview.CreatedOnClient)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
@@ -64,7 +64,10 @@ namespace WB.UI.Interviewer.ViewModel
 
         protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
         {
-            return NavigationIdentity.CreateForCoverScreen();
+            if (HasNotEmptyNoteFromSupervior || HasCommentsFromSupervior || HasPrefilledQuestions)
+                return NavigationIdentity.CreateForCoverScreen();
+
+            return base.GetDefaultScreenToNavigate(questionnaire);
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
