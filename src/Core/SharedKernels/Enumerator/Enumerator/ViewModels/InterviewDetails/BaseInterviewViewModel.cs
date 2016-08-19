@@ -64,6 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
+
+            this.PrefilledQuestions = new List<CoverPrefilledQuestion>();
         }
 
         public abstract void NavigateBack();
