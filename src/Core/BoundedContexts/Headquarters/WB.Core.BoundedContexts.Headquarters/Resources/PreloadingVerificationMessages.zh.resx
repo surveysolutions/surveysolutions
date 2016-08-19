@@ -196,7 +196,7 @@
     <value>提供的用户不是督导员或调查员</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>登记表大小问题的答案不能超过40。</value>
+    <value>登记表大小问题的答案不能超过{0}。</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>GPS问题要求纬度和经度列</value>

@@ -323,6 +323,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
+        public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
+        {
+            return false;
+        }
+
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
         {
             return allLevels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
