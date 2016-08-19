@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
-            this.UpdateNavigationItemTitle(true);
+            this.SetNavigationItemTitle(true);
             this.SetGroupState();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
         }
 
-        private void UpdateNavigationItemTitle(bool isInitialize = false)
+        private void SetNavigationItemTitle()
         {
             switch (this.navigationGroupType)
             {
