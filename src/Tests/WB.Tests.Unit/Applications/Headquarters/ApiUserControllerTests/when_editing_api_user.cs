@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 
             userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
             globalInfoProvider.Setup(x => x.IsHeadquarter).Returns(false);
-            globalInfoProvider.Setup(x => x.IsSurepvisor).Returns(false);
+            globalInfoProvider.Setup(x => x.IsSupervisor).Returns(false);
             globalInfoProvider.Setup(x => x.GetCurrentUser()).Returns(new UserLight(userId, "t"));
 
             controller = CreateApiUserController(commandService: commandServiceMock.Object,

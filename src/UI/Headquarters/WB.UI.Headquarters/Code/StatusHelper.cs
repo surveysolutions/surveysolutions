@@ -39,9 +39,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                    };
         }
 
-        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems(IGlobalInfoProvider infoProvider)
+        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems(bool isSupervisor)
         {
-            var ignoreStatuses = infoProvider.IsSurepvisor
+            var ignoreStatuses = isSupervisor
                 ? invisibleForSupervisorStatuses
                 : invisibleForUserStatuses;
             return GetAllSurveyStatusViewItems(ignoreStatuses)
