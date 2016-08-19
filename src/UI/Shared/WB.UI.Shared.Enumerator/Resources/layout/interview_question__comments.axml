@@ -11,7 +11,7 @@
         local:MvxItemTemplate="@layout/interview_question__comment_item"/>
   
    <LinearLayout 
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
         style="@style/Interview_Question_Comment_Editor"
         local:MvxBind="Visible QuestionState.Comments.IsCommentInEditMode">
      
@@ -23,6 +23,6 @@
         style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        local:MvxBind="Text QuestionState.Comments.InterviewerComment; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; SetFocus QuestionState.Comments.IsCommentInEditMode" />
+        local:MvxBind="Text QuestionState.Comments.InterviewerComment; Visible QuestionState.Comments.IsCommentInEditMode; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; SetFocus QuestionState.Comments.IsCommentInEditMode" />
   </LinearLayout>
 </LinearLayout>
