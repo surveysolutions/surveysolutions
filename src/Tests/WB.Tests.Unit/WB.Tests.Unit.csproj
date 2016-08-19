@@ -430,7 +430,6 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_missing_numeric_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_data_with_no_answers_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_has_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
     <Compile Include="SyncAsyncRunner.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
