@@ -329,12 +329,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

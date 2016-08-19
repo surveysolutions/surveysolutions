@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     {
         Establish context = () =>
         {
-            IGlobalInfoProvider globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_ => _.IsSurepvisor == true);
+            IGlobalInfoProvider globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_ => _.IsSupervisor == true);
             periodicStatusReportController = CreatePeriodicStatusReportController(globalInfoProvider: globalInfoProvider);
         };
 
