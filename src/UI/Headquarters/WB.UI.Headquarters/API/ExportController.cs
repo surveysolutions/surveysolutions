@@ -158,7 +158,7 @@ namespace WB.UI.Headquarters.API
 
             var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
 
-            var exportStatusByExportType = allExportStatuses.DataExports.FirstOrDefault(x =>
+            var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
                 x.DataExportFormat == exportFormat &&
                 x.DataExportType == dataExportType);
 
