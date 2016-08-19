@@ -16,8 +16,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
-    //[ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
-    //[ObserverNotAllowedApi]
+    [ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
+    [ObserverNotAllowedApi]
     [RoutePrefix(@"api/v1/export")]
     public class ExportController : ApiController
     {
@@ -79,9 +79,8 @@ namespace WB.UI.Headquarters.API
 
             return new ProgressiveDownloadResult(this.Request, exportedFilePath, exportedFileName, @"application/zip");
         }
-
-        [HttpGet]
-        //[HttpPost]
+        
+        [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
         public IHttpActionResult StartProcess(string id, string exportType)
         {
@@ -111,9 +110,8 @@ namespace WB.UI.Headquarters.API
 
             return this.Ok();
         }
-
-        [HttpGet]
-        //[HttpPost]
+        
+        [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
         public IHttpActionResult CancelProcess(string id, string exportType)
         {
