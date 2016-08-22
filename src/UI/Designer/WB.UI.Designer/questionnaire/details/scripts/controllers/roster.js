@@ -210,7 +210,7 @@
                 };
 
                 $rootScope.$on('groupMoved', function (event, data) {
-                    if (data === $stateParams.itemId) {
+                    if (data === $stateParams.itemId && !_.isUndefined($scope.editRosterForm)) {
                         questionnaireService.getRosterDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
                             $scope.activeRoster.lists = result.textListsQuestions;
                             $scope.activeRoster.numerics = result.numericIntegerQuestions;
