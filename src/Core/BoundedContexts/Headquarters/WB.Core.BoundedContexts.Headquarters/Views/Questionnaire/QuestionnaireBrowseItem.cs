@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
             this.AllowCensusMode = allowCensusMode;
+            this.ImportDate = DateTime.UtcNow;
         }
 
         public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion)
@@ -70,5 +71,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual long QuestionnaireContentVersion { get; set; }
 
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }
+        public virtual DateTime? ImportDate { get; set; }
     }
 }
