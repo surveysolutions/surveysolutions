@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string  QuestionnaireId { get; set; }
 
         [Indexed]
-        public string QuestionId { get; set; }
+        public Guid QuestionId { get; set; }
 
         public decimal Value { get; set; }
 
