@@ -319,6 +319,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     worksheet.Column(5).AutoFit();
                     worksheet.Protection.AllowFormatColumns = true;
                 }
+
+                if (excelPackage.Workbook.Worksheets.Count == 0)
+                    excelPackage.Workbook.Worksheets.Add(WorksheetName);
+
                 return excelPackage.GetAsByteArray();
             }
         }
