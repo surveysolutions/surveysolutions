@@ -10,26 +10,21 @@ using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_62 : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_where_integer_long_roster_size_question_has_answer_202 : PreloadedDataVerifierTestContext
     {
         private Establish context = () =>
         {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            numericQuestionId = Guid.Parse("21111111111111111111111111111111");
-             
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(chapterChildren:
-            new IComposite[]
-            {
-                Create.Entity.NumericIntegerQuestion(numericQuestionId, "num"),
-                Create.Entity.Roster(rosterSizeQuestionId: numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                new IComposite[]
                 {
-                     Create.Entity.Roster(rosterSizeQuestionId: numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question)
-                })
-            });
+                    Create.Entity.NumericIntegerQuestion(numericQuestionId, "num"),
+                    Create.Entity.Roster(rosterSizeQuestionId: numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question)
+                });
 
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "num" },
-                new[] { new[] { "1", "62" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(
+                new[] { "Id", "num" },
+                new[] { new[] { "1", "202" } },
                 "questionnaire.csv");
 
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
@@ -37,8 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
-        Because of = () =>
-            result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+        Because of =
+            () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_error = () =>
             result.Errors.Count().ShouldEqual(1);
@@ -52,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static Guid numericQuestionId;
+        private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static PreloadedDataByFile preloadedDataByFile;
     }
 }
