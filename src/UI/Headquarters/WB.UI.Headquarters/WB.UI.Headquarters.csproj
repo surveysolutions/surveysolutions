@@ -1262,6 +1262,7 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
