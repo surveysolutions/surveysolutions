@@ -666,11 +666,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Roster cannot have more than {0} child elements.
         /// </summary>
-        internal static string WB0068_ {
+        internal static string WB0068_RosterHasMoreThanAllowedChiledElements {
             get {
-                return ResourceManager.GetString("WB0068_", resourceCulture);
+                return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChiledElements", resourceCulture);
             }
         }
         
