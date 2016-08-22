@@ -7137,6 +7137,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .broken-links a:hover {
   background: #eee;
 }
+.icon-none {
+  background: none !important;
+}
 .icon {
   width: 20px;
   height: 20px;
@@ -7189,7 +7192,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .icon-variable {
   background-position: 0 -480px;
 }
-.icon-translation {
+.icon-tranlsation {
   background-position: 0 -510px;
 }
 .icon-error.icon-numeric {
@@ -9560,11 +9563,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .share-question-dialog ul.accounts > li > a {
   color: #5d6468;
 }
-
-.share-question-dialog .make-public {
-    padding-top: 12px;
-}
-
 .share-question-dialog input[type="text"]::-moz-placeholder {
   font-style: italic;
 }

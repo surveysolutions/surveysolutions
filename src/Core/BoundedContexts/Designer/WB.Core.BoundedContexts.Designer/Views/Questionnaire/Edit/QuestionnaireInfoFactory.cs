@@ -437,7 +437,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 var rosterPlaceholder = this.CreateRosterBreadcrumbPlaceholder(questionsCollection, roster);
                 result.Add(rosterPlaceholder);
 
-                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder);
+                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder, questionsCollection);
                 result.Add(rosterTitlePlaceholder);
 
                 var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster);
@@ -473,7 +473,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private DropdownQuestionView CreateRosterTitlePlaceholder(GroupAndRosterDetailsView roster,
-            DropdownQuestionView rosterPlaceholder)
+            DropdownQuestionView rosterPlaceholder, QuestionsAndGroupsCollectionView questionsCollection)
         {
             var rosterTitlePlaceholder = new DropdownQuestionView
             {
@@ -482,10 +482,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = rosterPlaceholder.Title,
                 Type = this.rosterType,
-                VarName = roster.VariableName
+                VarName = roster.VariableName,
+                QuestionType = GetRosterSourceType(roster, questionsCollection)
             };
             return rosterTitlePlaceholder;
         }
+
+        private static string GetRosterSourceType(GroupAndRosterDetailsView roster,
+            QuestionsAndGroupsCollectionView questionsCollection) => roster.RosterSizeQuestionId.HasValue
+                ? questionsCollection?.Questions?.Find(x => x.Id == roster.RosterSizeQuestionId.Value)?
+                    .Type.ToString()
+                    .ToLower()
+                : null;
 
         private DropdownQuestionView CreateRosterBreadcrumbPlaceholder(QuestionsAndGroupsCollectionView questionsCollection,
             GroupAndRosterDetailsView roster)
