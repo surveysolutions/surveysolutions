@@ -5,7 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -25,8 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         //Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument);
 
         Task StoreOptionsForQuestionAsync(QuestionnaireIdentity questionnaireId, Guid questionId, List<Answer> answers, List<TranslationDto> optionsTranslations);
-
-        Task StoreOptionsAsync(List<OptionView> options);
 
         bool IsEmpty();
     }
