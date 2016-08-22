@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             x.QuestionId == questionIdAsString &&
                             x.Title == optionTitle &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
-                .OrderBy(x => x.TranslationId != null)
+                .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();
 
             if (categoricalQuestionOption == null)
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             x.QuestionId == questionIdAsString &&
                             x.Value == optionValue &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
-                .OrderBy(x => x.TranslationId != null)
+                .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();
 
             if (categoricalQuestionOption == null)
