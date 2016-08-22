@@ -165,6 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(LongFixedRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Verifier<IGroup>(LongMultiRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Verifier<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
+            Verifier<IGroup>(LongRosterHaveMoreThanAllowedChilElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChiledElements,Constants.MaxAmountOfItemsInLongRoster)),
 
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
             Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
@@ -909,6 +910,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool LongFixedRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsFixedRoster(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => @group.FixedRosterTitles.Length);
+        }
+
+        private static bool LongRosterHaveMoreThanAllowedChilElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var count = questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count();
+            return IsLongRoster(@group, questionnaire) && count > Constants.MaxAmountOfItemsInLongRoster;
+        }
+
+        private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (IsFixedRoster(roster) && roster.FixedRosterTitles.Length > Constants.MaxRosterRowCount)
+            {
+                return true;
+            }
+
+            if (IsRosterByQuestion(roster))
+            {
+                var question = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
+                var questionMaxAnsweresCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers 
+                    ?? (question as TextListQuestion)?.MaxAnswerCount 
+                    ?? Constants.MaxRosterRowCount;
+
+                if (questionMaxAnsweresCount > Constants.MaxRosterRowCount)
+                    return true;
+            }
+
+            return false;
         }
 
         private static bool IsLongRosterNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire, 
