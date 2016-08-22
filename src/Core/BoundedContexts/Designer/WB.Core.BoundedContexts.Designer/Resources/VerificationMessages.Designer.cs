@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Items with with the same name found..
+        ///   Looks up a localized string similar to Items with the same name found..
         /// </summary>
         internal static string WB0026_ItemsWithTheSameNamesFound {
             get {

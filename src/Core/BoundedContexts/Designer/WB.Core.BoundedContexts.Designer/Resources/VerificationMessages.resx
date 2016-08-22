@@ -385,7 +385,7 @@
     <value>Question with options filter expression cannot be prefilled.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
-    <value>Items with with the same name found.</value>
+    <value>Items with the same name found.</value>
   </data>
   <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
     <value>Lookup table has invalid name.</value>
