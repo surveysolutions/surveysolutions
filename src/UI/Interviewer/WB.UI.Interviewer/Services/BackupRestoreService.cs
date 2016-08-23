@@ -41,7 +41,8 @@ namespace WB.UI.Interviewer.Services
             if (!isBackupFolderExists)
                 await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath);
 
-            if (await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath))
+            var isLogFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath);
+            if (isLogFolderExists)
                 await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, this.privateStorage);
 
             this.BackupSqliteDbs();
