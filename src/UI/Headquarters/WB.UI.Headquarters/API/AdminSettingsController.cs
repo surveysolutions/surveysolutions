@@ -41,10 +41,12 @@ namespace WB.UI.Headquarters.API
             {
                 this.noticeStorage.Remove(settingsKey);
             }
-
-            var globalNotice = this.noticeStorage.GetById(settingsKey) ?? new GlobalNotice();
-            globalNotice.Message = message.Message.Length > 1000 ? message.Message.Substring(0, 1000) : message.Message;
-            this.noticeStorage.Store(globalNotice, settingsKey);
+            else
+            {
+                var globalNotice = this.noticeStorage.GetById(settingsKey) ?? new GlobalNotice();
+                globalNotice.Message = message.Message.Length > 1000 ? message.Message.Substring(0, 1000) : message.Message;
+                this.noticeStorage.Store(globalNotice, settingsKey);
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
         }
