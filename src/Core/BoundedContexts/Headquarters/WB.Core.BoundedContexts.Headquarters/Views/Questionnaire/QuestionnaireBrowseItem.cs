@@ -71,6 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual long QuestionnaireContentVersion { get; set; }
 
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }
+
         public virtual DateTime? ImportDate { get; set; }
     }
 }

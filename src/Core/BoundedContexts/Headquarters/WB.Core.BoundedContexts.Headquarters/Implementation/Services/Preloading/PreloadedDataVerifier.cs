@@ -451,15 +451,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 var latitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
                         latitudeColumnIndex, level, preloadedDataService);
 
+                var longitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
+                        longitudeColumnIndex, level, preloadedDataService);
+
+                if (!latitude.HasValue && !longitude.HasValue)
+                    continue;
+
                 if (!latitude.HasValue)
                 {
                     yield return new PreloadedDataVerificationError("PL0030",
                         PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
                         this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
                 }
-
-                var longitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
-                        longitudeColumnIndex, level, preloadedDataService);
 
                 if (!longitude.HasValue)
                 {
