@@ -73,9 +73,7 @@
                 <td data-bind="text: ApprovedBySupervisorCount()"></td>
                 <td data-bind="template: { name: 'RejectedByHeadquartersCountTemplate' }"></td>
                 <td data-bind="text: ApprovedByHeadquartersCount()"></td>
-                <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: TotalCount"></a>
-                </td>
+                <td data-bind="text: TotalCount()"></td>
             </tr>
             <!-- /ko -->
         </tbody>
