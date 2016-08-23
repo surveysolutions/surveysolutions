@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_with_empty_latitude_longitude_in_gps_question : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_with_empty_longitude_in_gps_question : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
@@ -19,8 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "gps__Latitude", "gps__Longitude" },
-                new string[][] { new string[] { "1", "", "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(
+                new[] { "Id", "gps__Latitude", "gps__Longitude" },
+                new[] { new[] { "1", "1.5", "" } },
                 "questionnaire.csv");
 
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
@@ -30,11 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
         Because of = () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
-        It should_result_has_2_specified_errors = () =>
-        {
-            result.Errors.Count().ShouldEqual(2);
-            result.Errors.ShouldEachConformTo(x=>x.Code.Equals("PL0030"));
-        };
+        It should_return_1_error_PL0030 = () =>
+            result.Errors.Single().Code.ShouldEqual("PL0030");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static VerificationStatus result;
