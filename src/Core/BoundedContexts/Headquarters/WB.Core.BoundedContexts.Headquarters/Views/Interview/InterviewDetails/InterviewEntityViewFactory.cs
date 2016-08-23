@@ -156,6 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Text = x.Text,
                     CommenterId = x.CommenterId,
                     CommenterName = x.CommenterName,
+                    CommenterRole = x.CommenterRole,
                     Date = x.Date
                 }).ToList();
             questionView.Answer = answeredQuestion.Answer;

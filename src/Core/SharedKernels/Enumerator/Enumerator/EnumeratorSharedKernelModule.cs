@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator
         public override void Load()
         {
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
-            this.Bind<IEntityWithErrorsViewModelFactory>().To<EntityWithErrorsViewModelFactory>().InSingletonScope();
+            this.Bind<IEntitiesListViewModelFactory>().To<EntitiesListViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();

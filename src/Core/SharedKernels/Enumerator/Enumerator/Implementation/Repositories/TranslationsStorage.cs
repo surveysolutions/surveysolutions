@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             this.translationsRepository = translationsRepository;
         }
 
-
         public ITranslation Get(QuestionnaireIdentity questionnaire, Guid translationId)
         {
             var questionnaireId = questionnaire.ToString();

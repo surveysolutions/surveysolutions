@@ -261,9 +261,6 @@ Pode criar ou editar seus questionários em Survey Solutions Designer</value>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Próxima seção</value>
   </data>
-  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
-    <value>Para o pai</value>
-  </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>Todos os {0} perguntas respondidas</value>
   </data>

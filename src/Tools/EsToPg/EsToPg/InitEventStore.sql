@@ -28,6 +28,8 @@ IF NOT EXISTS (
     CREATE INDEX event_source_indx ON events USING btree (eventsourceid);
 END IF;
 
+CREATE INDEX globalsequence_indx  ON events USING btree (globalsequence);
+
 END$$;
   
 

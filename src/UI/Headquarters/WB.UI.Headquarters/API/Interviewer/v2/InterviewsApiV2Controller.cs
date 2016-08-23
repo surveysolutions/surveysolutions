@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             var response = this.Request.CreateResponse(new InterviewerInterviewApiView
             {
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
-                    .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, string.Empty))
+                    .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, new CommentSynchronizationDto[0]))
                     .ToArray(),
                 Details = this.synchronizationSerializer.Serialize(interviewDetails)
             });

@@ -28,6 +28,11 @@
                     return $http.get(url);
                 };
 
+                questionnaireService.getQuestionsEligibleForNumericRosterTitle = function (questionnaireId, rosterId, rosterSizeQuestionId) {
+                    var url = string.format('{0}/getQuestionsEligibleForNumericRosterTitle/{1}?rosterId={2}&rosterSizeQuestionId={3}', urlBase, questionnaireId, rosterId, rosterSizeQuestionId);
+                    return $http.get(url);
+                };
+
                 questionnaireService.getRosterDetailsById = function(questionnaireId, rosterId) {
                     var url = string.format('{0}/editRoster/{1}?rosterId={2}', urlBase, questionnaireId, rosterId);
                     return $http.get(url);

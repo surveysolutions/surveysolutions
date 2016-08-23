@@ -283,7 +283,7 @@
     <value>Processing...</value>
   </data>
   <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>Sample creation was succefully completed.</value>
+    <value>Sample creation was successfully completed.</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
     <value>Upload new data</value>
@@ -304,7 +304,7 @@
     <value>Create sample from this data</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Sample import is successfuly completed</value>
+    <value>Sample import is successfully completed</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
     <value>Sample import is completed with errors</value>

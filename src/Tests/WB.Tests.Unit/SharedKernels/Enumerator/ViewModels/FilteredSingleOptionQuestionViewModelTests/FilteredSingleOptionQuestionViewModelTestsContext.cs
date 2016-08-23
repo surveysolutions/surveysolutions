@@ -52,11 +52,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 .Returns(options);
 
             optionsRepository
-                .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<string>()))
+                .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<string>(), It.IsAny<Guid>()))
                 .Returns((QuestionnaireIdentity a, Guid b, int c) => options.First(x => x.Value == c));
 
             optionsRepository
-                .Setup(x => x.GetFilteredQuestionOptions(questionnaireId, questionId, It.IsAny<int?>(), It.IsAny<string>()))
+                .Setup(x => x.GetFilteredQuestionOptions(questionnaireId, questionId, It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<Guid>()))
                 .Returns((QuestionnaireIdentity a, Guid b, int? c, string d) => 
                         options.Where(x => x.Title.IndexOf(d ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0).Select(x => x));
             

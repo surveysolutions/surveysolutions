@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id);
 
+        List<DropdownQuestionView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
+
         VariableView GetVariableEditView(string questionnaireId, Guid variableId);
     }
 }

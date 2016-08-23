@@ -196,7 +196,7 @@
     <value>O Usuário fornecido não é o Supervisor ou Entrevistador</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>Resposta na pergunta de tamanho do lista não pode ser superior a 40.</value>
+    <value>Resposta na pergunta de tamanho do lista não pode ser superior a {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>GPS pergunta necessário colunas de Latitude e Longitude</value>

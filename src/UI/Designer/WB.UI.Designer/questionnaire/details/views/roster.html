@@ -179,25 +179,45 @@
             <label for="edit-fixed-roster-title" class="wb-label">Fixed set of items: <help key="fixedTitles" /></label>
             <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
             <div class="singleOption">
-                <div class="table-holder">
-                    <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
-                        <div class="column-2">
-                            <input type="number" min="-2147483648" max="2147483647" ng-model="title.value" name="title_value_{{$index}}" ng-pattern="/^([-+]?\d+)$/" 
-                                   ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
-                        </div>
-                        <div class="column-3">
-                            <input type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
-                        </div>
-                        <div class="column-4">
-                            <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>
+                <div ng-if="activeRoster.useListAsRosterTitleEditor" class="form-group">
+                    <div class="table-holder">
+                        <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
+                            <div class="column-2">
+                                <input type="number" min="-2147483648" max="2147483647" ng-model="title.value" name="title_value_{{$index}}" ng-pattern="/^([-+]?\d+)$/"
+                                       ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
+                            </div>
+                            <div class="column-3">
+                                <input type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
+                            </div>
+                            <div class="column-4">
+                                <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>
+                            </div>
                         </div>
                     </div>
                     <p>
-                        <button class="btn btn-link" ng-click="addFixedTitle()">Add item</button>
+                        <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                        <button class="btn btn-link" ng-hide="wasTitlesLimitReached()" ng-click="addFixedTitle()">Add item</button>
                     </p>
-
                 </div>
-
+                <div ng-if="!activeRoster.useListAsRosterTitleEditor">
+                    <div class="form-group" ng-class="{'has-error': !editRosterForm.stringifiedRosterTitles.$valid}">
+                        <textarea name="stringifiedRosterTitles"
+                                  class="form-control mono"
+                                  ng-model="activeRoster.stringifiedRosterTitles"
+                                  match-options-pattern
+                                  max-options-count
+                                  msd-elastic></textarea>
+                        <p class="help-block">
+                            <input class="btn btn-link" type="button" value="Show list" ng-click="showRosterTitlesInList()" ng-disabled="!editRosterForm.stringifiedRosterTitles.$valid" />
+                        </p>
+                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.matchOptionsPattern">
+                            You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. No empty lines are allowed.
+                        </p>
+                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.maxOptionsCount">
+                            You entered more than maximum allowed 200
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </script>

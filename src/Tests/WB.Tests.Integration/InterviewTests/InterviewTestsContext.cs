@@ -96,7 +96,7 @@ namespace WB.Tests.Integration.InterviewTests
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
@@ -119,9 +119,9 @@ namespace WB.Tests.Integration.InterviewTests
             ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
-
+            
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 

@@ -170,6 +170,10 @@
         return moment(date).format("YYYY-MM-DD HH:mm:ss");
     }
 
+    self.exportFormatProgress = function (progress) {
+        return progress === 0 ? "Enqueued" : progress + "%";
+    }
+
     self.updateDataExportInfo(true);
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

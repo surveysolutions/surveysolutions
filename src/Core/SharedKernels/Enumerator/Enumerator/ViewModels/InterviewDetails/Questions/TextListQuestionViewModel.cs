@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -191,9 +189,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private bool IsNeedShowAddNewItem()
         {
-            var isInvalidMaxAnswerCountRule = this.maxAnswerCount.HasValue && this.Answers.Count >= this.maxAnswerCount.Value;
+            if (this.maxAnswerCount.HasValue)
+            {
+                var isInvalidMaxAnswerCountRule = this.Answers.Count >= this.maxAnswerCount.Value;
+                return !isInvalidMaxAnswerCountRule;
+            }
+
             var isInvalidRosterSizeRule = this.isRosterSizeQuestion && this.Answers.Count >= Constants.MaxRosterRowCount;
-            return !(isInvalidMaxAnswerCountRule || isInvalidRosterSizeRule);
+            return !isInvalidRosterSizeRule;
         }
 
         private TextListItemViewModel CreateListItemViewModel(decimal value, string title)

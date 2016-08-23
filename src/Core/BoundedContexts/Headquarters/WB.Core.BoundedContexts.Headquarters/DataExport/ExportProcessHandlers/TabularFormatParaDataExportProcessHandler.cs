@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -40,6 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private ITransactionManager TransactionManager => this.transactionManagerProvider.GetTransactionManager();
         private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
+        private readonly ILogger logger;
+
         public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IPlainStorageAccessor<UserDocument> userReader,
@@ -47,7 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
             IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider,
+            ILogger logger)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -59,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.paraDataAccessor = paraDataAccessor;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.logger = logger;
         }
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
@@ -85,6 +91,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
                     interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
 
+            this.logger.Info($"Starting paradata creation from the begining = {!eventPosition.HasValue} ");
+            Stopwatch watch = Stopwatch.StartNew();
             if (!eventPosition.HasValue)
             {
                 this.paraDataAccessor.ClearParaDataFolder();
@@ -139,6 +147,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.paraDataAccessor.ArchiveParaDataFolder();
 
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
+
+            this.logger.Info($"Finished paradata creation. Took: {watch.Elapsed:g} ");
         }
 
         private void UpdateLastHandledEventPosition(EventPosition eventPosition)

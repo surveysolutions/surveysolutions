@@ -79,9 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Key,
                         interviewLevel.RosterVector,
-                        interviewQuestion.Value.Answer, GetLastComment(interviewQuestion.Value));
-
-                    FillAllComments(answeredQuestion, interviewQuestion.Value);
+                        interviewQuestion.Value.Answer,
+                        GetAllComments(interviewQuestion.Value));
 
                     if (!answeredQuestion.IsEmpty())
                     {
@@ -169,6 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 rejectedDateTime,
                 interviewerAssignedDateTime,
                 userId,
+                interview.SupervisorId,
                 interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(),
@@ -216,12 +216,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             return result;
         }
 
-        private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)
+        private static CommentSynchronizationDto[] GetAllComments(InterviewQuestion interviewQuestion)
         {
-            answeredQuestion.AllComments = (interviewQuestion.Comments?? new List<InterviewQuestionComment>()).Select(x => new CommentSynchronizationDto
+            return (interviewQuestion.Comments?? new List<InterviewQuestionComment>()).Select(x => new CommentSynchronizationDto
             {
                 Date = x.Date,
                 UserId = x.CommenterId,
+                UserRole = x.CommenterRole,
                 Text = x.Text
             }).ToArray();
         }

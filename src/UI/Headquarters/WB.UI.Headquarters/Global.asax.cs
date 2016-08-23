@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
             filters.Add(new InstallationAttribute(), 100);
+            filters.Add(new GlobalNotificationAttribute());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)

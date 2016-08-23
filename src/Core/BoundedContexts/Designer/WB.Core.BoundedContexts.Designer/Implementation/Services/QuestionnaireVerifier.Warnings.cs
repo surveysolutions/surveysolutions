@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool QuestionIsTooShort(IQuestion question)
         {
-            if (string.IsNullOrEmpty(question.QuestionText))
+            if (string.IsNullOrEmpty(question.QuestionText) || !AnsweredManually(question))
                 return false;
 
             return question.QuestionText.Split(new[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length <= 2;
@@ -62,8 +62,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool TooFewVariableLabelsAreDefined(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var countOfAllQuestions = questionnaire.Find<IQuestion>().Count();
-            var countOfQuestionsWithoutLabels= questionnaire.Find<IQuestion>(q=>string.IsNullOrEmpty(q.VariableLabel)).Count();
+            var countOfAllQuestions = questionnaire.Find<IQuestion>(AnsweredManually).Count();
+            var countOfQuestionsWithoutLabels =
+                questionnaire.Find<IQuestion>(q => string.IsNullOrEmpty(q.VariableLabel) && AnsweredManually(q)).Count();
 
             return countOfQuestionsWithoutLabels > (countOfAllQuestions/2);
         }
@@ -200,11 +201,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
         private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(MultiLanguageQuestionnaireDocument questionnaire)
-            => questionnaire.Find<IQuestion>().Count(IsNumericWithoutValidation) > 0.5 * questionnaire.Find<IQuestion>().Count(IsNumeric);
+            => questionnaire.Find<IQuestion>().Count(x => IsNumericWithoutValidation(x) && AnsweredManually(x)) > 0.5 * questionnaire.Find<IQuestion>().Count(IsNumeric);
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
             && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
+
+        private static bool AnsweredManually(IQuestion question) => 
+            !question.Featured && question.QuestionScope != QuestionScope.Headquarter && question.QuestionScope != QuestionScope.Hidden;
 
         private static bool TooManyQuestionsInGroup(IGroup group)
             => group.Children.OfType<IQuestion>().Count() > 200;

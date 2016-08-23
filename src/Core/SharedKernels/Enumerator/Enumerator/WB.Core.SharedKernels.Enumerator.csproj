@@ -70,6 +70,7 @@
     <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
     <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
     <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
+    <Compile Include="Entities\Interview\InterviewComment.cs" />
     <Compile Include="Entities\Interview\InterviewEnablementState.cs" />
     <Compile Include="Entities\Interview\InterviewRoster.cs" />
     <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\AsyncRunner.cs" />
     <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
-    <Compile Include="Implementation\Services\EntityWithErrorsViewModelFactory.cs" />
+    <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InMemoryAsyncPlainStorage.cs" />
@@ -101,6 +102,16 @@
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
+    <Compile Include="Properties\UIResources.es1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.fr1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.fr.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -110,6 +121,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.km.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.pt1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.pt.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\UIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -144,9 +160,11 @@
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\InterviewDetails\CountOfInvalidEntitiesIncreasedMessage.cs" />
+    <Compile Include="ViewModels\InterviewDetails\CoverInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\CoverStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
@@ -257,19 +275,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.2.3\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.2.3\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.2.3\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.2\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.2.3\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

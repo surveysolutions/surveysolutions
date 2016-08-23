@@ -94,6 +94,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             InterviewHistoryView currentState = this.readSideStorage.GetById(evt.EventSourceId);
 
+            if (currentState == null)
+            {
+                var interviewSummary = this.interviewSummaryReader.GetById(evt.EventSourceId);
+                if (interviewSummary != null)
+                    currentState = new InterviewHistoryView(evt.EventSourceId, new List<InterviewHistoricalRecordView>(), 
+                        interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            }
+
             var newState = (InterviewHistoryView)updateMethod
                 .Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
 
@@ -120,15 +128,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<SupervisorAssigned> @event)
         {
-            var interviewSummary = this.interviewSummaryReader.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return null;
-
-            var view = new InterviewHistoryView(@event.EventSourceId, new List<InterviewHistoricalRecordView>(), interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.SupervisorAssigned, @event.Payload.UserId, @event.EventTimeStamp);
-
-            return view;
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.SupervisorAssigned, @event.Payload.UserId, @event.EventTimeStamp);
+            return state;
         }
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQ> @event)

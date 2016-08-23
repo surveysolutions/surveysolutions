@@ -200,6 +200,13 @@ namespace WB.UI.Designer.Api
             return this.questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
         }
 
+        [HttpGet]
+        [CamelCase]
+        public List<DropdownQuestionView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
+        {
+            return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
+        }
+
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));

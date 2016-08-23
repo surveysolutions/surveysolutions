@@ -5,7 +5,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     public interface ICategoricalOptionsProvider
     {
-        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
-        CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionText);
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, Guid? TranslationId);
+        CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionText, Guid? TranslationId);
+        CategoricalOption GetOptionForQuestionFromStructureByOptionValue(Guid questionId, decimal optionValue, Guid? translationId);
     }
 }
