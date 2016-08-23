@@ -33,6 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         bool IsQuestionRosterSize(string variableName);
 
-        bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
+        bool IsRosterSizeQuestionForLongRoster(Guid questionId);
     }
 }
