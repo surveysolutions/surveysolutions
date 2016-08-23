@@ -61,12 +61,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems());
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems();
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
             Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
 
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =

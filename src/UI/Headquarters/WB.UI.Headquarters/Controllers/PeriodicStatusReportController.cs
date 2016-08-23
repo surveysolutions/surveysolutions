@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             PeriodiceReportType.AverageCaseAssignmentDuration
         };
 
-        private readonly PeriodiceReportType[] speedReportTypes =
+        private readonly PeriodiceReportType[] speedReportTypesForHeadquarters =
         {
             PeriodiceReportType.AverageInterviewDuration,
             PeriodiceReportType.AverageSupervisorProcessingTime,
@@ -36,11 +36,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             PeriodiceReportType.AverageOverallCaseProcessingTime
         };
 
-        private readonly PeriodiceReportType[] quantityReportTypes =
+        private readonly PeriodiceReportType[] speedReportTypesForSupervisor =
+        {
+            PeriodiceReportType.AverageInterviewDuration,
+            PeriodiceReportType.AverageCaseAssignmentDuration,
+        };
+
+        private readonly PeriodiceReportType[] quantityReportTypesForHeadquarters =
         {
             PeriodiceReportType.NumberOfCompletedInterviews,
             PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
             PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
+            PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
+        };
+
+        private readonly PeriodiceReportType[] quantityReportTypesForSupervisor =
+        {
+            PeriodiceReportType.NumberOfCompletedInterviews,
             PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
         };
 
@@ -70,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 totalRowPresent: true,
                 supervisorId: supervisorId);
 
-            model.ReportTypes = quantityReportTypes;
+            model.ReportTypes = this.quantityReportTypesForSupervisor;
             model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
@@ -90,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 totalRowPresent: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
-            model.ReportTypes = quantityReportTypes;
+            model.ReportTypes = this.quantityReportTypesForHeadquarters;
 
             return this.View("PeriodicStatusReport", model);
         }
@@ -114,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 totalRowPresent: false,
                 supervisorId: supervisorId);
 
-            model.ReportTypes = speedReportTypes;
+            model.ReportTypes = this.speedReportTypesForSupervisor;
             model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
@@ -138,7 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 reportName: "Speed", totalRowPresent: false,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
-            model.ReportTypes = speedReportTypes;
+            model.ReportTypes = this.speedReportTypesForHeadquarters;
 
             return this.View("PeriodicStatusReport", model);
         }

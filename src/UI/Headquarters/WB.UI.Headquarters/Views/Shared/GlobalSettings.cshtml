@@ -1,4 +1,6 @@
-﻿@using WB.UI.Headquarters.Resources
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters
+@using WB.UI.Headquarters.Resources
 @using WB.UI.Shared.Web.Filters
 @using WB.UI.Headquarters.Code
 
@@ -30,7 +32,10 @@
                 acsrf: {
                     tokenName : '@TokenValidationAuthorizationFilter.Apikey',
                     token : '@TokenHeaderValue()'
-                    }
+                },
+                config: {
+                    syncQueueEnabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true": "false"),
+                }
             }
         };
     }(document));

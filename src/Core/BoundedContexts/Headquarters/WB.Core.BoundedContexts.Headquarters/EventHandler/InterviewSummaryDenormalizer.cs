@@ -84,10 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
                 {
-                    var featuredQuestion = interview.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId);
-                    if (featuredQuestion == null)
-                        return;
-
                     var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
                     if (questionnaire == null)
                         return;

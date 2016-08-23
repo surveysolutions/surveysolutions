@@ -30,7 +30,7 @@
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
 
-    <p class="note has-error" data-bind="visible: invalidUserNameOrPassword">Login or password is incorrect. Please try again.</p>
+    <p class="note has-error server-response-holder" data-bind="visible: userIsNotAuthorized"></p>
     <div class="form-group" data-bind="css: { 'has-error': invalidUserNameOrPassword }">
         <input class="form-control" placeholder="Login" type="text" data-bind="value: userName"/>
     </div>
@@ -61,7 +61,7 @@
         };
         $(function() {
             var signInApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Users", action = "Login"})';
-            var homePageUrl = '@Url.Action("Index", "Questionnaire")';
+            var homePageUrl = '@Model.HomeUrl';
 
             var shouldUseRecaptcha = @Model.ShouldShowCaptcha.ToString().ToLower();
 

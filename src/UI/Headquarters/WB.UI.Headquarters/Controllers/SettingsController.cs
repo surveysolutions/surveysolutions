@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers
             
         }
 
-        public ActionResult ExportEncryptionSettings()
+        public ActionResult Index()
         {
             return View();
         }

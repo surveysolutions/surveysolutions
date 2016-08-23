@@ -58,12 +58,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
-        IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
+        IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId);
 
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
-        
+
+        CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
+
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
         decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
@@ -71,6 +73,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
         int GetMaxRosterRowCount();
+
+        int GetMaxLongRosterRowCount();
 
         bool IsQuestion(Guid entityId);
 
@@ -223,5 +227,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsFixedRoster(Guid id);
 
         IReadOnlyCollection<string> GetTranslationLanguages();
+        bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
     }
 }

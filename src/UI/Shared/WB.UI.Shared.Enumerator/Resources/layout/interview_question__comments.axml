@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_Question_Comments"
-    local:MvxBind="Visible QuestionState.Comments.HasComments">
+   xmlns:local="http://schemas.android.com/apk/res-auto"
+   android:orientation="vertical"
+   style="@style/Interview_Question_Comments">
+   <MvxLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        local:MvxBind="ItemsSource QuestionState.Comments.Comments"
+        local:MvxItemTemplate="@layout/interview_question__comment_item"/>
+  
+   <LinearLayout 
+        android:orientation="vertical"
+        style="@style/Interview_Question_Comment_Editor"
+        local:MvxBind="Visible QuestionState.Comments.IsCommentInEditMode">
+     
     <TextView
         style="@style/Interview_Question_Comments_InterviewerTitle"
         local:MvxBind="Text Localization('Interview_Comment_Interviewer_Caption')" />
-    <TextView
-        style="@style/Interview_Question_Comments_InterviewerDetails"
-        local:MvxBind="Text QuestionState.Comments.InterviewerComment; Visible If(QuestionState.Comments.IsCommentInEditMode, false, true)" />
+     
     <EditText
         style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        local:MvxBind="Text QuestionState.Comments.InterviewerComment; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; Visible QuestionState.Comments.IsCommentInEditMode; SetFocus QuestionState.Comments.IsCommentInEditMode" />
+        local:MvxBind="Text QuestionState.Comments.InterviewerComment; Visible QuestionState.Comments.IsCommentInEditMode; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; SetFocus QuestionState.Comments.IsCommentInEditMode" />
+  </LinearLayout>
 </LinearLayout>

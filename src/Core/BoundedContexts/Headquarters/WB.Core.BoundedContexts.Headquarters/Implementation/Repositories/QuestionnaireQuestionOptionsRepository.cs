@@ -9,14 +9,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, int? parentQuestionValue, string filter, Guid? translationId)
         {
-            return categoricalOptionsProvider.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
+            return categoricalOptionsProvider.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter, translationId);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, string optionText)
+        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, string optionText, Guid? translationId)
         {
-            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionText(questionId, optionText);
+            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionText(questionId, optionText, translationId);
+        }
+
+        public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
+            ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, decimal optionValue, Guid? translationId)
+        {
+            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionValue(questionId, optionValue, translationId);
         }
     }
 }

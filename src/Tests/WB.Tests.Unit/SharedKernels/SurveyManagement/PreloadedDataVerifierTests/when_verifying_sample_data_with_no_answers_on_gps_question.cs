@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService =
                 Create.Service.PreloadedDataService(questionnaire);
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, new QuestionDataParser(), preloadedDataService);
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
@@ -40,6 +40,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
-         
     }
 }

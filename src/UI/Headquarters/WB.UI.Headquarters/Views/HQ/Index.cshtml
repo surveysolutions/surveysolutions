@@ -58,6 +58,7 @@
             <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
             <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
             <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
+            <th data-bind='sortby : "ImportDate"'>@Dashboard.ImportDate</th>
             <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
             <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
             <th>@Dashboard.Actions</th>
@@ -73,6 +74,7 @@
                 </td>
                 <td style="vertical-align: middle" data-bind="text: Title, css: {'text-italic':Disabled }"></td>
                 <td style="vertical-align: middle" data-bind="text: Version"></td>
+                <td style="vertical-align: middle" data-bind="date: ImportDate"></td>
                 <td style="vertical-align: middle" data-bind="date: CreationDate"></td>
                 <td style="vertical-align: middle" data-bind="date: LastEntryDate"></td>
                 <td>

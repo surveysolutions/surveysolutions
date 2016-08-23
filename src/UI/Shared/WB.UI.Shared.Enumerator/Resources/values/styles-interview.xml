@@ -46,6 +46,57 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
+  <style name ="Interview_Cover_Screen_Header" parent="FullWidthWrappingLayout">
+    <item name="android:textColor">@color/complete_screen_title_text</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:textSize">@dimen/textsize_24</item>
+    <item name="android:fontFamily">@string/font_fontFamily_medium</item>
+  </style>
+  
+  <style name ="Interview_Cover_Prefilled_Answers_Block" parent="FullWidthWrappingLayout">
+    <item name="android:background">@color/colorBlueThemePrimary</item>
+   <item name="android:paddingLeft">@dimen/Interview_Cover_Marker_Line_width</item>
+  </style>
+  
+  <style name ="Interview_Cover_Prefilled_Answers" parent="FullWidthWrappingLayout">
+    <item name="android:background">@android:color/white</item>
+    <item name="android:divider">@android:color/transparent</item>
+    <item name="android:paddingTop">@dimen/Interview_Cover_Prefilled_Block_vertical_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Cover_Prefilled_Block_vertical_padding</item>
+  </style> 
+  
+   <style name ="Interview_Cover_Prefilled_Question" parent="Interview_Entity">
+     <item name="android:layout_marginTop">@dimen/Interview_Cover_Prefilled_vertical_padding</item>
+     <item name="android:layout_marginBottom">@dimen/Interview_Cover_Prefilled_vertical_padding</item>
+  </style>
+
+  <style name ="Interview_Cover_Question_Title" parent="Interview_Entity_BasicFont">
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:textColor">@color/complete_screen_title_text</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>  
+
+  <style name ="Interview_Cover_Question_Answer" parent="Interview_Entity_BasicFont">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/question_title_text</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name ="Interview_Cover_Supervisor_Note" parent="Interview_Entity">
+  </style>
+
+  <style name ="Interview_Cover_Supervisor_Note_Text" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/cover_not_from_supervisor_color</item>
+  </style>
+
   <style name ="Interview_Complete_Screen_Scroll">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>

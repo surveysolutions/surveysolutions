@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
         {
-            this.SetResponsible(command);
+            this.SetResponsibleOrThrowIfDontHavePermissions(command);
             ValidateAddSharedPersonCommand(command);
             ValidateRemoveSharedPersonCommand(command);
 
@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Code.Implementation
                 return questionnaire;
 
             var sharedPersons = this.sharedPersons.GetById(id);
-            if (sharedPersons == null || !sharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId))
+            if (sharedPersons == null || sharedPersons.SharedPersons.All(x => x.Id != this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }
@@ -74,13 +74,20 @@ namespace WB.UI.Designer.Code.Implementation
             return questionnaire;
         }
 
-        private void SetResponsible(ICommand command)
+        private void SetResponsibleOrThrowIfDontHavePermissions(ICommand command)
         {
             var currentCommand = command as QuestionnaireCommandBase;
-            if (currentCommand != null)
+            if (currentCommand == null) return;
+
+            var updateQuestionnaireCommand = currentCommand as UpdateQuestionnaire;
+            if (updateQuestionnaireCommand != null && updateQuestionnaireCommand.IsPublic &&
+                !this.userHelper.WebUser.IsAdmin)
             {
-                currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
+                throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden,
+                    "You don't have permissions to make questionnaire as public");
             }
+
+            currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
         }
 
         private static void ValidateAddSharedPersonCommand(ICommand command)

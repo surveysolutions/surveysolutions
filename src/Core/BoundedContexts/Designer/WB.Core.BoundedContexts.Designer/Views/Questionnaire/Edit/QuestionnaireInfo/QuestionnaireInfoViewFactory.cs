@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
@@ -18,18 +19,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IAttachmentService attachmentService;
+        private readonly IMembershipUserService membershipUserService;
 
         public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
             IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            IMembershipUserService membershipUserService)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;
             this.attachmentService = attachmentService;
+            this.membershipUserService = membershipUserService;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
@@ -86,6 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
+            questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros
@@ -115,6 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
                     Meta = attachments.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
                 })
+                .OrderBy(x => x.Name)
                 .ToList();
 
 
@@ -124,6 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     TranslationId = translationIdentity.Id.FormatGuid(),
                     Name = translationIdentity.Name
                 })
+                .OrderBy(x => x.Name)
                 .ToList();
 
             return questionnaireInfoView;

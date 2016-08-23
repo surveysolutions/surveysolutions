@@ -42,7 +42,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public void EnableGroups(IEnumerable<Identity> groupsToEnable) => this.adaptee.EnableGroups(groupsToEnable);
         public void DisableQuestions(IEnumerable<Identity> questionsToDisable) => this.adaptee.DisableQuestions(questionsToDisable);
         public void EnableQuestions(IEnumerable<Identity> questionsToEnable) => this.adaptee.EnableQuestions(questionsToEnable);
-        public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex) => this.adaptee.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
+        public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
+        {
+            this.adaptee.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
+            this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, "obsolete, don't use it");
+        }
         public void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId) => this.adaptee.RemoveRoster(rosterId, rosterVector, rosterInstanceId);
         public ValidityChanges ProcessValidationExpressions() => this.adaptee.ProcessValidationExpressions();
         public EnablementChanges ProcessEnablementConditions() => this.adaptee.ProcessEnablementConditions();

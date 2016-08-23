@@ -55,7 +55,7 @@
                     var translation = {};
                     if (!_.any($scope.translations, function (elem) { return elem.translationId === translationDto.translationId; })) {
                         dataBind(translation, translationDto);
-                        $scope.translations.unshift(translation);
+                        $scope.translations.push(translation);
                     }
                 });
             };
@@ -82,7 +82,7 @@
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
                         translation.initialTranslation = angular.copy(translation);
-                        $scope.translations.unshift(translation);
+                        $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
                 });

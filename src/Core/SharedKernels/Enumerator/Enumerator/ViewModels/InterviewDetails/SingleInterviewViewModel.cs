@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public abstract IReadOnlyCollection<string> AvailableLanguages { get; }
         public abstract string CurrentLanguage { get; }
+        public abstract IMvxCommand ReloadCommand { get; }
 
         protected string interviewId;
 

@@ -413,6 +413,7 @@
     <Compile Include="UserPreloading\Tasks\UserPreloadingCleanerTask.cs" />
     <Compile Include="UserPreloading\UserPreloadingSettings.cs" />
     <Compile Include="ValueObjects\Export\ExportFileSettings.cs" />
+    <Compile Include="ValueObjects\GlobalNotice.cs" />
     <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />

@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Version);
             Property(x => x.CreationDate);
             Property(x => x.LastEntryDate);
+            Property(x => x.ImportDate);
             Property(x => x.Title);
             Property(x => x.IsPublic);
             Property(x => x.CreatedBy);

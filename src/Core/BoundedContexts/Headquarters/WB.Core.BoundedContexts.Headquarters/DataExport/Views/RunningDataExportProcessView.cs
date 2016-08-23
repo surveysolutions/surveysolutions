@@ -16,5 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DataExportFormat Format { get;  set; }
         public InterviewStatus? InterviewStatus { get;  set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public DataExportStatus ProcessStatus { get; set; }
     }
 }

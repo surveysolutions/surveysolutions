@@ -1,14 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -62,7 +66,14 @@ namespace WB.UI.Interviewer.Activities
             foreach (var questionnaireView in questionnaires)
             {
                 var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
-                await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireView.Identity, questionnaire.Document);
+
+                var questionsWithLongOptionsList = questionnaire.Document.Find<SingleQuestion>(
+                    x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
+
+                foreach (var question in questionsWithLongOptionsList)
+                {
+                    await optionsRepository.StoreOptionsForQuestionAsync(questionnaireView.Identity, question.PublicKey, question.Answers, new List<TranslationDto>());
+                }
             }
         }
     }

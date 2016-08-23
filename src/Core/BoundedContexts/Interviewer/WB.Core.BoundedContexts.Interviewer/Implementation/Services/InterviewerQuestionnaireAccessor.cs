@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -26,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
-        private readonly IAsyncPlainStorage<TranslationInstance> translations;
+        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
@@ -37,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
             IOptionsRepository optionsRepository, 
-            IAsyncPlainStorage<TranslationInstance> translations)
+            IAsyncPlainStorage<TranslationInstance> translationsStorage)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -47,25 +53,54 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewFactory = interviewFactory;
             this.questionnaireDocuments = questionnaireDocuments;
             this.optionsRepository = optionsRepository;
-            this.translations = translations;
+            this.translationsStorage = translationsStorage;
         }
 
-        public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
+        public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
         {
-            var questionnaireId = questionnaireIdentity.ToString();
-
-            var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            var serializedQuestionnaireDocument = this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument);
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
-           
-            await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireIdentity, serializedQuestionnaireDocument);
+            
+            await optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
 
-            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, 
-                questionnaireIdentity.Version, 
+            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<SingleQuestion>(
+                x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
+
+            foreach (var question in questionsWithLongOptionsList)
+            {
+                var questionTranslations = translationDtos.Where(x => x.QuestionnaireEntityId == question.PublicKey).ToList();
+
+                await this.optionsRepository.StoreOptionsForQuestionAsync(questionnaireIdentity, question.PublicKey, question.Answers, questionTranslations);
+
+                //remove original answers after saving
+                //to save resources
+                question.Answers = new List<Answer>();
+            }
+
+            var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToList();
+
+            List<TranslationInstance> filteredTranslations = translationDtos
+                .Except(x => questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId) && x.Type == TranslationType.OptionTitle)
+                .Select(translationDto => new TranslationInstance
+                    {
+                        QuestionnaireId = questionnaireIdentity.ToString(),
+                        TranslationId = translationDto.TranslationId,
+                        QuestionnaireEntityId = translationDto.QuestionnaireEntityId,
+                        Type = translationDto.Type,
+                        TranslationIndex = translationDto.TranslationIndex,
+                        Value = translationDto.Value,
+                        Id = Guid.NewGuid().FormatGuid()
+                    }).ToList();
+
+            await this.StoreTranslationsAsync(questionnaireIdentity, filteredTranslations);
+
+            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
+                questionnaireIdentity.Version,
                 serializedQuestionnaireDocument);
 
             await this.questionnaireViewRepository.StoreAsync(new QuestionnaireView
             {
-                Id = questionnaireId,
+                Id = questionnaireIdentity.ToString(),
                 Identity = questionnaireIdentity,
                 Census = census,
                 Title = serializedQuestionnaireDocument.Title
@@ -104,7 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
             await this.RemoveTranslationsAsync(questionnaireIdentity);
-            await this.translations.StoreAsync(translationInstances);
+            await this.translationsStorage.StoreAsync(translationInstances);
         }
 
         private async Task RemoveTranslationsAsync(QuestionnaireIdentity questionnaireIdentity)
@@ -112,9 +147,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             string questionnaireId = questionnaireIdentity.ToString();
 
             var storedTranslations =
-                await this.translations.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
+                await this.translationsStorage.WhereAsync(x => x.QuestionnaireId == questionnaireId).ConfigureAwait(false);
 
-            await this.translations.RemoveAsync(storedTranslations).ConfigureAwait(false);
+            await this.translationsStorage.RemoveAsync(storedTranslations).ConfigureAwait(false);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
