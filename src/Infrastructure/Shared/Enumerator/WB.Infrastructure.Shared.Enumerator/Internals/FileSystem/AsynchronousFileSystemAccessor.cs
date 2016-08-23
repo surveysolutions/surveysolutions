@@ -50,19 +50,22 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         public async Task CopyDirectoryAsync(string sourceDirectory, string targetDir)
         {
             var sourceFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(sourceDirectory);
-            var filesInSourceFolder = await sourceFolder.GetFilesAsync();
-
-            var targetFolderPath = Path.Combine(targetDir, sourceFolder.Name);
-            var targetFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetFolderPath);
-
-            if (targetFolder == null)
+            if (sourceFolder != null)
             {
-                await CreateDirectoryAsync(targetFolderPath);
-            }
+                var targetFolderPath = Path.Combine(targetDir, sourceFolder.Name);
+                var targetFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetFolderPath);
 
-            foreach (var file in filesInSourceFolder)
-            {
-                await CopyFileAsync(file.Path, targetFolderPath);
+                if (targetFolder == null)
+                {
+                    await CreateDirectoryAsync(targetFolderPath);
+                }
+
+                var filesInSourceFolder = await sourceFolder.GetFilesAsync();
+
+                foreach (var file in filesInSourceFolder)
+                {
+                    await CopyFileAsync(file.Path, targetFolderPath);
+                }
             }
         }
 
@@ -83,11 +86,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
         public async Task<bool> IsDirectoryExistsAsync(string pathToDirectory)
         {
-            var parentFolderPath = Directory.GetParent(pathToDirectory).FullName;
-            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
-            if (parentFolder == null) return false;
-            return (await parentFolder.CheckExistsAsync(Path.GetDirectoryName(pathToDirectory))) ==
-                   ExistenceCheckResult.FolderExists;
+            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(pathToDirectory);
+            return parentFolder != null;
         }
 
         public async Task<bool> IsFileExistsAsync(string pathToFile)
@@ -95,8 +95,9 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             var parentFolderPath = Directory.GetParent(pathToFile).FullName;
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
             if (parentFolder == null) return false;
-            return (await parentFolder.CheckExistsAsync(Path.GetFileName(pathToFile))) ==
-                  ExistenceCheckResult.FileExists;
+            
+            var checkResult = await parentFolder.CheckExistsAsync(Path.GetFileName(pathToFile));
+            return checkResult == ExistenceCheckResult.FileExists;
         }
 
         public string CombinePath(string path1, string path2)
