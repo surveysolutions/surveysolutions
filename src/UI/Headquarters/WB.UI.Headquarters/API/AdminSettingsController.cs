@@ -37,13 +37,13 @@ namespace WB.UI.Headquarters.API
 
         public HttpResponseMessage Post([FromBody] GlobalNoticeModel message)
         {
-            if (message == null || string.IsNullOrEmpty(message.Message))
+            if (string.IsNullOrEmpty(message?.Message))
             {
                 this.noticeStorage.Remove(settingsKey);
             }
 
             var globalNotice = this.noticeStorage.GetById(settingsKey) ?? new GlobalNotice();
-            globalNotice.Message = message.Message;
+            globalNotice.Message = message.Message.Length > 1000 ? message.Message.Substring(0, 1000) : message.Message;
             this.noticeStorage.Store(globalNotice, settingsKey);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
