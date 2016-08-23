@@ -1104,5 +1104,10 @@ namespace WB.Tests.Unit.TestFactories
                 Type = type ?? TranslationType.Unknown
             };
         }
+
+        public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId)
+        {
+            return new RosterSynchronizationDto(rosterId, new decimal[] {}, 0, 0, "roster title");
+        }
     }
 }
