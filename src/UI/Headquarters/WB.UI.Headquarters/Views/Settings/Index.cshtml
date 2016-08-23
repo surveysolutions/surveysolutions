@@ -52,7 +52,7 @@
     <form class="well well-sm col-sm-6">
         <div class="form-group">
             <label for="notificationText">@Settings.GlobalNotice: </label>
-            <input class="form-control" id="notificationText" type="text" data-bind="value: message" />
+            <input class="form-control" id="notificationText" type="text" data-bind="value: message" maxlength="1000" />
         </div>
         <button type="button" class="btn btn-primary" data-bind="click: updateMessage">
             Save
