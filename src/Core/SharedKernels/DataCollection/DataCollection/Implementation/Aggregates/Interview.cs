@@ -1538,9 +1538,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
 
-            this.ApplyRosterTitleChanges(targetQuestionnaire);
-
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
+            this.ApplyRosterTitleChanges(targetQuestionnaire);
         }
 
         protected void ApplyRosterTitleChanges(IQuestionnaire targetQuestionnaire)
