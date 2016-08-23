@@ -230,7 +230,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 optionsToSave.Add(optionView);
 
-                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId && x.TranslationIndex == answer.AnswerValue)
+                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId &&
+                                                                x.TranslationIndex == answer.AnswerValue && 
+                                                                x.Type == TranslationType.OptionTitle)
                     .Select(y => new OptionView
                     {
                         Id = $"{questionnaireIdAsString}-{questionIdAsString}-{answer.AnswerValue}-{y.TranslationId.FormatGuid()}",
