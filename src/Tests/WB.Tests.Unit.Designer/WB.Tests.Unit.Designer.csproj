@@ -280,6 +280,7 @@
     <Compile Include="Applications\CommandDeserializerTests\when_deserializing_command_of_type__UpdateQuestion__with_title.cs" />
     <Compile Include="Applications\CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Applications\CommandInflaterTests\CommandInflaterTestsContext.cs" />
+    <Compile Include="Applications\CommandInflaterTests\when_UpdateQuestionnaire_is_inflating_and_admin_make_questionnaire_as_public.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_UpdateQuestionnaire_is_inflating_and_user_non_admin.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating_with_not_shared_non_public_questionnaire.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire.cs" />
