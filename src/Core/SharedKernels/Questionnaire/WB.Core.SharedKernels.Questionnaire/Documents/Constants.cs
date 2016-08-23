@@ -2,6 +2,8 @@
 {
     public class Constants
     {
-        public const int MaxRosterRowCount = 40;
+        public static readonly int MaxAmountOfItemsInLongRoster = 30;
+        public static readonly int MaxRosterRowCount = 60;
+        public static readonly int MaxLongRosterRowCount = 200;
     }
 }

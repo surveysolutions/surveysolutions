@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -295,10 +296,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
 
-                    await this.DownloadTranslations(questionnaireId: selectedQuestionnaire.Id,
-                            fakeQuestionnaireIdentity: fakeQuestionnaireIdentity);
+                    var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: selectedQuestionnaire.Id, token: this.tokenSource.Token);
 
-                    await this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage);
+                    await this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations);
+
                     var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
@@ -361,7 +362,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return interviewId;
         }
 
-        private async Task StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
+        private async Task StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage, TranslationDto[] translations)
         {
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
@@ -370,8 +371,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
 
             var supportingAssembly = questionnairePackage.Assembly;
-
-            await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+            
+            await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations);
         }
 
         private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
@@ -410,24 +411,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
             }
         }
-
-        private async Task DownloadTranslations(string questionnaireId, QuestionnaireIdentity fakeQuestionnaireIdentity)
-        {
-            var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: questionnaireId, token: this.tokenSource.Token);
-
-            await this.translationsStorage.RemoveAllAsync();
-            await this.translationsStorage.StoreAsync(translations.Select(translation => new TranslationInstance
-            {
-                Id = Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = fakeQuestionnaireIdentity.ToString(),
-                Type = translation.Type,
-                TranslationIndex = translation.TranslationIndex,
-                QuestionnaireEntityId = translation.QuestionnaireEntityId,
-                TranslationId = translation.TranslationId,
-                Value = translation.Value
-            }));
-        }
-
+       
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;

@@ -44,8 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             viewModel.Handle(Create.Event.GroupsEnabled(sectionDId, Empty.RosterVector));
         };
 
-        It should_contains_two_sections_and_complete_button = () =>
-            viewModel.Sections.Count.ShouldEqual(2 + 1);
+        It should_contains_two_sections_and_complete_and_cover_button = () =>
+            viewModel.Sections.Count.ShouldEqual(2 + 1 + 1);
 
         It should_add_section_D_at_second_position = () =>
         {

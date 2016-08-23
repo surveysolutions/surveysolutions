@@ -2,9 +2,11 @@
 {
     public enum DataExportFormat
     {
-        Tabular,
+        Tabular = 1,
         STATA,
         SPSS,
-        Binary
+        Binary,
+        DDI,
+        Paradata
     }
 }

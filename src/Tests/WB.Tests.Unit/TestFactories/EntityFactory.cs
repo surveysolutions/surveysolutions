@@ -6,11 +6,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using System.Collections.Generic;
 using System.Globalization;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -29,12 +27,10 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -55,12 +51,12 @@ namespace WB.Tests.Unit.TestFactories
             };
 
         public AnsweredQuestionSynchronizationDto AnsweredQuestionSynchronizationDto(
-            Guid? questionId = null, decimal[] rosterVector = null, object answer = null)
+            Guid? questionId = null, decimal[] rosterVector = null, object answer = null, params CommentSynchronizationDto[] comments)
             => new AnsweredQuestionSynchronizationDto(
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
-                answer ?? "42",
-                "no comment");
+                answer,
+                comments ?? new CommentSynchronizationDto[0]);
 
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
             => new AnsweredYesNoOption(value, answer);
@@ -118,6 +114,16 @@ namespace WB.Tests.Unit.TestFactories
                 Comment = comment,
                 Date = timestamp ?? DateTime.Now,
             };
+        
+        public CommentSynchronizationDto CommentSynchronizationDto(string text = "hello!", Guid? userId = null, UserRoles? userRole = null)
+        {
+            return new CommentSynchronizationDto
+            {
+                Text = text,
+                UserId = userId ?? Guid.NewGuid(),
+                UserRole = userRole
+            };
+        }
 
         public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null)
             => new DataExportProcessDetails(
@@ -419,6 +425,7 @@ namespace WB.Tests.Unit.TestFactories
             Guid? questionnaireId = null,
             long? questionnaireVersion = null,
             Guid? userId = null,
+            Guid? supervisorId = null,
             AnsweredQuestionSynchronizationDto[] answers = null,
             HashSet<InterviewItemId> disabledGroups = null,
             HashSet<InterviewItemId> disabledQuestions = null,
@@ -441,6 +448,7 @@ namespace WB.Tests.Unit.TestFactories
                 null,
                 null,
                 userId ?? Guid.NewGuid(),
+                supervisorId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1,
                 answers ?? new AnsweredQuestionSynchronizationDto[0],

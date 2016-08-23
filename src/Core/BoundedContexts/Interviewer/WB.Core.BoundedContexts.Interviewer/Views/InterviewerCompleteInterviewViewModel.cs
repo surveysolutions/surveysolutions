@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
             InterviewStateViewModel interviewState,
-            IEntityWithErrorsViewModelFactory entityWithErrorsViewModelFactory,
+            IEntitiesListViewModelFactory entitiesListViewModelFactory,
             DynamicTextViewModel dynamicTextViewModel)
-            : base(viewModelNavigationService, commandService, principal, messenger, entityWithErrorsViewModelFactory, interviewState, dynamicTextViewModel)
+            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
         }

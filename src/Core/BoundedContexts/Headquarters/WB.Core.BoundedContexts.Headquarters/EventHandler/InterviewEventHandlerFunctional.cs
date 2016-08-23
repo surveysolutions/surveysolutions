@@ -269,8 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interview;
         }
 
-        private InterviewData SaveComment(InterviewData interview, decimal[] vector, Guid questionId, string comment, Guid userId, string userName,
-            DateTime commentTime)
+        private InterviewData SaveComment(InterviewData interview, decimal[] vector, Guid questionId, string comment, Guid userId, string userName, DateTime commentTime, UserRoles commenterRole)
         {
             var interviewQuestionComment = new InterviewQuestionComment()
             {
@@ -278,7 +277,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 Text = comment,
                 CommenterId = userId,
                 CommenterName = userName,
-                Date = commentTime
+                Date = commentTime,
+                CommenterRole = commenterRole
             };
 
             return UpdateQuestion(interview, vector, questionId, (question) =>
@@ -444,9 +444,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswerCommented> @event)
         {
             var commenter = this.users.GetById(@event.Payload.UserId.FormatGuid());
-
+            
             return this.SaveComment(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                @event.Payload.Comment, @event.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", @event.Payload.CommentTime);
+                @event.Payload.Comment, @event.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", @event.Payload.CommentTime,
+                commenter.Roles.FirstOrDefault());
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)

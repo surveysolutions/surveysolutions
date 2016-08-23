@@ -9,6 +9,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Core.Views;
@@ -80,6 +81,7 @@ namespace WB.UI.Shared.Enumerator
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
+                {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -95,6 +97,7 @@ namespace WB.UI.Shared.Enumerator
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
+            registry.AddOrOverwrite("RoleToColor", new RoleToColorConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
@@ -111,7 +114,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("Watermark", (view) => new TextViewWatermarkBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
-            registry.RegisterCustomBindingFactory<TextView>("SideBarPrefillQuestion", (view) => new TextViewSideBarPrefillQuestionBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
             registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("FocusValueChanged", (editText) => new EditTextFocusValueChangedBinding(editText));
@@ -156,6 +158,12 @@ namespace WB.UI.Shared.Enumerator
             {
                 typeof(EnumeratorSharedKernelModule).Assembly,
             };
+        }
+
+        protected override void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+            Mvx.RegisterType<IMvxBindingContext, MvxBindingContext>();
         }
     }
 }

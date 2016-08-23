@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -23,8 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
-        internal const int RosterUpperBoundDefaultValue = 40;
-
         private readonly IPrincipal principal; 
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -151,7 +150,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.previousAnswer = Monads.Maybe(() => answerModel.Answer);
             }
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
-            this.answerMaxValue = RosterUpperBoundDefaultValue;
+            var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);
+
+            if (isRosterSizeOfLongRoster)
+                this.answerMaxValue = Constants.MaxLongRosterRowCount;
+            else
+                this.answerMaxValue = Constants.MaxRosterRowCount;
         }
 
         private async Task SendAnswerIntegerQuestionCommandAsync()

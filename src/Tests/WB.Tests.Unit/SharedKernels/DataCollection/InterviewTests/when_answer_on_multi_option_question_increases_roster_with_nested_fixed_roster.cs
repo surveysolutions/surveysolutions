@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.MultyOption
                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { rosterGroupId }
-                   && _.GetAnswerOptionsAsValues(questionWhichIncreasesRosterSizeId) == new decimal[] { 0 }
+                   && _.GetMultiSelectAnswerOptionsAsValues(questionWhichIncreasesRosterSizeId) == new decimal[] { 0 }
 
                    && _.HasGroup(fixedRosterGroupId) == true
                    && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2

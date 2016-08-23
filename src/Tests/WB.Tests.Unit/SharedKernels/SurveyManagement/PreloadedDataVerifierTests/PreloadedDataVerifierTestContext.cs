@@ -29,8 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
     [Subject(typeof(PreloadedDataVerifier))]
     internal class PreloadedDataVerifierTestContext
     {
-        protected static PreloadedDataVerifier CreatePreloadedDataVerifier(QuestionnaireDocument questionnaireDocument = null,
-            IQuestionDataParser questionDataParser = null, IPreloadedDataService preloadedDataService = null, IUserViewFactory userViewFactory=null)
+        protected static PreloadedDataVerifier CreatePreloadedDataVerifier(
+            QuestionnaireDocument questionnaireDocument = null, 
+            IPreloadedDataService preloadedDataService = null,
+            IUserViewFactory userViewFactory=null)
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null

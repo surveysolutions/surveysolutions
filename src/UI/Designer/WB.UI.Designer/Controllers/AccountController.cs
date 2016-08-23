@@ -62,7 +62,8 @@ namespace WB.UI.Designer.Controllers
             return this.View(new LoginModel()
             {
                 ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
-                GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"]
+                GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"],
+                HomeUrl = Url.Action("Index", "Questionnaire")
             });
         }
 

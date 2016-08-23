@@ -1,5 +1,4 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -43,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
                     viewResult.ViewBag.InterviewsCountAllowedToCreateUntilLimitReached = interviewsLeft;
                     viewResult.ViewBag.MaxAllowedInterviewsCount = maxAllowedInterviewsCount;
-                    viewResult.ViewBag.PayAttentionOnInterviewLimitIndicator = interviewsLeft <= (limit/10);
+                    viewResult.ViewBag.PayAttentionOnInterviewLimitIndicator = interviewsLeft <= (limit / 10);
                 }
 
             }

@@ -123,8 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             savedInterviewSummary.WasCreatedOnClient = true;
 
 
-            var featuredQuestionsMeta = new AnsweredQuestionSynchronizationDto[]{new AnsweredQuestionSynchronizationDto(
-                    questionId, new decimal[0], answer, string.Empty ) };
+            var featuredQuestionsMeta = new []{ Create.Entity.AnsweredQuestionSynchronizationDto(questionId, new decimal[0], answer ) };
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
 

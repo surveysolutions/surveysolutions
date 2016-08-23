@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -69,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
 
         private static TextListQuestionViewModel listModel;
-        private static NavigationState navigationState = Create.Other.NavigationState();
+        private static readonly NavigationState navigationState = Create.Other.NavigationState();
 
         private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock = 
             new Mock<QuestionStateViewModel<TextListQuestionAnswered>>{ DefaultValue = DefaultValue.Mock };

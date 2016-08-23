@@ -27,6 +27,7 @@ using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.Infrastructure.Shared.Enumerator.Internals;
+using WB.UI.Interviewer.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Interviewer.Infrastructure

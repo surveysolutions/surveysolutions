@@ -39,30 +39,30 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                                  {
-                                     Create.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
-                                     Create.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
-                                     Create.Option(value: "2.1", text: "child 1 for parent option 2", parentValue: "2"),
-                                     Create.Option(value: "2.1", text: "child 2 for parent option 2", parentValue: "2"),
+                                     Create.Option(value: "11", text: "child 1 for parent option 1", parentValue: "1"),
+                                     Create.Option(value: "12", text: "child 2 for parent option 1", parentValue: "1"),
+                                     Create.Option(value: "21", text: "child 1 for parent option 2", parentValue: "2"),
+                                     Create.Option(value: "21", text: "child 2 for parent option 2", parentValue: "2"),
                                  }),
                     Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                                  {
-                                     Create.Option(value: "11.1", text: "grand child 1 for parent option 1.1", parentValue: "1.1"),
-                                     Create.Option(value: "11.2", text: "grand child 2 for parent option 1.1", parentValue: "1.1"),
-                                     Create.Option(value: "12.1", text: "grand child 3 for parent option 1.2", parentValue: "1.2"),
-                                     Create.Option(value: "12.2", text: "grand child 4 for parent option 1.2", parentValue: "1.2"),
-                                     Create.Option(value: "21.1", text: "grand child 1 for parent option 2.1", parentValue: "2.1"),
-                                     Create.Option(value: "21.2", text: "grand child 2 for parent option 2.1", parentValue: "2.1"),
-                                     Create.Option(value: "22.1", text: "grand child 3 for parent option 2.2", parentValue: "2.2"),
-                                     Create.Option(value: "22.2", text: "grand child 4 for parent option 2.2", parentValue: "2.2"),
+                                     Create.Option(value: "111", text: "grand child 1 for parent option 11", parentValue: "11"),
+                                     Create.Option(value: "112", text: "grand child 2 for parent option 11", parentValue: "11"),
+                                     Create.Option(value: "121", text: "grand child 3 for parent option 12", parentValue: "12"),
+                                     Create.Option(value: "122", text: "grand child 4 for parent option 12", parentValue: "12"),
+                                     Create.Option(value: "211", text: "grand child 1 for parent option 21", parentValue: "21"),
+                                     Create.Option(value: "212", text: "grand child 2 for parent option 21", parentValue: "21"),
+                                     Create.Option(value: "221", text: "grand child 3 for parent option 22", parentValue: "22"),
+                                     Create.Option(value: "222", text: "grand child 4 for parent option 22", parentValue: "22"),
                                  })
                     );
 
                 var interview = SetupInterview(questionnaire, new List<object>());
 
                 interview.AnswerSingleOptionQuestion(userId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(userId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1.2m);
-                interview.AnswerSingleOptionQuestion(userId, grandChildCascadedComboboxId, new decimal[] { }, DateTime.Now, 12.2m);
+                interview.AnswerSingleOptionQuestion(userId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 12m);
+                interview.AnswerSingleOptionQuestion(userId, grandChildCascadedComboboxId, new decimal[] { }, DateTime.Now, 122m);
 
                 using (var eventContext = new EventContext())
                 {

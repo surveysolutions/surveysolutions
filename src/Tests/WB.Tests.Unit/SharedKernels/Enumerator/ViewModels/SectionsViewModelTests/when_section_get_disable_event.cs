@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             viewModel.Handle(new GroupsDisabled(new[] { new Identity(sectionBId, new decimal[0]) }));
         };
 
-        It should_contains_only_one_section_and_complete_button = () =>
-            viewModel.Sections.Count.ShouldEqual(2);
+        It should_contains_only_one_section_and_complete_and_cover_button = () =>
+            viewModel.Sections.Count.ShouldEqual(1+1+1);
 
         It should_contains_first_section = () =>
             viewModel.Sections.First().ShouldEqual(firstSelectedSection);

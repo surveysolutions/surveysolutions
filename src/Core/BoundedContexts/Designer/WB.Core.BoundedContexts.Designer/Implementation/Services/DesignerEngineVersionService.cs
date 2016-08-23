@@ -41,6 +41,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         HasQuestionnaire = (questionnaire) => questionnaire.Find<IMultyOptionsQuestion>(q => q.YesNoView).Any(),
                         Description = "Yes/No questions"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.ConditionExpression) &&
+                                                                                                 q.ConditionExpression.Contains("IsValidEmail")).Any() 
+                                                              ||
+                                                              questionnaire.Find<IQuestion>(q => q.ValidationConditions.Count() == 1 &&
+                                                                                                 !string.IsNullOrEmpty(q.ValidationConditions.First().Expression) &&
+                                                                                                 q.ValidationConditions.First().Expression.Contains("IsValidEmail")).Any(),
+                        Description = "Expression uses IsValidEmail"
                     }
                 }
             },

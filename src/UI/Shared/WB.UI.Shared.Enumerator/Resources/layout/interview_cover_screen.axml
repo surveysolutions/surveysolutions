@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto"
+            style="@style/Interview_Complete_Screen_Scroll">
+    <LinearLayout
+        style="@style/Interview_QuestionWithDivider"
+        local:MvxBind="HideKeyboardOnClick .">
+        <LinearLayout style="@style/Interview_QuestionWithDivider"
+            local:MvxBind="HideKeyboardOnClick .">
+      
+            <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
+                <LinearLayout style="@style/Interview_Question_Header">
+                <TextView
+                    style="@style/Interview_Cover_Screen_Header"
+                    local:MvxBind="Text QuestionnaireTitle;" />
+                </LinearLayout>
+            </LinearLayout >
+        </LinearLayout>
+
+        <LinearLayout android:orientation="vertical" 
+                      local:MvxBind="Visibility Visibility(SupervisorNote)"
+                      style="@style/Interview_Cover_Supervisor_Note">
+            <LinearLayout style="@style/Interview_Question_Header">
+                  <TextView
+                      style="@style/Interview_Complete_Screen_Text"
+                      local:MvxBind="Text Localization('Interview_Cover_Supervisor_Note')" />
+                  <TextView
+                      style="@style/Interview_Cover_Supervisor_Note_Text"
+                      local:MvxBind="Text SupervisorNote;" />
+            </LinearLayout>
+        </LinearLayout>
+      
+        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical" local:MvxBind="Visibility Visibility(CountOfCommentedQuestions)">
+            <LinearLayout style="@style/Interview_Question_Header">
+                <TextView
+                    style="@style/Interview_Complete_Screen_Text"
+                    local:MvxBind="Text CommentedEntitiesDescription" />
+            </LinearLayout>
+            <MvxLinearLayout style="@style/Interview_Question_Header"
+                  android:orientation="vertical"
+                  local:MvxBind="ItemsSource CommentedEntities;"
+                  local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
+        </LinearLayout>
+      
+        <View style="@style/Interview_Entity_Divider" />
+      
+        <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
+                      local:MvxBind="Visible HasPrefilledQuestions">
+            <MvxLinearLayout
+                      android:orientation="vertical"
+                      style="@style/Interview_Cover_Prefilled_Answers"
+                      local:MvxBind="ItemsSource PrefilledQuestions"
+                      local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
+        </LinearLayout>
+      
+        <View style="@style/Interview_Entity_Divider" />
+      
+        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
+            
+            <Button
+                style="@style/Interview_Complete_Screen_Button"
+                local:MvxBind="HideKeyboardOnClick .; 
+                Click StartInterviewCommand; 
+                Text Localization('PrefilledQuestions_StartInterview'); "/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

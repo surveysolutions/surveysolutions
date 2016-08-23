@@ -39,14 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
             interviewSynchronizationDto.Answers = new[]
             {
-                new AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", null)
-                {
-                    AllComments = new[]
-                    {
-                        existingComment,
-                        newComment
-                    }
-                }
+                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", comments: new[] { existingComment, newComment })
             };
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
