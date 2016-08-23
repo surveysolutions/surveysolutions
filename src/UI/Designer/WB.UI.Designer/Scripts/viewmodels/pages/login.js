@@ -15,6 +15,12 @@
 
     self.loginStatus = ko.observable();
 
+    self.userIsNotAuthorized = ko.computed(function () {
+        return self.loginStatus() === Designer.VM.Login.LoginStatus.InvalidLoginOrPassword ||
+            self.loginStatus() === Designer.VM.Login.LoginStatus.IsLockedOut ||
+            self.loginStatus() === Designer.VM.Login.LoginStatus.NotApproved;
+    });
+
     self.invalidUserNameOrPassword = ko.computed(function () {
         return self.loginStatus() === Designer.VM.Login.LoginStatus.InvalidLoginOrPassword;
     });
@@ -47,28 +53,36 @@
             loginRequest.recaptcha = self.recaptchaClientResponse;
         }
 
-        self.SendRequest(self.loginApiUrl, loginRequest, function(response) {
-            self.loginStatus(response.Status);
+        self.SendRequest(self.loginApiUrl,
+            loginRequest,
+            function(response) {
+                self.loginStatus(response.Status);
+                $(".server-response-holder").html(response.ResponseMessage);
 
-            switch (response.Status) {
+                switch (response.Status) {
+                case Designer.VM.Login.LoginStatus.IsLockedOut:
+                case Designer.VM.Login.LoginStatus.NotApproved:
                 case Designer.VM.Login.LoginStatus.InvalidLoginOrPassword:
                 case Designer.VM.Login.LoginStatus.InvalidCaptcha:
                     if (self.shouldUseRecaptcha()) {
                         grecaptcha.reset();
                     }
                     break;
-            case Designer.VM.Login.LoginStatus.CaptchaRequired:
-                self.shouldUseRecaptcha(true);
-                self.renderCaptcha();
-                break;
-            case Designer.VM.Login.LoginStatus.Success:
+                case Designer.VM.Login.LoginStatus.CaptchaRequired:
+                    self.shouldUseRecaptcha(true);
+                    self.renderCaptcha();
+                    break;
+                case Designer.VM.Login.LoginStatus.Success:
+                    self.navigateIfLoggedIn();
+                    break;
+                }
+            },
+            false,
+            false,
+            function(exception) {
+                // by anti forgery validation we can get BadRequest exception, so just try to move to home page
                 self.navigateIfLoggedIn();
-                break;
-            }
-        }, false, false, function (exception) {
-            // by anti forgery validation we can get BadRequest exception, so just try to move to home page
-            self.navigateIfLoggedIn();
-        });
+            });
     }
 
     self.navigateIfLoggedIn = function() {
@@ -96,7 +110,9 @@ Designer.VM.Login.LoginStatus = {
     Success : 1,
     InvalidLoginOrPassword : 2,
     InvalidCaptcha : 3,
-    CaptchaRequired : 4
+    CaptchaRequired: 4,
+    IsLockedOut: 5,
+    NotApproved: 6
 };
 
 Designer.Framework.Classes.inherit(Designer.VM.Login, Designer.VM.BasePage);
