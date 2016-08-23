@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_sample_data_with_no_answers_on_gps_question : PreloadedDataVerifierTestContext
+    internal class when_verifying_panel_data_with_no_answers_on_gps_question : PreloadedDataVerifierTestContext
     {
         private Establish context = () =>
         {
@@ -18,8 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id" },
-                new string[][] { new string[] { "1" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(
+                new[] { "Id", "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude", "gps__Timestamp" },
+                new[] { new[] { "1", "", "", "", "", "" } },
                 "questionnaire.tab");
 
             var preloadedDataService =
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => result = preloadedDataVerifier.VerifySample(questionnaireId, 1, preloadedDataByFile);
+            () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_return_no_errors = () =>
             result.Errors.Count().ShouldEqual(0);
