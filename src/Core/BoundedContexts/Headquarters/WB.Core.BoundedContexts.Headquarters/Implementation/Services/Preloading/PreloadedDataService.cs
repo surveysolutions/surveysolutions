@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
@@ -327,7 +326,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
-        public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
+        public bool IsRosterSizeQuestionForLongRoster(Guid questionId)
         {
             IEnumerable<IGroup> rosters = this.GroupsCache.Values.Where(g => g.RosterSizeQuestionId == questionId);
             foreach (var roster in rosters)
@@ -342,9 +341,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     return false;
                 }
 
-                var hasNestedRosters = roster.TreeToEnumerableDepthFirst<IComposite>(group => group.Children)
-                    .Skip(1)
-                    .Any(x => (x as IGroup)?.IsRoster ?? false);
+                var hasNestedRosters = roster.Find<IGroup>(group => group.IsRoster).Any();
 
                 if (hasNestedRosters)
                     return false;
@@ -355,14 +352,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private IEnumerable<IGroup> GetParentGroups(IGroup roster)
         {
             var parent = roster.GetParent();
-            while (true)
+            while (!(parent is IQuestionnaireDocument))
             {
-                if (parent == null)
-                    yield break;
-
-                if (parent is QuestionnaireDocument)
-                    yield break;
-
                 yield return (IGroup)parent;
                 parent = parent.GetParent();
             }

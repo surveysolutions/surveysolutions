@@ -66,19 +66,5 @@ namespace WB.Core.GenericSubdomains.Portable
                 }
             }
         }
-
-        public static IEnumerable<T> AsDepthFirstEnumerable<T>(this T head, Func<T, IEnumerable<T>> childrenFunc)
-        {
-            yield return head;
-
-            foreach (var node in childrenFunc(head))
-            {
-                foreach (var child in AsDepthFirstEnumerable(node, childrenFunc))
-                {
-                    yield return child;
-                }
-            }
-
-        }
     }
 }

@@ -493,14 +493,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         {
             if (!preloadedDataService.IsQuestionRosterSize(numericExportedQuestion.VariableName))
                 yield break;
-
-            var isRosterSizeForLongRoster = preloadedDataService.IsQuestionIsRosterSizeForLongRoster(numericExportedQuestion.PublicKey);
-
+           
             var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
                 numericExportedQuestion.VariableName);
 
             if (columnIndex < 0)
                 yield break;
+
+            var isRosterSizeForLongRoster = preloadedDataService.IsRosterSizeQuestionForLongRoster(numericExportedQuestion.PublicKey);
 
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
