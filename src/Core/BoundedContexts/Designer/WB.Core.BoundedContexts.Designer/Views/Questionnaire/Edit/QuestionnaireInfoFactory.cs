@@ -236,7 +236,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            QuestionDetailsView question = questionnaire?.Questions.FirstOrDefault(x => x.Id == questionId);
+            var questions = questionnaire?.Questions.ToList();
+            QuestionDetailsView question = questions?.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
 
