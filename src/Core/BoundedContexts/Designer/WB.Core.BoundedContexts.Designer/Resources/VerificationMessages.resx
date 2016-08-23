@@ -261,7 +261,7 @@
   <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
     <value>Roster cannot have empty roster ID.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChiledElements" xml:space="preserve">
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>Roster cannot have more than {0} child elements</value>
   </data>
   <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">

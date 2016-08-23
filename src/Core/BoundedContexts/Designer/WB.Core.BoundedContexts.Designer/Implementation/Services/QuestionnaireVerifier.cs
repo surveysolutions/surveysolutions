@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(LongFixedRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Verifier<IGroup>(LongMultiRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Verifier<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongRosterHaveMoreThanAllowedChilElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChiledElements,Constants.MaxAmountOfItemsInLongRoster)),
+            Verifier<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
 
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
             Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
@@ -912,10 +912,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsFixedRoster(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => @group.FixedRosterTitles.Length);
         }
 
-        private static bool LongRosterHaveMoreThanAllowedChilElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool LongRosterHasMoreThanAllowedChildElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var count = questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count();
-            return IsLongRoster(@group, questionnaire) && count > Constants.MaxAmountOfItemsInLongRoster;
+            return IsLongRoster(@group, questionnaire) && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count() > Constants.MaxAmountOfItemsInLongRoster;
         }
 
         private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
@@ -928,11 +927,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (IsRosterByQuestion(roster))
             {
                 var question = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
-                var questionMaxAnsweresCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers 
+                var questionMaxAnswersCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers 
                     ?? (question as TextListQuestion)?.MaxAnswerCount 
                     ?? Constants.MaxRosterRowCount;
 
-                if (questionMaxAnsweresCount > Constants.MaxRosterRowCount)
+                if (questionMaxAnswersCount > Constants.MaxRosterRowCount)
                     return true;
             }
 
