@@ -1538,24 +1538,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
 
+            this.ApplyRosterTitleChanges(targetQuestionnaire);
+
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
+        }
+
+        protected void ApplyRosterTitleChanges(IQuestionnaire targetQuestionnaire)
+        {
             var rosterInstances =
-                    this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                        targetQuestionnaire.GetCategoricalAndFixedRosters(), RosterVector.Empty,
-                        targetQuestionnaire);
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                    targetQuestionnaire.GetCategoricalAndFixedRosters(), RosterVector.Empty,
+                    targetQuestionnaire).ToArray();
 
             var changedTitles = rosterInstances.Select(
-                    rosterInstance =>
-                        new ChangedRosterInstanceTitleDto(
-                            RosterInstance.CreateFromIdentity(rosterInstance),
-                            GetRosterTitle(targetQuestionnaire, rosterInstance)))
-                    .ToArray();
+                rosterInstance =>
+                    new ChangedRosterInstanceTitleDto(
+                        RosterInstance.CreateFromIdentity(rosterInstance),
+                        this.GetRosterTitle(targetQuestionnaire, rosterInstance)))
+                .ToArray();
 
             if (changedTitles.Any())
             {
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
             }
-            
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
         }
 
         private string GetRosterTitle(IQuestionnaire targetQuestionnaire, Identity rosterInstance)

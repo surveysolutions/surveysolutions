@@ -735,9 +735,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
                 .ToArray();
-
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
             this.ApplyEvent(new InterviewAnswersFromSyncPackageRestored(answerDtos, synchronizedInterview.UserId));
+            base.ApplyRosterTitleChanges(questionnaire);
         }
 
         public bool HasGroup(Identity group)
