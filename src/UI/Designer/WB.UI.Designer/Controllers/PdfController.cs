@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
@@ -84,14 +85,14 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult PrintPreview(Guid id)
         {
             PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Download(Guid id)
         {
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(id);
@@ -113,7 +114,7 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        [Authorize]
+        [CustomAuthorize]
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         [System.Web.Mvc.HttpGet]
         public JsonResult Status(Guid id)
