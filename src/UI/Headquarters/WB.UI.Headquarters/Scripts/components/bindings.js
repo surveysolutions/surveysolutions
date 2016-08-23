@@ -55,7 +55,7 @@
 
             var pattern = allBindings.format || 'MM/DD/YYYY';
 
-            var output = "-";
+            var output = "";
             if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
                 output = moment(valueUnwrapped).format(pattern);
             }
