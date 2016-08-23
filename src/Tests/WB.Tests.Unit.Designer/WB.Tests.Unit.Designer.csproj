@@ -387,6 +387,7 @@
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_with_multiple_validations.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment_and_client_version_is_11.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_and_isemailvalid_usage.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_all_parameters_specified.cs" />
