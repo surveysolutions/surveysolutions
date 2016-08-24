@@ -7,8 +7,8 @@
     <ProjectGuid>{14C801B3-8893-48CD-BCDC-A93BDBF5D63E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChangeInterviewStatus</RootNamespace>
-    <AssemblyName>ChangeInterviewStatus</AssemblyName>
+    <RootNamespace>ApiUtil</RootNamespace>
+    <AssemblyName>ApiUtil</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -36,23 +36,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\packages\CsvHelper.2.16.0.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Flurl.1.0.10\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    <Reference Include="Flurl, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Flurl.2.2.0\lib\portable40-net40+sl5+win8+wp8+wpa81\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl.Http, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Flurl.Http.0.7.0\lib\net45\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Flurl.Http.1.0.1\lib\net45\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NConsole, Version=1.2.5854.14777, Culture=neutral, PublicKeyToken=0f839b9a5b9cbd65, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NConsole.1.2.5854.14777\lib\net45\NConsole.dll</HintPath>
+    <Reference Include="NConsole, Version=1.3.5963.27533, Culture=neutral, PublicKeyToken=0f839b9a5b9cbd65, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NConsole.1.3.5963.27533\lib\net45\NConsole.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -63,14 +63,26 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZetaLongPaths, Version=1.0.0.9, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ZetaLongPaths.1.0.0.9\lib\net40-full\ZetaLongPaths.dll</HintPath>
+    <Reference Include="ZetaLongPaths, Version=1.0.0.14, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ZetaLongPaths.1.0.0.14\lib\net40-full\ZetaLongPaths.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StatusChange\ApproveInterviewsCommand.cs" />
+    <Compile Include="StatusChange\ChangeInterviewStatusCommand.cs" />
+    <Compile Include="ConsoleRestServiceSettings.cs" />
+    <Compile Include="Export\ExportDataCommand.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="StatusChange\InterviewStatusChangeError.cs" />
+    <Compile Include="StatusChange\ProcessStatus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rest.cs" />
+    <Compile Include="RestCredentials.cs" />
+    <Compile Include="RestException.cs" />
+    <Compile Include="RestExceptionType.cs" />
+    <Compile Include="StatusChange\RejectInterviewsCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -80,13 +92,6 @@
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('..\..\..\packages\Fody.1.28.3\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Fody.1.28.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Fody.1.28.3\build\Fody.targets'))" />
-  </Target>
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
       <Config Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem" />
@@ -98,8 +103,7 @@
       <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System" />
       <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.IO" />
       <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.Xml.Linq" />
-      <Code xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Type="Fragment" Language="cs">
-<![CDATA[
+      <Code xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Type="Fragment" Language="cs"><![CDATA[
 var config = XElement.Load(Config.ItemSpec).Elements("Costura").FirstOrDefault();
 
 if (config == null) return true;
@@ -118,11 +122,18 @@ var filesToCleanup = Files.Select(f => f.ItemSpec).Where(f => !excludedAssemblie
 
 foreach (var item in filesToCleanup)
   File.Delete(item);
-]]>
-      </Code></Task>
+]]></Code>
+    </Task>
   </UsingTask>
   <Target Name="CleanReferenceCopyLocalPaths" AfterTargets="AfterBuild;NonWinFodyTarget">
     <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
+  </Target>
+  <Import Project="..\..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
