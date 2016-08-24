@@ -190,8 +190,10 @@ angular.module('designerApp')
                 dragStart: function () {
                     $scope.chaptersTree.isDragging = true;
                 },
-                dropped: function (event) {
+                beforeDrop: function (event) {
                     $scope.chaptersTree.isDragging = false;
+                },
+                dropped: function (event) {
                     var rollback = function (item, targetIndex) {
                         $scope.questionnaire.chapters.splice(_.indexOf($scope.questionnaire.chapters, item), 1);
                         $scope.questionnaire.chapters.splice(targetIndex, 0, item);
