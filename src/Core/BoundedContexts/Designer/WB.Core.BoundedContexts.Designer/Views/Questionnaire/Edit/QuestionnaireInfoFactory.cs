@@ -260,7 +260,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
 
-            StaticTextDetailsView staticTextDetailsView = questionnaire?.StaticTexts.FirstOrDefault(x => x.Id == staticTextId);
+            var staticTexts = questionnaire?.StaticTexts.ToList();
+            StaticTextDetailsView staticTextDetailsView = staticTexts?.FirstOrDefault(x => x.Id == staticTextId);
             if (staticTextDetailsView == null)
                 return null;
 
@@ -301,7 +302,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
 
-            var variables = questionnaire?.Variables;
+            var variables = questionnaire?.Variables.ToList();
             VariableView result = variables?.FirstOrDefault(x => x.Id == variableId);
             if (result == null)
                 return null;
