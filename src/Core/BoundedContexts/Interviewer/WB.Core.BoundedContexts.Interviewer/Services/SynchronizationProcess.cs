@@ -394,6 +394,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                         token: cancellationToken);
 
+                    if (interviewDetails == null)
+                    {
+                        statistics.NewInterviewsCount ++;
+                        continue;
+                    }
+
                     await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
