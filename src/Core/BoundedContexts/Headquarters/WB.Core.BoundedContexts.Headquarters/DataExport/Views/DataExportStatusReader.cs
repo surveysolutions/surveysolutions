@@ -7,12 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
@@ -29,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         private readonly Tuple<DataExportType, DataExportFormat>[] supportedDataExports = new[]
         {
+            Tuple.Create(DataExportType.ParaData, DataExportFormat.Paradata),
             Tuple.Create(DataExportType.ParaData, DataExportFormat.Tabular),
 
             Tuple.Create(DataExportType.Data, DataExportFormat.Tabular),
