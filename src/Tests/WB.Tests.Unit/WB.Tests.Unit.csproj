@@ -306,6 +306,7 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\ExportControllerTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details_for_paradata.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details_with_unexpected_export_type.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details_and_questionnaire_identity_is_invalid.cs" />
