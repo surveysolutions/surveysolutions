@@ -28,10 +28,15 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using Ncqrs.Domain.Storage;
+using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -43,6 +48,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -246,6 +252,19 @@ namespace WB.Tests.Unit.TestFactories
             expressionStatePrototypeProvider.SetReturnsDefault(latestInterviewExpressionState);
 
             return expressionStatePrototypeProvider.Object;
+        }
+
+        public IDataExportStatusReader DataExportStatusReader(IDataExportProcessesService dataExportProcessesService = null,
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
+            IParaDataAccessor paraDataAccessor = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
+        {
+            return new DataExportStatusReader(dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
+                filebasedExportedDataAccessor: filebasedExportedDataAccessor ?? Substitute.For<IFilebasedExportedDataAccessor>(),
+                paraDataAccessor: paraDataAccessor ?? Substitute.For<IParaDataAccessor>(),
+                fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
+                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
     }
 }

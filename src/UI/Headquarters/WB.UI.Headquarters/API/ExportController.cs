@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.API
                 return this.NotFound();
 
             var runningExportStatus = allExportStatuses.RunningDataExportProcesses.FirstOrDefault(x =>
-                x.QuestionnaireIdentity.Equals(questionnaireIdentity) &&
+                (x.QuestionnaireIdentity == null || x.QuestionnaireIdentity.Equals(questionnaireIdentity)) &&
                 x.Format == exportFormat &&
                 x.Type == dataExportType);
 
