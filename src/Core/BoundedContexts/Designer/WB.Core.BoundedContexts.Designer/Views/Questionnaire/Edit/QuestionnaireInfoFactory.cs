@@ -301,7 +301,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
 
-            VariableView result = questionnaire?.Variables?.FirstOrDefault(x => x.Id == variableId);
+            var variables = questionnaire?.Variables;
+            VariableView result = variables?.FirstOrDefault(x => x.Id == variableId);
             if (result == null)
                 return null;
 
