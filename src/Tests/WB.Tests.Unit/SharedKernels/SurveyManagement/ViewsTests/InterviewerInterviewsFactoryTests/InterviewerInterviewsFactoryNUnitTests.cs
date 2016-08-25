@@ -139,7 +139,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
 
             var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
 
-            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
