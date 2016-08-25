@@ -431,10 +431,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
             var result = new Dictionary<Guid, object>();
 
-            var rowWithoutMissingValues = row.Select(v => v
-                .Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty)
-                .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty)
-            ).ToArray();
+            var rowWithoutMissingValues = row.Select(v =>
+                  v?.Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty)
+                    .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty))
+                .ToArray();
 
             foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
             {
