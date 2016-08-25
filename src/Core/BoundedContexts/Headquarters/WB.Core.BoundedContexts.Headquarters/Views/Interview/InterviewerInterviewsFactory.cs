@@ -90,11 +90,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .StatusHistory
                 .ToList();
 
+            var lastInterviewStatus = fullStatusHistory.Last();
+
+            var isInterviewerAcceptedStatus = lastInterviewStatus.Status == InterviewStatus.InterviewerAssigned
+                                           || lastInterviewStatus.Status == InterviewStatus.RejectedBySupervisor;
+            if (!isInterviewerAcceptedStatus)
+                return null;
+
             var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
 
             var lastCompleteStatus = fullStatusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
-
-            var lastInterviewStatus = fullStatusHistory.Last();
 
             var statusHistoryStartingWithLastComplete =
                 lastCompleteStatus != null

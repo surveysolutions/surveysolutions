@@ -201,12 +201,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            var interviewDetailsApiView = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerInterviewApiView>(
-                url: string.Concat(this.interviewsController, "/", interviewId),
-                credentials: this.restCredentials,
-                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
-                token: token)).ConfigureAwait(false);
-            return interviewDetailsApiView;
+            try
+            {
+                var interviewDetailsApiView = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerInterviewApiView>(
+                    url: string.Concat(this.interviewsController, "/", interviewId),
+                    credentials: this.restCredentials,
+                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                    token: token)).ConfigureAwait(false);
+                return interviewDetailsApiView;
+            }
+            catch (SynchronizationException exception)
+            {
+                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
+                if (httpStatusCode == HttpStatusCode.NotFound)
+                    return null;
+
+                this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
+                throw;
+            }
         }
 
         public async Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
