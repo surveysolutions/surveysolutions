@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             });
         }
 
-        public InterviewSynchronizationDto GetInterviewDetails(Guid interviewId)
+        public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
