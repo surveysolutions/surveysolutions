@@ -6,9 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
@@ -37,11 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_delete_first_gps_question_map_report_point_for_deleted_interview = () =>
-            mapReportPointStorageMock.Verify(storage => storage.Remove($"{interviewId}-{gpsVariable1}-{RosterVector.Empty}"));
-
-        It should_delete_second_gps_question_map_report_point_for_deleted_interview = () =>
-            mapReportPointStorageMock.Verify(storage => storage.Remove($"{interviewId}-{gpsVariable2}-{RosterVector.Empty}"));
+        It should_delete_all_gps_question_map_report_point_for_deleted_interview = () =>
+            mapReportPointStorageMock.Verify(storage => storage.RemoveIfStartsWith($"{interviewId}"));
 
         private static MapReportDenormalizer denormalizer;
         private static IPublishedEvent<InterviewHardDeleted> @event;
