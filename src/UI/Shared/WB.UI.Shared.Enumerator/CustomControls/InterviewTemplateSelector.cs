@@ -44,6 +44,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question_header},
+            {typeof (ValidityViewModel), Resource.Layout.interview_question_validation},
+            {typeof (CommentsViewModel), Resource.Layout.interview_question_comments},
         };
 
         public int GetItemViewType(object forItemObject)
