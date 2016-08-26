@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Attributes;
@@ -24,21 +23,21 @@ namespace WB.UI.Headquarters.Controllers
     [ValidateInput(false)]
     public class AccountController : TeamController
     {
-        private readonly IFormsAuthentication authentication;
-
-        public AccountController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IFormsAuthentication authentication, IUserViewFactory userViewFactory,
+        public AccountController(
+            ICommandService commandService, 
+            IGlobalInfoProvider globalInfo, 
+            ILogger logger,
+            IUserViewFactory userViewFactory,
             IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
-            this.authentication = authentication;
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult Index()
         {
-            var userRoles = Roles.GetRolesForUser(this.authentication.GetCurrentUser().Name);
+            var userRoles = new string[0];//Roles.GetRolesForUser(this.authentication.GetCurrentUser().Name);
 
             bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
             bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
@@ -84,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
                 else
                 {
-                    this.authentication.SignIn(model.UserName, true);
+                    //this.authentication.SignIn(model.UserName, false);
                     return this.RedirectToLocal(returnUrl);
                 }
             }
@@ -95,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LogOff()
         {
-            this.authentication.SignOut();
+            //this.authentication.SignOut();
             return this.Redirect("~/");
         }
 
@@ -150,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers
             bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
             
             //do not forget pass current user to display you are observing
-            this.authentication.SignIn(user.UserName, false, currentUser);
+            //this.authentication.SignIn(user.UserName, false, currentUser);
             
             return isHeadquarter ? 
                 this.RedirectToAction("SurveysAndStatuses", "HQ") : 
@@ -173,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!targetUserInValidRole) 
                 throw new HttpException(404, string.Empty);
             
-            this.authentication.SignIn(currentUserIdentity.ObserverName, true);
+            //this.authentication.SignIn(currentUserIdentity.ObserverName, false);
             return this.RedirectToAction("Index", "Headquarters");
         }
 

@@ -1,12 +1,7 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Filters
@@ -25,7 +20,7 @@ namespace WB.UI.Headquarters.Filters
             if (filterContext.Controller is MaintenanceController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
-            Installed = identityManager.GetUsersInRole(UserRoles.Administrator.ToString()).Any();
+            Installed = false;//identityManager.GetUsersInRole(UserRoles.Administrator.ToString()).Any();
 
             if (isInstallController && Installed)
                 throw new HttpException(404, string.Empty);

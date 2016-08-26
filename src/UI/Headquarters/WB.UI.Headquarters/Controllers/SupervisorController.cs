@@ -29,14 +29,10 @@ namespace WB.UI.Headquarters.Controllers
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
-                              IPasswordHasher passwordHasher,
-                              IIdentityManager identityManager)
+                              IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
-            this.IdentityManager = identityManager;
         }
-
-        protected readonly IIdentityManager IdentityManager;
 
         public ActionResult Create()
         {
@@ -119,7 +115,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
             var forbiddenRoles = new string[] {UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
-            var doesUserInForbiddenRole = IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
+            var doesUserInForbiddenRole = false;//IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
 
             if (doesUserInForbiddenRole)
             {

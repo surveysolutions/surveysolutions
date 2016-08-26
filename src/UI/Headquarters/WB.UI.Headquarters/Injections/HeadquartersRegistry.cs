@@ -19,7 +19,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Infrastructure.Security;
@@ -64,8 +63,6 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
             this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
-            this.Kernel.Bind<IIdentityManager>().To<IdentityManager>();
-            this.Kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             this.Kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
             this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
@@ -140,7 +137,7 @@ namespace WB.UI.Headquarters.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(QuestionnaireMembershipProvider).Assembly,
+                typeof(HeadquartersRegistry).Assembly,
                 typeof(QuestionnaireItemInputModel).Assembly,
                 typeof(HeadquartersBoundedContextModule).Assembly
             });

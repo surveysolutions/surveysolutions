@@ -100,10 +100,6 @@
       <HintPath>..\..\..\..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
       <Private>True</Private>
@@ -200,9 +196,6 @@
       <HintPath>..\..\..\..\packages\Npgsql.3.1.10\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
     <Reference Include="prometheus-net, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\prometheus-net.1.2.4.0\lib\net40\prometheus-net.dll</HintPath>
       <Private>True</Private>
@@ -235,7 +228,6 @@
       <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -258,18 +250,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Spatial, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\System.Spatial.5.6.1\lib\net40\System.Spatial.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -309,9 +292,6 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
@@ -1458,8 +1438,6 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
-    <Compile Include="Code\IdentityManager.cs" />
-    <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\LocalizationExtensions.cs" />
@@ -1768,10 +1746,6 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
-    <Compile Include="Utils\Security\FormsAuthentication.cs" />
-    <Compile Include="Utils\Security\IFormsAuthentication.cs" />
-    <Compile Include="Utils\Security\QuestionnaireMembershipProvider.cs" />
-    <Compile Include="Utils\Security\QuestionnaireRoleProvider.cs" />
     <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
@@ -1796,6 +1770,7 @@
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
+    <Folder Include="Utils\Security\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
