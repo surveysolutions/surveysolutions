@@ -130,11 +130,11 @@
                                 </div>
 
                             }
-</div>
+                        </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
+                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
                     }
                 </div>
                 break;
