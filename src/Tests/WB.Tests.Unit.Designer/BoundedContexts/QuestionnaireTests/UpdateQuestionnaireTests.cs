@@ -62,5 +62,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
+
+        [Test]
+        public void UpdateQuestionnaire_When_User_is_admin_Then_DomainException_should_not_be_thrown()
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+
+            // act
+            TestDelegate act = () => questionnaire.UpdateQuestionnaire("title", false, responsibleId: Guid.NewGuid(), hasResponsibleAdminRights: true);
+            // assert
+            Assert.DoesNotThrow(act);
+        }
     }
 }

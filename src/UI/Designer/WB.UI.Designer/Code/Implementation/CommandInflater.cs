@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
         {
-            this.SetResponsibleOrThrowIfDontHavePermissions(command);
+            this.SetResponsible(command);
             ValidateAddSharedPersonCommand(command);
             ValidateRemoveSharedPersonCommand(command);
 
@@ -74,20 +74,13 @@ namespace WB.UI.Designer.Code.Implementation
             return questionnaire;
         }
 
-        private void SetResponsibleOrThrowIfDontHavePermissions(ICommand command)
+        private void SetResponsible(ICommand command)
         {
             var currentCommand = command as QuestionnaireCommandBase;
             if (currentCommand == null) return;
 
-            var updateQuestionnaireCommand = currentCommand as UpdateQuestionnaire;
-            if (updateQuestionnaireCommand != null && updateQuestionnaireCommand.IsPublic &&
-                !this.userHelper.WebUser.IsAdmin)
-            {
-                throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden,
-                    "You don't have permissions to make questionnaire as public");
-            }
-
             currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
+            currentCommand.HasResponsibleAdminRights = this.userHelper.WebUser.IsAdmin;
         }
 
         private static void ValidateAddSharedPersonCommand(ICommand command)
