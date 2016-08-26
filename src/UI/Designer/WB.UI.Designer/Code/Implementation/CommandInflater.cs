@@ -80,7 +80,7 @@ namespace WB.UI.Designer.Code.Implementation
             if (currentCommand == null) return;
 
             currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
-            currentCommand.HasResponsibleAdminRights = this.userHelper.WebUser.IsAdmin;
+            currentCommand.IsResponsibleAdmin = this.userHelper.WebUser.IsAdmin;
         }
 
         private static void ValidateAddSharedPersonCommand(ICommand command)
