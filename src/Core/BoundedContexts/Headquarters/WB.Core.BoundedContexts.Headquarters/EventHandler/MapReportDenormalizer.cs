@@ -94,21 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private void ClearMapReportPointsForInterview(Guid interviewId)
         {
-            InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(interviewId);
-            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion);
-
-            var gpsQuestionVariableNames = questionnaireDocument
-                .Find<GpsCoordinateQuestion>()
-                .Where(x => x != null)
-                .Select(question => question.StataExportCaption)
-                .ToList();
-
-            foreach (string gpsQuestionVariableName in gpsQuestionVariableNames)
-            {
-                var mapPointId = GetMapReportPointId(interviewId, gpsQuestionVariableName, RosterVector.Empty);
-
-                this.mapReportPointStorage.Remove(mapPointId);
-            }
+            this.mapReportPointStorage.RemoveIfStartsWith(interviewId.ToString());
         }
 
         private static string GetMapReportPointId(Guid interviewId, string variableName, RosterVector rosterVector)
