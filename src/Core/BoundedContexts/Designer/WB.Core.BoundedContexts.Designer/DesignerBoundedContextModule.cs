@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using Ncqrs.Eventing.Storage;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -49,6 +50,9 @@ namespace WB.Core.BoundedContexts.Designer
         }
         public override void Load()
         {
+            this.Bind<IEventTypeResolver>().ToConstant(
+                new EventTypeResolver(
+                    typeof(DesignerBoundedContextModule).Assembly));
 
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();

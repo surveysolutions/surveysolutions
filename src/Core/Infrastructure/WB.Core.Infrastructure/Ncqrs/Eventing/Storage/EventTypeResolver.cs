@@ -7,16 +7,21 @@ namespace Ncqrs.Eventing.Storage
 {
     public class EventTypeResolver : IEventTypeResolver
     {
-        readonly Dictionary<string, Type> KnownEventDataTypes = new Dictionary<string, Type>();
-
-        public EventTypeResolver() { }
+        private readonly Dictionary<string, Type> KnownEventDataTypes = new Dictionary<string, Type>();
 
         public EventTypeResolver(params Assembly[] assembliesWithEvents)
         {
+            foreach (Assembly assembly in assembliesWithEvents)
+            {
+                this.RegisterEventDataTypes(assembly);
+            }
+        }
+
+        private void RegisterEventDataTypes(Assembly assembly)
+        {
             var eventInterfaceInfo = typeof(WB.Core.Infrastructure.EventBus.IEvent).GetTypeInfo();
 
-            var eventImplementations = assembliesWithEvents.SelectMany(assembly => assembly.DefinedTypes)
-                .Where(definedType => eventInterfaceInfo.IsAssignableFrom(definedType));
+            var eventImplementations = assembly.DefinedTypes.Where(definedType => eventInterfaceInfo.IsAssignableFrom(definedType));
 
             foreach (var eventImplementation in eventImplementations)
             {
@@ -34,7 +39,7 @@ namespace Ncqrs.Eventing.Storage
             return KnownEventDataTypes[eventName];
         }
 
-        public void RegisterEventDataType(Type eventDataType)
+        internal void RegisterEventDataType(Type eventDataType)
         {
             ThrowIfThereIsAnotherEventWithSameFullName(eventDataType);
             ThrowIfThereIsAnotherEventWithSameName(eventDataType);
@@ -43,7 +48,7 @@ namespace Ncqrs.Eventing.Storage
             KnownEventDataTypes[eventDataType.Name] = eventDataType;
         }
 
-        void ThrowIfThereIsAnotherEventWithSameName(Type @event)
+        private void ThrowIfThereIsAnotherEventWithSameName(Type @event)
         {
             Type anotherEventWithSameName;
             KnownEventDataTypes.TryGetValue(@event.Name, out anotherEventWithSameName);
@@ -53,7 +58,7 @@ namespace Ncqrs.Eventing.Storage
                     Environment.NewLine, @event.AssemblyQualifiedName, anotherEventWithSameName.AssemblyQualifiedName));
         }
 
-        void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
+        private void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
         {
             Type anotherEventWithSameName;
             KnownEventDataTypes.TryGetValue(@event.FullName, out anotherEventWithSameName);
