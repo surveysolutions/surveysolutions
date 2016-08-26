@@ -5,8 +5,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class QuestionnaireCommand : QuestionnaireCommandBase
     {
         protected QuestionnaireCommand(Guid questionnaireId, Guid responsibleId)
-            : this(responsibleId, questionnaireId, false)
-        {;
+            : this(questionnaireId: questionnaireId, responsibleId: responsibleId, hasResponsibleAdminRights: false)
+        {
         }
 
         protected QuestionnaireCommand(Guid questionnaireId, Guid responsibleId, bool hasResponsibleAdminRights)
