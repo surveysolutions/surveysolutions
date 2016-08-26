@@ -913,10 +913,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ApplyEvent(new TemplateImported { Source = document });
         }
 
-        public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
+        public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool hasResponsibleAdminRights = false)
 #warning CRUD
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            if (!hasResponsibleAdminRights)
+                this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ApplyEvent(new QuestionnaireUpdated() { Title = title, IsPublic = isPublic, ResponsibleId = responsibleId });
