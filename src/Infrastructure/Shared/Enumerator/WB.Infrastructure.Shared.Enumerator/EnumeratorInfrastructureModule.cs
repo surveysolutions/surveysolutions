@@ -3,11 +3,14 @@ using Geolocator.Plugin;
 using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -22,7 +25,12 @@ namespace WB.Infrastructure.Shared.Enumerator
         public override void Load()
         {
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
-            this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
+            this.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
+
+            this.Bind<IEventTypeResolver>().ToConstant(
+                new EventTypeResolver(
+                    typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
+                    typeof(EnumeratorSharedKernelModule).Assembly));
 
             VFS.SetCurrent(new AndroidFileSystem());
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ncqrs.Eventing.Storage;
+using System;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -124,6 +125,11 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public override void Load()
         {
+            this.Bind<IEventTypeResolver>().ToConstant(
+                new EventTypeResolver(
+                    typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly));
+
             this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
             //this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();

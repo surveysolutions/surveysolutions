@@ -87,6 +87,7 @@
     <Compile Include="Commands\User\UnarchiveUserAndUpdateCommand.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="DataCollectionInfrastructureModule.cs" />
+    <Compile Include="DataCollectionSharedKernelAssemblyMarker.cs" />
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
