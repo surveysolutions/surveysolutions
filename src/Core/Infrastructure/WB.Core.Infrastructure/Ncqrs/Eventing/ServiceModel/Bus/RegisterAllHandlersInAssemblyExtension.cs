@@ -9,11 +9,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
     {
-        private static IEventTypeResolver EventTypeResolver
-        {
-            get { return ServiceLocator.Current.GetInstance<IEventTypeResolver>(); }
-        }
-
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm)
         {
             target.RegisterAllHandlersInAssembly(asm, CreateInstance);
@@ -40,8 +35,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public static void RegisterHandler(this InProcessEventBus target,object handler, Type eventDataType)
         {
-            EventTypeResolver.RegisterEventDataType(eventDataType);
-
             var registerHandlerMethod = target.GetType().GetMethods().Single
             (
                 m => m.Name == "RegisterHandler" && m.IsGenericMethod && m.GetParameters().Count() == 1
