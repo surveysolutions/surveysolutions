@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
+            this.Header.ShowComments += (sender, args) => this.ShowCommentsCommand();
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)
