@@ -103,8 +103,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return this.AllItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T;
         }
 
-        public string GetGroupTitle(Guid groupId) => this.Find<Group>(groupId).Title;
-
         public IEnumerable<IComposite> GetChildren(Guid groupId)
         {
             return this.Find<Group>(groupId).Children;
@@ -183,6 +181,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
             return statistics;
         }
+
+        public string GetQuestionTitle(IQuestion question) => question.QuestionText;
+
+        public string GetGroupTitle(IGroup group) => group.Title;
+
+        public string GetGroupTitle(Guid groupId) => this.Find<Group>(groupId).Title;
+
+        public string GetStaticText(IStaticText staticText) => staticText.Text;
 
         public bool QuestionHasInstructions(IQuestion question) => !string.IsNullOrWhiteSpace(question.Instructions);
 

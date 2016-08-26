@@ -7,9 +7,9 @@
 <div class="group">
     <div class="group_container">
         <div class="breacrumbs">@questionnaire.GetBreadcrumbsForGroup(group.PublicKey)</div>
-        <div class="sub_section">@group.Title.SanitizeHtml()</div>
+        <div class="sub_section">@questionnaire.GetGroupTitle(group)</div>
         @if (questionnaire.GroupHasEnablementCondition(group))
-            {
+        {
             <div class="common-info">
                 <div class="condition">
                     <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
