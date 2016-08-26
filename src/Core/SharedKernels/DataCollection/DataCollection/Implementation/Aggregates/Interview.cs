@@ -1572,23 +1572,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else if (targetQuestionnaire.IsNumericRoster(rosterInstance.Id))
             {
                 var questionId = targetQuestionnaire.GetRosterTitleQuestionId(rosterInstance.Id);
-                if (questionId != null)
+                Identity rosterTitleQuestionIdentity = new Identity(questionId.Value, rosterInstance.RosterVector);
+                var questionType = targetQuestionnaire.GetQuestionType(questionId.Value);
+                var questionValue = this.interviewState.GetAnswerSupportedInExpressions(rosterTitleQuestionIdentity);
+
+                switch (questionType)
                 {
-                    Identity rosterTitleQuestionIdentity = new Identity(questionId.Value, rosterInstance.RosterVector);
-                    var questionType = targetQuestionnaire.GetQuestionType(questionId.Value);
-                    var questionValue = this.interviewState.GetAnswerSupportedInExpressions(rosterTitleQuestionIdentity);
-
-                    switch (questionType)
-                    {
-                        case QuestionType.SingleOption:
-                        case QuestionType.MultyOption:
-                            return AnswerUtils.AnswerToString(questionValue, x => targetQuestionnaire.GetAnswerOptionTitle(questionId.Value, x));
-                        default:
-                            return AnswerUtils.AnswerToString(questionValue);
-                    }
+                    case QuestionType.SingleOption:
+                    case QuestionType.MultyOption:
+                        return AnswerUtils.AnswerToString(questionValue, x => targetQuestionnaire.GetAnswerOptionTitle(questionId.Value, x));
+                    default:
+                        return AnswerUtils.AnswerToString(questionValue);
                 }
-
-                return string.Empty;
             }
             else
             {
