@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
@@ -14,12 +13,11 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -38,8 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private ObservableRangeCollection<IInterviewEntityViewModel> items;
-        public ObservableRangeCollection<IInterviewEntityViewModel> Items
+        private ObservableRangeCollection<object> items;
+        public ObservableRangeCollection<object> Items
         {
             get { return this.items; }
             set
@@ -103,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
-            this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
+            this.Items = new ObservableRangeCollection<object>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
@@ -133,19 +131,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void SetScrollTo(Identity scrollTo)
         {
-            var anchorElementIndex = 0;
+            // TODO: KP-7661
 
-            if (scrollTo != null)
-            {
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    var childItem = this.Items
-                        .FirstOrDefault(x => x.Identity.Equals(scrollTo));
+            //var anchorElementIndex = 0;
 
-                    anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
-                });
-            }
-            this.ScrollToIndex = anchorElementIndex;
+            //if (scrollTo != null)
+            //{
+            //    this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            //    {
+            //        var childItem = this.Items
+            //            .FirstOrDefault(x => x.Identity.Equals(scrollTo));
+
+            //        anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
+            //    });
+            //}
+            //this.ScrollToIndex = anchorElementIndex;
         }
 
         public int? ScrollToIndex { get; set; }
@@ -173,8 +173,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => 
-                    this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
+
+                var newGroupItems = interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>());
+
+                var listToPutInRecycler = new List<object>();
+
+                foreach (var interviewEntityViewModel in newGroupItems)
+                {
+                    var compositeItem = interviewEntityViewModel as IDetailsCompositeItem;
+                    if (compositeItem != null)
+                    {
+                        listToPutInRecycler.AddRange(compositeItem.Children);
+                    }
+                    else
+                    {
+                        listToPutInRecycler.Add(interviewEntityViewModel);
+                    }
+                }
+
+                this.Items.Reset(listToPutInRecycler);
             }
             finally
             {
@@ -295,6 +312,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                             var existingIdentities =
                                 this.Items
+                                    .OfType<IInterviewEntityViewModel>()
                                     .Select(entity => entity.Identity)
                                     .ToHashSet();
 
@@ -330,6 +348,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var itemsToRemove = this
                             .Items
+                            .OfType<IInterviewEntityViewModel>()
                             .Where(item => identitiesToRemove.Contains(item.Identity))
                             .ToList();
 

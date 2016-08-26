@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -23,6 +22,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        IDetailsCompositeItem,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -215,6 +215,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.CheckedOrder = null;
                     option.Checked = false;
                 }
+            }
+        }
+
+        public IEnumerable<object> Children
+        {
+            get
+            {
+                var result = new List<Object>();
+                result.Add(this.QuestionState.Header);
+                result.AddRange(this.Options);
+                result.Add(this.QuestionState.Validity);
+                result.Add(this.QuestionState.Comments);
+                return result;
             }
         }
     }
