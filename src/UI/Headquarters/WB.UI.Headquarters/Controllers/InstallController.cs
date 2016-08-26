@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -15,20 +13,14 @@ namespace WB.UI.Headquarters.Controllers
     public class InstallController : BaseController
     {
         private readonly IPasswordHasher passwordHasher;
-        private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly IFormsAuthentication authentication;
 
         public InstallController(ICommandService commandService,
                                  IGlobalInfoProvider globalInfo,
                                  ILogger logger,
-                                 IPasswordHasher passwordHasher,
-                                 ISupportedVersionProvider supportedVersionProvider,
-                                 IFormsAuthentication authentication)
+                                 IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {
             this.passwordHasher = passwordHasher;
-            this.supportedVersionProvider = supportedVersionProvider;
-            this.authentication = authentication;
         }
 
         public ActionResult Finish()
@@ -52,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers
                                             personName:model.PersonName,
                                             phoneNumber:model.PhoneNumber));
 
-                this.authentication.SignIn(model.UserName, true);
+                //this.authentication.SignIn(model.UserName, true);
 
                 this.supportedVersionProvider.RememberMinSupportedVersion();
 
