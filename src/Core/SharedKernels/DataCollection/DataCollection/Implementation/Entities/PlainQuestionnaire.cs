@@ -596,12 +596,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetCategoricalAndFixedRosters()
+        public IEnumerable<Guid> GetRostersWithTitlesToChange()
         {
             return this.AllGroups
                 .Where(x => x.IsRoster)
                 .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles || 
-                            IsMultioptionQuestion(x.RosterSizeQuestionId))
+                            IsMultioptionQuestion(x.RosterSizeQuestionId) || 
+                            (IsNumericQuestion(x.RosterSizeQuestionId) && x.RosterTitleQuestionId.HasValue))
                 .Select(x => x.PublicKey)
                 .ToList();
         }
@@ -610,6 +611,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (!questionId.HasValue) return false;
             return this.GetQuestion(questionId.Value)?.QuestionType == QuestionType.MultyOption;
+        }
+
+        private bool IsNumericQuestion(Guid? questionId)
+        {
+            if (!questionId.HasValue) return false;
+            return this.GetQuestion(questionId.Value)?.QuestionType == QuestionType.Numeric;
         }
 
         public IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null)
@@ -871,6 +878,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return @group != null && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
         }
 
+        public bool IsNumericRoster(Guid id)
+        {
+            var @group = this.GetGroup(id);
+            return @group != null && @group.RosterSizeQuestionId != null && this.GetQuestion(@group.RosterSizeQuestionId.Value)?.QuestionType == QuestionType.Numeric;
+        }
+
         public IReadOnlyCollection<string> GetTranslationLanguages()
             => this
                 .QuestionnaireDocument
@@ -1035,6 +1048,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var roster = this.GetGroupOrThrow(rosterId);
             return roster.RosterSizeQuestionId;
+        }
+
+        public Guid? GetRosterTitleQuestionId(Guid rosterId)
+        {
+            var roster = this.GetGroupOrThrow(rosterId);
+            return roster.RosterTitleQuestionId;
         }
 
         public IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId)
