@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
-        IEnumerable<Guid> GetCategoricalAndFixedRosters();
+        IEnumerable<Guid> GetRostersWithTitlesToChange();
 
         Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
@@ -165,6 +165,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
         Guid? GetRosterSizeQuestion(Guid rosterId);
+
+        Guid? GetRosterTitleQuestionId(Guid rosterId);
 
         IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId);
 
@@ -225,6 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsTimestampQuestion(Guid questionId);
         bool IsSupportFilteringForOptions(Guid questionId);
         bool IsFixedRoster(Guid id);
+        bool IsNumericRoster(Guid id);
 
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
