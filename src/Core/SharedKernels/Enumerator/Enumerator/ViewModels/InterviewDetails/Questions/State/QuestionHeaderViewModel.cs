@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
+        public event EventHandler ShowComments;
+
         public DynamicTextViewModel Title { get; }
 
         public QuestionHeaderViewModel(
@@ -51,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
+        public ICommand ShowCommentEditorCommand => new MvxCommand(() => ShowComments?.Invoke(this, EventArgs.Empty));
 
         public void Dispose()
         {
