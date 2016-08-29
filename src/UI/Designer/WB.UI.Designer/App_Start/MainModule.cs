@@ -23,7 +23,7 @@ namespace WB.UI.Designer
         {
             //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
-            this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
+            this.BindFilter<CustomAuthorizeFilter>(FilterScope.Global, 0).InSingletonScope();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());

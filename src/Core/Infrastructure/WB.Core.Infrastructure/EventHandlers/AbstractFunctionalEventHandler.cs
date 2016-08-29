@@ -20,11 +20,6 @@ namespace WB.Core.Infrastructure.EventHandlers
     {
         private readonly TStorage readSideStorage;
 
-        private IEventTypeResolver EventTypeResolver
-        {
-            get { return ServiceLocator.Current.GetInstance<IEventTypeResolver>(); }
-        }
-
         protected AbstractFunctionalEventHandler(TStorage readSideStorage)
         {
             this.readSideStorage = readSideStorage;
@@ -94,7 +89,6 @@ namespace WB.Core.Infrastructure.EventHandlers
         private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
             var evntType = ExtractEventType(method);
-            EventTypeResolver.RegisterEventDataType(evntType);
             oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
         }
 

@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using Ncqrs.Eventing.Storage;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -49,6 +50,9 @@ namespace WB.Core.BoundedContexts.Designer
         }
         public override void Load()
         {
+            this.Bind<IEventTypeResolver>().ToConstant(
+                new EventTypeResolver(
+                    typeof(DesignerBoundedContextModule).Assembly));
 
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
@@ -141,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateMultiOptionQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMultiOptionQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Options, command.LinkedToEntityId, command.AreAnswersOrdered, command.MaxAllowedAnswers, command.YesNoView, command.ValidationConditions, command.LinkedFilterExpression, command.Properties))
                 .Handles<UpdateNumericQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateNumericQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.Properties, command.ResponsibleId, command.IsInteger, command.CountOfDecimalPlaces, command.ValidationConditions))
                 .Handles<UpdateQRBarcodeQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateQRBarcodeQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Scope, command.ValidationConditions, command.Properties))
-                .Handles<UpdateQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateQuestionnaire(command.Title, command.IsPublic, command.ResponsibleId, command.HasResponsibleAdminRights))
+                .Handles<UpdateQuestionnaire>(command => command.QuestionnaireId, aggregate => aggregate.UpdateQuestionnaire)
                 .Handles<UpdateSingleOptionQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateSingleOptionQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Options, command.LinkedToEntityId, command.IsFilteredCombobox, command.CascadeFromQuestionId, command.ValidationConditions, command.LinkedFilterExpression, command.Properties))
                 .Handles<UpdateTextListQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextListQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.MaxAnswerCount, command.Scope, command.ValidationConditions, command.Properties))
                 .Handles<UpdateTextQuestion>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.Mask, command.ResponsibleId, command.ValidationConditions, command.Properties))                
