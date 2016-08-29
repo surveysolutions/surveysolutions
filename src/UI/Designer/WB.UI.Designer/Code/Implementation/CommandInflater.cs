@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Code.Implementation
                 throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
             var sharedPersons = this.sharedPersons.GetById(id);
@@ -80,7 +80,7 @@ namespace WB.UI.Designer.Code.Implementation
             if (currentCommand == null) return;
 
             currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
-            currentCommand.HasResponsibleAdminRights = this.userHelper.WebUser.IsAdmin;
+            currentCommand.IsResponsibleAdmin = this.userHelper.WebUser.IsAdmin;
         }
 
         private static void ValidateAddSharedPersonCommand(ICommand command)

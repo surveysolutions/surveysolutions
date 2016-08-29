@@ -219,7 +219,6 @@
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Documents\TabletDocument.cs" />
     <Compile Include="EventHandler\CumulativeChartDenormalizer.cs" />
-    <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />

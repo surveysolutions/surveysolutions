@@ -60,6 +60,14 @@ namespace WB.UI.Designer
         /// </param>
         public void OnAuthorization(AuthorizationContext filterContext)
         {
+            bool skipAuthorization = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true)
+                                  || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true);
+
+            if (skipAuthorization)
+            {
+                return;
+            }
+
             if (readSideStatusService.AreViewsBeingRebuiltNow())
             {
                 filterContext.Result =
@@ -72,6 +80,7 @@ namespace WB.UI.Designer
                         }));
                 return;
             }
+
             bool isInvalidUser = false;
 
             this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();

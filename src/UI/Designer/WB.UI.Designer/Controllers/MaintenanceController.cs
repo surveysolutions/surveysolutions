@@ -3,6 +3,7 @@ using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Controllers
 {
+    [AllowAnonymous]
     public class MaintenanceController : Controller
     {
         [NoTransaction]
