@@ -23,7 +23,7 @@
         Welcome to Survey Solutions<br />
         Questionnaire Designer
     </h1>
-    <p class="note">Please log in or @Html.ActionLink("Register", "register")</p>
+    <p class="note">Please log in or @Html.ActionLink("Register", "register", "Account")</p>
 
     @if (TempData.ContainsKey(Alerts.ERROR))
     {
@@ -47,7 +47,7 @@
     <div id="recaptcha" class="recaptcha" data-bind="visible: shouldUseRecaptcha"></div>
     <div class="form-actions">
         <input class="btn btn-success btn-lg" type="submit" value="Log in" data-bind="click: login, enable: IsAjaxComplete"/>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot Password?</a>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">Forgot Password?</a>
     </div>
 </form>
 
