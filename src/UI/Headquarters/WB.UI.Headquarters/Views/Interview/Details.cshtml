@@ -71,7 +71,7 @@
                 @foreach (var group in Model.InterviewDetails.Groups)
                 {
                     <li class="list-group-item @SetGroupLevelClass(group.Depth) @css("active", group.Id == Model.SelectedGroupId && group.RosterVector.SequenceEqual(Model.SelectedGroupRosterVector))">
-                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Html.Stringify(@group.RosterVector)})">@group.Title</a>
+                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector = Html.Stringify(@group.RosterVector)})">@group.Title</a>
                     </li>
                 }
             </ul>
@@ -117,7 +117,7 @@
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
                 @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-                         || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+                     || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
                     <button class="btn btn-danger" data-bind="click: showRejectModal">@Pages.ApproveRejectPartialView_RejectAction</button>
@@ -135,7 +135,7 @@
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> @Pages.InterviewDetails_FlaggedButtonLabel (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> @Pages.InterviewDetails_SupervisorsButtonLabel (<span>@Model.Statistic.SupervisorsCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> @Pages.InterviewDetails_HiddenButtonLabel (<span>@Model.Statistic.HiddenCount</span>)</a>
-                
+
             </div>
         </div>
         <div id="list">
@@ -146,28 +146,28 @@
                     <div class="questions">
                         <table class="table table-bordered table-hover">
                             <tbody>
-                                @foreach (var entity in group.Entities)
+                            @foreach (var entity in group.Entities)
+                            {
+                                InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
+                                if (entityAsStaticText != null)
                                 {
-                                    InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
-                                    if (entityAsStaticText != null)
-                                    {
-                                        @Html.Partial("StaticTextPartialView", entityAsStaticText)
-                                        continue;
-                                    }
+                                    @Html.Partial("StaticTextPartialView", entityAsStaticText)
+                                    continue;
+                                }
 
-                                    InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
-                                    if (entityAsInterviewQuestionView != null)
+                                InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
+                                if (entityAsInterviewQuestionView != null)
+                                {
+                                    if (Model.InterviewDetails.ReceivedByInterviewer)
                                     {
-                                        if (Model.InterviewDetails.ReceivedByInterviewer)
-                                        {
-                                            @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
-                                        }
-                                        else
-                                        {
-                                            @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary { { "InterviewId", Model.InterviewDetails.PublicKey } })
-                                        }
+                                        @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
+                                    }
+                                    else
+                                    {
+                                        @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary {{"InterviewId", Model.InterviewDetails.PublicKey}})
                                     }
                                 }
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -176,6 +176,8 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("CommentTemplatePartialView")
 @Html.Partial("HistoryOfStatusesPartialView", Model.History)
 @Html.Partial("ApproveRejectPartialView", Model.InterviewDetails.Status)
 
