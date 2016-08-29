@@ -21,9 +21,13 @@
 
   <style name="Interview_Question" parent="Interview_Entity" />
 
-  <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+  <style name="Interview_Question_Header">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
 
   <style name="Interview_Question_Title" parent="Interview_Entity_Title" />
@@ -173,10 +177,13 @@
   <style name="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
+    
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
   </style>
 
@@ -347,8 +354,8 @@
   </style>
 
   <style name="Interview_Question_Errors">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Errors_margin_bottom</item>
   </style>
 
