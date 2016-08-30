@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private Establish context = () =>
         {
             var childQuestions = new List<IComposite>();
-            for (int i = 1; i <= 30; i++)
+            for (int i = 1; i <= Constants.MaxAmountOfItemsInLongRoster; i++)
             {
                 childQuestions.Add(Create.TextQuestion());
             }
