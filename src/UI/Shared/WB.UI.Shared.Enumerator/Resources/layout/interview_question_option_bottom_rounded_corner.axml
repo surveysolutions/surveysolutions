@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              style="@style/Interview_Question_Answer_Option_Top"
+              android:orientation="horizontal"
+              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered), false);">
+</LinearLayout>

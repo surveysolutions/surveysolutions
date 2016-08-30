@@ -227,6 +227,7 @@
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="Converters\RoleToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
@@ -1040,6 +1041,12 @@
     <AndroidResource Include="Resources\layout\interview_question_comments.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_option_top_rounded_corner.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_option_bottom_rounded_corner.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -1071,6 +1078,26 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\show_instructions.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_top_border_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_top_border_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_bottom_border_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_bottom_border_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
