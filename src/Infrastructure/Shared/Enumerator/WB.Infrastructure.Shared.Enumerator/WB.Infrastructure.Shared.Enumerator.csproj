@@ -40,8 +40,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flurl.Http, Version=0.6.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Flurl.Http.0.6.4\lib\portable-net45+sl50+win+wpa81+wp80\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Flurl.2.2.0\lib\monoandroid\Flurl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Flurl.Http.1.0.1\lib\monoandroid\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Geolocator.Plugin, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
