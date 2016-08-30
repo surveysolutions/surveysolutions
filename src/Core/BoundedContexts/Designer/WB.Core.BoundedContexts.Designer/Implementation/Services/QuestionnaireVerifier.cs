@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             TranslationVerifier(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
             TranslationVerifier(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
-            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHasDuplicatedNames),
+            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
