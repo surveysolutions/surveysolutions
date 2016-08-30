@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -22,10 +18,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
         IDisposable,
+        IDetailsCompositeItem,
         ILiteEventHandler<AnswerRemoved>
     {
         private readonly Guid userId;
-        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
@@ -39,12 +35,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
+            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
+            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
 
@@ -60,17 +55,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public bool HasOptions
-        {
-            get { return true; }
-        }
+        public bool HasOptions => true;
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
@@ -144,12 +136,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
                 Enablement = this.QuestionState.Enablement,
-
                 Value = model.Value,
                 Title = model.Title,
                 Selected = isSelected,
+                QuestionState = this.QuestionState,
             };
-            optionViewModel.QuestionState = this.QuestionState;
             optionViewModel.BeforeSelected += this.OptionSelected;
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
@@ -196,6 +187,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
+            }
+        }
+
+        public IEnumerable<object> Children
+        {
+            get
+            {
+                var result = new List<Object>();
+                result.Add(this.QuestionState.Header);
+                result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
+                result.AddRange(this.Options);
+                result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
+                result.Add(this.QuestionState.Validity);
+                result.Add(this.QuestionState.Comments);
+                return result;
             }
         }
     }
