@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        private readonly QuestionInstructionViewModel instructionViewModel;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -33,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel,
+            QuestionInstructionViewModel instructionViewModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -46,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.instructionViewModel = instructionViewModel;
         }
 
         private Identity questionIdentity;
@@ -64,6 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.instructionViewModel.Init(interviewId, entityIdentity);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
@@ -196,6 +200,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var result = new List<Object>();
                 result.Add(this.QuestionState.Header);
+                if (this.instructionViewModel.HasInstructions)
+                    result.Add(this.instructionViewModel);
                 result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
                 result.AddRange(this.Options);
                 result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
