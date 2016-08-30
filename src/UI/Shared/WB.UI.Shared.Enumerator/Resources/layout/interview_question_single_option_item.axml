@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+              xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
               android:orientation="horizontal"
-              local:MvxBind="BackgroundStyle ViewOptionStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+              local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
   <RadioButton
     style="@style/Interview_Question_Answer_Option_Input"
-    
     local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected" />
     
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
                local:MvxBind="HideKeyboardOnClick .;Click RemoveAnswerCommand; Visible Selected"/>
-
 </LinearLayout>
