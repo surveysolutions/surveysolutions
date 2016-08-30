@@ -540,7 +540,7 @@
     <Content Include="Scripts\lodash.underscore.min.js" />
     <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\Math.uuid.js" />
-    <Content Include="Scripts\modernizr-2.7.2.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-langs.js" />
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment-with-locales.js" />
