@@ -13,6 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
+        public QuestionInstructionViewModel() {}
+
         public QuestionInstructionViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
@@ -32,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasInstructions => !string.IsNullOrWhiteSpace(Instruction);
 
-        public void Init(string interviewId, Identity questionIdentity)
+        public virtual void Init(string interviewId, Identity questionIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
