@@ -1109,5 +1109,14 @@ namespace WB.Tests.Unit.TestFactories
         {
             return new RosterSynchronizationDto(rosterId, new decimal[] {}, 0, 0, "roster title");
         }
+
+        public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
+        {
+            return new MapReportPoint(id)
+            {
+                Latitude = latitude,
+                Longitude = longitude
+            };
+        }
     }
 }
