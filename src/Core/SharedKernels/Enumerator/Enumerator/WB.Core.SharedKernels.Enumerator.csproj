@@ -170,6 +170,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\IDetailsCompositeItem.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionInstructionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TimestampQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />

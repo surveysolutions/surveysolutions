@@ -6,8 +6,6 @@
   <LinearLayout style="@style/Interview_Question">
     <include layout="@layout/interview_question__title" />
     <LinearLayout style="@style/Interview_Question_Body">
-
-      <include layout="@layout/interview_question__instructions" />
       <LinearLayout
           style="@style/VerticalFullWidthWrappingLayout"
           local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">

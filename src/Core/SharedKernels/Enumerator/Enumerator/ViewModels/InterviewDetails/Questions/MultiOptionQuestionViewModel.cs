@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        private readonly QuestionInstructionViewModel instructionViewModel;
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -51,7 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IUserInteractionService userInteraction,
             AnsweringViewModel answering,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel, 
+            QuestionInstructionViewModel instructionViewModel)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.QuestionState = questionStateViewModel;
@@ -60,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.principal = principal;
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.instructionViewModel = instructionViewModel;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
         }
@@ -73,6 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.instructionViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
@@ -224,6 +228,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var result = new List<Object>();
                 result.Add(this.QuestionState.Header);
+                if (this.instructionViewModel.HasInstructions)
+                    result.Add(this.instructionViewModel);
                 result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
                 result.AddRange(this.Options);
                 result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
