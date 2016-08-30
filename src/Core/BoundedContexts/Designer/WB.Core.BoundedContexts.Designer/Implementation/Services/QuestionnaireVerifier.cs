@@ -1845,7 +1845,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 case ExpressionLocationType.Validation:
                     reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
-                        VerificationMessages.WB0004_VariableHasEmptyExpression, compilationErrorMessages, reference);
+                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Condition:
                     return QuestionnaireVerificationMessage.Error("WB0003",
                         VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);
