@@ -224,7 +224,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var result = new List<Object>();
                 result.Add(this.QuestionState.Header);
+                result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
                 result.AddRange(this.Options);
+                result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
                 result.Add(this.QuestionState.Validity);
                 result.Add(this.QuestionState.Comments);
                 return result;
