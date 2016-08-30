@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
 
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(Create.Entity.InterviewReferences());
 
-            mapReportPointStorage 
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId1, 1, 3), markerId1);
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId2, 2, 4), markerId2);
 
