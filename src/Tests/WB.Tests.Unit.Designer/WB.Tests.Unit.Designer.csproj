@@ -407,6 +407,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_integer_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions_and_variables.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_it_is_nested_intro_other_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_list_roster_with_31_questions_in_it.cs" />
