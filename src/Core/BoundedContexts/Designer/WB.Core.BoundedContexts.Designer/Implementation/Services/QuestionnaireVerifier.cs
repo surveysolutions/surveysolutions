@@ -914,7 +914,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool LongRosterHasMoreThanAllowedChildElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsLongRoster(@group, questionnaire) && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count() > Constants.MaxAmountOfItemsInLongRoster;
+            return IsLongRoster(@group, questionnaire) 
+                && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count(c => !(c is IVariable)) > Constants.MaxAmountOfItemsInLongRoster;
         }
 
         private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
