@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",
-                "~/Scripts/modernizr-2.7.2.js",
+                "~/Scripts/modernizr-2.8.3.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/director.js",
                 "~/Scripts/knockout-3.4.0.js",
