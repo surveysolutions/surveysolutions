@@ -95,11 +95,7 @@
                         <span>@Common.ErrorsLog</span>
                     </div>
                     <div class="panel-body">
-                        <ul data-bind="foreach: Errors" class="list-group">
-                            <li class="list-group-item">
-                                <pre data-bind="html: error"></pre>
-                            </li>
-                        </ul>
+                        <ul data-bind="foreach: Errors" class="list-group"><li class="list-group-item"><pre data-bind="html: error"></pre></li></ul>
                         @RenderSection("output", false)
                     </div>
                 </div>
