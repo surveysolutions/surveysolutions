@@ -54,6 +54,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             var typeOfViewModel = source.GetType();
 
+            if (typeOfViewModel.IsGenericType )
+            {
+                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionTopBorderViewModel<>))
+                {
+                    return Resource.Layout.interview_question_option_top_rounded_corner;
+                }
+                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBottomBorderViewModel<>))
+                {
+                    return Resource.Layout.interview_question_option_bottom_rounded_corner;
+                }
+            }
+
             var enablementModel = this.GetEnablementViewModel(source);
             if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
             {
