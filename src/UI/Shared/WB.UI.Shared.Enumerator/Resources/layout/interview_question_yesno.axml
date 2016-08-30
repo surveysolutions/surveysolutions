@@ -5,8 +5,6 @@
   <LinearLayout style="@style/Interview_Question">
     <include layout="@layout/interview_question__title" />
     <LinearLayout style="@style/Interview_Question_Body">
-      <include layout="@layout/interview_question__instructions" />
-
       <LinearLayout style="@style/Interview_Question_YesNo_Title">
         <TextView style="@style/Interview_Question_YesNo_Title_text" local:MvxBind="Text Localization('Yes');" />
         <TextView style="@style/Interview_Question_YesNo_Title_delimeter" android:text=" / " />
