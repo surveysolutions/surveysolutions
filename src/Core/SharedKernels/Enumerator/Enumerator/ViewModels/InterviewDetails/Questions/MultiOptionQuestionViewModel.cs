@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
+                .Select((x, index) => this.ToViewModel(x, existingAnswer))
                 .ToList();
 
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(optionViewModels);
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return true; }
         }
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = model.Title,
                 Checked = multiOptionAnswer != null &&
                           multiOptionAnswer.IsAnswered &&
-                          multiOptionAnswer.Answers.Any(x => model.Value == x)
+                          multiOptionAnswer.Answers.Any(x => model.Value == x),
             };
             var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
 
