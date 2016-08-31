@@ -1315,11 +1315,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translations has duplicate names.
+        ///   Looks up a localized string similar to Translations have duplicate names.
         /// </summary>
-        internal static string WB0258_TranslationsHasDuplicatedNames {
+        internal static string WB0258_TranslationsHaveDuplicatedNames {
             get {
-                return ResourceManager.GetString("WB0258_TranslationsHasDuplicatedNames", resourceCulture);
+                return ResourceManager.GetString("WB0258_TranslationsHaveDuplicatedNames", resourceCulture);
             }
         }
         
