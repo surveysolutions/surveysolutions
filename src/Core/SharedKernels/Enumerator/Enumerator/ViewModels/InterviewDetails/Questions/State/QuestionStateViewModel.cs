@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         ILiteEventHandler<TAnswerEvent>,
+        IQuestionStateViewModel,
         IDisposable
         where TAnswerEvent : QuestionAnswered
     {
