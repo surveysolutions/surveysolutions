@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -17,6 +18,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 
@@ -36,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private ObservableRangeCollection<object> items;
-        public ObservableRangeCollection<object> Items
+        private CompositeCollection<object> items;
+        public CompositeCollection<object> Items
         {
             get { return this.items; }
             set
@@ -101,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
-            this.Items = new ObservableRangeCollection<object>();
+            this.Items = new CompositeCollection<object>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
@@ -176,22 +178,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var newGroupItems = interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>());
 
-                var listToPutInRecycler = new List<object>();
+                this.Items.Clear();
 
                 foreach (var interviewEntityViewModel in newGroupItems)
                 {
                     var compositeItem = interviewEntityViewModel as IDetailsCompositeItem;
                     if (compositeItem != null)
                     {
-                        listToPutInRecycler.AddRange(compositeItem.Children);
+                        this.Items.AddCollection(compositeItem.Children);
                     }
                     else
                     {
-                        listToPutInRecycler.Add(interviewEntityViewModel);
+                        this.Items.AddCollection(new ObservableCollection<object>(interviewEntityViewModel.ToEnumerable()));
                     }
                 }
 
-                this.Items.Reset(listToPutInRecycler);
+                //this.Items.Reset(listToPutInRecycler);
             }
             finally
             {
@@ -224,7 +226,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            this.RemoveEntities(@event.Instances.Select(x => x.GetIdentity()).ToHashSet());
+            // TODO: KP-7658
+            //this.RemoveEntities(@event.Instances.Select(x => x.GetIdentity()).ToHashSet());
         }
 
         public void Handle(QuestionsEnabled @event)
@@ -352,7 +355,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             .Where(item => identitiesToRemove.Contains(item.Identity))
                             .ToList();
 
-                        this.Items.RemoveRange(itemsToRemove);
+                        //this.Items.RemoveRange(itemsToRemove); TODO: 
 
                         foreach (var item in itemsToRemove.OfType<IDisposable>())
                         {
@@ -369,19 +372,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                var readOnlyItems = this.Items.ToArray();
+            // TODO: KP-7672
+            //this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            //{
+            //    var readOnlyItems = this.Items.ToArray();
 
-                for (int i = 0; i < readOnlyItems.Length; i++)
-                {
-                    var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
-                    if (interviewEntityViewModel != null &&
-                        viewModelIdentities.Contains(interviewEntityViewModel.Identity))
-                        // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
-                        this.Items.NotifyItemChanged(i);
-                }
-            });
+            //    for (int i = 0; i < readOnlyItems.Length; i++)
+            //    {
+            //        var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
+            //        if (interviewEntityViewModel != null &&
+            //            viewModelIdentities.Contains(interviewEntityViewModel.Identity))
+            //            // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
+            //            //this.Items.NotifyItemChanged(i);
+            //    }
+            //});
         }
 
         private bool ShouldBeHidden(Identity entity)
