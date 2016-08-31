@@ -289,10 +289,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private List<SideBarSectionViewModel> GenerateChildNodes()
         {
+            if (this.SectionIdentity == null)
+                return new List<SideBarSectionViewModel>();
+
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
-            var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, NavigationIdentity.CreateForGroup(groupInstance), this.NavigationState, this.NavigationState.InterviewId));
+            var enabledSubgroups = interview.GetEnabledSubgroups(this.SectionIdentity).ToList();
+
+            var result = enabledSubgroups.Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, NavigationIdentity.CreateForGroup(groupInstance), 
+                                                                                               this.NavigationState, this.NavigationState.InterviewId));
 
             return new List<SideBarSectionViewModel>(result);
         }
