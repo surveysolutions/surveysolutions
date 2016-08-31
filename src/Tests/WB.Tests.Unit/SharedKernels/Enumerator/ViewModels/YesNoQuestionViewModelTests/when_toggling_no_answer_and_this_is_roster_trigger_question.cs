@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         It should_undo_checked_property_change = () => viewModel.Options.Last().YesSelected.ShouldBeFalse();
 
         It should_dont_call_userInteractionService_for_reduce_roster_size = () => 
-            userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Never());
+            userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never());
 
         static YesNoQuestionViewModel viewModel;
         static Mock<IUserInteractionService> userInteractionServiceMock;

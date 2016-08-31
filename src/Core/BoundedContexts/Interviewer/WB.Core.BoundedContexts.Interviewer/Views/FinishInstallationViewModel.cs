@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
             {
                 var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
-                if (await this.userInteractionService.ConfirmAsync(message))
+                if (await this.userInteractionService.ConfirmAsync(message, isHtml: false))
                 {
                     this.Endpoint = settingsEndpoint;
                 }

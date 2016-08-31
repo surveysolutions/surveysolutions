@@ -23,10 +23,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             string message,
             string title = "",
             string okButton = "OK",
-            string cancelButton = "Cancel")
+            string cancelButton = "Cancel", 
+            bool isHtml = true)
         {
             var tcs = new TaskCompletionSource<bool>();
-            this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton);
+            this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton, isHtml);
             return tcs.Task;
         }
 
@@ -79,9 +80,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             Action<bool> answer,
             string title = null,
             string okButton = "OK",
-            string cancelButton = "Cancel")
+            string cancelButton = "Cancel",
+            bool isHtml = true)
         {
-            this.ConfirmImpl(message, answer, title, okButton, cancelButton);
+            this.ConfirmImpl(message, answer, title, okButton, cancelButton, isHtml);
         }
 
         private void Alert(string message, Action done = null, string title = "", string okButton = "OK")
@@ -89,7 +91,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.AlertImpl(message, done, title, okButton);
         }
 
-        private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton)
+        private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton, bool isHtml)
         {
             var userInteractionId = Guid.NewGuid();
 
@@ -107,10 +109,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(Html.FromHtml(message))
-                            .SetTitle(Html.FromHtml(title))
-                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true); }); })
-                            .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false); }); })
+                            .SetMessage(isHtml ? Html.FromHtml(message) : new SpannedString(message))
+                            .SetTitle(isHtml ? Html.FromHtml(title) : new SpannedString(title))
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
+                            .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(false)); })
                             .SetCancelable(false)
                             .Show();
                     },

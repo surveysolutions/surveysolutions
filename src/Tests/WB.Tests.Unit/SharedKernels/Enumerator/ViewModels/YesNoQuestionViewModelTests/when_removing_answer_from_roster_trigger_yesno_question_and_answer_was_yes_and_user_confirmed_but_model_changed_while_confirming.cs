@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock = new Mock<IUserInteractionService>();
 
             userInteractionServiceMock
-                .Setup(_ => _.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Setup(_ => _.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Returns(Task.FromResult(true))
                 .Callback(() => yesNoAnswer.SetAnswers(new []
                 {
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         It should_not_undo_checked_property_change = () => viewModel.Options.Last().Selected.ShouldBeNull();
 
         It should_call_userInteractionService_for_reduce_roster_size = () => 
-            userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Once());
+            userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once());
 
         [Ignore("should be removed")]
         It should_answer_question_with_updated_state_of_options = () =>
