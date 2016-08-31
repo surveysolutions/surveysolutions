@@ -88,6 +88,12 @@ namespace WB.Tests.Unit.Designer
                 && message.Code == code);
         }
 
+        public static void ShouldNotContain(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldNotContain(message => message.Code == code);
+        }
+
         public static void ShouldContainCritical(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {

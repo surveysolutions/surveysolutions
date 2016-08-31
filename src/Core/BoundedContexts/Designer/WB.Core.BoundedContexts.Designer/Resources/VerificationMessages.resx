@@ -525,8 +525,8 @@
   <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
     <value>Translation has empty content</value>
   </data>
-  <data name="WB0258_TranslationsHasDuplicatedNames" xml:space="preserve">
-    <value>Translations has duplicate names</value>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>Translations have duplicate names</value>
   </data>
   <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
     <value>Question title is too long. It should be no longer than 500 characters.</value>
