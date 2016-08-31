@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -121,6 +122,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!isSupervisorRequired)
             {
+                if (this.interviewImportService.Status.IsInProgress)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                           "Import interviews is in progress. Wait until current operation is finished.");
+                }
+
                 ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
                 try

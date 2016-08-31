@@ -55,26 +55,27 @@ namespace WB.UI.Headquarters.Implementation.Services
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
             Guid? supervisorId, Guid headquartersId)
         {
-            var bigTemplateObject =
-                this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
-                    questionnaireIdentity.Version);
-
+            if(this.Status.IsInProgress == true)
+                return;
+            
             this.Status = new InterviewImportStatus
             {
                 QuestionnaireId = questionnaireIdentity.QuestionnaireId,
                 InterviewImportProcessId = interviewImportProcessId,
                 QuestionnaireVersion = questionnaireIdentity.Version,
-                QuestionnaireTitle = bigTemplateObject.Title,
                 StartedDateTime = DateTime.Now,
                 CreatedInterviewsCount = 0,
                 ElapsedTime = 0,
                 EstimatedTime = 0,
-                State = {Columns = new string[0], Errors = new List<InterviewImportError>()}
+                State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
+                IsInProgress = true
             };
-            this.Status.IsInProgress = true;
 
             try
             {
+                var bigTemplateObject = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                this.Status.QuestionnaireTitle = bigTemplateObject.Title;
+
                 var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
                 if (interviewsToImport == null)
                 {
