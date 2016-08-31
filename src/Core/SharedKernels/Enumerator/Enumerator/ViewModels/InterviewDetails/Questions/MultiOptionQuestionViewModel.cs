@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
-        IDetailsCompositeItem,
+        IDetailsCompositeItemWithChildren,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable
@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly QuestionInstructionViewModel instructionViewModel;
+        private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
+
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -42,7 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
 
-        public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
+        public IQuestionStateViewModel QuestionState => this.questionState;
         public AnsweringViewModel Answering { get; private set; }
 
         public MultiOptionQuestionViewModel(
@@ -57,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.principal = principal;
@@ -76,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.eventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.instructionViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
@@ -118,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Dispose();
             this.eventRegistry.Unsubscribe(this);
-            this.QuestionState.Dispose();
+            this.questionState.Dispose();
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
@@ -141,7 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?) null;
-            result.QuestionState = this.QuestionState;
+            result.QuestionState = this.questionState;
 
             return result;
         }
@@ -228,14 +231,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<Object>();
-                result.Add(this.QuestionState.Header);
-                if (this.instructionViewModel.HasInstructions)
-                    result.Add(this.instructionViewModel);
-                result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
+                result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState));
                 result.AddCollection(new ObservableCollection<object>(this.Options));
-                result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
-                result.Add(this.QuestionState.Validity);
-                result.Add(this.QuestionState.Comments);
+                result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState));
                 return result;
             }
         }
