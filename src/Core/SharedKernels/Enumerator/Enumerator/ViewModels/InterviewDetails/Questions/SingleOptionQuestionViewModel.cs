@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
         IDisposable,
-        IDetailsCompositeItem,
+        IDetailsCompositeItemWithChildren,
         ILiteEventHandler<AnswerRemoved>
     {
         private readonly Guid userId;
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.Answering = answering;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.instructionViewModel = instructionViewModel;
@@ -55,9 +55,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
         private Guid interviewId;
+        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
         public ObservableCollection<object> Options { get; private set; }
-        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
+
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
         public AnsweringViewModel Answering { get; private set; }
 
         public bool HasOptions => true;
@@ -70,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.instructionViewModel.Init(interviewId, entityIdentity);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
@@ -143,11 +147,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
-                Enablement = this.QuestionState.Enablement,
+                Enablement = this.questionState.Enablement,
                 Value = model.Value,
                 Title = model.Title,
                 Selected = isSelected,
-                QuestionState = this.QuestionState,
+                QuestionState = this.questionState,
             };
             optionViewModel.BeforeSelected += this.OptionSelected;
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
@@ -186,7 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-            this.QuestionState.Dispose();
+            this.questionState.Dispose();
 
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
@@ -203,14 +207,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<object>();
-                result.Add(this.QuestionState.Header);
-                if (this.instructionViewModel.HasInstructions)
-                    result.Add(this.instructionViewModel);
-                result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
+                result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.questionState));
                 result.AddCollection(this.Options);
-                result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
-                result.Add(this.QuestionState.Validity);
-                result.Add(this.QuestionState.Comments);
+                result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.questionState));
                 return result;
             }
         }

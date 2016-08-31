@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -185,15 +186,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var compositeItem = interviewEntityViewModel as IDetailsCompositeItem;
                     if (compositeItem != null)
                     {
-                        this.Items.AddCollection(compositeItem.Children);
+                        this.Items.Add(compositeItem.QuestionState.Header);
+                        if (compositeItem.InstructionViewModel.HasInstructions)
+                            this.Items.Add(compositeItem.InstructionViewModel);
+                        var compositeItemWithChildren  = compositeItem as IDetailsCompositeItemWithChildren;
+                        if (compositeItemWithChildren != null)
+                        {
+                            this.Items.AddCollection(compositeItemWithChildren.Children);
+                        }
+
+                        this.Items.Add(compositeItem.QuestionState.Validity);
+                        this.Items.Add(compositeItem.QuestionState.Comments);
                     }
                     else
                     {
                         this.Items.AddCollection(new ObservableCollection<object>(interviewEntityViewModel.ToEnumerable()));
                     }
                 }
-
-                //this.Items.Reset(listToPutInRecycler);
             }
             finally
             {
