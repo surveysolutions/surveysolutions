@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -54,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
+        public ObservableCollection<object> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
@@ -87,9 +89,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetSingleOptionAnswer(this.questionIdentity);
             var selectedValue = Monads.Maybe(() => answerModel.Answer);
 
-            this.Options = this.filteredOptionsViewModel.GetOptions()
+            var singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
+            var collection = new ObservableCollection<object>(singleOptionQuestionOptionViewModels);
+            this.Options = collection;
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -101,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
-            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
+            var previousOption = this.Options.Cast<SingleOptionQuestionOptionViewModel>().SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -172,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                foreach (var option in this.Options.Where(option => option.Selected))
+                foreach (var option in this.Options.Cast<SingleOptionQuestionOptionViewModel>().Where(option => option.Selected))
                 {
                     option.Selected = false;
                 }
@@ -187,23 +191,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
 
-            foreach (var option in Options)
+            foreach (var option in Options.Cast<SingleOptionQuestionOptionViewModel>())
             {
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
         }
 
-        public IEnumerable<object> Children
+        public CompositeCollection<object> Children
         {
             get
             {
-                var result = new List<Object>();
+                var result = new CompositeCollection<object>();
                 result.Add(this.QuestionState.Header);
                 if (this.instructionViewModel.HasInstructions)
                     result.Add(this.instructionViewModel);
                 result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
-                result.AddRange(this.Options);
+                result.AddCollection(this.Options);
                 result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.QuestionState));
                 result.Add(this.QuestionState.Validity);
                 result.Add(this.QuestionState.Comments);

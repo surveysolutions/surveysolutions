@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -222,16 +223,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IEnumerable<object> Children
+        public CompositeCollection<object> Children
         {
             get
             {
-                var result = new List<Object>();
+                var result = new CompositeCollection<Object>();
                 result.Add(this.QuestionState.Header);
                 if (this.instructionViewModel.HasInstructions)
                     result.Add(this.instructionViewModel);
                 result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
-                result.AddRange(this.Options);
+                result.AddCollection(new ObservableCollection<object>(this.Options));
                 result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.QuestionState));
                 result.Add(this.QuestionState.Validity);
                 result.Add(this.QuestionState.Comments);
