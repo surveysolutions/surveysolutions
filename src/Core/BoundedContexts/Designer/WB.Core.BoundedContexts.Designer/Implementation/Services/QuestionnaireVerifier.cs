@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             TranslationVerifier(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
             TranslationVerifier(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
-            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHasDuplicatedNames),
+            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
@@ -914,7 +914,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool LongRosterHasMoreThanAllowedChildElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsLongRoster(@group, questionnaire) && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count() > Constants.MaxAmountOfItemsInLongRoster;
+            return IsLongRoster(@group, questionnaire) 
+                && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count(c => !(c is IVariable)) > Constants.MaxAmountOfItemsInLongRoster;
         }
 
         private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1844,7 +1845,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 case ExpressionLocationType.Validation:
                     reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
-                        VerificationMessages.WB0004_VariableHasEmptyExpression, compilationErrorMessages, reference);
+                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Condition:
                     return QuestionnaireVerificationMessage.Error("WB0003",
                         VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);

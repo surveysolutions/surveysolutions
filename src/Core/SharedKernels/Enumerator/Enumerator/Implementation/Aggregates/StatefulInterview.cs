@@ -1515,7 +1515,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id);
+            IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id).ToList();
 
             foreach (var entity in groupsAndRosters)
             {
