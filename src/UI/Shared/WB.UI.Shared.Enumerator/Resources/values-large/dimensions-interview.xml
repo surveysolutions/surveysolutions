@@ -9,7 +9,6 @@
 
   <dimen name="Interview_Question_Answer_margin_top">10dp</dimen>
   <dimen name="Interview_Question_Answer_margin_bottom">0dp</dimen>
-  
   <dimen name="Interview_Question_Errors_margin_bottom">8dp</dimen>
 
   <dimen name="Interview_Question_Option_vertical_padding">4dp</dimen>
