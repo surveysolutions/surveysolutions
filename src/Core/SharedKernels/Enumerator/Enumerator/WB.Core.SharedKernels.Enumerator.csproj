@@ -156,6 +156,7 @@
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Services\IAsyncRunner.cs" />
+    <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
