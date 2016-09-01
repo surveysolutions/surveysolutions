@@ -14,12 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 
@@ -27,8 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
         ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
@@ -39,8 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private CompositeCollection<object> items;
-        public CompositeCollection<object> Items
+        private CompositeCollection<ICompositeEntity> items;
+        public CompositeCollection<ICompositeEntity> Items
         {
             get { return this.items; }
             set
@@ -104,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
-            this.Items = new CompositeCollection<object>();
+            this.Items = new CompositeCollection<ICompositeEntity>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
@@ -177,13 +175,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     interviewItemViewModel.Dispose();
                 }
 
-                var newGroupItems = interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>());
+                var newGroupItems = interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
 
+                this.Items.ForEach(x => x.DisposeIfDisposable());
                 this.Items.Clear();
+                this.InterviewEntities?.ForEach(x => x.DisposeIfDisposable());
+                this.InterviewEntities = newGroupItems;
 
                 foreach (var interviewEntityViewModel in newGroupItems)
                 {
                     var compositeItem = interviewEntityViewModel as ICompositeQuestion;
+                    var rosterViewModel = interviewEntityViewModel as RosterViewModel;
                     if (compositeItem != null)
                     {
                         this.Items.Add(compositeItem.QuestionState.Header);
@@ -198,9 +200,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         this.Items.AddCollection(compositeItem.QuestionState.Validity.Children);
                         this.Items.Add(compositeItem.QuestionState.Comments);
                     }
+                    if (rosterViewModel != null)
+                    {
+                        this.Items.AddCollection(rosterViewModel.RosterInstances);
+                    }
                     else
                     {
-                        this.Items.AddCollection(new ObservableCollection<object>(interviewEntityViewModel.ToEnumerable()));
+                        this.Items.AddCollection(new ObservableCollection<ICompositeEntity>(interviewEntityViewModel.ToEnumerable()));
                     }
                 }
             }
@@ -209,6 +215,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.userInterfaceStateService.NotifyRefreshFinished();
             }
         }
+
+        private IList<IInterviewEntityViewModel> InterviewEntities { get; set; }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
@@ -226,17 +234,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Name.ChangeText(fullRosterName);
                 }
             }
-        }
-
-        public void Handle(RosterInstancesAdded @event)
-        {
-            this.AddMissingEntities();
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-            // TODO: KP-7658
-            //this.RemoveEntities(@event.Instances.Select(x => x.GetIdentity()).ToHashSet());
         }
 
         public void Handle(QuestionsEnabled @event)
