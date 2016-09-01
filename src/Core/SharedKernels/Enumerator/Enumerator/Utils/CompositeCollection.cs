@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         /// <summary>Removes all underlying collections from this collection (without changing them).</summary>
         public void Clear()
         {
+            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.collectionChanged);
             this.collections.Clear();
             this.Count = 0;
             this.propertyChanged("Count");
