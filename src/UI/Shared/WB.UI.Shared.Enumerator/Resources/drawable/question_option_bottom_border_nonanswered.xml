@@ -3,8 +3,8 @@
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:shape="rectangle">
   <padding
-    android:top="@dimen/Interview_Question_Option_vertical_padding"
-    android:bottom="@dimen/Interview_Question_Option_vertical_padding"
+    android:top="@dimen/Interview_Question_Option_Frame_Element_vertical_padding"
+    android:bottom="@dimen/Interview_Question_Option_Frame_Element_vertical_padding"
     android:left="@dimen/Interview_Question_Answer_background_padding"
     android:right="@dimen/Interview_Question_Answer_background_padding" />
   <solid android:color="@color/nonAnsweredBackground"/>
