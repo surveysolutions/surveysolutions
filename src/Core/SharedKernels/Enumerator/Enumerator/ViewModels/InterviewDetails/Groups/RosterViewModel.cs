@@ -66,7 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 var groupViewModel = this.GetGroupViewModel(newRosterInstance.GetIdentity());
 
                 int index = Array.FindLastIndex(typedRosterInstances, t => t.SortIndex < groupViewModel.SortIndex) + 1;
-
                 InvokeOnMainThread(() => this.RosterInstances.Insert(index, groupViewModel));
             }
         }
