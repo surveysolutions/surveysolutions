@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -67,7 +69,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool IsInvalid
         {
             get { return this.isInvalid; }
-            private set { this.RaiseAndSetIfChanged(ref this.isInvalid, value); }
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref this.isInvalid, value);
+
+                var isShowErrors = this.children.Contains(this.Error);
+                if (value && !isShowErrors)
+                {
+                    this.children.Add(Error);
+                }
+                else if (!value && isShowErrors)
+                {
+                    this.children.Clear();
+                }
+            }
         }
 
         public ErrorMessagesViewModel Error { get; }
@@ -183,5 +198,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this);
         }
+
+
+        CompositeCollection<object> children = new CompositeCollection<object>();
+        public CompositeCollection<object> Children => this.children;
     }
 }
