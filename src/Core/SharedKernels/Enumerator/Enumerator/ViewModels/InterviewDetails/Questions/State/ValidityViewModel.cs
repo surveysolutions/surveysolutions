@@ -201,7 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        CompositeCollection<object> children = new CompositeCollection<object>();
-        public CompositeCollection<object> Children => this.children;
+        CompositeCollection<ICompositeEntity> children = new CompositeCollection<ICompositeEntity>();
+        public CompositeCollection<ICompositeEntity> Children => this.children;
     }
 }
