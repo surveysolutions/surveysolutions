@@ -36,4 +36,6 @@
 
   <dimen name="Interview_Comment_Item_margin_top">16dp</dimen>
   <dimen name="Interview_Comment_Caption_margin_bottom">8dp</dimen>
+
+  <dimen name="Interview_Entity_Title_margin_top">18dp</dimen>
 </resources>
