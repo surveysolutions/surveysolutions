@@ -8,6 +8,7 @@
         <locale>fr</locale>
         <locale>zh</locale>
         <locale>pt</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Resources\CommandValidatorsMessages.resx" nm="UserDontHavePermissionsToAnswer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="CommandValidatorsMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -192,9 +193,9 @@
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Roster Id is inconsistant with roster size." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="登记表编号与登记表大小不一致。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Lista Id é inconsistant com o tamanho de lista." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Roster Id is inconsistent with roster size." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="登记表编号与登记表大小不一致。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Lista Id é inconsistant com o tamanho de lista." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0010_UnsupportedLinkedQuestion" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -206,9 +207,9 @@
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0011_GeneralError" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="General error occured." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="发生了一般错误。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Ocorreu um erro geral." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="General error occurred." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="发生了一般错误。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Ocorreu um erro geral." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0012_QuestionWasNotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -283,9 +284,9 @@
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0024_DataWasNotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="x" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="未找到预加载数据" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="O pré-carregamento de dados não foi encontrado." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Preloading data was not found" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="未找到预加载数据" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="O pré-carregamento de dados não foi encontrado." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0025_ResponsibleNameIsEmpty" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -472,6 +473,7 @@
         <locale>fr</locale>
         <locale>zh</locale>
         <locale>pt</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AdvancedMode" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -897,11 +899,11 @@
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SampleCreationCompleted" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Sample creation was succefully completed." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Sample creation was successfully completed." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Создание образца было успешно завершено." ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Création de l’échantillon terminé avec succès." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="样本创建已成功完成。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Criação de amostra foi succefully concluída." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Création de l’échantillon terminé avec succès." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="样本创建已成功完成。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Criação de amostra foi succefully concluída." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SampleCreationResult" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -924,11 +926,11 @@
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SampleSuccess" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Sample import is successfuly completed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создание успешно завершено" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Importation d’échantillons effectuée avec succès" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="样本导入已成功完成" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="Importação de amostra for concluída com êxito" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Sample import is successfully completed" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Создание успешно завершено" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Importation d’échantillons effectuée avec succès" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="样本导入已成功完成" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Importação de amostra for concluída com êxito" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Status" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -2425,6 +2427,11 @@
             <li lc="pt" tx="Exportar as configurações de criptografia" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Settings.resx" nm="GlobalNotice" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Global note" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Settings.resx" nm="Password" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Password" ts="Translated" qs="ToReview" />
@@ -3884,7 +3891,8 @@
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_DefaultTranslation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="[Default]" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="original" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="[По умолчанию]" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_EnabledButtonLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -3988,7 +3996,8 @@
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_TranslationLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Translation" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Language" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Язык" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_UnansweredButtonLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5783,6 +5792,7 @@
         <locale>fr</locale>
         <locale>zh</locale>
         <locale>pt</locale>
+        <locale>km</locale>
       </locales>
       <items>
         <it rn="Resources\ErrorMessages.resx" nm="ExcessiveRequestAttemptsDetected" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">

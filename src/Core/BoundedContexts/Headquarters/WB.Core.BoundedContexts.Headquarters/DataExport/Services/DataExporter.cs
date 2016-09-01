@@ -6,8 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -30,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger = logger;
             this.serviceLocator = serviceLocator;
 
+            this.RegisterExporter<ParaDataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Paradata);
             this.RegisterExporter<ParaDataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
             this.RegisterExporter<DataExportProcessDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
 

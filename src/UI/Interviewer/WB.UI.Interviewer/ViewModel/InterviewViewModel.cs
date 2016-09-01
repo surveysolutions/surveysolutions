@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -34,29 +31,28 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState,
+            CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
-        
+
+        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
+
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
-        public IMvxCommand ReloadInterviewCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
-            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
-
-        public void NavigateBack()
+        public override void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
+            if (this.HasPrefilledQuestions && interview.CreatedOnClient)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
@@ -66,19 +62,30 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
+        protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
+        {
+            if (HasNotEmptyNoteFromSupervior || HasCommentsFromSupervior || HasPrefilledQuestions)
+                return NavigationIdentity.CreateForCoverScreen();
+
+            return base.GetDefaultScreenToNavigate(questionnaire);
+        }
+
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
-            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+            switch (this.navigationState.CurrentScreenType)
             {
-                var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                completeInterviewViewModel.Init(this.interviewId, this.navigationState);
-                return completeInterviewViewModel;
-            }
-            else
-            {
-                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                return activeStageViewModel;
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                    completeInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                case ScreenType.Cover:
+                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
+                    coverInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    return coverInterviewViewModel;
+                default:
+                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                    activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    return activeStageViewModel;
             }
         }
     }

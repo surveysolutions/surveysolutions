@@ -11,11 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public InterviewSummary()
         {
-            this.AnswersToFeaturedQuestions = new HashSet<QuestionAnswer>();
+            this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
         }
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()
         {
+            int position = 0;
             foreach (var featuredQuestion in questionnaire.Find<IQuestion>(q => q.Featured && q.QuestionType != QuestionType.GpsCoordinates))
             {
                 var result = new QuestionAnswer
@@ -24,8 +25,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Title = featuredQuestion.QuestionText,
                     Answer = string.Empty,
                     Type = featuredQuestion.QuestionType,
-                    InterviewSummary = this
+                    InterviewSummary = this,
+                    Position = position
                 };
+                position++;
 
                 this.AnswersToFeaturedQuestions.Add(result);
             }
@@ -51,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string LastStatusChangeComment { get; set; }
 
         public virtual bool WasRejectedBySupervisor { get; set; }
-        public virtual ISet<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
+        public virtual IList<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
         public virtual bool ReceivedByInterviewer { get; set; }

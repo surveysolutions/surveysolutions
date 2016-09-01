@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         Group = 100,
         Complete = 1000,
+        Cover = 5000
     }
 
     public class NavigationIdentity : EventArgs
@@ -24,6 +25,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return new NavigationIdentity(ScreenType.Complete, targetGroup: null);
         }
 
+        public static NavigationIdentity CreateForCoverScreen()
+        {
+            return new NavigationIdentity(ScreenType.Cover, targetGroup: null);
+        }
+        
         public static NavigationIdentity CreateForGroup(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
             return new NavigationIdentity(ScreenType.Group, targetGroup: groupIdentity, anchoredElementIdentity: anchoredElementIdentity);

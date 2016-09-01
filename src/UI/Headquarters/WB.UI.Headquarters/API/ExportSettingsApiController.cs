@@ -10,7 +10,8 @@ namespace WB.UI.Headquarters.API
     public class ExportSettingsApiController : ApiController
     {
         private readonly ILogger logger;
-        private IExportSettings exportSettings;
+        private readonly IExportSettings exportSettings;
+
         public ExportSettingsApiController(ILogger logger, IExportSettings exportSettings)
 
         {
@@ -33,7 +34,8 @@ namespace WB.UI.Headquarters.API
 
                 if (oldState.IsEnabled != changeSettingsState.EnableState)
                     this.exportSettings.SetEncryptionEnforcement(changeSettingsState.EnableState);
-            
+            this.logger.Info($"Export settings were changed by {base.User.Identity.Name}. Encription changed to " + (changeSettingsState.EnableState ? "enabled" : "disabled"));
+
             return new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
         }
 
@@ -44,6 +46,8 @@ namespace WB.UI.Headquarters.API
 
             if(model.IsEnabled)
                 this.exportSettings.RegeneratePassword();
+
+            this.logger.Info($"Export settings were changed by {base.User.Identity.Name}. Encryption password was chagned.");
 
             return new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
 

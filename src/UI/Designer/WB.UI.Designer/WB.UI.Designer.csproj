@@ -261,6 +261,8 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\LogImportActionAttribute.cs" />
+    <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
+    <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Api\Designer\TranslationsController.cs" />
     <Compile Include="Api\Designer\AttachmentsController.cs" />
     <Compile Include="Api\Designer\CommandController.cs" />
@@ -293,6 +295,7 @@
     <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
+    <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
@@ -423,6 +426,7 @@
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\IDeskAuthenticationService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
@@ -578,7 +582,7 @@
     <Content Include="questionnaire\details\views\treegroup.html" />
     <Content Include="questionnaire\details\views\treequestion.html" />
     <Content Include="questionnaire\details\views\treestatictext.html" />
-    <Content Include="UpdatedDesigner\build\*.js" />
+    <Content Include="questionnaire\build\*.js" />
     <Content Include="questionnaire\vendor\ace-builds\.bower.json" />
     <Content Include="questionnaire\vendor\ace-builds\ChangeLog.txt" />
     <Content Include="questionnaire\vendor\ace-builds\LICENSE" />
@@ -1360,7 +1364,7 @@
     <Content Include="questionnaire\vendor\prettycheckable\img\sprites\L-radio-checked-disabled.png" />
     <Content Include="questionnaire\vendor\prettycheckable\package.json" />
     <Content Include="questionnaire\vendor\prettycheckable\README.md" />
-    <Content Include="UpdatedDesigner\build\*.css" />
+    <Content Include="questionnaire\build\*.css" />
     <Content Include="questionnaire\details\scripts\app.js" />
     <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
     <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
@@ -1611,6 +1615,7 @@
     <Content Include="questionnaire\vendor\underscore\README.md" />
     <Content Include="questionnaire\vendor\underscore\underscore-min.map" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

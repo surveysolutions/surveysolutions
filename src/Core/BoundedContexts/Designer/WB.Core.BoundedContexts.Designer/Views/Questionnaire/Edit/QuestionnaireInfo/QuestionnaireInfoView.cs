@@ -28,6 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public int RostersCount { get; set; }
 
         public bool IsReadOnlyForUser { get; set; }
+        public bool HasViewerAdminRights { get; set; }
+
         public List<AttachmentView> Attachments { get; set; }
 
         public List<TranslationView> Translations { get; set; }

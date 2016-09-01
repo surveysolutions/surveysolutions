@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         IInterviewEntityViewModel,
         ILiteEventHandler<GroupsEnabled>, 
         ILiteEventHandler<GroupsDisabled>, 
+        ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
         private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
@@ -34,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private string interviewId;
+        private bool isRoster;
         private QuestionnaireIdentity questionnaireIdentity;
         private NavigationState navigationState;
 
@@ -49,13 +52,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly AnswerNotifier answerNotifier;
 
-        private string QuestionnaireId => this.questionnaireIdentity.ToString();
-
         private GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
         {
             get { return this.groupState; }
             set { this.RaiseAndSetIfChanged(ref this.groupState, value); }
+        }
+
+        public DynamicTextViewModel Title { get; }
+
+        private string rosterInstanceTitle;
+        public string RosterInstanceTitle
+        {
+            get { return this.rosterInstanceTitle; }
+            set
+            {
+                this.rosterInstanceTitle = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool IsRoster
+        {
+            get { return isRoster; }
+            set
+            {
+                isRoster = value;
+                this.RaisePropertyChanged();
+            }
         }
 
         private string navigationItemTitle;
@@ -77,13 +101,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICommandService commandService, AnswerNotifier answerNotifier)
+            ICommandService commandService, 
+            DynamicTextViewModel title,
+            AnswerNotifier answerNotifier)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.commandService = commandService;
+            this.Title = title;
             this.answerNotifier = answerNotifier;
         }
 
@@ -106,10 +133,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             else
             {
                 this.groupOrSectionToNavigateIdentity = this.GetParentGroupOrRosterIdentity();
+                this.IsRoster = questionnaire.IsRosterGroup(this.groupOrSectionToNavigateIdentity.Id);
+                this.RosterInstanceTitle = interview.GetRosterTitle(this.groupOrSectionToNavigateIdentity);
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
-            this.UpdateNavigationItemTitle();
+            this.SetNavigationItemTitle();
             this.SetGroupState();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
@@ -181,23 +210,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
         }
 
-        private void UpdateNavigationItemTitle()
-        {
-            this.NavigationItemTitle = this.GetNavigationItemTitle();
-        }
-
-        private string GetNavigationItemTitle()
+        private void SetNavigationItemTitle()
         {
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    return UIResources.Interview_ParentGroup_ButtonText;
-                case NavigationGroupType.LastSection:
-                    return UIResources.Interview_CompleteScreen_ButtonText;
                 case NavigationGroupType.Section:
-                    return UIResources.Interview_NextSection_ButtonText;
+                    var interview = this.interviewRepository.Get(interviewId);
+                    var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                    var textWithSubstitutions = questionnaire.GetGroupTitle(this.groupOrSectionToNavigateIdentity.Id);
+
+                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
+                    return;
+                case NavigationGroupType.LastSection:
+                    this.Title.InitAsStatic(UIResources.Interview_CompleteScreen_ButtonText);
+                    return;
                 default:
-                    return string.Empty;
+                    return;
             }
         }
 
@@ -231,14 +260,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private void UpdateNavigation()
         {
             this.SetNextEnabledSection();
-            this.UpdateNavigationItemTitle();
             this.SetGroupState();
         }
 
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-
+            
+            this.Title.Dispose();
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
             this.answerNotifier.Dispose();
         }
@@ -249,6 +278,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (!this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Intersect(@event.Groups).Any()) return;
 
             this.UpdateNavigation();
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            if (!this.isRoster) return;
+
+            foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.groupOrSectionToNavigateIdentity.Equals(changedInstance.RosterInstance.GetIdentity())))
+            {
+                this.RosterInstanceTitle = changedInstance.Title;
+            }
         }
 
         public void Handle(GroupsDisabled @event)

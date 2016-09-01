@@ -35,8 +35,8 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     }),
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId, options: new List<Answer>
                     {
-                        Create.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
-                        Create.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
+                        Create.Option(value: "11", text: "child 1 for parent option 1", parentValue: "1"),
+                        Create.Option(value: "12", text: "child 2 for parent option 1", parentValue: "1"),
                     }),
                     Create.NumericIntegerQuestion(numericId, "numeric")
                 });
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var interview = SetupInterview(questionnaire, new object[]{});
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1m);
-                interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1.1m);
+                interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 11m);
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2m);
 
                 using (var eventContext = new EventContext())

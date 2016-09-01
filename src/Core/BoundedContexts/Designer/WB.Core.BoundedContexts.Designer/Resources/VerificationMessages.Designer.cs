@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Items with with the same name found..
+        ///   Looks up a localized string similar to Items with the same name found..
         /// </summary>
         internal static string WB0026_ItemsWithTheSameNamesFound {
             get {
@@ -396,11 +396,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have more than 40 rows..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have more than {0} rows..
         /// </summary>
-        internal static string WB0038_RosterFixedTitlesHaveMoreThan40Items {
+        internal static string WB0038_RosterFixedTitlesHaveMoreThan200Items {
             get {
-                return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan40Items", resourceCulture);
+                return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan200Items", resourceCulture);
             }
         }
         
@@ -432,11 +432,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, 40]..
+        ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, {0}]..
         /// </summary>
-        internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
+        internal static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
             get {
-                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And40", resourceCulture);
+                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And200", resourceCulture);
             }
         }
         
@@ -666,11 +666,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Roster cannot have more than {0} child elements.
         /// </summary>
-        internal static string WB0068_ {
+        internal static string WB0068_RosterHasMoreThanAllowedChiledElements {
             get {
-                return ResourceManager.GetString("WB0068_", resourceCulture);
+                return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChiledElements", resourceCulture);
             }
         }
         
@@ -783,6 +783,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster with more than {0} rows cannot have nested rosters.
+        /// </summary>
+        internal static string WB0080_LongRosterCannotHaveNestedRosters {
+            get {
+                return ResourceManager.GetString("WB0080_LongRosterCannotHaveNestedRosters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster with more than {0} rows cannot be nested.
+        /// </summary>
+        internal static string WB0081_LongRosterCannotBeNested {
+            get {
+                return ResourceManager.GetString("WB0081_LongRosterCannotBeNested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster size multi-select question should have limit.
+        /// </summary>
+        internal static string WB0082_RosterSizeMultiOptionQuestionShouldBeLimited {
+            get {
+                return ResourceManager.GetString("WB0082_RosterSizeMultiOptionQuestionShouldBeLimited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
         internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
@@ -873,11 +900,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Roster size text list question should have limit.
         /// </summary>
-        internal static string WB0093_ {
+        internal static string WB0093_RosterSizeListOptionQuestionShouldBeLimit {
             get {
-                return ResourceManager.GetString("WB0093_", resourceCulture);
+                return ResourceManager.GetString("WB0093_RosterSizeListOptionQuestionShouldBeLimit", resourceCulture);
             }
         }
         
@@ -937,11 +964,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 40..
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 200..
         /// </summary>
-        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40 {
+        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {
-                return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40", resourceCulture);
+                return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200", resourceCulture);
             }
         }
         

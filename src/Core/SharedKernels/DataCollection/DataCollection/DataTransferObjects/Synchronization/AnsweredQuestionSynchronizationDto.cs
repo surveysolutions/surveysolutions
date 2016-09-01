@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public AnsweredQuestionSynchronizationDto(Guid id, decimal[] vector, object answer, string comments)
+        public AnsweredQuestionSynchronizationDto(Guid id, decimal[] vector, object answer, CommentSynchronizationDto[] allComments)
         {
             Id = id;
             this.QuestionRosterVector = vector;
@@ -27,8 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                 Answer = answer;   
             }
            
-            AllComments = new CommentSynchronizationDto[]{};
-            Comments = comments;
+            AllComments = allComments;
         }
 
         public Guid Id { get;  set; }
@@ -36,15 +35,12 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public decimal[] QuestionRosterVector { get; set; }
 
         public object Answer { get;  set; }
-        public string Comments { get;  set; }
 
         public CommentSynchronizationDto[] AllComments { get; set; }
 
         public bool IsEmpty()
         {
-            return this.Answer == null
-                && string.IsNullOrWhiteSpace(this.Comments)
-                && (this.AllComments == null || this.AllComments.Length == 0);
+            return this.Answer == null && (this.AllComments == null || this.AllComments.Length == 0);
         }
     }
 }

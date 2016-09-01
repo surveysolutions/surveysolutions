@@ -1538,24 +1538,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
 
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
+            this.ApplyRosterTitleChanges(targetQuestionnaire);
+        }
+
+        protected void ApplyRosterTitleChanges(IQuestionnaire targetQuestionnaire)
+        {
             var rosterInstances =
-                    this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                        targetQuestionnaire.GetCategoricalAndFixedRosters(), RosterVector.Empty,
-                        targetQuestionnaire);
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                    targetQuestionnaire.GetRostersWithTitlesToChange(), RosterVector.Empty,
+                    targetQuestionnaire).ToArray();
 
             var changedTitles = rosterInstances.Select(
-                    rosterInstance =>
-                        new ChangedRosterInstanceTitleDto(
-                            RosterInstance.CreateFromIdentity(rosterInstance),
-                            GetRosterTitle(targetQuestionnaire, rosterInstance)))
-                    .ToArray();
+                rosterInstance =>
+                    new ChangedRosterInstanceTitleDto(
+                        RosterInstance.CreateFromIdentity(rosterInstance),
+                        this.GetRosterTitle(targetQuestionnaire, rosterInstance)))
+                .ToArray();
 
             if (changedTitles.Any())
             {
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
             }
-            
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
         }
 
         private string GetRosterTitle(IQuestionnaire targetQuestionnaire, Identity rosterInstance)
@@ -1564,6 +1568,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return targetQuestionnaire.GetFixedRosterTitle(rosterInstance.Id,
                     rosterInstance.RosterVector.Coordinates.Last());
+            }
+            else if (targetQuestionnaire.IsNumericRoster(rosterInstance.Id))
+            {
+                var questionId = targetQuestionnaire.GetRosterTitleQuestionId(rosterInstance.Id);
+                Identity rosterTitleQuestionIdentity = new Identity(questionId.Value, rosterInstance.RosterVector);
+                var questionType = targetQuestionnaire.GetQuestionType(questionId.Value);
+                var questionValue = this.interviewState.GetAnswerSupportedInExpressions(rosterTitleQuestionIdentity);
+
+                switch (questionType)
+                {
+                    case QuestionType.SingleOption:
+                    case QuestionType.MultyOption:
+                        return AnswerUtils.AnswerToString(questionValue, x => targetQuestionnaire.GetAnswerOptionTitle(questionId.Value, x));
+                    default:
+                        return AnswerUtils.AnswerToString(questionValue);
+                }
             }
             else
             {
@@ -2492,6 +2512,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, selectedValues.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -2515,6 +2539,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(question.Id, selectedValues.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(question.Id, yesAnswersCount, questionnaire);
@@ -2542,6 +2570,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answer, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answer, questionnaire,
+                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                        ? questionnaire.GetMaxLongRosterRowCount()
+                        : questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -2560,6 +2592,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answers.Length, questionnaire);
+                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answers.Length,
+                    questionnaire,
+                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -2832,7 +2868,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] selectedValues, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
-            List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
+            List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId).ToList();
 
             IEnumerable<decimal> rosterInstanceIds = selectedValues.ToList();
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
@@ -2888,7 +2924,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
             ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
-            List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(question.Id).ToList();
+            List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(question.Id).ToList();
 
             IEnumerable<decimal> rosterInstanceIds = answer.Where(answeredOption => answeredOption.Yes).Select(answeredOption => answeredOption.OptionValue).ToList();
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(
@@ -4095,13 +4131,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
         {
-            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
-
-            bool valueIsNotOneOfAvailable = !availableValues.Contains(value);
-            if (valueIsNotOneOfAvailable)
+            var availableValues = questionnaire.GetOptionForQuestionByOptionValue(questionId, value);
+            
+            if (availableValues == null)
                 throw new InterviewException(string.Format(
-                    "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues), EventSourceId));
+                    "For question {0} was provided selected value {1} as answer. InterviewId: {2}",
+                    FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
         }
 
         private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(IReadOnlyInterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, RosterVector rosterVector, decimal value, IQuestionnaire questionnaire)
@@ -4121,7 +4156,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
             string parentAnswer = AnswerUtils.AnswerToString(answer);
 
-            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture) != childParentValue;
+            var answerNotExistsInParent = Convert.ToInt32(Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture)) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
@@ -4130,7 +4165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
         {
-            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
+            IEnumerable<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId);
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)
@@ -4202,12 +4237,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+        }
 
-            var maxRosterRowCount = questionnaire.GetMaxRosterRowCount();
+        private void ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(Guid questionId, int answer,
+           IQuestionnaire questionnaire, int maxRosterRowCount)
+        {
             if (answer > maxRosterRowCount)
                 throw new InterviewException(string.Format(
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater than {3}. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
+                    answer, FormatQuestionForException(questionId, questionnaire), this.EventSourceId, maxRosterRowCount));
         }
 
         protected void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
@@ -4735,7 +4773,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, string.Empty).SingleOrDefault(x => x.Value == value);
+
+            return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, string.Empty).FirstOrDefault(x => x.Value == value);
         }
 
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)

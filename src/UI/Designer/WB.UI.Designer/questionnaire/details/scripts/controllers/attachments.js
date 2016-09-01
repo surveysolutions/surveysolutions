@@ -85,7 +85,7 @@
                     var attachment = {};
                     if (!_.any($scope.attachments, function(elem) { return elem.attachmentId === attachmentDto.attachmentId;})) {
                         dataBind(attachment, attachmentDto);
-                        $scope.attachments.unshift(attachment);
+                        $scope.attachments.push(attachment);
                     }
                 });
             };
@@ -124,7 +124,7 @@
                 $scope.fileSelected(attachment, file, function() {
                     commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                         attachment.initialAttachment = angular.copy(attachment);
-                        $scope.attachments.unshift(attachment);
+                        $scope.attachments.push(attachment);
                         setTimeout(function () { utilityService.focus("focusAttachment" + attachment.attachmentId); }, 500);
                     });
                 });

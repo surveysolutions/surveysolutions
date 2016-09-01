@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new TextListQuestion { QuestionType = QuestionType.TextList, PublicKey = textListQuestionId, StataExportCaption = "var" },
+                new TextListQuestion { QuestionType = QuestionType.TextList, PublicKey = textListQuestionId, StataExportCaption = "var", MaxAnswerCount = 20 },
                 new Group { IsRoster = true, RosterSizeSource = RosterSizeSourceType.Question,VariableName = "a", RosterSizeQuestionId = textListQuestionId, PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") },
             });
 

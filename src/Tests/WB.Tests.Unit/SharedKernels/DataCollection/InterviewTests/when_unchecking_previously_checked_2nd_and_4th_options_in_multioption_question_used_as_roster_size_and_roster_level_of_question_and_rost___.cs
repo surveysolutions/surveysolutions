@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             (_
                 => _.HasQuestion(questionId) == true
                 && _.GetQuestionType(questionId) == QuestionType.MultyOption
-                && _.GetAnswerOptionsAsValues(questionId) == availableOptions
+                && _.GetMultiSelectAnswerOptionsAsValues(questionId) == availableOptions
                 && _.GetRosterGroupsByRosterSizeQuestion(questionId) == new[] { rosterId }
                 && _.HasGroup(rosterId) == true
                 && _.IsRosterGroup(rosterId) == true

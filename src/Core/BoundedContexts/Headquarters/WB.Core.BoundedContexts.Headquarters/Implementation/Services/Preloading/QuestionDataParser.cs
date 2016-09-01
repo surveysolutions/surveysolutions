@@ -21,6 +21,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
         {
             parsedValue =null;
+            answer = answer?
+                .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty)
+                .Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty);
 
             if (string.IsNullOrEmpty(answer))
                 return ValueParsingResult.ValueIsNullOrEmpty;
@@ -107,9 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     var dateTimeQuestion = question as DateTimeQuestion;
                     if (dateTimeQuestion == null) return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
 
-                    var dateTimeImportFormat = dateTimeQuestion.IsTimestamp ? ExportedQuestion.ExportDateTimeFormat : ExportedQuestion.ExportDateFormat;
-
-                    if (!DateTime.TryParseExact(answer, dateTimeImportFormat, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date))
+                    if (!DateTime.TryParse(answer, out date))
                     {
                         return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
                     }

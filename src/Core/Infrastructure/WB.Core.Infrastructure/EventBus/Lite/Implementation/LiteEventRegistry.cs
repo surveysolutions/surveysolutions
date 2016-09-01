@@ -148,11 +148,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 var eventType = payload.GetType();
                 var handlerType = handler.GetType();
 
-                if (handlerType.GetMethod("Handle", new[] {eventType}) != null)
+                if (handlerType.GetRuntimeMethod("Handle", new[] {eventType}) != null)
                     ((dynamic) handler).Handle((dynamic) payload);
 
                 var publishedEventInterfaceType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
-                var methodInfoForPublishedEvent = handlerType.GetMethod("Handle", new[] { publishedEventInterfaceType });
+                var methodInfoForPublishedEvent = handlerType.GetRuntimeMethod("Handle", new[] { publishedEventInterfaceType });
                 if (methodInfoForPublishedEvent != null)
                 {
                     var publishedEventType = typeof(PublishedEvent<>).MakeGenericType(eventType);

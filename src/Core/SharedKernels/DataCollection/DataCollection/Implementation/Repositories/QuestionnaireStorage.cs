@@ -40,9 +40,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
 
+            Guid? translationId = null;
             if (language != null)
             {
-                var translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
+                translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
 
                 var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Value) : null;
 
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
             }
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version);
+            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 

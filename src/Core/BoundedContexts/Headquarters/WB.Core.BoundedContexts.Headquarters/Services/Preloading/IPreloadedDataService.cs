@@ -32,5 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
         string GetValidFileNameForTopLevelQuestionnaire();
 
         bool IsQuestionRosterSize(string variableName);
+
+        bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
     }
 }

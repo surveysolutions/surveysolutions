@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import date.
+        /// </summary>
+        internal static string ImportDate {
+            get {
+                return ResourceManager.GetString("ImportDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import template.
         /// </summary>
         internal static string ImportTemplate {

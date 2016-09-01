@@ -10,5 +10,9 @@
   {
     "outputFile": "Content/pdf.css",
     "inputFile": "Content/pdf.less"
+  },
+  {
+    "outputFile": "questionnaire/content/designer-editor/wb-question-list.css.css",
+    "inputFile": "questionnaire/content/designer-editor/wb-question-list.css.less"
   }
 ]

@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using It = Machine.Specifications.It;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
@@ -38,10 +39,21 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         Because of = () => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
 
-        It should_be_downloaded_questionnaire = () => mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
-        It should_not_be_questionnaire_stored_to_local_storage = () => mockOfQuestionnaireImportService.Verify(_ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()), Times.Never);
-        It should_be_executed_CreateInterviewOnClientCommand = () => mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<ICommand>(), null, Moq.It.IsAny<CancellationToken>()), Times.Never);
-        It should_be_navigated_to_prefilled_questions_view_model = () => mockOfViewModelNavigationService.Verify(_ => _.NavigateTo<PrefilledQuestionsViewModel>(Moq.It.IsAny<object>()), Times.Never);
+        It should_be_downloaded_questionnaire = () => mockOfDesignerApiService.Verify(
+            _ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), 
+            Times.Once);
+
+        It should_not_be_questionnaire_stored_to_local_storage = () => mockOfQuestionnaireImportService.Verify(
+            _ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>(), new TranslationDto[0]), 
+            Times.Never);
+
+        It should_be_executed_CreateInterviewOnClientCommand = () => mockOfCommandService.Verify(
+            _ => _.ExecuteAsync(Moq.It.IsAny<ICommand>(), null, Moq.It.IsAny<CancellationToken>()), 
+            Times.Never);
+
+        It should_be_navigated_to_prefilled_questions_view_model = () => mockOfViewModelNavigationService.Verify(
+            _ => _.NavigateTo<PrefilledQuestionsViewModel>(Moq.It.IsAny<object>()), 
+            Times.Never);
         
         private static DashboardViewModel viewModel;
         private static readonly Questionnaire downloadedQuestionnaire = null;

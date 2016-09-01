@@ -75,6 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
+            sections.Add(this.modelsFactory.BuildCoverScreenSectionItem(navigationState, interviewId));
+
             foreach (Guid sectionId in questionnaire.GetAllSections())
             {
                 var groupIdentity = new Identity(sectionId, new decimal[] { });
@@ -103,14 +105,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             SideBarSectionViewModel selectedGroup = allTreeElements
                 .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(eventArgs.TargetGroup));
 
-            if (eventArgs.TargetScreen == ScreenType.Complete)
+            if (eventArgs.TargetScreen == ScreenType.Complete || eventArgs.TargetScreen == ScreenType.Cover)
             {
                 this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
                 this.Sections.Where(x => x.Expanded).ForEach(x => x.Expanded = false);
                 this.UpdateSideBarTree();
                 return;
             }
-
+            
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
             {

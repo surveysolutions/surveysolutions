@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [Serializable]
     public class UpdateQuestionnaire : QuestionnaireCommand
     {
-        public UpdateQuestionnaire(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)
-            : base(questionnaireId, responsibleId)
+        public UpdateQuestionnaire(Guid questionnaireId, string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin)
+            : base(questionnaireId, responsibleId, isResponsibleAdmin)
         {
             this.Title = CommandUtils.SanitizeHtml(title);
             this.IsPublic = isPublic;
