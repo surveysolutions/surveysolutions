@@ -435,8 +435,19 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
   </style>
 
-  <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
-    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
+  <style name="Interview_Question_Comments_InterviewerDetails_Editor">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/editorTextColor</item>
+    <item name="android:textColorHint">@color/editorHintTextColor</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:background">@drawable/question_comment_editor</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
   </style>
   
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
