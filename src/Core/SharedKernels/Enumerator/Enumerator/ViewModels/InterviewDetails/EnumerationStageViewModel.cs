@@ -409,18 +409,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool ShouldBeHiddenIfDisabled(Identity entity)
             => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
 
-        private static CompositeCollection<object> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
-            MvxNotifyPropertyChanged viewModel,
+        private static CompositeCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+            ICompositeEntity viewModel,
             string propertyNameToRefresh,
             Func<bool> doesNeedShowViewModel)
         {
-            CompositeCollection<object> collection = new CompositeCollection<object>();
-            viewModel.PropertyChanged += (sender, args) =>
+            if (viewModel == null)
+                throw new ArgumentNullException(nameof(viewModel));
+
+            var notifyPropertyChanged = viewModel as MvxNotifyPropertyChanged;
+            if (notifyPropertyChanged == null)
+                throw new ArgumentException("ViewModel should support MvxNotifyPropertyChanged interface. ViewModel: " + viewModel.GetType().Name);
+
+            CompositeCollection<ICompositeEntity> collection = new CompositeCollection<ICompositeEntity>();
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == propertyNameToRefresh)
                 {
                     bool isNeedShow = doesNeedShowViewModel.Invoke();
-                    var isShowing = collection.Contains(viewModel);
+                    var isShowing = collection.Contains((ICompositeEntity)viewModel);
 
                     if (isNeedShow && !isShowing)
                     {
