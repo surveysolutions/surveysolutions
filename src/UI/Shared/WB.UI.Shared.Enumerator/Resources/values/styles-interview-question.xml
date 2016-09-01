@@ -203,7 +203,6 @@
   <style name="Interview_Question_Answer_Option_Top">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <!--<item name="android:layout_height">@dimen/Interview_Question_Option_Frame_Element_vertical_height</item>-->
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
@@ -375,9 +374,10 @@
   </style>
 
   <style name="Interview_Question_Errors">
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_Errors_margin_bottom</item>
+    <item name="android:layout_marginBottom">@dimen/zero</item>
   </style>
 
   <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
@@ -385,7 +385,6 @@
     <item name="android:letterSpacing">0.1</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Title_margin_top</item>
   </style>
 
   <style name="Interview_Question_Errors_Details">
@@ -393,21 +392,21 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Details_margin_top</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
   <style name="Interview_Question_Comments">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
     <item name="android:layout_marginTop">@dimen/zero</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Element_margin_large_vertical</item>
   </style>
 
   <style name="Interview_Question_Comment_Item">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Comment_Item_margin_top</item>
   </style>
 
   <style name="Interview_Question_Comment_Editor">
@@ -423,8 +422,9 @@
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
-    <item name="android:textColor">@color/commentInterviewerTextColor</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Comment_Caption_margin_bottom</item>
+    <item name="android:textColor">@color/comment_from_interviewer</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
@@ -436,7 +436,6 @@
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
-    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
     <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
   
