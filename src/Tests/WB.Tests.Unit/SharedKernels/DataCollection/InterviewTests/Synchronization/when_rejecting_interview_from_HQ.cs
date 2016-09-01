@@ -31,13 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             };
             interviewSynchronizationDto.Answers = new[]
             {
-                new AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", null)
-                {
-                    AllComments = new CommentSynchronizationDto[]
-                    {
-                        answerComment
-                    }
-                }
+                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", comments: new CommentSynchronizationDto[] { answerComment })
             };
 
             synchronizationTime = DateTime.Now;

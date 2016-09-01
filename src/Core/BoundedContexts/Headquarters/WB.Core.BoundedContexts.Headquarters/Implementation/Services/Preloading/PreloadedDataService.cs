@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -17,6 +19,8 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
 {
@@ -323,6 +327,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
+        public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
+        {
+            IEnumerable<IGroup> rosters = this.GroupsCache.Values.Where(g => g.RosterSizeQuestionId == questionId);
+            foreach (var roster in rosters)
+            {
+                if (roster.Children.Count > Constants.MaxAmountOfItemsInLongRoster)
+                {
+                    return false;
+                }
+
+                if (GetParentGroups(roster).Any(x => x.IsRoster))
+                {
+                    return false;
+                }
+
+                var hasNestedRosters = roster.TreeToEnumerableDepthFirst<IComposite>(group => group.Children)
+                    .Skip(1)
+                    .Any(x => (x as IGroup)?.IsRoster ?? false);
+
+                if (hasNestedRosters)
+                    return false;
+            }
+            return true;
+        }
+
+        private IEnumerable<IGroup> GetParentGroups(IGroup roster)
+        {
+            var parent = roster.GetParent();
+            while (true)
+            {
+                if (parent == null)
+                    yield break;
+
+                if (parent is QuestionnaireDocument)
+                    yield break;
+
+                yield return (IGroup)parent;
+                parent = parent.GetParent();
+            }
+        }
+
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
         {
             return allLevels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
@@ -386,9 +431,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
             var result = new Dictionary<Guid, object>();
 
+            var rowWithoutMissingValues = row.Select(v =>
+                  v?.Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty)
+                    .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty))
+                .ToArray();
+
             foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
             {
-                var parsedAnswer = this.BuildAnswerByVariableName(levelExportStructure, exportedHeaderItem.VariableName, header, row);
+                var parsedAnswer = this.BuildAnswerByVariableName(levelExportStructure, exportedHeaderItem.VariableName, header, rowWithoutMissingValues);
 
                 if (parsedAnswer!=null)
                     result.Add(exportedHeaderItem.PublicKey, parsedAnswer);

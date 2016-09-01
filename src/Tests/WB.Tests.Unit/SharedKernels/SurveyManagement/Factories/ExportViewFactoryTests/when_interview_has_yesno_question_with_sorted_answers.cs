@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetQuestions().First();
             exportedQuestion.Answers.Length.ShouldEqual(4);
-            exportedQuestion.Answers.SequenceEqual(new[] { "2", "0", "1", "" }).ShouldBeTrue(); // 1 0 2
+            exportedQuestion.Answers.ShouldEqual(new[] { "2", "0", "1", ExportedQuestion.MissingNumericQuestionValue }); // 1 0 2
         };
 
         static ExportViewFactory exportViewFactory;

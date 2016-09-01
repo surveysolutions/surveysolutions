@@ -22,6 +22,10 @@
     }
 }
 @icon-dim: 30px;
+
+.icon-none {
+    background: none !important;
+}
 .icon {
     width: 20px;
     height: 20px;
@@ -90,6 +94,10 @@
     background-position: 0 -16*@icon-dim;
 }
 
+.icon-tranlsation {
+    background-position: 0 -17*@icon-dim;
+}
+
 
 .icon-error {
     &.icon-numeric {
@@ -149,5 +157,8 @@
     }
     &.icon-variable {
         background-position: -@icon-dim -16*@icon-dim;
+    }
+    &.icon-translation {
+        background-position: -@icon-dim -17*@icon-dim;
     }
 }

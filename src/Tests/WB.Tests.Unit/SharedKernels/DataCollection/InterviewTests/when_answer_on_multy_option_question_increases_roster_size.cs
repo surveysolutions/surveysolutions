@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.HasQuestion(multyOptionRosterSizeId) == true
                 && _.GetQuestionType(multyOptionRosterSizeId) == QuestionType.MultyOption
                 && _.GetRosterGroupsByRosterSizeQuestion(multyOptionRosterSizeId) == new Guid[] { rosterGroupId }
-                && _.GetAnswerOptionsAsValues(multyOptionRosterSizeId) == new decimal[] { 1,2,3}
+                && _.GetMultiSelectAnswerOptionsAsValues(multyOptionRosterSizeId) == new decimal[] { 1,2,3}
 
                 && _.HasGroup(rosterGroupId) == true
                 && _.GetRosterLevelForGroup(rosterGroupId) == 1
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: questionnaire.Version,
-                    answers: new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }, string.Empty) },
+                    answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }) },
                     rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {

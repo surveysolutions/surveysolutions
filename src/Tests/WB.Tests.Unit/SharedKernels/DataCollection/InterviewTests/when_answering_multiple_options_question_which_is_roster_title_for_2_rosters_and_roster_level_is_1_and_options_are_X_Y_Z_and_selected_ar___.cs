@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             (_
                 => _.HasQuestion(questionId) == true
                 && _.GetQuestionType(questionId) == QuestionType.MultyOption
-                && _.GetAnswerOptionsAsValues(questionId) == new[] { optionX, optionY, optionZ }
+                && _.GetMultiSelectAnswerOptionsAsValues(questionId) == new[] { optionX, optionY, optionZ }
                 && _.GetAnswerOptionTitle(questionId, optionX) == "X"
                 && _.GetAnswerOptionTitle(questionId, optionY) == "Y"
                 && _.GetAnswerOptionTitle(questionId, optionZ) == "Z"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -75,6 +76,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 result.Add(current);
             }
             return result.Skip(1).ToArray();
+        }
+
+        public IEnumerable<T> FindInGroup<T>(Guid groupId)
+        {
+            var group = Find<IGroup>(groupId);
+            return group.TreeToEnumerableDepthFirst<IComposite>(x => x.Children).Where(x => x.PublicKey!=groupId && x is T).Cast<T>();
         }
     }
 }

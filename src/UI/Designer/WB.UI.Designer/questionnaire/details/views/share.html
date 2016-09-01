@@ -15,10 +15,10 @@
                 </div>
             </div>
         </form>
-        <!--<div class="row">
-            <button class="btn btn-link" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
-            <i class="text-muted">({{questionnaire.isPublic ? 'visible to you and persons you shared with' : 'visible to everyone'}})</i>
-        </div>-->
+        <div class="row make-public" ng-if="questionnaire.hasViewerAdminRights">
+            <button class="btn btn-link answer" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
+            <i class="text-muted">({{questionnaire.isPublic ? 'visible to owner only' : 'visible to everyone in read only mode'}})</i>
+        </div>
         <div class="row">
                 <h3>Who has access:</h3>
                 <ul class="accounts">

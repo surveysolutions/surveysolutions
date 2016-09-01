@@ -50,12 +50,12 @@ namespace WB.UI.Designer.Api
             var translationName = string.IsNullOrEmpty(translationFile.TranslationName)
                 ? "New translation"
                 : translationFile.TranslationName;
-            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}.{fileExtension}");
+            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}");
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileNameStar = filename
+                FileNameStar = $"{filename}.{fileExtension}"
             };
 
             return response;

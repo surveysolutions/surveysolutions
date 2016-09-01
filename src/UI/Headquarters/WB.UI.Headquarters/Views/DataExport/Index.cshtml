@@ -178,7 +178,7 @@
                 <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
                 <td><span data-bind="text: $root.formatDate($data.BeginDate())"></span></td>
                 <td><span data-bind="text: $root.formatDate($data.LastUpdateDate())"></span></td>
-                <td><span data-bind="text: Progress"></span>%</td>
+                <td><span data-bind="text: $root.exportFormatProgress($data.Progress())"></span></td>
                 <td>
                     @if (User.IsInRole("Administrator"))
                     {

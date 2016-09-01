@@ -4,9 +4,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
-    public interface IEntityWithErrorsViewModelFactory
+    public interface IEntitiesListViewModelFactory
     {
-        IEnumerable<EntityWithErrorsViewModel> GetEntities(string interviewId, NavigationState navigationState);
+        IEnumerable<EntityWithErrorsViewModel> GetEntitiesWithErrors(string interviewId, NavigationState navigationState);
+        IEnumerable<EntityWithCommentsViewModel> GetEntitiesWithComments(string interviewId, NavigationState navigationState);
         int MaxNumberOfEntities { get; }
     }
 }

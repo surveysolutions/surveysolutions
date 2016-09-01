@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         IDataExportProcessDetails[] GetRunningExportProcesses();
 
+        IDataExportProcessDetails[] GetAllProcesses();
+
         void FinishExportSuccessfully(string processId);
 
         void FinishExportWithError(string processId, Exception e);
@@ -23,5 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         void UpdateDataExportProgress(string processId, int progressInPercents);
 
         void DeleteDataExport(string processId);
+
+        void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, DataExportType exportType);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using It = Machine.Specifications.It;
@@ -31,7 +32,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             var questionnaire = Create.QuestionnaireDocument(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
             {
-                Create.Group(groupId: Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+                Create.Group(groupId: Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")),
+                Create.SingleQuestion(id: questionId, variable: "question", isFilteredCombobox: true, options: new List<Answer> {Create.Option("1", "Combobox Option")})
             });
 
             var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
@@ -73,10 +75,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         It should_store_option_translation = () =>
         {
-            var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.OptionTitle));
+            var translationInstance = plainStorageAccessor.Query(_ => _.First(x => x.Type == TranslationType.OptionTitle));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
             translationInstance.Value.ShouldEqual("option");
             translationInstance.TranslationIndex.ShouldEqual("2");
+        };
+
+        It should_store_option_translation_for_combobox_from_second_sheet = () =>
+        {
+            var translationInstance = plainStorageAccessor.Query(_ => _.Last(x => x.Type == TranslationType.OptionTitle));
+            translationInstance.QuestionnaireEntityId.ShouldEqual(questionId);
+            translationInstance.Value.ShouldEqual("Опция Комбобокса");
+            translationInstance.TranslationIndex.ShouldEqual("1");
         };
 
         static TranslationsService service;
@@ -84,6 +94,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static byte[] fileStream;
         static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         static Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
 }

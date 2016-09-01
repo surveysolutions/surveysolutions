@@ -25,5 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public InterviewAnswerOnPrefilledQuestionView[] AnswersOnPrefilledQuestions { get; set; }
         public InterviewGpsLocationView GpsLocation { get; set; }
+
+        public string Language { get; set; }
     }
 }

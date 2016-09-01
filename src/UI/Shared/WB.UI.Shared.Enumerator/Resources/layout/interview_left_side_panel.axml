@@ -6,14 +6,6 @@
   <LinearLayout style="@style/Interview_Sidebar_Header">
     <TextView style="@style/Interview_Sidebar_Title"
               local:MvxBind="Text QuestionnaireTitle" />
-    <MaxHeightLinearLayout
-      local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
-      style="@style/Interview_Sidebar_PrefilledQuestions_Container">
-
-      <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
-                   local:MvxBind="ItemsSource PrefilledQuestionsStats"
-                   local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
-    </MaxHeightLinearLayout>
   </LinearLayout>
 
   <View style="@style/Interview_Entity_Divider" />

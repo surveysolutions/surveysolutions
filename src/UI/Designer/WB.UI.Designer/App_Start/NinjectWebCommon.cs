@@ -7,10 +7,7 @@ using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
@@ -24,7 +21,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
-using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
@@ -37,10 +33,8 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
-using WB.UI.Designer.Migrations;
 using WB.UI.Designer.Migrations.ReadSide;
 using WB.UI.Designer.Services;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -118,6 +112,8 @@ namespace WB.UI.Designer.App_Start
 
             var pdfSettings = (PdfConfigSection)WebConfigurationManager.GetSection("pdf");
 
+            var deskSettings = (DeskConfigSection)WebConfigurationManager.GetSection("desk");
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
@@ -131,7 +127,7 @@ namespace WB.UI.Designer.App_Start
                     new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                     cacheSettings, 
                     mappingAssemblies),
-                new DesignerRegistry(pdfSettings),
+                new DesignerRegistry(pdfSettings, deskSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),

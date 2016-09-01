@@ -23,14 +23,14 @@
         Welcome to Survey Solutions<br />
         Questionnaire Designer
     </h1>
-    <p class="note">Please log in or @Html.ActionLink("Register", "register")</p>
+    <p class="note">Please log in or @Html.ActionLink("Register", "register", "Account")</p>
 
     @if (TempData.ContainsKey(Alerts.ERROR))
     {
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
 
-    <p class="note has-error" data-bind="visible: invalidUserNameOrPassword">Login or password is incorrect. Please try again.</p>
+    <p class="note has-error server-response-holder" data-bind="visible: userIsNotAuthorized"></p>
     <div class="form-group" data-bind="css: { 'has-error': invalidUserNameOrPassword }">
         <input class="form-control" placeholder="Login" type="text" data-bind="value: userName"/>
     </div>
@@ -47,7 +47,7 @@
     <div id="recaptcha" class="recaptcha" data-bind="visible: shouldUseRecaptcha"></div>
     <div class="form-actions">
         <input class="btn btn-success btn-lg" type="submit" value="Log in" data-bind="click: login, enable: IsAjaxComplete"/>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot Password?</a>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">Forgot Password?</a>
     </div>
 </form>
 
@@ -61,7 +61,7 @@
         };
         $(function() {
             var signInApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Users", action = "Login"})';
-            var homePageUrl = '@Url.Action("Index", "Questionnaire")';
+            var homePageUrl = '@Model.HomeUrl';
 
             var shouldUseRecaptcha = @Model.ShouldShowCaptcha.ToString().ToLower();
 

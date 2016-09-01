@@ -672,6 +672,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
     <Compile Include="Views\Questionnaire\Edit\VariableName.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\DeskSettings.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfRenderExtensions.cs" />

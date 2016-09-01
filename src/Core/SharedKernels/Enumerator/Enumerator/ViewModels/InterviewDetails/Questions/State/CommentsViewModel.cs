@@ -1,9 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -11,6 +18,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CommentsViewModel : MvxNotifyPropertyChanged
     {
+        public class CommentViewModel
+        {
+            public string Comment { get; set; }
+
+            public string CommentCaption  { get; set; }
+
+            public UserRoles UserRole { get; set; }
+        }
+
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private readonly ICommandService commandService;
@@ -44,9 +60,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
-            this.InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
+            var comments = interview.GetQuestionComments(entityIdentity) ?? new List<QuestionComment>();
+
+            comments.Select(ToViewModel).ForEach(x => Comments.Add(x));
 
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
+        }
+
+        private CommentViewModel ToViewModel(QuestionComment comment)
+        {
+            var isCurrentUserComment = this.principal.CurrentUserIdentity.UserId == comment.UserId;
+            var isAuthorityComment = this.authorituesRoles.Contains(comment.UserRole);
+
+            return new CommentViewModel
+            {
+                Comment = comment.Comment,
+                UserRole = comment.UserRole,
+                CommentCaption = isCurrentUserComment 
+                ? UIResources.Interview_Comment_Interviewer_Caption
+                : (isAuthorityComment
+                    ? UIResources.Interview_Supervisor_Comment_Caption
+                    : UIResources.Interview_Other_Comment_Caption)
+            };
         }
 
         private bool hasComments;
@@ -82,12 +117,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public ObservableCollection<CommentViewModel> Comments { get; } = new ObservableCollection<CommentViewModel>();
+
+        private readonly HashSet<UserRoles> authorituesRoles = new HashSet<UserRoles>{ UserRoles.Administrator, UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor};
+
         private IMvxCommand valueChangeCommand;
         public IMvxCommand InterviewerCommentChangeCommand
         {
             get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommandAsync())); }
         }
-
 
         private async Task SendCommentQuestionCommandAsync()
         {
@@ -100,6 +138,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     commentTime: DateTime.UtcNow,
                     comment: this.InterviewerComment));
 
+            if (!string.IsNullOrWhiteSpace(this.InterviewerComment))
+                Comments.Add(ToViewModel(new QuestionComment(this.InterviewerComment, this.principal.CurrentUserIdentity.UserId, UserRoles.Operator)));
+
+            this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
         }
 

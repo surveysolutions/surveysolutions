@@ -37,6 +37,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.Find<T>(condition);
 
+        public IEnumerable<T> FindInGroup<T>(Guid groupId)
+             => this.Questionnaire.FindInGroup<T>(groupId);
+
         public class TranslatedEntity<TEntity>
         {
             public TranslatedEntity(TEntity entity, string translationName)
@@ -67,5 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<ReadOnlyQuestionnaireDocument.QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
             => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
+
+        
     }
 }

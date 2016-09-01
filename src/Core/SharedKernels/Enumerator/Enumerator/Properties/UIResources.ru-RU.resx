@@ -377,9 +377,6 @@
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Завершить интервью</value>
   </data>
-  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
-    <value>На уровень выше</value>
-  </data>
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
   </data>
@@ -412,5 +409,23 @@
   </data>
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
     <value>Ответ не может быть пустым</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Обложка</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Первые {0} вопросов с комментариями:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Вопросы с комментариями супервизора:</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Комментарий пользователя</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Комментарий супервизора</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Замечания супервизора</value>
   </data>
 </root>
