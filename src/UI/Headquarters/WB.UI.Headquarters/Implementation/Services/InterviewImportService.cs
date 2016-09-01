@@ -31,6 +31,8 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
+        private object lockStart;
+
         private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
@@ -55,21 +57,24 @@ namespace WB.UI.Headquarters.Implementation.Services
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
             Guid? supervisorId, Guid headquartersId)
         {
-            if(this.Status.IsInProgress == true)
-                return;
-            
-            this.Status = new InterviewImportStatus
+            lock (lockStart)
             {
-                QuestionnaireId = questionnaireIdentity.QuestionnaireId,
-                InterviewImportProcessId = interviewImportProcessId,
-                QuestionnaireVersion = questionnaireIdentity.Version,
-                StartedDateTime = DateTime.Now,
-                CreatedInterviewsCount = 0,
-                ElapsedTime = 0,
-                EstimatedTime = 0,
-                State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
-                IsInProgress = true
-            };
+                if (this.Status.IsInProgress == true)
+                    return;
+
+                this.Status = new InterviewImportStatus
+                {
+                    QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                    InterviewImportProcessId = interviewImportProcessId,
+                    QuestionnaireVersion = questionnaireIdentity.Version,
+                    StartedDateTime = DateTime.Now,
+                    CreatedInterviewsCount = 0,
+                    ElapsedTime = 0,
+                    EstimatedTime = 0,
+                    State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
+                    IsInProgress = true
+                };
+            }
 
             try
             {
