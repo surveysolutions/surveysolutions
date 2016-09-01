@@ -174,4 +174,7 @@
   <data name="Actions" xml:space="preserve">
     <value>Действия</value>
   </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>Дата загрузки</value>
+  </data>
 </root>

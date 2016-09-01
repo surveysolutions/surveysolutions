@@ -97,8 +97,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_have_second_column_with_value_a1_for_question_on_top_level = () =>
             GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[1].ShouldEqual("a2");
 
-        It should_have_all_other_coulmns_with_empty_values_for_question_on_top_level = () =>
-           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Skip(2).Any(a => !string.IsNullOrEmpty(a)).ShouldBeFalse();
+        It should_have_all_other_coulmns_with_missing_values_for_question_on_top_level = () =>
+           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Skip(2).Any(a => a != ExportedQuestion.MissingStringQuestionValue).ShouldBeFalse();
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {

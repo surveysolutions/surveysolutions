@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -38,18 +34,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         Because of = () =>
         {
-            integerModel.Answer = 50;
+            integerModel.Answer = 70;
             integerModel.ValueChangeCommand.Execute();
         };
 
         It should_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '50' is incorrect because answer is greater than Roster upper bound '40'."), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."), Times.Once);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
-
-        It should_not_reset_AnswerAsString_to_previous_value = () =>
-            integerModel.Answer.ShouldEqual(50);
 
         private static IntegerQuestionViewModel integerModel;
     }

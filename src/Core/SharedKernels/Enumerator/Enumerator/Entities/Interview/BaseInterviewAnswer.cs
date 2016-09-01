@@ -28,8 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
         public IList<FailedValidationCondition> FailedValidations { get; set; }
         public abstract bool IsAnswered { get; }
 
-        public string InterviewerComment { get; set; }
-
         public abstract void RemoveAnswer();
     }
 }

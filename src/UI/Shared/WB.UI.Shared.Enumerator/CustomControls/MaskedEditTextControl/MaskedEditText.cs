@@ -68,11 +68,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
                 this.maskedText.Mask = value;
                 this.CleanUp();
 
-                this.UpdatetInputType();
+                this.UpdateInputType();
             }
         }
 
-        private void UpdatetInputType()
+        private void UpdateInputType()
         {
             var inputTypes = this.InputType;
             var inputTypeOverrided = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
@@ -96,11 +96,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
                 if (this.isMaskedFormAnswered != value)
                 {
                     this.isMaskedFormAnswered = value;
-
-                    if (this.IsMaskedFormAnsweredChanged != null)
-                    {
-                        this.IsMaskedFormAnsweredChanged.Invoke(this, EventArgs.Empty);
-                    }
+                    this.IsMaskedFormAnsweredChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -117,7 +113,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
             this.BeforeTextChanged += (sender, args) => this.BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => this.OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
 
-            this.UpdatetInputType();
+            this.UpdateInputType();
 
             this.FocusChange += this.OnFocusChangeHandle;
         }
@@ -132,7 +128,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
                 if (args.HasFocus)
                 {
                     this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
-                    this.SetSelection(this.maskedText.FindFirstValidMaskPosition());
+                    var position = this.maskedText.FindFirstValidMaskPosition();
+                    this.SetSelection(position);
 
                     InputMethodManager imm = (InputMethodManager)this.Context.GetSystemService(Context.InputMethodService);
                     imm.ShowSoftInput(this, ShowFlags.Implicit);
@@ -203,11 +200,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
                     this.maskedText.AddString(addedString, start, ref this.selection);
                 }
             }
+
+            this.SetSelectAllOnFocus(!this.maskedText.HasAnyText);
         }
 
         void AfterTextChangedHandler(IEditable s)
         {
-            if (this.Mask.IsNullOrEmpty()) 
+            if (this.Mask.IsNullOrEmpty())
                 return;
 
             if(!this.editingAfter && this.editingBefore && this.editingOnChanged) 
@@ -249,12 +248,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
             {
                 if(!this.selectionChanged) 
                 {
-                    if (!this.maskedText.HasAnyText && this.HasHint) 
+                    if (!this.maskedText.HasAnyText && this.HasHint)
                     {
                         selStart = 0;
                         selEnd = 0;
                     }
-                    else 
+                    else
                     {
                         selStart = this.maskedText.FixSelectionIndex(selStart);
                         selEnd = this.maskedText.FixSelectionIndex(selEnd);

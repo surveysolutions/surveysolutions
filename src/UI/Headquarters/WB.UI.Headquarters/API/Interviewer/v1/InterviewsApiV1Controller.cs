@@ -95,7 +95,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             {
                 QuestionId = answer.Id,
                 QuestionRosterVector = answer.QuestionRosterVector,
-                LastSupervisorOrInterviewerComment = answer.Comments,
                 JsonAnswer = this.synchronizationSerializer.Serialize(answer.Answer)
             };
         }

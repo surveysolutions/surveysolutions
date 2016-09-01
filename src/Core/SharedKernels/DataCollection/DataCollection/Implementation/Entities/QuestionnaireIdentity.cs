@@ -43,6 +43,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return obj is QuestionnaireIdentity && this.Equals((QuestionnaireIdentity)obj);
         }
 
+        public static bool TryParse(string questionnaireIdentity, out QuestionnaireIdentity result)
+        {
+            try
+            {
+                result = Parse(questionnaireIdentity);
+                return true;
+            }
+            catch
+            {
+                result = null;
+                return false;
+            }
+        }
+
         public static QuestionnaireIdentity Parse(string id)
         {
             if (string.IsNullOrEmpty(id))

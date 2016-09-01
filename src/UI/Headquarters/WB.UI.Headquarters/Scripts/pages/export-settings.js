@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportSettings = function($dataUrl, $changeStateUrl, $regenPasswordUrl) {
+﻿Supervisor.VM.ExportSettings = function ($dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl) {
     Supervisor.VM.ExportSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -9,26 +9,43 @@
 
     self.isEnabled = ko.observable(false);
     self.password = ko.observable('');
+    self.message = ko.observable('');
+    self.messageUpdated = ko.observable(false);
 
-    self.load = function() {
-        self.SendRequest(self.Url, {}, function(data) {
+    self.load = function () {
+        self.SendRequest(self.Url, {}, function (data) {
             self.isEnabled(data.IsEnabled);
             self.password(data.Password);
         }, true, true);
+
+        self.SendRequest($messageUrl,
+            {},
+            function(data) {
+                self.message(data.Message);
+            }, true, true);
     };
 
     self.changeState = function () {
         self.SendRequest(self.changeStateUrl,
-        { EnableState: self.isEnabled() }, function (data) {
-            self.isEnabled(data.IsEnabled);
-            self.password(data.Password);
-        })
+            { EnableState: self.isEnabled() },
+            function (data) {
+                self.isEnabled(data.IsEnabled);
+                self.password(data.Password);
+            });
         return true;
     };
 
+    self.updateMessage = function() {
+        self.SendRequest($messageUrl,
+            { message: self.message() },
+            function() {
+                self.messageUpdated(true);
+            },
+            true,
+            false);
+    };
+
     self.regeneratePass = function () {
-
-
         var confirmRegenerateHtml = self.getBindedHtmlTemplate("#confirm-regenerate-password");
 
         bootbox.dialog({
@@ -42,14 +59,14 @@
                     callback: function () {
                         self.SendRequest(self.regenPasswordUrl,
                                         {}, function (data) {
-                                        self.isEnabled(data.IsEnabled);
-                                        self.password(data.Password);
-                        });
+                                            self.isEnabled(data.IsEnabled);
+                                            self.password(data.Password);
+                                        });
                     }
                 }
             }
         });
-        
+
         return true;
     };
 };

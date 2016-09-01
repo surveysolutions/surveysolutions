@@ -65,9 +65,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering, 
             ILiteEventRegistry eventRegistry)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
+            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
+            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
 
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -78,12 +78,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 

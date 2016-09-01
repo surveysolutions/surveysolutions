@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -27,7 +28,9 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -46,6 +49,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
@@ -448,7 +452,8 @@ namespace WB.Tests.Unit.Designer
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null)
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
+            int? maxAllowedAnswers = null)
         {
             return new MultyOptionsQuestion
             {
@@ -460,7 +465,8 @@ namespace WB.Tests.Unit.Designer
                 StataExportCaption = variable,
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                MaxAllowedAnswers = maxAllowedAnswers
             };
         }
 
@@ -1078,5 +1084,61 @@ namespace WB.Tests.Unit.Designer
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
                 questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+
+        public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
+        {
+            return new NumericDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                IsInteger = true,
+                Title = "Numeric Integer",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0]
+            };
+        }
+
+        public static QuestionDetailsView TextDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
+        {
+            return new TextDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                Title = "Text",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0]
+            };
+        }
+
+        public static GroupAndRosterDetailsView GroupAndRosterDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null,
+            Guid? rosterSizeQuestionId = null)
+        {
+            return new GroupAndRosterDetailsView
+            {
+                Id = id ?? Guid.NewGuid(),
+                Title = "Numeric Ro",
+                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
+                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
+                RosterScopeIds = rosterScopeIds ?? new Guid[0],
+                RosterSizeQuestionId = rosterSizeQuestionId
+            };
+        }
+
+        public static QuestionsAndGroupsCollectionView QuestionsAndGroupsCollectionView(GroupAndRosterDetailsView[] groups, QuestionDetailsView[] questions)
+        {
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = groups.ToList(),
+                Questions = questions.ToList()
+            };
+        }
+
+        public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
+        {
+            return new DeskAuthenticationService(new DeskSettings(multipassKey, returnUrlFormat, siteKey));
+        }
+
+        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
+            => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
     }
 }

@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
             var requiredInterviews = interviews.Select(y => y.SummaryId).ToList();
-            var featuredQuestionAnswers = this.featuredQuestions.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).ToList());
+            var featuredQuestionAnswers = this.featuredQuestions.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).OrderBy(x => x.Position).ToList());
 
 
             var result = new AllInterviewsView
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type
-                    }).OrderBy(question => question.Id).ToList(),
+                    }),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,

@@ -62,11 +62,11 @@ namespace WB.UI.Designer.Code.Implementation
                 throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
             var sharedPersons = this.sharedPersons.GetById(id);
-            if (sharedPersons == null || !sharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId))
+            if (sharedPersons == null || sharedPersons.SharedPersons.All(x => x.Id != this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }
@@ -77,10 +77,10 @@ namespace WB.UI.Designer.Code.Implementation
         private void SetResponsible(ICommand command)
         {
             var currentCommand = command as QuestionnaireCommandBase;
-            if (currentCommand != null)
-            {
-                currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
-            }
+            if (currentCommand == null) return;
+
+            currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
+            currentCommand.IsResponsibleAdmin = this.userHelper.WebUser.IsAdmin;
         }
 
         private static void ValidateAddSharedPersonCommand(ICommand command)

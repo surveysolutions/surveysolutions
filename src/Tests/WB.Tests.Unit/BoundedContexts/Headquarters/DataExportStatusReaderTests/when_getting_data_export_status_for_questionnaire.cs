@@ -50,9 +50,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
 
         It should_third_running_process_QuestionnaireIdentity_be_not_equal_to_questionnaireIdentity = () => result.RunningDataExportProcesses[2].QuestionnaireIdentity.ShouldNotEqual(questionnaireIdentity);
 
-        It should_export_para_data_in_tabular_format = () => ShouldExportDataTypeInFormat(DataExportType.ParaData, DataExportFormat.Tabular);
+        It should_export_para_data = () => ShouldExportDataTypeInFormat(DataExportType.ParaData, DataExportFormat.Paradata, DataExportFormat.Tabular);
 
-        It should_return_5_data_exports =() => result.DataExports.Length.ShouldEqual(5);
+        It should_return_5_data_exports =() => result.DataExports.Length.ShouldEqual(6);
 
         It should_export_data_in_tabular_stata_spss_and_binary_formats = () => ShouldExportDataTypeInFormat(DataExportType.Data, DataExportFormat.Tabular, DataExportFormat.STATA, DataExportFormat.SPSS, DataExportFormat.Binary);
 

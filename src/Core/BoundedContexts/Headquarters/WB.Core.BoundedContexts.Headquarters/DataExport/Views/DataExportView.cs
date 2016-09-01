@@ -14,6 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public bool CanRefreshBeRequested { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public int ProgressInPercents { get; set; }
-        public DataExportStatus StatusOfLatestExportprocess { get; set; }
+        public DataExportStatus StatusOfLatestExportProcess { get; set; }
     }
 }

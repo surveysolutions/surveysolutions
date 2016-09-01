@@ -6,7 +6,7 @@
             <div class="buttons">
                 <a class="btn" href="http://docs.mysurvey.solutions/designer.pdf" target="_blank">Help</a>
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank">History</a>
-                <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser" ng-click="showShareInfo()">Settings</button>
+                <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights" ng-click="showShareInfo()">Settings</button>
 
                 <div class="btn-group">
                     <a class="btn btn-default">Hi, {{::currentUserName}}</a>
@@ -378,7 +378,7 @@
 
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
-            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" title="Chapters"></a></li>
+            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" title="Sections"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" title="Translations"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" title="Macroses"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" title="Lookup tables"></a></li>
@@ -421,6 +421,7 @@
                                             <span ng-if="reference.type == 'StaticText'" class="icon icon-statictext icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
+                                            <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>

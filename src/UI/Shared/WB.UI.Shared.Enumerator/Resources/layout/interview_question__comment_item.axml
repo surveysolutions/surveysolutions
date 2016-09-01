@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:local="http://schemas.android.com/apk/res-auto"
+   android:orientation="vertical"
+   style="@style/Interview_Question_Comment_Item">
+   <TextView
+       style="@style/Interview_Question_Comments_InterviewerTitle"
+       local:MvxBind="Text CommentCaption;  TextColor RoleToColor(UserRole)" />
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       local:MvxBind="Text Comment;  TextColor RoleToColor(UserRole)" />
+</LinearLayout>

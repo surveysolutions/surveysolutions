@@ -58,9 +58,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
-        private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
+        private readonly ConcurrentDictionary<Identity, List<QuestionComment>> questionsComments;
         private bool createdOnClient;
-        private bool hasLinkedOptionsChangedEvents=false;
+        private bool hasLinkedOptionsChangedEvents = false;
 
         public StatefulInterview(ILogger logger,
                                  IQuestionnaireStorage questionnaireRepository,
@@ -72,8 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sortIndexesOfRosterInstanses = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
-            this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
             this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
+            this.questionsComments = new ConcurrentDictionary<Identity, List<QuestionComment>>();
 
             this.ResetCalculatedState();
             this.ResetLocalDelta();
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             this.delta = new LocalDelta();
         }
-       
+
         protected new void Apply(SynchronizationMetadataApplied @event)
         {
             base.Apply(@event);
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         protected new void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
-            this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId,  @event.QuestionnaireVersion);
+            this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId, @event.QuestionnaireVersion);
             this.createdOnClient = true;
         }
 
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.Id = eventSourceId;
             this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireGuid, version);
         }
-        
+
 
 
         #region Applying answers
@@ -139,10 +139,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.FailedValidationConditions.ForEach(
                 x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
-            
+
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
+            @event.InterviewData.Answers.ForEach(x => BuildCommentsHistory(x.Id, x.QuestionRosterVector, x.AllComments, @event.InterviewData.SupervisorId, @event.InterviewData.UserId));
+
+            SupervisorRejectComment = @event.InterviewData.Comments;
 
             this.ResetLocalDelta();
         }
@@ -286,7 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment);
+            this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment, @event.UserId, @event.CommentTime);
         }
 
 
@@ -350,7 +352,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
             if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
 
-            if(enabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsEnabled(enabledStaticTexts));
+            if (enabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsEnabled(enabledStaticTexts));
             if (disabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDisabled(disabledStaticTexts));
 
             if (validStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTexts));
@@ -365,11 +367,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
-            if (this.delta.SubstitutionsInGroupsChanged.Any() || 
+            if (this.delta.SubstitutionsInGroupsChanged.Any() ||
                 this.delta.SubstitutionsInQuestionsChanged.Any() ||
                 this.delta.SubstitutionsInStaticTextsChanged.Any())
             {
-                this.ApplyEvent(new SubstitutionTitlesChanged(this.delta.SubstitutionsInQuestionsChanged.ToArray(), 
+                this.ApplyEvent(new SubstitutionTitlesChanged(this.delta.SubstitutionsInQuestionsChanged.ToArray(),
                     this.delta.SubstitutionsInStaticTextsChanged.ToArray(),
                     this.delta.SubstitutionsInGroupsChanged.ToArray()));
             }
@@ -460,7 +462,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public new void Apply(VariablesEnabled @event)
         {
             base.Apply(@event);
-            
+
             @event.Variables.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -468,7 +470,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public new void Apply(VariablesDisabled @event)
         {
             base.Apply(@event);
-            
+
             @event.Variables.ForEach(x => this.delta.EnablementChanged.Remove(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -506,7 +508,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            
+
             @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -514,7 +516,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            
+
             @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -522,7 +524,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            
+
             @event.StaticTexts.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -530,7 +532,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            
+
             @event.GetFailedValidationConditionsDictionary().Keys.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -733,9 +735,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
                 .ToArray();
-
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
             this.ApplyEvent(new InterviewAnswersFromSyncPackageRestored(answerDtos, synchronizedInterview.UserId));
+            base.ApplyRosterTitleChanges(questionnaire);
         }
 
         public bool HasGroup(Identity group)
@@ -816,7 +818,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(this.GetExistingAnswerOrNull)
                 .Where(answer => answer != null).ToArray()
                 .OrderBy(x => x.RosterVector.Length);
-            
+
             for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
             {
                 var currentDepth = rosterDepth;
@@ -862,11 +864,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 case AnswerType.Integer:
                     this.GetOrCreateAnswer<IntegerNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer == null ? null : (int?) Convert.ToInt32(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (int?)Convert.ToInt32(answerDto.Answer));
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((decimal?) answerDto.Answer);
+                        .SetAnswer((decimal?)answerDto.Answer);
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
@@ -902,7 +904,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 case AnswerType.GpsData:
                     var geoAnswer = answerDto.Answer as GeoPosition;
                     var gpsQuestion = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector);
-                    if (geoAnswer!=null)
+                    if (geoAnswer != null)
                         this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy, geoAnswer.Altitude);
                     else
@@ -956,18 +958,63 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             groupOrRoster.IsDisabled = true;
         }
 
-        private void CommentQuestion(Guid id, RosterVector rosterVector, string comment)
+        private void BuildCommentsHistory(Guid questionId, RosterVector rosterVector, CommentSynchronizationDto[] commentDtos, Guid? supervisorId, Guid interviewerId)
         {
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
-            var answer = this.GetExistingAnswerOrNull(questionKey);
-            if (answer != null)
+            if (commentDtos == null || !commentDtos.Any())
+                return;
+
+            var commentsHistory = new List<QuestionComment>();
+            QuestionComment lastComment = null;
+            foreach (var commentDto in commentDtos)
             {
-                answer.InterviewerComment = comment;
+                if (lastComment != null && lastComment.UserId == commentDto.UserId)
+                {
+                    lastComment.Comment += Environment.NewLine + commentDto.Text;
+                    continue;
+                }
+
+                var role = GetUserRole(supervisorId, interviewerId, commentDto);
+
+                var comment = new QuestionComment(commentDto.Text, commentDto.UserId, role);
+                commentsHistory.Add(comment);
+                lastComment = comment;
+            }
+
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            this.questionsComments[questionIdentity] = commentsHistory;
+        }
+
+        [Obsolete("Removed after clients with version 5.11 and below will complete theirs surveys. Release date: 1st of Sep 2016")]
+        private static UserRoles GetUserRole(Guid? supervisorId, Guid interviewerId, CommentSynchronizationDto commentDto)
+        {
+            UserRoles role;
+            if (commentDto.UserId == interviewerId)
+            {
+                role = UserRoles.Operator;
+            }
+            else if (supervisorId.HasValue && commentDto.UserId == supervisorId)
+            {
+                role = UserRoles.Supervisor;
             }
             else
             {
-                this.notAnsweredQuestionsInterviewerComments[questionKey] = comment;
+                // Decided to mark those comments as Supervisor's by default.
+                role = commentDto.UserRole ?? UserRoles.Supervisor;
             }
+            return role;
+        }
+
+        private void CommentQuestion(Guid questionId, RosterVector rosterVector, string comment, Guid userId, DateTime commentTime)
+        {
+            var questionComment = new QuestionComment(comment, userId, UserRoles.Operator);
+
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            if (!this.questionsComments.ContainsKey(questionIdentity))
+                this.questionsComments[questionIdentity] = new List<QuestionComment>();
+
+            this.questionsComments[questionIdentity].Add(questionComment);
         }
 
         private void DisableQuestion(Guid id, RosterVector rosterVector)
@@ -1106,8 +1153,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             var linkedQuestionOptionsChanges = this.CreateChangedLinkedOptions(
-                expressionProcessorState, 
-                this.interviewState, 
+                expressionProcessorState,
+                this.interviewState,
                 questionnaire, null,
                 null, null, null).ToArray();
 
@@ -1144,9 +1191,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .ToList();
 
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
-                x => x.Value != null 
-                && x.Value.IsEnabled 
-                && x.Value.IsAnswered 
+                x => x.Value != null
+                && x.Value.IsEnabled
+                && x.Value.IsAnswered
                 && !x.Value.IsValid);
         }
 
@@ -1195,6 +1242,41 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     yield return identity;
                 }
             }
+        }
+
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var commentedEnabledInterviewerQuestionIds = this
+                  .questionsComments
+                  .Where(x => x.Value.Any(c => c.UserRole != UserRoles.Operator))
+                  .Select(x => x.Key)
+                  .Where(this.IsEnabled)
+                  .Where(x => questionnaire.IsInterviewierQuestion(x.Id));
+
+            var orderedCommentedQuestions = commentedEnabledInterviewerQuestionIds
+                .Select(x => new
+                {
+                    Id = x,
+                    HasInterviewerReply = this.HasSupervisorCommentInterviewerReply(x)
+                })
+                .OrderBy(x => x.HasInterviewerReply)
+                .Select(x => x.Id);
+
+            return orderedCommentedQuestions;
+        }
+
+        public string GetLastSupervisorComment()
+        {
+            return SupervisorRejectComment;
+        }
+
+        private bool HasSupervisorCommentInterviewerReply(Identity questionId)
+        {
+            var interviewerAnswerComments = this.GetQuestionComments(questionId);
+            var indexOfLastNotInterviewerComment = interviewerAnswerComments.FindLastIndex(0, x => x.UserRole != UserRoles.Operator);
+            return interviewerAnswerComments.Skip(indexOfLastNotInterviewerComment + 1).Any();
         }
 
         public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
@@ -1311,7 +1393,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             return new List<FailedValidationCondition>();
-        } 
+        }
 
         public bool IsEnabled(Identity entityIdentity)
         {
@@ -1385,18 +1467,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.IsAnswered;
         }
 
-        public string GetInterviewerAnswerComment(Identity entityIdentity)
+        public List<QuestionComment> GetQuestionComments(Identity entityIdentity)
         {
-            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!this.Answers.ContainsKey(questionKey))
-            {
-                return this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
-                    ? this.notAnsweredQuestionsInterviewerComments[questionKey]
-                    : null;
-            }
-
-            var interviewAnswerModel = this.Answers[questionKey];
-            return interviewAnswerModel.InterviewerComment;
+            return this.questionsComments.ContainsKey(entityIdentity)
+                ? this.questionsComments[entityIdentity]
+                : null;
         }
 
 
@@ -1413,6 +1488,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue)
         {
             return this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
+        }
+
+        public int CountCommentedQuestions()
+        {
+            var identitiesWithComments = this.GetCommentedBySupervisorQuestionsInInterview();
+            return identitiesWithComments.Count();
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
@@ -1507,27 +1588,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             if (!this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey)
-                && !this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
                 && !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
             {
                 return new T
-                       {
-                           InterviewerComment = null,
-                           IsEnabled = true,
-                           IsValid = true
-                       };
+                {
+                    IsEnabled = true,
+                    IsValid = true
+                };
             }
-
-            var interviewerComment = this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
-                ? this.notAnsweredQuestionsInterviewerComments[questionKey]
-                : null;
-
+            
             var isEnabled = !this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsEnablementStatus[questionKey];
             var isValid = !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
 
             var answer = new T
             {
-                InterviewerComment = interviewerComment,
                 IsEnabled = isEnabled,
                 IsValid = isValid
             };
@@ -1569,13 +1643,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     bool removedItemValidityStatus;
                     this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
-
-                if (this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey))
-                {
-                    question.InterviewerComment = this.notAnsweredQuestionsInterviewerComments[questionKey];
-                    string removedItemInterviewerComment;
-                    this.notAnsweredQuestionsInterviewerComments.TryRemove(questionKey, out removedItemInterviewerComment);
-                }
             }
 
             this.answers[questionKey] = question;
@@ -1606,7 +1673,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private IQuestionnaire GetQuestionnaireOrThrow()
         {
             return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetQuestionnaireOrThrow(
-                this.QuestionnaireIdentity.QuestionnaireId, 
+                this.QuestionnaireIdentity.QuestionnaireId,
                 this.QuestionnaireIdentity.Version,
                 this.Language));
         }

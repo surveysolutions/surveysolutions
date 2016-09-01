@@ -246,9 +246,6 @@
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>All {0} questions answered</value>
   </data>
-  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
-    <value>To parent </value>
-  </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Note: {0} questions is unanswered</value>
   </data>
@@ -412,5 +409,23 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrate when invalid answer is given</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Cover</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>First {0} questions with comments:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Questions with supervisor comments:</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>User comment</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Supervisor comment</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Supervisor note:</value>
   </data>
 </root>

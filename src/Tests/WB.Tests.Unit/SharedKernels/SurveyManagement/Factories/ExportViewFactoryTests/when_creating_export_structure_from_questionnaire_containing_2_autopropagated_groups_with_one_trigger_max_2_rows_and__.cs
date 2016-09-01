@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -15,54 +11,35 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
     {
         Establish context = () =>
         {
-            numericTriggerQuestionId = Guid.NewGuid();
-            linkedQuestionId = Guid.NewGuid();
-            referencedQuestionId = Guid.NewGuid();
-
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("i am auto propagate") { PublicKey = numericTriggerQuestionId },
-                new Group("i am roster1")
+                Create.Entity.NumericIntegerQuestion(numericTriggerQuestionId),
+                Create.Entity.Roster(roster1Id, rosterSizeQuestionId: numericTriggerQuestionId, children: new []
                 {
-                    IsRoster = true,
-                    RosterSizeQuestionId = numericTriggerQuestionId,
-                    Children =
-                        new List<IComposite>
-                        {
-                            new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric }
-                        }
-                },
-                new Group("i am roster2")
+                    Create.Entity.NumericIntegerQuestion(linkedToQuestionId)
+                }),
+                Create.Entity.Roster(roster2Id, rosterSizeQuestionId: numericTriggerQuestionId, children: new[]
                 {
-                    IsRoster = true,
-                    RosterSizeQuestionId = numericTriggerQuestionId,
-                    Children =
-                        new List<IComposite>
-                        {
-                            new MultyOptionsQuestion()
-                            {
-                                LinkedToQuestionId = referencedQuestionId,
-                                PublicKey = linkedQuestionId,
-                                QuestionType = QuestionType.MultyOption
-                            }
-                        }
-                });
+                    Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkedToQuestionId)
+                }));
             exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
-        It should_create_header_with_40_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { numericTriggerQuestionId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(40);
+        It should_create_header_with_60_column = () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster2Id }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(60);
 
         It should_create_header_with_nullable_level_labels = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;
-        private static Guid linkedQuestionId;
-        private static Guid referencedQuestionId;
         private static QuestionnaireDocument questionnaireDocument;
-        private static Guid numericTriggerQuestionId;
+        private static readonly Guid numericTriggerQuestionId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid linkedQuestionId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid roster1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly Guid roster2Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
     }
 }

@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             bool isAccessAllowed =
                 this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
-                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+                (this.GlobalInfo.IsSupervisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();

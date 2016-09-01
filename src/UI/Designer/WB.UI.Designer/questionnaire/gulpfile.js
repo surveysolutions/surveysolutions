@@ -32,6 +32,15 @@ gulp.task("styles", function(){
 	    .pipe(gulp.dest('build'));
 });
 
+gulp.task("bowerCss", function () {
+    return gulp.src(mainBowerFiles('**/*.css'))
+        .pipe(concat('libs.css'))
+	    .pipe(plugins.rev())
+
+	    .pipe(gulp.dest('build'));
+    
+});
+
 gulp.task("bowerJs", function(){
     return gulp.src(mainBowerFiles('**/*.js'))
 //        .pipe(debug({ title: 'unicorn:' }))
@@ -70,15 +79,17 @@ gulp.task('index', function () {
   	'./build/*.js',
   	'./build/vendor*.css',
   	'./build/markup*.css',
-  	'./build/*.css'], { read: false });
+  	'./build/*.css',
+    '!./build/libs*.css' ], { read: false });
 
-  return target.pipe(plugins.inject(sources, {relative: true}))
+  return target.pipe(plugins.inject(gulp.src('./build/libs*.css', { read: false }), { relative: true, name: 'libs' }))
+               .pipe(plugins.inject(sources, { relative: true }))
     		   .pipe(gulp.dest('./details'));
 });
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['templates', 'devJs', 'bowerJs', 'styles'],
+		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss'],
 		'index', 
 		callback);
 });

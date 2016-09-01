@@ -307,11 +307,17 @@
                     if (event.dest.nodesScope !== event.source.nodesScope || event.dest.index !== event.source.index) {
                         if ($scope.isQuestion(movedItem)) {
                             questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .success(function () {
+                                    $rootScope.$emit('questionMoved', movedItem.itemId);
+                                })
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         } else if ($scope.isStaticText(movedItem)) {
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .success(function () {
+                                    $rootScope.$emit('staticTextMoved', movedItem.itemId);
+                                })
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
@@ -319,12 +325,18 @@
                         }
                         else if ($scope.isVariable(movedItem)) {
                             questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .success(function () {
+                                    $rootScope.$emit('variableMoved', movedItem.itemId);
+                                })
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         }
                         else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .success(function () {
+                                    $rootScope.$emit('groupMoved', movedItem.itemId);
+                                })
                                 .error(function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });

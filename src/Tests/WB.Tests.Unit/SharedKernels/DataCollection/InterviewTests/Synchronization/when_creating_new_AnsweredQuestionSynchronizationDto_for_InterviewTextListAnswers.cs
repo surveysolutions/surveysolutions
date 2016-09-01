@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         };
 
         Because of = () =>
-            result = new AnsweredQuestionSynchronizationDto(questionId, EmptyRosterVector, interviewTextListAnswers, String.Empty);
+            result = Create.Entity.AnsweredQuestionSynchronizationDto(questionId, EmptyRosterVector, interviewTextListAnswers);
 
         It should_answer_value_be_equal_to_provided_answer_value = () =>
             result.Answer.ShouldEqual(textListAnswer);

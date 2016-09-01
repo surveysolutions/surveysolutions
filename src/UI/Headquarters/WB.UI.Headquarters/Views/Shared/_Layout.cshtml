@@ -19,6 +19,7 @@
     @RenderSection("styles", false)
 </head>
 <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header hidden-print">
@@ -69,7 +70,7 @@
     @if (User.Identity.IsObserver())
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
-            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@Users.ClickToReturn</a>
+            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
         </div>
     }
     <div class="container-fluid">
@@ -115,12 +116,12 @@
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())
 
                 @if (AppSettings.IsDebugBuilded)
-                {
+            {
                     <span id="build-config">[.NET Debug]</span>
                 }
 
                 @if (HttpContext.Current.IsDebuggingEnabled)
-                {
+            {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
 
@@ -144,21 +145,30 @@
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
         };
-        var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})';
-        $(document).ready(function () {
-            setMinHeight();
-            $(window).resize(function () {
+        var $updateIncomingPackagesQueueApiUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})';
+        $(document)
+            .ready(function () {
                 setMinHeight();
+                $(window)
+                    .resize(function () {
+                        setMinHeight();
+                    });
+
+                if (window.input.settings.config.syncQueueEnabled) {
+                    new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl,
+                        "#IncomingPackagesQueueIndicator")
+                    .load();
+                }
+
+                @if (User.Identity.IsObserver())
+            {
+                <text>
+                $('button[type="submit"]').attr("disabled", "disabled");
+                $('input[type="submit"]').attr("disabled", "disabled");
+                </text>
+            }
             });
-            new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
-            @if (User.Identity.IsObserver())
-        {
-        <text>
-            $('button[type="submit"]').attr("disabled", "disabled");
-            $('input[type="submit"]').attr("disabled", "disabled");
-            </text>
-        }
-        });
     </script>
     @RenderSection("scripts", false)
 </body>

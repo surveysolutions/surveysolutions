@@ -388,6 +388,42 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First {0} questions with comments:.
+        /// </summary>
+        public static string Interview_Cover_First_n_Questions_With_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Cover_First_n_Questions_With_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions with supervisor comments:.
+        /// </summary>
+        public static string Interview_Cover_Questions_With_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Questions_With_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover.
+        /// </summary>
+        public static string Interview_Cover_Screen_Title {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor note:.
+        /// </summary>
+        public static string Interview_Cover_Supervisor_Note {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Supervisor_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
@@ -514,11 +550,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To parent .
+        ///   Looks up a localized string similar to User comment.
         /// </summary>
-        public static string Interview_ParentGroup_ButtonText {
+        public static string Interview_Other_Comment_Caption {
             get {
-                return ResourceManager.GetString("Interview_ParentGroup_ButtonText", resourceCulture);
+                return ResourceManager.GetString("Interview_Other_Comment_Caption", resourceCulture);
             }
         }
         
@@ -672,6 +708,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_Timestamp_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_Timestamp_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor comment.
+        /// </summary>
+        public static string Interview_Supervisor_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Supervisor_Comment_Caption", resourceCulture);
             }
         }
         

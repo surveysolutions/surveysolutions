@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using NSubstitute;
@@ -52,7 +51,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             viewModel.Handle(Create.Event.RosterInstancesAdded(addedInstanceIdentity.Id, addedInstanceIdentity.RosterVector));
         };
 
-        It should_add_roster_into_a_tree = () => viewModel.Sections.First().Children.Count.ShouldEqual(5);
+        It should_add_roster_into_a_tree = () => 
+            viewModel.Sections.Second().Children.Count.ShouldEqual(5);
 
         static SideBarSectionsViewModel viewModel;
         static IStatefulInterview interview;

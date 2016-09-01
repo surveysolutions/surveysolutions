@@ -236,7 +236,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            QuestionDetailsView question = questionnaire?.Questions.FirstOrDefault(x => x.Id == questionId);
+            var questions = questionnaire?.Questions.ToList();
+            QuestionDetailsView question = questions?.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
 
@@ -259,7 +260,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
 
-            StaticTextDetailsView staticTextDetailsView = questionnaire?.StaticTexts.FirstOrDefault(x => x.Id == staticTextId);
+            var staticTexts = questionnaire?.StaticTexts.ToList();
+            StaticTextDetailsView staticTextDetailsView = staticTexts?.FirstOrDefault(x => x.Id == staticTextId);
             if (staticTextDetailsView == null)
                 return null;
 
@@ -272,11 +274,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
+        public List<DropdownQuestionView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
+        {
+            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            if (questionnaire == null)
+                return null;
+
+            var roster = this.GetRoster(questionnaire, rosterId);
+
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter;
+
+            var areTitlesForUnsavedRosterSizeRequested = roster.RosterSizeQuestionId != rosterSizeQuestionId;
+            if (areTitlesForUnsavedRosterSizeRequested)
+            {
+                var prospectiveRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).Union(rosterSizeQuestionId.ToEnumerable()).ToArray();
+                questionFilter = q => q.Where(x => x.ParentGroupId == rosterId || x.RosterScopeIds.SequenceEqual(prospectiveRosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+            }
+            else
+            {
+                questionFilter = q => q.Where(x => x.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+            }
+             
+            return this.PrepareGroupedQuestionsListForDropdown(questionnaire, questionFilter);
+        }
+
         public VariableView GetVariableEditView(string questionnaireId, Guid variableId)
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
 
-            VariableView result = questionnaire?.Variables?.FirstOrDefault(x => x.Id == variableId);
+            var variables = questionnaire?.Variables.ToList();
+            VariableView result = variables?.FirstOrDefault(x => x.Id == variableId);
             if (result == null)
                 return null;
 
@@ -413,7 +440,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 var rosterPlaceholder = this.CreateRosterBreadcrumbPlaceholder(questionsCollection, roster);
                 result.Add(rosterPlaceholder);
 
-                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder);
+                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder, questionsCollection);
                 result.Add(rosterTitlePlaceholder);
 
                 var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster);
@@ -449,7 +476,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private DropdownQuestionView CreateRosterTitlePlaceholder(GroupAndRosterDetailsView roster,
-            DropdownQuestionView rosterPlaceholder)
+            DropdownQuestionView rosterPlaceholder, QuestionsAndGroupsCollectionView questionsCollection)
         {
             var rosterTitlePlaceholder = new DropdownQuestionView
             {
@@ -458,10 +485,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = rosterPlaceholder.Title,
                 Type = this.rosterType,
-                VarName = roster.VariableName
+                VarName = roster.VariableName,
+                QuestionType = GetRosterSourceType(roster, questionsCollection)
             };
             return rosterTitlePlaceholder;
         }
+
+        private static string GetRosterSourceType(GroupAndRosterDetailsView roster,
+            QuestionsAndGroupsCollectionView questionsCollection) => roster.RosterSizeQuestionId.HasValue
+                ? questionsCollection?.Questions?.Find(x => x.Id == roster.RosterSizeQuestionId.Value)?
+                    .Type.ToString()
+                    .ToLower()
+                : null;
 
         private DropdownQuestionView CreateRosterBreadcrumbPlaceholder(QuestionsAndGroupsCollectionView questionsCollection,
             GroupAndRosterDetailsView roster)
@@ -480,10 +515,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
             GroupAndRosterDetailsView roster)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.Where(x => x.ParentGroupId == roster.Id && x.Type!=QuestionType.Multimedia).ToList();
+            var rosterSizeQuestion = roster.RosterSizeQuestionId;
+
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter;
+
+            if (rosterSizeQuestion.HasValue && this.IsQuestionIsNumeric(questionsCollection, rosterSizeQuestion.Value))
+            {
+                Guid? rosterSizeQuestionId = rosterSizeQuestion.Value;
+                Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter1 = q => q.Where(x => x.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+                return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter1);
+            }
+            else
+            {
+                questionFilter = q => q.Where(x => x.ParentGroupId == roster.Id && x.Type != QuestionType.Multimedia).ToList();
+            }
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+        }
+
+        private bool IsQuestionIsNumeric(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        {
+            return questionsCollection.Questions.OfType<NumericDetailsView>().Any(x => x.Id == questionId);
+        }
+
+        private GroupAndRosterDetailsView GetRoster(QuestionsAndGroupsCollectionView questionnaire, Guid rosterId)
+        {
+            return questionnaire.Groups.FirstOrDefault(x => x.Id == rosterId);
         }
 
         private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
