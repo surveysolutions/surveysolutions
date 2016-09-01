@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             this.Items.AddCollection(compositeItemWithChildren.Children);
                         }
 
-                        this.Items.Add(compositeItem.QuestionState.Validity);
+                        this.Items.AddCollection(compositeItem.QuestionState.Validity.Children);
                         this.Items.Add(compositeItem.QuestionState.Comments);
                     }
                     else
