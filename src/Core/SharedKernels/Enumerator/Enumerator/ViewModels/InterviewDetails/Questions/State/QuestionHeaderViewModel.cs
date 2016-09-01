@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;

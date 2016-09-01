@@ -16,7 +16,8 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class CommentsViewModel : MvxNotifyPropertyChanged
+    public class CommentsViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         public class CommentViewModel
         {

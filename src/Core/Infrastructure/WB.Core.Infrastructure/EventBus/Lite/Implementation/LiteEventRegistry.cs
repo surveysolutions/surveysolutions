@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
@@ -97,7 +98,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
 
-                handlersForEventType.Add(new LiteEventRegistryEntity(handler, raiseFilter));
+                var liteEventRegistryEntity = new LiteEventRegistryEntity(handler, raiseFilter);
+
+                ILiteEventHandler h;
+                Debug.WriteLine($"Weak reference for {eventType.Name} is live: " + liteEventRegistryEntity.EventHandler.TryGetTarget(out h));
+                handlersForEventType.Add(liteEventRegistryEntity);
             }
         }
 

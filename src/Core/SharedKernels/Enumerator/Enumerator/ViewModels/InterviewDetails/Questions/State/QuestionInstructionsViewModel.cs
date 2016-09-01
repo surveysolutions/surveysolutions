@@ -8,7 +8,8 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class QuestionInstructionViewModel : MvxNotifyPropertyChanged
+    public class QuestionInstructionViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;

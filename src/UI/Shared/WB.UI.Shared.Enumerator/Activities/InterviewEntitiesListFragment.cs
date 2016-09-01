@@ -25,7 +25,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.layoutManager = new LinearLayoutManager(this.Context);
             this.recyclerView.SetLayoutManager(this.layoutManager);
-            this.recyclerView.HasFixedSize = true;
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
             this.recyclerView.Adapter = this.adapter;
