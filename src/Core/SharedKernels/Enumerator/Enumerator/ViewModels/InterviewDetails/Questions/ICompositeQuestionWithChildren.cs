@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public interface IDetailsCompositeItemWithChildren : IDetailsCompositeItem
+    public interface ICompositeQuestionWithChildren : ICompositeQuestion
     {
         CompositeCollection<object> Children { get; }
     }

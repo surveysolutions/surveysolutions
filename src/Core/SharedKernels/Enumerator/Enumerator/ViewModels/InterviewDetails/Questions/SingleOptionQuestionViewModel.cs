@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
         IDisposable,
-        IDetailsCompositeItemWithChildren,
+        ICompositeQuestionWithChildren,
         ILiteEventHandler<AnswerRemoved>
     {
         private readonly Guid userId;
