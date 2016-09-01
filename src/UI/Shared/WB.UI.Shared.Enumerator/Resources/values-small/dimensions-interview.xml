@@ -7,8 +7,11 @@
   <dimen name="Interview_Entity_margin_with_border_left">56dp</dimen>
   <dimen name="Interview_Entity_margin_with_border_right">56dp</dimen>
 
-  <dimen name="Interview_Entity_Element_margin_horizontal">12dp</dimen>
+  <dimen name="Interview_Entity_margin_with_border_left">56dp</dimen>
+  <dimen name="Interview_Entity_margin_with_border_right">56dp</dimen>
 
+  <dimen name="Interview_Entity_Element_margin_horizontal">12dp</dimen>
+  
   <dimen name="Interview_Question_Answer_margin_top">7dp</dimen>
   <dimen name="Interview_Question_Answer_margin_bottom">0dp</dimen>
   <dimen name="Interview_Question_Errors_margin_bottom">4dp</dimen>
@@ -32,5 +35,6 @@
 
   <dimen name="Interview_Comment_Item_margin_top">12dp</dimen>
   <dimen name="Interview_Comment_Caption_margin_bottom">6dp</dimen>
-  
+
+  <dimen name="Interview_Instruction_margin_bottom">10dp</dimen>
 </resources>

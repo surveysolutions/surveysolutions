@@ -10,7 +10,6 @@
   </style>
 
   <style name="Interview_DisabledQuestion_Header" parent="Interview_Entity">
-    
   </style>
 
   <style name="Interview_DisabledQuestion_Title" parent="Interview_Entity_Title" >
@@ -35,7 +34,11 @@
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
 
-  <style name="Interview_Question_Instruction" parent="Interview_Question_Header" />
+  <style name="Interview_Question_Instruction" parent="Interview_Question_Header">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Instruction_margin_bottom</item>
+  </style>
 
   <style name="Interview_Question_Instruction_Title">
     <item name="android:layout_width">wrap_content</item>
