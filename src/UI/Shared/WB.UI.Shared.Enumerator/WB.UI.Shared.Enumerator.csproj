@@ -1047,6 +1047,7 @@
     <AndroidResource Include="Resources\layout\interview_question_option_bottom_rounded_corner.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__progressbar.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

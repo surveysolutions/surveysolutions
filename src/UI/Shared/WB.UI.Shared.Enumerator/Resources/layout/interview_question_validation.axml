@@ -7,11 +7,11 @@
     style="@style/Interview_Question_Errors">
   <TextView
       style="@style/Interview_Question_Errors_Title"
-      local:MvxBind="Text Caption" />
+      local:MvxBind="Text Error.Caption" />
   <MvxLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        local:MvxBind="ItemsSource ValidationErrors"
+        local:MvxBind="ItemsSource Error.ValidationErrors"
         local:MvxItemTemplate="@layout/interview_question__errors_item"/>
 </LinearLayout>

@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         QuestionInstructionViewModel InstructionViewModel { get; }
         IQuestionStateViewModel QuestionState { get; }
+        AnsweringViewModel Answering { get; }
     }
 }
