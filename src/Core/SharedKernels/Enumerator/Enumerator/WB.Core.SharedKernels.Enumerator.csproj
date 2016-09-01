@@ -168,8 +168,8 @@
     <Compile Include="ViewModels\InterviewDetails\Groups\CoverStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\OptionTopBorderViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\IDetailsCompositeItem.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\IDetailsCompositeItemWithChildren.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestion.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestionWithChildren.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IQuestionStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
