@@ -183,13 +183,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 foreach (var interviewEntityViewModel in newGroupItems)
                 {
-                    var compositeItem = interviewEntityViewModel as IDetailsCompositeItem;
+                    var compositeItem = interviewEntityViewModel as ICompositeQuestion;
                     if (compositeItem != null)
                     {
                         this.Items.Add(compositeItem.QuestionState.Header);
                         if (compositeItem.InstructionViewModel.HasInstructions)
                             this.Items.Add(compositeItem.InstructionViewModel);
-                        var compositeItemWithChildren  = compositeItem as IDetailsCompositeItemWithChildren;
+                        var compositeItemWithChildren  = compositeItem as ICompositeQuestionWithChildren;
                         if (compositeItemWithChildren != null)
                         {
                             this.Items.AddCollection(compositeItemWithChildren.Children);

@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
-        IDetailsCompositeItemWithChildren,
+        ICompositeQuestionWithChildren,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable

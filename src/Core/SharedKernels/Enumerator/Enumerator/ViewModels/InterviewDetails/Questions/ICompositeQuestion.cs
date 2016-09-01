@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public interface IDetailsCompositeItem
+    public interface ICompositeQuestion
     {
         QuestionInstructionViewModel InstructionViewModel { get; }
         IQuestionStateViewModel QuestionState { get; }
