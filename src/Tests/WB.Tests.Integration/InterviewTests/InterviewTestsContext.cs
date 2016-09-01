@@ -91,14 +91,14 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
+        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null, bool useLatestEngine = true)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
-            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
