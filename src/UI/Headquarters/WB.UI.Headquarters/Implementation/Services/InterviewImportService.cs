@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
-        private object lockStart;
+        private object lockStart = new object();
 
         private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
