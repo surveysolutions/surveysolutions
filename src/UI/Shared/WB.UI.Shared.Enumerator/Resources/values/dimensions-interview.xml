@@ -86,6 +86,7 @@
 
   <dimen name="Interview_Attachment_Small_margin_bottom">32dp</dimen>
   <dimen name="Interview_Attachment_Large_margin_bottom">1dp</dimen>
+  
   <dimen name="Interview_Instructions_margin">4dp</dimen>
 
   <dimen name="Interview_Cover_Marker_Line_width">14dp</dimen>
