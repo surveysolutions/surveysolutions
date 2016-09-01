@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
     }
 
-    public abstract class OptionBorderViewModel<T> where T : QuestionAnswered
+    public abstract class OptionBorderViewModel<T> : ICompositeEntity where T : QuestionAnswered
     {
         public OptionBorderViewModel(QuestionStateViewModel<T> questionState)
         {

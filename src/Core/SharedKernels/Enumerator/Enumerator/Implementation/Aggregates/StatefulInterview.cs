@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -1317,6 +1318,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return questionInstances;
         }
 
+        public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
+        {
+            var rosterInstanceIds = this.interviewState.GetRosterInstanceIds(rosterId, parentIdentity.RosterVector);
+            
+            List<Tuple<Identity, int>> result = new List<Tuple<Identity, int>>();
+            foreach (var rosterInstanceId in rosterInstanceIds)
+            {
+                var rosterVector = new RosterVector(parentIdentity.RosterVector).ExtendWithOneCoordinate(rosterInstanceId);
+                var identity = new Identity(rosterId, rosterVector);
+                result.Add(Tuple.Create(identity, GetRosterSortIndex(identity)));
+            }
+            return new ReadOnlyCollection<Identity>(result.OrderBy(x => x.Item2).Select(x => x.Item1).ToList());
+        }
+
         public IEnumerable<Identity> GetInterviewerEntities(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1504,7 +1519,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.calculated.GroupsAndRostersInGroup);
         }
 
-        private int GetRosterSortIndex(Identity rosterIdentity)
+        public int GetRosterSortIndex(Identity rosterIdentity)
         {
             return this.sortIndexesOfRosterInstanses.ContainsKey(rosterIdentity)
                 ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.Last()

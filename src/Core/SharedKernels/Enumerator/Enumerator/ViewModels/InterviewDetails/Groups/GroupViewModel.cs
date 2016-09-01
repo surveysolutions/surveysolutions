@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -19,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         IInterviewEntityViewModel,
+        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -32,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public EnablementViewModel Enablement { get; }
         public bool IsRoster { get; private set; }
+        public int SortIndex { get; private set; }
 
         public DynamicTextViewModel GroupTitle { get; }
 
@@ -46,24 +44,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private GroupStateViewModel groupState;
-        readonly ILiteEventRegistry eventRegistry;
+        private readonly ILiteEventRegistry eventRegistry;
 
-        public GroupStateViewModel GroupState
-        {
-            get { return this.groupState; }
-        }
+        public GroupStateViewModel GroupState { get; }
 
-        public bool IsStarted
-        {
-            get { return this.GroupState.Status > GroupStatus.NotStarted; }
-        }
+        public bool IsStarted => this.GroupState.Status > GroupStatus.NotStarted;
 
-        public Identity Identity
-        {
-            get{ return this.groupIdentity; }
-        }
-        
+        public Identity Identity => this.groupIdentity;
+
         public IMvxCommand NavigateToGroupCommand => new MvxCommand(this.NavigateToGroup);
 
         public GroupViewModel(
@@ -79,49 +67,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
-            this.groupState = groupState;
+            this.GroupState = groupState;
             this.GroupTitle = dynamicTextViewModel;
             this.eventRegistry = eventRegistry;
         }
 
-        public async void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
 
             Identity groupWithAnswersToMonitor = interview.GetParentGroup(entityIdentity);
 
-            await this.InitAsync(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
-        }
-
-        public Task InitAsync(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
-        {
             this.interviewId = interviewId;
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var statefulInterview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
+
+            this.IsRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
+            this.SortIndex = statefulInterview.GetRosterSortIndex(entityIdentity);
 
             this.navigationState = navigationState;
-            this.groupIdentity = groupIdentity;
+            this.groupIdentity = entityIdentity;
 
             this.eventRegistry.Subscribe(this, interviewId);
-            
-            if (!questionnaire.HasGroup(groupIdentity.Id))
-                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(groupIdentity));
 
-            this.Enablement.Init(interviewId, groupIdentity);
-            this.GroupState.Init(interviewId, groupIdentity);
+            if (!questionnaire.HasGroup(entityIdentity.Id))
+            {
+                throw new InvalidOperationException($"Questionnaire {statefulInterview.QuestionnaireIdentity} has no group with id {entityIdentity.Id}");
+            }
 
-            this.GroupTitle.Init(interviewId, groupIdentity, questionnaire.GetGroupTitle(groupIdentity.Id));
-            this.RosterInstanceTitle = interview.GetRosterTitle(groupIdentity);
-            this.IsRoster = questionnaire.IsRosterGroup(groupIdentity.Id);
+            this.Enablement.Init(interviewId, entityIdentity);
+            this.GroupState.Init(interviewId, entityIdentity);
+
+            this.GroupTitle.Init(interviewId, entityIdentity, questionnaire.GetGroupTitle(entityIdentity.Id));
+            this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
             
             if (groupWithAnswersToMonitor != null)
             {
-                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
+                IEnumerable<Identity> questionsToListen = statefulInterview.GetChildQuestions(groupWithAnswersToMonitor);
                 this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
-
-            return Task.FromResult(true);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
@@ -145,7 +130,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
         }
     }

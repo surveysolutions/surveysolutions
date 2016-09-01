@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<StaticTextsDeclaredValid>,
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         ILiteEventHandler<QuestionsEnabled>,
+        ICompositeEntity,
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;

@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
-        public ObservableCollection<object> Options { get; private set; }
+        public ObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -93,10 +93,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetSingleOptionAnswer(this.questionIdentity);
             var selectedValue = Monads.Maybe(() => answerModel.Answer);
 
-            var singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
+            List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
-            var collection = new ObservableCollection<object>(singleOptionQuestionOptionViewModels);
+            var collection = new ObservableCollection<SingleOptionQuestionOptionViewModel>(singleOptionQuestionOptionViewModels);
             this.Options = collection;
         }
 
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
-            var previousOption = this.Options.Cast<SingleOptionQuestionOptionViewModel>().SingleOrDefault(option => option.Selected && option != selectedOption);
+            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                foreach (var option in this.Options.Cast<SingleOptionQuestionOptionViewModel>().Where(option => option.Selected))
+                foreach (var option in this.Options.Where(option => option.Selected))
                 {
                     option.Selected = false;
                 }
@@ -195,20 +195,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
 
-            foreach (var option in Options.Cast<SingleOptionQuestionOptionViewModel>())
+            foreach (var option in this.Options)
             {
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
         }
 
-        public CompositeCollection<object> Children
+        public CompositeCollection<ICompositeEntity> Children
         {
             get
             {
-                var result = new CompositeCollection<object>();
+                var result = new CompositeCollection<ICompositeEntity>();
                 result.Add(new OptionTopBorderViewModel<SingleOptionQuestionAnswered>(this.questionState));
-                result.AddCollection(this.Options);
+                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
                 result.Add(new OptionBottomBorderViewModel<SingleOptionQuestionAnswered>(this.questionState));
                 return result;
             }

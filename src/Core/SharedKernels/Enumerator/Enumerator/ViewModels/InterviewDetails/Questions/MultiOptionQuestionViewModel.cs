@@ -226,13 +226,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public CompositeCollection<object> Children
+        public CompositeCollection<ICompositeEntity> Children
         {
             get
             {
-                var result = new CompositeCollection<Object>();
+                var result = new CompositeCollection<ICompositeEntity>();
                 result.Add(new OptionTopBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState));
-                result.AddCollection(new ObservableCollection<object>(this.Options));
+                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
                 result.Add(new OptionBottomBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState));
                 return result;
             }
