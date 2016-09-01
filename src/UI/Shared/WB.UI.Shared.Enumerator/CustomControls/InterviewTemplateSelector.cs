@@ -45,9 +45,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
             {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question_header},
-            {typeof (ErrorMessagesViewModel), Resource.Layout.interview_question_validation},
+            {typeof (ValidityViewModel), Resource.Layout.interview_question_validation},
             {typeof (CommentsViewModel), Resource.Layout.interview_question_comments},
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
+            {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
         };
 
         public int GetItemViewType(object forItemObject)

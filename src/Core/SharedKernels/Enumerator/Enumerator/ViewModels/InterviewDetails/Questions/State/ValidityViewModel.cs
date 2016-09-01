@@ -70,20 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool IsInvalid
         {
             get { return this.isInvalid; }
-            private set
-            {
-                this.RaiseAndSetIfChanged(ref this.isInvalid, value);
-
-                var isShowErrors = this.children.Contains(this.Error);
-                if (value && !isShowErrors)
-                {
-                    this.children.Add(Error);
-                }
-                else if (!value && isShowErrors)
-                {
-                    this.children.Clear();
-                }
-            }
+            private set { this.RaiseAndSetIfChanged(ref this.isInvalid, value); }
         }
 
         public ErrorMessagesViewModel Error { get; }
@@ -199,9 +186,5 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this);
         }
-
-
-        CompositeCollection<ICompositeEntity> children = new CompositeCollection<ICompositeEntity>();
-        public CompositeCollection<ICompositeEntity> Children => this.children;
     }
 }

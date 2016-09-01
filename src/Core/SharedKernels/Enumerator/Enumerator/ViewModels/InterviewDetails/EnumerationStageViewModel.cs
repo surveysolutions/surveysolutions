@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -197,8 +198,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             this.Items.AddCollection(compositeItemWithChildren.Children);
                         }
 
-                        this.Items.AddCollection(compositeItem.QuestionState.Validity.Children);
+                        this.Items.AddCollection(CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+                            compositeItem.QuestionState.Validity,
+                            nameof(compositeItem.QuestionState.Validity.IsInvalid),
+                            () => compositeItem.QuestionState.Validity.IsInvalid));
                         this.Items.Add(compositeItem.QuestionState.Comments);
+                        this.Items.AddCollection(CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+                            compositeItem.Answering,
+                            nameof(compositeItem.Answering.InProgress),
+                            () => compositeItem.Answering.InProgress));
                     }
                     if (rosterViewModel != null)
                     {
@@ -401,6 +409,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool ShouldBeHiddenIfDisabled(Identity entity)
             => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
 
+        private static CompositeCollection<object> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+            MvxNotifyPropertyChanged viewModel,
+            string propertyNameToRefresh,
+            Func<bool> doesNeedShowViewModel)
+        {
+            CompositeCollection<object> collection = new CompositeCollection<object>();
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == propertyNameToRefresh)
+                {
+                    bool isNeedShow = doesNeedShowViewModel.Invoke();
+                    var isShowing = collection.Contains(viewModel);
+
+                    if (isNeedShow && !isShowing)
+                    {
+                        collection.Add(viewModel);
+                    }
+                    else if (!isNeedShow && isShowing)
+                    {
+                        collection.Clear();
+                    }
+
+                }
+            };
+            return collection;
+        }
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
