@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -208,7 +209,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             nameof(compositeItem.Answering.InProgress),
                             () => compositeItem.Answering.InProgress));
                     }
-                    if (rosterViewModel != null)
+                    else if (rosterViewModel != null)
                     {
                         this.Items.AddCollection(rosterViewModel.RosterInstances);
                     }
@@ -417,9 +418,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (viewModel == null)
                 throw new ArgumentNullException(nameof(viewModel));
 
-            var notifyPropertyChanged = viewModel as MvxNotifyPropertyChanged;
+            var notifyPropertyChanged = viewModel as INotifyPropertyChanged;
             if (notifyPropertyChanged == null)
-                throw new ArgumentException("ViewModel should support MvxNotifyPropertyChanged interface. ViewModel: " + viewModel.GetType().Name);
+                throw new ArgumentException("ViewModel should support INotifyPropertyChanged interface. ViewModel: " + viewModel.GetType().Name);
 
             CompositeCollection<ICompositeEntity> collection = new CompositeCollection<ICompositeEntity>();
             notifyPropertyChanged.PropertyChanged += (sender, args) =>

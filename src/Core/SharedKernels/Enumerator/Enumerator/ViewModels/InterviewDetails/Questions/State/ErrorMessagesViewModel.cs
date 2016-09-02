@@ -5,8 +5,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity
+    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged
     {
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
