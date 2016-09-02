@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
@@ -18,13 +17,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class RosterViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
-        ICompositeEntity,
         IDisposable,
         IInterviewEntityViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private string interviewId;
         private NavigationState navigationState;
 
@@ -34,11 +33,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.RosterInstances = new ObservableCollection<ICompositeEntity>();
         }
 
@@ -66,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 var groupViewModel = this.GetGroupViewModel(newRosterInstance.GetIdentity());
 
                 int index = Array.FindLastIndex(typedRosterInstances, t => t.SortIndex < groupViewModel.SortIndex) + 1;
-                InvokeOnMainThread(() => this.RosterInstances.Insert(index, groupViewModel));
+                this.mainThreadDispatcher.RequestMainThreadAction(() => this.RosterInstances.Insert(index, groupViewModel));
             }
         }
 
@@ -78,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             {
                 var instancesToRemove = typedRosterInstances.Where(x => x.Identity.Equals(rosterInstance.GetIdentity())).ToList();
 
-                InvokeOnMainThread(() => instancesToRemove.ForEach(x => this.RosterInstances.Remove(x)));
+                this.mainThreadDispatcher.RequestMainThreadAction(() => instancesToRemove.ForEach(x => this.RosterInstances.Remove(x)));
                 instancesToRemove.ForEach(x => x.DisposeIfDisposable());
             }
         }

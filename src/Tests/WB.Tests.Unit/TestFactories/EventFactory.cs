@@ -254,5 +254,13 @@ namespace WB.Tests.Unit.TestFactories
             {
                 new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m),
             });
+
+        public RosterInstancesRemoved RosterInstancesRemoved(Guid rosterGroupId, params RosterVector[] rosterVectors)
+            => new RosterInstancesRemoved(
+                rosterVectors
+                    .Select(fullRosterVector => new RosterInstance(
+                        rosterGroupId,
+                        outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                        rosterInstanceId: fullRosterVector.Last())).ToArray());
     }
 }
