@@ -11,7 +11,5 @@
               local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
   </LinearLayout>
 
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress Answering.InProgress" />
   <View style="@style/Interview_Question_Divider" />
 </LinearLayout>
