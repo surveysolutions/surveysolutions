@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
             viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
-            viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, Create.Entity.RosterVector(1)));
+            viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, new RosterVector[] { Create.Entity.RosterVector(1)}));
 
             Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(1));
         }
