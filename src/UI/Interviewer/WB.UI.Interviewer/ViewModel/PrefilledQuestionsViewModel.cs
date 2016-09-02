@@ -19,7 +19,8 @@ namespace WB.UI.Interviewer.ViewModel
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,
             IPrincipal principal,
-            ICommandService commandService)
+            ICommandService commandService,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -27,7 +28,8 @@ namespace WB.UI.Interviewer.ViewModel
                 viewModelNavigationService,
                 logger,
                 principal,
-                commandService) {}
+                commandService,
+                compositeCollectionInflationService) {}
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 
