@@ -25,11 +25,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private string interviewId;
 
         private NavigationState navigationState;
-        private Identity groupIdentity;
+        protected Identity groupIdentity;
 
         public EnablementViewModel Enablement { get; }
         public bool IsRoster { get; private set; }
-        public int SortIndex { get; private set; }
+        public int SortIndex { get; protected set; }
 
         public DynamicTextViewModel GroupTitle { get; }
 
@@ -54,6 +54,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public IMvxCommand NavigateToGroupCommand => new MvxCommand(this.NavigateToGroup);
 
+        protected GroupViewModel()
+        {
+        }
+
         public GroupViewModel(
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
@@ -72,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.eventRegistry = eventRegistry;
         }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
 
@@ -127,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
