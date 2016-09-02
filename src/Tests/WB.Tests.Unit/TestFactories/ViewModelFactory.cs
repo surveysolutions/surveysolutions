@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.TestFactories
             ILiteEventRegistry eventRegistry = null,
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            ICompositeCollectionInflationService compositeCollectionInflationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
@@ -64,7 +65,8 @@ namespace WB.Tests.Unit.TestFactories
                     questionnaireRepository: questionnaireRepository,
                     interviewRepository: interviewRepository),
                 Mock.Of<IMvxMessenger>(),
-                Mock.Of<IEnumeratorSettings>());
+                Mock.Of<IEnumeratorSettings>(),
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
