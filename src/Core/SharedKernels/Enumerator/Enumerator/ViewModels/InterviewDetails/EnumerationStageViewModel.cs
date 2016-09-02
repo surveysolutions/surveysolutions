@@ -57,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMessenger messenger;
+        private ICompositeCollectionInflationService compositeCollectionInflationService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
@@ -79,7 +80,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
-            DynamicTextViewModel dynamicTextViewModel, IMvxMessenger messenger, IEnumeratorSettings settings)
+            DynamicTextViewModel dynamicTextViewModel, 
+            IMvxMessenger messenger, 
+            IEnumeratorSettings settings,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -92,6 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name = dynamicTextViewModel;
             this.messenger = messenger;
             this.settings = settings;
+            this.compositeCollectionInflationService = compositeCollectionInflationService;
         }
 
         public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -184,40 +189,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.InterviewEntities?.ForEach(x => x.DisposeIfDisposable());
                 this.InterviewEntities = newGroupItems;
 
-                foreach (var interviewEntityViewModel in newGroupItems)
-                {
-                    var compositeItem = interviewEntityViewModel as ICompositeQuestion;
-                    var rosterViewModel = interviewEntityViewModel as RosterViewModel;
-                    if (compositeItem != null)
-                    {
-                        this.Items.Add(compositeItem.QuestionState.Header);
-                        if (compositeItem.InstructionViewModel.HasInstructions)
-                            this.Items.Add(compositeItem.InstructionViewModel);
-                        var compositeItemWithChildren  = compositeItem as ICompositeQuestionWithChildren;
-                        if (compositeItemWithChildren != null)
-                        {
-                            this.Items.AddCollection(compositeItemWithChildren.Children);
-                        }
-
-                        this.Items.AddCollection(CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
-                            compositeItem.QuestionState.Validity,
-                            nameof(compositeItem.QuestionState.Validity.IsInvalid),
-                            () => compositeItem.QuestionState.Validity.IsInvalid));
-                        this.Items.Add(compositeItem.QuestionState.Comments);
-                        this.Items.AddCollection(CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
-                            compositeItem.Answering,
-                            nameof(compositeItem.Answering.InProgress),
-                            () => compositeItem.Answering.InProgress));
-                    }
-                    else if (rosterViewModel != null)
-                    {
-                        this.Items.AddCollection(rosterViewModel.RosterInstances);
-                    }
-                    else
-                    {
-                        this.Items.AddCollection(new ObservableCollection<ICompositeEntity>(interviewEntityViewModel.ToEnumerable()));
-                    }
-                }
+                var collection = this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
+                this.Items.AddCollection(collection);
             }
             finally
             {
@@ -409,40 +382,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private bool ShouldBeHiddenIfDisabled(Identity entity)
             => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
-
-        private static CompositeCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
-            ICompositeEntity viewModel,
-            string propertyNameToRefresh,
-            Func<bool> doesNeedShowViewModel)
-        {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel));
-
-            var notifyPropertyChanged = viewModel as INotifyPropertyChanged;
-            if (notifyPropertyChanged == null)
-                throw new ArgumentException("ViewModel should support INotifyPropertyChanged interface. ViewModel: " + viewModel.GetType().Name);
-
-            CompositeCollection<ICompositeEntity> collection = new CompositeCollection<ICompositeEntity>();
-            notifyPropertyChanged.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == propertyNameToRefresh)
-                {
-                    bool isNeedShow = doesNeedShowViewModel.Invoke();
-                    var isShowing = collection.Contains((ICompositeEntity)viewModel);
-
-                    if (isNeedShow && !isShowing)
-                    {
-                        collection.Add(viewModel);
-                    }
-                    else if (!isNeedShow && isShowing)
-                    {
-                        collection.Clear();
-                    }
-
-                }
-            };
-            return collection;
-        }
+        
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);

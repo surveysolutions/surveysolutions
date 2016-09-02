@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
             this.Bind<IAsyncRunner>().To<AsyncRunner>();
 
+            this.Bind<ICompositeCollectionInflationService>().To<CompositeCollectionInflationService>();
+
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))

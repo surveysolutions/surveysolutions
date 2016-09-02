@@ -86,6 +86,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Services\CompositeCollectionInflationService.cs" />
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
@@ -143,6 +144,7 @@
       <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IAttachmentContentStorage.cs" />
+    <Compile Include="Services\ICompositeCollectionInflationService.cs" />
     <Compile Include="Services\IEntityWithErrorsViewModelFactory.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />

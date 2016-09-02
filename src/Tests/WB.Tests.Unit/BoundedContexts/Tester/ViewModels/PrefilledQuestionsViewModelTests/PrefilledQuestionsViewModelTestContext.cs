@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             IStatefulInterviewRepository interviewRepository = null,
             IViewModelNavigationService viewModelNavigationService = null,
             ILogger logger = null,
-            IPrincipal principal = null)
+            IPrincipal principal = null,
+            ICompositeCollectionInflationService compositeCollectionInflationService = null)
         {
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
@@ -32,7 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 principal ?? Mock.Of<IPrincipal>(),
-                Mock.Of<ICommandService>());
+                Mock.Of<ICommandService>(),
+                Mock.Of<ICompositeCollectionInflationService>());
         }
     }
 }
