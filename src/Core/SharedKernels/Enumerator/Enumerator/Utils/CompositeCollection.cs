@@ -11,23 +11,14 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
 
-    /// <summary>
-    ///     Implements a true observable composite collection. This collection looks like a collection of the underlying
-    ///     elements, however the elements are themselves sourced from observable collections. Changes to the
-    ///     underlying collections will be immediately reflected in this collection, with all the appropriate change
-    ///     notifications.
-    /// </summary>
     public class CompositeCollection<T> : IList<T>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private readonly List<IList<T>> collections = new List<IList<T>>();
 
-        /// <summary>Returns true, because individual items cannot be added directly to this collection.</summary>
         public bool IsReadOnly => true;
 
-        /// <summary>Gets the number of elements in this collection.</summary>
         public int Count { get; private set; }
 
-        /// <summary>Removes all underlying collections from this collection (without changing them).</summary>
         public void Clear()
         {
             this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.collectionChanged);
@@ -37,9 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.collectionChanged_Reset();
         }
 
-        /// <summary>
-        ///     Gets a value indicating whether the specified item is contained in this collection.
-        /// </summary>
         public bool Contains(T item)
         {
             foreach (var coll in this.collections)
@@ -48,9 +36,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return false;
         }
 
-        /// <summary>
-        ///     Gets the index of the specified item within this collection, or -1 if the item is not present.
-        /// </summary>
         public int IndexOf(T item)
         {
             var offset = 0;
@@ -64,9 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return -1;
         }
 
-        /// <summary>
-        ///     Gets an item at the specified index. Does not support setting an item.
-        /// </summary>
         public T this[int index]
         {
             get
@@ -84,7 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             set { throw new NotSupportedException(); }
         }
 
-        /// <summary>Enumerates all items in the order in which they appear in the underlying collections.</summary>
         public IEnumerator<T> GetEnumerator()
         {
             foreach (var coll in this.collections)
@@ -97,7 +78,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return this.GetEnumerator();
         }
 
-        /// <summary>Copies this collection to the specified array.</summary>
         public void CopyTo(T[] array, int arrayIndex)
         {
             foreach (var coll in this.collections)
@@ -107,48 +87,30 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             }
         }
 
-        /// <summary>Throws a "not supported" exception.</summary>
         public void Insert(int index, T item)
         {
             throw new NotSupportedException();
         }
 
-        /// <summary>Throws a "not supported" exception.</summary>
         public void RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        /// <summary>Throws a "not supported" exception.</summary>
         public void Add(T item)
         {
             this.AddCollection(new ObservableCollection<T>(item.ToEnumerable()));
         }
 
-        /// <summary>Throws a "not supported" exception.</summary>
         public bool Remove(T item)
         {
             throw new NotSupportedException();
         }
 
-        /// <summary>
-        ///     Triggered whenever the collection is changed (which happens whenever an underlying collection is changed,
-        ///     or a new items collection is added via <see cref="AddCollection{TC}" />).
-        /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        /// <summary>
-        ///     Triggered whenever the <see cref="Count" /> property changes (which happens whenever an underlying collection is
-        ///     changed,
-        ///     or a new items collection is added via <see cref="AddCollection{TC}" />).
-        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        ///     Adds an observable collection as an item source for this collection. The items will appear in this collection
-        ///     in the same order, after all the items sourced from collections added earlier (if any). Any changes to the
-        ///     added collection will be immediately reflected in this collection.
-        /// </summary>
         public void AddCollection<TC>(TC collection)
             where TC : IList<T>, INotifyCollectionChanged
         {
@@ -214,18 +176,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-        }
-
-        private void collectionChanged_Moved(T item, int oldIndex, int newIndex)
-        {
-            this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
-        }
-
-        private void collectionChanged_Removed(T item, int index)
-        {
-            this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
         }
 
         private void collectionChanged_Reset()
