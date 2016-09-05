@@ -49,6 +49,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (CommentsViewModel), Resource.Layout.interview_question_comments},
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
+            {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
         };
 
         public int GetItemViewType(object forItemObject)

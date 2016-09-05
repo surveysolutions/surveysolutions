@@ -129,5 +129,10 @@ namespace WB.Tests.Unit.TestFactories
                     questionnaireRepository: questionnaireRepository,
                     interviewRepository: interviewRepository));
         }
+
+        public QuestionInstructionViewModel QuestionInstructionViewModel()
+        {
+            return new QuestionInstructionViewModel();
+        }
     }
 }
