@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 ResponsibleId = userId, // Creator is responsible
-                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined,
+                ResponsibleRole = responsible?.Roles.FirstOrDefault() ?? 0,
                 CreatedOnClient = createdOnClient
             };
             var emptyVector = new decimal[0];
@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (@event.Payload.InterviewerId.HasValue)
             {
                 state.ResponsibleId = @event.Payload.InterviewerId.Value;
-                state.ResponsibleRole = UserRoles.Operator;
+                state.ResponsibleRole = UserRoles.Interviewer;
                 state.ReceivedByInterviewer = false;
                 state.IsMissingAssignToInterviewer = false;
             }

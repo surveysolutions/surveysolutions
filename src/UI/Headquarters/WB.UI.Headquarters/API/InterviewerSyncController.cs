@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.API
@@ -26,12 +25,12 @@ namespace WB.UI.Headquarters.API
     public class InterviewerSyncController : BaseApiController
     { 
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
+        private readonly IIdentityManager identityManager;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
-
-        private readonly IUserWebViewFactory userInfoViewFactory;
+        
         private readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
 
@@ -41,31 +40,29 @@ namespace WB.UI.Headquarters.API
 
 
         public InterviewerSyncController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
+            IIdentityManager identityManager,
             ILogger logger,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IInterviewPackagesService incomingSyncPackagesQueue, 
-            IUserWebViewFactory userInfoViewFactory,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
-
+            this.identityManager = identityManager;
             this.plainFileRepository = plainFileRepository;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.userViewFactory = userViewFactory;
             this.androidPackageReader = androidPackageReader;
         }
 
         [HttpGet]
-        [ApiBasicAuth(new[] {UserRoles.Operator})]
+        [ApiBasicAuth(new[] {UserRoles.Interviewer})]
         [Obsolete]
         public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
         {
@@ -77,15 +74,12 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
-        public bool CheckExpectedDevice(string deviceId)
-        {
-            var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
-            return string.IsNullOrEmpty(interviewerInfo.DeviceId) || interviewerInfo.DeviceId == deviceId;
-        }
+        [ApiBasicAuth(new[] {UserRoles.Interviewer})]
+        public bool CheckExpectedDevice(string deviceId) =>
+            string.IsNullOrEmpty(this.identityManager.CurrentUserDeviceId) || this.identityManager.CurrentUserDeviceId == deviceId;
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage GetHandshakePackage(HandshakePackageRequest request)
         {
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
@@ -95,7 +89,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
             this.plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
@@ -103,7 +97,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostPackage(PostPackageRequest request)
         {
             this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: request.SynchronizationPackage);

@@ -1,5 +1,7 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Identity
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -30,7 +32,7 @@
         </ul>
     </li>
     @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
-    @if (!User.Identity.IsObserver())
+    @if (!(ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver))
     {
         @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
     }

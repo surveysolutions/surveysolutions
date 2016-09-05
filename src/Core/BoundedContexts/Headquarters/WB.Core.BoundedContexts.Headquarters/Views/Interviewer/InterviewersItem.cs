@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
 {
     public class InterviewersItem
     {
-        public InterviewersItem(Guid id, string name, string supervisorName, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ, string deviceId)
+        public InterviewersItem(string id, string name, string supervisorName, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ, string deviceId)
         {
             this.UserId = id;
             this.UserName = name;
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
 
         public string Email { get; private set; }
 
-        public Guid UserId { get; private set; }
+        public string UserId { get; private set; }
 
         public string UserName { get; private set; }
 

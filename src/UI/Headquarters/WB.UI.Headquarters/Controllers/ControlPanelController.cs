@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         public ControlPanelController(
             IServiceLocator serviceLocator,
             ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
+            IIdentityManager identityManager,
             ILogger logger,
             IUserViewFactory userViewFactory,
             IPasswordHasher passwordHasher,
@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             ITransactionManagerProvider transactionManagerProvider,
             IEventStoreApiService eventStoreApiService,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
-             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
+             : base(commandService: commandService, logger: logger)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

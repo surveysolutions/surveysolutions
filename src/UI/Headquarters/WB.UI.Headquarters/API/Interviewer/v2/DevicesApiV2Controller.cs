@@ -8,21 +8,19 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class DevicesApiV2Controller : DevicesControllerBase
     {
         public DevicesApiV2Controller(
-            IGlobalInfoProvider globalInfoProvider,
-            IUserWebViewFactory userInfoViewFactory,
             ISyncProtocolVersionProvider syncVersionProvider,
             ICommandService commandService,
-            IReadSideRepositoryReader<TabletDocument> devicesRepository) : base(
-                globalInfoProvider: globalInfoProvider,
-                userInfoViewFactory: userInfoViewFactory,
+            IReadSideRepositoryReader<TabletDocument> devicesRepository,
+            IIdentityManager identityManager) : base(
+                identityManager: identityManager,
                 syncVersionProvider: syncVersionProvider,
                 commandService: commandService,
                 devicesRepository: devicesRepository)

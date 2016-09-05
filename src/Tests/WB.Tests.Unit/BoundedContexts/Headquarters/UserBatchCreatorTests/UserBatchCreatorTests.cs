@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor:"tttt"));
             var commantService = new Mock<ICommandService>();
-            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
 
             var userBatchCreator =
                 CreateUserBatchCreator(userPreloadingServiceMock.Object, commandService: commantService.Object);
@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
             commantService.Verify(
                 x =>
-                    x.Execute(Moq.It.Is<CreateUserCommand>(c => c.UserName == interviewerName && c.Roles.Contains(UserRoles.Operator)), Moq.It.IsAny<string>()));
+                    x.Execute(Moq.It.Is<CreateUserCommand>(c => c.UserName == interviewerName && c.Roles.Contains(UserRoles.Interviewer)), Moq.It.IsAny<string>()));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
             var commantService = new Mock<ICommandService>();
-            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
             var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.Entity.UserDocument(userName: interviewerName, isArchived: true, supervisorId:Guid.NewGuid()), "id");
 
@@ -155,7 +155,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 Mock.Of<IPasswordHasher>());
         }
 
-        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
+        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)
         {
             var UserPreloadingProcessIdQueue = new Queue<string>();
             UserPreloadingProcessIdQueue.Enqueue(userPreloadingProcess.UserPreloadingProcessId);

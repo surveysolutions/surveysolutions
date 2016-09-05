@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
                 DeviceId = deviceId,
                 IsArchived = isArchived,
                 Supervisor = new UserLight(supervisor.PublicKey, supervisor.UserName),
-                Roles = new HashSet<UserRoles>() { UserRoles.Operator } 
+                Roles = new HashSet<UserRoles>() { UserRoles.Interviewer } 
             };
         }
     }

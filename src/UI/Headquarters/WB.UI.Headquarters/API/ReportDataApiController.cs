@@ -17,7 +17,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 
-namespace WB.UI.Headquarters.API  
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.API
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
+        private readonly IIdentityManager identityManager;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
@@ -41,7 +43,7 @@ namespace WB.UI.Headquarters.API
 
         public ReportDataApiController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
+            IIdentityManager identityManager,
             ILogger logger,
             ISurveysAndStatusesReport surveysAndStatusesReport,
             IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
@@ -52,8 +54,9 @@ namespace WB.UI.Headquarters.API
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.surveysAndStatusesReport = surveysAndStatusesReport;
             this.headquartersTeamsAndStatusesReport = headquartersTeamsAndStatusesReport;
             this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
@@ -70,7 +73,7 @@ namespace WB.UI.Headquarters.API
         {
             var input = new TeamsAndStatusesInputModel
             {
-                ViewerId = this.GlobalInfo.GetCurrentUser().Id,
+                ViewerId = this.identityManager.CurrentUserId,
                 Orders = data.SortOrder,
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
@@ -117,7 +120,7 @@ namespace WB.UI.Headquarters.API
 
             var input = new QuantityByInterviewersReportInputModel
             {
-               SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+               SupervisorId = data.SupervisorId ?? this.identityManager.CurrentUserId,
                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                Page = data.PageIndex,
                PageSize = data.PageSize,
@@ -158,7 +161,7 @@ namespace WB.UI.Headquarters.API
             {
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
-                SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+                SupervisorId = data.SupervisorId ?? this.identityManager.CurrentUserId,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 QuestionnaireVersion = data.QuestionnaireVersion,
                 QuestionnaireId = data.QuestionnaireId,
@@ -205,7 +208,7 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
                 EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                SupervisorId = input.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id
+                SupervisorId = input.SupervisorId ?? this.identityManager.CurrentUserId
             };
 
             return this.speedReport.Load(inputParameters);
@@ -233,7 +236,7 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
         {
-            var teamLeadName = this.GlobalInfo.GetCurrentUser().Name;
+            var teamLeadName = this.identityManager.CurrentUserName;
 
             var input = new SurveysAndStatusesReportInputModel
             {

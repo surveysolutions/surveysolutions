@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class AttachmentsApiV2Controller : ApiController
     {
         private readonly IAttachmentContentService attachmentContentService;

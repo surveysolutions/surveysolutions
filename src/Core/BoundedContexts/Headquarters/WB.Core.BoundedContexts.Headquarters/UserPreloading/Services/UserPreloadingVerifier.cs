@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var archivedInterviewerNamesMappedOnSupervisorName = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 userStorage.Query(
                     _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Operator))
+                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Interviewer))
                             .Select(
                                 u => new {u.UserName, SupervisorName = u.Supervisor == null ? "" : u.Supervisor.Name}))
                     .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower())
@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (desiredRole != UserRoles.Operator)
+            if (desiredRole != UserRoles.Interviewer)
                 return false;
 
             if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(userPreloadingDataRecord.Login.ToLower()))
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             switch (desiredRole)
             {
-                case UserRoles.Operator:
+                case UserRoles.Interviewer:
                     return archivedSupervisorNames.Contains(userPreloadingDataRecord.Login.ToLower());
                 case UserRoles.Supervisor:
                     return
@@ -238,14 +238,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            return role == UserRoles.Undefined;
+            return role == 0;
         }
 
         private bool SupervisorVerification(IList<UserPreloadingDataRecord> data,
             HashSet<string> activeSupervisors, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (role != UserRoles.Operator)
+            if (role != UserRoles.Interviewer)
                 return false;
 
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor))

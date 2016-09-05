@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -8,9 +9,10 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using Microsoft.AspNet.Identity.Owin;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -21,49 +23,41 @@ using WB.UI.Shared.Web.Attributes;
 namespace WB.UI.Headquarters.Controllers
 {
     [ValidateInput(false)]
+    [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer")]
     public class AccountController : TeamController
     {
         public AccountController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
             ILogger logger,
-            IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+            IIdentityManager identityManager)
+            : base(commandService, logger, identityManager)
         {
         }
 
         [HttpGet]
-        [Authorize]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var userRoles = new string[0];//Roles.GetRolesForUser(this.authentication.GetCurrentUser().Name);
+            var roleForCurrentUser = await this.identityManager.GetRoleForCurrentUserAsync();
 
-            bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
-            bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
-            bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
-            bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
-
-            if (isSupervisor)
+            switch (roleForCurrentUser)
             {
-                return this.RedirectToAction("Index", "Survey");
-            }
+                case UserRoles.Headquarter:
+                    return this.RedirectToAction("SurveysAndStatuses", "HQ");
 
-            if (isHeadquarter)
-            {
-                return this.RedirectToAction("SurveysAndStatuses", "HQ");
-            }
+                case UserRoles.Supervisor:
+                    return this.RedirectToAction("Index", "Survey");
 
-            if (isObserver || isAdmin)
-            {
-                return this.RedirectToAction("Index", "Headquarters");
-            }
+                case UserRoles.Administrator:
+                case UserRoles.Observer:
+                    return this.RedirectToAction("Index", "Headquarters");
 
-            return this.RedirectToAction("NotFound", "Error");
+                default:
+                    return this.RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpGet]
-        [NoTransaction]
+        [AllowAnonymous]
         public ActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
@@ -72,107 +66,105 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        [AllowAnonymous]
+        public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
+            this.ViewBag.ReturnUrl = returnUrl;
+
+            if (!ModelState.IsValid)
             {
-                var isInterviewer = Roles.GetRolesForUser(model.UserName).Contains(UserRoles.Operator.ToString());
-
-                if (isInterviewer)
-                    this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
-                else
-                {
-                    //this.authentication.SignIn(model.UserName, false);
-                    return this.RedirectToLocal(returnUrl);
-                }
+                return View(model);
             }
-            else this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
-
-            return this.View(model);
+            
+            var signInResult = await this.identityManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
+            switch (signInResult)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                default:
+                    ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
+                    return View(model);
+            }
         }
 
         public ActionResult LogOff()
         {
-            //this.authentication.SignOut();
+            this.identityManager.SignOut();
             return this.Redirect("~/");
         }
 
+        [Authorize(Roles = @"Administrator, Headquarter")]
         public ActionResult Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var currentUser = GetUserById(GlobalInfo.GetCurrentUser().Id);
+            var currentUser = this.identityManager.CurrentUser;
 
-            if (currentUser == null || !(GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
-                throw new HttpException(404, string.Empty);
-
-            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email, 
-                PersonName = currentUser.PersonName, PhoneNumber = currentUser.PhoneNumber});
+            return View(new UserEditModel()
+            {
+                Id = currentUser.Id,
+                Email = currentUser.Email,
+                PersonName = currentUser.FullName,
+                PhoneNumber = currentUser.PhoneNumber
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult Manage(UserEditModel model)
+        public async Task<ActionResult> Manage(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
             if (this.ModelState.IsValid)
             {
-                this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
+                await this.UpdateAccountAsync(model);
                 this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
             }
             
             return this.View(model);
         }
 
-        
-        [Authorize(Roles = "Administrator, Observer")]
-        public ActionResult ObservePerson(string personName)
-        {
-            if (string.IsNullOrEmpty(personName)) 
-                throw new HttpException(404, string.Empty);
-            
-            var user = Membership.GetUser(personName);
-            if (user == null) 
-                throw new HttpException(404, string.Empty);
-            
-            var currentUser = GlobalInfo.GetCurrentUser().Name;
 
-            var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
-            var userRoles = Roles.GetRolesForUser(user.UserName);
-            bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
-            
-            if (invalidTargetUser) 
+        [Authorize(Roles = "Administrator, Observer")]
+        public async Task<ActionResult> ObservePerson(string personName)
+        {
+            if (string.IsNullOrEmpty(personName))
                 throw new HttpException(404, string.Empty);
-            bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+
+            var user = this.identityManager.GetUserByName(personName);
+            if (user == null)
+                throw new HttpException(404, string.Empty);
+
+            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
             
+            if (new[] { UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer }.Contains(currentUserRole))
+                throw new HttpException(404, string.Empty);
+
             //do not forget pass current user to display you are observing
-            //this.authentication.SignIn(user.UserName, false, currentUser);
-            
-            return isHeadquarter ? 
-                this.RedirectToAction("SurveysAndStatuses", "HQ") : 
+            await this.identityManager.SignInAsObserverAsync(personName);
+
+            return this.identityManager.IsCurrentUserHeadquarter ?
+                this.RedirectToAction("SurveysAndStatuses", "HQ") :
                 this.RedirectToAction("Index", "Survey");
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]
-        public ActionResult ReturnToObserver()
+        public async ActionResult ReturnToObserver()
         {
-            var currentUserIdentity = (User.Identity as CustomIdentity);
-
-            if (currentUserIdentity == null || string.IsNullOrEmpty(currentUserIdentity.ObserverName))
+            if (!this.identityManager.IsCurrentUserObserver)
                 throw new HttpException(404, string.Empty);
-            
-            var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+
+            var alowedRoles = new [] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
             var userRoles = Roles.GetRolesForUser(currentUserIdentity.ObserverName);
 
             bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
 
-            if (!targetUserInValidRole) 
+            if (!targetUserInValidRole)
                 throw new HttpException(404, string.Empty);
-            
-            //this.authentication.SignIn(currentUserIdentity.ObserverName, false);
+
+            await this.identityManager.SignInBackFromObserverAsync();
             return this.RedirectToAction("Index", "Headquarters");
         }
 

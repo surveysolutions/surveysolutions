@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 UserName = "apiTest",
                 Password = "12345",
                 ConfirmPassword = "12345",
-                Id = userId
+                Id = userId.ToString()
             };
 
             var user = new UserView()
@@ -35,9 +35,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             };
 
             userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
-            globalInfoProvider.Setup(x => x.IsHeadquarter).Returns(false);
-            globalInfoProvider.Setup(x => x.IsSupervisor).Returns(false);
-            globalInfoProvider.Setup(x => x.GetCurrentUser()).Returns(new UserLight(userId, "t"));
 
             controller = CreateApiUserController(commandService: commandServiceMock.Object,
                 globalInfoProvider: globalInfoProvider.Object,

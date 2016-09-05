@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserListViewInputModel : ListViewModelBase
     {
-        public UserRoles Role = UserRoles.Undefined;
+        public UserRoles Role = 0;
 
         public string SearchBy { get; set; }
 

@@ -1,11 +1,9 @@
 ﻿using System.Web.Mvc;
 using Machine.Specifications;
-using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
@@ -14,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     {
         Establish context = () =>
         {
-            IGlobalInfoProvider globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_ => _.IsHeadquarter == true);
-            periodicStatusReportController = CreatePeriodicStatusReportController(globalInfoProvider: globalInfoProvider);
+            periodicStatusReportController = CreatePeriodicStatusReportController();
         };
 
         Because of = () =>

@@ -195,7 +195,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_users_role_is_undefined_Then_record_verification_error_with_code_PLU0009()
         {
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord());
-            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, role: UserRoles.Undefined);
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, role: 0);
 
             var userPreloadingVerifier =
                 CreateUserPreloadingVerifier(userPreloadingServiceMock.Object);
@@ -278,7 +278,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
                     Create.Entity.UserPreloadingSettings(), Mock.Of<ILogger>());
         }
 
-        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
+        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)
         {
             var UserPreloadingProcessIdQueue = new Queue<string>();
             UserPreloadingProcessIdQueue.Enqueue(userPreloadingProcess.UserPreloadingProcessId);

@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class User : IPlainAggregateRoot
     {
-        private static readonly UserRoles[] RolesWhichSupportArchiving = { UserRoles.Operator, UserRoles.Supervisor };
+        private static readonly UserRoles[] RolesWhichSupportArchiving = { UserRoles.Interviewer, UserRoles.Supervisor };
 
         public Guid Id { get; private set; }
 

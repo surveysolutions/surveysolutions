@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
 
             user = Create.Entity.User();
             var userDocument = Create.Entity.UserDocument(userId: Guid.NewGuid(), isArchived: true, supervisorId: supervisor.PublicKey);
-            userDocument.Roles.Add(UserRoles.Operator);
+            userDocument.Roles.Add(UserRoles.Interviewer);
             userDocumentStorage.Store(userDocument, userDocument.PublicKey.FormatGuid());
             user.SetId(userDocument.PublicKey);
         };

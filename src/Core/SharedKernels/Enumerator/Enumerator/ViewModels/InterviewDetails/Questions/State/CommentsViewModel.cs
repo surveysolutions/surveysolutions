@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         return UIResources.Interview_Headquarters_Comment_Caption;
                     case UserRoles.Supervisor:
                         return UIResources.Interview_Supervisor_Comment_Caption;
-                    case UserRoles.Operator:
+                    case UserRoles.Interviewer:
                         return UIResources.Interview_Interviewer_Comment_Caption;
                     default:
                         return UIResources.Interview_Other_Comment_Caption;

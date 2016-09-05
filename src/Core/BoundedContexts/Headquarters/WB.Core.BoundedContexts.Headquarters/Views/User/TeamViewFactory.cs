@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         private static IQueryable<UserDocument> ApplyFilterByInterviewers(string searchBy, Guid supervisorId, IQueryable<UserDocument> users)
         {
             users = users.Where(user => !user.IsArchived && !user.IsLockedBySupervisor && !user.IsLockedByHQ)
-                         .Where(user => (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId));
+                         .Where(user => (user.Roles.Any(role => role == UserRoles.Interviewer) && user.Supervisor.Id == supervisorId));
 
             users = ApplyFilterByUserName(searchBy, users);
 

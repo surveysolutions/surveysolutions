@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services;
@@ -25,12 +24,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
         private readonly IImageProcessingService imageProcessingService;
 
-        public SettingsController(ICommandService commandService, 
-            IGlobalInfoProvider globalInfo,
+        public SettingsController(ICommandService commandService,
             IPlainKeyValueStorage<CompanyLogo> logoStorage,
             IImageProcessingService imageProcessingService,
             ILogger logger)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.logoStorage = logoStorage;
             this.imageProcessingService = imageProcessingService;

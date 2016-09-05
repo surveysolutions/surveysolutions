@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     () => userPreloadingService.IncrementCreatedUsersCount(id));
             }
 
-            var interviewersToCreate = data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Operator).ToArray();
+            var interviewersToCreate = data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Interviewer).ToArray();
 
             foreach (var interviewerToCreate in interviewersToCreate)
             {
@@ -159,14 +159,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             {
                 commandService.Execute(new CreateUserCommand(Guid.NewGuid(), interviewerToCreate.Login,
                     passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email,
-                    new[] { UserRoles.Operator },
+                    new[] { UserRoles.Interviewer },
                     false,
                     false, supervisor,
                     interviewerToCreate.FullName, interviewerToCreate.PhoneNumber));
                 return;
             }
 
-            if (!archivedInterviewers.Roles.Contains(UserRoles.Operator))
+            if (!archivedInterviewers.Roles.Contains(UserRoles.Interviewer))
                 throw new UserPreloadingException(
                     String.Format("archived user '{0}' is in role '{1}' but must be in role interviewer",
                         archivedInterviewers.UserName, string.Join(",", archivedInterviewers.Roles)));
