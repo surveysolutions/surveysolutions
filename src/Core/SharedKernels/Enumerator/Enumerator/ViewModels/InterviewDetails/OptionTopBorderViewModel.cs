@@ -4,29 +4,19 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class OptionTopBorderViewModel<T> : OptionBorderViewModel<T> where T : QuestionAnswered
+    public class OptionBorderViewModel<T> : ICompositeEntity where T : QuestionAnswered
     {
-        public OptionTopBorderViewModel(QuestionStateViewModel<T> questionState) : base(questionState)
-        {
-        }
-    }
-
-    public class OptionBottomBorderViewModel<T> : OptionBorderViewModel<T> where T : QuestionAnswered
-    {
-        public OptionBottomBorderViewModel(QuestionStateViewModel<T> questionState) : base(questionState)
-        {
-        }
-    }
-
-    public abstract class OptionBorderViewModel<T> : ICompositeEntity where T : QuestionAnswered
-    {
-        public OptionBorderViewModel(QuestionStateViewModel<T> questionState)
+        public OptionBorderViewModel(QuestionStateViewModel<T> questionState,
+            bool isTop)
         {
             if (questionState == null) throw new ArgumentNullException(nameof(questionState));
 
             this.QuestionState = questionState;
+            this.IsTop = isTop;
         }
 
         public QuestionStateViewModel<T> QuestionState { get; set; }
+
+        public bool IsTop { get; set; }
     }
 }

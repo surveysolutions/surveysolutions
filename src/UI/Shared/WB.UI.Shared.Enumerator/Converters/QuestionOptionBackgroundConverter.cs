@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.Converters
                     return isTop ? Resource.Drawable.question_option_top_border_invalid : Resource.Drawable.question_option_bottom_border_invalid;
 
                 case QuestionStateStyle.Answered:
-                    return Resource.Drawable.question_text_question;
+                    return Resource.Drawable.question_option_corner_answered;
 
                 default:
                     return Resource.Drawable.question_text_question;
