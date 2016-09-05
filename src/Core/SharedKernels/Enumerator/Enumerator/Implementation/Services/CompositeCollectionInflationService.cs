@@ -24,6 +24,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     collection.Add(compositeItem.QuestionState.Header);
                     if (compositeItem.InstructionViewModel.HasInstructions)
                         collection.Add(compositeItem.InstructionViewModel);
+
+                    collection.Add(compositeItem);
+
                     var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
                     if (compositeItemWithChildren != null)
                     {

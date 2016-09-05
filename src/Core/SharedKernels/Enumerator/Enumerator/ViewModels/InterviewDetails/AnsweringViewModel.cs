@@ -58,7 +58,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 this.StartInProgressIndicator();
-
                 await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
 
                 lock (this.cancellationLockObject)
