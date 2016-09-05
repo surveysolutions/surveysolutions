@@ -191,21 +191,21 @@
   <style name="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
 
-  <style name="Interview_Question_Answer_Option_Bottom">
+  <style name="Interview_Question_Answer_Option_Bottom" parent="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
 
-  <style name="Interview_Question_Answer_Option_Top">
+  <style name="Interview_Question_Answer_Option_Top" parent="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
+
 
   <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">0dp</item>
