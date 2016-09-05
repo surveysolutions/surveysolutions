@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public QuestionInstructionViewModel QuestionInstructionViewModel()
         {
-            return new QuestionInstructionViewModel();
+            return Mock.Of<QuestionInstructionViewModel>();
         }
     }
 }
