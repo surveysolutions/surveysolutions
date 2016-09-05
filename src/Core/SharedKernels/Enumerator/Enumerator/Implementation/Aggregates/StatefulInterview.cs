@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -296,8 +297,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
-            ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
+
+            invariants.Properties.ThrowIfInterviewHardDeleted();
+            invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -729,7 +733,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            ThrowIfInterviewHardDeleted();
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
+
+            invariants.Properties.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             var answerDtos = synchronizedInterview
                 .Answers
