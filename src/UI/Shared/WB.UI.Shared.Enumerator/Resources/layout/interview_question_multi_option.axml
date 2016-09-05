@@ -7,14 +7,12 @@
               local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   
   <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+                local:MvxBind="
+                  Visible If(HasOptions, false, true)
+                  BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
         
     <TextView style="@style/Interview_Question_EmptyOptions"
               local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
 
   </LinearLayout>
-
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
 </LinearLayout>
