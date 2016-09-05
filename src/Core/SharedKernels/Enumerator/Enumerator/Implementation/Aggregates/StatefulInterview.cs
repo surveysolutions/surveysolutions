@@ -1522,8 +1522,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int GetRosterSortIndex(Identity rosterIdentity)
         {
             return this.sortIndexesOfRosterInstanses.ContainsKey(rosterIdentity)
-                ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.Last()
-                : (int)rosterIdentity.RosterVector.Last();
+                ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.LastOrDefault()
+                : (int)rosterIdentity.RosterVector.LastOrDefault();
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
