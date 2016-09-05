@@ -10,21 +10,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     internal class InterviewProperties
     {
         public InterviewProperties(Guid id, Guid interviewerId, InterviewStatus status,
-            bool wasCompleted, bool wasHardDeleted, bool receivedByInterviewer)
+            bool isReceivedByInterviewer, bool isCompleted, bool isHardDeleted)
         {
             this.Id = id;
             this.InterviewerId = interviewerId != Guid.Empty ? interviewerId : null as Guid?;
             this.Status = status;
-            this.WasCompleted = wasCompleted;
-            this.WasHardDeleted = wasHardDeleted;
-            this.ReceivedByInterviewer = receivedByInterviewer;
+            this.IsReceivedByInterviewer = isReceivedByInterviewer;
+            this.IsCompleted = isCompleted;
+            this.IsHardDeleted = isHardDeleted;
         }
 
         public Guid Id { get; }
         public Guid? InterviewerId { get; }
         public InterviewStatus Status { get; }
-        public bool WasCompleted { get; }
-        public bool WasHardDeleted { get; }
-        public bool ReceivedByInterviewer { get; }
+        public bool IsReceivedByInterviewer { get; }
+        public bool IsCompleted { get; }
+        public bool IsHardDeleted { get; }
     }
 }

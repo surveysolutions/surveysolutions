@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void ThrowIfInterviewWasCompleted()
         {
-            if (this.InterviewProperties.WasCompleted)
+            if (this.InterviewProperties.IsCompleted)
                 throw new InterviewException(
                     $"Interview was completed by interviewer and cannot be deleted. InterviewId: {this.InterviewProperties.Id}");
         }
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void ThrowIfInterviewHardDeleted()
         {
-            if (this.InterviewProperties.WasHardDeleted)
+            if (this.InterviewProperties.IsHardDeleted)
                 throw new InterviewException(
                     $"Interview {this.InterviewProperties.Id} status is hard deleted.",
                     InterviewDomainExceptionType.InterviewHardDeleted);
@@ -62,14 +62,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void ThrowIfInterviewReceivedByInterviewer()
         {
-            if (this.InterviewProperties.ReceivedByInterviewer)
+            if (this.InterviewProperties.IsReceivedByInterviewer)
                 throw new InterviewException(
                     $"Can't modify Interview {this.InterviewProperties.Id} on server, because it received by interviewer.");
         }
 
         public void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
         {
-            ThrowIfInterviewHardDeleted();
+            this.ThrowIfInterviewHardDeleted();
             switch (interviewStatus)
             {
                 case InterviewStatus.Completed:
@@ -102,10 +102,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                         InterviewStatus.RejectedByHeadquarters,
                         InterviewStatus.SupervisorAssigned);
                     return;
+                default:
+                    throw new InterviewException(
+                        $"Status {interviewStatus} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {this.InterviewProperties.Id}",
+                        InterviewDomainExceptionType.StatusIsNotOneOfExpected);
             }
-            throw new InterviewException(
-                $"Status {interviewStatus} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {this.InterviewProperties.Id}",
-                InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
     }
 }
