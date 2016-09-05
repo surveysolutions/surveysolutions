@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -1921,7 +1922,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
         {
-            ThrowIfOtherUserIsResponsible(userId);
+            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
+            InterviewInvariants invariants = new InterviewInvariants(properties);
+
+            invariants.Properties.ThrowIfOtherInterviewerIsResponsible(userId);
 
             SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
@@ -1978,15 +1982,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
             ApplyValidationEvent(valid);
-        }
-
-        private void ThrowIfOtherUserIsResponsible(Guid userId)
-        {
-            if (this.interviewerId != Guid.Empty && userId != this.interviewerId)
-                throw new InterviewException(
-                    string.Format(
-                        "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
-                        userId, this.interviewerId), InterviewDomainExceptionType.OtherUserIsResponsible);
         }
 
         private void ApplyValidationEvent(bool isValid)
@@ -4808,5 +4803,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .Union(answeredOptions.Yes.Select(x => new AnsweredYesNoOption(x, true)))
                     .ToArray();
         }
+
+        private InterviewEntities.InterviewProperties BuildInterviewProperties()
+            => new InterviewEntities.InterviewProperties(
+                interviewerId: this.interviewerId);
     }
 }
