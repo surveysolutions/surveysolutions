@@ -4,15 +4,15 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+              local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .;">
   
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="
-                  Visible If(HasOptions, false, true)
+                  Hidden HasOptions;
                   BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
         
     <TextView style="@style/Interview_Question_EmptyOptions"
-              local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
+              local:MvxBind="Hidden HasOptions; Text Localization('Interview_LinkedQuestion_Empty');"/>
 
   </LinearLayout>
 </LinearLayout>
