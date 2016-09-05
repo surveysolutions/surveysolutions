@@ -1184,8 +1184,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1206,8 +1206,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1229,8 +1229,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1254,8 +1254,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1279,8 +1279,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1306,8 +1306,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1334,8 +1334,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1361,8 +1361,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1386,8 +1386,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1407,8 +1407,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1430,8 +1430,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1457,8 +1457,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1490,8 +1490,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewApprovedByHQ();
@@ -1517,8 +1517,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
 
@@ -1542,8 +1542,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         //todo should respect changes calculated in ExpressionState
         public void ReevaluateSynchronizedInterview()
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
 
@@ -1570,8 +1570,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SwitchTranslation(SwitchTranslation command)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             
@@ -1644,8 +1644,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -1658,8 +1658,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -1672,8 +1672,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -1686,8 +1686,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AssignSupervisor(Guid userId, Guid supervisorId)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
@@ -1698,8 +1698,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
@@ -1714,8 +1714,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Delete(Guid userId)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewWasCompleted();
@@ -1736,8 +1736,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CancelByHQSynchronization(Guid userId)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
 
@@ -1750,8 +1750,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void MarkInterviewAsReceivedByInterviwer(Guid userId)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
 
@@ -1770,8 +1770,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Restore(Guid userId)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
@@ -1782,8 +1782,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Restart(Guid userId, string comment, DateTime restartTime)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
@@ -1794,8 +1794,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Approve(Guid userId, string comment, DateTime approveTime)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
@@ -1808,8 +1808,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Reject(Guid userId, string comment, DateTime rejectTime)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
@@ -1822,8 +1822,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HqApprove(Guid userId, string comment)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
@@ -1834,8 +1834,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void UnapproveByHeadquarters(Guid userId, string comment)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedByHeadquarters);
@@ -1889,8 +1889,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HqReject(Guid userId, string comment)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
@@ -1901,8 +1901,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
@@ -1917,8 +1917,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.SetQuestionnaireProperties(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
 
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(interviewDto.QuestionnaireId,
@@ -2023,8 +2023,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             invariants.Properties.ThrowIfOtherInterviewerIsResponsible(userId);
 
@@ -2063,8 +2063,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            InterviewEntities.InterviewProperties properties = this.BuildInterviewProperties();
-            InterviewInvariants invariants = new InterviewInvariants(properties);
+            var properties = this.BuildInterviewProperties();
+            var invariants = new InterviewInvariants(properties);
 
             if (this.status == InterviewStatus.Deleted)
                 this.Restore(userId);
@@ -4811,7 +4811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToArray();
         }
 
-        private InterviewEntities.InterviewProperties BuildInterviewProperties()
+        protected InterviewEntities.InterviewProperties BuildInterviewProperties()
             => new InterviewEntities.InterviewProperties(
                 id: this.EventSourceId,
                 interviewerId: this.interviewerId,
