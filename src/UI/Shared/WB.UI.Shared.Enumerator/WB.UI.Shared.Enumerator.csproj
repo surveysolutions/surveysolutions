@@ -227,12 +227,12 @@
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="Converters\RoleToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
-    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
@@ -1104,6 +1104,16 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_option_corner_answered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_invalid.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -8,16 +8,12 @@
         android:bottom="@dimen/Interview_Question_Option_vertical_padding"
         android:left="@dimen/Interview_Question_Answer_background_padding"
         android:right="@dimen/Interview_Question_Answer_background_padding" />
-      <solid android:color="@android:color/transparent"/>
-      <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+      <solid android:color="@color/commentSupervisorTextColor"/>
     </shape>
   </item>
   <item>
     <shape android:shape="rectangle">
       <solid android:color="@color/sections_list_background_color" />
-      <stroke
-        android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
-        android:color="@color/interview_question_yesno_not_selected_text"/>
       <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
     </shape>
   </item>

@@ -102,10 +102,10 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
+            registry.AddOrOverwrite("QuestionCornerOptionBackground", new QuestionCornerOptionBackgroundConverter());
             registry.AddOrOverwrite("QuestionOptionBackground", new QuestionOptionBackgroundConverter());
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
-            registry.AddOrOverwrite("ViewOptionStyleBackground", new ViewOptionStyleBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
         }
 
