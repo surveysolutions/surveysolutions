@@ -4816,8 +4816,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 id: this.EventSourceId,
                 interviewerId: this.interviewerId,
                 status: this.status,
-                wasCompleted: this.wasCompleted,
-                wasHardDeleted: this.wasHardDeleted,
-                receivedByInterviewer: this.receivedByInterviewer);
+                isCompleted: this.wasCompleted,
+                isHardDeleted: this.wasHardDeleted,
+                isReceivedByInterviewer: this.receivedByInterviewer);
     }
 }
