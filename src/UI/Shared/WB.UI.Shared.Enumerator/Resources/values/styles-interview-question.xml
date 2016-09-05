@@ -198,7 +198,7 @@
 
   <style name="Interview_Question_Answer_Option_Corner" parent="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_background_corners_radius</item>
   </style>
 
   <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
