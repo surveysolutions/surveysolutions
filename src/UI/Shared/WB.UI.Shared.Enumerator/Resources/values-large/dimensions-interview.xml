@@ -21,7 +21,6 @@
   <dimen name="Interview_Question_Errors_margin_bottom">8dp</dimen>
 
   <dimen name="Interview_Question_Option_vertical_padding">4dp</dimen>
-  <dimen name="Interview_Question_Option_Frame_Element_vertical_padding">6dp</dimen>
   
   <dimen name="Interview_Question_Answer_background_padding">16dp</dimen>
   <dimen name="Interview_Question_Answer_half_background_padding">8dp</dimen>
