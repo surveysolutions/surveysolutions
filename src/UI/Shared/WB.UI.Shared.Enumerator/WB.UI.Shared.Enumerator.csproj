@@ -1041,10 +1041,7 @@
     <AndroidResource Include="Resources\layout\interview_question_comments.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_option_top_rounded_corner.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_option_bottom_rounded_corner.axml">
+    <AndroidResource Include="Resources\layout\interview_question_option_rounded_corner.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__progressbar.axml" />
@@ -1102,6 +1099,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_comment_editor.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_corner_answered.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
