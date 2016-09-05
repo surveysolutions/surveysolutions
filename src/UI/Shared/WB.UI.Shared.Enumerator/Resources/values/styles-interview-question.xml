@@ -233,6 +233,7 @@
   <style name="Interview_Question_YesNo_Title" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_YesNo_paddingLeft</item>
     <item name="android:orientation">horizontal</item>
   </style> 

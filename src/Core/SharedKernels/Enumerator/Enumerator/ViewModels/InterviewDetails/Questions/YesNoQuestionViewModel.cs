@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -18,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -25,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class YesNoQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         IDisposable,
+        ICompositeQuestionWithChildren,
         ILiteEventHandler<YesNoQuestionAnswered>
     {
         private readonly Guid userId;
@@ -38,9 +42,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool areAnswersOrdered;
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
+        private readonly QuestionStateViewModel<YesNoQuestionAnswered> questionState;
 
         public AnsweringViewModel Answering { get; set; }
-        public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }
+
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
         public List<YesNoQuestionOptionViewModel> Options { get; set; }
 
         public YesNoQuestionViewModel(IPrincipal principal,
@@ -50,7 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             IUserInteractionService userInteraction,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel,
+            QuestionInstructionViewModel instructionViewModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -61,10 +71,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.Answering = answering;
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.InstructionViewModel = instructionViewModel;
         }
 
         public Identity Identity { get; private set; }
@@ -76,8 +87,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             interviewIdAsString = interviewId;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -123,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? Array.IndexOf(answerModel.Answers.Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
 
-            var optionViewModel = new YesNoQuestionOptionViewModel(this, this.QuestionState)
+            var optionViewModel = new YesNoQuestionOptionViewModel(this, this.questionState)
             {
                 Value = model.Value,
                 Title = model.Title,
@@ -280,6 +293,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.areAnswersOrdered && @event.QuestionId == this.Identity.Id && @event.RosterVector.Identical(this.Identity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
+            }
+        }
+
+        public CompositeCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                result.Add(new OptionTopBorderViewModel<YesNoQuestionAnswered>(this.questionState));
+                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
+                result.Add(new OptionBottomBorderViewModel<YesNoQuestionAnswered>(this.questionState));
+                return result;
             }
         }
 
