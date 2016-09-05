@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 QuestionStateMock.Object,
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 AnsweringViewModelMock.Object,
+                Mock.Of<QuestionInstructionViewModel>(),
                 Mock.Of<ILiteEventRegistry>());
         }
 
