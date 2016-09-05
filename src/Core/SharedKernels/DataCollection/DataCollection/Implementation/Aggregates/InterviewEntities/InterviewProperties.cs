@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    internal class InterviewProperties
+    public class InterviewProperties
     {
         public InterviewProperties(Guid id, Guid interviewerId, InterviewStatus status,
             bool isReceivedByInterviewer, bool isCompleted, bool isHardDeleted)
