@@ -23,13 +23,15 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {
+        private readonly IIdentityManager identityManager;
         private readonly IRestService designerQuestionnaireApiRestService;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private IQuestionnaireImportService importService;
 
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService)
-            : base(commandService, globalInfo, logger)
+        public TemplateController(ICommandService commandService, IIdentityManager identityManager, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.importService = importService;
@@ -45,9 +47,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private RestCredentials designerUserCredentials
         {
-            get { return (RestCredentials)this.Session[this.GlobalInfo.GetCurrentUser().Name]; }
+            get { return (RestCredentials)this.Session[this.identityManager.CurrentUserName]; }
 
-            set { this.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
+            set { this.Session[this.identityManager.CurrentUserName] = value; }
         }
 
         public ActionResult Import()

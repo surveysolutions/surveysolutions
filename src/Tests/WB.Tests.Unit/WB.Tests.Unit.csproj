@@ -1644,10 +1644,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\ImportExportControllerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\QuestionnaireRoleProviderTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\QuestionnaireMembershipProviderTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\when_initialize_and_all_provider_params_specified.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />

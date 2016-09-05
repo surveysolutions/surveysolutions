@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
+                ResponsibleRole = responsible?.Roles.FirstOrDefault() ?? 0
             };
 
             return interviewSummary;
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                     interview.ResponsibleId = @event.Payload.InterviewerId.Value;
                     interview.ResponsibleName = interviewerName;
-                    interview.ResponsibleRole = UserRoles.Operator;
+                    interview.ResponsibleRole = UserRoles.Interviewer;
                     interview.IsAssignedToInterviewer = true;
 
                     interview.ReceivedByInterviewer = false;

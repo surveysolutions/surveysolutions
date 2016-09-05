@@ -1,6 +1,10 @@
-﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.UI.Headquarters.Resources
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@{
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+}
 
 @model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewDetailsView
 
@@ -8,13 +12,13 @@
     InterviewStatus status = Model.Status;
     bool isNotAssignedToInterviewer = !Model.IsAssignedToInterviewer;
 
-    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
-    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
+    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
 
-    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
-    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
+    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
 
-    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator);
 
     bool isShowInterviewerSelectForRejectBySupervisor = isSupervisorRedjectSupport && isNotAssignedToInterviewer;
 }
@@ -34,7 +38,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-success" data-bind="click: @(GlobalInfo.IsSupervisor ? "approveInterview" : "hQApproveInterview")">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                    <button class="btn btn-success" data-bind="click: @(identityManager.IsCurrentUserSupervisor ? "approveInterview" : "hQApproveInterview")">@Pages.ApproveRejectPartialView_ApproveAction</button>
                 </div>
             </div>
         </div>
@@ -72,7 +76,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
+                    <button class="btn btn-danger" data-bind="click: @(identityManager.IsCurrentUserSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
                 </div>
             </div>
         </div>

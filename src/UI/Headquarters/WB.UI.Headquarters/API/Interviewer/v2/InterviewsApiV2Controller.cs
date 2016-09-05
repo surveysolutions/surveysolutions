@@ -17,25 +17,25 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewsControllerBase
     {
         public InterviewsApiV2Controller(
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            IGlobalInfoProvider globalInfoProvider,
+            IIdentityManager identityManager,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
-                globalInfoProvider: globalInfoProvider,
+                identityManager: identityManager,
                 interviewsFactory: interviewsFactory,
                 interviewPackagesService: incomingSyncPackagesQueue,
                 commandService: commandService,

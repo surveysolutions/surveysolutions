@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteSupervisor;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
@@ -20,7 +19,6 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -306,7 +304,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
          
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
-            this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();

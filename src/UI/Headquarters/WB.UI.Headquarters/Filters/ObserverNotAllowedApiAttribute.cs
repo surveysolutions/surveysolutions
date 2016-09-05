@@ -2,16 +2,20 @@
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.UI.Headquarters.Identity;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
     public class ObserverNotAllowedApiAttribute : ActionFilterAttribute
     {
+        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+
         public override void OnActionExecuting(HttpActionContext filterContext)
         {
-            if (HttpContext.Current.User.Identity.IsObserver())
+            if (this.identityManager.IsCurrentUserObserver)
             {
                 filterContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
                 {
@@ -20,6 +24,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             }
             else
                 base.OnActionExecuting(filterContext);
+        }
+    }
+
+    public class ObserverNotAllowedAttribute : ActionFilterAttribute
+    {
+        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            if (this.identityManager.IsCurrentUserObserver)
+            {
+                throw new HttpException(403, Strings.ObserverNotAllowed);
+            }
+
+            base.OnActionExecuting(actionContext);
         }
     }
 }

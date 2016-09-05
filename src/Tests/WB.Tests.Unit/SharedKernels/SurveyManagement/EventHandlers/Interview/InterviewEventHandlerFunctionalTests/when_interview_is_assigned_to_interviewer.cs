@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         It should_change_responsible_to_interviewer = () => viewState.ResponsibleId.ShouldEqual(interviewerId);
 
-        It should_set_responsible_role_to_Operator = () => viewState.ResponsibleRole.ShouldEqual(UserRoles.Operator);
+        It should_set_responsible_role_to_Operator = () => viewState.ResponsibleRole.ShouldEqual(UserRoles.Interviewer);
 
 
         static InterviewEventHandlerFunctional interviewEventHandlerFunctional;

@@ -1,6 +1,8 @@
 ﻿@using Main.Core.Entities.SubEntities
+@using Microsoft.Practices.ServiceLocation
 @using Microsoft.Security.Application
 @using Newtonsoft.Json
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
@@ -12,6 +14,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var interviewQuestions = Model.FilteredEntities.OfType<InterviewQuestionView>();
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
 }
 @section styles
 {
@@ -37,7 +40,7 @@
 
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
-        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
+        settings.Urls.Interviews = '@(identityManager.IsCurrentUserSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
         settings.Urls.InterviewersToAssign = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
 
         var filter = { filteredBy: '@Model.Filter' };
@@ -116,13 +119,13 @@
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
                 @{
-                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
-                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
+                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
 
-                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
-                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
+                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
 
-                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator);
                 }
 
                 @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
@@ -236,7 +239,11 @@ if (filter == Model.Filter)
             return false;
         }
 
-        private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
+    private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
+    {
+        var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+        if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
+        entityView.QuestionType == QuestionType.MultyOption)
         {
             if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && entityView.IsEnabled &&
                 entityView.QuestionType == QuestionType.MultyOption)

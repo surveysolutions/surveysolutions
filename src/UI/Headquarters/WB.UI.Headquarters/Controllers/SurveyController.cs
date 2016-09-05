@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -19,18 +20,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IInterviewersViewFactory interviewersFactory;
+        private readonly IIdentityManager identityManager;
 
         private readonly ITeamUsersAndQuestionnairesFactory
             teamUsersAndQuestionnairesFactory;
 
-        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-                                IInterviewersViewFactory interviewersFactory,
-                                ITeamUsersAndQuestionnairesFactory
-                                    teamUsersAndQuestionnairesFactory)
-            : base(commandService, provider, logger)
+        public SurveyController(
+            ICommandService commandService, 
+            IIdentityManager identityManager, 
+            ILogger logger,
+            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory)
+            : base(commandService, logger)
         {
-            this.interviewersFactory = interviewersFactory;
+            this.identityManager = identityManager;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }
 
@@ -44,8 +46,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Interviews()
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            this.ViewBag.CurrentUser = new UsersViewItem
+            {
+                UserId = this.identityManager.CurrentUserId,
+                UserName = this.identityManager.CurrentUserName
+            };
             return this.View(this.Filters());
         }
 
@@ -53,20 +58,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Summary;
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.identityManager.CurrentUserId));
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
-            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor);
+            Guid viewerId = this.identityManager.CurrentUserId;
 
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));

@@ -14,6 +14,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -28,19 +34,20 @@ namespace WB.UI.Headquarters.Controllers
 
         internal RestCredentials designerUserCredentials
         {
-            get { return GlobalInfo.GetDesignerUserCredentials(); }
-            set { HttpContext.Current.Session[GlobalInfo.GetCurrentUser().Name] = value; }
+            get { return this.identityManager.GetDesignerUserCredentials(); }
+            set { HttpContext.Current.Session[this.identityManager.CurrentUserName] = value; }
         }
 
         private readonly IRestService restService;
 
         public DesignerQuestionnairesApiController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
+            IIdentityManager identityManager, 
             ILogger logger, 
             IRestService restService)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.restService = restService;
         }
 

@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             UserDocument responsible = this.userStorage.GetById(originatorId.FormatGuid());
             var originatorName = responsible == null ? this.unknown : responsible.UserName;
             var originatorRole = responsible == null || !responsible.Roles.Any()
-                ? UserRoles.Undefined
+                ? 0
                 : responsible.Roles.FirstOrDefault();
 
             var interviewComment = new InterviewComment()

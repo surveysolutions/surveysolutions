@@ -4,6 +4,7 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -18,25 +19,24 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class UsersApiController : BaseApiController
     {
+        private readonly IIdentityManager identityManager;
         private readonly IInterviewersViewFactory interviewersFactory;
         private readonly ISupervisorsViewFactory supervisorsFactory;
         private readonly IUserListViewFactory usersFactory;
-        public readonly IDeleteSupervisorService deleteSupervisorService;
 
         public UsersApiController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
+            IIdentityManager identityManager,
             ILogger logger,
             IInterviewersViewFactory interviewersFactory,
             ISupervisorsViewFactory supervisorsFactory,
-            IUserListViewFactory usersFactory, 
-            IDeleteSupervisorService deleteSupervisorService)
-            : base(commandService, provider, logger)
+            IUserListViewFactory usersFactory)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.interviewersFactory = interviewersFactory;
             this.supervisorsFactory = supervisorsFactory;
             this.usersFactory = usersFactory;
-            this.deleteSupervisorService = deleteSupervisorService;
         }
 
 
@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            Guid viewerId = this.identityManager.CurrentUserId;
 
             var input = new InterviewersInputModel
             {
@@ -194,21 +194,13 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteSupervisor(DeleteSupervisorCommandRequest request)
         {
-            var response = new JsonCommandResponse();
-            try
-            {
-                this.deleteSupervisorService.DeleteSupervisor(request.SupervisorId);
-                response.IsSuccess = true;
-            }
-            catch (Exception e)
-            {
-                this.Logger.Error(e.Message, e);
+            var identityResults = this.identityManager.DeleteSupervisorAndDependentInterviewers(request.SupervisorId).ToList();
 
-                response.IsSuccess = false;
-                response.DomainException = e.Message;
-            }
-
-            return response;
+            return new JsonCommandResponse
+            {
+                IsSuccess = identityResults.All(result => result.Succeeded),
+                DomainException = string.Join(@"; ", identityResults.Select(result=>result.Errors))
+            };
         }
     }
     public class DeleteSupervisorCommandRequest 

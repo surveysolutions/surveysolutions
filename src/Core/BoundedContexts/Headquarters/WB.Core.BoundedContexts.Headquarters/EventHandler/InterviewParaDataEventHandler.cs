@@ -478,7 +478,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
-                case UserRoles.Operator: return "Interviewer";
+                case UserRoles.Interviewer: return "Interviewer";
                 case UserRoles.Supervisor: return "Supervisor";
                 case UserRoles.Headquarter: return "Headquarter";
             }

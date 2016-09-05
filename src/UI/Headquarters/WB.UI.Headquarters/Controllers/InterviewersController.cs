@@ -13,9 +13,9 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class InterviewersController : TeamController
     {
-        public InterviewersController(ICommandService commandService, IGlobalInfoProvider globalInfo, 
-            ILogger logger, IUserViewFactory userViewFactory, IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+        public InterviewersController(ICommandService commandService, 
+            ILogger logger, IIdentityManager identityManager)
+            : base(commandService, logger, identityManager)
         {
         }
        

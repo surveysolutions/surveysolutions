@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -18,11 +21,9 @@ namespace WB.UI.Headquarters.Controllers
     public class ApiUserController : TeamController
     {
         public ApiUserController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
             ILogger logger,
-            IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+            IIdentityManager identityManager)
+            : base(commandService, logger, identityManager)
         {
         }
 
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult Create(UserModel model)
+        public async Task<ActionResult> Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
-                    this.CreateApiWriterUser(model);
+                    await this.CreateUserAsync(model, UserRoles.ApiUser);
                 }
                 catch (Exception e)
                 {
@@ -61,50 +62,42 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(string id)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            var user = this.GetUserById(id);
+            var user = await this.identityManager.GetUserById(id);
 
             if (user == null) throw new HttpException(404, string.Empty);
 
             return this.View(new UserEditModel
             {
                 UserName = user.UserName,
-                Id = user.PublicKey,
+                Id = user.Id,
                 Email = user.Email,
-                IsLocked = user.IsLockedByHQ
+                IsLocked = user.IsLockedByHeadquaters
             });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(UserEditModel model)
+        public async Task<ActionResult> Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var user = this.GetUserById(model.Id);
-                if (user != null)
+                var updateResult = await this.UpdateAccountAsync(model);
+                if (updateResult.Succeeded)
                 {
-                    if (!user.IsAdmin())
-                    {
-                        this.UpdateAccount(user, model);
-                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                        return this.RedirectToAction("Index");
-                    }
-
-                    this.Error("Could not update user information because you don't have permission to perform this operation");
+                    this.Success($"Information about <b>{model.UserName}</b> successfully updated");
+                    return this.RedirectToAction("Index");
                 }
-                else
-                {
-                    this.Error("Could not update user information because current user does not exist");
-                }
+                AddErrors(updateResult);
             }
 
-            return this.View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         public ActionResult Index()

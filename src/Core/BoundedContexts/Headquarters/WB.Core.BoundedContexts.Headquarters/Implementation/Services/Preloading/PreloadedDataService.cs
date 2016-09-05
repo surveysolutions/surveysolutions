@@ -545,7 +545,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return interviewerCache[userNameLowerCase];
 
             var user = this.GetUserByName(userNameLowerCase);//assuming that user exists
-            if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
+            if (user == null || !user.Roles.Contains(UserRoles.Interviewer)) return null;
 
             interviewerCache.Add(userNameLowerCase, user);
             return user;

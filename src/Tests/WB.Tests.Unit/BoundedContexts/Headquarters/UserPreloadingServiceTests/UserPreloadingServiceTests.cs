@@ -333,10 +333,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
                 Is.EqualTo(UserRoles.Supervisor));
 
             Assert.That(interviewer,
-              Is.EqualTo(UserRoles.Operator));
+              Is.EqualTo(UserRoles.Interviewer));
 
             Assert.That(undefined,
-             Is.EqualTo(UserRoles.Undefined));
+             Is.EqualTo(0));
         }
 
         private UserPreloadingService CreateUserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage=null,

@@ -1,9 +1,9 @@
-﻿using System.Web.Http.Filters;
+using System.Web.Http.Filters;
 using Elmah;
 using Prometheus;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters
+namespace WB.UI.Headquarters.Filters
 {
     public class ElmahHandledErrorLoggerFilter : ExceptionFilterAttribute
     {

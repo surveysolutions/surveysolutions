@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.AnsweredQuestionSynchronizationDto(prefilledQuestionId, rosterVector, 2, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(hiddenQuestionId, rosterVector, 3, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(disabledQuestionId, rosterVector, 4, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
-                Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Operator)),
+                Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Interviewer)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
             };
 

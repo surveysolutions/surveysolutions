@@ -1,4 +1,6 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.UI.Headquarters.Identity
 @using WB.UI.Headquarters.Resources
 
 @{
@@ -40,7 +42,7 @@
         </div>
         <div class="well well-sm">
             <div class="btn-group">
-                @if (!(User.Identity.IsObserver()))
+                @if (!(ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver))
                 {
                     <div class="form-inline">
                         <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">

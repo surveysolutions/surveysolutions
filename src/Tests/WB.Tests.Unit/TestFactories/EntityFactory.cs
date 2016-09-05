@@ -418,7 +418,7 @@ namespace WB.Tests.Unit.TestFactories
             Guid? teamLeadId = null,
             string responsibleName = null,
             string teamLeadName = null,
-            UserRoles role = UserRoles.Operator)
+            UserRoles role = UserRoles.Interviewer)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -1075,7 +1075,7 @@ namespace WB.Tests.Unit.TestFactories
             var user = new UserDocument { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
             if (supervisorId.HasValue)
             {
-                user.Roles.Add(UserRoles.Operator);
+                user.Roles.Add(UserRoles.Interviewer);
                 user.Supervisor = new UserLight(supervisorId.Value, "supervisor");
             }
             else

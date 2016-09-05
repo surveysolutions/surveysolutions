@@ -5,20 +5,18 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class UsersApiV2Controller : UsersControllerBase
     {
         public UsersApiV2Controller(
-            IGlobalInfoProvider globalInfoProvider,
-            IUserViewFactory userViewFactory,
-            IUserWebViewFactory userInfoViewFactory) : base(
-                globalInfoProvider: globalInfoProvider,
-                userViewFactory: userViewFactory,
-                userInfoViewFactory: userInfoViewFactory)
+            IIdentityManager identityManager,
+            IUserViewFactory userViewFactory) : base(
+                identityManager: identityManager,
+                userViewFactory: userViewFactory)
         {
         }
 

@@ -202,7 +202,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void ctor_When_two_roles_are_specified_Then_raised_NewUserCreated_event_with_specified_roles()
         {
             // arrange
-            UserRoles[] twoSpecifedRoles = { UserRoles.Supervisor, UserRoles.User };
+            UserRoles[] twoSpecifedRoles = { UserRoles.Supervisor, UserRoles.Observer };
             User user = CreateUserAR();
 
             // act
@@ -218,7 +218,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             var user = new User();
             user.SetId(id??Guid.NewGuid());
-            user.CreateUser("",false, false,"",user.Id,new [] {UserRoles.Operator },null,"","","");
+            user.CreateUser("",false, false,"",user.Id,new [] {UserRoles.Interviewer },null,"","","");
             return user;
         }
 

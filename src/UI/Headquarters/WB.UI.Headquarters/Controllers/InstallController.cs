@@ -1,11 +1,11 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Shared.Web.Filters;
 
@@ -14,17 +14,16 @@ namespace WB.UI.Headquarters.Controllers
     public class InstallController : BaseController
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly IPasswordHasher passwordHasher;
+        private readonly IIdentityManager identityManager;
 
         public InstallController(ICommandService commandService,
-                                 IGlobalInfoProvider globalInfo,
                                  ISupportedVersionProvider supportedVersionProvider,
                                  ILogger logger,
-                                 IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger)
+                                 IIdentityManager identityManager)
+            : base(commandService, logger)
         {
             this.supportedVersionProvider = supportedVersionProvider;
-            this.passwordHasher = passwordHasher;
+            this.identityManager = identityManager;
         }
 
         public ActionResult Finish()
@@ -35,26 +34,28 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [PreventDoubleSubmit]
-        public ActionResult Finish(UserModel model)
+        public async Task<ActionResult> Finish(UserModel model)
         {
             if (ModelState.IsValid)
             {
-                this.CommandService.Execute(
-                    new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
-                                            password: passwordHasher.Hash(model.Password), 
-                                            email: model.Email, isLockedBySupervisor: false,
-                                            isLockedByHQ: false, roles: new[] { UserRoles.Administrator }, 
-                                            supervsor: null,
-                                            personName:model.PersonName,
-                                            phoneNumber:model.PhoneNumber));
+                var creationResult = await this.identityManager.CreateUserAsync(new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email
+                }, model.Password, UserRoles.Administrator);
 
-                //this.authentication.SignIn(model.UserName, true);
+                if (creationResult.Succeeded)
+                {
+                    await this.identityManager.SignInAsync(model.UserName, model.Password, isPersistent: false);
 
-                this.supportedVersionProvider.RememberMinSupportedVersion();
+                    this.supportedVersionProvider.RememberMinSupportedVersion();
 
-                return this.RedirectToAction("Index", "Headquarters");
+                    return this.RedirectToAction("Index", "Headquarters");
+                }
+                AddErrors(creationResult);
             }
 
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
     }

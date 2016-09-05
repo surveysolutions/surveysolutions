@@ -10,16 +10,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
     public class CommandTransformator
     {
-        private static IGlobalInfoProvider globalInfo
-        {
-            get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
-        }
+        private static IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
@@ -30,7 +26,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)
             {
-                interviewCommand.UserId = responsibleId ?? globalInfo.GetCurrentUser().Id;
+                interviewCommand.UserId = identityManager.CurrentUserId;
             }
 
             var rejectCommand = command as RejectInterviewCommand;
@@ -69,7 +65,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             Guid interviewId = Guid.NewGuid();
 
             var resultCommand = new CreateInterviewCommand(interviewId,
-                                                           globalInfo.GetCurrentUser().Id,
+                                                           identityManager.CurrentUserId,
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,

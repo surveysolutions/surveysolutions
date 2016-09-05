@@ -9,12 +9,15 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
 using Main.DenormalizerStorage;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using Microsoft.Practices.ServiceLocation;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Ninject;
+using Ninject.Activation;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -44,7 +47,6 @@ using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Headquarters;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -63,44 +65,29 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
-using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
-using WB.Infrastructure.Native;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.Implementation.Aggregates;
-
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
-[assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
+using Microsoft.AspNet.Identity.Owin;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.UI.Headquarters.Identity;
+using Constants = WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization.Constants;
+using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.UI.Headquarters
 {
-    public static class NinjectWebCommon
+    public static class NinjectConfig
     {
-        private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
-
-        public static void Start()
+        public static IKernel CreateKernel()
         {
-            DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
-            DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
-            Bootstrapper.Initialize(CreateKernel);
-        }
-
-        public static void Stop()
-        {
-            Bootstrapper.ShutDown();
-        }
-
-        private static IKernel CreateKernel()
-        {
-            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-            Global.Initialize(); // pinging global.asax to perform it's part of static initialization
-
             var useBackgroundJobForProcessingPackages = WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false);
             var interviewDetailsDataLoaderSettings =
                 new SyncPackagesProcessorBackgroundJobSetting(useBackgroundJobForProcessingPackages,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
-                    synchronizationBatchCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
-                    synchronizationParallelExecutorsCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount", @default: 1));
+                    synchronizationBatchCount:
+                        WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
+                    synchronizationParallelExecutorsCount:
+                        WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount",
+                            @default: 1));
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
@@ -113,7 +100,7 @@ namespace WB.UI.Headquarters
 
             var basePath = appDataDirectory;
             
-            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
+            var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
@@ -128,12 +115,14 @@ namespace WB.UI.Headquarters
 
             var cacheSettings = new ReadSideCacheSettings(
                 enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
-                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                esentCacheFolder:
+                    Path.Combine(appDataDirectory,
+                        WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
                 cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var kernel = new StandardKernel(
-                new NinjectSettings { InjectNonPublic = true },
+                new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
@@ -151,16 +140,21 @@ namespace WB.UI.Headquarters
                     new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
                     cacheSettings,
                     mappingAssemblies)
-            );
+                );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
-            int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
+            int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
+                ? (int?) null
+                : int.Parse(interviewCountLimitString);
 
-            var userPreloadingConfigurationSection = (UserPreloadingConfigurationSection)(WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ?? new UserPreloadingConfigurationSection());
+            var userPreloadingConfigurationSection =
+                (UserPreloadingConfigurationSection)
+                    (WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ??
+                     new UserPreloadingConfigurationSection());
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
@@ -223,7 +217,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             CreateAndRegisterEventBus(kernel);
 
-            kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
+            kernel.Bind<ITokenVerifier>()
+                .ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
@@ -240,11 +235,19 @@ namespace WB.UI.Headquarters
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
-            kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
+            var memebershipConfigSection =
+                (MembershipConfigSection)WebConfigurationManager.GetSection(@"memebership");
+            kernel.Bind<IPasswordPolicy>().ToMethod(_ => new PasswordPolicy
+            {
+                MinRequiredNonAlphanumericCharacters = memebershipConfigSection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
+                PasswordMinimumLength = memebershipConfigSection.PasswordPolicy.PasswordMinimumLength,
+                PasswordStrengthRegularExpression = memebershipConfigSection.PasswordPolicy.PasswordStrengthRegularExpression
+            }).InSingletonScope();
 
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
-            kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>().To<RestoreDeletedQuestionnaireProjectionsService>();
+            kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>()
+                .To<RestoreDeletedQuestionnaireProjectionsService>();
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -263,7 +266,22 @@ namespace WB.UI.Headquarters
                 }
             }));
 
+            kernel.Bind<IPasswordHasher>().To<AspNetPasswordHasher>();
+            kernel.Bind<IAuthenticationManager>()
+                .ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext().Authentication);
+
+            kernel.Bind<ApplicationSignInManager>().ToMethod(context => GetOwinInstance<ApplicationSignInManager>());
+            kernel.Bind<ApplicationUserManager>().ToMethod(context => GetOwinInstance<ApplicationUserManager>());
+
+            kernel.Bind<IIdentityManager>().To<IdentityManager>();
+
             return kernel;
+        }
+
+        private static T GetOwinInstance<T>()
+        {
+            var contextBase = new HttpContextWrapper(HttpContext.Current);
+            return contextBase.GetOwinContext().Get<T>();
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

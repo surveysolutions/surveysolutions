@@ -47,7 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             if (TypedDirectRouteProvider.Routes.ContainsKey(route.ControllerType))
             {
                 var controllerLevelDictionary = TypedDirectRouteProvider.Routes[route.ControllerType];
-                controllerLevelDictionary.Add(route.ActionName, route);
+                if (!controllerLevelDictionary.ContainsKey(route.ActionName))
+                    controllerLevelDictionary.Add(route.ActionName, route);
             }
             else
             {

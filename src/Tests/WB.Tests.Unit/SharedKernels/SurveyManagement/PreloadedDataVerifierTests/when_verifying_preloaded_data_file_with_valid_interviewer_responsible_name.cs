@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 UserName = "fd",
                 IsLockedByHQ = false,
                 IsLockedBySupervisor = false,
-                Roles = { UserRoles.Operator }
+                Roles = { UserRoles.Interviewer }
             };
             userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 

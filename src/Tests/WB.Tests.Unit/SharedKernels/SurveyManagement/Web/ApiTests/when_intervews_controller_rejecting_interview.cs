@@ -31,14 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 Mock.Of<IUserViewFactory>(
                     c =>
                         c.Load(Moq.It.IsAny<UserViewInputModel>()) ==
-                        new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Operator}});
-            var globalInfoProvider =
-                Mock.Of<IGlobalInfoProvider>(
-                    g => g.GetCurrentUser() == new UserLight() {Id = executorId });
+                        new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Interviewer}});
 
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userViewFactory: userViewFactory);
         };
 
         Because of = () =>
