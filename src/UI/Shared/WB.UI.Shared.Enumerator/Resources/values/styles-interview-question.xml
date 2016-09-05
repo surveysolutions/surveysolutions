@@ -83,7 +83,9 @@
   <style name="Interview_Question_Answer">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_gravity">center_horizontal</item>
+    
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_bottom</item>
   </style>
