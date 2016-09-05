@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             UserDocument responsible = this.users.GetById(userId.FormatGuid());
 
-            if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
+            if (responsible == null || !responsible.Roles.Contains(UserRoles.Interviewer))
                 return interviewStatuses;
 
             var interviewSummary = this.interviewSummares.GetById(interviewId);
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 comment,
                 statusOriginator == null ? this.unknown : statusOriginator.UserName,
                 statusOriginator == null || !statusOriginator.Roles.Any()
-                    ? UserRoles.Undefined
+                    ? 0
                     : statusOriginator.Roles.First(),
                 timeSpanWithPreviousStatus,
                 supervisorName,

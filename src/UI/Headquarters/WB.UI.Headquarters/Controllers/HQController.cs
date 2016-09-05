@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Resources;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -30,19 +30,23 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IIdentityManager identityManager;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
-        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
+        public HQController(ICommandService commandService, 
+            IIdentityManager identityManager, 
+            ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IQuestionnaireVersionProvider questionnaireVersionProvider)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;
@@ -96,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.CommandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion: newVersion, userId: this.GlobalInfo.GetCurrentUser().Id));
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.identityManager.CurrentUserId));
             }
             catch (QuestionnaireException exception)
             {
@@ -121,8 +125,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult TakeNew(Guid id, long? version)
         {
             Guid key = id;
-            UserLight user = this.GlobalInfo.GetCurrentUser();
-            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, user.Id));
+            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, this.identityManager.CurrentUserId));
             return this.View(model);
         }
 
@@ -160,12 +163,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

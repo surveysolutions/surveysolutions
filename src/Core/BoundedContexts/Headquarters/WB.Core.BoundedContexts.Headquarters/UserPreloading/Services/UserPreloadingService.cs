@@ -331,9 +331,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if ("supervisor".Equals(dataRecord.Role,StringComparison.InvariantCultureIgnoreCase))
                 return UserRoles.Supervisor;
             if ("interviewer".Equals(dataRecord.Role,StringComparison.InvariantCultureIgnoreCase))
-                return UserRoles.Operator;
+                return UserRoles.Interviewer;
 
-            return UserRoles.Undefined;
+            return 0;
         }
 
         private UserPreloadingProcess GetUserPreloadingProcessAndThrowIfMissing(string preloadingProcessId)

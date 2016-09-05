@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -7,37 +11,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserListViewFactory : IUserListViewFactory
     {
-        private readonly IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor;
+        private readonly IIdentityManager identityManager;
 
-        public UserListViewFactory(IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor)
+        public UserListViewFactory(IIdentityManager identityManager)
         {
-            this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
+            this.identityManager = identityManager;
         }
 
         public UserListView Load(UserListViewInputModel input)
         {
-            var users = this.readSideRepositoryIndexAccessor.Query(_ =>
-            {
-                var allUsers = ApplyFilter(_, input);
+            input.Order = string.IsNullOrEmpty(input.Order) ? nameof(ApplicationUser.UserName) : input.Order;
 
-                allUsers = allUsers.OrderUsingSortExpression(input.Order)
+            Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>> query = _ => ApplyFilter(_, input);
+
+            Func<IQueryable<ApplicationUser>, List<ApplicationUser>> pagedAndOrderedQuery = _ =>
+            {
+                _ = query(_).OrderUsingSortExpression(input.Order)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize);
 
-                return allUsers.ToList();
-            }).Select(x => new UserListItem(
-                        id: x.PublicKey,
-                        creationDate: x.CreationDate,
-                        email: x.Email,
-                        isLockedBySupervisor: x.IsLockedBySupervisor,
-                        isLockedByHQ: x.IsLockedByHQ,
-                        name: x.UserName,
-                        roles: x.Roles.ToList(),
-                        deviceId: x.DeviceId
-                        ));
+                return _.ToList();
+            };
 
 
-            var totalCount = this.readSideRepositoryIndexAccessor.Query(_ => ApplyFilter(_, input)).Count();
+            var users = pagedAndOrderedQuery.Invoke(this.identityManager.Users).Select(x => new UserListItem(
+                id: x.Id,
+                creationDate: x.CreationDate,
+                email: x.Email,
+                isLockedBySupervisor: x.IsLockedBySupervisor,
+                isLockedByHQ: x.IsLockedByHeadquaters,
+                name: x.UserName,
+                roles: x.Roles.Select(role => (UserRoles)Enum.Parse(typeof(UserRoles), role.RoleId)).ToList(),
+                deviceId: x.DeviceId
+                ));
+
+
+            var totalCount = query.Invoke(this.identityManager.Users).Count();
 
             return new UserListView
             {
@@ -48,9 +57,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<UserDocument> ApplyFilter(IQueryable<UserDocument> _, UserListViewInputModel input)
+        private static IQueryable<ApplicationUser> ApplyFilter(IQueryable<ApplicationUser> _, UserListViewInputModel input)
         {
-            var allUsers = _.Where(x =>x.IsArchived==input.Archived && x.Roles.Contains(input.Role));
+            var allUsers = _.Where(x =>x.IsArchived==input.Archived && x.Roles.FirstOrDefault().RoleId == ((int)input.Role).ToString());
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 var searchByToLower = input.SearchBy.ToLower();

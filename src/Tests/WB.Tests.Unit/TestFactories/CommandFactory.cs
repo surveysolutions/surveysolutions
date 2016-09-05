@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.TestFactories
                 AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
             };
 
-        public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId = null)
+        public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Interviewer, string userName = "name", Guid? supervisorId = null)
             => new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.Entity.UserLight(supervisorId), "", "");
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",

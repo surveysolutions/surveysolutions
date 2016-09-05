@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
             var interviewerDetails = interviewers.OrderUsingSortExpression(input.Order)
                                     .Skip((input.Page - 1) * input.PageSize)
                                     .Take(input.PageSize)
-                                    .Select(x => new InterviewersItem(x.PublicKey, x.UserName, x.Supervisor.Name, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId))
+                                    .Select(x => new InterviewersItem(x.PublicKey.ToString(), x.UserName, x.Supervisor.Name, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId))
                                     .ToList();
 
             return new InterviewersView() { Items = interviewerDetails, TotalCount = interviewers.Count() };
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
                     all = all.Where(x => (x.DeviceId != null) == connectedToDevice.Value);
                 }
 
-                all = all.Where(user => (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId));
+                all = all.Where(user => (user.Roles.Any(role => role == UserRoles.Interviewer) && user.Supervisor.Id == supervisorId));
 
                 return all;
             });
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
         {
             var result = this.users.Query(_ =>
             {
-                var all = _.Where(user => user.IsArchived == input.Archived && user.Roles.Any(role => role == UserRoles.Operator));
+                var all = _.Where(user => user.IsArchived == input.Archived && user.Roles.Any(role => role == UserRoles.Interviewer));
 
                 if (!string.IsNullOrWhiteSpace(input.SearchBy))
                 {

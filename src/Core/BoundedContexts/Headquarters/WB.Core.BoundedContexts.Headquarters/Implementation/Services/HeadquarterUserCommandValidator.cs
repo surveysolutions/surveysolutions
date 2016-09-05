@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         void ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(UserRoles[] userRoles, Guid supervisorId)
         {
-            if (!userRoles.Contains(UserRoles.Operator))
+            if (!userRoles.Contains(UserRoles.Interviewer))
                 return;
 
             var user = users.GetById(supervisorId.FormatGuid());

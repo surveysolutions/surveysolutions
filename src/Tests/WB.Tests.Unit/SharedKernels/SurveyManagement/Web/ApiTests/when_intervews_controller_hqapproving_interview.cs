@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,7 +12,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -31,14 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 Mock.Of<IUserViewFactory>(
                     c =>
                         c.Load(Moq.It.IsAny<UserViewInputModel>()) ==
-                        new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Operator}});
-            var globalInfoProvider =
-                Mock.Of<IGlobalInfoProvider>(
-                    g => g.GetCurrentUser() == new UserLight() {Id = executorId });
-
+                        new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Interviewer}});
+            
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userViewFactory: userViewFactory);
         };
 
         Because of = () =>

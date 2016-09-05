@@ -971,7 +971,7 @@ namespace WB.Tests.Integration
          Guid? teamLeadId = null,
          string responsibleName = null,
          string teamLeadName = null,
-         UserRoles role = UserRoles.Operator)
+         UserRoles role = UserRoles.Interviewer)
         {
             return new InterviewSummary()
             {

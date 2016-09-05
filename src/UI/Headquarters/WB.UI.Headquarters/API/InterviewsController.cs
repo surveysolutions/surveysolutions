@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -31,14 +31,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
 
         private readonly ICommandService commandService;
-        private readonly IGlobalInfoProvider globalInfoProvider;
+        private readonly IIdentityManager identityManager;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
             IInterviewDetailsViewFactory interviewDetailsViewFactory, 
             IInterviewHistoryFactory interviewHistoryViewFactory,
             ICommandService commandService,
-            IGlobalInfoProvider globalInfoProvider,
+            IIdentityManager identityManager,
             IUserViewFactory userViewFactory,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences)
             : base(logger)
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.commandService = commandService;
-            this.globalInfoProvider = globalInfoProvider;
+            this.identityManager = identityManager;
             this.userViewFactory = userViewFactory;
             this.interviewReferences = interviewReferences;
         }
@@ -113,11 +113,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             if(userInfo == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
 
-            if(!userInfo.Roles.Contains(UserRoles.Operator))
+            if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new AssignInterviewerCommand(request.Id, executor.Id, userInfo.PublicKey, DateTime.UtcNow));
+            
+            return TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.identityManager.CurrentUserId, userInfo.PublicKey, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -125,9 +124,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage Approve(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new ApproveInterviewCommand(request.Id, executor.Id, request.Comment, DateTime.UtcNow));
+            
+            return TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -135,9 +133,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage Reject(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new RejectInterviewCommand(request.Id, executor.Id, request.Comment, DateTime.UtcNow));
+            
+            return TryExecuteCommand(new RejectInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -145,9 +142,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage HQApprove(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new HqApproveInterviewCommand(request.Id, executor.Id, request.Comment));
+            
+            return TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
         }
 
 
@@ -156,9 +152,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage HQReject(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, executor.Id, request.Comment));
+            
+            return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
         }
 
 
@@ -167,9 +162,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage HQUnapprove(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, executor.Id, request.Comment));
+            
+            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
         }
 
         [HttpPost]

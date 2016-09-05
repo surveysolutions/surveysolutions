@@ -13,15 +13,17 @@ namespace WB.UI.Headquarters.Controllers
         private const string DEFAULTEMPTYQUERY = "";
         private const bool DEFAULT_SHOW_LOCKED = false;
 
+        private readonly IIdentityManager identityManager;
         private readonly ITeamViewFactory teamViewFactory;
 
         public TeamsController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
+            IIdentityManager identityManager,
             ILogger logger,
             ITeamViewFactory teamViewFactory)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.teamViewFactory = teamViewFactory;
         }
 
@@ -43,14 +45,14 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Supervisor")]
         public UsersView AsigneeInterviewersBySupervisor(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            return this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query, supervisorId: this.GlobalInfo.GetCurrentUser().Id);
+            return this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query, supervisorId: this.identityManager.CurrentUserId);
         }
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            return this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.GlobalInfo.GetCurrentUser().Id);
+            return this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.identityManager.CurrentUserId);
         }
 
         [HttpGet]

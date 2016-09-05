@@ -12,6 +12,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -21,19 +23,52 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IInterviewImportService interviewImportService;
         private readonly IArchiveUtils archiver;
+        private readonly IIdentityManager identityManager;
 
         public InterviewsApiController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
+            IIdentityManager identityManager, 
             ILogger logger, 
             IInterviewImportService interviewImportService,
             IArchiveUtils archiver)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.interviewImportService = interviewImportService;
             this.archiver = archiver;
+            this.identityManager = identityManager;
         }
-        
+
+        [ObserverNotAllowedApi]
+        [ApiValidationAntiForgeryToken]
+        public void ImportPanelData(BatchUploadModel model)
+        {
+            PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(model.InterviewId);
+            Guid responsibleHeadquarterId = this.identityManager.CurrentUserId;
+
+            new Task(() =>
+            {
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
+                try
+                {
+                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
+
+                    sampleImportService.CreatePanel(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        model.InterviewId,
+                        preloadedData,
+                        responsibleHeadquarterId,
+                        model.ResponsibleSupervisor);
+                }
+                finally
+                {
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+                }
+            }).Start();
+        }
+
         [HttpGet]
         [CamelCase]
         public InterviewImportStatusApiView GetImportInterviewsStatus()
@@ -53,6 +88,46 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewsWithError = status.State.Errors.Count,
                 InterviewImportProcessId = status.InterviewImportProcessId
             };
+        }
+
+        [HttpPost]
+        [ObserverNotAllowedApi]
+        [ApiValidationAntiForgeryToken]
+        public HttpResponseMessage ImportInterviews(ImportInterviewsRequestApiView request)
+        {
+            if (this.interviewImportService.Status.IsInProgress)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                       "Import interviews is in progress. Wait until current operation is finished.");
+            }
+
+            var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
+
+            var isSupervisorRequired = !this.interviewImportService.HasResponsibleColumn(request.InterviewImportProcessId) &&
+                                       !request.SupervisorId.HasValue;
+
+            var headquartersId = this.identityManager.CurrentUserId;
+
+            if (!isSupervisorRequired)
+            {
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+
+                try
+                {
+                    this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
+                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId,
+                        headquartersId: headquartersId);
+                }
+                finally
+                {
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                }
+            }
+
+            return Request.CreateResponse(new ImportInterviewsResponseApiView
+            {
+                IsSupervisorRequired = isSupervisorRequired
+            });
         }
 
         [HttpGet]

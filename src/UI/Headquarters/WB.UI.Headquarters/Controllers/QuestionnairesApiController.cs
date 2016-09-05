@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -10,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
@@ -22,15 +22,17 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
+        private readonly IIdentityManager identityManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+            ICommandService commandService, IIdentityManager identityManager, ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
         }
@@ -87,7 +89,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.GlobalInfo.GetCurrentUser().Id);
+            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.identityManager.CurrentUserId);
             
             return new JsonCommandResponse() { IsSuccess = true };
         }

@@ -12,8 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
@@ -29,26 +27,23 @@ namespace WB.UI.Headquarters.API.Interviewer
         protected readonly ITabletInformationService tabletInformationService;
         protected readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
-        private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
-        private readonly IGlobalInfoProvider globalInfoProvider;
+        private readonly IIdentityManager identityManager;
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
             ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader,
-            IUserWebViewFactory userInfoViewFactory,
             ISyncProtocolVersionProvider syncVersionProvider,
-            IGlobalInfoProvider globalInfoProvider)
+            IIdentityManager identityManager)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
             this.androidPackageReader = androidPackageReader;
-            this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
-            this.globalInfoProvider = globalInfoProvider;
+            this.identityManager = identityManager;
         }
 
         [HttpGet]
@@ -109,7 +104,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
@@ -122,10 +117,8 @@ namespace WB.UI.Headquarters.API.Interviewer
 
             if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
-
-
-            var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
-            return interviewerInfo.DeviceId != deviceId
+            
+            return this.identityManager.CurrentUserDeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
                 : this.Request.CreateResponse(HttpStatusCode.OK, "449634775");
         }

@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             Setup.InstanceToMockedServiceLocator(userViewFactory ?? Mock.Of<IUserViewFactory>());
             Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
-            return new ApiBasicAuthAttribute(isUserValid, new [] {UserRoles.Operator});
+            return new ApiBasicAuthAttribute(isUserValid, new [] {UserRoles.Interviewer});
         }
 
         protected static HttpActionContext CreateActionContext()

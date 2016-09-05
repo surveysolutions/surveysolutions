@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Web.Modules
         public override void Load()
         {
             var membershipSection = (MembershipSection)WebConfigurationManager.GetSection("system.web/membership");
-            var membershipSettings = membershipSection.Providers[membershipSection.DefaultProvider].Parameters;
+            var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
 
             Bind<IConfigurationManager>()
                 .ToConstant(new ConfigurationManager(appSettings: WebConfigurationManager.AppSettings,

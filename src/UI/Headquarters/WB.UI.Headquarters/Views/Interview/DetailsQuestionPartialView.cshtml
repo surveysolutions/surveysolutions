@@ -1,7 +1,12 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.DataCollection
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.UI.Headquarters.Resources
 @model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+@{
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+}
 
 <tr id="@getInterviewItemIdWithPostfix(Model.Id, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">
@@ -16,7 +21,7 @@
         </div>
     </td>
     <td class="question-answer">
-        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && Model.IsEnabled)
+        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && Model.IsEnabled)
         {
             @Html.Partial("EditableSupervisorsQuestionPartialView", Model)
         }
@@ -32,7 +37,7 @@
                 @foreach (var validationCondition in Model.FailedValidationMessages)
                 {
                     <dt>
-                    <small class="text-error">@validationCondition.Expression</small>
+                        <small class="text-error">@validationCondition.Expression</small>
                     </dt>
                     <dd>
                         <small class="text-error">@validationCondition.Message</small>

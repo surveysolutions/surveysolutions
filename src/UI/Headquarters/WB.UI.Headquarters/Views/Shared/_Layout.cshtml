@@ -2,10 +2,11 @@
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
 @using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @using WB.UI.Headquarters.Code
+@using WB.UI.Headquarters.Identity
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
 <html>
@@ -67,7 +68,7 @@
 
         </div>
     </div>
-    @if (User.Identity.IsObserver())
+    @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
             @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
@@ -154,7 +155,7 @@
                         "#IncomingPackagesQueueIndicator").load();
                 }
 
-                @if (User.Identity.IsObserver())
+                @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
             {
                 <text>
                 $('button[type="submit"]').attr("disabled", "disabled");

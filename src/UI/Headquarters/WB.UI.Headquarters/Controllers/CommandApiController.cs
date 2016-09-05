@@ -22,9 +22,8 @@ namespace WB.UI.Headquarters.Controllers
         private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
-            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
-                                 IGlobalInfoProvider globalInfo)
-            : base(commandService, globalInfo, logger)
+            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger)
+            : base(commandService, logger)
         {
             this.commandDeserializer = commandDeserializer;
         }

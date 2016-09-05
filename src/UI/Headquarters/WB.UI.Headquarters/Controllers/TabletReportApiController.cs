@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -12,18 +11,14 @@ namespace WB.UI.Headquarters.Controllers
     public class TabletReportApiController : BaseApiController
     {
         private readonly ITabletInformationService tabletInformationService;
-        private readonly IInterviewersViewFactory interviewersFactory;
 
         public TabletReportApiController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
             ILogger logger,
-            ITabletInformationService tabletInformationService,
-            IInterviewersViewFactory interviewersFactory)
-            : base(commandService, provider, logger)
+            ITabletInformationService tabletInformationService)
+            : base(commandService, logger)
         {
             this.tabletInformationService = tabletInformationService;
-            this.interviewersFactory = interviewersFactory;
         }
 
         [HttpPost]

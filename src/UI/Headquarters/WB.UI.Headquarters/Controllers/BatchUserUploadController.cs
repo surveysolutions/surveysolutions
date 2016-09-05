@@ -25,10 +25,9 @@ namespace WB.UI.Headquarters.Controllers
 
         public BatchUserUploadController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
             ILogger logger, 
             IUserPreloadingService userPreloadingService) : 
-            base(commandService, globalInfo, logger)
+            base(commandService, logger)
         {
             this.userPreloadingService = userPreloadingService;
         }

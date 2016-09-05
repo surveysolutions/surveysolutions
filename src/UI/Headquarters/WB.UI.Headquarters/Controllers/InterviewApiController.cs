@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Controllers
@@ -19,18 +18,20 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize]
     public class InterviewApiController : BaseApiController
     {
+        private readonly IIdentityManager identityManager;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly ITeamInterviewsFactory teamInterviewViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
-        public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+        public InterviewApiController(ICommandService commandService, IIdentityManager identityManager, ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
             ITeamInterviewsFactory teamInterviewViewFactory,
             IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
+            this.identityManager = identityManager;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
@@ -73,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
                 SearchBy = data.SearchBy,
                 Status = data.Status,
                 ResponsibleName = data.ResponsibleName,
-                ViewerId = this.GlobalInfo.GetCurrentUser().Id
+                ViewerId = this.identityManager.CurrentUserId
             };
 
             var teamInterviews =  this.teamInterviewViewFactory.Load(input);

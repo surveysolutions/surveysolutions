@@ -16,8 +16,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 
@@ -33,9 +32,7 @@ namespace WB.UI.Headquarters.Code
         private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
 
-        private IGlobalInfoProvider globalInfoProvider => ServiceLocator.Current.GetInstance<IGlobalInfoProvider>();
-
-        private IUserWebViewFactory userInfoViewFactory => ServiceLocator.Current.GetInstance<IUserWebViewFactory>();
+        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
 
         private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
             => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
@@ -57,9 +54,9 @@ namespace WB.UI.Headquarters.Code
             {
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.GetInterviewerDeviceId(),
-                    InterviewerId = this.globalInfoProvider.GetCurrentUser().Id,
-                    InterviewerName = this.globalInfoProvider.GetCurrentUser().Name,
+                    DeviceId = this.identityManager.CurrentUserDeviceId,
+                    InterviewerId = this.identityManager.CurrentUserId,
+                    InterviewerName = this.identityManager.CurrentUserName,
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };
@@ -226,12 +223,6 @@ namespace WB.UI.Headquarters.Code
                 return messageFormat.FormatString(UnknownStringArgumentValue, UnknownStringArgumentValue);
 
             return messageFormat.FormatString(questionnaire.Title, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
-        }
-
-        private string GetInterviewerDeviceId()
-        {
-            return this.userInfoViewFactory.Load(
-                new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId;
         }
 
         private T GetResponseObject<T>(HttpActionExecutedContext context) where T : class

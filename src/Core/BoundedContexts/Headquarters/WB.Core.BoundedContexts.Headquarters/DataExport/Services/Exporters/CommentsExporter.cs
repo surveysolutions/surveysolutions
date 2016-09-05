@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             switch (userRole)
             {
-                case UserRoles.Operator:
+                case UserRoles.Interviewer:
                     return FileBasedDataExportRepositoryWriterMessages.Interviewer;
                 case UserRoles.Supervisor:
                     return FileBasedDataExportRepositoryWriterMessages.Supervisor;

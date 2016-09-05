@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         It should_change_responsible_to_new_interviewer = () => viewState.ResponsibleId.ShouldEqual(interviewerIdNew);
 
-        It should_save_responsible_role_as_Operator = () => viewState.ResponsibleRole.ShouldEqual(UserRoles.Operator);
+        It should_save_responsible_role_as_Operator = () => viewState.ResponsibleRole.ShouldEqual(UserRoles.Interviewer);
 
         It should_reset_ReceivedByInterviewer_flag = () => viewState.ReceivedByInterviewer.ShouldBeFalse();
 

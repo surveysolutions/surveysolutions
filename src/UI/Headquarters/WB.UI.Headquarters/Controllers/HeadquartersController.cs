@@ -1,7 +1,6 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -12,7 +11,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -23,11 +21,9 @@ namespace WB.UI.Headquarters.Controllers
     public class HeadquartersController : TeamController
     {
         public HeadquartersController(ICommandService commandService, 
-                              IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IUserViewFactory userViewFactory,
-                              IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+                              IIdentityManager identityManager)
+            : base(commandService, logger, identityManager)
         {
             
         }
@@ -44,28 +40,22 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
         [ObserverNotAllowed]
-        public ActionResult Create(UserModel model)
+        public async Task<ActionResult> Create(UserModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
-
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                try
-                {
-                    this.CreateHeadquarters(model);
-                }
-                catch (Exception e)
-                {
-                    this.Logger.Error(e.Message, e);
-                    this.Error(e.Message);
-                    return this.View(model);
-                }
+                var creationResult = await this.CreateUserAsync(model, UserRoles.Headquarter);
 
-                this.Success(HQ.UserWasCreated);
-                return this.RedirectToAction("Index");
+                if (creationResult.Succeeded)
+                {
+                    this.Success(HQ.UserWasCreated);
+                    return this.RedirectToAction("Index");
+                }
+                AddErrors(creationResult);
             }
 
-            return this.View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         [Authorize(Roles = "Administrator, Observer")]
@@ -77,21 +67,21 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(string id)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
 
-            var user = this.GetUserById(id);
+            var user = await this.identityManager.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 
             return this.View(new UserEditModel()
                 {
-                    Id = user.PublicKey,
+                    Id = user.Id,
                     Email = user.Email,
-                    IsLocked = user.IsLockedByHQ,
+                    IsLocked = user.IsLockedByHeadquaters,
                     UserName = user.UserName,
-                    PersonName = user.PersonName,
+                    PersonName = user.FullName,
                     PhoneNumber = user.PhoneNumber
                 });
         }
@@ -100,35 +90,23 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
         [ObserverNotAllowed]
-        public ActionResult Edit(UserEditModel model)
+        public async Task<ActionResult> Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
 
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var user = this.GetUserById(model.Id);
-                if (user == null)
+                var updateResult = await this.UpdateAccountAsync(model);
+                if (updateResult.Succeeded)
                 {
-                    this.Error(HQ.UserNotExists);
-                    return this.View(model);
-                }
-
-                bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
-
-                if (isAdmin)
-                    this.Error(HQ.NoPermission);
-                else
-                {
-                    this.UpdateAccount(user: user, editModel: model);
-
-                    this.Success(string.Format(HQ.UserWasUpdatedFormat, user.UserName));
-
+                    this.Success(string.Format(HQ.UserWasUpdatedFormat, model.UserName));
                     return this.RedirectToAction("Index");
                 }
-
+                AddErrors(updateResult);
             }
-            
-            return this.View(model);
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
     }
 }
