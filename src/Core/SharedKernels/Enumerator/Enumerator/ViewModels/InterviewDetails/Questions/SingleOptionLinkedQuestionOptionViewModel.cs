@@ -5,7 +5,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class SingleOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class SingleOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         public event EventHandler BeforeSelected;
         public event EventHandler AnswerRemoved;

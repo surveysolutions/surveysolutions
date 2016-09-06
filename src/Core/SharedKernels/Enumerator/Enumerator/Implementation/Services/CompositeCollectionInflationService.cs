@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return collection;
         }
 
-        private static CompositeCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+        private static IObserbableCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
             ICompositeEntity viewModel,
             string propertyNameToRefresh,
             Func<bool> doesNeedShowViewModel)
@@ -69,13 +69,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (notifyPropertyChanged == null)
                 throw new ArgumentException("ViewModel should support INotifyPropertyChanged interface. ViewModel: " + viewModel.GetType().Name);
 
-            CompositeCollection<ICompositeEntity> collection = new CompositeCollection<ICompositeEntity>();
+            CovariantObservableCollection<ICompositeEntity> collection = new CovariantObservableCollection<ICompositeEntity>();
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == propertyNameToRefresh)
                 {
                     bool isNeedShow = doesNeedShowViewModel.Invoke();
-                    var isShowing = collection.Contains((ICompositeEntity)viewModel);
+                    var isShowing = collection.Contains(viewModel);
 
                     if (isNeedShow && !isShowing)
                     {
