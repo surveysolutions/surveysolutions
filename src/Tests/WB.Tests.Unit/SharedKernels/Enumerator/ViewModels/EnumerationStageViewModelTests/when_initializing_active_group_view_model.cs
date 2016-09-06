@@ -4,14 +4,13 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using It = Machine.Specifications.It;
-
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageViewModelTests
 {
@@ -26,8 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             enumerationStage = Create.ViewModel.EnumerationStageViewModel(
                 eventRegistry: eventRegistry.Object, 
                 interviewRepository: interviewRepositoryMock.Object,
-                interviewViewModelFactory: interviewViewModelFactory
-                );
+                interviewViewModelFactory: interviewViewModelFactory,
+                compositeCollectionInflationService: new CompositeCollectionInflationService());
         };
 
         Because of = () => enumerationStage.Init(interviewId, navigationState.Object, groupId, null);

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<shape  xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:shape="rectangle">
+  <padding
+    android:top="@dimen/Interview_Question_Option_vertical_padding"
+    android:bottom="@dimen/Interview_Question_Option_vertical_padding"
+    android:left="@dimen/Interview_Question_Answer_background_padding"
+    android:right="@dimen/Interview_Question_Answer_background_padding" />
+  <solid android:color="@color/nonAnsweredBackground"/>
+  <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"
+           android:topLeftRadius="@dimen/zero"
+           android:topRightRadius="@dimen/zero" 
+           android:bottomLeftRadius="@dimen/Interview_Question_Answer_Input_background_corners_radius"
+           android:bottomRightRadius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+</shape>

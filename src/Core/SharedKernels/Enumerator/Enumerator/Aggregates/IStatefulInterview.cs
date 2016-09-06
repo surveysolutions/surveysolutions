@@ -139,5 +139,9 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview();
 
         string GetLastSupervisorComment();
+
+        IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+
+        int GetRosterSortIndex(Identity entityIdentity);
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:local="http://schemas.android.com/apk/res-auto"
+   android:orientation="vertical"
+   style="@style/Interview_Question_Comments">
+   <MvxLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        local:MvxBind="ItemsSource Comments"
+        local:MvxItemTemplate="@layout/interview_question__comment_item"/>
+
+    <TextView
+        style="@style/Interview_Question_Comments_InterviewerTitle"
+        local:MvxBind="Text Localization('Interview_Comment_Interviewer_Caption'); Visible IsCommentInEditMode;" />
+     
+    <EditText
+        style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        local:MvxBind="Text InterviewerComment; Visible IsCommentInEditMode; FocusValueChanged InterviewerCommentChangeCommand; SetFocus IsCommentInEditMode" />
+</LinearLayout>
