@@ -209,6 +209,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId);
 
+        IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId);
+
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 

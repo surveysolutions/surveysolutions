@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageViewModelTests
 {
+    [Ignore("KP-7672")]
     internal class when_handling_StaticTextsDisabled_event
     {
         Establish context = () =>

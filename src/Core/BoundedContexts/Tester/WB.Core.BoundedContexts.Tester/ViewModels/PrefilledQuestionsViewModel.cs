@@ -18,7 +18,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,
             IPrincipal principal,
-            ICommandService commandService)
+            ICommandService commandService,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -26,7 +27,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 viewModelNavigationService,
                 logger,
                 principal,
-                commandService) {}
+                commandService,
+                compositeCollectionInflationService) {}
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 
