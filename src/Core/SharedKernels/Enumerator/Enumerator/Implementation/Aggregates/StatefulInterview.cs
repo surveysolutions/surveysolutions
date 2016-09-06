@@ -298,10 +298,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
             var properties = this.BuildInterviewProperties();
-            var invariants = new InterviewInvariants(properties);
+            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
-            invariants.Properties.ThrowIfInterviewHardDeleted();
-            invariants.Properties.ThrowIfInterviewStatusIsNotOneOfExpected(
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -734,9 +734,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             var properties = this.BuildInterviewProperties();
-            var invariants = new InterviewInvariants(properties);
+            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
-            invariants.Properties.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             var answerDtos = synchronizedInterview
                 .Answers
