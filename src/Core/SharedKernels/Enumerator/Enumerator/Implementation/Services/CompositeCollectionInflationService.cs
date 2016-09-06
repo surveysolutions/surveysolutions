@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         compositeItem.Answering,
                         nameof(compositeItem.Answering.InProgress),
                         () => compositeItem.Answering.InProgress));
+                    collection.Add(new QuestionDivider());
                 }
                 else if (rosterViewModel != null)
                 {
