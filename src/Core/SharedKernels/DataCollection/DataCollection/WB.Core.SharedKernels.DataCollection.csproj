@@ -136,7 +136,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
-    <Compile Include="Implementation\Aggregates\Invariants\InterviewInvariants.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewPropertiesInvariants.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
