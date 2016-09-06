@@ -97,6 +97,7 @@ namespace WB.Tests.Unit.TestFactories
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+                Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
 
         public SubstitutionViewModel SubstitutionViewModel(

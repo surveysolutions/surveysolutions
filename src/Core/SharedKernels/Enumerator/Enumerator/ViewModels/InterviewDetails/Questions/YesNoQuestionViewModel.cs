@@ -74,6 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.InstructionViewModel = instructionViewModel;
+            this.Options = new CovariantObservableCollection<YesNoQuestionOptionViewModel>();
         }
 
         public Identity Identity { get; private set; }
@@ -114,12 +115,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
             
-            if (this.Options != null)
-            {
-                this.Options.ForEach(x => x.DisposeIfDisposable());
-                this.Options.Clear();
-                newOptions.ForEach(x => this.Options.Add(x));
-            }
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+            this.Options.Clear();
+            newOptions.ForEach(x => this.Options.Add(x));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
