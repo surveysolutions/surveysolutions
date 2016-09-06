@@ -113,10 +113,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var newOptions = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
-
-            this.Options.ForEach(x => x.DisposeIfDisposable());
-            this.Options.Clear();
-            newOptions.ForEach(x => this.Options.Add(x));
+            
+            if (this.Options != null)
+            {
+                this.Options.ForEach(x => x.DisposeIfDisposable());
+                this.Options.Clear();
+                newOptions.ForEach(x => this.Options.Add(x));
+            }
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
