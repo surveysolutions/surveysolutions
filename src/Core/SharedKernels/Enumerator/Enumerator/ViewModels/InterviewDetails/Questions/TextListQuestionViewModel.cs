@@ -12,12 +12,16 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        IDisposable, 
+        ICompositeQuestionWithChildren
     {
         private readonly IPrincipal principal;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -25,98 +29,89 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IUserInteractionService userInteractionService;
         private Identity questionIdentity;
         private string interviewId;
-
-        public QuestionStateViewModel<TextListQuestionAnswered> QuestionState { get; private set; }
-        public AnsweringViewModel Answering { get; private set; }
-
         private bool isRosterSizeQuestion;
-
         private int? maxAnswerCount;
 
-        public ObservableCollection<TextListItemViewModel> Answers { get; set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; private set; }
+        private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
 
-        public bool IsAddNewItemVisible
-        {
-            get { return this.isAddNewItemVisible; }
-            set { this.isAddNewItemVisible = value; this.RaisePropertyChanged(); }
-        }
+        private TextListAddNewItemViewModel addNewItemViewModel
+            => this.Answers?.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
 
-        private string newListItem = string.Empty;
+        public IQuestionStateViewModel QuestionState => this.questionState;
+        public AnsweringViewModel Answering { get; private set; }
 
-        private bool isAddNewItemVisible;
-
-        public string NewListItem
-        {
-            get
-            {
-                return this.newListItem;
-            }
-            set
-            {
-                this.newListItem = value;
-                this.RaisePropertyChanged();
-            }
-        }
-
-        private IMvxCommand valueChangeCommand;
-
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.AddNewItemCommand)); }
-        }
-
-        private void AddNewItemCommand()
-        {
-            if (!string.IsNullOrWhiteSpace(this.NewListItem))
-            {
-                this.AddNewItemAndSaveAnswers(this.NewListItem.Trim());
-            }
-        }
-
+        public CovariantObservableCollection<ICompositeEntity> Answers { get;  }
+        
         public TextListQuestionViewModel(
             IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
             this.Answering = answering;
-            this.Answers = new ObservableCollection<TextListItemViewModel>();
+            this.Answers = new CovariantObservableCollection<ICompositeEntity>();
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetTextListAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(this.questionIdentity.Id);
+            this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
 
             if (answerModel.IsAnswered)
             {
-                answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2)).ForEach(x => this.Answers.Add(x));
+                var answerViewModels = answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
+
+                answerViewModels.ForEach(answerViewModel => this.Answers.Add(answerViewModel));
             }
+            
+            this.ShowOrHideAddNewItem();
+        }
 
-            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
-            this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+        private void ShowOrHideAddNewItem()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+            var textListAnswer = interview.GetTextListAnswer(this.questionIdentity);
 
-            this.IsAddNewItemVisible = this.IsNeedShowAddNewItem();
+            bool denyAddNewItem = (this.maxAnswerCount.HasValue && textListAnswer.Answers?.Length >= maxAnswerCount.Value) ||
+                                  (this.isRosterSizeQuestion && textListAnswer.Answers?.Length >= Constants.MaxRosterRowCount);
+
+            if (denyAddNewItem && this.addNewItemViewModel != null)
+            {
+                this.addNewItemViewModel.ItemAdded -= this.ListItemAdded;
+                this.Answers.Remove(addNewItemViewModel);
+            }
+            else if (!denyAddNewItem && this.addNewItemViewModel == null)
+            {
+                var viewModel = new TextListAddNewItemViewModel(this.questionState);
+                viewModel.ItemAdded += this.ListItemAdded;
+                this.Answers.Add(viewModel);
+            }
         }
 
         private async void ListItemDeleted(object sender, EventArgs eventArgs)
@@ -135,38 +130,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
+            listItem.ItemEdited -= this.ListItemEdited;
+            listItem.ItemDeleted -= this.ListItemDeleted;
+
             this.Answers.Remove(listItem);
 
             this.SaveAnswers();
         }
 
-        private void ListItemEdited(object sender, EventArgs eventArgs)
+        private void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
         {
+            var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
+            var maxValue = answerViewModels.Count == 0
+                ? 1
+                : answerViewModels.Max(x => x.Value) + 1;
+
+            this.Answers.Insert(this.Answers.Count - 1,
+                this.CreateListItemViewModel(maxValue, e.NewText));
+
             this.SaveAnswers();
+
+            this.addNewItemViewModel.Text = string.Empty;
         }
 
-        private void AddNewItemAndSaveAnswers(string title)
-        {
-            var maxValue = this.Answers.Count == 0 ? 1 : this.Answers.Max(x => x.Value) + 1;
-
-            this.Answers.Add(this.CreateListItemViewModel(maxValue, title));
-
-            this.SaveAnswers();
-            
-            this.NewListItem = string.Empty;
-        }
+        private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
 
         private async void SaveAnswers()
         {
-            this.IsAddNewItemVisible = this.IsNeedShowAddNewItem();
+            var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
-            if (this.Answers.Any(x => string.IsNullOrWhiteSpace(x.Title)))
+            if (answerViewModels.Any(x => string.IsNullOrWhiteSpace(x.Title)))
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_List_Empty_Values_Are_Not_Allowed);
+                this.questionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_List_Empty_Values_Are_Not_Allowed);
                 return;
             }
 
-            var answers = this.Answers.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();
+            var answers = answerViewModels.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();
 
             var command = new AnswerTextListQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
@@ -179,32 +178,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.questionState.Validity.ExecutedWithoutExceptions();
+                this.ShowOrHideAddNewItem();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                this.questionState.Validity.ProcessException(ex);
             }
-        }
-
-        private bool IsNeedShowAddNewItem()
-        {
-            if (this.maxAnswerCount.HasValue)
-            {
-                var isInvalidMaxAnswerCountRule = this.Answers.Count >= this.maxAnswerCount.Value;
-                return !isInvalidMaxAnswerCountRule;
-            }
-
-            var isInvalidRosterSizeRule = this.isRosterSizeQuestion && this.Answers.Count >= Constants.MaxRosterRowCount;
-            return !isInvalidRosterSizeRule;
         }
 
         private TextListItemViewModel CreateListItemViewModel(decimal value, string title)
         {
-            var optionViewModel = new TextListItemViewModel
+            var optionViewModel = new TextListItemViewModel(this.questionState)
             {
-                Enablement = this.QuestionState.Enablement,
-
                 Value = value,
                 Title = title
             };
@@ -215,9 +201,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public void Dispose()
+        public void Dispose() => this.questionState.Dispose();
+
+        public IObserbableCollection<ICompositeEntity> Children
         {
-            this.QuestionState.Dispose();
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();                    
+                result.Add(new OptionBorderViewModel<TextListQuestionAnswered>(this.questionState, true));
+                result.AddCollection(this.Answers);
+                result.Add(new OptionBorderViewModel<TextListQuestionAnswered>(this.questionState, false));
+                return result;
+            }
         }
     }
 }

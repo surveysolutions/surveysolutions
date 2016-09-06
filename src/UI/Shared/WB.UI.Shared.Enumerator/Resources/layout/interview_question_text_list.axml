@@ -1,37 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_QuestionWithDivider"
-    local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <LinearLayout style="@style/Interview_Question_Body">
-      <LinearLayout
-          style="@style/VerticalFullWidthWrappingLayout"
-          local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-
-        <MvxLinearLayout
-             style="@style/VerticalFullWidthWrappingLayout"
-             local:MvxBind="ItemsSource Answers"
-             local:MvxItemTemplate="@layout/interview_question_text_list_item" />
-        <LinearLayout
-          style="@style/Interview_Question_Answer_List_Item" android:background="@drawable/question_text_question_nonanswered">
-          <EditText
-              style="@style/Interview_Question_Answer_Text_Editor"
-              local:MvxBind="Text NewListItem; 
-                  FocusValueChanged ValueChangeCommand; 
-                  Watermark Localization('TextListQuestion_Hint'); 
-                  Visible IsAddNewItemVisible;" />
-        </LinearLayout>
-      </LinearLayout>
-
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
-    </LinearLayout>
-  </LinearLayout>
-  <ProgressBar
-    style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
-
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
 </LinearLayout>
