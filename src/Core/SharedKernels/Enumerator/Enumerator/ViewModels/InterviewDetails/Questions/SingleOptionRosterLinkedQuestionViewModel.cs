@@ -69,6 +69,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
         private HashSet<Guid> parentRosters;
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
+        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsTopBorderViewModel;
+        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
@@ -80,24 +82,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public bool HasOptions
-        {
-            get { return this.Options.Any(); }
-        }
+        public bool HasOptions => this.Options.Any();
 
-        public IQuestionStateViewModel QuestionState
-        {
-            get { return this.questionState; }
-        }
+        public IQuestionStateViewModel QuestionState => this.questionState;
 
         public IObserbableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                result.Add(new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, true));
+                this.optionsTopBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, true)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
-                result.Add(new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, false));
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, false)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsBottomBorderViewModel);
                 return result;
             }
         }
@@ -105,15 +109,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public Identity Identity
-        {
-            get { return this.questionIdentity; }
-        }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
             this.questionState.Init(interviewId, questionIdentity, navigationState);
 
@@ -125,10 +126,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
             this.referencedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedRosterId).ToHashSet();
-            this.Options =
-                new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
+            this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
                     this.GenerateOptionsFromModel(interview));
 
+            this.Options.CollectionChanged += (sender, args) =>
+            {
+                if (this.optionsTopBorderViewModel != null)
+                {
+                    this.optionsTopBorderViewModel.HasOptions = HasOptions;
+                }
+                if (this.optionsBottomBorderViewModel != null)
+                {
+                    this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
+                }
+            };
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
