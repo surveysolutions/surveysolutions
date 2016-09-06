@@ -14,41 +14,51 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged,
+    public class DateTimeQuestionViewModel :
+        MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private readonly IPrincipal principal;
         public event EventHandler AnswerRemoved;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly QuestionStateViewModel<DateTimeQuestionAnswered> questionState;
 
         private Identity questionIdentity;
         private string interviewId;
 
-        public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
         private readonly ILiteEventRegistry liteEventRegistry;
         public AnsweringViewModel Answering { get; private set; }
 
         public DateTimeQuestionViewModel(
-            IPrincipal principal,
-            IStatefulInterviewRepository interviewRepository,
-            QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
+            IPrincipal principal, 
+            IStatefulInterviewRepository interviewRepository, 
+            QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel, 
+            AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel, 
+            ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;

@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class TimestampQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private string interviewId;
@@ -26,27 +27,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly QuestionStateViewModel<DateTimeQuestionAnswered> questionState;
+        public IQuestionStateViewModel QuestionState => this.questionState;
 
-        public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
         public AnsweringViewModel Answering { get; private set; }
 
         public TimestampQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
+            QuestionInstructionViewModel instructionViewModel,
+            AnsweringViewModel answering, 
+            ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
