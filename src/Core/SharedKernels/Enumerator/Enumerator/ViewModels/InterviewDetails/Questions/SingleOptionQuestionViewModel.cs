@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -57,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
-        public ObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
+        public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -96,8 +97,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
-            var collection = new ObservableCollection<SingleOptionQuestionOptionViewModel>(singleOptionQuestionOptionViewModels);
-            this.Options = collection;
+
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+            this.Options.Clear();
+            singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -202,13 +205,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public CompositeCollection<ICompositeEntity> Children
+        public IObserbableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
                 result.Add(new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, true));
-                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
+                result.AddCollection(this.Options);
                 result.Add(new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, false));
                 return result;
             }

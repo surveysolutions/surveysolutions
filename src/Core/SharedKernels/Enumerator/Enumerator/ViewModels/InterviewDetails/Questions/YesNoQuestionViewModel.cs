@@ -7,14 +7,12 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -50,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
-        public List<YesNoQuestionOptionViewModel> Options { get; set; }
+        public CovariantObservableCollection<YesNoQuestionOptionViewModel> Options { get; set; }
 
         public YesNoQuestionViewModel(IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
@@ -112,9 +110,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewIdAsString);
             var answerModel = interview.GetYesNoAnswer(Identity);
 
-            this.Options = this.filteredOptionsViewModel.GetOptions()
+            var newOptions = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
+
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+            this.Options.Clear();
+            newOptions.ForEach(x => this.Options.Add(x));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -296,13 +298,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public CompositeCollection<ICompositeEntity> Children
+        public IObserbableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
                 result.Add(new OptionBorderViewModel<YesNoQuestionAnswered>(this.questionState, true));
-                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
+                result.AddCollection(this.Options);
                 result.Add(new OptionBorderViewModel<YesNoQuestionAnswered>(this.questionState, false));
                 return result;
             }

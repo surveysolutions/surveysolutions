@@ -70,19 +70,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Guid interviewId;
         private Guid referencedQuestionId;
-        private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
+        private CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
         private IEnumerable<Guid> parentRosterIds;
 
-        public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
+        public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
             get { return this.options; }
             private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions);}
         }
 
-        public bool HasOptions
-        {
-            get { return this.Options.Any(); }
-        }
+        public bool HasOptions => this.Options.Any();
 
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -105,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
 
             var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
-            this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
+            this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedQuestionId).ToHashSet();
 
@@ -239,6 +236,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsFromModel();
+            }
+        }
+
+        public IObserbableCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                result.Add(new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.QuestionState, true));
+                result.AddCollection(this.Options);
+                result.Add(new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.QuestionState, false));
+                return result;
             }
         }
 
