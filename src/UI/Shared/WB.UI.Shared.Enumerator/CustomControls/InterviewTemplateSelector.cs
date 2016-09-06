@@ -20,6 +20,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
+            {typeof (TextListItemViewModel), Resource.Layout.interview_question_text_list_item},
+            {typeof (TextListAddNewItemViewModel), Resource.Layout.interview_question_text_list_add_new_item},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},

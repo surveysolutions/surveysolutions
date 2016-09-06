@@ -5,6 +5,14 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
+    public class TextListItemAddedEventArgrs : EventArgs
+    {
+        public readonly string NewText;
+        public   TextListItemAddedEventArgrs(string newText)
+        {
+            this.NewText = newText;
+        }
+    }
     public class TextListAddNewItemViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
         private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
@@ -15,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionState;
         }
         
-        public event EventHandler ItemEdited;
+        public event EventHandler<TextListItemAddedEventArgrs> ItemAdded;
 
         private string text;
         public string Text
@@ -37,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (string.IsNullOrWhiteSpace(this.Text)) return;
 
-            this.ItemEdited?.Invoke(this, EventArgs.Empty);
+            this.ItemAdded?.Invoke(this, new TextListItemAddedEventArgrs(this.Text));
         }
     }
 }
