@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 try
                 {
-                    if (value == true)
+                    if (value)
                     {
                         this.OnBeforeSelected();
                     }
@@ -45,25 +45,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return new MvxCommand(OnAnswerRemoved);
-            }
-        }
+        public IMvxCommand RemoveAnswerCommand => new MvxCommand(this.OnAnswerRemoved);
 
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; set; }
 
         private void OnBeforeSelected()
         {
-            if (this.BeforeSelected != null) this.BeforeSelected.Invoke(this, EventArgs.Empty);
+            this.BeforeSelected?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void OnAnswerRemoved()
         {
             var handler = this.AnswerRemoved;
-            if (handler != null) handler(this, EventArgs.Empty);
+            handler?.Invoke(this, EventArgs.Empty);
         }
     }
 }
