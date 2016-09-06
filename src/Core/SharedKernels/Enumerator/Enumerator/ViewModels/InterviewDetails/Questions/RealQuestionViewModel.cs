@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>, 
+        ICompositeQuestion,
         IDisposable
     {
         const decimal jsonSerializerDecimalLimit = 9999999999999999m;
@@ -29,8 +30,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
 
-        public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
-        public AnsweringViewModel Answering { get; private set; }
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public AnsweringViewModel Answering { get; }
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
         private decimal? answer;
         public decimal? Answer
@@ -50,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxCommand ValueChangeCommand => this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand));
 
         private IMvxCommand answerRemoveCommand;
+        private readonly QuestionStateViewModel<NumericRealQuestionAnswered> questionState;
+
         public IMvxCommand RemoveAnswerCommand
         {
             get
@@ -85,13 +90,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel,
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.Answering = answering;
+            this.InstructionViewModel = instructionViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.liteEventRegistry = liteEventRegistry;
         }
@@ -106,7 +113,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
