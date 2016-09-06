@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class YesNoQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class YesNoQuestionOptionViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
         public YesNoQuestionViewModel QuestionViewModel { get; private set; }
         public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }

@@ -9,10 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
+
+        public event EventHandler ShowComments;
 
         public DynamicTextViewModel Title { get; }
 
@@ -27,15 +30,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Title = dynamicTextViewModel;
         }
 
-        public string Instruction { get; private set; }
-
-        private bool isInstructionsHidden;
-        public bool IsInstructionsHidden
-        {
-            get { return this.isInstructionsHidden; }
-            set { this.RaiseAndSetIfChanged(ref this.isInstructionsHidden, value); }
-        }
-
         public void Init(string interviewId, Identity questionIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
@@ -44,13 +38,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             
-            this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
-            this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
-
             this.Title.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
         }
 
-        public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
+        public ICommand ShowCommentEditorCommand => new MvxCommand(() => ShowComments?.Invoke(this, EventArgs.Empty));
 
         public void Dispose()
         {

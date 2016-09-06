@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
+    [DebuggerDisplay("HandlerType = {HandlerType}")]
     internal class LiteEventRegistryEntity
     {
         public LiteEventRegistryEntity(ILiteEventHandler eventHandler, ILiteEventRaiseFilter filter)
@@ -11,10 +13,13 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
             this.EventHandler = new WeakReference<ILiteEventHandler>(eventHandler);
             this.Filter = filter;
+            this.HandlerType = eventHandler.GetType().Name;
         }
 
         public WeakReference<ILiteEventHandler> EventHandler { get; }
         public ILiteEventRaiseFilter Filter { get; }
+
+        public string HandlerType { get; }
 
         public override int GetHashCode()
         {

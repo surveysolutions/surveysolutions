@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.TestFactories
@@ -49,7 +50,8 @@ namespace WB.Tests.Unit.TestFactories
             ILiteEventRegistry eventRegistry = null,
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            ICompositeCollectionInflationService compositeCollectionInflationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
@@ -63,7 +65,8 @@ namespace WB.Tests.Unit.TestFactories
                     questionnaireRepository: questionnaireRepository,
                     interviewRepository: interviewRepository),
                 Mock.Of<IMvxMessenger>(),
-                Mock.Of<IEnumeratorSettings>());
+                Mock.Of<IEnumeratorSettings>(),
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
@@ -94,6 +97,7 @@ namespace WB.Tests.Unit.TestFactories
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+                Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
 
         public SubstitutionViewModel SubstitutionViewModel(
@@ -125,6 +129,11 @@ namespace WB.Tests.Unit.TestFactories
                 Create.ViewModel.ErrorMessagesViewModel(
                     questionnaireRepository: questionnaireRepository,
                     interviewRepository: interviewRepository));
+        }
+
+        public QuestionInstructionViewModel QuestionInstructionViewModel()
+        {
+            return Mock.Of<QuestionInstructionViewModel>();
         }
     }
 }

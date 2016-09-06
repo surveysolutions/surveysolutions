@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups.GroupViewModel;
 
@@ -72,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel> },
                 { InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel> },
                 { InterviewEntityType.GroupModel, Load<GroupViewModel> },
-                { InterviewEntityType.RosterModel, Load<GroupViewModel>},
+                { InterviewEntityType.RosterModel, Load<RosterViewModel>},
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
             };
 
@@ -116,13 +117,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             if (!questionnaire.HasGroup(groupIdentity.Id))
-                throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} was not found. Interview id: {interviewId}.");
+                throw new KeyNotFoundException($"Questionnaire {interview.QuestionnaireIdentity} has no group with id {groupIdentity.Id}. Interview id: {interviewId}.");
 
-            var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity).ToList();
+            IReadOnlyList<Guid> groupWithoutNestedChildren = questionnaire.GetAllUnderlyingInterviewerEntities(groupIdentity.Id);
 
             IEnumerable<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
-                identity: questionnaireEntity,
-                entityModelType: GetEntityModelType(questionnaireEntity.Id, questionnaire),
+                identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
+                entityModelType: GetEntityModelType(questionnaireEntity, questionnaire),
                 interviewId: interviewId,
                 navigationState: navigationState)).ToList();
 
