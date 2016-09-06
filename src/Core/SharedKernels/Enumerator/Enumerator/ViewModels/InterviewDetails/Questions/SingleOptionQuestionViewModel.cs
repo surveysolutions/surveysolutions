@@ -52,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.instructionViewModel = instructionViewModel;
+            this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
         }
 
         private Identity questionIdentity;
