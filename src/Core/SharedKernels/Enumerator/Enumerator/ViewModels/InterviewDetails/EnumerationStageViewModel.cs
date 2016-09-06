@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -20,9 +18,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -190,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.InterviewEntities = newGroupItems;
 
                 var collection = this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
-                this.Items.AddCollection(collection);
+                this.Items = collection;
             }
             finally
             {

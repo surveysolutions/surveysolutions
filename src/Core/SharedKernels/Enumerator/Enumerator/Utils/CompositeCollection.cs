@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -11,9 +10,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
 
-    public class CompositeCollection<T> : IList<T>, INotifyCollectionChanged, INotifyPropertyChanged
+    public class CompositeCollection<T> : IObserbableCollection<T>
     {
-        private readonly List<IList<T>> collections = new List<IList<T>>();
+        private readonly List<IObserbableCollection<T>> collections = new List<IObserbableCollection<T>>();
 
         public bool IsReadOnly => true;
 
@@ -36,36 +35,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return false;
         }
 
-        public int IndexOf(T item)
-        {
-            var offset = 0;
-            foreach (var coll in this.collections)
-            {
-                var index = coll.IndexOf(item);
-                if (index >= 0)
-                    return offset + index;
-                offset += coll.Count;
-            }
-            return -1;
-        }
-
-        public T this[int index]
-        {
-            get
-            {
-                if (index >= this.Count)
-                    throw new IndexOutOfRangeException();
-                foreach (var coll in this.collections)
-                {
-                    if (index < coll.Count)
-                        return coll[index];
-                    index -= coll.Count;
-                }
-                throw new IndexOutOfRangeException();
-            }
-            set { throw new NotSupportedException(); }
-        }
-
         public IEnumerator<T> GetEnumerator()
         {
             foreach (var coll in this.collections)
@@ -76,15 +45,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            foreach (var coll in this.collections)
-            {
-                coll.CopyTo(array, arrayIndex);
-                arrayIndex += coll.Count;
-            }
         }
 
         public void Insert(int index, T item)
@@ -99,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Add(T item)
         {
-            this.AddCollection(new ObservableCollection<T>(item.ToEnumerable()));
+            this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
         }
 
         public bool Remove(T item)
@@ -111,19 +71,19 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void AddCollection<TC>(TC collection)
-            where TC : IList<T>, INotifyCollectionChanged
+        public void AddCollection(IObserbableCollection<T> collection)
         {
             this.collections.Add(collection);
             collection.CollectionChanged += this.collectionChanged;
             var offset = this.Count;
-            this.Count += collection.Count;
+            var addedCollectionCount = collection.Count();
+            this.Count += addedCollectionCount;
             this.propertyChanged("Count");
-            if (collection.Count > 5)
+            if (addedCollectionCount > 5)
                 this.collectionChanged_Reset();
             else
-                for (var i = 0; i < collection.Count; i++)
-                    this.collectionChanged_Added(collection[i], offset + i);
+                for (var i = 0; i < addedCollectionCount; i++)
+                    this.collectionChanged_Added(collection.ElementAt(i), offset + i);
         }
 
         private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -140,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 if (sender == coll)
                     break;
                 else
-                    offset += coll.Count;
+                    offset += coll.Count();
             var newIndex = e.NewStartingIndex == -1 ? -1 : e.NewStartingIndex + offset;
             var oldIndex = e.OldStartingIndex == -1 ? -1 : e.OldStartingIndex + offset;
 

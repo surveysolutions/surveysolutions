@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             FilteredOptionsViewModel filteredOptionsViewModel, 
             QuestionInstructionViewModel instructionViewModel)
         {
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
+            this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionStateViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
@@ -106,7 +107,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .Select((x, index) => this.ToViewModel(x, existingAnswer))
                 .ToList();
 
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(optionViewModels);
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+            this.Options.Clear();
+            optionViewModels.ForEach(x => this.Options.Add(x));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -124,12 +129,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Dispose();
         }
 
-        public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
+        public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
-        public bool HasOptions
-        {
-            get { return true; }
-        }
+        public bool HasOptions => true;
 
         private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer)
         {
@@ -226,13 +228,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public CompositeCollection<ICompositeEntity> Children
+        public IObserbableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
                 result.Add(new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, true));
-                result.AddCollection(new ObservableCollection<ICompositeEntity>(this.Options));
+                result.AddCollection(this.Options);
                 result.Add(new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, false));
                 return result;
             }

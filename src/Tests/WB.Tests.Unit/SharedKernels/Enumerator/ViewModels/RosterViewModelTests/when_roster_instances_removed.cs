@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
             viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, new RosterVector[] { Create.Entity.RosterVector(1)}));
 
-            Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(1));
+            Assert.That(viewModel.RosterInstances.Count(), Is.EqualTo(1));
         }
     }
 }

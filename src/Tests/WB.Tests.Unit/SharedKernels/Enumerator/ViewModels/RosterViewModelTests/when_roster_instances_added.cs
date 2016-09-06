@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(1), Create.Entity.RosterVector(2)));
 
-            Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(2));
+            Assert.That(viewModel.RosterInstances.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, addedRosterRosterVector));
 
             Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(3));
-            var groupViewModel = viewModel.RosterInstances[1] as GroupViewModel;
+            var groupViewModel = viewModel.RosterInstances.ElementAt(1) as GroupViewModel;
             Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, addedRosterRosterVector)));
         }
     }
