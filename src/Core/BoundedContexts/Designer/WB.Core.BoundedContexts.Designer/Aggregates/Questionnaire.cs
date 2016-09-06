@@ -15,6 +15,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using NHibernate.Util;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,13 +31,13 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Translations;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -4830,5 +4831,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #endregion
+
+        protected override void OnEventApplied(UncommittedEvent appliedEvent) { }
     }
 }
