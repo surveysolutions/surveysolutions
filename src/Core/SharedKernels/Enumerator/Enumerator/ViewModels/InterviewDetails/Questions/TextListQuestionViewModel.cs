@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose() => this.questionState.Dispose();
 
-        public IObserbableCollection<ICompositeEntity> Children
+        public IObservableCollection<ICompositeEntity> Children
         {
             get
             {
