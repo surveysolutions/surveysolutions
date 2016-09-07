@@ -552,7 +552,6 @@ namespace WB.Tests.Integration
                 new QuestionnaireRosterStructureFactory(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 Mock.Of<IFileSystemAccessor>(),
                 new InMemoryPlainStorageAccessor<TranslationInstance>());
