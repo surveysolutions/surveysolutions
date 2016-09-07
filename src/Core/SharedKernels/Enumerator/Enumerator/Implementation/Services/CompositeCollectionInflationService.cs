@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     }
                     else if (!isNeedShow && isShowing)
                     {
-                        collection.Clear();
+                        collection.RemoveAt(0);
                     }
 
                 }
