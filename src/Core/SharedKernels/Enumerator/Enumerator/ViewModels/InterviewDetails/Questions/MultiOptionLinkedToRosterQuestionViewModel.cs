@@ -26,13 +26,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public MultiOptionLinkedToRosterQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher)
             : base(
-                questionState, answering, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
+                questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
         }
@@ -81,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = title,
                 Value = referencedRoster.RosterVector,
                 Checked = isChecked,
-                QuestionState = this.QuestionState
+                QuestionState = this.questionState
             };
             if (this.areAnswersOrdered && isChecked)
             {
