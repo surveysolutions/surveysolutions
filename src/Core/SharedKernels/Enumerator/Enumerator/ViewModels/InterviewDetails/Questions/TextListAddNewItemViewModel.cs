@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (string.IsNullOrWhiteSpace(this.Text)) return;
 
-            this.ItemAdded?.Invoke(this, new TextListItemAddedEventArgrs(this.Text));
+            this.ItemAdded?.Invoke(this, new TextListItemAddedEventArgrs(this.Text.Trim()));
         }
     }
 }

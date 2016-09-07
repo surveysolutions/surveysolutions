@@ -95,11 +95,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ShowOrHideAddNewItem()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
-            var textListAnswer = interview.GetTextListAnswer(this.questionIdentity);
+            var answerVeiewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
-            bool denyAddNewItem = (this.maxAnswerCount.HasValue && textListAnswer.Answers?.Length >= maxAnswerCount.Value) ||
-                                  (this.isRosterSizeQuestion && textListAnswer.Answers?.Length >= Constants.MaxRosterRowCount);
+            bool denyAddNewItem = (this.maxAnswerCount.HasValue && answerVeiewModels.Count >= maxAnswerCount.Value) ||
+                                  (this.isRosterSizeQuestion && answerVeiewModels.Count >= Constants.MaxRosterRowCount);
 
             if (denyAddNewItem && this.addNewItemViewModel != null)
             {
@@ -150,7 +149,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.SaveAnswers();
 
-            this.addNewItemViewModel.Text = string.Empty;
+            if (this.addNewItemViewModel != null)
+                this.addNewItemViewModel.Text = string.Empty;
         }
 
         private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
