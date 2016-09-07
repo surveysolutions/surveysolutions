@@ -245,7 +245,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
             this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();

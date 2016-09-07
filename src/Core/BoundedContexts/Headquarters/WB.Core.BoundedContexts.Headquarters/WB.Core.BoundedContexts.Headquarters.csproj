@@ -245,7 +245,6 @@
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
-    <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\ExportSettings.cs" />
@@ -257,7 +256,6 @@
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRosterStructureStorage.cs" />
@@ -532,7 +530,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
-    <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewFactory.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewInputModel.cs" />

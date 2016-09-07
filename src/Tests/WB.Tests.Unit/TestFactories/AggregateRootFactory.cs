@@ -47,10 +47,7 @@ namespace WB.Tests.Unit.TestFactories
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());
