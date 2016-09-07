@@ -2471,25 +2471,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ThrowIfSelectedRosterRowIsAbsent(Guid questionId, decimal[] selectedRosterVector,
-            IQuestionnaire questionnaire)
-        {
-            Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
-            var availableRosterInstanceIds = this.interviewState.GetRosterInstanceIds(linkedRosterId,
-                new RosterVector(selectedRosterVector.WithoutLast()));
-            var rosterInstanceId = selectedRosterVector.Last();
-            if (!availableRosterInstanceIds.Contains(rosterInstanceId))
-            {
-                throw new InterviewException(string.Format(
-                    "Answer on linked to roster question {0} is incorrect. " +
-                    "Answer refers to instance of roster group {1} by instance id [{2}] " +
-                    "but roster group has only following roster instances: {3}. InterviewId: {4}",
-                    FormatQuestionForException(questionId, questionnaire),
-                    FormatGroupForException(linkedRosterId, questionnaire), rosterInstanceId,
-                    string.Join(", ", availableRosterInstanceIds), this.EventSourceId));
-            }
-        }
-
         private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
            IQuestionnaire questionnaire,
            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
@@ -4000,15 +3981,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfRosterVectorIsIncorrect(IReadOnlyInterviewStateDependentOnAnswers state, Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
-            ThrowIfRosterVectorIsNull(questionId, rosterVector, questionnaire);
+            if (rosterVector == null)
+                throw new InterviewException(string.Format(
+                    "Roster information for question {0} is missing. Roster vector cannot be null. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), this.EventSourceId));
 
             Guid[] parentRosterGroupIdsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
 
-            ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(questionId, rosterVector,
-                parentRosterGroupIdsStartingFromTop, questionnaire);
+            if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(rosterVector, parentRosterGroupIdsStartingFromTop))
+                throw new InterviewException(string.Format(
+                    "Roster information for question {0} is incorrect. " +
+                    "Roster vector has {1} elements, but parent roster groups count is {2}. InterviewId: {3}",
+                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroupIdsStartingFromTop.Length, this.EventSourceId));
 
-            this.ThrowIfSomeOfRosterVectorValuesAreInvalid(state, questionId, rosterVector, parentRosterGroupIdsStartingFromTop,
-                questionnaire);
+            for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
+            {
+                decimal rosterInstanceId = rosterVector[indexOfRosterVectorElement];
+                Guid rosterGroupId = parentRosterGroupIdsStartingFromTop[indexOfRosterVectorElement];
+
+                int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
+                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
+                IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
+
+                if (!rosterInstanceIds.Contains(rosterInstanceId))
+                    throw new InterviewException(string.Format(
+                        "Roster information for question {0} is incorrect. " +
+                        "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}] " +
+                        "but roster group has only following roster instances: {4}. InterviewId: {5}",
+                        FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
+                        FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,
+                        string.Join(", ", rosterInstanceIds), this.EventSourceId));
+            }
         }
 
         private void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit,
@@ -4037,47 +4040,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
-            }
-        }
-
-        private void ThrowIfRosterVectorIsNull(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            if (rosterVector == null)
-                throw new InterviewException(string.Format(
-                    "Roster information for question {0} is missing. Roster vector cannot be null. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-        }
-
-        private void ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(
-            Guid questionId, RosterVector rosterVector, Guid[] parentRosterGroups, IQuestionnaire questionnaire)
-        {
-            if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(rosterVector, parentRosterGroups))
-                throw new InterviewException(string.Format(
-                    "Roster information for question {0} is incorrect. " +
-                        "Roster vector has {1} elements, but parent roster groups count is {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroups.Length, this.EventSourceId));
-        }
-
-        private void ThrowIfSomeOfRosterVectorValuesAreInvalid(IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid questionId, RosterVector rosterVector, Guid[] parentRosterGroupIdsStartingFromTop, IQuestionnaire questionnaire)
-        {
-            for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
-            {
-                decimal rosterInstanceId = rosterVector[indexOfRosterVectorElement];
-                Guid rosterGroupId = parentRosterGroupIdsStartingFromTop[indexOfRosterVectorElement];
-
-                int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
-                IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
-
-                if (!rosterInstanceIds.Contains(rosterInstanceId))
-                    throw new InterviewException(string.Format(
-                        "Roster information for question {0} is incorrect. " +
-                            "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}] " +
-                            "but roster group has only following roster instances: {4}. InterviewId: {5}",
-                        FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
-                        FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,
-                        string.Join(", ", rosterInstanceIds), this.EventSourceId));
             }
         }
 
