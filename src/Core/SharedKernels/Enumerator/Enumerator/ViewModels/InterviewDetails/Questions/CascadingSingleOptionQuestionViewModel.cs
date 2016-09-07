@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>,
          ILiteEventHandler<AnswerRemoved>,
+         ICompositeQuestion,
          IDisposable
     {
         public class CascadingComboboxItemViewModel 
@@ -49,8 +50,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private decimal? answerOnParentQuestion = null;
 
-        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
         public AnsweringViewModel Answering { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
         private readonly ILiteEventRegistry eventRegistry;
 
         public Identity Identities => this.questionIdentity;
@@ -63,6 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
+            QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry eventRegistry)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
@@ -73,8 +77,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.Answering = answering;
+            this.InstructionViewModel = instructionViewModel;
             this.eventRegistry = eventRegistry;
         }
 
@@ -85,7 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
@@ -154,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(async () =>
                 {
-                    if (!QuestionState.IsAnswered)
+                    if (!questionState.IsAnswered)
                     {
                         ResetTextInEditor = "";
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -288,6 +294,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
+        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
 
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
