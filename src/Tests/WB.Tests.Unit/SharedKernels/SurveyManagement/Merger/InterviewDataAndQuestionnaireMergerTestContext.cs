@@ -4,10 +4,8 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -102,14 +100,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 g.RosterVector.SequenceEqual(questionRosterVector));
 
             return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
-        }
-
-        internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo(QuestionnaireDocument questionnaireDocument = null)
-        {
-            if (questionnaireDocument == null)
-                return new ReferenceInfoForLinkedQuestions();
-            questionnaireDocument.ConnectChildrenWithParent();
-            return new ReferenceInfoForLinkedQuestionsFactory().CreateReferenceInfoForLinkedQuestions(questionnaireDocument, 1);
         }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)

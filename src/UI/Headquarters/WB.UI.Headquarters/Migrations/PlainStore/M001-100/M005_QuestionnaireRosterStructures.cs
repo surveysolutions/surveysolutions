@@ -8,12 +8,18 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
         public override void Up()
         {
             Delete.Table("questionnairerosterstructures");
+            Delete.Table("referenceinfoforlinkedquestions");
+
         }
 
         public override void Down()
         {
             Create.Table("questionnairerosterstructures")
-                  .WithColumn("id").AsInt32().PrimaryKey()
+                  .WithColumn("id").AsString().PrimaryKey()
+                  .WithColumn("value").AsCustom("json").NotNullable();
+
+            Create.Table("referenceinfoforlinkedquestions")
+                  .WithColumn("id").AsString().PrimaryKey()
                   .WithColumn("value").AsCustom("json").NotNullable();
         }
     }
