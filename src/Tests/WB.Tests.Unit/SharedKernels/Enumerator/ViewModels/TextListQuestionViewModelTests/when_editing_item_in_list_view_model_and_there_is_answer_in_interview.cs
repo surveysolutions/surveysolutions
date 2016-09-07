@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
@@ -45,18 +47,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
         Because of = () =>
         {
-            listModel.Answers[editedItemIndex].Title = newListItemTitle;
-            listModel.Answers[editedItemIndex].ValueChangeCommand.Execute();
+            answerViewModels[editedItemIndex].Title = newListItemTitle;
+            answerViewModels[editedItemIndex].ValueChangeCommand.Execute();
         };
 
         It should_create_list_with_5_answers = () =>
-            listModel.Answers.Count.ShouldEqual(5);
+            answerViewModels.Count.ShouldEqual(5);
 
         It should_change_title_for_item_with_index_equals__editedItemIndex__ = () =>
-            listModel.Answers[editedItemIndex].Title.ShouldEqual(newListItemTitle);
+            answerViewModels[editedItemIndex].Title.ShouldEqual(newListItemTitle);
 
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
@@ -87,5 +89,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly int editedItemIndex = 2;
 
         private static readonly string newListItemTitle = "Hello World!";
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }

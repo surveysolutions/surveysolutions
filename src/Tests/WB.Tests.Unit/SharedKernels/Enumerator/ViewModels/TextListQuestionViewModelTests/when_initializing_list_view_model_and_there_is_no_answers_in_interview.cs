@@ -1,3 +1,4 @@
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
@@ -39,11 +40,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         It should_initialize_question_state = () =>
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
-        It should_create_empty_list_of_answers = () => 
-            listModel.Answers.Count.ShouldEqual(0);
+        It should_create_empty_list_of_answers = () =>
+            listModel.Answers.OfType<TextListItemViewModel>().Count().ShouldEqual(0);
 
-        It should_set_IsAddNewItemVisible_flag_in_true = () =>
-            listModel.IsAddNewItemVisible.ShouldBeTrue();
+        It should_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldNotBeEmpty();
 
         private static TextListQuestionViewModel listModel;
         private static NavigationState navigationState = Create.Other.NavigationState();

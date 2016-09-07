@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -8,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -50,24 +52,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
         Because of = () =>
         {
-            listModel.NewListItem = newListItemTitle;
-            listModel.ValueChangeCommand.Execute();
+            var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
+
+            textListAddNewItemViewModel.Text = newListItemTitle;
+            textListAddNewItemViewModel.AddNewItemCommand.Execute();
         };
 
         It should_create_list_with_60_answers = () =>
-            listModel.Answers.Count.ShouldEqual(60);
+            answerViewModels.Count.ShouldEqual(60);
 
         It should_add_item_with_Title_equals_trimmed_newListItemTitle = () =>
-            listModel.Answers.Last().Title.ShouldEqual(newListItemTitle.Trim());
+            answerViewModels.Last().Title.ShouldEqual(newListItemTitle.Trim());
 
         It should_add_new_item_with_Value_equals_60 = () =>
-            listModel.Answers.Last().Value.ShouldEqual(60m);
+            answerViewModels.Last().Value.ShouldEqual(60m);
 
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
-
-        It should_clear_NewListItem_field = () =>
-            listModel.NewListItem.ShouldBeEmpty();
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
@@ -89,5 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly Tuple<decimal, string>[] savedAnswers = new Tuple<decimal, string>[59];
 
         private static readonly string newListItemTitle = "   Hello World!      ";
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }

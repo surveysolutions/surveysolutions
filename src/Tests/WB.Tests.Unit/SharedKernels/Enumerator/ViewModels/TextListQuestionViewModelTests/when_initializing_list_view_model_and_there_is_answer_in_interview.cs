@@ -44,16 +44,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_create_list_with_5_answers = () =>
-            listModel.Answers.Count.ShouldEqual(5);
+            answerViewModels.Count.ShouldEqual(5);
 
         It should_create_list_with_Values_same_as_in_saved_answers = () =>
-            listModel.Answers.Select(x => x.Value).ShouldContainOnly(savedAnswers.Select(x=> x.Item1));
+            answerViewModels.Select(x => x.Value).ShouldContainOnly(savedAnswers.Select(x=> x.Item1));
 
         It should_create_list_with_Titles_same_as_in_saved_answers = () =>
-            listModel.Answers.Select(x => x.Title).ShouldContainOnly(savedAnswers.Select(x => x.Item2));
+            answerViewModels.Select(x => x.Title).ShouldContainOnly(savedAnswers.Select(x => x.Item2));
 
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         private static TextListQuestionViewModel listModel;
         private static NavigationState navigationState = Create.Other.NavigationState();
@@ -71,5 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             new Tuple<decimal, string>(8m, "Answer 8"),
             new Tuple<decimal, string>(9m, "Answer 9"),
         };
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }
