@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 Mock.Of<ILiteEventRegistry>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<QuestionInstructionViewModel>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
                 );
         }
