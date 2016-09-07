@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.Parse("22222222222222222222222222222222");
             updatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : parentQuestionId,
                 groupPublicKey:rootGroupId,
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 }
             ));
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : updatedQuestionId,
                 groupPublicKey: rootGroupId,

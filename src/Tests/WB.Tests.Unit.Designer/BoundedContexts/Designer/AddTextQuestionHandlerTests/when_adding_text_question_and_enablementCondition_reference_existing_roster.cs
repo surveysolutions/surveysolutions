@@ -19,15 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 => processor.GetIdentifiersUsedInExpression("roster.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.Apply(Create.Event.AddGroup(chapterId));
-            questionnaire.Apply(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
-            questionnaire.Apply(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.Apply(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles,
+            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
+            questionnaire.AddGroup(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
+            questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
+            questionnaire.ChangeRoster(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles,
                 titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));
-            questionnaire.Apply(Create.Event.AddTextQuestion(rosterQuestionId, parentId: rosterId));
-            questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
-            questionnaire.Apply(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));
-            questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(existingQuestionId, variableName: "maxAge"));
+            questionnaire.AddQuestion(Create.Event.AddTextQuestion(rosterQuestionId, parentId: rosterId));
+            questionnaire.UpdateNumericQuestion(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
+            questionnaire.AddQuestion(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));
+            questionnaire.UpdateNumericQuestion(Create.Event.UpdateNumericIntegerQuestion(existingQuestionId, variableName: "maxAge"));
 
             eventContext = new EventContext();
         };

@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: chapterId,
                 questionText: "old title",
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 conditionExpression: "old condition",
                 responsibleId: responsibleId
             ));
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey: question1Id,
                 groupPublicKey: chapterId,
                 questionText: "old title",
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 conditionExpression: "old condition",
                 responsibleId: responsibleId
             ));
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : question2Id,
                 groupPublicKey : chapterId,
                 questionText : "old title",

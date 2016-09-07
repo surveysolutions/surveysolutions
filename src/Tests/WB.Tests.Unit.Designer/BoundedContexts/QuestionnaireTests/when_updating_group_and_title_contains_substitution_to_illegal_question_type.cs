@@ -11,11 +11,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(Create.Event.AddGroup(groupId: chapterId));
-            questionnaire.Apply(Create.Event.AddTextQuestion(questionId: textQuestionId, parentId: chapterId));
-            questionnaire.Apply(Create.Event.QuestionChanged(publicKey: textQuestionId, groupPublicKey: chapterId,
+            questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
+            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: textQuestionId, parentId: chapterId));
+            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(publicKey: textQuestionId, groupPublicKey: chapterId,
                 questionType: QuestionType.GpsCoordinates, stataExportCaption: textQuestionVariable));
-            questionnaire.Apply(Create.Event.AddGroup(groupId: groupId, parentId:chapterId));
+            questionnaire.AddGroup(Create.Event.AddGroup(groupId: groupId, parentId:chapterId));
 
             eventContext = new EventContext();
         };
