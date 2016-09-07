@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
-    public class CovariantObservableCollection<T> : ObservableCollection<T>, IObserbableCollection<T>
+    public class CovariantObservableCollection<T> : ObservableCollection<T>, IObservableCollection<T>
     {
         public CovariantObservableCollection()
         {

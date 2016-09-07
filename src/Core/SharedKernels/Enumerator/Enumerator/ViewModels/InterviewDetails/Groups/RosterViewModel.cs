@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private NavigationState navigationState;
         private CovariantObservableCollection<ICompositeEntity> rosterInstances;
 
-        public IObserbableCollection<ICompositeEntity> RosterInstances => this.rosterInstances;
+        public IObservableCollection<ICompositeEntity> RosterInstances => this.rosterInstances;
 
         public Identity Identity { get; private set; }
 

@@ -255,7 +255,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IObserbableCollection<ICompositeEntity> Children
+        public IObservableCollection<ICompositeEntity> Children
         {
             get
             {
