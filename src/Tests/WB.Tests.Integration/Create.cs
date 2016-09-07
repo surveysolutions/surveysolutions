@@ -548,10 +548,7 @@ namespace WB.Tests.Integration
             var questionnaire = new Questionnaire(
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                new ReferenceInfoForLinkedQuestionsFactory(), 
-                new QuestionnaireRosterStructureFactory(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 Mock.Of<IFileSystemAccessor>(),
                 new InMemoryPlainStorageAccessor<TranslationInstance>());
