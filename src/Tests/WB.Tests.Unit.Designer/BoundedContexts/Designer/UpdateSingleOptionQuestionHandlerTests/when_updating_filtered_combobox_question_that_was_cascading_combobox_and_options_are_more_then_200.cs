@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     }).ToArray();
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : parentQuestionId,
                 answers : new Answer[] { new Answer{ AnswerText = "option1", AnswerValue = "1"}, new Answer{AnswerText = "option2", AnswerValue = "2"}},
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId : null
             ));
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : cascadeQuestionId,
                 answers : oldAnswers,

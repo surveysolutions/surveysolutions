@@ -20,16 +20,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             var nestedRosterId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : chapterId ));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : chapterId ));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, nestedRosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, nestedRosterId));
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded( publicKey : titleQuestionId, isInteger : true, groupPublicKey : nestedRosterId ));
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded( publicKey : titleQuestionId, isInteger : true, groupPublicKey : nestedRosterId ));
         };
 
         Because of = () =>

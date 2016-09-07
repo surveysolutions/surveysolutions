@@ -24,12 +24,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 new FixedRosterTitleItem("3", "fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
             
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
         };
 
         Because of = () =>

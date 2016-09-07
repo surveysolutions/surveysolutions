@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), stataExportCaption : "valid_varname", groupPublicKey : chapterId ));
-            questionnaire.Apply(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), stataExportCaption : null, groupPublicKey : chapterId ));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), stataExportCaption : "valid_varname", groupPublicKey : chapterId ));
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), stataExportCaption : null, groupPublicKey : chapterId ));
         };
 
         Because of = () =>

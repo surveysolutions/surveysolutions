@@ -13,17 +13,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = roster1Id, ParentGroupPublicKey = groupId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, roster1Id));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster1Id, ParentGroupPublicKey = groupId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster1Id));
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded (publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : roster1Id ));
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded (publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : roster1Id ));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = roster1Id });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, roster2Id));
-            questionnaire.Apply(new RosterChanged(responsibleId, roster2Id)
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = roster1Id });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId, roster2Id)
             {
                 RosterSizeQuestionId = rosterSizeQuestionId,
                 RosterSizeSource = RosterSizeSourceType.Question,

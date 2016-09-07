@@ -19,22 +19,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitle = "Roster Title";
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: rosterSizeQuestionId,
                 groupPublicKey: chapterId,
                 questionType: QuestionType.MultyOption
             ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId, rosterId)
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
                 {
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = rosterSizeQuestionId
                 });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: rosterTitleQuestionId,
                 groupPublicKey: rosterId,
                 questionType: QuestionType.Text
