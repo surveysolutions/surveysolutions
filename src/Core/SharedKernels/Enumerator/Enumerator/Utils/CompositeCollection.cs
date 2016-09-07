@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
-
     public class CompositeCollection<T> : IObservableCollection<T>
     {
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
@@ -79,17 +78,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             var addedCollectionCount = collection.Count();
             this.Count += addedCollectionCount;
             this.propertyChanged("Count");
-            if (addedCollectionCount > 5)
-                this.collectionChanged_Reset();
-            else
-                for (var i = 0; i < addedCollectionCount; i++)
-                    this.collectionChanged_Added(collection.ElementAt(i), offset + i);
+            this.collectionChanged_Added(collection.ToList(), offset);
         }
 
         private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.Count = this.Count + (e.NewItems?.Count ?? 0) -
-                         (e.OldItems?.Count ?? 0);
+            this.Count = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
             this.propertyChanged("Count");
 
             if (this.CollectionChanged == null)
@@ -115,16 +109,14 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, e.NewItems, newIndex);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems,
-                        oldIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems, oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Move:
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems, newIndex,
                         oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems,
-                        e.OldItems, newIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.OldItems, newIndex);
                     break;
                 default:
                     throw new Exception("bug");
@@ -132,10 +124,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.CollectionChanged(this, args);
         }
 
-        private void collectionChanged_Added(T item, int index)
+        private void collectionChanged_Added(IList<T> items, int offset)
         {
-            this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
         }
 
         private void collectionChanged_Reset()
