@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
             var readOnlyUser = Guid.NewGuid();
-            questionnaire.Apply(new SharedPersonToQuestionnaireAdded()
+            questionnaire.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded()
             {
                 PersonId = readOnlyUser,
                 ShareType = ShareType.View

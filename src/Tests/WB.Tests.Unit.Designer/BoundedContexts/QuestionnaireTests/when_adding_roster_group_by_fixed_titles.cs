@@ -21,15 +21,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterFixedTitles = new[] { new FixedRosterTitleItem("1", rosterFixedTitle1), new FixedRosterTitleItem("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: Guid.NewGuid(),
                 groupPublicKey: chapterId,
                 questionType: QuestionType.Text
             ));
             
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
 
             eventContext = new EventContext();
         };

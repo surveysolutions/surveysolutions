@@ -13,11 +13,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(Create.Event.AddGroup(chapterId));
-            questionnaire.Apply(Create.Event.AddTextQuestion(parentQuestionId, chapterId));
-            questionnaire.Apply(Create.Event.QuestionChanged(parentQuestionId, "cascade_parent", questionType: QuestionType.SingleOption));
-            questionnaire.Apply(Create.Event.AddTextQuestion(cascadingId, chapterId));
-            questionnaire.Apply(Create.Event.QuestionChanged(cascadingId, "cascade_child", questionType: QuestionType.SingleOption));
+            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
+            questionnaire.AddQuestion(Create.Event.AddTextQuestion(parentQuestionId, chapterId));
+            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(parentQuestionId, "cascade_parent", questionType: QuestionType.SingleOption));
+            questionnaire.AddQuestion(Create.Event.AddTextQuestion(cascadingId, chapterId));
+            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(cascadingId, "cascade_child", questionType: QuestionType.SingleOption));
         };
 
         Because of = () =>

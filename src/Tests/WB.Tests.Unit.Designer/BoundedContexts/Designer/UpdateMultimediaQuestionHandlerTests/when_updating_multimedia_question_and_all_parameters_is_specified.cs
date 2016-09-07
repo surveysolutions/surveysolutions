@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 questionType : QuestionType.Text,
                 publicKey : questionId,
                 groupPublicKey : chapterId,

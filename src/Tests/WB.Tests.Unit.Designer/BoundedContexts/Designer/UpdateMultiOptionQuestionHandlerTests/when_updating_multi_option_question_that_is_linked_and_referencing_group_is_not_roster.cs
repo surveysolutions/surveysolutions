@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = linkedToGroupId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = linkedToGroupId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: linkedToGroupId,
                 questionText: "old title",

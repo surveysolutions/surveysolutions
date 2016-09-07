@@ -14,9 +14,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId, VariableName = "valid"});
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId, VariableName = "valid"});
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
         };
 
         Because of = () =>

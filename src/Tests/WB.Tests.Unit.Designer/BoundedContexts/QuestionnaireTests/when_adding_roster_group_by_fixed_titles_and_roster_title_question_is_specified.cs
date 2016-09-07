@@ -23,13 +23,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 new FixedRosterTitleItem("3","fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey : Guid.NewGuid(),
                 groupPublicKey : chapterId,
                 questionType : QuestionType.Text
             ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
         };
 
         Because of = () =>

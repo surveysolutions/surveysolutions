@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 Guid responsibleId = Guid.NewGuid();
                 Guid sharedPersonWith = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-                questionnaire.Apply(new SharedPersonToQuestionnaireAdded() { PersonId = sharedPersonWith });
+                questionnaire.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded() { PersonId = sharedPersonWith });
                 var newState = new QuestionnaireDocument();
                 // act
                 questionnaire.ImportQuestionnaire(responsibleId,newState);

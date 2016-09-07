@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
             (
                 publicKey : rosterSizeQuestionId,
                 isInteger : true,

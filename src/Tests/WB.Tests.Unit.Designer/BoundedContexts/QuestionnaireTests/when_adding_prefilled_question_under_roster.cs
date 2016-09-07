@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             isPrefilled = true;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
         };
 
         Because of = () =>

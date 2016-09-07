@@ -13,27 +13,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") },
                     RosterTitleQuestionId = null 
                 });
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupToMoveId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToMoveId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : groupToMoveId,
                 isInteger : true
             ));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, nestedRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId){
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, nestedRosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles =  null,
