@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -48,7 +48,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations)
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
             this.referenceInfoForLinkedQuestionsStorage = referenceInfoForLinkedQuestionsStorage;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
@@ -145,10 +144,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.referenceInfoForLinkedQuestionsStorage.Store(
                 this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaireDocument, identity.Version),
-                projectionId);
-
-            this.questionnaireRosterStructureStorage.Store(
-                this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaireDocument, identity.Version),
                 projectionId);
 
             this.questionnaireQuestionsInfoStorage.Store(

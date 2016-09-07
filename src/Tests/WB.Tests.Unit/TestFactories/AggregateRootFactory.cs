@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -50,7 +51,6 @@ namespace WB.Tests.Unit.TestFactories
                 new QuestionnaireRosterStructureFactory(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 Mock.Of<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());

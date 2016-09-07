@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly SampleImportSettings sampleImportSettings;
 
@@ -42,8 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public SampleImportService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             SampleImportSettings sampleImportSettings, 
-            IQuestionnaireStorage questionnaireStorage, 
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IQuestionnaireStorage questionnaireStorage,
+            IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
@@ -112,8 +112,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                         new QuestionnaireIdentity(questionnaireId, version));
                 questionnaireRosterStructure =
-                    this.questionnaireRosterStructureStorage.GetById(
-                        new QuestionnaireIdentity(questionnaireId, version).ToString());
+                    this.questionnaireRosterStructureStorage.GetQuestionnaireRosterStructure(
+                        new QuestionnaireIdentity(questionnaireId, version));
             }
             finally
             {

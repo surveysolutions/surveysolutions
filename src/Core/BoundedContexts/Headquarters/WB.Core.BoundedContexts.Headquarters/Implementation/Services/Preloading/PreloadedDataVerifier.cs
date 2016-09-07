@@ -12,10 +12,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
@@ -36,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
       	private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
@@ -44,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
@@ -147,8 +145,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireId, version));
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(
-                    new QuestionnaireIdentity(questionnaireId, version).ToString());
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetQuestionnaireRosterStructure(
+                    new QuestionnaireIdentity(questionnaireId, version));
 
             if (questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null)
             {
