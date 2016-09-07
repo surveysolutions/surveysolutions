@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewException = () =>
             exception.ShouldBeOfExactType<InterviewException>();
 
-        It should_throw_exception_with_message_containting__question_not_found__ = () =>
+        It should_throw_exception_with_message_containting_words__roster_information_incorrect__ = () =>
              new[] { "roster", "information", "incorrect" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
