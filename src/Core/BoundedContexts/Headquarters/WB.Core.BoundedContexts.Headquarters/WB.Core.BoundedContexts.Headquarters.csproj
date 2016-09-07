@@ -260,6 +260,7 @@
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireRosterStructureStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
+    <Compile Include="Repositories\IQuestionnaireRosterStructureStorage.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
     <Compile Include="Resources\CommandValidatorsMessages.Designer.cs">
       <AutoGen>True</AutoGen>
