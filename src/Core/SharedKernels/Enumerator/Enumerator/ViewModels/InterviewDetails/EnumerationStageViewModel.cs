@@ -18,6 +18,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -134,21 +136,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void SetScrollTo(Identity scrollTo)
         {
-            // TODO: KP-7661
+            var anchorElementIndex = 0;
 
-            //var anchorElementIndex = 0;
+            if (scrollTo != null)
+            {
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    var childItem = this.Items.OfType<GroupViewModel>()
+                        .FirstOrDefault(x => x.Identity.Equals(scrollTo)) as ICompositeEntity;
 
-            //if (scrollTo != null)
-            //{
-            //    this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-            //    {
-            //        var childItem = this.Items
-            //            .FirstOrDefault(x => x.Identity.Equals(scrollTo));
-
-            //        anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
-            //    });
-            //}
-            //this.ScrollToIndex = anchorElementIndex;
+                    anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
+                });
+            }
+            this.ScrollToIndex = anchorElementIndex;
         }
 
         public int? ScrollToIndex { get; set; }
