@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -64,10 +63,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             var typedRosterInstances = this.RosterInstances.Cast<GroupViewModel>().ToArray();
 
-            foreach (AddedRosterInstance newRosterInstance in @event.Instances.Where(x => x.GroupId == this.Identity.Id))
-            {
-                var groupViewModel = this.GetGroupViewModel(newRosterInstance.GetIdentity());
+            var viewModels = @event.Instances.Where(x => x.GroupId == this.Identity.Id)
+                .Select(x => this.GetGroupViewModel(x.GetIdentity()))
+                .ToList();
 
+            foreach (var groupViewModel in viewModels)
+            {
                 int index = Array.FindLastIndex(typedRosterInstances, t => t.SortIndex < groupViewModel.SortIndex) + 1;
                 this.mainThreadDispatcher.RequestMainThreadAction(() => this.rosterInstances.Insert(index, groupViewModel));
             }
@@ -76,14 +77,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public void Handle(RosterInstancesRemoved @event)
         {
             var typedRosterInstances = this.RosterInstances.Cast<GroupViewModel>().ToList();
-
+            var instancesToRemove = new List<GroupViewModel>();
             foreach (var rosterInstance in @event.Instances)
             {
-                var instancesToRemove = typedRosterInstances.Where(x => x.Identity.Equals(rosterInstance.GetIdentity())).ToList();
-
-                this.mainThreadDispatcher.RequestMainThreadAction(() => instancesToRemove.ForEach(x => this.rosterInstances.Remove(x)));
-                instancesToRemove.ForEach(x => x.DisposeIfDisposable());
+                instancesToRemove.AddRange(typedRosterInstances.Where(x => x.Identity.Equals(rosterInstance.GetIdentity())).ToList());
             }
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() => instancesToRemove.ForEach(x => this.rosterInstances.Remove(x)));
+            instancesToRemove.ForEach(x => x.DisposeIfDisposable());
         }
 
         private GroupViewModel GetGroupViewModel(Identity identity)
