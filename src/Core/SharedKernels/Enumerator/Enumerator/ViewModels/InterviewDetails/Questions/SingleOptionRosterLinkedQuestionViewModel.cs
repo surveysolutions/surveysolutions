@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
-        public IObserbableCollection<ICompositeEntity> Children
+        public IObservableCollection<ICompositeEntity> Children
         {
             get
             {

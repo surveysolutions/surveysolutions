@@ -4,6 +4,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public interface ICompositeQuestionWithChildren : ICompositeQuestion
     {
-        IObserbableCollection<ICompositeEntity> Children { get; }
+        IObservableCollection<ICompositeEntity> Children { get; }
     }
 }

@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
 
-    public class CompositeCollection<T> : IObserbableCollection<T>
+    public class CompositeCollection<T> : IObservableCollection<T>
     {
-        private readonly List<IObserbableCollection<T>> collections = new List<IObserbableCollection<T>>();
+        private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
 
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void AddCollection(IObserbableCollection<T> collection)
+        public void AddCollection(IObservableCollection<T> collection)
         {
             this.collections.Add(collection);
             collection.CollectionChanged += this.collectionChanged;
