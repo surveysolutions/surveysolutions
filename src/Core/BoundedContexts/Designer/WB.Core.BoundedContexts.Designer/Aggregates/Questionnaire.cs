@@ -79,45 +79,81 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(MacroAdded e)
         {
             this.macroIds.Add(e.MacroId);
+            this.innerDocument.Macros[e.MacroId] = new Macro();
         }
 
         internal void Apply(MacroUpdated e)
         {
+            if (!innerDocument.Macros.ContainsKey(e.MacroId))
+                return;
+
+            var macro = this.innerDocument.Macros[e.MacroId];
+            macro.Name = e.Name;
+            macro.Content = e.Content;
+            macro.Description = e.Description;
         }
 
         internal void Apply(MacroDeleted e)
         {
             this.macroIds.Remove(e.MacroId);
+            innerDocument.Macros.Remove(e.MacroId);
         }
 
         internal void Apply(LookupTableAdded e)
         {
             this.lookupTableIds.Add(e.LookupTableId);
+            innerDocument.LookupTables[e.LookupTableId] = new LookupTable()
+            {
+                TableName = e.LookupTableName,
+                FileName = e.LookupTableFileName
+            };
         }
 
         internal void Apply(LookupTableUpdated e)
         {
+            innerDocument.LookupTables[e.LookupTableId] = new LookupTable
+            {
+                TableName = e.LookupTableName,
+                FileName = e.LookupTableFileName
+            };
         }
 
         internal void Apply(LookupTableDeleted e)
         {
             this.lookupTableIds.Remove(e.LookupTableId);
+            innerDocument.LookupTables.Remove(e.LookupTableId);
         }
 
         internal void Apply(AttachmentUpdated e)
         {
+            innerDocument.Attachments.RemoveAll(x => x.AttachmentId == e.AttachmentId);
+            innerDocument.Attachments.Add(new Attachment
+            {
+                AttachmentId = e.AttachmentId,
+                Name = e.AttachmentName,
+                ContentId = e.AttachmentContentId
+            });
         }
 
         internal void Apply(AttachmentDeleted e)
         {
+            innerDocument.Attachments.RemoveAll(x => x.AttachmentId == e.AttachmentId);
         }
 
         internal void Apply(TranslationUpdated e)
         {
+            var translation = new Translation
+            {
+                Id = e.TranslationId,
+                Name = e.Name,
+            };
+            innerDocument.Translations.RemoveAll(x => x.Id == e.TranslationId);
+            innerDocument.Translations.Add(translation);
         }
 
         internal void Apply(TranslationDeleted e)
         {
+            innerDocument.Translations.RemoveAll(x => x.Id == e.TranslationId);
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -135,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionnaireUpdated e)
         {
-            this.innerDocument.Title = e.Title;
+            this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(e.Title);
             this.innerDocument.IsPublic = e.IsPublic;
         }
 
@@ -147,6 +183,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(ExpressionsMigratedToCSharp e)
         {
             this.wasExpressionsMigrationPerformed = true;
+            this.innerDocument.UsesCSharp = true;
+
         }
 
         private void Apply(GroupDeleted e)
@@ -156,18 +194,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupUpdated e)
         {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression, e.HideIfDisabled);
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, 
+                e.GroupText,
+                e.VariableName, 
+                e.Description, 
+                e.ConditionExpression, 
+                e.HideIfDisabled);
         }
 
         internal void Apply(NewGroupAdded e)
         {
             var group = new Group();
-            group.Title = e.GroupText;
+            group.Title = System.Web.HttpUtility.HtmlDecode(e.GroupText);
             group.VariableName = e.VariableName;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
             group.HideIfDisabled = e.HideIfDisabled;
+
+            Guid? parentGroupPublicKey = e.ParentGroupPublicKey;
+            if (parentGroupPublicKey.HasValue)
+            {
+                var parentGroup = this.innerDocument.Find<Group>(parentGroupPublicKey.Value);
+                if (parentGroup != null)
+                {
+                    group.SetParent(parentGroup);
+                }
+                else
+                {
+                    string errorMessage = string.Format("Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}",
+                        e.PublicKey,
+                        e.ParentGroupPublicKey,
+                        this.innerDocument.PublicKey);
+
+                    logger.Error(errorMessage);
+                }
+            }
+
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
@@ -196,12 +259,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(GroupCloned e)
         {
             var group = new Group();
-            group.Title = e.GroupText;
+            group.Title = System.Web.HttpUtility.HtmlDecode(e.GroupText);
             group.VariableName = e.VariableName;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
             group.HideIfDisabled = e.HideIfDisabled;
+
             this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
         }
 
@@ -223,7 +287,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupStoppedBeingARoster e)
         {
-            this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = false);
+            this.innerDocument.UpdateGroup(e.GroupId, group =>
+            {
+                group.IsRoster = false;
+                group.RosterSizeSource = RosterSizeSourceType.Question;
+                group.RosterSizeQuestionId = null;
+                group.RosterTitleQuestionId = null;
+                group.FixedRosterTitles = new FixedRosterTitle[0];
+            });
         }
 
         internal void Apply(NewQuestionAdded e)
@@ -260,10 +331,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.LinkedFilterExpression,
                         e.IsTimestamp));
 
-            if (question == null)
-            {
-                return;
-            }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
 
@@ -403,13 +470,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupId);
-
         }
 
         private void Apply(NewQuestionnaireCreated e)
         {
             this.innerDocument.IsPublic = e.IsPublic;
-            this.innerDocument.Title = e.Title;
+            this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(e.Title);
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
             this.innerDocument.LastEntryDate = e.CreationDate;
@@ -540,7 +606,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
-
         }
 
         private void Apply(QuestionDeleted e)
@@ -690,9 +755,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
                 text: e.Text, 
                 attachmentName: null,
-                enablementCondition: null,
-                hideIfDisabled: false,
-                validationConditions: new List<ValidationCondition>());
+                enablementCondition: e.EnablementCondition,
+                hideIfDisabled: e.HideIfDisabled,
+                validationConditions: e.ValidationConditions);
 
             this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
         }
@@ -731,7 +796,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var variable = this.questionnaireEntityFactory.CreateVariable(e);
             this.innerDocument.Add(c: variable, parent: e.ParentId, parentPropagationKey: null);
-
         }
 
         internal void Apply(VariableUpdated e)
@@ -824,7 +888,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            this.ApplyEvent(
+            this.Apply(
                 new NewQuestionnaireCreated
                 {
                     IsPublic = isPublic,
@@ -834,7 +898,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     CreatedBy = createdBy
                 });
 
-            this.ApplyEvent(
+            this.Apply(
                 new NewGroupAdded
                 {
                     GroupText = "New Section",
@@ -843,7 +907,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
                 );
 
-            this.ApplyEvent(new ExpressionsMigratedToCSharp());
+            this.Apply(new ExpressionsMigratedToCSharp());
         }
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
@@ -889,7 +953,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 translation.Id = newTranslationId;
             }
 
-            ApplyEvent(new QuestionnaireCloned
+            Apply(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
                 ClonedFromQuestionnaireId = document.PublicKey,
@@ -898,7 +962,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (source.UsesCSharp)
             {
-                this.ApplyEvent(new ExpressionsMigratedToCSharp());
+                this.Apply(new ExpressionsMigratedToCSharp());
             }
         }
 
@@ -911,7 +975,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Trying to import template of deleted questionnaire");
 
             document.CreatedBy = createdBy;
-            ApplyEvent(new TemplateImported { Source = document });
+            Apply(new TemplateImported { Source = document });
         }
 
         public void UpdateQuestionnaire(UpdateQuestionnaire command)
@@ -922,7 +986,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(command.Title);
 
-            this.ApplyEvent(new QuestionnaireUpdated()
+            this.Apply(new QuestionnaireUpdated()
             {
                 Title = command.Title,
                 IsPublic = command.IsPublic,
@@ -932,7 +996,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void DeleteQuestionnaire()
         {
-            this.ApplyEvent(new QuestionnaireDeleted());
+            this.Apply(new QuestionnaireDeleted());
         }
 
         #endregion
@@ -943,7 +1007,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroAlreadyExist(command.MacroId);
-            this.ApplyEvent(new MacroAdded(command.MacroId, command.ResponsibleId));
+            this.Apply(new MacroAdded(command.MacroId, command.ResponsibleId));
         }
 
         public void UpdateMacro(UpdateMacro command)
@@ -951,14 +1015,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ThrowDomainExceptionIfMacroContentIsEmpty(command.Content);
-            this.ApplyEvent(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
+            this.Apply(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
         public void DeleteMacro(DeleteMacro command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
-            this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
+            this.Apply(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
 
         #endregion
@@ -968,7 +1032,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddOrUpdateAttachment(AddOrUpdateAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new AttachmentUpdated(
+            this.Apply(new AttachmentUpdated(
                 attachmentId: command.AttachmentId, 
                 attachmentName: command.AttachmentName, 
                 responsibleId: command.ResponsibleId,
@@ -978,7 +1042,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteAttachment(DeleteAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
+            this.Apply(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
         }
 
         #endregion
@@ -988,7 +1052,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddOrUpdateTranslation(AddOrUpdateTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new TranslationUpdated(
+            this.Apply(new TranslationUpdated(
                 translationId: command.TranslationId,
                 name: command.Name,
                 responsibleId: command.ResponsibleId));
@@ -997,7 +1061,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteTranslation(DeleteTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new TranslationDeleted(command.TranslationId, command.ResponsibleId));
+            this.Apply(new TranslationDeleted(command.TranslationId, command.ResponsibleId));
         }
 
         #endregion
@@ -1014,7 +1078,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
             }
-            this.ApplyEvent(new LookupTableAdded(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
+            this.Apply(new LookupTableAdded(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
 
         public void UpdateLookupTable(UpdateLookupTable command)
@@ -1027,7 +1091,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
-            this.ApplyEvent(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
+            this.Apply(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
 
         public void DeleteLookupTable(DeleteLookupTable command)
@@ -1038,7 +1102,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
-            this.ApplyEvent(new LookupTableDeleted(command.LookupTableId, command.ResponsibleId));
+            this.Apply(new LookupTableDeleted(command.LookupTableId, command.ResponsibleId));
         }
 
         #endregion
@@ -1088,7 +1152,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableName: variableName,
                 parentGroup: parentGroupId.HasValue ? this.innerDocument.Find<IGroup>(parentGroupId.Value) : this.innerDocument);
 
-            this.ApplyEvent(new NewGroupAdded
+            this.Apply(new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
@@ -1102,8 +1166,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isRoster)
             {
-                this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId)
+                this.Apply(new GroupBecameARoster(responsibleId, groupId));
+                this.Apply(new RosterChanged(responsibleId, groupId)
                 {
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = rosterSizeSource,
@@ -1113,12 +1177,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             else
             {
-                this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+                this.Apply(new GroupStoppedBeingARoster(responsibleId, groupId));
             }
 
             if (index.HasValue)
             {
-                this.ApplyEvent(new QuestionnaireItemMoved
+                this.Apply(new QuestionnaireItemMoved
                 {
                     PublicKey = groupId,
                     GroupKey = parentGroupId,
@@ -1474,7 +1538,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableName: variableName,
                 parentGroup: @group.GetParent() as IGroup ?? this.innerDocument);
 
-            this.ApplyEvent(new GroupUpdated
+            this.Apply(new GroupUpdated
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
@@ -1487,8 +1551,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isRoster)
             {
-                this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId)
+                this.Apply(new GroupBecameARoster(responsibleId, groupId));
+                this.Apply(new RosterChanged(responsibleId, groupId)
                     {
                         RosterSizeQuestionId = rosterSizeQuestionId,
                         RosterSizeSource = rosterSizeSource,
@@ -1498,7 +1562,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             else
             {
-                this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+                this.Apply(new GroupStoppedBeingARoster(responsibleId, groupId));
             }
         }
 
@@ -1513,7 +1577,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
 
-            this.ApplyEvent(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
+            this.Apply(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
         }
 
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
@@ -1583,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     variableName: sourceGroup.VariableName,
                     parentGroup: targetGroup);
 
-            this.ApplyEvent(new QuestionnaireItemMoved
+            this.Apply(new QuestionnaireItemMoved
             {
                 PublicKey = groupId,
                 GroupKey = targetGroupId,
@@ -1669,7 +1733,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
            
-            this.ApplyEvent(new NewQuestionAdded(
+            this.Apply(new NewQuestionAdded(
                 publicKey : command.QuestionId,
                 groupPublicKey : command.ParentGroupId,
                 questionText : command.Title,
@@ -1701,7 +1765,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (command.Index.HasValue)
             {
-                this.ApplyEvent(new QuestionnaireItemMoved
+                this.Apply(new QuestionnaireItemMoved
                 {
                     PublicKey = command.QuestionId,
                     GroupKey = command.ParentGroupId,
@@ -1721,7 +1785,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsUsedAsRosterTitle(questionId);
             this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
-            this.ApplyEvent(new QuestionDeleted() { QuestionId = questionId, ResponsibleId = responsibleId });
+            this.Apply(new QuestionDeleted() { QuestionId = questionId, ResponsibleId = responsibleId });
         }
 
         public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
@@ -1756,7 +1820,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(question, targetGroup);
 
-            this.ApplyEvent(new QuestionnaireItemMoved
+            this.Apply(new QuestionnaireItemMoved
             {
                 PublicKey = questionId,
                 GroupKey = targetGroupId,
@@ -1776,7 +1840,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                QuestionType.Text, responsibleId, validationCoditions);
 
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey : questionId,
                 groupPublicKey : null, //?
@@ -1822,7 +1886,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.GpsCoordinates, responsibleId, validationConditions);
             
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: questionId,
                 groupPublicKey: null, //?
@@ -1872,7 +1936,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
                 QuestionType.DateTime, command.ResponsibleId, command.ValidationConditions);
             
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: command.QuestionId,
                 groupPublicKey: null, //?
@@ -1926,7 +1990,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: questionId,
                 groupPublicKey: null, //?
@@ -2004,7 +2068,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: questionId,
                 groupPublicKey: null, //?
@@ -2061,7 +2125,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: questionId,
                 groupPublicKey: null, //?
@@ -2111,7 +2175,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
-            this.ApplyEvent(new QuestionChanged
+            this.Apply(new QuestionChanged
             (
                 publicKey: questionId,
                 groupPublicKey: null, //?
@@ -2173,7 +2237,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
 
-            this.ApplyEvent(new NumericQuestionChanged
+            this.Apply(new NumericQuestionChanged
             (
                 publicKey : questionId,
                 questionText : title,
@@ -2208,7 +2272,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.TextList, responsibleId, validationConditions);
 
-            this.ApplyEvent(new TextListQuestionChanged
+            this.Apply(new TextListQuestionChanged
             {
                 PublicKey = questionId,
 
@@ -2238,7 +2302,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId, null);
 
-            this.ApplyEvent(new MultimediaQuestionUpdated()
+            this.Apply(new MultimediaQuestionUpdated()
             {
                 QuestionId = questionId,
                 Title = title,
@@ -2267,7 +2331,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, responsibleId, validationConditions);
             
 
-            this.ApplyEvent(new QRBarcodeQuestionUpdated()
+            this.Apply(new QRBarcodeQuestionUpdated()
             {
                 QuestionId = questionId,
                 Title = title,
@@ -2296,7 +2360,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.ApplyEvent(new StaticTextAdded(command.EntityId, 
+            this.Apply(new StaticTextAdded(command.EntityId, 
                 command.ResponsibleId,
                 command.ParentId, 
                 command.Text,
@@ -2306,7 +2370,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             if (command.Index.HasValue)
             {
-                this.ApplyEvent(new QuestionnaireItemMoved
+                this.Apply(new QuestionnaireItemMoved
                 {
                     PublicKey = command.EntityId,
                     GroupKey = command.ParentId,
@@ -2323,7 +2387,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            this.ApplyEvent(new StaticTextUpdated(command.EntityId,
+            this.Apply(new StaticTextUpdated(command.EntityId,
                 command.ResponsibleId, 
                 command.Text, 
                 command.AttachmentName, 
@@ -2338,7 +2402,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
 
-            this.ApplyEvent(new StaticTextDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+            this.Apply(new StaticTextDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
         }
 
         public void MoveStaticText(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
@@ -2353,7 +2417,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var sourceStaticText = this.innerDocument.Find<IStaticText>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceStaticText.GetParent() as IGroup);
 
-            this.ApplyEvent(new QuestionnaireItemMoved
+            this.Apply(new QuestionnaireItemMoved
             {
                 PublicKey = entityId,
                 GroupKey = targetEntityId,
@@ -2375,7 +2439,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.ApplyEvent(new VariableAdded(
+            this.Apply(new VariableAdded(
                 command.EntityId, 
                 command.ResponsibleId,
                 command.ParentId, 
@@ -2383,7 +2447,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             if (command.Index.HasValue)
             {
-                this.ApplyEvent(new QuestionnaireItemMoved
+                this.Apply(new QuestionnaireItemMoved
                 {
                     PublicKey = command.EntityId,
                     GroupKey = command.ParentId,
@@ -2400,7 +2464,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
 
-            this.ApplyEvent(new VariableUpdated(command.EntityId, command.ResponsibleId, command.VariableData));
+            this.Apply(new VariableUpdated(command.EntityId, command.ResponsibleId, command.VariableData));
         }
 
         public void DeleteVariable(Guid entityId, Guid responsibleId)
@@ -2408,7 +2472,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
 
-            this.ApplyEvent(new VariableDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+            this.Apply(new VariableDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
         }
 
         public void MoveVariable(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
@@ -2423,7 +2487,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable.GetParent() as IGroup);
 
-            this.ApplyEvent(new QuestionnaireItemMoved
+            this.Apply(new QuestionnaireItemMoved
             {
                 PublicKey = entityId,
                 GroupKey = targetEntityId,
@@ -2453,7 +2517,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("User {0} already exist in share list.", email));
             }
 
-            this.ApplyEvent(new SharedPersonToQuestionnaireAdded()
+            this.Apply(new SharedPersonToQuestionnaireAdded()
             {
                 PersonId = personId,
                 Email = email,
@@ -2473,7 +2537,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Couldn't remove user, because it doesn't exist in share list");
             }
 
-            this.ApplyEvent(new SharedPersonFromQuestionnaireRemoved()
+            this.Apply(new SharedPersonFromQuestionnaireRemoved()
             {
                 PersonId = personId,
                 ResponsibleId = responsibleId
@@ -2574,7 +2638,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     targetToPasteIn.PublicKey,
                     targetIndex, true, responsibleId);
 
-                this.ApplyEvent(questionCloned);
+                this.Apply(questionCloned);
 
                 return;
             }
@@ -2585,7 +2649,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
-                this.ApplyEvent(new StaticTextCloned(
+                this.Apply(new StaticTextCloned(
                     entityId : pasteItemId,
                     parentId : targetToPasteIn.PublicKey,
                     sourceEntityId : entityToInsert.PublicKey,
@@ -2624,7 +2688,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     replacementIdDictionary: replacementIdDictionary,
                     events: events);
 
-                events.ForEach(this.ApplyEvent);
+                events.ForEach(this.Apply);
 
                 return;
             }
@@ -2635,7 +2699,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Variable cannot be pasted here."));
 
-                this.ApplyEvent(new VariableCloned(
+                this.Apply(new VariableCloned(
                     entityId: pasteItemId,
                     parentId: targetToPasteIn.PublicKey,
                     sourceEntityId: entityToInsert.PublicKey,
