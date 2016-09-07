@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return collection;
         }
 
-        private static IObserbableCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
+        private static IObservableCollection<ICompositeEntity> CreateViewModelAsCompositeCollectionRefreshedByChangesInField(
             ICompositeEntity viewModel,
             string propertyNameToRefresh,
             Func<bool> doesNeedShowViewModel)

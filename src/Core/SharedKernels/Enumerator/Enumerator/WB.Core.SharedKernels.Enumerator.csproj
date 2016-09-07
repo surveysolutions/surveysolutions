@@ -160,7 +160,7 @@
     <Compile Include="Services\IAsyncRunner.cs" />
     <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\CovariantObservableCollection.cs" />
-    <Compile Include="Utils\IObserbableCollection.cs" />
+    <Compile Include="Utils\IObservableCollection.cs" />
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
