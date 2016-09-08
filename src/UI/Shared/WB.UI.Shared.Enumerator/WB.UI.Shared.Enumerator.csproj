@@ -1040,7 +1040,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__progressbar.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_divider.axml">
+    <AndroidResource Include="Resources\layout\interview_question__divider.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_text_list_add_new_item.axml" />
