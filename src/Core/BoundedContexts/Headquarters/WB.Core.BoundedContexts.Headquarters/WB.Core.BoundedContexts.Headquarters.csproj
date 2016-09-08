@@ -290,7 +290,6 @@
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
@@ -375,7 +374,6 @@
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
-    <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
@@ -517,6 +515,7 @@
     <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
+    <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
     <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
