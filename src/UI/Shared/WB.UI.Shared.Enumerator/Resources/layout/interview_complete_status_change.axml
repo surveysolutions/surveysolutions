@@ -5,18 +5,13 @@
   <LinearLayout
       style="@style/Interview_QuestionWithDivider"
       local:MvxBind="HideKeyboardOnClick .">
-    <LinearLayout style="@style/Interview_QuestionWithDivider"
-      local:MvxBind="HideKeyboardOnClick .">
-      <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-        <LinearLayout style="@style/Interview_Question_Header">
-          <TextView
-              style="@style/Interview_Question_Title"
-              local:MvxBind="Text Localization('Interview_Complete_Screen_Description');" />
-        </LinearLayout>
-      </LinearLayout >
+    
+    <TextView
+      style="@style/Interview_Question_Title"
+      android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+      local:MvxBind="Text Localization('Interview_Complete_Screen_Description');" />
 
-      <View style="@style/Interview_Entity_Divider" />
-    </LinearLayout>
+    <View style="@style/Interview_Entity_Divider" />
 
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
       <LinearLayout style="@style/Interview_Question_Header">
@@ -108,11 +103,10 @@
         Text Localization('Interview_Complete_Button'); 
         ButtonGroupStyle InterviewState; "/>
 
-      <LinearLayout style="@style/Interview_Question_Header">
-        <TextView
-            style="@style/Interview_Complete_Screen_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
-      </LinearLayout>
+      <TextView
+        style="@style/Interview_Complete_Screen_Text"
+        local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
+
     </LinearLayout>
   </LinearLayout>
 </ScrollView>
