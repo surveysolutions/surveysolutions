@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -65,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
             this.questionnaireIdentity = questionnaireId;
-            
+
             this.BuildSectionsList();
         }
 
@@ -112,13 +113,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.UpdateSideBarTree();
                 return;
             }
-            
+
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
             {
                 return;
-            }      
-      
+            }
+
             while (sideBarSectionToHighlight.Parent != null)
             {
                 sideBarSectionToHighlight = sideBarSectionToHighlight.Parent;
@@ -141,10 +142,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            foreach (var rosterInstance in @event.Instances)
+            var parentGroupsToRefresh = @event.Instances.Select(x => interview.GetParentGroup(x.GetIdentity())).Distinct();
+
+            foreach (var identity in parentGroupsToRefresh)
             {
-                var addedIdentity = rosterInstance.GetIdentity();
-                this.RefreshListWithNewItemAdded(addedIdentity, interview);
+                this.RefreshSectionChildItemsIfVisible(identity, interview);
             }
 
             this.RefreshHasChildrenFlags();
@@ -155,15 +157,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
-            
-            foreach (var groupId in @event.Groups)
-            {
-                var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
 
-                if (questionnaire.GetAllSections().Contains(addedIdentity.Id))
-                    this.AddSection(addedIdentity.Id, questionnaire, interview);
-                else
-                    this.RefreshListWithNewItemAdded(addedIdentity, interview);
+            var allSections = questionnaire.GetAllSections().ToHashSet();
+
+            var sectionsIdToAdd = @event.Groups.Select(x => x.Id).Where(x => allSections.Contains(x));
+            foreach (Guid sectionIdToAdd in sectionsIdToAdd)
+            {
+                this.AddSection(sectionIdToAdd, questionnaire, interview);
+            }
+
+            var groupsToRefresh = @event.Groups.Where(x => !allSections.Contains(x.Id)).Select(x => interview.GetParentGroup(x)).Distinct();
+            foreach (Identity parentGroupToRefresh in groupsToRefresh)
+            {
+                this.RefreshSectionChildItemsIfVisible(parentGroupToRefresh, interview);
             }
 
             this.RefreshHasChildrenFlags();
@@ -183,14 +189,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Sections.Insert(index + sectionsOffsetBecauseCoverLink, sectionViewModel);
         }
 
-        private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
+        private void RefreshSectionChildItemsIfVisible(Identity sectionId, IStatefulInterview interview)
         {
-            Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(sectionId));
 
             if (sectionToAddTo != null)
             {
-                List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
+                List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(sectionId).ToList();
                 for (int i = 0; i < enabledSubgroups.Count; i++)
                 {
                     var enabledSubgroupIdentity = enabledSubgroups[i];
@@ -278,8 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(
-                    () =>
+                return new MvxCommand(async () => await Task.Run(() =>
                     {
                         this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
                     }));
