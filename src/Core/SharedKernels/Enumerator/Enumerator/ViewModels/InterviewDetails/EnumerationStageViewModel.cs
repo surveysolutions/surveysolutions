@@ -152,7 +152,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public int? ScrollToIndex { get; set; }
-        private static int run = 1;
 
         private void LoadFromModel(Identity groupIdentity)
         {
