@@ -106,13 +106,17 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Question_Answer_TextEditor" parent="Interview_Question_Answer_Editor">
+  <style name="Interview_TextEditor" parent="Interview_Question_Answer_Editor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:focusable">true</item>
     <item name="android:focusableInTouchMode">true</item>
-    <item name="android:background">@drawable/question_text_question</item>
+    <item name="android:background">@drawable/text_editor_border</item>
     <item name="android:textCursorDrawable">@null</item>
+  </style>
+
+  <style name="Interview_Question_TextEditor" parent="Interview_Question_Answer_Editor">
+    <item name="android:background">@drawable/question_text_question</item>
   </style>
   
    <style name="Interview_Question_Answer_Text_Editor" >
@@ -148,7 +152,7 @@
     <item name="android:background">@drawable/question_text_question</item>
   </style>
   
-  <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_Answer_TextEditor">
+  <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_TextEditor">
     <item name="android:background">@null</item>
     <item name="android:completionThreshold">1</item>
     <item name="android:drawablePadding">@dimen/Interview_Question_Answer_FilteredComboBox_padding</item>
@@ -267,7 +271,7 @@
     <item name="android:background">@drawable/delete_button</item>
   </style>
 
-  <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_Answer_TextEditor">
+  <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_TextEditor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:focusable">true</item>
