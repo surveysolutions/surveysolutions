@@ -16,13 +16,13 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -4717,5 +4717,90 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 isCompleted: this.wasCompleted,
                 isHardDeleted: this.wasHardDeleted,
                 isReceivedByInterviewer: this.receivedByInterviewer);
+
+        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire)
+        {
+            var tree = new InterviewTree();
+
+            var sectionIds = questionnaire.GetAllSections();
+
+            foreach (var sectionId in sectionIds)
+            {
+                var sectionIdentity = new Identity(sectionId, RosterVector.Empty);
+                var section = this.BuildInterviewTreeSection(questionnaire, sectionIdentity);
+
+                tree.Sections.Add(section);
+            }
+
+            return tree;
+        }
+
+        private InterviewTreeSection BuildInterviewTreeSection(IQuestionnaire questionnaire, Identity sectionIdentity)
+        {
+            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire);
+
+            return new InterviewTreeSection(sectionIdentity, children);
+        }
+
+        private InterviewTreeGroup BuildInterviewTreeGroup(Identity groupIdentity, IQuestionnaire questionnaire)
+        {
+            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire);
+
+            return new InterviewTreeGroup(groupIdentity, children);
+        }
+
+        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire)
+        {
+            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire);
+
+            return new InterviewTreeRoster(rosterIdentity, children);
+        }
+
+        private InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire)
+        {
+            return new InterviewTreeQuestion(questionIdentity);
+        }
+
+        private InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire)
+        {
+            return new InterviewTreeStaticText(staticTextIdentity);
+        }
+
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire)
+        {
+            var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
+
+            foreach (var childId in childIds)
+            {
+                if (questionnaire.IsQuestion(childId))
+                {
+                    var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire);
+                }
+                else if (questionnaire.IsStaticText(childId))
+                {
+                    var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire);
+                }
+                else if (questionnaire.HasGroup(childId))
+                {
+                    var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeGroup(childGroupIdentity, questionnaire);
+                }
+                else if (questionnaire.IsRosterGroup(childId))
+                {
+                    Guid[] rostersStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(childId).ToArray();
+
+                    IEnumerable<RosterVector> childRosterVectors = this.ExtendRosterVector(
+                        this.interviewState, groupIdentity.RosterVector, rostersStartingFromTop.Length, rostersStartingFromTop);
+
+                    foreach (var childRosterVector in childRosterVectors)
+                    {
+                        var childRosterIdentity = new Identity(childId, childRosterVector);
+                        yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire);
+                    }
+                }
+            }
+        }
     }
 }
