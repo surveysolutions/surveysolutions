@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTree
     {
-        public List<InterviewTreeSection> Sections { get; } = new List<InterviewTreeSection>();
+        public IList<InterviewTreeSection> Sections { get; } = new List<InterviewTreeSection>();
     }
 
     public interface IInterviewTreeNode
@@ -16,9 +16,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IList<IInterviewTreeNode> Children { get; }
     }
 
-    public class InterviewTreeQuestion : IInterviewTreeNode
+    public class InterviewTreeLeafNode : IInterviewTreeNode
     {
-        public InterviewTreeQuestion(Identity identity)
+        public InterviewTreeLeafNode(Identity identity)
         {
             this.Identity = identity;
         }
@@ -27,32 +27,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IList<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
     }
 
+    public class InterviewTreeQuestion : InterviewTreeLeafNode
+    {
+        public InterviewTreeQuestion(Identity identity)
+            : base(identity) {}
+    }
+
+    public class InterviewTreeStaticText : InterviewTreeLeafNode
+    {
+        public InterviewTreeStaticText(Identity identity)
+            : base(identity) {}
+    }
+
     public class InterviewTreeNodeContainer : IInterviewTreeNode
     {
-        public InterviewTreeNodeContainer(Identity identity)
+        public InterviewTreeNodeContainer(Identity identity, IEnumerable<IInterviewTreeNode> children)
         {
             this.Identity = identity;
+            this.Children = children.ToList();
         }
 
         public Identity Identity { get; }
-        public IList<IInterviewTreeNode> Children { get; } = new List<IInterviewTreeNode>();
+        public IList<IInterviewTreeNode> Children { get; }
     }
 
     public class InterviewTreeGroup : InterviewTreeNodeContainer
     {
-        public InterviewTreeGroup(Identity identity)
-            : base(identity) {}
+        public InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
+            : base(identity, children) {}
     }
 
     public class InterviewTreeSection : InterviewTreeNodeContainer
     {
-        public InterviewTreeSection(Identity identity)
-            : base(identity) {}
+        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
+            : base(identity, children) {}
     }
 
     public class InterviewTreeRoster : InterviewTreeNodeContainer
     {
-        public InterviewTreeRoster(Identity identity)
-            : base(identity) {}
+        public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children)
+            : base(identity, children) {}
     }
 }
