@@ -2,11 +2,9 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
 {
@@ -35,10 +33,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
-        public InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
+        public InterviewImportData[] GetInterviewsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.GetInterviewsImport(interviewImportProcessId, questionnaireIdentity, false);
+        }
+
+        public InterviewImportData[] GetInterviewsImportDataForPanel(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.GetInterviewsImport(interviewImportProcessId, questionnaireIdentity, true);
+        }
+
+        private InterviewImportData[] GetInterviewsImport(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, bool isPanel)
         {
             var bigTemplateObject =
-                this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+                this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
@@ -47,24 +55,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 this.questionnaireRosterStructureStorage.GetQuestionnaireRosterStructure(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
-            var preloadedDataService =
-                this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                     questionnaireRosterStructure, bigTemplateObject);
 
-            var preloadedDataOfSample = this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId);
-
-            var dataToPreload = preloadedDataService.CreatePreloadedDataDtoFromSampleData(preloadedDataOfSample);
+            PreloadedDataRecord[] dataToPreload = isPanel 
+                ? preloadedDataService.CreatePreloadedDataDtosFromPanelData(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId)) 
+                : preloadedDataService.CreatePreloadedDataDtoFromSampleData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
 
             return
                 dataToPreload.Select(
-                    d =>
-                        new InterviewImportData()
-                        {
-                            Answers = d.PreloadedDataDto.Data[0].Answers,
-                            InterviewerId = d.InterviewerId,
-                            SupervisorId = d.SupervisorId
-                        })
-                    .ToArray();
+                    d => new InterviewImportData()
+                    {
+                        PreloadedData = d.PreloadedDataDto,
+                        InterviewerId = d.InterviewerId,
+                        SupervisorId = d.SupervisorId
+                    }).ToArray();
         }
     }
 }

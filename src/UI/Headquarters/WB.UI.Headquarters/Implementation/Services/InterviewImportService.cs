@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,7 +12,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
@@ -28,7 +24,6 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
-        private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
         private object lockStart = new object();
@@ -40,7 +35,6 @@ namespace WB.UI.Headquarters.Implementation.Services
             ICommandService commandService,
             ILogger logger,
             SampleImportSettings sampleImportSettings, 
-            IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
             IQuestionnaireStorage questionnaireStorage,
             IPlainTransactionManagerProvider plainTransactionManagerProvider)
@@ -48,14 +42,12 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.commandService = commandService;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
-            this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
             this.questionnaireStorage = questionnaireStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
-            Guid? supervisorId, Guid headquartersId)
+        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, bool isPanel, Guid? supervisorId, Guid headquartersId)
         {
             lock (lockStart)
             {
@@ -81,7 +73,10 @@ namespace WB.UI.Headquarters.Implementation.Services
                 var bigTemplateObject = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                 this.Status.QuestionnaireTitle = bigTemplateObject.Title;
 
-                var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId, questionnaireIdentity);
+                var interviewsToImport = isPanel ? 
+                    this.interviewImportDataParsingService.GetInterviewsImportDataForPanel(interviewImportProcessId, questionnaireIdentity):
+                    this.interviewImportDataParsingService.GetInterviewsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
+
                 if (interviewsToImport == null)
                 {
                     this.Status.State.Errors.Add(new InterviewImportError()
@@ -115,14 +110,16 @@ namespace WB.UI.Headquarters.Implementation.Services
                         {
                             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                             this.plainTransactionManager.ExecuteInPlainTransaction(
-                                () => this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
-                                    interviewId: Guid.NewGuid(),
-                                    responsibleId: headquartersId,
-                                    questionnaireIdentity: questionnaireIdentity,
-                                    supervisorId: responsibleSupervisorId,
-                                    interviewerId: importedInterview.InterviewerId,
-                                    answersTime: DateTime.UtcNow,
-                                    answersOnPrefilledQuestions: importedInterview.Answers)));
+                                () => this.commandService.Execute(
+                                    new CreateInterviewWithPreloadedData(
+                                        Guid.NewGuid(),
+                                        headquartersId,
+                                        questionnaireIdentity.QuestionnaireId,
+                                        questionnaireIdentity.Version,
+                                        supervisorId: responsibleSupervisorId,
+                                        interviewerId: importedInterview.InterviewerId,
+                                        answersTime: DateTime.UtcNow,
+                                        preloadedDataDto: importedInterview.PreloadedData)));
                         }
                         catch (Exception ex)
                         {
@@ -162,33 +159,9 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private string FormatInterviewImportData(InterviewImportData importedInterview)
         {
-            return string.Join(", ", importedInterview.Answers.Values.Where(x => x != null));
+            return string.Join(", ", importedInterview.PreloadedData.Data[0].Answers.Values.Where(x => x != null));
         }
-
-        public bool HasResponsibleColumn(string sampleId)
-        {
-            using (var csvReader =new CsvReader(new StreamReader(new MemoryStream(this.preloadedDataRepository.GetBytesOfSampleData(sampleId)))))
-            {
-                this.ConfigureCsvReader(csvReader);
-
-                csvReader.Read();
-
-                var columns = csvReader.FieldHeaders.Select(header => header.Trim().ToLower()).ToArray();
-                return columns.Contains(ServiceColumns.ResponsibleColumnName);
-            }
-        }
-
-        private void ConfigureCsvReader(CsvReader csvReader)
-        {
-            csvReader.Configuration.Delimiter = this.Status.State.Delimiter;
-            csvReader.Configuration.BufferSize = 32768;
-            csvReader.Configuration.IgnoreHeaderWhiteSpace = true;
-            csvReader.Configuration.IsHeaderCaseSensitive = false;
-            csvReader.Configuration.SkipEmptyRecords = true;
-            csvReader.Configuration.TrimFields = true;
-            csvReader.Configuration.TrimHeaders = true;
-            csvReader.Configuration.WillThrowOnMissingField = false;
-        }
+        
         public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
     }
 }
