@@ -178,7 +178,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Where(sId => interview.IsEnabled(new Identity(sId, new decimal[0])))
                 .ToList()
                 .IndexOf(sectionId);
-            this.Sections.Insert(index, sectionViewModel);
+
+            var sectionsOffsetBecauseCoverLink = 1;
+            this.Sections.Insert(index + sectionsOffsetBecauseCoverLink, sectionViewModel);
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
