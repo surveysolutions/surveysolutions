@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -8,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewProperties(Guid id, Guid interviewerId, InterviewStatus status,
             bool isReceivedByInterviewer, bool isCompleted, bool isHardDeleted)
         {
-            this.Id = id;
+            this.Id = id.FormatGuid();
             this.InterviewerId = interviewerId != Guid.Empty ? interviewerId : null as Guid?;
             this.Status = status;
             this.IsReceivedByInterviewer = isReceivedByInterviewer;
@@ -16,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.IsHardDeleted = isHardDeleted;
         }
 
-        public Guid Id { get; }
+        public string Id { get; }
         public Guid? InterviewerId { get; }
         public InterviewStatus Status { get; }
         public bool IsReceivedByInterviewer { get; }

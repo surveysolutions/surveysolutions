@@ -1,5 +1,6 @@
 using System;
 using Machine.Specifications;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_throw_InterviewException_with_explanation = () =>
-            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
+            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId.FormatGuid()} on server, because it received by interviewer.");
 
         private static Interview interview;
         private static Guid userId;

@@ -1174,8 +1174,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
@@ -1199,8 +1204,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
@@ -1462,8 +1471,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
@@ -1584,9 +1596,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
@@ -1598,9 +1615,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
@@ -1612,9 +1634,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
@@ -2409,8 +2436,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, RosterVector rosterVector,
             decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, Identity answeredQuestion)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
@@ -2432,8 +2462,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
 
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
@@ -2475,8 +2508,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
            IQuestionnaire questionnaire,
            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
@@ -2489,8 +2525,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
@@ -2500,8 +2539,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
@@ -2513,8 +2555,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
 
@@ -2545,8 +2590,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
             var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
 
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
             this.ThrowIfQuestionDoesNotExist(question.Id, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(state, question.Id, question.RosterVector, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(question.Id, question.RosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(question.Id, questionnaire, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(question.Id, selectedValues, questionnaire);
 
@@ -2566,8 +2614,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
@@ -2576,8 +2627,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
 
@@ -2599,8 +2653,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
@@ -2625,8 +2682,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
@@ -2635,8 +2695,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
          Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(tree);
+
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
@@ -3979,41 +4042,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Question with id '{0}' is not found. InterviewId: {1}", questionId, EventSourceId));
         }
 
-        private void ThrowIfRosterVectorIsIncorrect(IReadOnlyInterviewStateDependentOnAnswers state, Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            if (rosterVector == null)
-                throw new InterviewException(string.Format(
-                    "Roster information for question {0} is missing. Roster vector cannot be null. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), this.EventSourceId));
-
-            Guid[] parentRosterGroupIdsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
-
-            if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(rosterVector, parentRosterGroupIdsStartingFromTop))
-                throw new InterviewException(string.Format(
-                    "Roster information for question {0} is incorrect. " +
-                    "Roster vector has {1} elements, but parent roster groups count is {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroupIdsStartingFromTop.Length, this.EventSourceId));
-
-            for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
-            {
-                decimal rosterInstanceId = rosterVector[indexOfRosterVectorElement];
-                Guid rosterGroupId = parentRosterGroupIdsStartingFromTop[indexOfRosterVectorElement];
-
-                int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
-                IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
-
-                if (!rosterInstanceIds.Contains(rosterInstanceId))
-                    throw new InterviewException(string.Format(
-                        "Roster information for question {0} is incorrect. " +
-                        "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}] " +
-                        "but roster group has only following roster instances: {4}. InterviewId: {5}",
-                        FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
-                        FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,
-                        string.Join(", ", rosterInstanceIds), this.EventSourceId));
-            }
-        }
-
         private void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit,
             Guid questionId, IQuestionnaire questionnaire)
         {
@@ -4720,7 +4748,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire)
         {
-            var tree = new InterviewTree();
+            var tree = new InterviewTree(this.EventSourceId);
 
             var sectionIds = questionnaire.GetAllSections();
 

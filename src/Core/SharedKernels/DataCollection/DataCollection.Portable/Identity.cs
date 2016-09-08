@@ -57,10 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.Equals((Identity) obj);
         }
 
-        public bool Equals(Guid id, RosterVector rosterVector)
-        {
-            return Equals(new Identity(id, rosterVector));
-        }
+        public bool Equals(Guid id, RosterVector rosterVector) => this.Equals(new Identity(id, rosterVector));
 
         public static bool operator ==(Identity a, Identity b)
         {
@@ -73,9 +70,6 @@ namespace WB.Core.SharedKernels.DataCollection
             return a.Equals(b);
         }
 
-        public static bool operator !=(Identity a, Identity b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(Identity a, Identity b) => !(a == b);
     }
 }

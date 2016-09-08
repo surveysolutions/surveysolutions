@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -6,7 +7,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTree
     {
+        public InterviewTree(Guid interviewId)
+        {
+            this.InterviewId = interviewId.FormatGuid();
+        }
+
+        public string InterviewId { get; }
+
         public IList<InterviewTreeSection> Sections { get; } = new List<InterviewTreeSection>();
+
+        public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions(Guid questionId)
+            => this
+                .Sections
+                .Cast<IInterviewTreeNode>()
+                .TreeToEnumerable(node => node.Children)
+                .OfType<InterviewTreeQuestion>()
+                .Where(node => node.Identity.Id == questionId)
+                .ToReadOnlyCollection();
     }
 
     public interface IInterviewTreeNode
