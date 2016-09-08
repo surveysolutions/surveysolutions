@@ -37,11 +37,12 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.Infrastructure.Aggregates;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    internal class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
+    internal class Questionnaire : /*AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>,*/ IPlainAggregateRoot
     {
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
@@ -69,12 +70,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region State
 
-        private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        protected internal QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private HashSet<Guid> macroIds = new HashSet<Guid>();
         private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
 
         private bool wasExpressionsMigrationPerformed = false;
+
+        public Guid EventSourceId => this.innerDocument.PublicKey;
 
         internal void AddMacro(MacroAdded e)
         {
@@ -817,7 +820,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.RemoveEntity(e.EntityId);
         }
 
-        public QuestionnaireState CreateSnapshot()
+       /* public QuestionnaireState CreateSnapshot()
         {
             return new QuestionnaireState
             {
@@ -837,7 +840,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.readOnlyUsers = snapshot.ReadOnlyUsers;
             this.macroIds = snapshot.MacroIds;
             this.lookupTableIds = snapshot.LookupTableIds;
-        }
+        }*/
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
         {
@@ -2688,7 +2691,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     replacementIdDictionary: replacementIdDictionary,
                     events: events);
 
-                events.ForEach(this.ApplyEvent);
+                //events.ForEach(this.ApplyEvent);
 
                 return;
             }
@@ -4896,6 +4899,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        protected override void OnEventApplied(UncommittedEvent appliedEvent) { }
+        public void SetId(Guid id)
+        {
+            this.innerDocument.PublicKey = id;
+        }
     }
 }
