@@ -152,11 +152,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public int? ScrollToIndex { get; set; }
+        private static int run = 1;
 
         private void LoadFromModel(Identity groupIdentity)
         {
             try
-            { 
+            {
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
                 var entities = this.interviewViewModelFactory
@@ -169,7 +170,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
-                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                var previousGroupNavigationViewModel =
+                    this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
@@ -177,14 +179,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     interviewItemViewModel.Dispose();
                 }
 
-                var newGroupItems = interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
+                var newGroupItems =
+                    interviewEntityViewModels.Concat(
+                        previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
 
-                this.Items.ForEach(x => x.DisposeIfDisposable());
-                this.Items.Clear();
-                this.InterviewEntities?.ForEach(x => x.DisposeIfDisposable());
                 this.InterviewEntities = newGroupItems;
 
-                var collection = this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
+                var collection =
+                    this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
                 this.Items = collection;
             }
             finally
