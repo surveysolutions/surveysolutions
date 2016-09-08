@@ -113,14 +113,6 @@ namespace WB.UI.Headquarters
                 "~/Scripts/ko.datepicker.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/batch-upload").Include(
-                "~/Scripts/bootstrap3-typeahead.js",
-                "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/pages/batchupload.js",
-                "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js"
-                ));
             bundles.Add(new ScriptBundle("~/js/synclog").Include(
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/ko.datepicker.js",
