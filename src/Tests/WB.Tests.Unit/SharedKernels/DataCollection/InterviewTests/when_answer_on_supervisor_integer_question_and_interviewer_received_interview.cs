@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             exception.ShouldNotBeNull();
             exception.ShouldBeOfExactType<InterviewException>();
-            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
+            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId.FormatGuid()} on server, because it received by interviewer.");
         };
 
         It should_not_raise_any_NumericIntegerQuestionAnswered_event = () =>
