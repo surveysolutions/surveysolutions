@@ -232,6 +232,7 @@
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
     <Compile Include="Events\Questionnaire\VariableUpdated.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
