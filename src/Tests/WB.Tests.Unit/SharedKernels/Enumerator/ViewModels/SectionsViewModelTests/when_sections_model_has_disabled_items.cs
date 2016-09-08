@@ -47,11 +47,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         It should_contains_two_sections_and_complete_and_cover_button = () =>
             viewModel.Sections.Count.ShouldEqual(2 + 1 + 1);
 
-        It should_add_section_D_at_second_position = () =>
+        It should_add_section_D_at_third_position = () =>
         {
-            viewModel.Sections.ElementAt(1).SectionIdentity.Id.Equals(sectionDId);
-            viewModel.Sections.ElementAt(1).SectionIdentity.RosterVector.Equals(Empty.RosterVector);
-            viewModel.Sections.ElementAt(1).Title.PlainText.ShouldEqual("D");
+            viewModel.Sections.ElementAt(2).SectionIdentity.Id.Equals(sectionDId);
+            viewModel.Sections.ElementAt(2).SectionIdentity.RosterVector.Equals(Empty.RosterVector);
+            viewModel.Sections.ElementAt(2).Title.PlainText.ShouldEqual("D");
         };
 
         static SideBarSectionsViewModel viewModel;
