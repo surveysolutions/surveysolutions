@@ -99,9 +99,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
 
                 var liteEventRegistryEntity = new LiteEventRegistryEntity(handler, raiseFilter);
-
-                ILiteEventHandler h;
-                Debug.WriteLine($"Weak reference for {eventType.Name} is live: " + liteEventRegistryEntity.EventHandler.TryGetTarget(out h));
                 handlersForEventType.Add(liteEventRegistryEntity);
             }
         }
