@@ -726,11 +726,12 @@ namespace WB.Tests.Unit.TestFactories
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-            => this.QuestionnaireDocumentWithOneChapter(null, children);
+            => this.QuestionnaireDocumentWithOneChapter(null, null, children);
 
-        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
             {
+                PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
