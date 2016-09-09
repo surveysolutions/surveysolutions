@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -12,11 +14,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IReadSideKeyValueStorage<GroupInfoView>>();
+            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
 
             repositoryMock
                 .Setup(x => x.GetById(questionnaireId))
-                .Returns(CreateChapterInfoView(questionnaireId, chapterId));
+                .Returns(CreateQuestionnaireDocument(questionnaireId, chapterId));
 
             factory = CreateChapterInfoViewFactory(repository: repositoryMock.Object);
         };
