@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -53,19 +54,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.Answers[deletedItemIndex].DeleteListItemCommand.Execute();
+            answerViewModels[deletedItemIndex].DeleteListItemCommand.Execute();
 
         It should_create_list_with_4_answers = () =>
-            listModel.Answers.Count.ShouldEqual(4);
+            answerViewModels.Count.ShouldEqual(4);
 
         It should_delete_item_with_index_equals__deletedItemIndex__ = () =>
-            listModel.Answers.Any(x
+            answerViewModels.Any(x
                 => x.Value == savedAnswers[deletedItemIndex].Item1
                    && x.Title == savedAnswers[deletedItemIndex].Item2)
                 .ShouldBeFalse();
 
-        It should_set_IsAddNewItemVisible_flag_in_true = () =>
-            listModel.IsAddNewItemVisible.ShouldBeTrue();
+        It should_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldNotBeEmpty();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
@@ -94,5 +95,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                                                                         };
 
         private static readonly int deletedItemIndex = 2;
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }

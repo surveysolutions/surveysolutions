@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -296,8 +298,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
-            ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+            var properties = this.BuildInterviewProperties();
+            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -729,7 +734,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            ThrowIfInterviewHardDeleted();
+            var properties = this.BuildInterviewProperties();
+            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             var answerDtos = synchronizedInterview
                 .Answers
@@ -1317,6 +1325,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return questionInstances;
         }
 
+        public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
+        {
+            var rosterInstanceIds = this.interviewState.GetRosterInstanceIds(rosterId, parentIdentity.RosterVector);
+            
+            List<Tuple<Identity, int>> result = new List<Tuple<Identity, int>>();
+            foreach (var rosterInstanceId in rosterInstanceIds)
+            {
+                var rosterVector = new RosterVector(parentIdentity.RosterVector).ExtendWithOneCoordinate(rosterInstanceId);
+                var identity = new Identity(rosterId, rosterVector);
+                result.Add(Tuple.Create(identity, GetRosterSortIndex(identity)));
+            }
+            return new ReadOnlyCollection<Identity>(result.OrderBy(x => x.Item2).Select(x => x.Item1).ToList());
+        }
+
         public IEnumerable<Identity> GetInterviewerEntities(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1504,11 +1526,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.calculated.GroupsAndRostersInGroup);
         }
 
-        private int GetRosterSortIndex(Identity rosterIdentity)
+        public int GetRosterSortIndex(Identity rosterIdentity)
         {
             return this.sortIndexesOfRosterInstanses.ContainsKey(rosterIdentity)
-                ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.Last()
-                : (int)rosterIdentity.RosterVector.Last();
+                ? this.sortIndexesOfRosterInstanses[rosterIdentity] ?? (int)rosterIdentity.RosterVector.LastOrDefault()
+                : (int)rosterIdentity.RosterVector.LastOrDefault();
         }
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroupImpl(Identity group)

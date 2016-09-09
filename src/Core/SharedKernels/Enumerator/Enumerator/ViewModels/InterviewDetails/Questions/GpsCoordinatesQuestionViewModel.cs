@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private bool isInProgress;
@@ -90,7 +91,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
+        private readonly QuestionStateViewModel<GeoLocationQuestionAnswered> questionState;
+        public IQuestionStateViewModel QuestionState => this.questionState;
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
         public AnsweringViewModel Answering { get; private set; }
 
         public GpsCoordinatesQuestionViewModel(
@@ -101,6 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
+             QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry liteEventRegistry,
             ILogger logger)
         {
@@ -110,7 +115,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.locationService = locationService;
             this.userInterfaceStateService = userInterfaceStateService;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
@@ -130,7 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel.IsAnswered)

@@ -5,7 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,11 +12,9 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 {
@@ -28,13 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
-
-        private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
-        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
-
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
-        private readonly IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -44,22 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         public Questionnaire(
             IQuestionnaireStorage questionnaireStorage, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
-            IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
-            IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage,
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
-            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
-            this.referenceInfoForLinkedQuestionsStorage = referenceInfoForLinkedQuestionsStorage;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
@@ -141,14 +124,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion),
-                projectionId);
-
-            this.referenceInfoForLinkedQuestionsStorage.Store(
-                this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaireDocument, identity.Version),
-                projectionId);
-
-            this.questionnaireRosterStructureStorage.Store(
-                this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaireDocument, identity.Version),
                 projectionId);
 
             this.questionnaireQuestionsInfoStorage.Store(

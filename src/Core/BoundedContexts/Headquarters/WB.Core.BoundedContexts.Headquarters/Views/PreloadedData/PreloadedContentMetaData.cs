@@ -15,10 +15,4 @@
         public PreloadedFileMetaData[] FilesMetaInformation { get; private set; }
         public PreloadedContentType PreloadedContentType { get; private set; }
     }
-
-    public enum PreloadedContentType
-    {
-        Sample,
-        Panel
-    }
 }

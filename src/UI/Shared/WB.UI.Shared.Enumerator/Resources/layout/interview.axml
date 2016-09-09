@@ -30,6 +30,7 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
+      android:animateLayoutChanges="true"
       android:id="@+id/interviewCurrentStepFrame"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"

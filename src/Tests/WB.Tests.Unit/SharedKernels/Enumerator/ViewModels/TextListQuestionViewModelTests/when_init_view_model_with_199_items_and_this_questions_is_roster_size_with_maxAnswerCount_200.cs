@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    internal class when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200 : TextListQuestionViewModelTestContext
+    internal class when_init_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200 : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
@@ -46,17 +47,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             listModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-        {
-            listModel.NewListItem = newListItemTitle;
-            listModel.ValueChangeCommand.Execute();
-        };
-
-        It should_create_list_with_200_answers = () =>
-            listModel.Answers.Count.ShouldEqual(200);
-
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
+        Because of = () => listModel.Init(interviewId, questionIdentity, navigationState);
+        
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         private static TextListQuestionViewModel listModel;
         private static readonly NavigationState navigationState = Create.Other.NavigationState();
@@ -73,7 +67,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
         private static readonly Tuple<decimal, string>[] savedAnswers = new Tuple<decimal, string>[199];
-
-        private static readonly string newListItemTitle = "   Hello World!      ";
     }
 }

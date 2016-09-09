@@ -1,17 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <resources>
-
   <dimen name="Interview_Entity_margin_left">56dp</dimen>
   <dimen name="Interview_Entity_margin_right">74dp</dimen>
+  
+  <dimen name="Interview_Entity_margin_with_border_left">72dp</dimen>
+  <dimen name="Interview_Entity_margin_with_border_right">90dp</dimen>
+  
+  <dimen name="Interview_Entity_margin_with_border_left">72dp</dimen>
+  <dimen name="Interview_Entity_margin_with_border_right">90dp</dimen>
 
   <dimen name="Interview_Entity_Element_margin_horizontal">14dp</dimen>
+
+  <dimen name="Interview_Entity_margin_vertical">14dp</dimen>
+  <dimen name="Interview_Entity_margin_small_vertical">6dp</dimen>
+  <dimen name="Interview_Entity_Element_margin_large_vertical">20dp</dimen>
 
   <dimen name="Interview_Question_Answer_margin_top">10dp</dimen>
   <dimen name="Interview_Question_Answer_margin_bottom">0dp</dimen>
   <dimen name="Interview_Question_Errors_margin_bottom">8dp</dimen>
 
+  <dimen name="Interview_Question_Option_vertical_padding">4dp</dimen>
+  
   <dimen name="Interview_Question_Answer_background_padding">16dp</dimen>
+  <dimen name="Interview_Question_Answer_half_background_padding">8dp</dimen>
   <dimen name="Interview_Question_Answer_background_corners_radius">12dp</dimen>
 
   <dimen name="Interview_Question_Answer_Input_background_padding">13dp</dimen>
@@ -28,4 +39,5 @@
   <dimen name="Interview_Comment_Item_margin_top">16dp</dimen>
   <dimen name="Interview_Comment_Caption_margin_bottom">8dp</dimen>
 
+  <dimen name="Interview_Entity_Title_margin_top">18dp</dimen>
 </resources>

@@ -3,26 +3,18 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
     local:MvxBind="HideKeyboardOnClick .">
-  
-  <LinearLayout
-      style="@style/Interview_Question"
-      android:orientation="vertical">
-    <LinearLayout style="@style/Interview_Question_Header">
-      <TextView
-          style="@style/Interview_Question_Title"
-          local:MvxBind="Html Text.HtmlText; Visible Not(QuestionState.Validity.IsInvalid)" />
 
-      <TextView
-          style="@style/Interview_Question_Title"
-          android:textColor="@color/errorTextColor"
-          local:MvxBind="Text Text.PlainText; Visible QuestionState.Validity.IsInvalid" />
-    </LinearLayout>
-  </LinearLayout>
+  <TextView
+    style="@style/Interview_Question_Title"
+    local:MvxBind="Html Text.HtmlText; Visible Not(QuestionState.Validity.IsInvalid)" />
+
+  <TextView
+    style="@style/Interview_Question_Title"
+    android:textColor="@color/errorTextColor"
+    local:MvxBind="Text Text.PlainText; Visible QuestionState.Validity.IsInvalid" />
+
   <include layout="@layout/interview__attachment" />
-  <LinearLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/Interview_Entity_margin_left">
-    <include layout="@layout/interview_question__errors" />
-  </LinearLayout>
+  <include layout="@layout/interview_question__errors" />
+
   <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

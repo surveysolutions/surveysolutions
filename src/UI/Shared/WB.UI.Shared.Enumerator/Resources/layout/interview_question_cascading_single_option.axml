@@ -2,37 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <LinearLayout style="@style/Interview_Question_Body">
-      <include layout="@layout/interview_question__instructions" />
-      <LinearLayout style="@style/Interview_Question_Answer"
-        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-        <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-          <MvxAutoCompleteTextView
-            style="@style/Interview_Question_Answer_FilteredComboBox"
-            android:completionThreshold="1"
-            android:layout_weight="1"
-            android:inputType="textVisiblePassword"
-            local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-            local:MvxBind="FocusValueChanged ValueChangeCommand; 
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+    <MvxAutoCompleteTextView
+      style="@style/Interview_Question_Answer_FilteredComboBox"
+      android:completionThreshold="1"
+      android:layout_weight="1"
+      android:inputType="textVisiblePassword"
+      local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+      local:MvxBind="FocusValueChanged ValueChangeCommand; 
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 
                          ResetText ResetTextInEditor;
                          Watermark Localization('FilteredComboboxQuestion_Hint');" />
-          <include layout="@layout/interview_question__remove_button_input" />
-        </LinearLayout>
-
-      </LinearLayout>
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
-    </LinearLayout>
+    <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
 </LinearLayout>

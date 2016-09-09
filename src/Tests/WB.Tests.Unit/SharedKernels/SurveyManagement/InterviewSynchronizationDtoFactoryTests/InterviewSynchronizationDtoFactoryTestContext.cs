@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -26,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             document.ConnectChildrenWithParent();
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
+                Mock.Of<IQuestionnaireRosterStructureStorage>(
                     _ =>
-                        _.GetById(Moq.It.IsAny<string>()) ==
+                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
                         new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
                 Mock.Of<IQuestionnaireStorage>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
@@ -38,9 +39,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         {
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
+                Mock.Of<IQuestionnaireRosterStructureStorage>(
                     _ =>
-                        _.GetById(Moq.It.IsAny<string>()) ==
+                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
                         questionnaireRosterStructure),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
                 Mock.Of<IQuestionnaireStorage>());

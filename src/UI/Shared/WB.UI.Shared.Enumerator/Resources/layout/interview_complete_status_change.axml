@@ -5,18 +5,13 @@
   <LinearLayout
       style="@style/Interview_QuestionWithDivider"
       local:MvxBind="HideKeyboardOnClick .">
-    <LinearLayout style="@style/Interview_QuestionWithDivider"
-      local:MvxBind="HideKeyboardOnClick .">
-      <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-        <LinearLayout style="@style/Interview_Question_Header">
-          <TextView
-              style="@style/Interview_Question_Title"
-              local:MvxBind="Text Localization('Interview_Complete_Screen_Description');" />
-        </LinearLayout>
-      </LinearLayout >
+    
+    <TextView
+      style="@style/Interview_Question_Title"
+      android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+      local:MvxBind="Text Localization('Interview_Complete_Screen_Description');" />
 
-      <View style="@style/Interview_Entity_Divider" />
-    </LinearLayout>
+    <View style="@style/Interview_Entity_Divider" />
 
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
       <LinearLayout style="@style/Interview_Question_Header">
@@ -83,23 +78,18 @@
     <View style="@style/Interview_Entity_Divider" />
 
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-      <LinearLayout style="@style/Interview_Question_Header">
-        <TextView
-            style="@style/Interview_Complete_Screen_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Note_For_Supervisor')" />
-
-        <LinearLayout style="@style/Interview_Question_Answer">
-          <EditText
-              android:inputType="textMultiLine"
-              android:maxLines="5"
-              android:scrollbars="vertical"
-              android:scrollHorizontally="false"
-              android:gravity="top|left"
-              style="@style/Interview_Question_Answer_TextEditor"
-              android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
-              local:MvxBind="Text CompleteComment; Watermark Localization('TextQuestion_Hint');" />
-        </LinearLayout>
-      </LinearLayout>
+      <TextView
+        style="@style/Interview_Complete_Screen_Text"
+        local:MvxBind="Text Localization('Interview_Complete_Note_For_Supervisor')" />
+      <EditText
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        android:gravity="top|left"
+        style="@style/Interview_TextEditor"
+        android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
+        local:MvxBind="Text CompleteComment; Watermark Localization('TextQuestion_Hint');" />
     </LinearLayout>
 
     <View style="@style/Interview_Entity_Divider" />
@@ -113,11 +103,10 @@
         Text Localization('Interview_Complete_Button'); 
         ButtonGroupStyle InterviewState; "/>
 
-      <LinearLayout style="@style/Interview_Question_Header">
-        <TextView
-            style="@style/Interview_Complete_Screen_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
-      </LinearLayout>
+      <TextView
+        style="@style/Interview_Complete_Screen_Text"
+        local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
+
     </LinearLayout>
   </LinearLayout>
 </ScrollView>

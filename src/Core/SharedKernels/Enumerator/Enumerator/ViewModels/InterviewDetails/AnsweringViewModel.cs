@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class AnsweringViewModel : MvxNotifyPropertyChanged
+    public class AnsweringViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
         private readonly ICommandService commandService;
         readonly IUserInterfaceStateService userInterfaceStateService;
@@ -58,7 +58,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 this.StartInProgressIndicator();
-
                 await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
 
                 lock (this.cancellationLockObject)

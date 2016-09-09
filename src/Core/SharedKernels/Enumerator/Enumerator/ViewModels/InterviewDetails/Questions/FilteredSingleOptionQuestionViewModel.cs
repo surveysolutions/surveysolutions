@@ -8,11 +8,9 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -21,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         public class FilteredComboboxItemViewModel
@@ -64,8 +63,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
         protected IStatefulInterview interview;
-        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
         public AnsweringViewModel Answering { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -73,17 +75,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
+            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
 
             this.principal = principal;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.Answering = answering;
+            this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
@@ -94,7 +98,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
@@ -283,6 +288,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private List<FilteredComboboxItemViewModel> autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
+        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
+
         public List<FilteredComboboxItemViewModel> AutoCompleteSuggestions
         {
             get
