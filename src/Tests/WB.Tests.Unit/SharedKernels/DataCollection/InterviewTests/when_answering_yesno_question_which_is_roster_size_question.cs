@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: true),
                 });
 
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.YesNoQuestion(questionId: command.QuestionId, answers: new[]
                 {
