@@ -146,7 +146,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -227,11 +227,12 @@
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="Converters\RoleToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
-    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
@@ -831,11 +832,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question__title.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question_cascading_single_option.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -866,7 +862,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question_multi_option.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_multi_option.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question_multi_option_item.axml">
@@ -1006,7 +1004,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__errors_item.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview__attachment.axml" />
     <AndroidResource Include="Resources\layout\interview_disabled_static_text.axml">
@@ -1029,6 +1027,23 @@
     <AndroidResource Include="Resources\layout\interview_question__comment_item.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__header.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_validation.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_comments.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_option_rounded_corner.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__progressbar.axml" />
+    <AndroidResource Include="Resources\layout\interview_question__divider.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_text_list_add_new_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -1060,6 +1075,51 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\show_instructions.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_top_border_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_top_border_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_bottom_border_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_bottom_border_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_comment_editor.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_corner_answered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\text_editor_border.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

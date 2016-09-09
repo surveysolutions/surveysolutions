@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                Create.ViewModel.QuestionInstructionViewModel()
             );
         }
     }

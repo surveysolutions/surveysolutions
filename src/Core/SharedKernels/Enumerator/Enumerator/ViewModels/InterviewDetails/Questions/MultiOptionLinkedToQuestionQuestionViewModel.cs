@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public MultiOptionLinkedToQuestionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             IQuestionnaireStorage questionnaireStorage,
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IMvxMainThreadDispatcher mainThreadDispatcher, 
             IQuestionnaireStorage questionnaireRepository)
             : base(
-                questionState, answering, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
+                questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
             this.answerToStringService = answerToStringService;
@@ -117,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = title,
                 Value = linkedToAnswer.RosterVector,
                 Checked = isChecked,
-                QuestionState = this.QuestionState
+                QuestionState = this.questionState
             };
             if (this.areAnswersOrdered && isChecked)
             {

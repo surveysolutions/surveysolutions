@@ -4,11 +4,13 @@ using System.Linq;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -19,8 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure = null, UserDocument user = null)
         {
-            var questionnaireRosterStructureMockStorage = new Mock<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
+            var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireRosterStructureStorage>();
+            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireRosterStructure(It.IsAny<QuestionnaireIdentity>())).Returns(rosterStructure);
 
             var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);

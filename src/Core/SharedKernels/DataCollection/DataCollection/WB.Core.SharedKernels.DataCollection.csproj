@@ -75,7 +75,6 @@
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewByPrefilledQuestions.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\SwitchTranslation.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
@@ -121,6 +120,8 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
+    <Compile Include="Implementation\Aggregates\Invariants\InterviewPropertiesInvariants.cs" />
+    <Compile Include="Implementation\Aggregates\Invariants\InterviewTreeInvariants.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />

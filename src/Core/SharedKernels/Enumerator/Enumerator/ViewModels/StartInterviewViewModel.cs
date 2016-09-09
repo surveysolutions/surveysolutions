@@ -3,10 +3,11 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class StartInterviewViewModel : MvxNotifyPropertyChanged
+    public class StartInterviewViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
         private readonly ICommandService commandService;
         readonly IViewModelNavigationService viewModelNavigationService;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
@@ -14,20 +13,19 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
         ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
@@ -38,8 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private ObservableRangeCollection<IInterviewEntityViewModel> items;
-        public ObservableRangeCollection<IInterviewEntityViewModel> Items
+        private CompositeCollection<ICompositeEntity> items;
+        public CompositeCollection<ICompositeEntity> Items
         {
             get { return this.items; }
             set
@@ -56,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMessenger messenger;
+        private ICompositeCollectionInflationService compositeCollectionInflationService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
@@ -78,7 +77,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
-            DynamicTextViewModel dynamicTextViewModel, IMvxMessenger messenger, IEnumeratorSettings settings)
+            DynamicTextViewModel dynamicTextViewModel, 
+            IMvxMessenger messenger, 
+            IEnumeratorSettings settings,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -91,6 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name = dynamicTextViewModel;
             this.messenger = messenger;
             this.settings = settings;
+            this.compositeCollectionInflationService = compositeCollectionInflationService;
         }
 
         public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -103,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
-            this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
+            this.Items = new CompositeCollection<ICompositeEntity>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
@@ -139,10 +142,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var childItem = this.Items
-                        .FirstOrDefault(x => x.Identity.Equals(scrollTo));
+                    var childItem = this.Items.OfType<GroupViewModel>()
+                        .FirstOrDefault(x => x.Identity.Equals(scrollTo)) as ICompositeEntity;
 
-                    anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
+                    anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
                 });
             }
             this.ScrollToIndex = anchorElementIndex;
@@ -153,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void LoadFromModel(Identity groupIdentity)
         {
             try
-            { 
+            {
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
                 var entities = this.interviewViewModelFactory
@@ -166,21 +169,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
-                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                var previousGroupNavigationViewModel =
+                    this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => 
-                    this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
+
+                var newGroupItems =
+                    interviewEntityViewModels.Concat(
+                        previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
+
+                this.InterviewEntities = newGroupItems;
+
+                var collection =
+                    this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
+                this.Items = collection;
             }
             finally
             {
                 this.userInterfaceStateService.NotifyRefreshFinished();
             }
         }
+
+        private IList<IInterviewEntityViewModel> InterviewEntities { get; set; }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
@@ -198,16 +212,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Name.ChangeText(fullRosterName);
                 }
             }
-        }
-
-        public void Handle(RosterInstancesAdded @event)
-        {
-            this.AddMissingEntities();
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-            this.RemoveEntities(@event.Instances.Select(x => x.GetIdentity()).ToHashSet());
         }
 
         public void Handle(QuestionsEnabled @event)
@@ -295,6 +299,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                             var existingIdentities =
                                 this.Items
+                                    .OfType<IInterviewEntityViewModel>()
                                     .Select(entity => entity.Identity)
                                     .ToHashSet();
 
@@ -330,10 +335,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var itemsToRemove = this
                             .Items
+                            .OfType<IInterviewEntityViewModel>()
                             .Where(item => identitiesToRemove.Contains(item.Identity))
                             .ToList();
 
-                        this.Items.RemoveRange(itemsToRemove);
+                        //this.Items.RemoveRange(itemsToRemove); TODO: 
 
                         foreach (var item in itemsToRemove.OfType<IDisposable>())
                         {
@@ -350,19 +356,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                var readOnlyItems = this.Items.ToArray();
+            // TODO: KP-7672
+            //this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            //{
+            //    var readOnlyItems = this.Items.ToArray();
 
-                for (int i = 0; i < readOnlyItems.Length; i++)
-                {
-                    var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
-                    if (interviewEntityViewModel != null &&
-                        viewModelIdentities.Contains(interviewEntityViewModel.Identity))
-                        // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
-                        this.Items.NotifyItemChanged(i);
-                }
-            });
+            //    for (int i = 0; i < readOnlyItems.Length; i++)
+            //    {
+            //        var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
+            //        if (interviewEntityViewModel != null &&
+            //            viewModelIdentities.Contains(interviewEntityViewModel.Identity))
+            //            // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
+            //            //this.Items.NotifyItemChanged(i);
+            //    }
+            //});
         }
 
         private bool ShouldBeHidden(Identity entity)
@@ -371,7 +378,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private bool ShouldBeHiddenIfDisabled(Identity entity)
             => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
-
+        
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);

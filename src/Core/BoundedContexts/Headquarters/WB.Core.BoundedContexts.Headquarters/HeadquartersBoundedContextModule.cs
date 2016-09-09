@@ -142,6 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<Questionnaire>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
             this.Bind<IQuestionnaireExportStructureStorage>().To<QuestionnaireExportStructureStorage>().InSingletonScope();
+            this.Bind<IQuestionnaireRosterStructureStorage>().To<QuestionnaireRosterStructureStorage>().InSingletonScope();
             this.Bind<IQuestionOptionsRepository>().To<QuestionnaireQuestionOptionsRepository>();
 
             CommandRegistry
@@ -176,9 +177,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewCreatedOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewCreatedOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.IsValid, command.UserId))
                 .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId))
-                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command.QuestionnaireId, command.Version, command.PreloadedData, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewerId))
+                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
                 .InitializesWith<SynchronizeInterviewFromHeadquarters>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewFromHeadquarters(command.Id, command.UserId, command.SupervisorId, command.InterviewDto, command.SynchronizationTime))
-                .InitializesWith<CreateInterviewByPrefilledQuestions>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewByPrefilledQuestions(command.QuestionnaireIdentity, command.UserId, command.SupervisorId, command.InterviewerId, command.AnswersTime, command.AnswersOnPrefilledQuestions))
                 
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
 
@@ -224,11 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry.Configure<Interview, CreateInterviewCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewCreatedOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
-            CommandRegistry.Configure<Interview, CreateInterviewByPrefilledQuestions>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             
-            this.Bind<ISampleImportService>().To<SampleImportService>();
-            this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
-
             this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
@@ -244,7 +240,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
             this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();

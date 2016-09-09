@@ -14,20 +14,14 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public RosterVector(IEnumerable<decimal> coordinates)
         {
-            if (coordinates == null) throw new ArgumentNullException("coordinates");
+            if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
 
             this.coordinates = new ReadOnlyCollection<decimal>(new List<decimal>(coordinates));
         }
 
-        public IReadOnlyCollection<decimal> Coordinates
-        {
-            get { return this.coordinates; }
-        }
+        public IReadOnlyCollection<decimal> Coordinates => this.coordinates;
 
-        public override string ToString()
-        {
-            return string.Format("<{0}>", string.Join("-", this.Coordinates));
-        }
+        public override string ToString() => $"<{string.Join("-", this.Coordinates)}>";
 
         public RosterVector Shrink(int targetLength)
         {
@@ -52,40 +46,19 @@ namespace WB.Core.SharedKernels.DataCollection
 
         private decimal[] array;
 
-        private decimal[] Array
-        {
-            get { return this.array ?? (this.array = this.Coordinates.ToArray()); }
-        }
+        private decimal[] Array => this.array ?? (this.array = this.Coordinates.ToArray());
 
-        IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator()
-        {
-            return ((IEnumerable<decimal>)this.Array).GetEnumerator();
-        }
+        IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator() => ((IEnumerable<decimal>)this.Array).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.Array.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => this.Array.GetEnumerator();
 
-        public int Length
-        {
-            get { return this.Array.Length; }
-        }
+        public int Length => this.Array.Length;
 
-        public decimal this[int index]
-        {
-            get { return this.Array[index]; }
-        }
+        public decimal this[int index] => this.Array[index];
 
-        public static implicit operator decimal[](RosterVector rosterVector)
-        {
-            return rosterVector.Array;
-        }
+        public static implicit operator decimal[](RosterVector rosterVector) => rosterVector.Array;
 
-        public static implicit operator RosterVector(decimal[] array)
-        {
-            return new RosterVector(array);
-        }
+        public static implicit operator RosterVector(decimal[] array) => new RosterVector(array);
 
         public bool Identical(RosterVector other)
         {
@@ -134,5 +107,12 @@ namespace WB.Core.SharedKernels.DataCollection
                 return hc;
             }
         }
+
+        public static bool operator ==(RosterVector a, RosterVector b)
+            => ReferenceEquals(a, b)
+            || (a?.Equals(b) ?? false);
+
+        public static bool operator !=(RosterVector a, RosterVector b)
+            => !(a == b);
     }
 }
