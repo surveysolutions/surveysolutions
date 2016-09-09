@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private readonly IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader;
-
+       
         private readonly IExpressionProcessor expressionProcessor;
 
         private static readonly SelectOption[] AllQuestionScopeOptions =
@@ -120,13 +120,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly SelectOption[] RosterTypeOptions =
         {
-            new SelectOption() {Value = RosterType.Fixed.ToString(), Text = Properties.Roster.RosterType_Fixed},
-            new SelectOption() {Value = RosterType.List.ToString(), Text = Properties.Roster.RosterType_List},
-            new SelectOption() {Value = RosterType.Multi.ToString(), Text = Properties.Roster.RosterType_Multi},
-            new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
+            new SelectOption {Value = RosterType.Fixed.ToString(), Text = Roster.RosterType_Fixed},
+            new SelectOption {Value = RosterType.List.ToString(), Text = Roster.RosterType_List},
+            new SelectOption {Value = RosterType.Multi.ToString(), Text = Roster.RosterType_Multi},
+            new SelectOption {Value = RosterType.Numeric.ToString(), Text = Roster.RosterType_Numeric}
         };
 
-        public QuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader,
+        public QuestionnaireInfoFactory(
+            IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader,
             IExpressionProcessor expressionProcessor)
         {
             this.questionDetailsReader = questionDetailsReader;
@@ -138,6 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
+
             var group = questionnaire.Groups.FirstOrDefault(x => x.Id == groupId);
             if (group == null)
                 return null;
