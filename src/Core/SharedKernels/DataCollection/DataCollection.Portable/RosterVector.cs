@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class RosterVector : IEnumerable<decimal>
     {
+        private int? cachedHashCode = null;
         public static readonly RosterVector Empty = new decimal[]{};
 
         private readonly ReadOnlyCollection<decimal> coordinates;
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (other == null) return false;
 
-            if (this.Length == 0 && other.Length == 0 || ReferenceEquals(this, other))
+            if ((this.Length == 0 && other.Length == 0) || ReferenceEquals(this, other))
             {
                 return true;
             }
@@ -95,17 +96,22 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override int GetHashCode()
         {
-            unchecked
+            if (!this.cachedHashCode.HasValue)
             {
-                int hc = this.Coordinates.Count;
-
-                foreach (var coordinate in this.Coordinates)
+                unchecked
                 {
-                    hc = unchecked(hc * 13 + coordinate.GetHashCode());
-                }
+                    int hc = this.Coordinates.Count;
 
-                return hc;
+                    foreach (var coordinate in this.Coordinates)
+                    {
+                        hc = unchecked(hc*13 + coordinate.GetHashCode());
+                    }
+
+                    this.cachedHashCode = hc;
+                }
             }
+
+            return this.cachedHashCode.Value;
         }
 
         public static bool operator ==(RosterVector a, RosterVector b)

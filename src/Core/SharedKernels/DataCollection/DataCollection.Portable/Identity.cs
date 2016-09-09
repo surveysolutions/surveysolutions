@@ -1,7 +1,4 @@
 using System;
-using System.Diagnostics;
-using Microsoft.VisualBasic.CompilerServices;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -15,6 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection
     /// </remarks>
     public class Identity
     {
+        private int? hashCode = null;
+
         protected bool Equals(Identity other)
         {
             return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
@@ -24,13 +23,17 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             unchecked
             {
-                int hc = this.RosterVector.Length;
-                for (int i = 0; i < this.RosterVector.Length; ++i)
+                if (!this.hashCode.HasValue)
                 {
-                    hc = unchecked(hc * 13 + this.RosterVector[i].GetHashCode());
+                    int hc = this.RosterVector.Length;
+                    for (int i = 0; i < this.RosterVector.Length; ++i)
+                    {
+                        hc = unchecked(hc*13 + this.RosterVector[i].GetHashCode());
+                    }
+                    this.hashCode = hc;
                 }
 
-                return hc + this.Id.GetHashCode() * 29;
+                return this.hashCode.Value;
             }
         }
 
