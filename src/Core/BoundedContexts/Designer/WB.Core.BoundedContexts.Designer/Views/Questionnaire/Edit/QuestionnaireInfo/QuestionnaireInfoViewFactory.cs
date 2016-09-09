@@ -38,12 +38,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
         {
-            QuestionnaireInfoView questionnaireInfoView = this.questionnaireStorage.GetById(questionnaireId);
-
-            if (questionnaireInfoView == null)
-                return null;
-
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+
+            var questionnaireInfoView = new QuestionnaireInfoView()
+            {
+                QuestionnaireId = questionnaireId,
+                Title = questionnaireDocument.Title,
+                Chapters = new List<ChapterInfoView>(),
+                IsPublic = questionnaireDocument.IsPublic
+            };
+
+            foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
+            {
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView()
+                {
+                    ItemId = chapter.PublicKey.FormatGuid(),
+                    Title = chapter.Title,
+                    GroupsCount = 0,
+                    RostersCount = 0,
+                    QuestionsCount = 0
+                });
+            }
+
             int questionsCount = 0, groupsCount = 0, rostersCount = 0;
             questionnaireDocument.Children.TreeToEnumerable(item => item.Children).ForEach(item =>
             {
