@@ -17,12 +17,9 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -67,14 +64,23 @@ namespace WB.UI.Designer.Controllers
         }
 
         public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
-            => this.View("~/questionnaire/details/index.cshtml");
+        {
+            return (UserHelper.WebUser.IsAdmin || this.UserHasAccessToEditOrViewQuestionnaire(id)) 
+                ? this.View("~/questionnaire/details/index.cshtml") 
+                : this.LackOfPermits();
+        }
+
+        private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
+        {
+            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);
+        }
 
         public ActionResult Clone(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
             return
                 this.View(
-                    new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
+                    new QuestionnaireCloneModel { Title = $"Copy of {model.Title}", Id = model.PublicKey });
         }
         
         [HttpPost]
@@ -86,7 +92,7 @@ namespace WB.UI.Designer.Controllers
                 QuestionnaireView sourceModel = this.GetQuestionnaire(model.Id);
                 if (sourceModel == null)
                 {
-                    throw new ArgumentNullException("model");
+                    throw new ArgumentNullException(nameof(model));
                 }
                 try
                 {
@@ -167,7 +173,7 @@ namespace WB.UI.Designer.Controllers
 
                 this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
-                this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
+                this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
             }
 
             return this.Redirect(this.Request.UrlReferrer.ToString());
@@ -438,14 +444,12 @@ namespace WB.UI.Designer.Controllers
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire =
-                this.questionnaireViewFactory.Load(
-                    new QuestionnaireViewInputModel(id));
+            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             if (questionnaire == null)
             {
                 throw new HttpException(
-                    (int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
+                    (int)HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
             }
 
             return questionnaire;
@@ -473,13 +477,13 @@ namespace WB.UI.Designer.Controllers
 
             if (sortOrder.ToBool())
             {
-                sortBy = string.Format("{0} Desc", sortBy);
+                sortBy = $"{sortBy} Desc";
             }
         }
 
         public ActionResult LackOfPermits()
         {
-            this.Error("You no longer have permission to edit this questionnaire");
+            this.Error("You don't have permission to edit this questionnaire");
             return this.RedirectToAction("Index");
         }
     }
