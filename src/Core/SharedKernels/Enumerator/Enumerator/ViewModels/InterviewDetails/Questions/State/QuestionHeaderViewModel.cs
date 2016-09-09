@@ -18,15 +18,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler ShowComments;
 
         public DynamicTextViewModel Title { get; }
+        public EnablementViewModel Enablement { get; }
 
         public QuestionHeaderViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel,
+            EnablementViewModel enablementViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
+            this.Enablement = enablementViewModel;
             this.Title = dynamicTextViewModel;
         }
 
@@ -39,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             
             this.Title.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
+            this.Enablement.Init(interviewId, questionIdentity);
         }
 
         public ICommand ShowCommentEditorCommand => new MvxCommand(() => ShowComments?.Invoke(this, EventArgs.Empty));
