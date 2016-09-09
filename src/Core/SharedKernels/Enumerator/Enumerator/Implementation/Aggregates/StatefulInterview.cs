@@ -1052,6 +1052,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 ParentRosterVector = rosterInstance.OuterRosterVector,
                 RowCode = rosterInstance.RosterInstanceId
             };
+            
             this.sortIndexesOfRosterInstanses[rosterIdentity] = rosterInstance.SortIndex;
         }
 
