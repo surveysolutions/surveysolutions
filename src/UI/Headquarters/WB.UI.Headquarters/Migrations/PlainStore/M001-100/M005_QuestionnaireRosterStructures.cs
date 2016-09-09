@@ -7,9 +7,15 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Delete.Table("questionnairerosterstructures");
-            Delete.Table("referenceinfoforlinkedquestions");
+            if (Schema.Table("questionnairerosterstructures").Exists())
+            {
+                Delete.Table("questionnairerosterstructures");
+            }
 
+            if (Schema.Table("referenceinfoforlinkedquestions").Exists())
+            {
+                Delete.Table("referenceinfoforlinkedquestions");
+            }
         }
 
         public override void Down()
