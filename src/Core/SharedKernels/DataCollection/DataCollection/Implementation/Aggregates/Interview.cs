@@ -2948,9 +2948,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId).ToList();
 
             IEnumerable<decimal> rosterInstanceIds = selectedValues.ToList();
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
-                selectedValue => selectedValue,
-                selectedValue => (int?)availableValues.IndexOf(selectedValue));
+
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = new Dictionary<decimal, int?>();
+            if (!questionnaire.ShouldQuestionRecordAnswersOrder(questionId))
+            {
+                rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
+                    selectedValue => selectedValue,
+                    selectedValue => (int?) availableValues.IndexOf(selectedValue));
+            }
+            else
+            {
+                for (int i = 0; i < selectedValues.Length; i++)
+                {
+                    var selectedValue = selectedValues[i];
+                    rosterInstanceIdsWithSortIndexes[selectedValue] = i;
+                }
+            }
 
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
 
