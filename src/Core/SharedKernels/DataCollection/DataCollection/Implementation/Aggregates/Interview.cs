@@ -4778,21 +4778,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTreeSection BuildInterviewTreeSection(IQuestionnaire questionnaire, Identity sectionIdentity)
         {
-            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire);
+            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire).ToList();
 
             return new InterviewTreeSection(sectionIdentity, children);
         }
 
-        private InterviewTreeGroup BuildInterviewTreeGroup(Identity groupIdentity, IQuestionnaire questionnaire)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire)
         {
-            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire);
+            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire).ToList();
 
-            return new InterviewTreeGroup(groupIdentity, children);
+            return new InterviewTreeSubSection(groupIdentity, children);
         }
 
         private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire)
         {
-            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire);
+            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire).ToList();
 
             return new InterviewTreeRoster(rosterIdentity, children);
         }
@@ -4813,22 +4813,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var childId in childIds)
             {
-                if (questionnaire.IsQuestion(childId))
-                {
-                    var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire);
-                }
-                else if (questionnaire.IsStaticText(childId))
-                {
-                    var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire);
-                }
-                else if (questionnaire.HasGroup(childId))
-                {
-                    var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeGroup(childGroupIdentity, questionnaire);
-                }
-                else if (questionnaire.IsRosterGroup(childId))
+                if (questionnaire.IsRosterGroup(childId))
                 {
                     Guid[] rostersStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(childId).ToArray();
 
@@ -4840,6 +4825,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         var childRosterIdentity = new Identity(childId, childRosterVector);
                         yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire);
                     }
+                }
+                else if (questionnaire.HasGroup(childId))
+                {
+                    var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeSubSection(childGroupIdentity, questionnaire);
+                }
+                else if (questionnaire.IsQuestion(childId))
+                {
+                    var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire);
+                }
+                else if (questionnaire.IsStaticText(childId))
+                {
+                    var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire);
                 }
             }
         }

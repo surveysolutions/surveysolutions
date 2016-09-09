@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedRosterId = Guid.Parse("21111111111111111111111111111111");
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),

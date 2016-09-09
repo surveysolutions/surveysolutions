@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
                 Create.Entity.YesNoQuestion(questionId: questionId, answers: new[]
                 {
