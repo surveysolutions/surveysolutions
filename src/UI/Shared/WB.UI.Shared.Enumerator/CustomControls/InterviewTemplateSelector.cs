@@ -72,9 +72,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
 
             var enablementModel = this.GetEnablementViewModel(source);
-            if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
+            if (typeOfViewModel == typeof(QuestionHeaderViewModel))
             {
-                if (enablementModel != null && !enablementModel.Enabled)
+                if (!((dynamic)source).Enablement.Enabled)
                 {
                     return Resource.Layout.interview_disabled_question;
                 }
