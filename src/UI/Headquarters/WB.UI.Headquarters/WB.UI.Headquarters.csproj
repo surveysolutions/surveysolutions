@@ -551,7 +551,6 @@
     <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\exportdata.js" />
     <Content Include="Scripts\pages\import-interviews.js" />
-    <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\export-settings.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -704,7 +703,6 @@
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
-    <Content Include="Views\HQ\VerifyPanel.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -1265,6 +1263,7 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />

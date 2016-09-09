@@ -5,7 +5,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         private readonly MultiOptionLinkedQuestionViewModel questionViewModel;
 

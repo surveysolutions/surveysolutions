@@ -86,6 +86,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Services\CompositeCollectionInflationService.cs" />
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
@@ -143,6 +144,7 @@
       <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IAttachmentContentStorage.cs" />
+    <Compile Include="Services\ICompositeCollectionInflationService.cs" />
     <Compile Include="Services\IEntityWithErrorsViewModelFactory.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
@@ -156,6 +158,9 @@
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Services\IAsyncRunner.cs" />
+    <Compile Include="Utils\CompositeCollection.cs" />
+    <Compile Include="Utils\CovariantObservableCollection.cs" />
+    <Compile Include="Utils\IObservableCollection.cs" />
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
@@ -165,9 +170,18 @@
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\EntityWithErrorsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\CoverStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\RosterViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\ICompositeEntity.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
+    <Compile Include="ViewModels\InterviewDetails\OptionTopBorderViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\QuestionDivider.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestion.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestionWithChildren.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\IQuestionStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionInstructionsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\TextListAddNewItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TimestampQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />

@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create sample from this data.
+        ///   Looks up a localized string similar to Create interviews from this data.
         /// </summary>
         internal static string CreateSample {
             get {
@@ -502,7 +502,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample import is completed with errors.
+        ///   Looks up a localized string similar to Interview import is completed with errors.
         /// </summary>
         internal static string SampleImportWithErrors {
             get {
@@ -511,7 +511,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample import is successfully completed.
+        ///   Looks up a localized string similar to Interview import is successfully completed.
         /// </summary>
         internal static string SampleSuccess {
             get {
@@ -691,7 +691,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify sample data.
+        ///   Looks up a localized string similar to Verify data.
         /// </summary>
         internal static string VerifySampleData {
             get {

@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
                 Create.Service.LiteEventRegistry(),
                 Stub.MvxMainThreadDispatcher(),
                 Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+                Substitute.For<QuestionInstructionViewModel>(),
                 Substitute.For<AnsweringViewModel>()
                 );
         }

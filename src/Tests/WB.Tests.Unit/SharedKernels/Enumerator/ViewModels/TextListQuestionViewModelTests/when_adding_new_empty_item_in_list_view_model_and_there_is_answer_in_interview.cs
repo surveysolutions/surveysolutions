@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
@@ -43,10 +45,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.NewListItem = string.Empty;
+        {
+            var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
+
+            textListAddNewItemViewModel.Text = string.Empty;
+        };
 
         It should_not_add_anything_in_list_of_answers = () =>
-            listModel.Answers.Count.ShouldEqual(0);
+            listModel.Answers.OfType<TextListItemViewModel>().Count().ShouldEqual(0);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);

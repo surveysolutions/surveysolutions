@@ -20,6 +20,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
+            {typeof (TextListItemViewModel), Resource.Layout.interview_question_text_list_item},
+            {typeof (TextListAddNewItemViewModel), Resource.Layout.interview_question_text_list_add_new_item},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
@@ -41,6 +43,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
+
+            {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
+            {typeof (MultiOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
+            {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
+            {typeof (SingleOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
+            {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question__header},
+            {typeof (ValidityViewModel), Resource.Layout.interview_question_validation},
+            {typeof (CommentsViewModel), Resource.Layout.interview_question_comments},
+            {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
+            {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
+            {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
+            {typeof (QuestionDivider), Resource.Layout.interview_question__divider},
         };
 
         public int GetItemViewType(object forItemObject)
@@ -48,6 +62,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             object source = forItemObject;
 
             var typeOfViewModel = source.GetType();
+
+            if (typeOfViewModel.IsGenericType )
+            {
+                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
+                {
+                    return Resource.Layout.interview_question_option_rounded_corner;
+                }
+            }
 
             var enablementModel = this.GetEnablementViewModel(source);
             if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))

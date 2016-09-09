@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,6 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         ILiteEventHandler<TAnswerEvent>,
+        IQuestionStateViewModel,
         IDisposable
         where TAnswerEvent : QuestionAnswered
     {
@@ -65,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
+            this.Header.ShowComments += (sender, args) => this.ShowCommentsCommand();
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)
