@@ -72,13 +72,13 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interview-general").Include(
-                "~/Scripts/knockout.validation.js",
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/Math.uuid.js",
-                "~/Scripts/viewmodels/pages/interview/custom.js",
                 "~/Scripts/knockout/ko.numericformatter.js",
                 "~/Scripts/lodash.underscore.js",
-                "~/Scripts/jquery.maskedinput.js"
+                "~/Scripts/jquery.maskedinput.js",
+                "~/Scripts/knockout.validation.min.js",
+                "~/Scripts/viewmodels/pages/interview/custom.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/interview-new").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
