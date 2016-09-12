@@ -16,7 +16,7 @@
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
             var $processUrl = '@Url.RouteUrl("Default", new {httproute = "", controller = "HQ", action = "VerifySample" , id=""})';
-            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, '@Model.PreloadedContentType', $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl, $processUrl);
+            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, '@Model.PreloadedContentType', '@Model.WasSupervsorProvided', $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl, $processUrl);
 
             model.load();
             ko.applyBindings(model);
