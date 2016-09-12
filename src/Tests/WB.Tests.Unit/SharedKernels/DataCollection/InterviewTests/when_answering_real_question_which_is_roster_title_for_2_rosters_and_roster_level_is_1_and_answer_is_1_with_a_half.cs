@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -30,17 +31,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-
-            var questionnaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionId) == false
-                && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
-                && _.DoesQuestionSpecifyRosterTitle(questionId) == true
-                && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
-            );
-
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                {
+                    Create.Entity.NumericRealQuestion(id: questionId),
+                }),
+                Create.Entity.Roster(rosterId: rosterBId, rosterTitleQuestionId: questionId),
+            }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

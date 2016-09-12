@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -25,31 +26,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionId = Guid.Parse("11111111111111111111111111111111");
             rosterId = Guid.Parse("44444444444444444444444444444444");
 
-            var availableOptions = new[]
-            {
-                (decimal) 14.7,
-                option2 = (decimal) 18.4,
-                3,
-                option4 = -1,
-                (decimal) 256.128,
-            };
-
             option2Title = "Option 2 Title";
             option4Title = "Option 4 Title";
 
-            var questionaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.MultyOption
-                && _.GetMultiSelectAnswerOptionsAsValues(questionId) == availableOptions
-                && _.GetAnswerOptionTitle(questionId, option2) == option2Title
-                && _.GetAnswerOptionTitle(questionId, option4) == option4Title
-                && _.GetRosterGroupsByRosterSizeQuestion(questionId) == new[] { rosterId }
-                && _.HasGroup(rosterId) == true
-                && _.IsRosterGroup(rosterId) == true
-            );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
+                {
+                    Create.Entity.Answer("option 1", 14.7m),
+                    Create.Entity.Answer(option2Title, option2 = 18.4m),
+                    Create.Entity.Answer("option 3", 3),
+                    Create.Entity.Answer(option4Title, option4 = -1),
+                    Create.Entity.Answer("option 5", 256.128m),
+                }),
 
-            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: questionId),
+            }));
+
+            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 

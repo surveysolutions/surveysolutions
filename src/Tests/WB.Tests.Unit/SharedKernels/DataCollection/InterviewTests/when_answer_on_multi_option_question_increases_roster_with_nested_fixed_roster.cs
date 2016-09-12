@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
+            var sectionId = Guid.Parse("FFFFFFFF0000000000000000DDDDDDDD");
             fixedRosterGroupId = Guid.Parse("11111111111111111111111111111111");
             rosterGroupId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
@@ -31,7 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
 
-                => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
+                => _.GetAllSections() == new[] { sectionId }
+                && _.GetChildEntityIds(sectionId) == new[] { questionWhichIncreasesRosterSizeId }
+
+                && _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.MultyOption
                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { rosterGroupId }
                    && _.GetMultiSelectAnswerOptionsAsValues(questionWhichIncreasesRosterSizeId) == new decimal[] { 0 }
@@ -40,8 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
 
-                   &&
-                   _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
+                   && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                    && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(1, "t1") }
                    && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }
                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
@@ -49,9 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.GetNestedRostersOfGroupById(rosterGroupId) == new[] { fixedRosterGroupId }
                    && _.GetFixedRosterGroups(rosterGroupId) == new[] { fixedRosterGroupId }
                    && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
-                   &&
-                   _.GetFixedRosterTitles(fixedRosterGroupId) ==
-                   new[] { new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2) }
+                   && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2) }
                 );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
