@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        var isEntityExists = connection.Get<TEntity>(entity.Id) != null;
+                        var isEntityExists = connection.Table<TEntity>().FirstOrDefault(x => x.Id == entity.Id) != null;
 
                         if (isEntityExists)
                         {
