@@ -3,7 +3,6 @@
   style="@style/Interview_DisabledQuestionWithDivider">
   <LinearLayout style="@style/Interview_DisabledQuestion_Header">
     <TextView style="@style/Interview_DisabledQuestion_Title"
-        local:MvxBind="Html QuestionState.Header.Title.PlainText;" />
+        local:MvxBind="Html Title.PlainText;" />
   </LinearLayout>
-  <View style="@style/Interview_Question_Divider" />
 </LinearLayout>

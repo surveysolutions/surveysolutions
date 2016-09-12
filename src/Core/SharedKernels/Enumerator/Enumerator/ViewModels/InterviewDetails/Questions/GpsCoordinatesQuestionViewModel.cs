@@ -26,13 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        private bool isInProgress;
-        public bool IsInProgress
-        {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; this.RaisePropertyChanged(); }
-        }
-
         private GpsLocation answer;
         public GpsLocation Answer
         {
@@ -43,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.IsInProgress)); }
+            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.Answering.InProgress)); }
         }
 
         private IMvxCommand answerRemoveCommand;
@@ -152,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswerAsync()
         {
-            this.IsInProgress = true;
+            this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
             try
             {
@@ -175,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             finally
             {
                 this.userInterfaceStateService.NotifyRefreshFinished();
-                this.IsInProgress = false;
+                this.Answering.FinishInProgressIndicator();
             }
         }
 

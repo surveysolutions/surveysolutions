@@ -11,6 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [Ignore("KP-7751")]
     internal class when_answering_text_list_question_with_incorrect_roster_vector : InterviewTestsContext
     {
         private Establish context = () =>

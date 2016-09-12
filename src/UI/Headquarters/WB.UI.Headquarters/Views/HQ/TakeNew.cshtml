@@ -42,18 +42,9 @@
 
             var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl, supervisorsUrl);
 
-            var isViewModelValid = function() {
-                if (!model.isValid()) {
-                    model.errors.showAllMessages();
-                    return false;
-                } else {
-                    return true;
-                };
-            };
+            model.load();
 
-            model.load(isViewModelValid);
-
-            ko.validation.group(model);
+            /*ko.validation.group(model);*/
             ko.applyBindings(model);
         });
 

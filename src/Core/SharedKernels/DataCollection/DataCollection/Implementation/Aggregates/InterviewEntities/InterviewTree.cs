@@ -56,9 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             : base(identity) {}
     }
 
-    public class InterviewTreeNodeContainer : IInterviewTreeNode
+    public class InterviewTreeGroup : IInterviewTreeNode
     {
-        public InterviewTreeNodeContainer(Identity identity, IEnumerable<IInterviewTreeNode> children)
+        public InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
         {
             this.Identity = identity;
             this.Children = children.ToList();
@@ -68,19 +68,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IList<IInterviewTreeNode> Children { get; }
     }
 
-    public class InterviewTreeGroup : InterviewTreeNodeContainer
+    public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
+        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}
     }
 
-    public class InterviewTreeSection : InterviewTreeNodeContainer
+    public class InterviewTreeSection : InterviewTreeGroup
     {
         public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}
     }
 
-    public class InterviewTreeRoster : InterviewTreeNodeContainer
+    public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}

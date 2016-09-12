@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-
+       
         private readonly IExpressionProcessor expressionProcessor;
 
         private static readonly SelectOption[] AllQuestionScopeOptions =
@@ -123,13 +123,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly SelectOption[] RosterTypeOptions =
         {
-            new SelectOption() {Value = RosterType.Fixed.ToString(), Text = Properties.Roster.RosterType_Fixed},
-            new SelectOption() {Value = RosterType.List.ToString(), Text = Properties.Roster.RosterType_List},
-            new SelectOption() {Value = RosterType.Multi.ToString(), Text = Properties.Roster.RosterType_Multi},
-            new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
+            new SelectOption {Value = RosterType.Fixed.ToString(), Text = Roster.RosterType_Fixed},
+            new SelectOption {Value = RosterType.List.ToString(), Text = Roster.RosterType_List},
+            new SelectOption {Value = RosterType.Multi.ToString(), Text = Roster.RosterType_Multi},
+            new SelectOption {Value = RosterType.Numeric.ToString(), Text = Roster.RosterType_Numeric}
         };
 
-        public QuestionnaireInfoFactory(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+        public QuestionnaireInfoFactory(
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IExpressionProcessor expressionProcessor)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
@@ -141,6 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             var group = questionnaire?.Find<IGroup>(groupId);
             if (@group == null)
+
                 return null;
             var result = new NewEditGroupView
             {

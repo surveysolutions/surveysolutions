@@ -53,14 +53,12 @@
                 });
             }
         },
-    self.load = function (isViewModelValid) {
+    self.load = function () {
         self.IsAjaxComplete(false);
         self.questionnaire(datacontext.questionnaire);
         self.questions(datacontext.questions.getAllLocal());
         self.IsAjaxComplete(true);
         self.IsPageLoaded(true);
-
-        self.isViewModelValid = isViewModelValid;
     };
 
     self.answerTimestampQuestion = function(question) {
@@ -68,6 +66,15 @@
         question.selectedOption(formattedDate);
     }
 
-    self.isViewModelValid = function() { return true };
+    self.errors = ko.validation.group(self);
+
+    self.isViewModelValid = function() {
+        if (self.errors().length === 0) {
+            return true;
+        } else {
+            self.errors.showAllMessages();
+            return false;
+        };
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.NewInterview, Supervisor.VM.BasePage);
