@@ -152,18 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var entities = this.interviewViewModelFactory
-                    .GetEntities(
-                        interviewId: this.navigationState.InterviewId,
-                        groupIdentity: groupIdentity,
-                        navigationState: this.navigationState);
-
-                var interviewEntityViewModels = entities
-                    .Where(entity => !this.ShouldBeHidden(entity.Identity))
-                    .ToList();
-
-                var previousGroupNavigationViewModel =
-                    this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
@@ -171,8 +160,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     interviewItemViewModel.Dispose();
                 }
 
-                var newGroupItems =
-                    interviewEntityViewModels.Concat(
+                var entities = this.interviewViewModelFactory.GetEntities(
+                    interviewId: this.navigationState.InterviewId,
+                    groupIdentity: groupIdentity,
+                    navigationState: this.navigationState);
+
+                var newGroupItems = entities.Concat(
                         previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
 
                 this.InterviewEntities = newGroupItems;
@@ -221,13 +214,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.messenger.Publish(new CountOfInvalidEntitiesIncreasedMessage(this));
 
         }
-
-        private bool ShouldBeHidden(Identity entity)
-            => this.ShouldBeHiddenIfDisabled(entity) &&
-               !this.interview.IsEnabled(entity);
-
-        private bool ShouldBeHiddenIfDisabled(Identity entity)
-            => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
         
         public void Dispose()
         {
