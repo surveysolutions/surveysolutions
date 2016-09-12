@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
         Establish context = () =>
         {
             var questionnaireAsyncPlainStorage = new SqliteInmemoryStorage<QuestionnaireView>();
-            questionnaireAsyncPlainStorage.StoreAsync(emulatedStorageQuestionnaires).WaitAndUnwrapException();
+            questionnaireAsyncPlainStorage.Store(emulatedStorageQuestionnaires);
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(questionnaireViewRepository: questionnaireAsyncPlainStorage);
         };
 

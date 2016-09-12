@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsEndpointValid = true;
             bool isNeedNavigateToRelinkPage = false;
 
-            await this.interviewerSettings.SetEndpointAsync(this.Endpoint);
+            this.interviewerSettings.SetEndpoint(this.Endpoint);
 
             var restCredentials = new RestCredentials
             {
@@ -172,9 +172,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
                 
-                await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
+                this.interviewersPlainStorage.Store(interviewerIdentity);
 
-                await this.principal.SignInAsync(restCredentials.Login, restCredentials.Password, true);
+                this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)

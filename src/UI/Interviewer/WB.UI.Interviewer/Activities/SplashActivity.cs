@@ -52,7 +52,7 @@ namespace WB.UI.Interviewer.Activities
                 {
                     isMigrationNeeded = true;
                     var optionViewRemover = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
-                    await optionViewRemover.RemoveAllAsync();
+                    optionViewRemover.RemoveAll();
                 }
             }
 
@@ -62,7 +62,7 @@ namespace WB.UI.Interviewer.Activities
             var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
             var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
 
-            var questionnaires = await questionnaireViewRepository.LoadAllAsync();
+            var questionnaires = questionnaireViewRepository.LoadAll();
             foreach (var questionnaireView in questionnaires)
             {
                 var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
@@ -72,7 +72,7 @@ namespace WB.UI.Interviewer.Activities
 
                 foreach (var question in questionsWithLongOptionsList)
                 {
-                    await optionsRepository.StoreOptionsForQuestionAsync(questionnaireView.Identity, question.PublicKey, question.Answers, new List<TranslationDto>());
+                    optionsRepository.StoreOptionsForQuestion(questionnaireView.Identity, question.PublicKey, question.Answers, new List<TranslationDto>());
                 }
             }
         }

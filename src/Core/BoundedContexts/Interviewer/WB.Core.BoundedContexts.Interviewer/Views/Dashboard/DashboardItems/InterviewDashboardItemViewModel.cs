@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.isInterviewReadyToLoad = true;
                 return;
             }
-            await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
+            this.interviewerInterviewFactory.RemoveInterview(this.InterviewId);
             RaiseRemovedDashboardItem();
         }
 

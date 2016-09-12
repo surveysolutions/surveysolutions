@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -21,12 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId);
 
-        Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId);
-        //Task StoreQuestionOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument serializedQuestionnaireDocument);
+        void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId);
 
-        Task StoreOptionsForQuestionAsync(QuestionnaireIdentity questionnaireId, Guid questionId, List<Answer> answers, List<TranslationDto> optionsTranslations);
+        void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, List<Answer> answers, List<TranslationDto> optionsTranslations);
 
-        Task StoreOptionsAsync(List<OptionView> options);
+        void StoreOptions(List<OptionView> options);
 
         bool IsEmpty();
     }

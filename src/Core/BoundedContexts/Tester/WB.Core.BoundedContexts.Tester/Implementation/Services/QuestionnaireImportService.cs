@@ -36,12 +36,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.translationsStorage = translationsStorage;
         }
 
-        public async Task ImportQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
+        public void ImportQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireDocument questionnaireDocument,
             string supportingAssembly,
             TranslationDto[] translations)
         {
-            await this.optionsRepository.RemoveOptionsForQuestionnaireAsync(questionnaireIdentity);
+            this.optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 
             var questionsWithLongOptionsList = questionnaireDocument.Find<SingleQuestion>(
                 x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             {
                 var questionTranslations = translations.Where(x => x.QuestionnaireEntityId == question.PublicKey).ToList();
 
-                await this.optionsRepository.StoreOptionsForQuestionAsync(questionnaireIdentity, question.PublicKey, question.Answers, questionTranslations);
+                this.optionsRepository.StoreOptionsForQuestion(questionnaireIdentity, question.PublicKey, question.Answers, questionTranslations);
 
                 //remove original answers after saving
                 //to save resources
@@ -72,9 +72,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     Id = Guid.NewGuid().FormatGuid()
                 }).ToList();
 
-            await this.translationsStorage.RemoveAllAsync();
-            await this.translationsStorage.StoreAsync(filteredTranslations);
-            
+            this.translationsStorage.RemoveAll();
+            this.translationsStorage.Store(filteredTranslations);
+
             this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
 
             this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, supportingAssembly);

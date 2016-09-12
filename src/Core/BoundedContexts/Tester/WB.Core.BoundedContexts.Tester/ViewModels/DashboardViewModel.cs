@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: selectedQuestionnaire.Id, token: this.tokenSource.Token);
 
-                    await this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations);
+                    this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations);
 
                     var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity);
 
@@ -362,7 +362,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return interviewId;
         }
 
-        private async Task StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage, TranslationDto[] translations)
+        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage, TranslationDto[] translations)
         {
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
@@ -371,8 +371,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
 
             var supportingAssembly = questionnairePackage.Assembly;
-            
-            await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations);
+
+            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations);
         }
 
         private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
@@ -407,7 +407,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                         },
                                         token: this.tokenSource.Token);
 
-                    await this.attachmentContentStorage.StoreAsync(attachmentContent);
+                    this.attachmentContentStorage.Store(attachmentContent);
                 }
             }
         }
@@ -420,16 +420,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.ClearSearch();
 
-                await this.questionnaireListStorage.RemoveAsync(this.localQuestionnaires);
+                this.questionnaireListStorage.Remove(this.localQuestionnaires);
 
                 this.localQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(token: tokenSource.Token);
                 
-                await this.questionnaireListStorage.StoreAsync(this.localQuestionnaires);
+                this.questionnaireListStorage.Store(this.localQuestionnaires);
 
                 var lastUpdateDate = DateTime.UtcNow;
                 this.HumanizeLastUpdateDate(lastUpdateDate);
 
-                await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
+                this.dashboardLastUpdateStorage.Store(new DashboardLastUpdate
                 {
                     Id = this.principal.CurrentUserIdentity.Name,
                     LastUpdateDate = lastUpdateDate

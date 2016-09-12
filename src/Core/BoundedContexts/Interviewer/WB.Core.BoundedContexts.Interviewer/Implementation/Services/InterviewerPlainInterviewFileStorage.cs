@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -42,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public async Task StoreInterviewBinaryDataAsync(Guid interviewId, string fileName, byte[] data)
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
             var imageView =
              this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
@@ -51,27 +49,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             if (imageView == null)
             {
                 string fileId = Guid.NewGuid().FormatGuid();
-                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                this.fileViewStorage.Store(new InterviewFileView
                 {
                     Id = fileId,
                     File = data
-                }).ConfigureAwait(false);
+                });
 
-                await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+                this.imageViewStorage.Store(new InterviewMultimediaView
                 {
                     Id = Guid.NewGuid().FormatGuid(),
                     InterviewId = interviewId,
                     FileId = fileId,
                     FileName = fileName
-                }).ConfigureAwait(false);
+                });
             }
             else
             {
-                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                this.fileViewStorage.Store(new InterviewFileView
                 {
                     Id = imageView.FileId,
                     File = data
-                }).ConfigureAwait(false);
+                });
             }
         }
 
@@ -81,8 +79,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             if (imageView == null) return;
 
-            this.fileViewStorage.RemoveAsync(imageView.FileId).Wait();
-            this.imageViewStorage.RemoveAsync(imageView.Id).Wait();
+            this.fileViewStorage.Remove(imageView.FileId);
+            this.imageViewStorage.Remove(imageView.Id);
         }
     }
 }
