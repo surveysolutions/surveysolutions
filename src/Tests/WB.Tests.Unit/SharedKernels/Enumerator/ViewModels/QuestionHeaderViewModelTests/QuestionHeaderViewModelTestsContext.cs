@@ -18,15 +18,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         {
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var liteEventRegistry = registry ?? Create.Service.LiteEventRegistry();
+            var questionnaireStorage = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
 
             return new QuestionHeaderViewModel(
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                questionnaireStorage,
                 statefulInterviewRepository,
                 Create.ViewModel.DynamicTextViewModel(
                     interviewRepository: interviewRepository,
                     questionnaireRepository: questionnaireRepository,
                     rosterTitleSubstitutionService: rosterTitleSubstitutionService),
-                new EnablementViewModel(statefulInterviewRepository, liteEventRegistry));
+                new EnablementViewModel(statefulInterviewRepository, liteEventRegistry, questionnaireStorage));
         }
     }
 }
