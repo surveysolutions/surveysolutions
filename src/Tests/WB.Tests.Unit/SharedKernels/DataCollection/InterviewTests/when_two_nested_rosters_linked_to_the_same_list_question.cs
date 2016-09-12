@@ -28,19 +28,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
             var questionnaire = Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.TextListQuestion(questionId: questionId, variable: "list"),
-                Create.Entity.Roster(rosterId: rosterAId,
-                    variable: "ros",
-                    rosterSizeQuestionId: questionId,
-                    rosterSizeSourceType: RosterSizeSourceType.Question,
-                    children:
-                        new List<IComposite>()
-                        {
-                            Create.Entity.Roster(rosterId: rosterBId,
-                                variable: "nestedList",
-                                rosterSizeQuestionId: questionId,
-                                rosterSizeSourceType: RosterSizeSourceType.Question)
-                        }));
+                Create.Entity.Group(children: new IComposite[] 
+                {
+                    Create.Entity.TextListQuestion(questionId: questionId, variable: "list"),
+                    Create.Entity.Roster(rosterId: rosterAId,
+                        variable: "ros",
+                        rosterSizeQuestionId: questionId,
+                        rosterSizeSourceType: RosterSizeSourceType.Question,
+                        children:
+                            new List<IComposite>()
+                            {
+                                Create.Entity.Roster(rosterId: rosterBId,
+                                    variable: "nestedList",
+                                    rosterSizeQuestionId: questionId,
+                                    rosterSizeSourceType: RosterSizeSourceType.Question)
+                            })
+                }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
 

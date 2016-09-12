@@ -89,7 +89,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 return this.sectionsCache ?? (this.sectionsCache 
                     = this.innerDocument
-                    .Children.Cast<IGroup>()
+                    .Children
+                    .OfType<IGroup>()
                     .Where(x => x != null)
                     .Select(x => x.PublicKey)
                     .ToReadOnlyCollection());

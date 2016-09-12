@@ -175,8 +175,8 @@
       <HintPath>..\..\..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
@@ -388,6 +388,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_fixed_rosters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_numeric_roster.cs" />
@@ -640,11 +641,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_without_attachment.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_with_image_attachment.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsDisabled_event_with_2_groups_and_one_of_that_group_is_set_to_be_hidden_if_disabled_and_another_is_not.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsEnabled_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsDisabled_event_with_2_questions_and_one_of_that_question_is_set_to_be_hidden_if_disabled_and_anothe___.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_StaticTextsDisabled_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_StaticTextsEnabled_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsEnabled_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />

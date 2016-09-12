@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 },
                 answerTime: new DateTime(2015, 11, 19, 18, 04, 53));
 
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
                 Create.Entity.Roster(rosterId: rosterId, children: new[]
                 {
